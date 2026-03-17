@@ -1,4 +1,4 @@
-import { NDGameEngine } from '../NDGameEngine';
+import { NDGameEngine } from './NDGameEngine';
 
 export class Ping extends NDGameEngine {
   public override init(): void {

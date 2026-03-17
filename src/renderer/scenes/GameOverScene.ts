@@ -55,7 +55,7 @@ export class GameOverScene extends Scene {
         this.gameOverConfig = config;
     }
 
-    protected create(): void {
+    public create(): void {
         const gameMode = this.gameOverConfig.stats.gameMode ?? 'marathon';
         this.isHighScore = HighScoreManager.isHighScore(
             this.gameOverConfig.stats.score,

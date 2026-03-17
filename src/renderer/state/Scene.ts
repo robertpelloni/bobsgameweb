@@ -52,7 +52,7 @@ export abstract class Scene implements State {
     this.onRender();
   }
 
-  protected abstract create(): void | Promise<void>;
+  public abstract create(): void | Promise<void>;
 
   protected abstract onUpdate(dt: number): void;
 

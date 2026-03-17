@@ -1,4 +1,4 @@
-import { BobNet } from '../puzzle/BobNet';
+import { BobNet } from '../../puzzle/BobNet';
 
 export class GameClientTCP {
   private socket: any; // In a real browser implementation, this would be a WebSocket or WebRTC DataChannel

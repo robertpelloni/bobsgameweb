@@ -32,7 +32,11 @@ export interface EntityConfig {
 
 export abstract class Entity extends EventEmitter<EntityEvents> {
   protected container: Container;
-  protected sprite: Sprite | null = null;
+  protected _sprite: Sprite | null = null;
+
+  get sprite(): Sprite | null {
+    return this._sprite;
+  }
 
   protected _x: number = 0;
   protected _y: number = 0;

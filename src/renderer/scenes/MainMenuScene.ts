@@ -63,7 +63,7 @@ export class MainMenuScene extends Scene {
     // Lifecycle
     // ============================================================
 
-    protected create(): void {
+    public create(): void {
         this.createBackground();
         this.createParticles();
         this.createTitle();

@@ -1,304 +1,133 @@
-import { EventEmitter } from 'eventemitter3';
 import { Easing, type EasingFn } from './Easing';
+import { EventEmitter } from 'eventemitter3';
 
-export type EasingName = keyof typeof Easing;
-
-export interface TweenEvents {
-  'start': () => void;
-  'update': (value: number, progress: number) => void;
-  'complete': () => void;
-  'stop': () => void;
-}
+export type EasingName = 'linear' | 'easeInOutCircular';
 
 export interface TweenConfig {
   from: number;
   to: number;
   duration: number;
-  easing?: EasingName | EasingFn;
-  delay?: number;
-  onUpdate?: (value: number, progress: number) => void;
+  easing?: EasingName;
+  onUpdate?: (value: number) => void;
   onComplete?: () => void;
 }
 
-export class Tween extends EventEmitter<TweenEvents> {
-  private from: number;
-  private to: number;
-  private duration: number;
-  private easing: EasingFn;
-  private delay: number;
+export interface TweenEvents {
+  update: (value: number) => void;
+  complete: (value: number) => void;
+}
 
-  private elapsed: number = 0;
-  private _value: number;
-  private _progress: number = 0;
-  private _running: boolean = false;
-  private _paused: boolean = false;
-  private _completed: boolean = false;
+export class Tween extends EventEmitter<TweenEvents> {
+  public from: number;
+  public to: number;
+  public duration: number;
+  public easing: EasingFn;
+  public elapsed: number = 0;
+  public value: number;
+  public active: boolean = true;
 
   constructor(config: TweenConfig) {
     super();
     this.from = config.from;
     this.to = config.to;
     this.duration = config.duration;
-    this.delay = config.delay ?? 0;
-    this._value = config.from;
+    this.value = config.from;
 
-    if (typeof config.easing === 'function') {
-      this.easing = config.easing;
-    } else {
-      this.easing = Easing[config.easing ?? 'linear'];
-    }
+    const easingName = config.easing ?? 'linear';
+    this.easing = (Easing as any)[easingName] || Easing.linear;
 
-    if (config.onUpdate) {
-      this.on('update', config.onUpdate);
-    }
-    if (config.onComplete) {
-      this.on('complete', config.onComplete);
-    }
+    if (config.onUpdate) this.on('update', config.onUpdate);
+    if (config.onComplete) this.on('complete', config.onComplete);
   }
 
-  start(): this {
-    if (this._running) return this;
-    this._running = true;
-    this._paused = false;
-    this._completed = false;
-    this.elapsed = -this.delay;
-    this._value = this.from;
-    this._progress = 0;
-    this.emit('start');
-    return this;
-  }
-
-  stop(): this {
-    if (!this._running) return this;
-    this._running = false;
-    this._paused = false;
-    this.emit('stop');
-    return this;
-  }
-
-  pause(): this {
-    if (!this._running || this._paused) return this;
-    this._paused = true;
-    return this;
-  }
-
-  resume(): this {
-    if (!this._running || !this._paused) return this;
-    this._paused = false;
-    return this;
-  }
-
-  reset(): this {
-    this.elapsed = -this.delay;
-    this._value = this.from;
-    this._progress = 0;
-    this._completed = false;
-    return this;
-  }
-
-  update(dt: number): boolean {
-    if (!this._running || this._paused || this._completed) return false;
+  public update(dt: number): void {
+    if (!this.active) return;
 
     this.elapsed += dt;
+    const progress = Math.min(1, this.elapsed / this.duration);
+    
+    this.value = this.easing(this.elapsed, this.from, this.to - this.from, this.duration);
 
-    if (this.elapsed < 0) return true;
+    this.emit('update', this.value);
 
-    if (this.elapsed >= this.duration) {
-      this._value = this.to;
-      this._progress = 1;
-      this._completed = true;
-      this._running = false;
-      this.emit('update', this._value, this._progress);
-      this.emit('complete');
-      return false;
+    if (progress >= 1) {
+      this.value = this.to;
+      this.active = false;
+      this.emit('complete', this.value);
     }
-
-    const change = this.to - this.from;
-    this._value = this.easing(this.elapsed, this.from, change, this.duration);
-    this._progress = this.elapsed / this.duration;
-    this.emit('update', this._value, this._progress);
-    return true;
   }
 
-  get value(): number {
-    return this._value;
-  }
-
-  get progress(): number {
-    return this._progress;
-  }
-
-  get running(): boolean {
-    return this._running;
-  }
-
-  get paused(): boolean {
-    return this._paused;
-  }
-
-  get completed(): boolean {
-    return this._completed;
+  public stop(): void {
+    this.active = false;
   }
 }
 
 export interface TweenTargetConfig<T> {
   target: T;
-  props: { [K in keyof T]?: number };
+  props: Partial<Record<keyof T, number>>;
   duration: number;
-  easing?: EasingName | EasingFn;
-  delay?: number;
+  easing?: EasingName;
   onUpdate?: (target: T) => void;
-  onComplete?: () => void;
+  onComplete?: (target: T) => void;
 }
 
-export class TweenTarget<T extends object> extends EventEmitter<TweenEvents> {
+export class TweenTarget<T> extends EventEmitter<{ complete: (target: T) => void }> {
+  private tweens: Array<{ prop: keyof T; from: number; to: number }>;
+  private duration: number;
+  private easing: EasingFn;
+  private elapsed: number = 0;
   private target: T;
-  private tweens: Map<keyof T, Tween> = new Map();
-  private _running: boolean = false;
-  private _completed: boolean = false;
-  private onUpdateCallback?: (target: T) => void;
+  public active: boolean = true;
 
   constructor(config: TweenTargetConfig<T>) {
     super();
     this.target = config.target;
-    this.onUpdateCallback = config.onUpdate;
+    this.duration = config.duration;
+    const easingName = config.easing ?? 'linear';
+    this.easing = (Easing as any)[easingName] || Easing.linear;
 
-    for (const [key, toValue] of Object.entries(config.props)) {
-      const prop = key as keyof T;
-      const fromValue = this.target[prop] as number;
-      const tween = new Tween({
-        from: fromValue,
-        to: toValue as number,
-        duration: config.duration,
-        easing: config.easing,
-        delay: config.delay,
-      });
-      this.tweens.set(prop, tween);
+    this.tweens = Object.entries(config.props).map(([prop, to]) => ({
+      prop: prop as keyof T,
+      from: (this.target as any)[prop],
+      to: to as number,
+    }));
+  }
+
+  public update(dt: number): void {
+    if (!this.active) return;
+
+    this.elapsed += dt;
+    const progress = Math.min(1, this.elapsed / this.duration);
+
+    for (const t of this.tweens) {
+      (this.target as any)[t.prop] = this.easing(this.elapsed, t.from, t.to - t.from, this.duration);
     }
 
-    if (config.onComplete) {
-      this.on('complete', config.onComplete);
-    }
-  }
-
-  start(): this {
-    if (this._running) return this;
-    this._running = true;
-    this._completed = false;
-    this.tweens.forEach((tween) => tween.start());
-    this.emit('start');
-    return this;
-  }
-
-  stop(): this {
-    if (!this._running) return this;
-    this._running = false;
-    this.tweens.forEach((tween) => tween.stop());
-    this.emit('stop');
-    return this;
-  }
-
-  pause(): this {
-    this.tweens.forEach((tween) => tween.pause());
-    return this;
-  }
-
-  resume(): this {
-    this.tweens.forEach((tween) => tween.resume());
-    return this;
-  }
-
-  update(dt: number): boolean {
-    if (!this._running || this._completed) return false;
-
-    let allComplete = true;
-    this.tweens.forEach((tween, prop) => {
-      if (tween.update(dt)) {
-        allComplete = false;
+    if (progress >= 1) {
+      for (const t of this.tweens) {
+        (this.target as any)[t.prop] = t.to;
       }
-      (this.target as Record<keyof T, number>)[prop] = tween.value;
-    });
-
-    this.onUpdateCallback?.(this.target);
-    this.emit('update', 0, this.progress);
-
-    if (allComplete) {
-      this._completed = true;
-      this._running = false;
-      this.emit('complete');
-      return false;
+      this.active = false;
+      this.emit('complete', this.target);
     }
-
-    return true;
-  }
-
-  get progress(): number {
-    let total = 0;
-    this.tweens.forEach((tween) => {
-      total += tween.progress;
-    });
-    return this.tweens.size > 0 ? total / this.tweens.size : 0;
-  }
-
-  get running(): boolean {
-    return this._running;
-  }
-
-  get completed(): boolean {
-    return this._completed;
   }
 }
 
-class TweenManagerClass {
-  private tweens: Set<Tween | TweenTarget<object>> = new Set();
+export class TweenManager {
+  private static tweens: (Tween | TweenTarget<any>)[] = [];
 
-  add(tween: Tween | TweenTarget<object>): void {
-    this.tweens.add(tween);
-  }
-
-  remove(tween: Tween | TweenTarget<object>): void {
-    this.tweens.delete(tween);
-  }
-
-  update(dt: number): void {
-    this.tweens.forEach((tween) => {
-      if (!tween.update(dt)) {
-        this.tweens.delete(tween);
-      }
+  public static update(dt: number): void {
+    this.tweens = this.tweens.filter((t) => {
+      t.update(dt);
+      return t.active;
     });
   }
 
-  clear(): void {
-    this.tweens.forEach((tween) => tween.stop());
-    this.tweens.clear();
+  public static add(tween: Tween | TweenTarget<any>): void {
+    this.tweens.push(tween);
   }
 
-  get count(): number {
-    return this.tweens.size;
-  }
-
-  create(config: TweenConfig): Tween {
-    const tween = new Tween(config);
-    this.add(tween);
-    tween.start();
-    return tween;
-  }
-
-  createTarget<T extends object>(config: TweenTargetConfig<T>): TweenTarget<T> {
-    const tween = new TweenTarget(config);
-    this.add(tween as unknown as TweenTarget<object>);
-    tween.start();
-    return tween;
-  }
-
-  to<T extends object>(
-    target: T,
-    props: { [K in keyof T]?: number },
-    duration: number,
-    easing?: EasingName | EasingFn
-  ): TweenTarget<T> {
-    return this.createTarget({ target, props, duration, easing });
+  public static clear(): void {
+    this.tweens = [];
   }
 }
-
-export const TweenManager = new TweenManagerClass();

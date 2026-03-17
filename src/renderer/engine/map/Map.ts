@@ -1,5 +1,5 @@
 import { MapData } from './MapData';
-import { Entity } from '../entity/Entity';
+import { Entity } from '../../entity/Entity';
 import { Container, Sprite, Texture } from 'pixi.js';
 
 export class Map {
