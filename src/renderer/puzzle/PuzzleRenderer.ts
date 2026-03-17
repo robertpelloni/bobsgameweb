@@ -1,8 +1,5 @@
 import { Container, Graphics, Text, TextStyle } from 'pixi.js';
-import { PuzzleGame, GameState } from './PuzzleGame';
-import { Block, AnimationState } from './Block';
-import { Piece } from './Piece';
-import { Color } from './Color';
+import { PuzzleGame, GameState, Block, AnimationState, Piece, Color } from './index';
 
 export interface PuzzleRendererConfig {
   cellSize?: number;
@@ -130,8 +127,8 @@ export class PuzzleRenderer {
     if (!this.game) return;
 
     const { cellSize, gridOffsetX, gridOffsetY } = this.config;
-    const gridWidth = this.game.grid.width;
-    const gridHeight = this.game.grid.height - this.game.grid.hiddenRows;
+    const gridWidth = this.game.grid.getWidth();
+    const gridHeight = this.game.grid.getHeight() - 5; // hidden rows buffer
 
     this.gridContainer.position.set(gridOffsetX, gridOffsetY);
     this.blocksContainer.position.set(gridOffsetX, gridOffsetY);
@@ -163,7 +160,8 @@ export class PuzzleRenderer {
     this.nextGraphics.forEach((g) => g.destroy());
     this.nextGraphics = [];
 
-    const showCount = this.game.gameType.visualRules.showNextPieces;
+    // Default to 3 next pieces for now
+    const showCount = 3;
     for (let i = 0; i < showCount; i++) {
       const g = new Graphics();
       g.position.set(0, i * (this.config.cellSize * 3 + 20));
@@ -176,8 +174,8 @@ export class PuzzleRenderer {
     if (!this.game) return;
 
     const { cellSize, borderWidth, gridLineColor, borderColor, backgroundColor } = this.config;
-    const gridWidth = this.game.grid.width;
-    const gridHeight = this.game.grid.height - this.game.grid.hiddenRows;
+    const gridWidth = this.game.grid.getWidth();
+    const gridHeight = this.game.grid.getHeight() - 5;
     const pixelWidth = gridWidth * cellSize;
     const pixelHeight = gridHeight * cellSize;
 
@@ -219,12 +217,12 @@ export class PuzzleRenderer {
 
     const { cellSize } = this.config;
     const grid = this.game.grid;
-    const hiddenRows = grid.hiddenRows;
+    const hiddenRows = 5;
 
     const activeKeys = new Set<string>();
 
-    for (let y = hiddenRows; y < grid.height; y++) {
-      for (let x = 0; x < grid.width; x++) {
+    for (let y = hiddenRows; y < grid.getHeight(); y++) {
+      for (let x = 0; x < grid.getWidth(); x++) {
         const block = grid.get(x, y);
         if (!block) continue;
 
@@ -257,9 +255,9 @@ export class PuzzleRenderer {
     this.pieceGraphics.clear();
 
     const piece = this.game.currentPiece;
-    if (!piece || this.game.state !== GameState.PLAYING) return;
+    if (!piece || this.game.state === GameState.IDLE || this.game.state === GameState.PAUSED) return;
 
-    this.drawPiece(this.pieceGraphics, piece, piece.xGrid, piece.yGrid - this.game.grid.hiddenRows);
+    this.drawPiece(this.pieceGraphics, piece, piece.xGrid, piece.yGrid - 5);
   }
 
   private updateGhostPiece(): void {
@@ -268,12 +266,12 @@ export class PuzzleRenderer {
     this.ghostGraphics.clear();
 
     const piece = this.game.currentPiece;
-    if (!piece || this.game.state !== GameState.PLAYING) return;
+    if (!piece || this.game.state === GameState.IDLE || this.game.state === GameState.PAUSED) return;
 
     const ghostY = this.game.getGhostY();
     if (ghostY === piece.yGrid) return;
 
-    this.drawPiece(this.ghostGraphics, piece, piece.xGrid, ghostY - this.game.grid.hiddenRows);
+    this.drawPiece(this.ghostGraphics, piece, piece.xGrid, ghostY - 5);
   }
 
   private updateNextPieces(): void {
@@ -313,10 +311,10 @@ export class PuzzleRenderer {
   }
 
   private drawBlock(g: Graphics, px: number, py: number, size: number, block: Block): void {
-    const color = block.color;
-    const hexColor = color.hex;
-    const darkerColor = color.darken(50).hex;
-    const lighterColor = color.brighten(50).hex;
+    const color = block.getColor() || Color.gray;
+    const hexColor = color.toInt();
+    const darkerColor = color.clone(); darkerColor.darker(0.5);
+    const lighterColor = color.clone(); lighterColor.lighter(0.5);
 
     const inset = 2;
     const innerSize = size - inset * 2;
@@ -325,8 +323,8 @@ export class PuzzleRenderer {
     if (block.fadingOut) {
       alpha = block.disappearingAlpha;
     }
-    if (block.animationState === AnimationState.FLASHING) {
-      alpha = 0.5 + Math.sin(block.animationFrameTicks * 0.5) * 0.5;
+    if (block.flashingToBeRemoved) {
+      alpha = 0.5 + Math.sin(Date.now() * 0.01) * 0.5;
     }
 
     g.clear();
@@ -335,16 +333,16 @@ export class PuzzleRenderer {
     g.fill({ color: hexColor, alpha });
 
     g.rect(px + inset, py + inset, innerSize, 3);
-    g.fill({ color: lighterColor, alpha });
+    g.fill({ color: lighterColor.toInt(), alpha });
 
     g.rect(px + inset, py + inset, 3, innerSize);
-    g.fill({ color: lighterColor, alpha });
+    g.fill({ color: lighterColor.toInt(), alpha });
 
     g.rect(px + inset, py + size - inset - 3, innerSize, 3);
-    g.fill({ color: darkerColor, alpha });
+    g.fill({ color: darkerColor.toInt(), alpha });
 
     g.rect(px + size - inset - 3, py + inset, 3, innerSize);
-    g.fill({ color: darkerColor, alpha });
+    g.fill({ color: darkerColor.toInt(), alpha });
 
     if (block.connectedUp || block.connectedDown || block.connectedLeft || block.connectedRight) {
       this.drawBlockConnections(g, px, py, size, block, hexColor, alpha);
@@ -387,7 +385,8 @@ export class PuzzleRenderer {
     for (const block of piece.blocks) {
       const px = (gridX + block.xInPiece) * cellSize;
       const py = (gridY + block.yInPiece) * cellSize;
-      this.drawBlockSimple(g, px, py, cellSize, block.color);
+      const color = block.getColor() || Color.gray;
+      this.drawBlockSimple(g, px, py, cellSize, color);
     }
   }
 
@@ -402,14 +401,15 @@ export class PuzzleRenderer {
     for (const block of piece.blocks) {
       const px = offsetX + block.xInPiece * previewCellSize;
       const py = offsetY + block.yInPiece * previewCellSize;
-      this.drawBlockSimple(g, px, py, previewCellSize, block.color);
+      const color = block.getColor() || Color.gray;
+      this.drawBlockSimple(g, px, py, previewCellSize, color);
     }
   }
 
   private drawBlockSimple(g: Graphics, px: number, py: number, size: number, color: Color): void {
-    const hexColor = color.hex;
-    const darkerColor = color.darken(50).hex;
-    const lighterColor = color.brighten(50).hex;
+    const hexColor = color.toInt();
+    const darkerColor = color.clone(); darkerColor.darker(0.5);
+    const lighterColor = color.clone(); lighterColor.lighter(0.5);
 
     const inset = 2;
     const innerSize = size - inset * 2;
@@ -418,16 +418,16 @@ export class PuzzleRenderer {
     g.fill(hexColor);
 
     g.rect(px + inset, py + inset, innerSize, 2);
-    g.fill(lighterColor);
+    g.fill(lighterColor.toInt());
 
     g.rect(px + inset, py + inset, 2, innerSize);
-    g.fill(lighterColor);
+    g.fill(lighterColor.toInt());
 
     g.rect(px + inset, py + size - inset - 2, innerSize, 2);
-    g.fill(darkerColor);
+    g.fill(darkerColor.toInt());
 
     g.rect(px + size - inset - 2, py + inset, 2, innerSize);
-    g.fill(darkerColor);
+    g.fill(darkerColor.toInt());
   }
 
   private clearAllGraphics(): void {
@@ -471,8 +471,8 @@ export class PuzzleRenderer {
     return {
       x: gridOffsetX,
       y: gridOffsetY,
-      width: this.game.grid.width * cellSize,
-      height: (this.game.grid.height - this.game.grid.hiddenRows) * cellSize,
+      width: this.game.grid.getWidth() * cellSize,
+      height: (this.game.grid.getHeight() - 5) * cellSize,
     };
   }
 

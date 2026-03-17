@@ -1,4 +1,4 @@
-import { GameType } from '../puzzle/GameType';
+import { GameType } from '../puzzle';
 
 export interface HighScore {
     name: string;

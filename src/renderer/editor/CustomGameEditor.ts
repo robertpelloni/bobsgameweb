@@ -1,24 +1,22 @@
-import { GameType } from '../puzzle/GameType';
-import { BlockType } from '../puzzle/BlockType';
-import { PieceType } from '../puzzle/PieceType';
+import { GameType, BlockType, PieceType } from '../puzzle';
 
 export class CustomGameEditor {
   private container: HTMLElement;
   private currentGameType: GameType;
 
   // UI Elements
-  private nameInput: HTMLInputElement;
-  private modeSelect: HTMLSelectElement;
-  private gridWidthInput: HTMLInputElement;
-  private gridHeightInput: HTMLInputElement;
-  private gravityInput: HTMLInputElement;
-  private lockDelayInput: HTMLInputElement;
-  private chainAmountInput: HTMLInputElement;
-  private holdPieceCheck: HTMLInputElement;
-  private nextPieceCheck: HTMLInputElement;
+  private nameInput!: HTMLInputElement;
+  private modeSelect!: HTMLSelectElement;
+  private gridWidthInput!: HTMLInputElement;
+  private gridHeightInput!: HTMLInputElement;
+  private gravityInput!: HTMLInputElement;
+  private lockDelayInput!: HTMLInputElement;
+  private chainAmountInput!: HTMLInputElement;
+  private holdPieceCheck!: HTMLInputElement;
+  private nextPieceCheck!: HTMLInputElement;
   
-  private blockList: HTMLSelectElement;
-  private pieceList: HTMLSelectElement;
+  private blockList!: HTMLSelectElement;
+  private pieceList!: HTMLSelectElement;
 
   constructor(parentElementId: string) {
     const parent = document.getElementById(parentElementId);
@@ -49,165 +47,184 @@ export class CustomGameEditor {
         <button class="tab-btn" data-tab="pieces">Pieces</button>
       </div>
       
-      <div id="tab-settings" class="tab-content active">
+      <div class="tab-content" id="tab-settings">
         <div class="form-group">
-          <label>Name:</label>
-          <input type="text" id="input-name" />
+          <label>Game Name</label>
+          <input type="text" id="game-name">
         </div>
         <div class="form-group">
-          <label>Mode:</label>
-          <select id="select-mode">
+          <label>Mode</label>
+          <select id="game-mode">
             <option value="DROP">Drop</option>
             <option value="STACK">Stack</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Grid Width:</label>
-          <input type="number" id="input-grid-w" />
-        </div>
-        <div class="form-group">
-          <label>Grid Height:</label>
-          <input type="number" id="input-grid-h" />
-        </div>
-        <div class="form-group">
-          <label>Gravity Ticks:</label>
-          <input type="number" id="input-gravity" />
-        </div>
-        <div class="form-group">
-          <label>Lock Delay:</label>
-          <input type="number" id="input-lock" />
-        </div>
-        <div class="form-group">
-          <label>Chain Amount:</label>
-          <input type="number" id="input-chain" />
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" id="check-hold" /> Hold Piece Enabled</label>
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" id="check-next" /> Next Piece Enabled</label>
-        </div>
-      </div>
-      
-      <div id="tab-blocks" class="tab-content" style="display:none;">
-        <div class="split-view">
-          <div class="list-pane">
-            <select id="list-blocks" size="10"></select>
-            <div class="actions">
-              <button id="btn-add-block">Add</button>
-              <button id="btn-rm-block">Remove</button>
-            </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Grid Width</label>
+            <input type="number" id="grid-width" min="4" max="20">
           </div>
-          <div class="editor-pane" id="block-editor-pane">
-            <!-- Block editor details will go here -->
-            <p>Select a block type to edit</p>
+          <div class="form-group">
+            <label>Grid Height</label>
+            <input type="number" id="grid-height" min="10" max="40">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Gravity (ms)</label>
+            <input type="number" id="gravity" min="0" step="10">
+          </div>
+          <div class="form-group">
+            <label>Lock Delay (ms)</label>
+            <input type="number" id="lock-delay" min="0" step="10">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Chain Amount</label>
+          <input type="number" id="chain-amount" min="2" max="10">
+        </div>
+        <div class="form-row">
+          <div class="checkbox-group">
+            <input type="checkbox" id="hold-enabled">
+            <label for="hold-enabled">Enable Hold</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="next-enabled">
+            <label for="next-enabled">Enable Next</label>
           </div>
         </div>
       </div>
       
-      <div id="tab-pieces" class="tab-content" style="display:none;">
-        <div class="split-view">
-          <div class="list-pane">
-            <select id="list-pieces" size="10"></select>
-            <div class="actions">
-              <button id="btn-add-piece">Add</button>
-              <button id="btn-rm-piece">Remove</button>
+      <div class="tab-content hidden" id="tab-blocks">
+        <div class="editor-columns">
+          <div class="item-list">
+            <h3>Block Types</h3>
+            <select id="block-list" size="10"></select>
+            <div class="list-actions">
+              <button id="btn-add-block">+</button>
+              <button id="btn-remove-block">-</button>
             </div>
           </div>
-          <div class="editor-pane" id="piece-editor-pane">
-            <!-- Piece editor details will go here -->
-            <p>Select a piece type to edit</p>
+          <div class="item-details" id="block-details">
+            <!-- Dynamic block details -->
+          </div>
+        </div>
+      </div>
+      
+      <div class="tab-content hidden" id="tab-pieces">
+        <div class="editor-columns">
+          <div class="item-list">
+            <h3>Piece Types</h3>
+            <select id="piece-list" size="10"></select>
+            <div class="list-actions">
+              <button id="btn-add-piece">+</button>
+              <button id="btn-remove-piece">-</button>
+            </div>
+          </div>
+          <div class="item-details" id="piece-details">
+            <!-- Dynamic piece details -->
           </div>
         </div>
       </div>
     `;
 
-    // Bind elements
-    this.nameInput = this.container.querySelector('#input-name') as HTMLInputElement;
-    this.modeSelect = this.container.querySelector('#select-mode') as HTMLSelectElement;
-    this.gridWidthInput = this.container.querySelector('#input-grid-w') as HTMLInputElement;
-    this.gridHeightInput = this.container.querySelector('#input-grid-h') as HTMLInputElement;
-    this.gravityInput = this.container.querySelector('#input-gravity') as HTMLInputElement;
-    this.lockDelayInput = this.container.querySelector('#input-lock') as HTMLInputElement;
-    this.chainAmountInput = this.container.querySelector('#input-chain') as HTMLInputElement;
-    this.holdPieceCheck = this.container.querySelector('#check-hold') as HTMLInputElement;
-    this.nextPieceCheck = this.container.querySelector('#check-next') as HTMLInputElement;
-    
-    this.blockList = this.container.querySelector('#list-blocks') as HTMLSelectElement;
-    this.pieceList = this.container.querySelector('#list-pieces') as HTMLSelectElement;
+    this.nameInput = this.container.querySelector('#game-name') as HTMLInputElement;
+    this.modeSelect = this.container.querySelector('#game-mode') as HTMLSelectElement;
+    this.gridWidthInput = this.container.querySelector('#grid-width') as HTMLInputElement;
+    this.gridHeightInput = this.container.querySelector('#grid-height') as HTMLInputElement;
+    this.gravityInput = this.container.querySelector('#gravity') as HTMLInputElement;
+    this.lockDelayInput = this.container.querySelector('#lock-delay') as HTMLInputElement;
+    this.chainAmountInput = this.container.querySelector('#chain-amount') as HTMLInputElement;
+    this.holdPieceCheck = this.container.querySelector('#hold-enabled') as HTMLInputElement;
+    this.nextPieceCheck = this.container.querySelector('#next-enabled') as HTMLInputElement;
+    this.blockList = this.container.querySelector('#block-list') as HTMLSelectElement;
+    this.pieceList = this.container.querySelector('#piece-list') as HTMLSelectElement;
 
-    this.bindEvents();
+    // Add event listeners
+    this.setupEventListeners();
   }
 
-  private bindEvents() {
-    // Tabs
-    const tabs = this.container.querySelectorAll('.tab-btn');
-    const contents = this.container.querySelectorAll('.tab-content');
-    
-    tabs.forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        const target = (e.target as HTMLElement).dataset.tab;
-        
-        tabs.forEach(t => t.classList.remove('active'));
-        contents.forEach(c => (c as HTMLElement).style.display = 'none');
-        
-        (e.target as HTMLElement).classList.add('active');
-        const content = this.container.querySelector(`#tab-${target}`) as HTMLElement;
-        if (content) content.style.display = 'block';
+  private setupEventListeners() {
+    this.container.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const tab = (e.target as HTMLElement).dataset.tab;
+        this.switchTab(tab!);
       });
     });
 
-    // Inputs (Auto-save to memory object)
-    const inputs = [this.nameInput, this.modeSelect, this.gridWidthInput, this.gridHeightInput, 
-                   this.gravityInput, this.lockDelayInput, this.chainAmountInput, 
-                   this.holdPieceCheck, this.nextPieceCheck];
-                   
-    inputs.forEach(input => {
-      input.addEventListener('change', () => this.saveToGameType());
+    this.container.querySelector('#btn-save')?.addEventListener('click', () => this.save());
+    this.container.querySelector('#btn-load')?.addEventListener('click', () => this.load());
+    this.container.querySelector('#btn-new')?.addEventListener('click', () => this.createNew());
+  }
+
+  private switchTab(tabName: string) {
+    this.container.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('active', (btn as HTMLElement).dataset.tab === tabName);
     });
-    
-    // Main Buttons
-    this.container.querySelector('#btn-save')?.addEventListener('click', () => {
-      this.saveToGameType();
-      console.log('Saved GameType:', this.currentGameType);
-      // Implementation to save to localStorage or backend
-    });
-    
-    this.container.querySelector('#btn-new')?.addEventListener('click', () => {
-      this.currentGameType = new GameType();
-      this.loadFromGameType();
+    this.container.querySelectorAll('.tab-content').forEach(content => {
+      content.classList.toggle('hidden', content.id !== `tab-${tabName}`);
     });
   }
 
   private loadFromGameType() {
-    if (!this.currentGameType) return;
+    this.nameInput.value = this.currentGameType.name;
+    this.modeSelect.value = this.currentGameType.gameMode;
+    this.gridWidthInput.value = this.currentGameType.gridWidth.toString();
+    this.gridHeightInput.value = this.currentGameType.gridHeight.toString();
+    this.gravityInput.value = this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces.toString();
+    this.lockDelayInput.value = this.currentGameType.maxLockDelayTicks.toString();
+    this.chainAmountInput.value = this.currentGameType.chainRule_AmountPerChain.toString();
+    // this.holdPieceCheck.checked = this.currentGameType.holdPieceEnabled; // Field might be named differently
+    // this.nextPieceCheck.checked = this.currentGameType.nextPieceEnabled;
     
-    this.nameInput.value = this.currentGameType.name || '';
-    // This assumes GameType has these properties mapped properly based on the Java/C++ versions
-    // this.modeSelect.value = this.currentGameType.gameMode;
-    // this.gridWidthInput.value = this.currentGameType.gridWidth.toString();
-    // this.gridHeightInput.value = this.currentGameType.gridHeight.toString();
-    
-    this.refreshBlockList();
-    this.refreshPieceList();
+    this.updateBlockList();
+    this.updatePieceList();
   }
 
-  private saveToGameType() {
-    if (!this.currentGameType) return;
-    
-    this.currentGameType.name = this.nameInput.value;
-    // this.currentGameType.gameMode = this.modeSelect.value as any;
-    // this.currentGameType.gridWidth = parseInt(this.gridWidthInput.value, 10);
-    // this.currentGameType.gridHeight = parseInt(this.gridHeightInput.value, 10);
-  }
-
-  private refreshBlockList() {
+  private updateBlockList() {
     this.blockList.innerHTML = '';
-    // Populate from this.currentGameType.blockTypes
+    this.currentGameType.blockTypes.forEach(bt => {
+      const option = document.createElement('option');
+      option.value = bt.uuid;
+      option.textContent = bt.name || 'Unnamed Block';
+      this.blockList.appendChild(option);
+    });
   }
 
-  private refreshPieceList() {
+  private updatePieceList() {
     this.pieceList.innerHTML = '';
-    // Populate from this.currentGameType.pieceTypes
+    this.currentGameType.pieceTypes.forEach(pt => {
+      const option = document.createElement('option');
+      option.value = pt.uuid;
+      option.textContent = pt.name || 'Unnamed Piece';
+      this.pieceList.appendChild(option);
+    });
+  }
+
+  private save() {
+    this.currentGameType.name = this.nameInput.value;
+    this.currentGameType.gameMode = this.modeSelect.value as any;
+    this.currentGameType.gridWidth = parseInt(this.gridWidthInput.value);
+    this.currentGameType.gridHeight = parseInt(this.gridHeightInput.value);
+    this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = parseInt(this.gravityInput.value);
+    this.currentGameType.maxLockDelayTicks = parseInt(this.lockDelayInput.value);
+    this.currentGameType.chainRule_AmountPerChain = parseInt(this.chainAmountInput.value);
+    
+    const data = this.currentGameType.toBase64GZippedXML();
+    localStorage.setItem('custom-game-type', data);
+    alert('Game type saved!');
+  }
+
+  private load() {
+    const data = localStorage.getItem('custom-game-type');
+    if (data) {
+      this.currentGameType = GameType.fromBase64GZippedXML(data);
+      this.loadFromGameType();
+    }
+  }
+
+  private createNew() {
+    this.currentGameType = new GameType();
+    this.loadFromGameType();
   }
 }

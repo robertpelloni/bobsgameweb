@@ -36,7 +36,7 @@ export class HighScoresScene extends Scene {
         this.selectedModeIndex = this.modes.indexOf(this.currentMode);
     }
 
-    protected create(): void {
+    public create(): void {
         this.createBackground();
         this.createTitle();
         this.createModeTabs();

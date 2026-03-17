@@ -1,1005 +1,616 @@
 import { Block } from "./Block";
-import { GameLogic } from "./GameLogic";
 import { Piece } from "./Piece";
-import { GameType } from "./GameType";
+import { GameType, DifficultyType, GameMode, GarbageType } from "./GameType";
+import { MovementType } from "./MovementType";
+import { GameLogic } from "./GameLogic";
 import { PieceType } from "./PieceType";
 import { BlockType } from "./BlockType";
-import { BobColor } from "../BobColor";
 import { Easing } from "../Easing";
 
 export class Grid {
     public game: GameLogic;
-    public blocks: (Block | null)[] = [];
-
+    public blocks: (Block | null)[][] = [];
     public screenX: number = 0;
     public screenY: number = 0;
+    public scrollPlayingFieldY: number = 0;
+    public scrollBlockIncrement: number = 100;
+
+    public deadX: number = 0;
+    public deadY: number = 0;
+
+    public lastGarbageHoleX: number = 0;
+    public garbageHoleDirectionToggle: boolean = true;
+
+    public shakePlayingFieldX: number = 0;
+    public shakePlayingFieldY: number = 0;
+    public shakePlayingFieldScreenTicksCounter: number = 0;
+    public shakePlayingFieldTicksDuration: number = 0;
+    public shakePlayingFieldMaxX: number = 0;
+    public shakePlayingFieldMaxY: number = 0;
+    public shakePlayingFieldTicksPerShake: number = 0;
+    public shakePlayingFieldStartTime: number = 0;
+    public shakePlayingFieldTicksPerShakeXCounter: number = 0;
+    public shakePlayingFieldTicksPerShakeYCounter: number = 0;
+    public shakePlayingFieldLeftRightToggle: boolean = false;
+    public shakePlayingFieldUpDownToggle: boolean = false;
 
     public wigglePlayingFieldX: number = 0;
-    public wigglePlayingFieldY: number = 0;
+    public wigglePlayingFieldTicks: number = 0;
+    public wigglePlayingFieldTicksSpeed: number = 50;
     public wigglePlayingFieldMaxX: number = 2;
-    public wigglePlayingFieldTicksSpeed: number = 40;
-    private wigglePlayingFieldTicks: number = 0;
-    private wigglePlayingFieldLeftRightToggle: boolean = false;
+    public wigglePlayingFieldLeftRightToggle: boolean = false;
 
-    private shakePlayingFieldMaxX: number = 0;
-    private shakePlayingFieldMaxY: number = 0;
-    private shakePlayingFieldTicksPerShake: number = 0;
-    private shakePlayingFieldTicksDuration: number = 0;
-    private shakePlayingFieldStartTime: number = 0;
-    private shakePlayingFieldTicksPerShakeXCounter: number = 0;
-    private shakePlayingFieldTicksPerShakeYCounter: number = 0;
-    private shakePlayingFieldScreenTicksCounter: number = 0;
-    private shakePlayingFieldX: number = 0;
-    private shakePlayingFieldY: number = 0;
-    private shakePlayingFieldLeftRightToggle: boolean = false;
-    private shakePlayingFieldUpDownToggle: boolean = false;
-
-    public scrollPlayingFieldY: number = 0;
-    public scrollBlockIncrement: number = 60;
-
-    private scrollPlayingFieldBackgroundTicksSpeed: number = 30;
-    private backgroundScrollX: number = 0;
-    private backgroundScrollY: number = 0;
-    private scrollPlayingFieldBackgroundTicks: number = 0;
-
-    private lastGarbageHoleX: number = 0;
-    private garbageHoleDirectionToggle: boolean = false;
-
-    private deadX: number = 0;
-    private deadY: number = 0;
-
-    public randomBag: Piece[] = [];
-
-    constructor(gameInstance: GameLogic) {
-        this.game = gameInstance;
-        const size = this.getWidth() * this.getHeight();
-        for (let i = 0; i < size; i++) this.blocks.push(null);
+    constructor(game: GameLogic) {
+        this.game = game;
     }
 
-    public getXInFBO(): number { return this.getXInFBONoShake() + this.wigglePlayingFieldX + this.shakePlayingFieldX; }
-    public getYInFBO(): number { return this.getYInFBONoShake() + this.wigglePlayingFieldY + this.shakePlayingFieldY; }
-    public getXInFBONoShake(): number { return (this.game.playingFieldX1 - this.game.playingFieldX0) / 2 - this.getWidth() * this.cellW() / 2; }
-    public getYInFBONoShake(): number { return 5 * this.cellH(); }
-    public getXOnScreenNoShake(): number { return this.screenX; }
-    public getYOnScreenNoShake(): number { return this.screenY; }
-    public bgX(): number { return this.getXInFBO() + this.backgroundScrollX; }
-    public bgY(): number { return this.getYInFBO() + this.backgroundScrollY; }
-    public getHeight(): number { return (this.getGameType() ? this.getGameType()!.gridHeight : 20) + GameLogic.aboveGridBuffer; }
-    public getWidth(): number { return this.getGameType() ? this.getGameType()!.gridWidth : 10; }
-
-    public update(): void {
-        const piecesInGrid = this.getArrayOfPiecesOnGrid();
-        for (const p of piecesInGrid) p.update();
-        this.updateShake();
-    }
-
-    public reformat(oldWidth: number, oldHeight: number): void {
-        const blockList: Block[] = [];
-        if (this.blocks.length > 0) {
-            for (let y = oldHeight - 1; y >= 0; y--) {
-                for (let x = 0; x < oldWidth; x++) {
-                    const index = y * oldWidth + x;
-                    if (index < this.blocks.length && this.blocks[index]) {
-                        const b = this.blocks[index]!;
-                        this.blocks[index] = null;
-                        b.xInPiece = 0; b.yInPiece = 0;
-                        b.connectedBlocksByColor = [];
-                        b.connectedBlocksByPiece = [];
-                        blockList.push(b);
-                    }
-                }
+    public getArrayOfPiecesOnGrid(): Piece[] {
+        const pieces = new Set<Piece>();
+        for (let y = 0; y < this.getHeight(); y++) {
+            for (let x = 0; x < this.getWidth(); x++) {
+                const b = this.get(x, y);
+                if (b && b.piece) pieces.add(b.piece);
             }
         }
-        this.blocks = [];
-        const newSize = this.getWidth() * this.getHeight();
-        for (let i = 0; i < newSize; i++) this.blocks.push(null);
-        let x = 0; let y = this.getHeight() - 1;
-        while (blockList.length > 0 && y >= 0) {
-            this.add(x, y, blockList.shift()!);
-            x++;
-            if (x >= this.getWidth()) { y--; x = 0; }
+        return Array.from(pieces);
+    }
+
+    public getWidth(): number { return this.game.gridW(); }
+    public getHeight(): number { return this.game.gridH(); }
+
+    public reformat(w: number, h: number): void {
+        this.blocks = Array.from({ length: h }, () => Array(w).fill(null));
+    }
+
+    public get(x: number, y: number): Block | null {
+        if (x < 0 || x >= this.getWidth() || y < 0 || y >= this.getHeight()) return null;
+        return this.blocks[y][x];
+    }
+
+    public set(x: number, y: number, b: Block | null): void {
+        if (x < 0 || x >= this.getWidth() || y < 0 || y >= this.getHeight()) return;
+        this.blocks[y][x] = b;
+        if (b) { b.xGrid = x; b.yGrid = y; }
+    }
+
+    public add(x: number, y: number, b: Block): void { this.set(x, y, b); }
+
+    public remove(x: number, y: number, destroy: boolean, explode: boolean): Block | null {
+        const b = this.get(x, y);
+        if (b) {
+            this.blocks[y][x] = null;
         }
+        return b;
+    }
+
+    public removeBlock(b: Block, destroy: boolean, explode: boolean): void {
+        this.remove(b.xGrid, b.yGrid, destroy, explode);
+    }
+
+    public contains(x: number, y: number): boolean {
+        return this.get(x, y) !== null;
     }
 
     public getNumberOfFilledCells(): number {
-        let amt = 0;
-        for (let y = 0; y < this.getHeight(); y++) for (let x = 0; x < this.getWidth(); x++) if (this.get(x, y)) amt++;
-        return amt;
-    }
-
-    public removeAllBlocksOfPieceFromGrid(p: Piece, fadeOut: boolean): void {
-        for (const b of p.blocks) if (b.setInGrid) this.removeBlock(b, fadeOut, true);
-    }
-
-    public replaceAllBlocksWithNewGameBlocks(): void {
-        const removedBlocks: Block[] = [];
-        const maxHeight = GameLogic.aboveGridBuffer + Math.floor((this.getHeight() - GameLogic.aboveGridBuffer) / 3);
-        for (let y = this.getHeight() - 1; y >= 0; y--) {
+        let count = 0;
+        for (let y = 0; y < this.getHeight(); y++) {
             for (let x = 0; x < this.getWidth(); x++) {
-                const a = this.get(x, y);
-                if (a) {
-                    removedBlocks.push(a);
-                    this.removeBlock(a, y < maxHeight, true);
-                }
+                if (this.contains(x, y)) count++;
             }
         }
-        const bt = this.getGameType()!.getPlayingFieldBlockTypes(this.game.getCurrentDifficulty());
-        const pt = this.getGameType()!.getPlayingFieldPieceTypes(this.game.getCurrentDifficulty());
-        for (const a of removedBlocks) {
-            const x = a.xGrid; const y = a.yGrid;
-            if (y >= maxHeight) {
-                const p = this.putOneBlockPieceInGridCheckingForFillRules(x, y, pt, bt);
-                if (p && p.blocks.length > 0) {
-                    const b = p.blocks[0];
-                    if (b) { b.lastScreenX = a.lastScreenX; b.lastScreenY = a.lastScreenY; b.ticksSinceLastMovement = 0; }
-                }
-            }
-        }
+        return count;
     }
 
-    public putOneBlockPieceInGridCheckingForFillRules(x: number, y: number, pieceTypes: PieceType[], blockTypes: BlockType[]): Piece | null {
-        let p: Piece | null = null;
-        if (this.getGameType()!.stackDontPutSameColorNextToEachOther) p = this.dontPutSameColorNextToEachOtherOrReturnNull(p, x, y, pieceTypes, blockTypes);
-        if (this.getGameType()!.stackDontPutSameBlockTypeNextToEachOther) p = this.dontPutSameBlockTypeNextToEachOtherOrReturnNull(p, x, y, pieceTypes, blockTypes);
-        if (this.getGameType()!.stackDontPutSameColorDiagonalOrNextToEachOtherReturnNull) p = this.dontPutSameColorDiagonalOrNextToEachOtherReturnNull(p, x, y, pieceTypes, blockTypes);
-        if (p === null) {
-            p = this.getRandomPiece(pieceTypes, blockTypes);
-            while (p.blocks.length > 1) p.blocks.pop()!.breakConnectionsInPiece();
-        }
-        if (p) {
-            this.setPiece(p, x, y);
-            if (this.getGameType()!.stackLeaveAtLeastOneGapPerRow) {
-                let isFull = true;
-                for (let xx = 0; xx < this.getWidth(); xx++) if (this.get(xx, y) === null) { isFull = false; break; }
-                if (isFull) this.remove(this.game.getRandomIntLessThan(this.getWidth(), "putOneBlockPieceInGridCheckingForFillRules"), y, false, true);
-            }
-        }
-        return p;
-    }
-
-    public dontPutSameColorDiagonalOrNextToEachOtherReturnNull(p: Piece | null, x: number, y: number, pieceTypes: PieceType[], blockTypes: BlockType[]): Piece | null {
-        let acceptableColors: BobColor[] = [];
-        const maxC = this.game.getCurrentDifficulty().maximumBlockTypeColors;
-        for (const bt of blockTypes) {
-            const amt = Math.min(bt.colors.length, maxC);
-            for (let i = 0; i < amt; i++) {
-                const c = bt.colors[i];
-                if (!acceptableColors.includes(c)) acceptableColors.push(c);
-            }
-        }
-        if (x > 0 && y > 0 && this.get(x-1, y-1)) acceptableColors = acceptableColors.filter(c => c !== this.get(x-1, y-1)!.getColor());
-        if (x > 0 && y < this.getHeight()-1 && this.get(x-1, y+1)) acceptableColors = acceptableColors.filter(c => c !== this.get(x-1, y+1)!.getColor());
-        if (x > 0 && this.get(x-1, y)) acceptableColors = acceptableColors.filter(c => c !== this.get(x-1, y)!.getColor());
-        if (y < this.getHeight()-1 && this.get(x, y+1)) acceptableColors = acceptableColors.filter(c => c !== this.get(x, y+1)!.getColor());
-        if (y > 0 && this.get(x, y-1)) acceptableColors = acceptableColors.filter(c => c !== this.get(x, y-1)!.getColor());
-        if (acceptableColors.length > 0) {
-            const color = acceptableColors[this.game.getRandomIntLessThan(acceptableColors.length, "dontPutSameColorDiagonal")];
-            if (p === null) {
-                p = this.getRandomPiece(pieceTypes, blockTypes);
-                while (p.blocks.length > 1) p.blocks.pop()!.breakConnectionsInPiece();
-            }
-            for (const b of p.blocks) b.setColor(color);
-            return p;
-        }
-        return null;
-    }
-
-    public dontPutSameColorNextToEachOtherOrReturnNull(p: Piece | null, x: number, y: number, pieceTypes: PieceType[], blockTypes: BlockType[]): Piece | null {
-        let acceptableColors: BobColor[] = [];
-        const maxC = this.game.getCurrentDifficulty().maximumBlockTypeColors;
-        for (const bt of blockTypes) {
-            const amt = Math.min(bt.colors.length, maxC);
-            for (let i = 0; i < amt; i++) {
-                const c = bt.colors[i];
-                if (!acceptableColors.includes(c)) acceptableColors.push(c);
-            }
-        }
-        if (x > 0 && this.get(x-1, y)) acceptableColors = acceptableColors.filter(c => c !== this.get(x-1, y)!.getColor());
-        if (y < this.getHeight()-1 && this.get(x, y+1)) acceptableColors = acceptableColors.filter(c => c !== this.get(x, y+1)!.getColor());
-        if (y > 0 && this.get(x, y-1)) acceptableColors = acceptableColors.filter(c => c !== this.get(x, y-1)!.getColor());
-        if (acceptableColors.length > 0) {
-            const color = acceptableColors[this.game.getRandomIntLessThan(acceptableColors.length, "dontPutSameColorNextToEachOther")];
-            if (p === null) {
-                p = this.getRandomPiece(pieceTypes, blockTypes);
-                while (p.blocks.length > 1) p.blocks.pop()!.breakConnectionsInPiece();
-                for (const b of p.blocks) b.setColor(color);
-            } else {
-                for (const b of p.blocks) if (!acceptableColors.includes(b.getColor()!)) b.setColor(color);
-            }
-            return p;
-        }
-        return null;
-    }
-
-    public dontPutSameBlockTypeNextToEachOtherOrReturnNull(p: Piece | null, x: number, y: number, pieceTypes: PieceType[], blockTypes: BlockType[]): Piece | null {
-        let acceptableBlockTypes = [...blockTypes];
-        if (x > 0 && this.get(x-1, y)) acceptableBlockTypes = acceptableBlockTypes.filter(bt => bt !== this.get(x-1, y)!.blockType);
-        if (y < this.getHeight()-1 && this.get(x, y+1)) acceptableBlockTypes = acceptableBlockTypes.filter(bt => bt !== this.get(x, y+1)!.blockType);
-        if (y > 0 && this.get(x, y-1)) acceptableBlockTypes = acceptableBlockTypes.filter(bt => bt !== this.get(x, y-1)!.blockType);
-        if (acceptableBlockTypes.length > 0) {
-            if (p !== null) { for (const b of p.blocks) if (!acceptableBlockTypes.includes(b.blockType)) { p = null; break; } }
-            if (p === null) {
-                const pt = this.getRandomPieceType(pieceTypes);
-                const bt = acceptableBlockTypes[this.game.getRandomIntLessThan(acceptableBlockTypes.length, "dontPutSameBlockTypeNextToEachOther")];
-                p = new Piece(this.game, this, pt, bt); p.init();
-                while (p.blocks.length > 1) p.blocks.pop()!.breakConnectionsInPiece();
-            }
-            return p;
-        }
-        return null;
-    }
-
-    public removeAndDestroyAllBlocksInGrid(): void {
-        for (let y = 0; y < this.getHeight(); y++) for (let x = 0; x < this.getWidth(); x++) if (this.get(x, y)) this.remove(x, y, true, true);
-    }
-
-    public randomlyFillGridWithPlayingFieldPieces(numberOfBlocks: number, topY: number): void {
-        topY += GameLogic.aboveGridBuffer;
-        const fieldSize = this.getWidth() * Math.max((this.getHeight() - topY), 0);
-        const num = this.getNumberOfFilledCells();
-        if (num > 0 && num < numberOfBlocks) numberOfBlocks = num;
-        if (numberOfBlocks >= fieldSize) numberOfBlocks = fieldSize - 1;
-        if (numberOfBlocks < 0) numberOfBlocks = 0;
-        const blockList: Block[] = [];
-        for (let y = 0; y < this.getHeight(); y++) for (let x = 0; x < this.getWidth(); x++) {
-            const b = this.remove(x, y, false, true);
-            if (b && !blockList.includes(b)) blockList.push(b);
-        }
-        const bt = this.getGameType()!.getPlayingFieldBlockTypes(this.game.getCurrentDifficulty());
-        const pt = this.getGameType()!.getPlayingFieldPieceTypes(this.game.getCurrentDifficulty());
-        for (let i = 0; i < numberOfBlocks; i++) {
-            let r = this.game.getRandomIntLessThan(fieldSize, "randomlyFillGridWithPlayingFieldPieces");
-            let x = r % this.getWidth(); let y = Math.floor(r / this.getWidth()) + topY;
-            let attempt = 0;
-            while (this.get(x, y) !== null && attempt < fieldSize) {
-                r = this.game.getRandomIntLessThan(fieldSize, "randomlyFillGridWithPlayingFieldPieces");
-                x = r % this.getWidth(); y = Math.floor(r / this.getWidth()) + topY;
-                attempt++;
-            }
-            if (this.get(x, y) === null) { const p = this.putOneBlockPieceInGridCheckingForFillRules(x, y, pt, bt); if (p) i += p.blocks.length - 1; }
-        }
-        for (let y = 0; y < this.getHeight(); y++) for (let x = 0; x < this.getWidth(); x++) {
-            const b = this.get(x, y);
-            if (b && blockList.length > 0) { const a = blockList.shift()!; b.lastScreenX = a.lastScreenX; b.lastScreenY = a.lastScreenY; b.ticksSinceLastMovement = 0; }
-        }
-    }
-
-    public scrollUpStack(cursorPiece: Piece, amt: number): boolean {
-        this.scrollPlayingFieldY -= amt;
-        for (let y = 0; y < this.getHeight(); y++) for (let x = 0; x < this.getWidth(); x++) { const b = this.get(x, y); if (b) b.lastScreenY = b.getScreenY(); }
-        if (this.scrollPlayingFieldY < 0 - this.scrollBlockIncrement) {
-            for (let x = 0; x < this.getWidth(); x++) if (this.get(x, GameLogic.aboveGridBuffer)) { this.scrollPlayingFieldY = 0 - this.scrollBlockIncrement; return false; }
-            cursorPiece.yGrid -= 1;
-            if (cursorPiece.yGrid < 1 + GameLogic.aboveGridBuffer) cursorPiece.yGrid += 1;
-            this.scrollPlayingFieldY += this.scrollBlockIncrement;
-            for (let y = 0; y < this.getHeight() - 1; y++) for (let x = 0; x < this.getWidth(); x++) { const b = this.remove(x, y + 1, false, false); if (b) this.add(x, y, b); }
-            const bt = this.getGameType()!.getNormalBlockTypes(this.game.getCurrentDifficulty());
-            const pt = this.getGameType()!.getNormalPieceTypes(this.game.getCurrentDifficulty());
-            for (let x = 0; x < this.getWidth(); x++) this.putOneBlockPieceInGridCheckingForFillRules(x, this.getHeight() - 1, pt, bt);
-            this.game.piecesMadeThisGame++;
+    public doesPieceFit(p: Piece, gridX: number = p.xGrid, gridY: number = p.yGrid, rot: number = p.currentRotation): boolean {
+        const rs = p.pieceType.rotationSet;
+        if (!rs || rot >= rs.size()) return false;
+        const r = rs.get(rot);
+        for (const bo of r.blockOffsets) {
+            const x = gridX + bo.x; const y = gridY + bo.y;
+            if (x < 0 || x >= this.getWidth() || y >= this.getHeight()) return false;
+            if (y >= 0 && this.get(x, y) !== null) return false;
         }
         return true;
     }
 
-    public makeGarbageRowFromFloor(): void {
-        this.moveAllRowsUpOne();
-        const y = this.getHeight() - 1;
-        if (this.getGameType()!.playingFieldGarbageType === "MATCH_BOTTOM_ROW") { for (let x = 0; x < this.getWidth(); x++) if (this.get(x, y - 1)) this.putGarbageBlockFromFloor(x, y); }
-        else if (this.getGameType()!.playingFieldGarbageType === "RANDOM") { for (let x = 0; x < this.getWidth(); x++) if (this.game.getRandomIntLessThan(2, "makeGarbageRowFromFloor") === 0) this.putGarbageBlockFromFloor(x, y); }
-        else if (this.getGameType()!.playingFieldGarbageType === "ZIGZAG_PATTERN") {
-            for (let x = 0; x < this.getWidth(); x++) if (x !== this.lastGarbageHoleX) this.putGarbageBlockFromFloor(x, y);
-            if (this.garbageHoleDirectionToggle) { this.lastGarbageHoleX++; if (this.lastGarbageHoleX >= this.getWidth()) { this.lastGarbageHoleX = this.getWidth() - 1; this.garbageHoleDirectionToggle = false; } }
-            else { this.lastGarbageHoleX--; if (this.lastGarbageHoleX < 0) { this.lastGarbageHoleX = 0; this.garbageHoleDirectionToggle = true; } }
+    public setPiece(p: Piece, gridX: number = p.xGrid, gridY: number = p.yGrid): void {
+        for (const b of p.blocks) {
+            this.add(gridX + b.xInPiece, gridY + b.yInPiece, b);
         }
     }
 
-    public moveAllRowsUpOne(): void {
-        for (let x = 0; x < this.getWidth(); x++) { const b = this.get(x, 0); if (b) this.removeBlock(b, true, true); }
-        for (let y = 0; y < this.getHeight() - 1; y++) for (let x = 0; x < this.getWidth(); x++) { const b = this.remove(x, y + 1, false, false); if (b) this.add(x, y, b); }
+    public cursorSwapBetweenTwoBlocksHorizontal(cursor: Piece): void {
+        const a = this.get(cursor.xGrid, cursor.yGrid);
+        const b = this.get(cursor.xGrid + 1, cursor.yGrid);
+        if (a && a.interpolateSwappingWithX === 0 && !a.flashingToBeRemoved) {
+            if (!b || b.interpolateSwappingWithX === 0) a.interpolateSwappingWithX = 1;
+        }
+        if (b && b.interpolateSwappingWithX === 0 && !b.flashingToBeRemoved) {
+            if (!a || a.interpolateSwappingWithX === 1) b.interpolateSwappingWithX = -1;
+        }
     }
 
-    public putGarbageBlockFromFloor(x: number, y: number): void {
-        const bt = this.getGameType()!.getGarbageBlockTypes(this.game.getCurrentDifficulty());
-        const pt = this.getGameType()!.getGarbagePieceTypes(this.game.getCurrentDifficulty());
-        const p = this.putOneBlockPieceInGridCheckingForFillRules(x, y, pt, bt);
-        if (p) for (const b of p.blocks) { b.lastScreenX = this.getXInFBO() + b.xGrid * this.cellW(); b.lastScreenY = this.getYInFBO() + b.yInPiece * this.cellH() + this.getHeight() * this.cellH(); b.ticksSinceLastMovement = 0; }
+    public cursorSwapBetweenTwoBlocksVertical(cursor: Piece): void {
+        const a = this.get(cursor.xGrid, cursor.yGrid);
+        const b = this.get(cursor.xGrid, cursor.yGrid + 1);
+        if (a && a.interpolateSwappingWithY === 0 && !a.flashingToBeRemoved) {
+            if (!b || b.interpolateSwappingWithY === 0) a.interpolateSwappingWithY = 1;
+        }
+        if (b && b.interpolateSwappingWithY === 0 && !b.flashingToBeRemoved) {
+            if (!a || a.interpolateSwappingWithY === 1) b.interpolateSwappingWithY = -1;
+        }
     }
 
-    public continueSwappingBlocks(): boolean {
-        let swappingAny = false;
-        for (let y = 0; y < this.getHeight(); y++) for (let x = 0; x < this.getWidth(); x++) {
-            const a = this.get(x, y); if (!a) continue;
-            if (a.interpolateSwappingWithX !== 0) {
-                const b = this.get(x + a.interpolateSwappingWithX, y); swappingAny = true;
-                if (a.swapTicks < 17 * 6) { a.swapTicks += this.game.ticks(); if (b) b.swapTicks = a.swapTicks; }
-                else { a.swapTicks = 0; if (b) b.swapTicks = 0; this.remove(x, y, false, false); this.remove(x + a.interpolateSwappingWithX, y, false, false); if (b) this.add(x, y, b); this.add(x + a.interpolateSwappingWithX, y, a); a.interpolateSwappingWithX = 0; if (b) b.interpolateSwappingWithX = 0; }
-            }
-            if (a.interpolateSwappingWithY !== 0) {
-                const b = this.get(x, y + a.interpolateSwappingWithY); swappingAny = true;
-                if (a.swapTicks < 17 * 6) { a.swapTicks += this.game.ticks(); if (b) b.swapTicks = a.swapTicks; }
-                else { a.swapTicks = 0; if (b) b.swapTicks = 0; this.remove(x, y, false, false); this.remove(x, y + a.interpolateSwappingWithY, false, false); if (b) this.add(x, y, b); this.add(x, y + a.interpolateSwappingWithY, a); a.interpolateSwappingWithY = 0; if (b) b.interpolateSwappingWithY = 0; }
+    public cursorSwapBetweenThreeBlocksHorizontal(cursor: Piece, rotation: MovementType): void {
+        const a = this.get(cursor.xGrid - 1, cursor.yGrid);
+        const b = this.get(cursor.xGrid, cursor.yGrid);
+        const c = this.get(cursor.xGrid + 1, cursor.yGrid);
+        if (rotation === MovementType.ROTATE_CLOCKWISE) {
+            if (a && a.interpolateSwappingWithX === 0 && !a.flashingToBeRemoved) if (!b || b.interpolateSwappingWithX === 0) a.interpolateSwappingWithX = 1;
+            if (b && b.interpolateSwappingWithX === 0 && !b.flashingToBeRemoved) if (!c || c.interpolateSwappingWithX === -2) b.interpolateSwappingWithX = 1;
+            if (c && c.interpolateSwappingWithX === 0 && !c.flashingToBeRemoved) if (!a || a.interpolateSwappingWithX === 1) c.interpolateSwappingWithX = -2;
+        }
+        if (rotation === MovementType.ROTATE_COUNTERCLOCKWISE) {
+            if (a && a.interpolateSwappingWithX === 0 && !a.flashingToBeRemoved) if (!c || c.interpolateSwappingWithX === -1) a.interpolateSwappingWithX = 2;
+            if (b && b.interpolateSwappingWithX === 0 && !b.flashingToBeRemoved) if (!a || a.interpolateSwappingWithX === 2) b.interpolateSwappingWithX = -1;
+            if (c && c.interpolateSwappingWithX === 0 && !c.flashingToBeRemoved) if (!b || b.interpolateSwappingWithX === -1) c.interpolateSwappingWithX = -1;
+        }
+    }
+
+    public cursorSwapBetweenThreeBlocksVertical(cursor: Piece, rotation: MovementType): void {
+        const a = this.get(cursor.xGrid, cursor.yGrid - 1);
+        const b = this.get(cursor.xGrid, cursor.yGrid);
+        const c = this.get(cursor.xGrid, cursor.yGrid + 1);
+        if (rotation === MovementType.ROTATE_CLOCKWISE) {
+            if (a && a.interpolateSwappingWithY === 0 && !a.flashingToBeRemoved) if (!b || b.interpolateSwappingWithY === 0) a.interpolateSwappingWithY = 1;
+            if (b && b.interpolateSwappingWithY === 0 && !b.flashingToBeRemoved) if (!c || c.interpolateSwappingWithY === -2) b.interpolateSwappingWithY = 1;
+            if (c && c.interpolateSwappingWithY === 0 && !c.flashingToBeRemoved) if (!a || a.interpolateSwappingWithY === 1) c.interpolateSwappingWithY = -2;
+        }
+        if (rotation === MovementType.ROTATE_COUNTERCLOCKWISE) {
+            if (a && a.interpolateSwappingWithY === 0 && !a.flashingToBeRemoved) if (!c || c.interpolateSwappingWithY === -1) a.interpolateSwappingWithY = 2;
+            if (b && b.interpolateSwappingWithY === 0 && !b.flashingToBeRemoved) if (!a || a.interpolateSwappingWithY === 2) b.interpolateSwappingWithY = -1;
+            if (c && c.interpolateSwappingWithY === 0 && !c.flashingToBeRemoved) if (!b || b.interpolateSwappingWithY === -1) c.interpolateSwappingWithY = -1;
+        }
+    }
+
+    public cursorSwapHoldingBlockWithGrid(cursor: Piece): void {
+        const x = cursor.xGrid; const y = cursor.yGrid;
+        const gridBlock = this.get(x, y);
+        if (gridBlock && gridBlock.flashingToBeRemoved) return;
+        const heldBlock = cursor.holdingBlock;
+        cursor.holdingBlock = gridBlock;
+        if (gridBlock) this.remove(x, y, false, false);
+        if (heldBlock) this.add(x, y, heldBlock);
+    }
+
+    public cursorRotateBlocks(cursor: Piece, rotation: MovementType): void {
+        const x = cursor.xGrid; const y = cursor.yGrid;
+        const a = this.get(x, y); const b = this.get(x + 1, y);
+        const c = this.get(x, y + 1); const d = this.get(x + 1, y + 1);
+        if ((a && a.flashingToBeRemoved) || (b && b.flashingToBeRemoved) || (c && c.flashingToBeRemoved) || (d && d.flashingToBeRemoved)) return;
+        
+        this.remove(x, y, false, false); this.remove(x + 1, y, false, false);
+        this.remove(x, y + 1, false, false); this.remove(x + 1, y + 1, false, false);
+
+        if (rotation === MovementType.ROTATE_CLOCKWISE) {
+            if (a) this.add(x + 1, y, a); if (b) this.add(x + 1, y + 1, b);
+            if (c) this.add(x, y, c); if (d) this.add(x, y + 1, d);
+        } else {
+            if (a) this.add(x, y + 1, a); if (b) this.add(x, y, b);
+            if (c) this.add(x + 1, y + 1, c); if (d) this.add(x + 1, y, d);
+        }
+    }
+
+    public moveDownDisconnectedBlocksAboveBlankSpacesOneLine(ignore: BlockType[]): boolean {
+        let moved = false;
+        for (let y = this.getHeight() - 2; y >= 0; y--) {
+            for (let x = 0; x < this.getWidth(); x++) {
+                const b = this.get(x, y);
+                if (b && !ignore.includes(b.blockType) && this.get(x, y + 1) === null) {
+                    this.remove(x, y, false, false);
+                    this.add(x, y + 1, b);
+                    moved = true;
+                }
             }
         }
-        return swappingAny;
+        return moved;
     }
+
+    public moveDownAnyBlocksAboveBlankSpacesOneLine(ignore: BlockType[]): boolean {
+        return this.moveDownDisconnectedBlocksAboveBlankSpacesOneLine(ignore);
+    }
+
+    public moveDownLinesAboveBlankLinesOneLine(): boolean {
+        let moved = false;
+        for (let y = this.getHeight() - 2; y >= 0; y--) {
+            let isFull = true;
+            for (let x = 0; x < this.getWidth(); x++) if (this.get(x, y) === null) { isFull = false; break; }
+            if (isFull) {
+                let isEmptyBelow = true;
+                for (let x = 0; x < this.getWidth(); x++) if (this.get(x, y + 1) !== null) { isEmptyBelow = false; break; }
+                if (isEmptyBelow) {
+                    for (let x = 0; x < this.getWidth(); x++) {
+                        const b = this.remove(x, y, false, false)!;
+                        this.add(x, y + 1, b);
+                    }
+                    moved = true;
+                }
+            }
+        }
+        return moved;
+    }
+
+    public checkLines(ignore: BlockType[], mustContain: BlockType[]): Block[] {
+        const chain: Block[] = [];
+        for (let y = 0; y < this.getHeight(); y++) {
+            let isFull = true;
+            let containsMust = mustContain.length === 0;
+            const line: Block[] = [];
+            for (let x = 0; x < this.getWidth(); x++) {
+                const b = this.get(x, y);
+                if (b === null || ignore.includes(b.blockType)) { isFull = false; break; }
+                if (!containsMust && mustContain.includes(b.blockType)) containsMust = true;
+                line.push(b);
+            }
+            if (isFull && containsMust) chain.push(...line);
+        }
+        return chain;
+    }
+
+    public setColorConnections(ignore: BlockType[]): void {
+        for (let y = 0; y < this.getHeight(); y++) {
+            for (let x = 0; x < this.getWidth(); x++) {
+                const b = this.get(x, y);
+                if (b) {
+                    b.connectedUp = this.doBlocksMatchColor(b, this.get(x, y - 1), ignore);
+                    b.connectedDown = this.doBlocksMatchColor(b, this.get(x, y + 1), ignore);
+                    b.connectedLeft = this.doBlocksMatchColor(b, this.get(x - 1, y), ignore);
+                    b.connectedRight = this.doBlocksMatchColor(b, this.get(x + 1, y), ignore);
+                }
+            }
+        }
+    }
+
+    public doBlocksMatchColor(a: Block, b: Block | null, ignore: BlockType[]): boolean {
+        if (!b || ignore.includes(b.blockType)) return false;
+        return a.getColor() === b.getColor();
+    }
+
+    public recursivelyGetAllMatchingBlocksConnectedToBlockToArrayIfNotInItAlready(b: Block, arr: Block[], ignore: BlockType[]): void {
+        if (!arr.includes(b)) arr.push(b);
+        for (const n of this.getConnectedBlocksUpDownLeftRight(b)) {
+            if (this.doBlocksMatchColor(b, n, ignore) && !arr.includes(n)) {
+                this.recursivelyGetAllMatchingBlocksConnectedToBlockToArrayIfNotInItAlready(n, arr, ignore);
+            }
+        }
+    }
+
+    public addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInRowAtLeastAmount(b: Block, arr: Block[], amount: number, x0: number, x1: number, y0: number, y1: number, ignore: BlockType[], mustContain: BlockType[]): void {
+        const row: Block[] = [b];
+        for (let x = b.xGrid - 1; x >= x0; x--) { const next = this.get(x, b.yGrid); if (this.doBlocksMatchColor(b, next, ignore)) row.push(next!); else break; }
+        for (let x = b.xGrid + 1; x < x1; x++) { const next = this.get(x, b.yGrid); if (this.doBlocksMatchColor(b, next, ignore)) row.push(next!); else break; }
+        if (row.length >= amount) {
+            if (mustContain.length > 0 && !row.some(r => mustContain.includes(r.blockType))) return;
+            for (const r of row) if (!arr.includes(r)) arr.push(r);
+        }
+    }
+
+    public addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInColumnAtLeastAmount(b: Block, arr: Block[], amount: number, x0: number, x1: number, y0: number, y1: number, ignore: BlockType[], mustContain: BlockType[]): void {
+        const col: Block[] = [b];
+        for (let y = b.yGrid - 1; y >= y0; y--) { const next = this.get(b.xGrid, y); if (this.doBlocksMatchColor(b, next, ignore)) col.push(next!); else break; }
+        for (let y = b.yGrid + 1; y < y1; y++) { const next = this.get(b.xGrid, y); if (this.doBlocksMatchColor(b, next, ignore)) col.push(next!); else break; }
+        if (col.length >= amount) {
+            if (mustContain.length > 0 && !col.some(c => mustContain.includes(c.blockType))) return;
+            for (const c of col) if (!arr.includes(c)) arr.push(c);
+        }
+    }
+
+    public addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfDiagonalAtLeastAmount(b: Block, arr: Block[], amount: number, x0: number, x1: number, y0: number, y1: number, ignore: BlockType[], mustContain: BlockType[]): void {
+        const d1: Block[] = [b];
+        for (let x = 1, y = 1; b.xGrid + x < x1 && b.yGrid + y < y1; x++, y++) { const n = this.get(b.xGrid + x, b.yGrid + y); if (this.doBlocksMatchColor(b, n, ignore)) d1.push(n!); else break; }
+        for (let x = 1, y = 1; b.xGrid - x >= x0 && b.yGrid - y >= y0; x++, y--) { const n = this.get(b.xGrid - x, b.yGrid - y); if (this.doBlocksMatchColor(b, n, ignore)) d1.push(n!); else break; }
+        if (d1.length >= amount) { if (mustContain.length > 0 && !d1.some(r => mustContain.includes(r.blockType))) return; for (const r of d1) if (!arr.includes(r)) arr.push(r); }
+
+        const d2: Block[] = [b];
+        for (let x = 1, y = 1; b.xGrid - x >= x0 && b.yGrid + y < y1; x++, y++) { const n = this.get(b.xGrid - x, b.yGrid + y); if (this.doBlocksMatchColor(b, n, ignore)) d2.push(n!); else break; }
+        for (let x = 1, y = 1; b.xGrid + x < x1 && b.yGrid - y >= y0; x++, y--) { const n = this.get(b.xGrid + x, b.yGrid - y); if (this.doBlocksMatchColor(b, n, ignore)) d2.push(n!); else break; }
+        if (d2.length >= amount) { if (mustContain.length > 0 && !d2.some(r => mustContain.includes(r.blockType))) return; for (const r of d2) if (!arr.includes(r)) arr.push(r); }
+    }
+
+    public checkRecursiveConnectedRowOrColumn(arr: Block[], amount: number, x0: number, x1: number, y0: number, y1: number, ignore: BlockType[], mustContain: BlockType[]): void {
+        for (let y = y0; y < y1; y++) {
+            for (let x = x0; x < x1; x++) {
+                const b = this.get(x, y);
+                if (b && !ignore.includes(b.blockType)) {
+                    const connected: Block[] = [];
+                    this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInRowAtLeastAmount(b, connected, 2, x0, x1, y0, y1, ignore, mustContain);
+                    this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInColumnAtLeastAmount(b, connected, 2, x0, x1, y0, y1, ignore, mustContain);
+                    if (connected.length > 0) {
+                        let size = connected.length;
+                        for (let i = 0; i < size; i++) {
+                            this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInRowAtLeastAmount(connected[i], connected, 2, x0, x1, y0, y1, ignore, mustContain);
+                            this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInColumnAtLeastAmount(connected[i], connected, 2, x0, x1, y0, y1, ignore, mustContain);
+                            if (connected.length > size) { size = connected.length; i = -1; }
+                        }
+                        if (connected.length >= amount) for (const c of connected) if (!arr.includes(c)) arr.push(c);
+                    }
+                }
+            }
+        }
+    }
+
+    public checkBreakerBlocks(toRow: number, ignore: BlockType[], mustContain: BlockType[]): Block[] {
+        const breakBlocks: Block[] = [];
+        for (let y = 0; y < toRow; y++) {
+            for (let x = 0; x < this.getWidth(); x++) {
+                const b = this.get(x, y);
+                if (b && b.blockType.isBreaker) {
+                    const connected: Block[] = [];
+                    this.recursivelyGetAllMatchingBlocksConnectedToBlockToArrayIfNotInItAlready(b, connected, ignore);
+                    if (connected.length >= 2) {
+                        for (const c of connected) if (!breakBlocks.includes(c)) breakBlocks.push(c);
+                        for (const d of this.getConnectedBlocksUpDownLeftRight(b)) if (ignore.includes(d.blockType)) if (!breakBlocks.includes(d)) breakBlocks.push(d);
+                    }
+                }
+            }
+        }
+        return breakBlocks;
+    }
+
+    public getConnectedBlocksUpDownLeftRight(b: Block): Block[] {
+        const res: Block[] = [];
+        const u = this.get(b.xGrid, b.yGrid - 1); if (u) res.push(u);
+        const d = this.get(b.xGrid, b.yGrid + 1); if (d) res.push(d);
+        const l = this.get(b.xGrid - 1, b.yGrid); if (l) res.push(l);
+        const r = this.get(b.xGrid + 1, b.yGrid); if (r) res.push(r);
+        return res;
+    }
+
+    public areAnyBlocksPopping(): boolean {
+        for (let y = 0; y < this.getHeight(); y++) for (let x = 0; x < this.getWidth(); x++) { const b = this.get(x, y); if (b && b.popping) return true; }
+        return false;
+    }
+
+    public update(): void {
+        this.updateShake();
+        this.wigglePlayingField();
+        for (let y = 0; y < this.getHeight(); y++) for (let x = 0; x < this.getWidth(); x++) { const b = this.get(x, y); if (b) b.update(); }
+    }
+
+    public scrollBackground(): void {}
+
+    public setShakePlayingField(ticksDuration: number, maxX: number, maxY: number, ticksPerShake: number): void {
+        if (this.shakePlayingFieldScreenTicksCounter === 0) this.shakePlayingFieldStartTime = Date.now();
+        this.shakePlayingFieldScreenTicksCounter += ticksDuration;
+        this.shakePlayingFieldTicksDuration = this.shakePlayingFieldScreenTicksCounter;
+        this.shakePlayingFieldMaxX = maxX;
+        this.shakePlayingFieldMaxY = maxY;
+        this.shakePlayingFieldTicksPerShake = ticksPerShake;
+    }
+
+    public shakeSmall(): void { this.setShakePlayingField(120, 2, 2, 40); }
+    public shakeMedium(): void { this.setShakePlayingField(300, 4, 2, 60); }
+    public shakeHard(): void { this.setShakePlayingField(600, 10, 10, 60); }
 
     public updateShake(): void {
         if (this.shakePlayingFieldScreenTicksCounter > 0) {
             this.shakePlayingFieldScreenTicksCounter -= this.game.ticks();
             if (this.shakePlayingFieldScreenTicksCounter < 0) this.shakePlayingFieldScreenTicksCounter = 0;
             const ticksPassed = Date.now() - this.shakePlayingFieldStartTime;
-            const xOver = Easing.easeInOutCircular(this.shakePlayingFieldTicksDuration / 2 + ticksPassed, 0, this.shakePlayingFieldMaxX, this.shakePlayingFieldTicksDuration * 2);
-            const yOver = Easing.easeInOutCircular(this.shakePlayingFieldTicksDuration / 2 + ticksPassed, 0, this.shakePlayingFieldMaxY, this.shakePlayingFieldTicksDuration * 2);
+            const xOverShakeTime = Easing.easeInOutCircular(this.shakePlayingFieldTicksDuration / 2 + ticksPassed, 0, this.shakePlayingFieldMaxX, this.shakePlayingFieldTicksDuration * 2);
+            const yOverShakeTime = Easing.easeInOutCircular(this.shakePlayingFieldTicksDuration / 2 + ticksPassed, 0, this.shakePlayingFieldMaxY, this.shakePlayingFieldTicksDuration * 2);
             this.shakePlayingFieldTicksPerShakeXCounter += this.game.ticks();
-            if (this.shakePlayingFieldTicksPerShakeXCounter > this.shakePlayingFieldTicksPerShake) { this.shakePlayingFieldTicksPerShakeXCounter = 0; this.shakePlayingFieldLeftRightToggle = !this.shakePlayingFieldLeftRightToggle; }
+            if (this.shakePlayingFieldTicksPerShakeXCounter > this.shakePlayingFieldTicksPerShake) {
+                this.shakePlayingFieldTicksPerShakeXCounter = 0;
+                this.shakePlayingFieldLeftRightToggle = !this.shakePlayingFieldLeftRightToggle;
+            }
             this.shakePlayingFieldTicksPerShakeYCounter += this.game.ticks();
-            if (this.shakePlayingFieldTicksPerShakeYCounter > this.shakePlayingFieldTicksPerShake * 2) { this.shakePlayingFieldTicksPerShakeYCounter = 0; this.shakePlayingFieldUpDownToggle = !this.shakePlayingFieldUpDownToggle; }
-            const xThis = Easing.easeInOutCircular(this.shakePlayingFieldTicksPerShakeXCounter, 0, xOver, this.shakePlayingFieldTicksPerShake);
-            const yThis = Easing.easeInOutCircular(this.shakePlayingFieldTicksPerShakeYCounter, 0, yOver, this.shakePlayingFieldTicksPerShake * 2);
-            this.shakePlayingFieldX = this.shakePlayingFieldLeftRightToggle ? xThis : -xThis;
-            this.shakePlayingFieldY = this.shakePlayingFieldUpDownToggle ? yThis : -yThis;
-        } else { this.shakePlayingFieldX = 0; this.shakePlayingFieldY = 0; }
+            if (this.shakePlayingFieldTicksPerShakeYCounter > this.shakePlayingFieldTicksPerShake * 2) {
+                this.shakePlayingFieldTicksPerShakeYCounter = 0;
+                this.shakePlayingFieldUpDownToggle = !this.shakePlayingFieldUpDownToggle;
+            }
+            const xThisTime = Easing.easeInOutCircular(this.shakePlayingFieldTicksPerShakeXCounter, 0, xOverShakeTime, this.shakePlayingFieldTicksPerShake);
+            const yThisTime = Easing.easeInOutCircular(this.shakePlayingFieldTicksPerShakeYCounter, 0, yOverShakeTime, this.shakePlayingFieldTicksPerShake * 2);
+            this.shakePlayingFieldX = this.shakePlayingFieldLeftRightToggle ? Math.floor(xThisTime) : Math.floor(-xThisTime);
+            this.shakePlayingFieldY = this.shakePlayingFieldUpDownToggle ? Math.floor(yThisTime) : Math.floor(-yThisTime);
+        } else {
+            this.shakePlayingFieldX = 0; this.shakePlayingFieldY = 0;
+        }
     }
 
-    public add(x: number, y: number, b: Block): void {
-        if (!b) return;
-        b.xGrid = x; b.yGrid = y; b.grid = this;
-        if (x < 0 || y < 0 || x >= this.getWidth() || y >= this.getHeight()) return;
-        this.blocks[y * this.getWidth() + x] = b;
+    public wigglePlayingField(): void {
+        this.wigglePlayingFieldTicks += this.game.ticks();
+        if (this.wigglePlayingFieldTicks > this.wigglePlayingFieldTicksSpeed) {
+            this.wigglePlayingFieldTicks = 0;
+            if (this.wigglePlayingFieldLeftRightToggle === false) {
+                this.wigglePlayingFieldX++;
+                if (this.wigglePlayingFieldX > this.wigglePlayingFieldMaxX) { this.wigglePlayingFieldLeftRightToggle = true; this.wigglePlayingFieldX--; }
+            } else {
+                this.wigglePlayingFieldX--;
+                if (this.wigglePlayingFieldX < -this.wigglePlayingFieldMaxX) { this.wigglePlayingFieldLeftRightToggle = false; this.wigglePlayingFieldX++; }
+            }
+        }
     }
 
-    public get(x: number, y: number): Block | null {
-        if (x < 0 || y < 0 || x >= this.getWidth() || y >= this.getHeight()) return null;
-        return this.blocks[y * this.getWidth() + x];
+    public replaceAllBlocksWithNewGameBlocks(): void {
+        this.reformat(this.getWidth(), this.getHeight());
     }
 
-    public remove(x: number, y: number, fadeOut: boolean, breakConnections: boolean): Block | null {
-        if (x < 0 || y < 0 || x >= this.getWidth() || y >= this.getHeight()) return null;
-        const b = this.blocks[y * this.getWidth() + x];
-        if (!b) return null;
-        this.blocks[y * this.getWidth() + x] = null;
-        if (fadeOut) { b.fadingOut = true; if (!this.game.fadingOutBlocks.includes(b)) this.game.fadingOutBlocks.push(b); }
-        if (breakConnections) b.breakConnectionsInPiece();
-        return b;
+    public randomlyFillGridWithPlayingFieldPieces(amount: number, startY: number): void {
+        const bt = this.game.currentGameType.getPlayingFieldBlockTypes(this.game.getCurrentDifficulty());
+        const pt = this.game.currentGameType.getPlayingFieldPieceTypes(this.game.getCurrentDifficulty());
+        for (let i = 0; i < amount; i++) {
+            const x = this.game.getRandomIntLessThan(this.getWidth(), "randomFill");
+            const y = startY + this.game.getRandomIntLessThan(this.getHeight() - startY, "randomFill");
+            if (this.get(x, y) === null) this.putOneBlockPieceInGridCheckingForFillRules(x, y, pt, bt);
+        }
     }
 
-    public removeBlock(b: Block, fadeOut: boolean, breakConnections: boolean): void {
-        if (b.xGrid < 0 || b.yGrid < 0) return;
-        this.remove(b.xGrid, b.yGrid, fadeOut, breakConnections);
+    public buildRandomStackRetainingExistingBlocks(amount: number, startY: number): void {
+        this.randomlyFillGridWithPlayingFieldPieces(amount, startY);
     }
 
-    public getArrayOfPiecesOnGrid(): Piece[] {
-        const res: Piece[] = [];
-        for (const b of this.blocks) if (b && b.piece && !res.includes(b.piece)) res.push(b.piece);
-        return res;
+    public getRandomPiece(): Piece {
+        const pt = this.game.currentGameType.getNormalPieceTypes(this.game.getCurrentDifficulty());
+        const bt = this.game.currentGameType.getNormalBlockTypes(this.game.getCurrentDifficulty());
+        const p = new Piece(this.game, this, pt[this.game.getRandomIntLessThan(pt.length, "getRandomPiece")], bt);
+        return p;
     }
 
-    public checkLines(ignore: BlockType[] | null, mustContain: BlockType[] | null): Block[] {
-        const result: Block[] = [];
+    public putOneBlockPieceInGridCheckingForFillRules(x: number, y: number, pt: PieceType[], bt: BlockType[]): Piece {
+        const p = new Piece(this.game, this, pt[this.game.getRandomIntLessThan(pt.length, "putOneBlock")], bt);
+        p.init();
+        p.xGrid = x; p.yGrid = y;
+        this.setPiece(p);
+        return p;
+    }
+
+    public continueSwappingBlocks(): boolean {
+        let swappingAny = false;
         for (let y = 0; y < this.getHeight(); y++) {
-            const row: Block[] = [];
-            let full = true;
             for (let x = 0; x < this.getWidth(); x++) {
-                const b = this.get(x, y);
-                if (b === null || (ignore && ignore.includes(b.blockType))) { full = false; break; }
-                row.push(b);
-            }
-            if (full) {
-                if (mustContain && mustContain.length > 0) {
-                    let ok = false; for (const b of row) if (mustContain.includes(b.blockType)) { ok = true; break; }
-                    if (!ok) continue;
-                }
-                for (const b of row) if (!result.includes(b)) result.push(b);
-            }
-        }
-        return result;
-    }
-
-    public addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfDiagonalAtLeastAmount(b: Block, connectedBlocks: Block[], leastInARow: number, startX: number, endX: number, startY: number, endY: number, ignoreTypes: BlockType[], mustContainAtLeastOneTypes: BlockType[]): void {
-        // Diagonal \
-        const diag1: Block[] = []; diag1.push(b);
-        for (let i = 1; b.xGrid + i < endX && b.yGrid + i < endY; i++) { const n = this.get(b.xGrid + i, b.yGrid + i); if (n && this.doBlocksMatchColor(b, n, ignoreTypes)) diag1.push(n); else break; }
-        for (let i = 1; b.xGrid - i >= startX && b.yGrid - i >= startY; i++) { const n = this.get(b.xGrid - i, b.yGrid - i); if (n && this.doBlocksMatchColor(b, n, ignoreTypes)) diag1.push(n); else break; }
-        if (diag1.length >= leastInARow) {
-            if (mustContainAtLeastOneTypes.length > 0) {
-                let ok = false; for (const d of diag1) if (mustContainAtLeastOneTypes.includes(d.blockType)) { ok = true; break; }
-                if (!ok) diag1.length = 0;
-            }
-            for (const c of diag1) if (!connectedBlocks.includes(c)) connectedBlocks.push(c);
-        }
-        // Diagonal /
-        const diag2: Block[] = []; diag2.push(b);
-        for (let i = 1; b.xGrid + i < endX && b.yGrid - i >= startY; i++) { const n = this.get(b.xGrid + i, b.yGrid - i); if (n && this.doBlocksMatchColor(b, n, ignoreTypes)) diag2.push(n); else break; }
-        for (let i = 1; b.xGrid - i >= startX && b.yGrid + i < endY; i++) { const n = this.get(b.xGrid - i, b.yGrid + i); if (n && this.doBlocksMatchColor(b, n, ignoreTypes)) diag2.push(n); else break; }
-        if (diag2.length >= leastInARow) {
-            if (mustContainAtLeastOneTypes.length > 0) {
-                let ok = false; for (const d of diag2) if (mustContainAtLeastOneTypes.includes(d.blockType)) { ok = true; break; }
-                if (!ok) diag2.length = 0;
-            }
-            for (const c of diag2) if (!connectedBlocks.includes(c)) connectedBlocks.push(c);
-        }
-    }
-
-    public checkBreakerBlocks(toRow: number, ignore: BlockType[], breakers: BlockType[]): Block[] {
-        const result: Block[] = [];
-        for (let y = 0; y < toRow; y++) {
-            for (let x = 0; x < this.getWidth(); x++) {
-                const b = this.get(x, y);
-                if (b && breakers.includes(b.blockType)) {
-                    const connected: Block[] = [];
-                    this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInRowAtLeastAmount(b, connected, 2, 0, this.getWidth(), 0, this.getHeight(), ignore, breakers);
-                    this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInColumnAtLeastAmount(b, connected, 2, 0, this.getWidth(), 0, this.getHeight(), ignore, breakers);
-                    if (connected.length > 0) {
-                        let size = connected.length;
-                        for (let i = 0; i < size; i++) {
-                            this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInRowAtLeastAmount(connected[i], connected, 2, 0, this.getWidth(), 0, this.getHeight(), ignore, []);
-                            this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInColumnAtLeastAmount(connected[i], connected, 2, 0, this.getWidth(), 0, this.getHeight(), ignore, []);
-                            if (connected.length > size) { size = connected.length; i = -1; }
+                const a = this.get(x, y);
+                if (a) {
+                    if (a.interpolateSwappingWithX !== 0) {
+                        const b = this.get(x + a.interpolateSwappingWithX, y);
+                        swappingAny = true;
+                        if (a.swapTicks < 17 * 6) { a.swapTicks += this.game.ticks(); if (b) b.swapTicks = a.swapTicks; }
+                        else {
+                            a.swapTicks = 0; if (b) b.swapTicks = 0;
+                            this.remove(x, y, false, false);
+                            if (this.contains(x + a.interpolateSwappingWithX, y)) this.remove(x + a.interpolateSwappingWithX, y, false, false);
+                            if (b) this.add(x, y, b);
+                            this.add(x + a.interpolateSwappingWithX, y, a);
+                            a.interpolateSwappingWithX = 0; if (b) b.interpolateSwappingWithX = 0;
                         }
-                        if (connected.length >= 2) {
-                            for (const c of connected) if (!result.includes(c)) result.push(c);
-                            for (const s of this.getConnectedBlocksUpDownLeftRight(b)) if (ignore.includes(s.blockType)) if (!result.includes(s)) result.push(s);
+                    }
+                    if (a.interpolateSwappingWithY !== 0) {
+                        const b = this.get(x, y + a.interpolateSwappingWithY);
+                        swappingAny = true;
+                        if (a.swapTicks < 17 * 6) { a.swapTicks += this.game.ticks(); if (b) b.swapTicks = a.swapTicks; }
+                        else {
+                            a.swapTicks = 0; if (b) b.swapTicks = 0;
+                            this.remove(x, y, false, false);
+                            if (this.contains(x, y + a.interpolateSwappingWithY)) this.remove(x, y + a.interpolateSwappingWithY, false, false);
+                            if (b) this.add(x, y, b);
+                            this.add(x, y + a.interpolateSwappingWithY, a);
+                            a.interpolateSwappingWithY = 0; if (b) b.interpolateSwappingWithY = 0;
                         }
                     }
                 }
             }
         }
-        return result;
+        return swappingAny;
     }
 
-    public checkRecursiveConnectedRowOrColumn(connectedBlocks: Block[], leastAmountConnected: number, startX: number, endX: number, startY: number, endY: number, ignoreTypes: BlockType[], mustContainAtLeastOneTypes: BlockType[]): void {
-        for (let y = startY; y < endY; y++) {
-            for (let x = startX; x < endX; x++) {
-                const connectedToThisBlock: Block[] = [];
-                const b = this.get(x, y);
-                if (b && !ignoreTypes.includes(b.blockType)) {
-                    this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInRowAtLeastAmount(b, connectedToThisBlock, 2, startX, endX, startY, endY, ignoreTypes, mustContainAtLeastOneTypes);
-                    this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInColumnAtLeastAmount(b, connectedToThisBlock, 2, startX, endX, startY, endY, ignoreTypes, mustContainAtLeastOneTypes);
-                    if (connectedToThisBlock.length > 0) {
-                        let size = connectedToThisBlock.length;
-                        for (let i = 0; i < size; i++) {
-                            this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInRowAtLeastAmount(connectedToThisBlock[i], connectedToThisBlock, 2, startX, endX, startY, endY, ignoreTypes, mustContainAtLeastOneTypes);
-                            this.addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInColumnAtLeastAmount(connectedToThisBlock[i], connectedToThisBlock, 2, startX, endX, startY, endY, ignoreTypes, mustContainAtLeastOneTypes);
-                            if (connectedToThisBlock.length > size) { size = connectedToThisBlock.length; i = -1; }
-                        }
-                        if (connectedToThisBlock.length >= leastAmountConnected) {
-                            for (const c of connectedToThisBlock) if (!connectedBlocks.includes(c)) connectedBlocks.push(c);
-                        }
-                    }
-                }
+    public scrollUpStack(cursorPiece: Piece | null, amt: number): boolean {
+        this.scrollPlayingFieldY -= amt;
+        if (this.scrollPlayingFieldY < 0 - this.scrollBlockIncrement) {
+            for (let x = 0; x < this.getWidth(); x++) if (this.get(x, GameLogic.aboveGridBuffer) !== null) { this.scrollPlayingFieldY = 0 - this.scrollBlockIncrement; return false; }
+            if (cursorPiece) {
+                cursorPiece.yGrid -= 1;
+                if (cursorPiece.yGrid < 1 + GameLogic.aboveGridBuffer) cursorPiece.yGrid += 1;
             }
-        }
-    }
-
-    public doBlocksMatchColor(a: Block | null, b: Block | null, ignore: BlockType[] | null): boolean {
-        if (!a || !b) return false;
-        if (a.interpolateSwappingWithX !== 0 || b.interpolateSwappingWithX !== 0 || a.flashingToBeRemoved || b.flashingToBeRemoved) return false;
-        if (ignore && (ignore.includes(a.blockType) || ignore.includes(b.blockType))) return false;
-        if (a.getColor() && b.getColor() && (a.getColor() === b.getColor())) return true;
-        if (a.blockType.matchAnyColor || b.blockType.matchAnyColor) return true;
-        return false;
-    }
-
-    public getConnectedBlocksUpDownLeftRight(b: Block): Block[] {
-        const connectedBlocks: Block[] = [];
-        const xOffset = 1;
-        if (b.xGrid + xOffset < this.getWidth()) { const n = this.get(b.xGrid + xOffset, b.yGrid); if (n) connectedBlocks.push(n); }
-        if (b.xGrid - xOffset >= 0) { const n = this.get(b.xGrid - xOffset, b.yGrid); if (n) connectedBlocks.push(n); }
-        const yOffset = 1;
-        if (b.yGrid + yOffset < this.getHeight()) { const n = this.get(b.xGrid, b.yGrid + yOffset); if (n) connectedBlocks.push(n); }
-        if (b.yGrid - yOffset >= 0) { const n = this.get(b.xGrid, b.yGrid - yOffset); if (n) connectedBlocks.push(n); }
-        return connectedBlocks;
-    }
-
-    public addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInRowAtLeastAmount(b: Block, connectedBlocks: Block[], leastInARow: number, startX: number, endX: number, startY: number, endY: number, ignoreTypes: BlockType[], mustContainAtLeastOneTypes: BlockType[]): void {
-        const row: Block[] = []; row.push(b);
-        for (let xOffset = 1; b.xGrid + xOffset < endX; xOffset++) { const n = this.get(b.xGrid + xOffset, b.yGrid); if (n && this.doBlocksMatchColor(b, n, ignoreTypes)) row.push(n); else break; }
-        for (let xOffset = 1; b.xGrid - xOffset >= startX; xOffset++) { const n = this.get(b.xGrid - xOffset, b.yGrid); if (n && this.doBlocksMatchColor(b, n, ignoreTypes)) row.push(n); else break; }
-        if (row.length >= leastInARow) {
-            if (mustContainAtLeastOneTypes.length > 0) {
-                let ok = false; for (const r of row) if (mustContainAtLeastOneTypes.includes(r.blockType)) { ok = true; break; }
-                if (!ok) row.length = 0;
-            }
-            for (const c of row) if (!connectedBlocks.includes(c)) connectedBlocks.push(c);
-        }
-    }
-
-    public addBlocksConnectedToBlockToArrayIfNotInItAlreadyIfInColumnAtLeastAmount(b: Block, connectedBlocks: Block[], leastInARow: number, startX: number, endX: number, startY: number, endY: number, ignoreTypes: BlockType[], mustContainAtLeastOneTypes: BlockType[]): void {
-        const column: Block[] = []; column.push(b);
-        for (let yOffset = 1; b.yGrid + yOffset < endY; yOffset++) { const n = this.get(b.xGrid, b.yGrid + yOffset); if (n && this.doBlocksMatchColor(b, n, ignoreTypes)) column.push(n); else break; }
-        for (let yOffset = 1; b.yGrid - yOffset >= startY; yOffset++) { const n = this.get(b.xGrid, b.yGrid - yOffset); if (n && this.doBlocksMatchColor(b, n, ignoreTypes)) column.push(n); else break; }
-        if (column.length >= leastInARow) {
-            if (mustContainAtLeastOneTypes.length > 0) {
-                let ok = false; for (const c of column) if (mustContainAtLeastOneTypes.includes(c.blockType)) { ok = true; break; }
-                if (!ok) column.length = 0;
-            }
-            for (const c of column) if (!connectedBlocks.includes(c)) connectedBlocks.push(c);
-        }
-    }
-
-    public render(renderer: any): void {
-        for (let x = 0; x < this.getWidth(); x++) {
-            for (let y = 0; y < this.getHeight(); y++) {
-                const b = this.get(x, y);
-                if (b) {
-                    b.render(renderer, this.getXInFBO() + x * this.cellW(), this.getYInFBO() + (this.scrollPlayingFieldY / this.scrollBlockIncrement) * this.cellH() + y * this.cellH(), 1.0, 1.0, true, false);
-                }
-            }
-        }
-    }
-
-    public renderBackground(renderer: any): void {
-        const alpha = 0.85;
-        let h = this.getHeight();
-        if (this.getGameType()!.gameMode === "STACK") h--;
-
-        for (let x = -1; x < this.getWidth(); x++) {
-            for (let y = -1; y < h; y++) {
-                const color = (y % 2 === 0) ? (x % 2 === 0 ? 0x222222 : 0x444444) : (x % 2 === 0 ? 0x444444 : 0x222222);
-                const fbgX = this.bgX() + (x * this.cellW());
-                const fbgY = this.bgY() + (y * this.cellH());
-                renderer.fillRect(fbgX, fbgY, this.cellW(), this.cellH(), color, alpha);
-            }
-        }
-    }
-
-    public renderBorder(renderer: any): void {
-        const x0 = this.getXInFBO();
-        const y0 = this.getYInFBO();
-        const w = this.getWidth() * this.cellW();
-        let h = this.getHeight() * this.cellH();
-        if (this.getGameType()!.gameMode === "STACK") h -= this.cellH();
-        renderer.strokeRect(x0 - 1, y0 - 1, w + 2, h + 2, 0xffffff, 1.0, 1);
-    }
-
-    public renderBlockOutlines(renderer: any): void {
-        for (let x = 0; x < this.getWidth(); x++) {
-            for (let y = 0; y < this.getHeight(); y++) {
-                const b = this.get(x, y);
-                if (b) {
-                    b.renderOutlines(renderer, this.getXInFBO() + x * this.cellW(), this.getYInFBO() + (this.scrollPlayingFieldY / this.scrollBlockIncrement) * this.cellH() + y * this.cellH(), 1.0);
-                }
-            }
-        }
-    }
-
-    public renderGhostPiece(renderer: any, currentPiece: Piece): void {
-        let ghostY = currentPiece.yGrid;
-        for (let y = ghostY; y < this.getHeight(); y++) {
-            if (this.game.grid.doesPieceFit(currentPiece, currentPiece.xGrid, y)) ghostY = y;
-            else break;
-        }
-        if (ghostY !== currentPiece.yGrid) {
-            const x = this.getXInFBO() + currentPiece.xGrid * this.cellW();
-            const y = this.getYInFBO() + ghostY * this.cellH();
-            let alpha = (ghostY - currentPiece.yGrid) / (this.getHeight() * 0.6);
-            if (alpha > 1) alpha = 1;
-            currentPiece.renderGhost(renderer, x, y, alpha);
-        }
-    }
-
-    public setPiece(p: Piece, x: number, y: number): void {
-        if (p.pieceType && p.pieceType.fadeOutOnceSetInsteadOfAddedToGrid) {
-            for (const b of p.blocks) { b.fadingOut = true; if (!this.game.fadingOutBlocks.includes(b)) this.game.fadingOutBlocks.push(b); }
-            return;
-        }
-        for (const b of p.blocks) { this.add(x + b.xInPiece, y + b.yInPiece, b); b.setInGrid = true; b.locking = true; }
-        p.setInGrid = true;
-    }
-
-    public shakeSmall(): void {
-        this.setShakePlayingField(200, 2, 2, 20);
-    }
-
-    public setShakePlayingField(ticksDuration: number, maxX: number, maxY: number, ticksPerShake: number): void {
-        this.shakePlayingFieldTicksDuration = ticksDuration;
-        this.shakePlayingFieldMaxX = maxX;
-        this.shakePlayingFieldMaxY = maxY;
-        this.shakePlayingFieldTicksPerShake = ticksPerShake;
-        this.shakePlayingFieldStartTime = Date.now();
-        this.shakePlayingFieldScreenTicksCounter = ticksDuration;
-    }
-
-    public checkLines(ignoreTypes: BlockType[], mustContainAtLeastOneTypes: BlockType[]): Block[] {
-        const blocksOnFullLines: Block[] = [];
-        for (let y = this.getHeight() - 1; y >= 0; y--) {
-            let lineFull = true;
-            for (let x = 0; x < this.getWidth(); x++) {
-                const b = this.get(x, y);
-                if (b === null || (ignoreTypes.length > 0 && ignoreTypes.includes(b.blockType))) {
-                    lineFull = false;
-                    break;
-                }
-            }
-            if (lineFull) {
-                const lineBlocks: Block[] = [];
-                for (let x = 0; x < this.getWidth(); x++) {
-                    const b = this.get(x, y)!;
-                    lineBlocks.push(b);
-                    if (!blocksOnFullLines.includes(b)) blocksOnFullLines.push(b);
-
-                    if (b.piece?.pieceType?.clearEveryRowPieceIsOnIfAnySingleRowCleared && !b.piece.overrideAnySpecialBehavior) {
-                        for (const connected of b.connectedBlocksByPiece) {
-                            for (let cx = 0; cx < this.getWidth(); cx++) {
-                                const otherLineBlock = this.get(cx, connected.yGrid);
-                                if (otherLineBlock && !blocksOnFullLines.includes(otherLineBlock)) {
-                                    blocksOnFullLines.push(otherLineBlock);
-                                }
-                            }
-                        }
-                        this.shakeSmall();
-                    }
-                }
-                if (mustContainAtLeastOneTypes.length > 0) {
-                    let ok = false;
-                    for (const b of lineBlocks) if (mustContainAtLeastOneTypes.includes(b.blockType)) { ok = true; break; }
-                    if (!ok) {
-                        // If line was full but didn't have required block, don't clear it
-                        for (const b of lineBlocks) {
-                            const idx = blocksOnFullLines.indexOf(b);
-                            if (idx > -1) blocksOnFullLines.splice(idx, 1);
-                        }
-                    }
-                }
-            }
-        }
-        return blocksOnFullLines;
-    }
-
-    public getRandomPiece(pt: PieceType[], bt: BlockType[]): Piece {
-        const p = new Piece(this.game, this, this.getRandomPieceType(pt), bt); p.init(); return p;
-    }
-
-    public getRandomPieceType(pt: PieceType[]): PieceType {
-        return pt[this.game.getRandomIntLessThan(pt.length, "getRandomPieceType")];
-    }
-
-    public cellW(): number { return this.game.cellW(); }
-    public cellH(): number { return this.game.cellH(); }
-    public getGameType(): GameType | undefined { return this.game.currentGameType; }
-
-    public isWithinBounds(piece: Piece, x: number, y: number): boolean {
-        for (let i = 0; i < piece.getNumBlocksInCurrentRotation() && i < piece.blocks.length; i++) {
-            const b = piece.blocks[i];
-            if (x + b.xInPiece >= this.getWidth() || x + b.xInPiece < 0 || y + b.yInPiece >= this.getHeight()) {
-                return false;
-            }
+            this.scrollPlayingFieldY += this.scrollBlockIncrement;
+            this.moveAllRowsUpOne();
+            const bt = this.game.currentGameType.getPlayingFieldBlockTypes(this.game.getCurrentDifficulty());
+            const pt = this.game.currentGameType.getPlayingFieldPieceTypes(this.game.getCurrentDifficulty());
+            const y = this.getHeight() - 1;
+            for (let x = 0; x < this.getWidth(); x++) this.putOneBlockPieceInGridCheckingForFillRules(x, y, pt, bt);
+            this.game.piecesMadeThisGame++;
         }
         return true;
     }
 
-    public isHittingLeft(piece: Piece, x: number = piece.xGrid, y: number = piece.yGrid): boolean {
-        if (x < 0) return true;
-        for (let i = 0; i < piece.getNumBlocksInCurrentRotation() && i < piece.blocks.length; i++) {
-            const b = piece.blocks[i];
-            if (x + b.xInPiece < 0) return true;
-        }
-        for (let i = 0; i < piece.getNumBlocksInCurrentRotation() && i < piece.blocks.length; i++) {
-            const b = piece.blocks[i];
-            const gridBlock = this.get(x + b.xInPiece, y + b.yInPiece);
-            if (x + b.xInPiece < x && gridBlock !== null) return true;
-        }
-        return false;
+    public getXInFBO(): number { return this.screenX; }
+    public getYInFBO(): number { return this.screenY; }
+
+    public removeAllBlocksOfPieceFromGrid(p: Piece, destroy: boolean): void {
+        for (const b of p.blocks) this.removeBlock(b, destroy, false);
     }
 
-    public isHittingRight(piece: Piece, x: number = piece.xGrid, y: number = piece.yGrid): boolean {
-        if (x >= this.getWidth()) return true;
-        for (let i = 0; i < piece.getNumBlocksInCurrentRotation() && i < piece.blocks.length; i++) {
-            const b = piece.blocks[i];
-            if (x + b.xInPiece >= this.getWidth()) return true;
-        }
-        for (let i = 0; i < piece.getNumBlocksInCurrentRotation() && i < piece.blocks.length; i++) {
-            const b = piece.blocks[i];
-            const gridBlock = this.get(x + b.xInPiece, y + b.yInPiece);
-            if (x + b.xInPiece > x && gridBlock !== null) return true;
-        }
-        return false;
-    }
-
-    public doesPieceFit(piece: Piece, x: number = piece.xGrid, y: number = piece.yGrid): boolean {
-        if (!this.isWithinBounds(piece, x, y)) return false;
-        for (let i = 0; i < piece.getNumBlocksInCurrentRotation() && i < piece.blocks.length; i++) {
-            const b = piece.blocks[i];
-            if (x + b.xInPiece < 0 || x + b.xInPiece >= this.getWidth()) return false;
-        }
-        for (let i = 0; i < piece.getNumBlocksInCurrentRotation() && i < piece.blocks.length; i++) {
-            const b = piece.blocks[i];
-            if (y + b.yInPiece >= 0 && this.get(x + b.xInPiece, y + b.yInPiece) !== null) return false;
-        }
-        return true;
-    }
-
-    public moveDownLinesAboveBlankLinesOneLine(): boolean {
-        let moved = false;
-        for (let y = this.getHeight() - 1; y > 0; y--) {
-            let lineIsBlank = true;
-            for (let x = 0; x < this.getWidth(); x++) {
-                if (this.get(x, y) !== null) {
-                    lineIsBlank = false;
-                    break;
-                }
-            }
-            if (lineIsBlank) {
-                for (let x = 0; x < this.getWidth(); x++) {
-                    const b = this.get(x, y - 1);
-                    if (b !== null) {
-                        this.remove(x, y - 1, false, false);
-                        this.add(x, y, b);
-                        moved = true;
-                    }
-                }
-            }
-        }
-        return moved;
-    }
-
-    public moveDownDisconnectedBlocksAboveBlankSpacesOneLine(ignoreTypes: BlockType[]): boolean {
-        let moved = false;
-        for (let y = this.getHeight() - 2; y >= 0; y--) {
-            for (let x = 0; x < this.getWidth(); x++) {
-                const b = this.get(x, y);
-                if (b !== null && (ignoreTypes.length === 0 || !ignoreTypes.includes(b.blockType))) {
-                    let connectedInGrid: Block | null = null;
-                    for (const temp of b.connectedBlocksByPiece) {
-                        if (this.blocks.includes(temp)) {
-                            connectedInGrid = temp;
-                            break;
-                        }
-                    }
-                    if (connectedInGrid === null) {
-                        if (this.get(x, y + 1) === null) {
-                            this.removeBlock(b, false, false);
-                            this.add(x, y + 1, b);
-                            moved = true;
-                        }
-                    } else {
-                        for (const c of b.connectedBlocksByPiece) {
-                            if (!this.blocks.includes(c) || c === b) continue;
-                            if (c.yGrid === b.yGrid - 1 && c.xGrid === b.xGrid) {
-                                if (this.get(x, y + 1) === null) {
-                                    this.removeBlock(b, false, false);
-                                    this.add(x, y + 1, b);
-                                    this.removeBlock(c, false, false);
-                                    this.add(x, y, c);
-                                    moved = true;
-                                }
-                            } else if ((c.xGrid === b.xGrid - 1 || c.xGrid === b.xGrid + 1) && c.yGrid === b.yGrid) {
-                                if (this.get(b.xGrid, y + 1) === null && this.get(c.xGrid, y + 1) === null) {
-                                    this.removeBlock(b, false, false);
-                                    this.add(b.xGrid, y + 1, b);
-                                    this.removeBlock(c, false, false);
-                                    this.add(c.xGrid, y + 1, c);
-                                    moved = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return moved;
-    }
-
-    public moveDownAnyBlocksAboveBlankSpacesOneLine(ignoreTypes: BlockType[]): boolean {
-        let moved = false;
-        for (let y = this.getHeight() - 2; y >= 0; y--) {
-            for (let x = 0; x < this.getWidth(); x++) {
-                const b = this.get(x, y);
-                if (b !== null && (ignoreTypes.length === 0 || !ignoreTypes.includes(b.blockType))) {
-                    if (this.get(x, y + 1) === null) {
-                        this.remove(x, y, false, false);
-                        this.add(x, y + 1, b);
-                        moved = true;
-                    }
-                }
-            }
-        }
-        return moved;
-    }
-
-    public setRandomBlockColors(): void {
-        // Logic as per C++ (mostly empty/TODO in source)
-    }
-
-    public setRandomMatrixBlockColors(): void {
-        // Logic as per C++ (mostly empty/TODO in source)
-    }
-
-    public setRandomWholePieceColors(grayscale: boolean, currentPiece: Piece | null, nextPieces: Piece[]): void {
-        const previousColors: BobColor[] = [];
-        for (const b of this.blocks) {
-            if (b && b.getColor()) {
-                if (!previousColors.includes(b.getColor()!)) previousColors.push(b.getColor()!);
-            }
-        }
-        if (currentPiece) {
-            for (const b of currentPiece.blocks) {
-                if (b.getColor() && !previousColors.includes(b.getColor()!)) previousColors.push(b.getColor()!);
-            }
-        }
-        if (nextPieces) {
-            for (const p of nextPieces) {
-                for (const b of p.blocks) {
-                    if (b.getColor() && !previousColors.includes(b.getColor()!)) previousColors.push(b.getColor()!);
-                }
-            }
-        }
-    }
-
-    public setRandomPieceGrayscaleColors(currentPiece: Piece | null, nextPieces: Piece[]): void {
-        this.setRandomWholePieceColors(true, currentPiece, nextPieces);
+    public getNumberOfFilledCellsInRow(y: number): number {
+        let count = 0;
+        for (let x = 0; x < this.getWidth(); x++) if (this.contains(x, y)) count++;
+        return count;
     }
 
     public isAnythingAboveThreeQuarters(): boolean {
         for (let x = 0; x < this.getWidth(); x++) {
-            for (let y = 0; y < this.getHeight(); y++) {
-                if (this.get(x, y) !== null) {
-                    if (y < GameLogic.aboveGridBuffer + ((this.getHeight() - GameLogic.aboveGridBuffer) / 4)) {
-                        return true;
-                    }
-                }
+            for (let y = 0; y < (this.getHeight() - GameLogic.aboveGridBuffer) / 4; y++) {
+                if (this.get(x, y + GameLogic.aboveGridBuffer) !== null) return true;
             }
         }
         return false;
     }
 
-    public doDeathSequence(): void {
-        if (this.deadX < this.getWidth()) {
-            const p = this.getRandomPiece(this.getGameType()!.getNormalPieceTypes(this.game.getCurrentDifficulty()), this.getGameType()!.getNormalBlockTypes(this.game.getCurrentDifficulty()));
-            for (const b of p.blocks) {
-                b.lastScreenX = this.getXInFBO() + (this.deadX + b.xInPiece) * this.cellW();
-                b.lastScreenY = this.getYInFBO() + (this.deadY + b.yInPiece) * this.cellH() + (this.scrollPlayingFieldY / this.scrollBlockIncrement) * this.cellH();
-            }
-            const d = this.get(this.deadX, this.deadY);
-            if (d) this.removeAllBlocksOfPieceFromGrid(d.piece!, true);
-
-            if (this.doesPieceFit(p, this.deadX, this.deadY) && this.deadY + p.getLowestOffsetY() > 2) {
-                this.setPiece(p, this.deadX, this.deadY);
-                this.deadX += p.getWidth();
-                this.deadY -= 1;
-            } else {
-                this.deadX += this.game.getRandomIntLessThan(3, "doDeathSequence");
-                this.deadY -= this.game.getRandomIntLessThan(3, "doDeathSequence");
-            }
-            if (this.deadY < 0) this.deadY = this.getHeight() - 1;
-            if (this.deadX >= this.getWidth()) this.deadX = 0;
-        }
-    }
-
-    public checkLine(y: number): boolean {
+    public moveAllRowsUpOne(): void {
         for (let x = 0; x < this.getWidth(); x++) {
-            if (this.get(x, y) === null) return false;
-        }
-        return true;
-    }
-
-    public recursivelyGetAllMatchingBlocksConnectedToBlockToArrayIfNotInItAlready(b: Block, connectedBlocks: Block[], ignoreTypes: BlockType[]): void {
-        if (!connectedBlocks.includes(b)) connectedBlocks.push(b);
-        const udlr = this.getConnectedBlocksUpDownLeftRight(b);
-        for (const n of udlr) {
-            if (this.doBlocksMatchColor(b, n, ignoreTypes)) {
-                if (!connectedBlocks.includes(n)) {
-                    connectedBlocks.push(n);
-                    this.recursivelyGetAllMatchingBlocksConnectedToBlockToArrayIfNotInItAlready(n, connectedBlocks, ignoreTypes);
-                }
+            if (this.contains(x, 0)) {
+                const b = this.get(x, 0)!;
+                this.removeBlock(b, true, true);
             }
         }
-    }
-
-    public setColorConnections(ignoreTypes: BlockType[]): void {
-        for (const b of this.blocks) if (b) b.connectedBlocksByColor = [];
-        for (let y = 0; y < this.getHeight(); y++) {
+        for (let y = 0; y < this.getHeight() - 1; y++) {
             for (let x = 0; x < this.getWidth(); x++) {
-                const b = this.get(x, y);
-                if (b && (ignoreTypes.length === 0 || !ignoreTypes.includes(b.blockType))) {
-                    if (b.connectedBlocksByColor.length > 0) continue;
-                    const connectedList: Block[] = [];
-                    this.recursivelyGetAllMatchingBlocksConnectedToBlockToArrayIfNotInItAlready(b, connectedList, ignoreTypes);
-                    for (const c of connectedList) {
-                        if (b !== c && !b.connectedBlocksByColor.includes(c)) b.connectedBlocksByColor.push(c);
-                    }
+                if (this.contains(x, y + 1)) {
+                    const b = this.remove(x, y + 1, false, false)!;
+                    this.add(x, y, b);
                 }
             }
         }
     }
 
-    public getRandomBlockType(arr: BlockType[]): BlockType {
-        let bt = this.getRandomSpecialBlockTypeFromArrayExcludingNormalBlocksOrNull(arr);
-        if (!bt) bt = this.getRandomBlockTypeFromArrayExcludingSpecialBlockTypes(arr);
-        return bt || arr[0];
+    public putGarbageBlock(x: number, y: number): Piece {
+        const bt = this.game.currentGameType.getGarbageBlockTypes(this.game.getCurrentDifficulty());
+        const pt = this.game.currentGameType.getGarbagePieceTypes(this.game.getCurrentDifficulty());
+        if (pt.length === 0) pt.push(PieceType.emptyPieceType);
+        return this.putOneBlockPieceInGridCheckingForFillRules(x, y, pt, bt);
     }
 
-    public getRandomBlockTypeDisregardingSpecialFrequency(arr: BlockType[]): BlockType {
-        const bt = arr[this.game.getRandomIntLessThan(arr.length, "getRandomBlockTypeDisregardingSpecialFrequency")];
-        return bt || arr[0];
+    public putGarbageBlockFromFloor(x: number, y: number): void {
+        const p = this.putGarbageBlock(x, y);
+        if (p) {
+            for (const b of p.blocks) {
+                b.ticksSinceLastMovement = 0;
+            }
+        }
     }
 
-    public getRandomSpecialBlockTypeFromArrayExcludingNormalBlocksOrNull(arr: BlockType[]): BlockType | null {
-        const bag: BlockType[] = [];
-        for (const b of arr) {
-            if (b.frequencySpecialBlockTypeOnceEveryNPieces !== 0) {
-                if (this.game.createdPiecesCounterForFrequencyPieces >= b.frequencySpecialBlockTypeOnceEveryNPieces - 1) {
-                    bag.push(b);
+    public makeGarbageRowFromFloor(): void {
+        this.moveAllRowsUpOne();
+        const y = this.getHeight() - 1;
+        const rule = this.game.currentGameType.playingFieldGarbageType;
+        if (rule === GarbageType.MATCH_BOTTOM_ROW) {
+            for (let x = 0; x < this.getWidth(); x++) if (this.get(x, y - 1) !== null) this.putGarbageBlockFromFloor(x, y);
+        } else if (rule === GarbageType.RANDOM) {
+            for (let x = 0; x < this.getWidth(); x++) if (this.game.getRandomIntLessThan(2, "makeGarbageRowFromFloor") === 0) this.putGarbageBlockFromFloor(x, y);
+        } else if (rule === GarbageType.ZIGZAG_PATTERN) {
+            for (let x = 0; x < this.getWidth(); x++) if (x !== this.lastGarbageHoleX) this.putGarbageBlockFromFloor(x, y);
+            if (this.garbageHoleDirectionToggle) {
+                this.lastGarbageHoleX++;
+                if (this.lastGarbageHoleX >= this.getWidth()) { this.lastGarbageHoleX = this.getWidth() - 1; this.garbageHoleDirectionToggle = false; }
+            } else {
+                this.lastGarbageHoleX--;
+                if (this.lastGarbageHoleX < 0) { this.lastGarbageHoleX = 0; this.garbageHoleDirectionToggle = true; }
+            }
+        }
+    }
+
+    public makeGarbageRowFromCeiling(): void {
+        const y = 0;
+        for (let x = 0; x < this.getWidth(); x++) {
+            const p = this.putGarbageBlock(x, y);
+            if (p) {
+                for (const b of p.blocks) {
+                    b.lastScreenX = this.getXInFBO() + b.xGrid * this.cellW();
+                    b.lastScreenY = this.getYInFBO() + b.yInPiece * this.cellH();
+                    b.ticksSinceLastMovement = 0;
                 }
             }
         }
-        if (bag.length > 0) {
-            this.game.createdPiecesCounterForFrequencyPieces = 0;
-            return bag[this.game.getRandomIntLessThan(bag.length, "getRandomSpecialBlockType")];
-        }
-        for (const b of arr) {
-            if (b.randomSpecialBlockChanceOneOutOf > 0) {
-                if (this.game.getRandomIntLessThan(b.randomSpecialBlockChanceOneOutOf, "getRandomSpecialBlockType") === 0) {
-                    bag.push(b);
-                }
-            }
-        }
-        if (bag.length > 0) return bag[this.game.getRandomIntLessThan(bag.length, "getRandomSpecialBlockType")];
-        return null;
     }
 
-    public getRandomBlockTypeFromArrayExcludingSpecialBlockTypes(arr: BlockType[]): BlockType {
-        const bag = arr.filter(b => !b.isSpecialType());
-        if (bag.length > 0) return bag[this.game.getRandomIntLessThan(bag.length, "getRandomBlockTypeExcludingSpecial")];
-        return arr[0];
-    }
-
-    public getRandomSpecialPieceTypeFromArrayExcludingNormalPiecesOrNull(pieceTypes: PieceType[]): PieceType | null {
-        const bag: PieceType[] = [];
-        for (const p of pieceTypes) {
-            if (p.frequencySpecialPieceTypeOnceEveryNPieces !== 0) {
-                if (this.game.createdPiecesCounterForFrequencyPieces >= p.frequencySpecialPieceTypeOnceEveryNPieces) {
-                    bag.push(p);
-                }
-            }
-        }
-        if (bag.length > 0) {
-            this.game.createdPiecesCounterForFrequencyPieces = 0;
-            return bag[this.game.getRandomIntLessThan(bag.length, "getRandomSpecialPieceType")];
-        }
-        for (const p of pieceTypes) {
-            if (p.randomSpecialPieceChanceOneOutOf > 0) {
-                if (this.game.getRandomIntLessThan(p.randomSpecialPieceChanceOneOutOf, "getRandomSpecialPieceType") === 0) {
-                    bag.push(p);
-                }
-            }
-        }
-        if (bag.length > 0) return bag[this.game.getRandomIntLessThan(bag.length, "getRandomSpecialPieceType")];
-        return null;
-    }
-
-    public getRandomPieceTypeFromArrayExcludingSpecialPieceTypes(arr: PieceType[]): PieceType | null {
-        const bag = arr.filter(p => p.randomSpecialPieceChanceOneOutOf === 0 && p.frequencySpecialPieceTypeOnceEveryNPieces === 0);
-        if (bag.length > 0) return bag[this.game.getRandomIntLessThan(bag.length, "getRandomPieceTypeExcludingSpecial")];
-        return null;
-    }
-
-    public getBagOfOneOfEachNonRandomNormalPieces(): Piece[] {
-        const pt = this.getGameType()!.getNormalPieceTypes(this.game.getCurrentDifficulty());
-        const bt = this.getGameType()!.getNormalBlockTypes(this.game.getCurrentDifficulty());
-        const tempBag: Piece[] = [];
-        for (const type of pt) {
-            if (type.randomSpecialPieceChanceOneOutOf === 0 && type.frequencySpecialPieceTypeOnceEveryNPieces === 0) {
-                const p = new Piece(this.game, this, type, bt[0]);
-                p.init();
-                tempBag.push(p);
-            }
-        }
-        return tempBag;
-    }
-
-    public getPieceFromNormalPieceRandomBag(): Piece {
-        if (this.randomBag.length === 0) {
-            const tempBag = this.getBagOfOneOfEachNonRandomNormalPieces();
-            while (tempBag.length > 0) {
-                let i = this.game.getRandomIntLessThan(tempBag.length, "getPieceFromBag");
-                if (this.randomBag.length === 0) {
-                    const anyAllowed = tempBag.some(p => !p.pieceType.disallowAsFirstPiece);
-                    if (anyAllowed) while (tempBag[i].pieceType.disallowAsFirstPiece) i = this.game.getRandomIntLessThan(tempBag.length, \"getPieceFromBag\");
-                }
-                this.randomBag.push(tempBag.splice(i, 1)[0]);
-            }
-        }
-        return this.randomBag.shift()!;
-    }
+    public cellW(): number { return this.game.cellW(); }
+    public cellH(): number { return this.game.cellH(); }
 }

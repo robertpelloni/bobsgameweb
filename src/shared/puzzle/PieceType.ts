@@ -1,13 +1,13 @@
 import { BobColor } from "../BobColor";
-import { RotationSet, Rotation, BlockOffset, Piece, RotationType } from "./Piece";
+import { RotationSet, Rotation, BlockOffset, Piece } from "./Piece";
 
 export class PieceType {
-    public name: string = "";
-    public uuid: string = "";
-    public description: string = "";
+    public static readonly emptyPieceType = new PieceType("empty");
 
+    public uuid: string = "";
+    public name: string = "";
     public color: BobColor | null = null;
-    public rotationSet: RotationSet = new RotationSet();
+    public rotationSet: RotationSet = new RotationSet("");
 
     public frequencySpecialPieceTypeOnceEveryNPieces: number = 0;
     public randomSpecialPieceChanceOneOutOf: number = 0;
@@ -30,41 +30,76 @@ export class PieceType {
 
     public overrideBlockTypes_UUID: string[] = [];
 
-    public static create(rs: RotationSet): PieceType {
-        const pt = new PieceType();
-        pt.rotationSet = rs;
-        return pt;
+    // Legacy/compatibility fields
+    public isGarbagePieceType: boolean = false;
+    public isBomb: boolean = false;
+    public isWeight: boolean = false;
+    public isSubtractor: boolean = false;
+    public isShooter: boolean = false;
+
+    constructor(name: string = "", rs: RotationSet = new RotationSet("")) {
+        this.uuid = crypto.randomUUID();
+        this.name = name;
+        this.rotationSet = rs;
+        if (this.rotationSet.size() === 0) {
+            const r = new Rotation();
+            r.add(new BlockOffset(0, 0));
+            this.rotationSet.add(r);
+        }
     }
 
-    public static emptyPieceType: PieceType = PieceType.create(new RotationSet("Empty"));
-    public static oneBlockCursorPieceType: PieceType = PieceType.create(Piece.get1BlockCursorRotationSet());
-    public static twoBlockHorizontalCursorPieceType: PieceType = PieceType.create(Piece.get2BlockHorizontalCursorRotationSet());
-    public static twoBlockVerticalCursorPieceType: PieceType = PieceType.create(Piece.get2BlockVerticalCursorRotationSet());
-    public static threeBlockHorizontalCursorPieceType: PieceType = PieceType.create(Piece.get3BlockHorizontalCursorRotationSet());
-    public static threeBlockVerticalCursorPieceType: PieceType = PieceType.create(Piece.get3BlockVerticalCursorRotationSet());
-    public static fourBlockCursorPieceType: PieceType = PieceType.create(Piece.get4BlockCursorRotationSet());
-    public static threeBlockVerticalSwapPieceType: PieceType = PieceType.create(Piece.get3BlockVerticalRotationSet());
-    public static threeBlockHorizontalSwapPieceType: PieceType = PieceType.create(Piece.get3BlockHorizontalRotationSet());
-    public static threeBlockTPieceType: PieceType = PieceType.create(Piece.get3BlockTRotationSet());
-    public static threeBlockLPieceType: PieceType = PieceType.create(Piece.get3BlockLRotationSet());
-    public static threeBlockJPieceType: PieceType = PieceType.create(Piece.get3BlockJRotationSet());
-    public static threeBlockIPieceType: PieceType = PieceType.create(Piece.get3BlockIRotationSet());
-    public static threeBlockCPieceType: PieceType = PieceType.create(Piece.get3BlockCRotationSet());
-    public static threeBlockDPieceType: PieceType = PieceType.create(Piece.get3BlockDRotationSet());
-    public static fourBlockOPieceType: PieceType = PieceType.create(Piece.get4BlockORotationSet());
-    public static fourBlockSolidPieceType: PieceType = PieceType.create(Piece.get4BlockSolidRotationSet());
-    public static nineBlockSolidPieceType: PieceType = PieceType.create(Piece.get9BlockSolidRotationSet());
-    public static fourBlockIPieceType: PieceType = PieceType.create(Piece.get4BlockIRotationSet(RotationType.SRS));
-    public static fourBlockJPieceType: PieceType = PieceType.create(Piece.get4BlockJRotationSet(RotationType.SRS));
-    public static fourBlockLPieceType: PieceType = PieceType.create(Piece.get4BlockLRotationSet(RotationType.SRS));
-    public static fourBlockSPieceType: PieceType = PieceType.create(Piece.get4BlockSRotationSet(RotationType.SRS));
-    public static fourBlockTPieceType: PieceType = PieceType.create(Piece.get4BlockTRotationSet(RotationType.SRS));
-    public static fourBlockZPieceType: PieceType = PieceType.create(Piece.get4BlockZRotationSet(RotationType.SRS));
-
-    constructor() {
-        this.uuid = crypto.randomUUID();
-        const r = new Rotation();
-        r.blockOffsets.push(new BlockOffset(0, 0));
-        this.rotationSet.rotations.push(r);
+    public isSpecialType(): boolean {
+        if (this.randomSpecialPieceChanceOneOutOf !== 0) return true;
+        if (this.frequencySpecialPieceTypeOnceEveryNPieces !== 0) return true;
+        if (this.flashingSpecialType) return true;
+        return this.bombPiece || this.weightPiece || this.pieceRemovalShooterPiece || this.pieceShooterPiece || this.isBomb || this.isWeight || this.isSubtractor || this.isShooter;
     }
 }
+
+export const PieceTypes = {
+    I: (() => {
+        const pt = new PieceType('I', Piece.get4BlockIRotationSet(0));
+        pt.useAsNormalPiece = true;
+        return pt;
+    })(),
+    O: (() => {
+        const pt = new PieceType('O', Piece.get4BlockORotationSet());
+        pt.useAsNormalPiece = true;
+        return pt;
+    })(),
+    T: (() => {
+        const pt = new PieceType('T', Piece.get4BlockTRotationSet(0));
+        pt.useAsNormalPiece = true;
+        return pt;
+    })(),
+    S: (() => {
+        const pt = new PieceType('S', Piece.get4BlockSRotationSet(0));
+        pt.useAsNormalPiece = true;
+        return pt;
+    })(),
+    Z: (() => {
+        const pt = new PieceType('Z', Piece.get4BlockZRotationSet(0));
+        pt.useAsNormalPiece = true;
+        return pt;
+    })(),
+    J: (() => {
+        const pt = new PieceType('J', Piece.get4BlockJRotationSet(0));
+        pt.useAsNormalPiece = true;
+        return pt;
+    })(),
+    L: (() => {
+        const pt = new PieceType('L', Piece.get4BlockLRotationSet(0));
+        pt.useAsNormalPiece = true;
+        return pt;
+    })(),
+};
+
+export const STANDARD_PIECE_TYPES = [
+    PieceTypes.I,
+    PieceTypes.O,
+    PieceTypes.T,
+    PieceTypes.S,
+    PieceTypes.Z,
+    PieceTypes.J,
+    PieceTypes.L,
+];

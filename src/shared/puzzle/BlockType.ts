@@ -1,58 +1,67 @@
 import { BobColor } from "../BobColor";
 
-export interface TurnFromBlockTypeToType {
-    fromType_UUID: string;
-    toType_UUID: string;
+export class TurnFromBlockTypeToType {
+    public fromType_UUID: string = "";
+    public toType_UUID: string = "";
+    constructor(from?: string, to?: string) {
+        this.fromType_UUID = from || "";
+        this.toType_UUID = to || "";
+    }
 }
 
 export class BlockType {
-    public name: string = "";
-    public uuid: string = "";
-    public description: string = "";
+    public static readonly emptyBlockType = new BlockType("empty");
 
-    public sprite: string = "";
+    public uuid: string = "";
+    public name: string = "";
     public spriteName: string = "";
     public specialSpriteName: string = "";
 
-    public specialColor: BobColor | null = null;
+    public useInNormalPieces: boolean = false;
+    public useAsGarbage: boolean = false;
+    public useAsPlayingFieldFiller: boolean = false;
+    public ignoreWhenMovingDownBlocks: boolean = false;
+    public chainConnectionsMustContainAtLeastOneBlockWithThisTrue: boolean = false;
+    public ignoreWhenCheckingChain: boolean = false;
+    public ignoreWhenCheckingChainConnections: boolean = false;
+
     public colors: BobColor[] = [];
+    public specialColor: BobColor | null = null;
 
     public randomSpecialBlockChanceOneOutOf: number = 0;
     public frequencySpecialBlockTypeOnceEveryNPieces: number = 0;
+
     public flashingSpecialType: boolean = false;
+    public turnBackToNormalBlockAfterNPiecesLock: number = -1;
 
     public makePieceTypeWhenCleared_UUID: string[] = [];
     public clearEveryOtherLineOnGridWhenCleared: boolean = false;
 
-    public useInNormalPieces: boolean = false;
-    public useAsGarbageBlock: boolean = false;
-    public useAsPlayingFieldFillerBlock: boolean = false;
-
-    public removeAllBlocksOfColorOnFieldBlockIsSetOn: boolean = false;
-    public changeAllBlocksOfColorOnFieldBlockIsSetOnToDiamondColor: boolean = false;
-
+    public counterType: boolean = false;
     public pacmanType: boolean = false;
     public pacJarType: boolean = false;
     public ticksToChangeDirection: number = 1000;
 
-    public counterType: boolean = false;
-    public turnBackToNormalBlockAfterNPiecesLock: number = -1;
-
-    public ignoreWhenCheckingChainConnections: boolean = false;
-    public ignoreWhenMovingDownBlocks: boolean = false;
-    public chainConnectionsMustContainAtLeastOneBlockWithThisTrue: boolean = false;
+    public ifConnectedUpDownLeftRightToExplodingBlockChangeIntoThisType_UUID: string[] = [];
     public addToChainIfConnectedUpDownLeftRightToExplodingChainBlocks: boolean = false;
+
+    public whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut: TurnFromBlockTypeToType[] = [];
+    public removeAllBlocksOfColorOnFieldBlockIsSetOn: boolean = false;
+    public changeAllBlocksOfColorOnFieldBlockIsSetOnToDiamondColor: boolean = false;
     public matchAnyColor: boolean = false;
 
-    public ifConnectedUpDownLeftRightToExplodingBlockChangeIntoThisType_UUID: string[] = [];
-    public whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut: TurnFromBlockTypeToType[] = [];
+    // Legacy/compatibility fields
+    public isGarbageBlockType: boolean = false;
+    public isBomb: boolean = false;
+    public isWeight: boolean = false;
+    public isSubtractor: boolean = false;
+    public isShooter: boolean = false;
+    public isBreaker: boolean = false;
+    public chainMustContainAtLeastOneOfTheseBlockTypesToStartExploding: boolean = true;
 
-    constructor() {
+    constructor(name: string = "") {
         this.uuid = crypto.randomUUID();
-    }
-
-    public isNormalType(): boolean {
-        return this.useInNormalPieces;
+        this.name = name;
     }
 
     public isSpecialType(): boolean {
@@ -61,6 +70,33 @@ export class BlockType {
         if (this.flashingSpecialType) return true;
         if (this.makePieceTypeWhenCleared_UUID.length > 0) return true;
         if (this.clearEveryOtherLineOnGridWhenCleared) return true;
-        return false;
+        return this.isBomb || this.isWeight || this.isSubtractor || this.isShooter || this.isBreaker;
+    }
+
+    public isNormalType(): boolean {
+        return this.useInNormalPieces;
     }
 }
+
+export const BlockTypes = {
+    NORMAL: (() => {
+        const bt = new BlockType("Normal");
+        bt.useInNormalPieces = true;
+        bt.chainMustContainAtLeastOneOfTheseBlockTypesToStartExploding = true;
+        return bt;
+    })(),
+
+    GARBAGE: (() => {
+        const bt = new BlockType("Garbage");
+        bt.useAsGarbage = true;
+        bt.isGarbageBlockType = true;
+        bt.chainMustContainAtLeastOneOfTheseBlockTypesToStartExploding = false;
+        return bt;
+    })(),
+
+    FILLER: (() => {
+        const bt = new BlockType("Filler");
+        bt.useAsPlayingFieldFiller = true;
+        return bt;
+    })(),
+};

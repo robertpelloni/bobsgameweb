@@ -1,4 +1,4 @@
-import { Entity, EntityConfig, Direction } from './Entity';
+import { Entity, EntityConfig, Direction } from '../../entity/Entity';
 
 export interface CharacterConfig extends EntityConfig {
   name?: string;
@@ -65,8 +65,6 @@ export class Character extends Entity {
   }
   
   public override update(dt: number) {
-    super.update(dt);
-    
     if (this.isMoving) {
       this.x += this.vx * (dt / 1000);
       this.y += this.vy * (dt / 1000);

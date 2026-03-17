@@ -45,7 +45,7 @@ export class OptionsScene extends Scene {
         this.optionsConfig = config;
     }
 
-    protected create(): void {
+    public create(): void {
         this.createBackground();
         this.createTitle();
         this.createOptions();
