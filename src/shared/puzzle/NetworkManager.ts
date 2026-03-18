@@ -65,6 +65,14 @@ export class NetworkManager extends EventEmitter {
         });
 
         this.socket.on('opponentFrame', (state: any) => {
+            if (typeof state === 'string') {
+                try {
+                    state = JSON.parse(state);
+                } catch (e) {
+                    console.error("Failed to parse opponent frame state", e);
+                    return;
+                }
+            }
             this.emit('opponentFrame', state);
         });
     }
