@@ -47,13 +47,27 @@ export class LobbyScene extends Scene {
         createRoomDiv.style.padding = '10px';
         createRoomDiv.style.borderRadius = '8px';
         createRoomDiv.innerHTML = `
-            <input type="text" id="roomNameInput" placeholder="Room Name" value="New Room" style="padding: 5px;" />
-            <input type="password" id="roomPasswordInput" placeholder="Password (Optional)" style="padding: 5px;" />
-            <label style="color: white; display: flex; align-items: center; gap: 5px;">
-                <input type="checkbox" id="roomPrivateInput" /> Private
-            </label>
-            <button id="createRoomBtn" style="padding: 5px 10px; cursor: pointer;">Create Room</button>
-            <button id="backBtn" style="padding: 5px 10px; cursor: pointer;">Back</button>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="roomNameInput" placeholder="Room Name" value="New Room" style="padding: 5px;" />
+                    <input type="password" id="roomPasswordInput" placeholder="Password (Optional)" style="padding: 5px;" />
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center; color: white;">
+                    <select id="gameModeInput" style="padding: 5px;">
+                        <option value="marathon">Marathon</option>
+                        <option value="sprint">Sprint (40 Lines)</option>
+                        <option value="ultra">Ultra (3 Min)</option>
+                    </select>
+                    <input type="number" id="startLevelInput" value="1" min="1" max="20" style="width: 50px; padding: 5px;" />
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" id="roomPrivateInput" /> Private
+                    </label>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button id="createRoomBtn" style="padding: 5px 10px; cursor: pointer;">Create Room</button>
+                    <button id="backBtn" style="padding: 5px 10px; cursor: pointer;">Back</button>
+                </div>
+            </div>
         `;
         document.body.appendChild(createRoomDiv);
         this.uiElements.push(createRoomDiv);
@@ -62,7 +76,9 @@ export class LobbyScene extends Scene {
             const name = (document.getElementById('roomNameInput') as HTMLInputElement).value;
             const password = (document.getElementById('roomPasswordInput') as HTMLInputElement).value;
             const isPrivate = (document.getElementById('roomPrivateInput') as HTMLInputElement).checked;
-            this.networkManager.createRoom({ name, password, isPrivate });
+            const gameMode = (document.getElementById('gameModeInput') as HTMLSelectElement).value;
+            const startLevel = parseInt((document.getElementById('startLevelInput') as HTMLInputElement).value) || 1;
+            this.networkManager.createRoom({ name, password, isPrivate, gameMode, startLevel });
         };
 
         document.getElementById('backBtn')!.onclick = () => {
@@ -91,13 +107,15 @@ export class LobbyScene extends Scene {
             this.roomListContainer.visible = false;
         });
 
-        this.networkManager.on('gameStart', (data: { seed: number }) => {
-            console.log('Game starting with seed:', data.seed);
+        this.networkManager.on('gameStart', (data: { seed: number, gameMode: string, startLevel: number }) => {
+            console.log('Game starting with seed:', data.seed, 'Mode:', data.gameMode, 'Level:', data.startLevel);
             this.manager.push(new PuzzleScene({ 
                 name: 'Puzzle',
                 app: this.app,
                 multiplayer: true,
-                seed: data.seed 
+                seed: data.seed,
+                gameMode: data.gameMode as any,
+                startLevel: data.startLevel
             }));
         });
 

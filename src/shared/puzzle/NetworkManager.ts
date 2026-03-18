@@ -97,7 +97,7 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
-    public createRoom(options: { name: string, isPrivate?: boolean, password?: string }): void {
+    public createRoom(options: { name: string, isPrivate?: boolean, password?: string, gameMode?: string, startLevel?: number }): void {
         if (this.socket) {
             this.socket.emit('createRoom', options);
         }
