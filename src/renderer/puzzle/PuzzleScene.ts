@@ -60,6 +60,9 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private gameTime: number = 0;
   private frameCount: number = 0;
 
+  private chatContainer: HTMLElement | null = null;
+  private chatInputActive: boolean = false;
+
   constructor(config: PuzzleSceneConfig, bindings?: Partial<PuzzleKeyBindings>) {
     super(config);
     this.gameType = config.gameType ?? new GameType();
@@ -107,6 +110,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       networkManager.connect('http://localhost:6065');
       networkManager.setGame(this.game);
       this.setupNetworkHandlers();
+      this.createChatUI();
     }
 
     this.game.initGame();
@@ -276,6 +280,13 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       return;
     }
 
+    if (InputManager.isKeyPressed(Key.T) && this.config.multiplayer) {
+        this.toggleChat();
+        return;
+    }
+
+    if (this.chatInputActive) return;
+
     if (InputManager.isKeyPressed(this.bindings.restart as Key)) {
       this.restart();
       return;
@@ -307,12 +318,88 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     return this.renderer;
   }
 
+  private createChatUI(): void {
+    if (this.chatContainer) return;
+
+    this.chatContainer = document.createElement('div');
+    this.chatContainer.style.position = 'absolute';
+    this.chatContainer.style.left = '10px';
+    this.chatContainer.style.bottom = '10px';
+    this.chatContainer.style.width = '300px';
+    this.chatContainer.style.height = '200px';
+    this.chatContainer.style.background = 'rgba(0,0,0,0.5)';
+    this.chatContainer.style.color = 'white';
+    this.chatContainer.style.display = 'flex';
+    this.chatContainer.style.flexDirection = 'column';
+    this.chatContainer.style.padding = '5px';
+    this.chatContainer.style.borderRadius = '4px';
+    this.chatContainer.style.pointerEvents = 'none';
+
+    this.chatContainer.innerHTML = `
+        <div id="gameChatMessages" style="flex-grow: 1; overflow-y: auto; margin-bottom: 5px; font-family: monospace; font-size: 12px; text-shadow: 1px 1px 1px black;"></div>
+        <input type="text" id="gameChatInput" placeholder="Press T to chat..." style="width: 100%; padding: 3px; background: rgba(0,0,0,0.7); color: white; border: 1px solid #444; pointer-events: auto; display: none;" />
+    `;
+
+    document.body.appendChild(this.chatContainer);
+
+    networkManager.on('chatMessage', (data: any) => this.handleChatMessage(data));
+  }
+
+  private handleChatMessage(data: { message: string, name: string, timestamp: number }): void {
+    const messagesDiv = document.getElementById('gameChatMessages');
+    if (messagesDiv) {
+        const msgEl = document.createElement('div');
+        msgEl.innerHTML = `<span style="color: #3366ff; font-weight: bold;">${data.name}:</span> ${data.message}`;
+        messagesDiv.appendChild(msgEl);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        
+        // Auto-fade messages or keep them visible? Let's keep them for now.
+    }
+  }
+
+  private toggleChat(): void {
+    const input = document.getElementById('gameChatInput') as HTMLInputElement;
+    if (!input) return;
+
+    this.chatInputActive = !this.chatInputActive;
+    if (this.chatInputActive) {
+        input.style.display = 'block';
+        input.focus();
+        // Lock game input
+        InputManager.setLocked(true);
+        
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter') {
+                const msg = input.value.trim();
+                if (msg) {
+                    const name = localStorage.getItem('playerName') || 'WebPlayer';
+                    networkManager.sendChat(msg, name);
+                }
+                input.value = '';
+                this.toggleChat();
+            } else if (e.key === 'Escape') {
+                this.toggleChat();
+            }
+            e.stopPropagation();
+        };
+    } else {
+        input.style.display = 'none';
+        input.blur();
+        InputManager.setLocked(false);
+    }
+  }
+
   protected async destroy(): Promise<void> {
     this.game.removeAllListeners();
     this.renderer.destroy();
     this.pauseOverlay?.destroy();
+    if (this.chatContainer) {
+        this.chatContainer.remove();
+        this.chatContainer = null;
+    }
     if (this.config.multiplayer) {
       networkManager.setGame(null);
+      networkManager.off('chatMessage');
     }
   }
 }

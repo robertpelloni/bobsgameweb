@@ -55,6 +55,12 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
+    public sendChat(message: string, name: string): void {
+        if (this.socket && this.socket.connected) {
+            this.socket.emit('chatMessage', { message, name });
+        }
+    }
+
     private setupHandlers(): void {
         if (!this.socket) return;
 
@@ -64,6 +70,10 @@ export class NetworkManager extends EventEmitter {
 
         this.socket.on('disconnect', () => {
             console.log('Disconnected from game server');
+        });
+
+        this.socket.on('chatMessage', (data: any) => {
+            this.emit('chatMessage', data);
         });
 
         this.socket.on('garbage', (amount: number) => {
