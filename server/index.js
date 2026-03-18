@@ -183,6 +183,25 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("chatMessage", (data) => {
+    if (typeof data === 'string') {
+        try {
+            data = JSON.parse(data);
+        } catch (e) {
+            data = { message: data };
+        }
+    }
+    const { message, name } = data;
+    const roomIds = Array.from(socket.rooms).filter(id => id !== socket.id);
+    if (roomIds.length > 0) {
+        io.to(roomIds[0]).emit("chatMessage", {
+            message,
+            name: name || "Anonymous",
+            timestamp: Date.now()
+        });
+    }
+  });
+
   socket.on("disconnecting", () => {
     for (const roomId of socket.rooms) {
         if (rooms.has(roomId)) {

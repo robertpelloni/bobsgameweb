@@ -13,6 +13,7 @@ export class LobbyScene extends Scene {
     private leaderboardContainer: Container;
     private titleText!: Text;
     private uiElements: HTMLElement[] = [];
+    private chatContainer: HTMLElement | null = null;
 
     constructor(config: SceneConfig) {
         super(config);
@@ -105,6 +106,12 @@ export class LobbyScene extends Scene {
             this.titleText.text = `Waiting in ${room.name}...`;
             this.uiElements.forEach(el => el.style.display = 'none');
             this.roomListContainer.visible = false;
+            this.leaderboardContainer.visible = false;
+            this.createChatUI();
+        });
+
+        this.networkManager.on('chatMessage', (data: { message: string, name: string, timestamp: number }) => {
+            this.handleChatMessage(data);
         });
 
         this.networkManager.on('gameStart', (data: { seed: number, gameMode: string, startLevel: number }) => {
@@ -196,6 +203,64 @@ export class LobbyScene extends Scene {
         // Auto refresh every 5 seconds
         if (Math.floor(Date.now() / 5000) !== Math.floor((Date.now() - delta * 16) / 5000)) {
             this.refreshRoomList();
+        }
+    }
+
+    private createChatUI(): void {
+        if (this.chatContainer) return;
+
+        this.chatContainer = document.createElement('div');
+        this.chatContainer.style.position = 'absolute';
+        this.chatContainer.style.left = '50%';
+        this.chatContainer.style.top = '120px';
+        this.chatContainer.style.transform = 'translateX(-50%)';
+        this.chatContainer.style.width = '400px';
+        this.chatContainer.style.height = '300px';
+        this.chatContainer.style.background = 'rgba(0,0,0,0.8)';
+        this.chatContainer.style.color = 'white';
+        this.chatContainer.style.display = 'flex';
+        this.chatContainer.style.flexDirection = 'column';
+        this.chatContainer.style.padding = '10px';
+        this.chatContainer.style.borderRadius = '8px';
+        this.chatContainer.style.border = '1px solid #3366ff';
+
+        this.chatContainer.innerHTML = `
+            <div id="chatMessages" style="flex-grow: 1; overflow-y: auto; margin-bottom: 10px; font-family: monospace; font-size: 14px;"></div>
+            <div style="display: flex; gap: 5px;">
+                <input type="text" id="chatInput" placeholder="Type a message..." style="flex-grow: 1; padding: 5px; background: #222; color: white; border: 1px solid #444;" />
+                <button id="sendChatBtn" style="padding: 5px 10px; background: #3366ff; color: white; border: none; cursor: pointer;">Send</button>
+            </div>
+        `;
+
+        document.body.appendChild(this.chatContainer);
+        this.uiElements.push(this.chatContainer);
+
+        const input = document.getElementById('chatInput') as HTMLInputElement;
+        const sendBtn = document.getElementById('sendChatBtn') as HTMLButtonElement;
+
+        const sendMessage = () => {
+            const msg = input.value.trim();
+            if (msg) {
+                const name = localStorage.getItem('playerName') || 'Player';
+                this.networkManager.sendChat(msg, name);
+                input.value = '';
+            }
+        };
+
+        sendBtn.onclick = sendMessage;
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter') sendMessage();
+        };
+    }
+
+    private handleChatMessage(data: { message: string, name: string, timestamp: number }): void {
+        const messagesDiv = document.getElementById('chatMessages');
+        if (messagesDiv) {
+            const msgEl = document.createElement('div');
+            const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            msgEl.innerHTML = `<span style="color: #888;">[${time}]</span> <span style="color: #3366ff; font-weight: bold;">${data.name}:</span> ${data.message}`;
+            messagesDiv.appendChild(msgEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
     }
 
