@@ -1,13 +1,11 @@
-import { Application } from 'pixi.js';
 import { Scene, SceneConfig } from '../state/Scene';
 import { StateManager } from '../state/StateManager';
 import { InputManager, Key } from '../input/InputManager';
 import { AudioManager } from '../audio/AudioManager';
-import { PuzzleGame, GameState, MovementType, PuzzleGameEvents, NetworkManager } from './index';
+import { PuzzleGame, GameState, MovementType, networkManager } from './index';
 import { PuzzleRenderer } from './PuzzleRenderer';
 import { GameType } from './index';
 import { PauseOverlay } from '../scenes/PauseOverlay';
-// import { GameOverScene, GameStats } from '../scenes/GameOverScene'; // Assume these exist or will be fixed
 import { GameMode } from '../data/HighScoreManager';
 
 export interface PuzzleSceneConfig extends SceneConfig {
@@ -44,11 +42,14 @@ const DEFAULT_BINDINGS: PuzzleKeyBindings = {
   restart: Key.R,
 };
 
-export class PuzzleScene extends Scene {
+export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private game: PuzzleGame;
   private renderer: PuzzleRenderer;
   private bindings: PuzzleKeyBindings;
   private pauseOverlay: PauseOverlay | null = null;
+
+  private opponentGame: PuzzleGame | null = null;
+  private opponentRenderer: PuzzleRenderer | null = null;
 
   private gameType: GameType;
   private gameMode: GameMode;
@@ -57,7 +58,7 @@ export class PuzzleScene extends Scene {
 
   private soundsLoaded: boolean = false;
   private gameTime: number = 0;
-  private networkManager: NetworkManager | null = null;
+  private frameCount: number = 0;
 
   constructor(config: PuzzleSceneConfig, bindings?: Partial<PuzzleKeyBindings>) {
     super(config);
@@ -72,27 +73,52 @@ export class PuzzleScene extends Scene {
 
     this.renderer = new PuzzleRenderer({
       cellSize: 32,
-      gridOffsetX: 200,
+      gridOffsetX: 0,
       gridOffsetY: 50,
     });
+
+    if (config.multiplayer) {
+      this.opponentGame = new PuzzleGame(this, 0);
+      this.opponentGame.currentGameType = this.gameType;
+      this.opponentRenderer = new PuzzleRenderer({
+        cellSize: 20,
+        gridOffsetX: 0,
+        gridOffsetY: 50,
+        isOpponent: true
+      });
+    }
   }
 
   public async create(): Promise<void> {
     this.renderer.attachGame(this.game);
     this.container.addChild(this.renderer.container);
 
+    if (this.opponentGame && this.opponentRenderer) {
+      this.opponentRenderer.attachGame(this.opponentGame);
+      this.container.addChild(this.opponentRenderer.container);
+    }
+
     this.centerRenderer();
     this.createPauseOverlay();
     this.loadSounds();
     this.setupGameEvents();
 
-    if ((this.config as PuzzleSceneConfig).multiplayer) {
-      this.networkManager = new NetworkManager(this.game);
-      this.networkManager.connect('http://localhost:6065');
+    if (this.config.multiplayer) {
+      networkManager.connect('http://localhost:6065');
+      networkManager.setGame(this.game);
+      this.setupNetworkHandlers();
     }
 
     this.game.initGame();
     this.game.start();
+  }
+
+  private setupNetworkHandlers(): void {
+    networkManager.on('opponentFrame', (state: any) => {
+      if (this.opponentGame) {
+        this.opponentGame.applyState(state);
+      }
+    });
   }
 
   private createPauseOverlay(): void {
@@ -107,10 +133,21 @@ export class PuzzleScene extends Scene {
   }
 
   private centerRenderer(): void {
-    const bounds = this.renderer.getGridBounds();
-    const totalWidth = bounds.width + 400;
-    const offsetX = (this.width - totalWidth) / 2;
-    this.renderer.setPosition(offsetX, 0);
+    if (this.opponentRenderer) {
+      const pBounds = this.renderer.getGridBounds();
+      const oBounds = this.opponentRenderer.getGridBounds();
+      
+      const totalWidth = pBounds.width + oBounds.width + 100;
+      const startX = (this.width - totalWidth) / 2;
+      
+      this.renderer.setPosition(startX, 0);
+      this.opponentRenderer.setPosition(startX + pBounds.width + 100, 100);
+    } else {
+      const bounds = this.renderer.getGridBounds();
+      const totalWidth = bounds.width + 400;
+      const offsetX = (this.width - totalWidth) / 2;
+      this.renderer.setPosition(offsetX, 0);
+    }
   }
 
   private loadSounds(): void {
@@ -200,7 +237,7 @@ export class PuzzleScene extends Scene {
     }
   }
 
-  protected onUpdate(dt: number): void {
+  public onUpdate(dt: number): void {
     if (this.pauseOverlay?.visible) {
       this.pauseOverlay.update();
       return;
@@ -208,11 +245,17 @@ export class PuzzleScene extends Scene {
 
     if (this.game.state === GameState.PLAYING) {
       this.gameTime += dt;
+      this.frameCount++;
+
+      if (this.config.multiplayer && this.frameCount % 5 === 0) {
+        networkManager.sendFrame(this.game.getState());
+      }
     }
 
     this.processInput();
     this.game.update();
     this.renderer.update();
+    this.opponentRenderer?.update();
   }
 
   private processInput(): void {
@@ -261,6 +304,8 @@ export class PuzzleScene extends Scene {
     this.game.removeAllListeners();
     this.renderer.destroy();
     this.pauseOverlay?.destroy();
-    this.networkManager?.disconnect();
+    if (this.config.multiplayer) {
+      networkManager.setGame(null);
+    }
   }
 }

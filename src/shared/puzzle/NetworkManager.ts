@@ -1,17 +1,52 @@
 import { io, Socket } from 'socket.io-client';
+import { EventEmitter } from 'eventemitter3';
 import { GameLogic } from './GameLogic';
 
-export class NetworkManager {
-    private socket: Socket | null = null;
-    private game: GameLogic;
+export interface LobbyRoom {
+    id: string;
+    name: string;
+    players: number;
+    maxPlayers: number;
+}
 
-    constructor(game: GameLogic) {
+export class NetworkManager extends EventEmitter {
+    private socket: Socket | null = null;
+    private game: GameLogic | null = null;
+    private gameListener: ((amount: number) => void) | null = null;
+
+    constructor(game: GameLogic | null = null) {
+        super();
+        if (game) this.setGame(game);
+    }
+
+    public setGame(game: GameLogic | null): void {
+        // Remove old listener
+        if (this.game && this.gameListener) {
+            this.game.off('garbageSent', this.gameListener);
+        }
+
         this.game = game;
+
+        if (this.game) {
+            this.gameListener = (amount: number) => {
+                if (this.socket && this.socket.connected) {
+                    this.socket.emit('garbage', amount);
+                }
+            };
+            this.game.on('garbageSent', this.gameListener);
+        }
     }
 
     public connect(url: string): void {
+        if (this.socket) return;
         this.socket = io(url);
         this.setupHandlers();
+    }
+
+    public sendFrame(state: any): void {
+        if (this.socket && this.socket.connected) {
+            this.socket.emit('frame', state);
+        }
     }
 
     private setupHandlers(): void {
@@ -26,14 +61,31 @@ export class NetworkManager {
         });
 
         this.socket.on('garbage', (amount: number) => {
-            this.game.gotVSGarbageFromOtherPlayer(amount);
+            if (this.game) this.game.gotVSGarbageFromOtherPlayer(amount);
         });
 
-        this.game.on('garbageSent', (amount: number) => {
-            if (this.socket && this.socket.connected) {
-                this.socket.emit('garbage', amount);
-            }
+        this.socket.on('opponentFrame', (state: any) => {
+            this.emit('opponentFrame', state);
         });
+    }
+
+    public listRooms(callback: (rooms: LobbyRoom[]) => void): void {
+        if (this.socket) {
+            this.socket.once('roomList', callback);
+            this.socket.emit('listRooms');
+        }
+    }
+
+    public createRoom(name: string): void {
+        if (this.socket) {
+            this.socket.emit('createRoom', name);
+        }
+    }
+
+    public joinRoom(id: string): void {
+        if (this.socket) {
+            this.socket.emit('joinRoom', id);
+        }
     }
 
     public disconnect(): void {
