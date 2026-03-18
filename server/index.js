@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import { createServer } from "http";
+import fs from "fs";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -9,9 +10,56 @@ const io = new Server(httpServer, {
 });
 
 const rooms = new Map();
+let leaderboards = {
+    marathon: [],
+    sprint: [],
+    ultra: []
+};
+
+const LEADERBOARD_FILE = "leaderboards.json";
+
+try {
+    if (fs.existsSync(LEADERBOARD_FILE)) {
+        const data = fs.readFileSync(LEADERBOARD_FILE, "utf-8");
+        leaderboards = JSON.parse(data);
+        console.log("Loaded leaderboards from disk.");
+    }
+} catch (e) {
+    console.error("Failed to load leaderboards:", e);
+}
+
+function saveLeaderboards() {
+    try {
+        fs.writeFileSync(LEADERBOARD_FILE, JSON.stringify(leaderboards, null, 2), "utf-8");
+    } catch (e) {
+        console.error("Failed to save leaderboards:", e);
+    }
+}
 
 io.on("connection", (socket) => {
   console.log("Player connected:", socket.id);
+
+  socket.on("getLeaderboard", (mode) => {
+    socket.emit("leaderboard", { mode, scores: leaderboards[mode] || [] });
+  });
+
+  socket.on("reportScore", (data) => {
+    if (typeof data === 'string') {
+        try {
+            data = JSON.parse(data);
+        } catch (e) {
+            console.error("Failed to parse reportScore data", e);
+            return;
+        }
+    }
+    const { mode, name, score, lines, time } = data;
+    if (!leaderboards[mode]) leaderboards[mode] = [];
+    leaderboards[mode].push({ name, score, lines, time, date: Date.now() });
+    leaderboards[mode].sort((a, b) => b.score - a.score);
+    leaderboards[mode] = leaderboards[mode].slice(0, 10); // Keep top 10
+    saveLeaderboards();
+    io.emit("leaderboardUpdate", { mode, scores: leaderboards[mode] });
+  });
 
   socket.on("listRooms", () => {
     const roomList = Array.from(rooms.values()).map(r => ({
