@@ -49,6 +49,12 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
+    public reportScore(data: { mode: string, name: string, score: number, lines: number, time: number }): void {
+        if (this.socket && this.socket.connected) {
+            this.socket.emit('reportScore', data);
+        }
+    }
+
     private setupHandlers(): void {
         if (!this.socket) return;
 
@@ -81,6 +87,13 @@ export class NetworkManager extends EventEmitter {
         if (this.socket) {
             this.socket.once('roomList', callback);
             this.socket.emit('listRooms');
+        }
+    }
+
+    public getLeaderboard(mode: string, callback: (data: { mode: string, scores: any[] }) => void): void {
+        if (this.socket) {
+            this.socket.once('leaderboard', callback);
+            this.socket.emit('getLeaderboard', mode);
         }
     }
 

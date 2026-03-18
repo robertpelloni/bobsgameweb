@@ -6,6 +6,7 @@ import { PuzzleScene } from '../puzzle/PuzzleScene';
 export class LobbyScene extends Scene {
     private networkManager: NetworkManager;
     private roomListContainer: Container;
+    private leaderboardContainer: Container;
     private titleText!: Text;
     private createButton!: Container;
 
@@ -13,10 +14,12 @@ export class LobbyScene extends Scene {
         super(config);
         this.networkManager = new NetworkManager(null);
         this.roomListContainer = new Container();
+        this.leaderboardContainer = new Container();
     }
 
     public async create(): Promise<void> {
         this.container.addChild(this.roomListContainer);
+        this.container.addChild(this.leaderboardContainer);
 
         const style = new TextStyle({
             fill: '#ffffff',
@@ -38,7 +41,10 @@ export class LobbyScene extends Scene {
         this.setupNetworkHandlers();
         
         // Initial refresh
-        setTimeout(() => this.refreshRoomList(), 500);
+        setTimeout(() => {
+            this.refreshRoomList();
+            this.refreshLeaderboard();
+        }, 500);
     }
 
     private setupNetworkHandlers(): void {
@@ -69,6 +75,24 @@ export class LobbyScene extends Scene {
             rooms.forEach((room, index) => {
                 const roomRow = this.createRoomRow(room, index);
                 this.roomListContainer.addChild(roomRow);
+            });
+        });
+    }
+
+    private refreshLeaderboard(): void {
+        this.networkManager.getLeaderboard('marathon', (data) => {
+            this.leaderboardContainer.removeChildren();
+            
+            const title = new Text({ text: 'Top Scores (Marathon)', style: { fill: '#ffff00', fontSize: 28 } });
+            title.position.set(600, 200);
+            this.leaderboardContainer.addChild(title);
+
+            data.scores.forEach((score, index) => {
+                const row = new Container();
+                row.position.set(600, 250 + index * 40);
+                const text = new Text({ text: `${index + 1}. ${score.name}: ${score.score} pts`, style: { fill: '#ffffff', fontSize: 20 } });
+                row.addChild(text);
+                this.leaderboardContainer.addChild(row);
             });
         });
     }

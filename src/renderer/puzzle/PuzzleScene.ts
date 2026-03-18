@@ -213,8 +213,14 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   }
 
   private showGameOver(): void {
-    // Implement stats and game over scene transition
     console.log('Game Over');
+    networkManager.reportScore({
+      mode: this.gameMode,
+      name: 'WebPlayer', // TODO: Get from settings
+      score: this.game.score,
+      lines: this.game.linesClearedTotal,
+      time: this.gameTime
+    });
   }
 
   private resumeGame(): void {
