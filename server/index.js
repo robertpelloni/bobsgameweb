@@ -79,12 +79,22 @@ io.on("connection", (socket) => {
     let isPrivate = false;
     let password = "";
     
+    if (typeof options === 'string') {
+        try {
+            const parsed = JSON.parse(options);
+            if (typeof parsed === 'object' && parsed !== null) {
+                options = parsed;
+            }
+        } catch (e) {
+            // It's just a raw string room name
+        }
+    }
+
     if (typeof options === 'object' && options !== null) {
         roomName = options.name || roomName;
         isPrivate = options.isPrivate || false;
         password = options.password || "";
-    } else {
-        // Fallback for older clients
+    } else if (typeof options === 'string') {
         roomName = options;
     }
 
@@ -111,6 +121,17 @@ io.on("connection", (socket) => {
     let roomId = data;
     let password = "";
     
+    if (typeof data === 'string') {
+        try {
+            const parsed = JSON.parse(data);
+            if (typeof parsed === 'object' && parsed !== null) {
+                data = parsed;
+            }
+        } catch (e) {
+            // It's just a raw string room id
+        }
+    }
+
     if (typeof data === 'object' && data !== null) {
         roomId = data.id;
         password = data.password || "";
