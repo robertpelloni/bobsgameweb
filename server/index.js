@@ -62,35 +62,74 @@ io.on("connection", (socket) => {
   });
 
   socket.on("listRooms", () => {
-    const roomList = Array.from(rooms.values()).map(r => ({
-        id: r.id,
-        name: r.name,
-        players: r.players.length,
-        maxPlayers: r.maxPlayers
-    }));
+    const roomList = Array.from(rooms.values())
+        .filter(r => !r.isPrivate)
+        .map(r => ({
+            id: r.id,
+            name: r.name,
+            players: r.players.length,
+            maxPlayers: r.maxPlayers,
+            hasPassword: r.password !== ""
+        }));
     socket.emit("roomList", roomList);
   });
 
-  socket.on("createRoom", (roomName) => {
+  socket.on("createRoom", (options) => {
+    let roomName = "New Room";
+    let isPrivate = false;
+    let password = "";
+    
+    if (typeof options === 'object' && options !== null) {
+        roomName = options.name || roomName;
+        isPrivate = options.isPrivate || false;
+        password = options.password || "";
+    } else {
+        // Fallback for older clients
+        roomName = options;
+    }
+
     const roomId = Math.random().toString(36).substring(2, 9);
     const newRoom = {
         id: roomId,
         name: roomName,
+        isPrivate: isPrivate,
+        password: password,
         players: [socket.id],
         maxPlayers: 2
     };
     rooms.set(roomId, newRoom);
     socket.join(roomId);
-    socket.emit("roomCreated", newRoom);
-    console.log("Room created:", roomName, roomId);
+    
+    const roomInfo = { ...newRoom };
+    delete roomInfo.password;
+    
+    socket.emit("roomCreated", roomInfo);
+    console.log("Room created:", roomName, roomId, isPrivate ? "(Private)" : "");
   });
 
-  socket.on("joinRoom", (roomId) => {
+  socket.on("joinRoom", (data) => {
+    let roomId = data;
+    let password = "";
+    
+    if (typeof data === 'object' && data !== null) {
+        roomId = data.id;
+        password = data.password || "";
+    }
+
     const room = rooms.get(roomId);
     if (room && room.players.length < room.maxPlayers) {
+        if (room.password && room.password !== password) {
+            socket.emit("error", "Incorrect password");
+            return;
+        }
+        
         room.players.push(socket.id);
         socket.join(roomId);
-        socket.emit("joinedRoom", room);
+        
+        const roomInfo = { ...room };
+        delete roomInfo.password;
+        
+        socket.emit("joinedRoom", roomInfo);
         io.to(roomId).emit("playerJoined", socket.id);
         console.log("Player", socket.id, "joined room", roomId);
         
