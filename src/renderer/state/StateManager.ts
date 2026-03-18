@@ -14,9 +14,10 @@ export interface State {
   onResume?(): void;
   update(dt: number): void;
   render?(): void;
+  public?(): void; // Compatibility for some scenes?
 }
 
-class StateManagerClass extends EventEmitter<StateEvents> {
+export class StateManagerClass extends EventEmitter<StateEvents> {
   private stack: State[] = [];
   private initialized: boolean = false;
 

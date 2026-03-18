@@ -6,6 +6,7 @@ import { GameLogic } from "./GameLogic";
 import { PieceType } from "./PieceType";
 import { BlockType } from "./BlockType";
 import { Easing } from "../Easing";
+import { BobColor } from "../BobColor";
 
 export class Grid {
     public game: GameLogic;
@@ -613,4 +614,38 @@ export class Grid {
 
     public cellW(): number { return this.game.cellW(); }
     public cellH(): number { return this.game.cellH(); }
+
+    public getState(): (number | null)[][] {
+        const h = this.getHeight();
+        const w = this.getWidth();
+        const state: (number | null)[][] = Array.from({ length: h }, () => Array(w).fill(null));
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const b = this.get(x, y);
+                if (b) {
+                    const color = b.getColor();
+                    if (color) state[y][x] = color.toInt();
+                }
+            }
+        }
+        return state;
+    }
+
+    public applyState(state: (number | null)[][]): void {
+        const h = state.length;
+        const w = state[0].length;
+        this.reformat(w, h);
+        const bt = this.game.currentGameType.getNormalBlockTypes(this.game.getCurrentDifficulty())[0];
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const colorInt = state[y][x];
+                if (colorInt !== null) {
+                    const b = new Block(this.game, this, bt);
+                    const color = b.getColor();
+                    if (color) color.copyFrom(BobColor.fromInt(colorInt));
+                    this.set(x, y, b);
+                }
+            }
+        }
+    }
 }

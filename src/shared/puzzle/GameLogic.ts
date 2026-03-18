@@ -938,4 +938,42 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
         }
         return ghostY;
     }
+
+    public getState(): any {
+        return {
+            grid: this.grid.getState(),
+            currentPiece: this.currentPiece ? {
+                type: this.currentPiece.pieceType.name,
+                x: this.currentPiece.xGrid,
+                y: this.currentPiece.yGrid,
+                rot: this.currentPiece.currentRotation
+            } : null,
+            score: this.score,
+            level: this.currentLevel,
+            lines: this.linesClearedTotal,
+            state: this.state
+        };
+    }
+
+    public applyState(state: any): void {
+        this.grid.applyState(state.grid);
+        this.score = state.score;
+        this.currentLevel = state.level;
+        this.linesClearedTotal = state.lines;
+        this.state = state.state;
+
+        if (state.currentPiece) {
+            const pt = this.currentGameType.getNormalPieceTypes(this.getCurrentDifficulty()).find(p => p.name === state.currentPiece.type);
+            if (pt) {
+                const bt = this.currentGameType.getNormalBlockTypes(this.getCurrentDifficulty());
+                this.currentPiece = new Piece(this, this.grid, pt, bt);
+                this.currentPiece.init();
+                this.currentPiece.xGrid = state.currentPiece.x;
+                this.currentPiece.yGrid = state.currentPiece.y;
+                this.currentPiece.currentRotation = state.currentPiece.rot;
+            }
+        } else {
+            this.currentPiece = null;
+        }
+    }
 }

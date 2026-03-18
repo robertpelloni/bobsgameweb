@@ -11,7 +11,10 @@ export { GameLogic as PuzzleGame } from '../../shared/puzzle/GameLogic';
 export type { GameLogicEvents as PuzzleGameEvents } from '../../shared/puzzle/GameLogic';
 export { GameState } from '../../shared/puzzle/GameState';
 export { MovementType } from '../../shared/puzzle/MovementType';
-export { NetworkManager } from '../../shared/puzzle/NetworkManager';
+import { NetworkManager } from '../../shared/puzzle/NetworkManager';
+export { NetworkManager };
+
+export const networkManager = new NetworkManager();
 
 export { PuzzleRenderer } from './PuzzleRenderer';
 export type { PuzzleRendererConfig } from './PuzzleRenderer';

@@ -1,5 +1,5 @@
 import { Container, Application } from 'pixi.js';
-import { type State } from './StateManager';
+import type { State, StateManagerClass } from './StateManager';
 import { TweenManager } from '../../shared/Tween';
 
 export interface SceneConfig {
@@ -7,15 +7,18 @@ export interface SceneConfig {
   app: Application;
 }
 
-export abstract class Scene implements State {
+export abstract class Scene<T extends SceneConfig = SceneConfig> implements State {
   readonly name: string;
   protected app: Application;
   protected container: Container;
   protected _paused: boolean = false;
+  protected config: T;
+  protected manager!: StateManagerClass;
 
-  constructor(config: SceneConfig) {
+  constructor(config: T) {
     this.name = config.name;
     this.app = config.app;
+    this.config = config;
     this.container = new Container();
     this.container.label = config.name;
   }

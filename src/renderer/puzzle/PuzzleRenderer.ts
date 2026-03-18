@@ -15,6 +15,7 @@ export interface PuzzleRendererConfig {
   backgroundColor?: number;
   gridLineColor?: number;
   borderColor?: number;
+  isOpponent?: boolean;
 }
 
 const DEFAULT_CONFIG: Required<PuzzleRendererConfig> = {
@@ -31,6 +32,7 @@ const DEFAULT_CONFIG: Required<PuzzleRendererConfig> = {
   backgroundColor: 0x1a1a2e,
   gridLineColor: 0x2a2a4e,
   borderColor: 0x4a4a6e,
+  isOpponent: false,
 };
 
 export class PuzzleRenderer {
@@ -126,7 +128,7 @@ export class PuzzleRenderer {
   private setupLayout(): void {
     if (!this.game) return;
 
-    const { cellSize, gridOffsetX, gridOffsetY } = this.config;
+    const { cellSize, gridOffsetX, gridOffsetY, isOpponent } = this.config;
     const gridWidth = this.game.grid.getWidth();
     const gridHeight = this.game.grid.getHeight() - 5; // hidden rows buffer
 
@@ -137,14 +139,21 @@ export class PuzzleRenderer {
 
     const gridPixelWidth = gridWidth * cellSize;
 
-    this.nextContainer.position.set(
-      gridOffsetX + gridPixelWidth + 40,
-      gridOffsetY
-    );
+    if (isOpponent) {
+      this.nextContainer.visible = false;
+      this.holdContainer.visible = false;
+      this.ghostContainer.visible = false;
+      this.statsContainer.position.set(gridOffsetX, gridOffsetY + gridHeight * cellSize + 10);
+    } else {
+      this.nextContainer.position.set(
+        gridOffsetX + gridPixelWidth + 40,
+        gridOffsetY
+      );
 
-    this.holdContainer.position.set(gridOffsetX - 140, gridOffsetY);
+      this.holdContainer.position.set(gridOffsetX - 140, gridOffsetY);
 
-    this.statsContainer.position.set(gridOffsetX - 180, gridOffsetY + 200);
+      this.statsContainer.position.set(gridOffsetX - 180, gridOffsetY + 200);
+    }
 
     this.scoreText.position.set(0, 0);
     this.levelText.position.set(0, 30);
