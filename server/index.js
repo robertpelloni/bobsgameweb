@@ -104,6 +104,8 @@ io.on("connection", (socket) => {
         name: roomName,
         isPrivate: isPrivate,
         password: password,
+        gameMode: options.gameMode || "marathon",
+        startLevel: options.startLevel || 1,
         players: [socket.id],
         maxPlayers: 2
     };
@@ -114,7 +116,7 @@ io.on("connection", (socket) => {
     delete roomInfo.password;
     
     socket.emit("roomCreated", roomInfo);
-    console.log("Room created:", roomName, roomId, isPrivate ? "(Private)" : "");
+    console.log("Room created:", roomName, roomId, isPrivate ? "(Private)" : "", `Mode: ${newRoom.gameMode}, Level: ${newRoom.startLevel}`);
   });
 
   socket.on("joinRoom", (data) => {
@@ -156,7 +158,11 @@ io.on("connection", (socket) => {
         
         if (room.players.length === room.maxPlayers) {
             const seed = Math.floor(Math.random() * 1000000);
-            io.to(roomId).emit("gameStart", { seed });
+            io.to(roomId).emit("gameStart", { 
+                seed,
+                gameMode: room.gameMode,
+                startLevel: room.startLevel
+            });
         }
     } else {
         socket.emit("error", "Room full or not found");
