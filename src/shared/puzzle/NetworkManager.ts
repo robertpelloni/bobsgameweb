@@ -97,15 +97,15 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
-    public createRoom(name: string): void {
+    public createRoom(options: { name: string, isPrivate?: boolean, password?: string }): void {
         if (this.socket) {
-            this.socket.emit('createRoom', name);
+            this.socket.emit('createRoom', options);
         }
     }
 
-    public joinRoom(id: string): void {
+    public joinRoom(data: string | { id: string, password?: string }): void {
         if (this.socket) {
-            this.socket.emit('joinRoom', id);
+            this.socket.emit('joinRoom', data);
         }
     }
 

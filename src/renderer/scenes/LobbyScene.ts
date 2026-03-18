@@ -3,12 +3,16 @@ import { Scene, SceneConfig } from '../state/Scene';
 import { NetworkManager, LobbyRoom } from '../../shared/puzzle/NetworkManager';
 import { PuzzleScene } from '../puzzle/PuzzleScene';
 
+export interface LobbyRoomExt extends LobbyRoom {
+    hasPassword?: boolean;
+}
+
 export class LobbyScene extends Scene {
     private networkManager: NetworkManager;
     private roomListContainer: Container;
     private leaderboardContainer: Container;
     private titleText!: Text;
-    private createButton!: Container;
+    private uiElements: HTMLElement[] = [];
 
     constructor(config: SceneConfig) {
         super(config);
@@ -32,10 +36,38 @@ export class LobbyScene extends Scene {
         this.titleText.position.set(this.app.screen.width / 2, 50);
         this.container.addChild(this.titleText);
 
-        this.createButton = this.createStyledButton('Create Room', 200, 50);
-        this.createButton.position.set(this.app.screen.width / 2 - 100, 120);
-        this.createButton.on('pointerdown', () => this.networkManager.createRoom('New Room'));
-        this.container.addChild(this.createButton);
+        const createRoomDiv = document.createElement('div');
+        createRoomDiv.style.position = 'absolute';
+        createRoomDiv.style.left = '50%';
+        createRoomDiv.style.top = '120px';
+        createRoomDiv.style.transform = 'translateX(-50%)';
+        createRoomDiv.style.display = 'flex';
+        createRoomDiv.style.gap = '10px';
+        createRoomDiv.style.background = 'rgba(0,0,0,0.7)';
+        createRoomDiv.style.padding = '10px';
+        createRoomDiv.style.borderRadius = '8px';
+        createRoomDiv.innerHTML = `
+            <input type="text" id="roomNameInput" placeholder="Room Name" value="New Room" style="padding: 5px;" />
+            <input type="password" id="roomPasswordInput" placeholder="Password (Optional)" style="padding: 5px;" />
+            <label style="color: white; display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" id="roomPrivateInput" /> Private
+            </label>
+            <button id="createRoomBtn" style="padding: 5px 10px; cursor: pointer;">Create Room</button>
+            <button id="backBtn" style="padding: 5px 10px; cursor: pointer;">Back</button>
+        `;
+        document.body.appendChild(createRoomDiv);
+        this.uiElements.push(createRoomDiv);
+
+        document.getElementById('createRoomBtn')!.onclick = () => {
+            const name = (document.getElementById('roomNameInput') as HTMLInputElement).value;
+            const password = (document.getElementById('roomPasswordInput') as HTMLInputElement).value;
+            const isPrivate = (document.getElementById('roomPrivateInput') as HTMLInputElement).checked;
+            this.networkManager.createRoom({ name, password, isPrivate });
+        };
+
+        document.getElementById('backBtn')!.onclick = () => {
+            this.manager.pop();
+        };
 
         this.networkManager.connect('http://localhost:6065');
         this.setupNetworkHandlers();
@@ -49,12 +81,13 @@ export class LobbyScene extends Scene {
 
     private setupNetworkHandlers(): void {
         this.networkManager.on('roomCreated', (room: LobbyRoom) => {
-            this.networkManager.joinRoom(room.id);
+            const password = (document.getElementById('roomPasswordInput') as HTMLInputElement)?.value || "";
+            this.networkManager.joinRoom({ id: room.id, password });
         });
 
         this.networkManager.on('joinedRoom', (room: LobbyRoom) => {
             this.titleText.text = `Waiting in ${room.name}...`;
-            this.createButton.visible = false;
+            this.uiElements.forEach(el => el.style.display = 'none');
             this.roomListContainer.visible = false;
         });
 
@@ -67,10 +100,14 @@ export class LobbyScene extends Scene {
                 seed: data.seed 
             }));
         });
+
+        this.networkManager.on('error', (msg: string) => {
+            alert("Error: " + msg);
+        });
     }
 
     private refreshRoomList(): void {
-        this.networkManager.listRooms((rooms) => {
+        this.networkManager.listRooms((rooms: LobbyRoomExt[]) => {
             this.roomListContainer.removeChildren();
             rooms.forEach((room, index) => {
                 const roomRow = this.createRoomRow(room, index);
@@ -97,16 +134,23 @@ export class LobbyScene extends Scene {
         });
     }
 
-    private createRoomRow(room: LobbyRoom, index: number): Container {
+    private createRoomRow(room: LobbyRoomExt, index: number): Container {
         const row = new Container();
         row.position.set(100, 200 + index * 60);
 
-        const text = new Text({ text: `${room.name} (${room.players}/${room.maxPlayers})`, style: { fill: '#ffffff', fontSize: 24 } });
+        const lockStr = room.hasPassword ? " 🔒" : "";
+        const text = new Text({ text: `${room.name}${lockStr} (${room.players}/${room.maxPlayers})`, style: { fill: '#ffffff', fontSize: 24 } });
         row.addChild(text);
 
         const joinBtn = this.createStyledButton('Join', 100, 40);
         joinBtn.position.set(400, 0);
-        joinBtn.on('pointerdown', () => this.networkManager.joinRoom(room.id));
+        joinBtn.on('pointerdown', () => {
+            let password = "";
+            if (room.hasPassword) {
+                password = prompt(`Enter password for room ${room.name}:`) || "";
+            }
+            this.networkManager.joinRoom({ id: room.id, password });
+        });
         row.addChild(joinBtn);
 
         return row;
@@ -140,5 +184,8 @@ export class LobbyScene extends Scene {
     protected async destroy(): Promise<void> {
         this.networkManager.disconnect();
         this.roomListContainer.destroy({ children: true });
+        this.uiElements.forEach(el => el.remove());
+        this.uiElements = [];
     }
 }
+
