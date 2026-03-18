@@ -214,9 +214,10 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
   private showGameOver(): void {
     console.log('Game Over');
+    const playerName = localStorage.getItem('playerName') || 'WebPlayer';
     networkManager.reportScore({
       mode: this.gameMode,
-      name: 'WebPlayer', // TODO: Get from settings
+      name: playerName,
       score: this.game.score,
       lines: this.game.linesClearedTotal,
       time: this.gameTime

@@ -12,6 +12,9 @@ import { HighScoresScene } from './HighScoresScene';
 import { GameMode } from '../data/HighScoreManager';
 import { SceneTransition } from '../state/SceneTransition';
 
+import { LobbyScene } from './LobbyScene';
+import { SettingsScene } from './SettingsScene';
+
 // ============================================================
 // Types
 // ============================================================
@@ -31,6 +34,7 @@ interface MenuItem {
 // ============================================================
 
 export class MainMenuScene extends Scene {
+// ... (rest remains unchanged up to createMenu)
     private menuConfig: MainMenuSceneConfig;
     
     private titleText!: Text;
@@ -222,10 +226,9 @@ export class MainMenuScene extends Scene {
         this.menuItems = [
             { label: 'Classic', action: () => this.startGame(GameTypes.CLASSIC) },
             { label: 'Modern', action: () => this.startGame(GameTypes.MODERN) },
-            { label: 'Puyo', action: () => this.startGame(GameTypes.PUYO) },
-            { label: 'Columns', action: () => this.startGame(GameTypes.COLUMNS) },
+            { label: 'Multiplayer', action: () => this.openLobby() },
             { label: 'High Scores', action: () => this.openHighScores() },
-            { label: 'Options', action: () => this.openOptions() },
+            { label: 'Settings', action: () => this.openSettings() },
         ];
 
         const buttonStyle: ButtonStyle = {
@@ -347,6 +350,22 @@ export class MainMenuScene extends Scene {
             app: this.app,
         });
         SceneTransition.pushWithFade(this.app, optionsScene);
+    }
+
+    private openLobby(): void {
+        const lobbyScene = new LobbyScene({
+            name: 'lobby',
+            app: this.app,
+        });
+        SceneTransition.pushWithFade(this.app, lobbyScene);
+    }
+
+    private openSettings(): void {
+        const settingsScene = new SettingsScene({
+            name: 'settings',
+            app: this.app,
+        });
+        SceneTransition.pushWithFade(this.app, settingsScene);
     }
 
     private openHighScores(): void {
