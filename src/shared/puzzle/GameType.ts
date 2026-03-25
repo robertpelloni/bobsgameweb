@@ -309,16 +309,37 @@ export class GameType {
         return GameType.difficulty_NORMAL;
     }
 
-    public toBase64GZippedXML(): string {
-        // TODO: implement XML serialization and GZip
-        return btoa(JSON.stringify(this));
+    public async toBase64GZippedJSON(): Promise<string> {
+        const json = JSON.stringify(this);
+        const uint8Array = new TextEncoder().encode(json);
+        const cs = new CompressionStream("gzip");
+        const writer = cs.writable.getWriter();
+        writer.write(uint8Array);
+        writer.close();
+        const arrayBuffer = await new Response(cs.readable).arrayBuffer();
+        return btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
     }
 
-    public static fromBase64GZippedXML(data: string): GameType {
-        // TODO: implement XML deserialization and GZip
+    public static async fromBase64GZippedJSON(data: string): Promise<GameType> {
+        const bytes = Uint8Array.from(atob(data), c => c.charCodeAt(0));
+        const ds = new DecompressionStream("gzip");
+        const writer = ds.writable.getWriter();
+        writer.write(bytes);
+        writer.close();
+        const arrayBuffer = await new Response(ds.readable).arrayBuffer();
+        const json = new TextDecoder().decode(arrayBuffer);
         const gt = new GameType();
-        Object.assign(gt, JSON.parse(atob(data)));
+        Object.assign(gt, JSON.parse(json));
         return gt;
+    }
+
+    // Alias for backward compatibility with the expected stub name
+    public async toBase64GZippedXML(): Promise<string> {
+        return this.toBase64GZippedJSON();
+    }
+
+    public static async fromBase64GZippedXML(data: string): Promise<GameType> {
+        return this.fromBase64GZippedJSON(data);
     }
 }
 
