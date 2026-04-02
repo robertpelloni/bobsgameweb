@@ -69,7 +69,10 @@ io.on("connection", (socket) => {
             name: r.name,
             players: r.players.length,
             maxPlayers: r.maxPlayers,
-            hasPassword: r.password !== ""
+            hasPassword: r.password !== "",
+            gameMode: r.gameMode,
+            startLevel: r.startLevel,
+            isTournament: r.isTournament
         }));
     socket.emit("roomList", roomList);
   });
@@ -78,6 +81,7 @@ io.on("connection", (socket) => {
     let roomName = "New Room";
     let isPrivate = false;
     let password = "";
+    let isTournament = false;
     
     if (typeof options === 'string') {
         try {
@@ -94,6 +98,7 @@ io.on("connection", (socket) => {
         roomName = options.name || roomName;
         isPrivate = options.isPrivate || false;
         password = options.password || "";
+        isTournament = options.isTournament || false;
     } else if (typeof options === 'string') {
         roomName = options;
     }
@@ -104,10 +109,11 @@ io.on("connection", (socket) => {
         name: roomName,
         isPrivate: isPrivate,
         password: password,
+        isTournament: isTournament,
         gameMode: options.gameMode || "marathon",
         startLevel: options.startLevel || 1,
         players: [socket.id],
-        maxPlayers: 2
+        maxPlayers: isTournament ? 8 : 2
     };
     rooms.set(roomId, newRoom);
     socket.join(roomId);
@@ -116,7 +122,20 @@ io.on("connection", (socket) => {
     delete roomInfo.password;
     
     socket.emit("roomCreated", roomInfo);
-    console.log("Room created:", roomName, roomId, isPrivate ? "(Private)" : "", `Mode: ${newRoom.gameMode}, Level: ${newRoom.startLevel}`);
+    console.log("Room created:", roomName, roomId, isPrivate ? "(Private)" : "", isTournament ? "(Tournament)" : "", `Mode: ${newRoom.gameMode}, Level: ${newRoom.startLevel}`);
+  });
+
+  socket.on("getTournamentBracket", (roomId) => {
+      const room = rooms.get(roomId);
+      if (room && room.isTournament) {
+          // Dummy bracket for demonstration
+          const dummyData = [
+              { id: "m1", p1: room.players[0] || "Player1", p2: "Waiting...", winner: "", nextMatchId: "m3", isFinal: false, round: 1 },
+              { id: "m2", p1: "Waiting...", p2: "Waiting...", winner: "", nextMatchId: "m3", isFinal: false, round: 1 },
+              { id: "m3", p1: "", p2: "", winner: "", nextMatchId: "", isFinal: true, round: 2 }
+          ];
+          socket.emit("tournamentBracket", { roomId, matches: dummyData });
+      }
   });
 
   socket.on("joinRoom", (data) => {
