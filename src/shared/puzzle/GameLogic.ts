@@ -173,6 +173,8 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
     public lastSentGarbageToPlayerIndex: number = 0;
 
     public manager: any = null; // Equivalent to BobsGame instance
+    private random: () => number;
+    public randomSeed: number;
 
     constructor(manager: any, seed: number) {
         super();
@@ -180,6 +182,13 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
         this.manager = manager;
         this.grid = new Grid(this);
         this.currentGameType = new GameType();
+        this.randomSeed = seed;
+        // Simple seeded RNG (LCG) to match Java Random behavior enough for parity
+        let state = seed;
+        this.random = () => {
+            state = (state * 1664525 + 1013904223) % 4294967296;
+            return state / 4294967296;
+        };
     }
 
     public ticks(): number { return this.frameState ? this.frameState.ticksPassed : 0; }
@@ -398,7 +407,7 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
         if (this.currentGameType.gameMode === GameMode.STACK) this.doStackRiseGame();
         else if (this.currentGameType.gameMode === GameMode.DROP) this.doFallingBlockGame();
         this.moveDownLineTicksCounter += this.ticks();
-        if ((this.pieceSetAtBottom && !this.detectedChain())) {
+        if (this.pieceSetAtBottom && !this.detectedChain()) {
             if (this.checkForChainAgainIfNoBlocksPopping) { if (this.grid.areAnyBlocksPopping()) return; else this.checkForChainAgainIfNoBlocksPopping = false; }
             const movedDownBlocks = this.moveDownBlocksOverBlankSpaces();
             if (!movedDownBlocks) {
@@ -817,6 +826,8 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
                 const a = this.currentChainBlocks[0];
                 for (const b of this.grid.getConnectedBlocksUpDownLeftRight(a)) {
                     if (b.blockType.ifConnectedUpDownLeftRightToExplodingBlockChangeIntoThisType_UUID.length > 0) {
+                        const nextPt = this.currentGameType.getBlockTypeByUUID(b.blockType.ifConnectedUpDownLeftRightToExplodingBlockChangeIntoThisType_UUID[this.getRandomIntLessThan(b.blockType.ifConnectedUpDownLeftRightToExplodingBlockChangeIntoThisType_UUID.length, "changeType")]);
+                        b.blockType = nextPt;
                         b.popping = true; b.animationFrame = 0; this.checkForChainAgainIfNoBlocksPopping = true;
                     }
                 }
@@ -910,7 +921,7 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
     public cellH(): number { return this.blockHeight + this.currentGameType.gridPixelsBetweenRows; }
     public gridW(): number { return this.currentGameType.gridWidth; }
     public gridH(): number { return this.currentGameType.gridHeight + GameLogic.aboveGridBuffer; }
-    public getRandomIntLessThan(i: number, s: string): number { return Math.floor(Math.random() * i); }
+    public getRandomIntLessThan(i: number, s: string): number { return Math.floor(this.random() * i); }
     private updateSpecialPiecesAndBlocks(): void { 
         if (this.currentPiece) this.currentPiece.update(); 
         if (this.holdPiece) this.holdPiece.update(); 
