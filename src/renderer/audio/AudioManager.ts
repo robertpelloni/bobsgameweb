@@ -1,5 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import { Howl, Howler } from 'howler';
+// @ts-ignore - chiptune3 lacks official types
+import { ChiptuneJsPlayer } from './tracker/chiptune3';
 
 export interface AudioEvents {
   'sound:play': (name: string) => void;
@@ -11,7 +13,8 @@ export interface AudioEvents {
 }
 
 interface SoundInstance {
-  howl: Howl;
+  howl?: Howl;
+  trackerPlayer?: ChiptuneJsPlayer;
   id: number;
   name: string;
   isMusic: boolean;
@@ -26,8 +29,11 @@ interface AudioConfig {
   muted: boolean;
 }
 
+const TRACKER_EXTENSIONS = ['mod', 'xm', 's3m', 'it', 'stm', 'med', 'mtm', '669', 'ult', 'amf'];
+
 class AudioManagerClass extends EventEmitter<AudioEvents> {
   private cache: Map<string, Howl> = new Map();
+  private trackerCache: Map<string, string> = new Map();
   private playing: Map<string, SoundInstance[]> = new Map();
   private config: AudioConfig = {
     masterVolume: 1.0,
@@ -37,6 +43,8 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   };
 
   private initialized: boolean = false;
+  private trackerPlayer: ChiptuneJsPlayer | null = null;
+  private currentTrackerMusic: string | null = null;
 
   // ============================================================
   // Initialization
@@ -46,6 +54,28 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
     if (this.initialized) return;
     this.initialized = true;
     Howler.autoUnlock = true;
+    
+    // Initialize chiptune3 player using Howler's audio context
+    try {
+      this.trackerPlayer = new ChiptuneJsPlayer({
+        context: Howler.ctx,
+        repeatCount: -1, // loop by default
+      });
+      
+      this.trackerPlayer.onInitialized(() => {
+        console.log('Tracker player initialized');
+      });
+      
+      this.trackerPlayer.onEnded(() => {
+        if (this.currentTrackerMusic) {
+          this.emit('sound:end', this.currentTrackerMusic);
+          this.currentTrackerMusic = null;
+        }
+      });
+    } catch (e) {
+      console.error('Failed to initialize tracker player:', e);
+    }
+    
     console.log('AudioManager initialized');
   }
 
@@ -54,7 +84,12 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
     this.stopAll();
     this.cache.forEach((howl) => howl.unload());
     this.cache.clear();
+    this.trackerCache.clear();
     this.playing.clear();
+    if (this.trackerPlayer) {
+      this.trackerPlayer.stop();
+      this.trackerPlayer = null;
+    }
     this.initialized = false;
   }
 
@@ -62,7 +97,13 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   // Loading
   // ============================================================
 
-  load(name: string, src: string | string[], options?: { preload?: boolean }): Howl {
+  load(name: string, src: string | string[], options?: { preload?: boolean }): any {
+    const mainSrc = Array.isArray(src) ? src[0] : src;
+    if (this.isTrackerFile(mainSrc)) {
+      this.trackerCache.set(name, mainSrc);
+      return null;
+    }
+
     if (this.cache.has(name)) {
       return this.cache.get(name)!;
     }
@@ -86,11 +127,18 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
       howl.unload();
       this.cache.delete(name);
     }
+    this.trackerCache.delete(name);
   }
 
   isLoaded(name: string): boolean {
+    if (this.trackerCache.has(name)) return true; // assuming always loadable if we have URL
     const howl = this.cache.get(name);
     return howl?.state() === 'loaded';
+  }
+
+  private isTrackerFile(url: string): boolean {
+    const ext = url.split('.').pop()?.toLowerCase();
+    return ext ? TRACKER_EXTENSIONS.includes(ext) : false;
   }
 
   // ============================================================
@@ -106,6 +154,11 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
       loop?: boolean;
     }
   ): number | null {
+    if (this.trackerCache.has(name)) {
+      console.warn(`Tracker file "${name}" used as sound effect. This is not fully supported yet.`);
+      return this.playMusic(name, options);
+    }
+
     const howl = this.cache.get(name);
     if (!howl) {
       console.warn(`Sound "${name}" not loaded`);
@@ -159,6 +212,26 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
       fadeIn?: number;
     }
   ): number | null {
+    if (this.trackerCache.has(name)) {
+      if (!this.trackerPlayer) {
+        console.error('Tracker player not initialized');
+        return null;
+      }
+      
+      const url = this.trackerCache.get(name)!;
+      this.stopAllMusic(); // Only one tracker music at a time
+      
+      const effectiveVolume = (options?.volume ?? 1.0) * this.config.musicVolume * this.config.masterVolume;
+      this.trackerPlayer.setVol(this.config.muted ? 0 : effectiveVolume);
+      this.trackerPlayer.setRepeatCount(options?.loop === false ? 0 : -1);
+      if (options?.pitch !== undefined) this.trackerPlayer.setPitch(options.pitch);
+      
+      this.trackerPlayer.load(url);
+      this.currentTrackerMusic = name;
+      this.emit('music:play', name);
+      return 9999; // Dummy ID for tracker music
+    }
+
     const howl = this.cache.get(name);
     if (!howl) {
       console.warn(`Music "${name}" not loaded`);
@@ -198,11 +271,18 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   // ============================================================
 
   stop(name: string): void {
+    if (name === this.currentTrackerMusic && this.trackerPlayer) {
+      this.trackerPlayer.stop();
+      this.currentTrackerMusic = null;
+      this.emit('music:stop', name);
+      return;
+    }
+
     const instances = this.playing.get(name);
     if (!instances) return;
 
     for (const instance of instances) {
-      instance.howl.stop(instance.id);
+      instance.howl?.stop(instance.id);
     }
     this.playing.delete(name);
     this.emit('sound:stop', name);
@@ -210,6 +290,7 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
 
   stopAll(): void {
     this.playing.forEach((_, name) => this.stop(name));
+    if (this.currentTrackerMusic) this.stop(this.currentTrackerMusic);
   }
 
   stopAllMusic(): void {
@@ -217,12 +298,15 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
       const musicInstances = instances.filter((i) => i.isMusic);
       if (musicInstances.length > 0) {
         for (const instance of musicInstances) {
-          instance.howl.stop(instance.id);
+          instance.howl?.stop(instance.id);
           this.removeInstance(name, instance.id);
         }
         this.emit('music:stop', name);
       }
     });
+    if (this.currentTrackerMusic) {
+      this.stop(this.currentTrackerMusic);
+    }
   }
 
   stopAllSounds(): void {
@@ -230,7 +314,7 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
       const sfxInstances = instances.filter((i) => !i.isMusic);
       if (sfxInstances.length > 0) {
         for (const instance of sfxInstances) {
-          instance.howl.stop(instance.id);
+          instance.howl?.stop(instance.id);
           this.removeInstance(name, instance.id);
         }
         this.emit('sound:stop', name);
@@ -239,16 +323,21 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   }
 
   fadeOut(name: string, duration: number): void {
+    if (name === this.currentTrackerMusic) {
+       // chiptune2/3 doesn't have native fade, we could implement manually but stop for now
+       this.stop(name);
+       return;
+    }
     const instances = this.playing.get(name);
     if (!instances) return;
 
     for (const instance of instances) {
       if (instance.fadingOut) continue;
       instance.fadingOut = true;
-      const currentVolume = instance.howl.volume(instance.id) as number;
-      instance.howl.fade(currentVolume, 0, duration, instance.id);
-      instance.howl.once('fade', () => {
-        instance.howl.stop(instance.id);
+      const currentVolume = instance.howl?.volume(instance.id) as number;
+      instance.howl?.fade(currentVolume, 0, duration, instance.id);
+      instance.howl?.once('fade', () => {
+        instance.howl?.stop(instance.id);
         this.removeInstance(name, instance.id);
       });
     }
@@ -259,14 +348,17 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
       const musicInstances = instances.filter((i) => i.isMusic && !i.fadingOut);
       for (const instance of musicInstances) {
         instance.fadingOut = true;
-        const currentVolume = instance.howl.volume(instance.id) as number;
-        instance.howl.fade(currentVolume, 0, duration, instance.id);
-        instance.howl.once('fade', () => {
-          instance.howl.stop(instance.id);
+        const currentVolume = instance.howl?.volume(instance.id) as number;
+        instance.howl?.fade(currentVolume, 0, duration, instance.id);
+        instance.howl?.once('fade', () => {
+          instance.howl?.stop(instance.id);
           this.removeInstance(name, instance.id);
         });
       }
     });
+    if (this.currentTrackerMusic) {
+      this.stop(this.currentTrackerMusic);
+    }
   }
 
   fadeOutAllSounds(duration: number): void {
@@ -274,10 +366,10 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
       const sfxInstances = instances.filter((i) => !i.isMusic && !i.fadingOut);
       for (const instance of sfxInstances) {
         instance.fadingOut = true;
-        const currentVolume = instance.howl.volume(instance.id) as number;
-        instance.howl.fade(currentVolume, 0, duration, instance.id);
-        instance.howl.once('fade', () => {
-          instance.howl.stop(instance.id);
+        const currentVolume = instance.howl?.volume(instance.id) as number;
+        instance.howl?.fade(currentVolume, 0, duration, instance.id);
+        instance.howl?.once('fade', () => {
+          instance.howl?.stop(instance.id);
           this.removeInstance(name, instance.id);
         });
       }
@@ -289,55 +381,67 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   // ============================================================
 
   pause(name: string): void {
+    if (name === this.currentTrackerMusic && this.trackerPlayer) {
+      this.trackerPlayer.pause();
+      return;
+    }
     const instances = this.playing.get(name);
     if (!instances) return;
     for (const instance of instances) {
-      instance.howl.pause(instance.id);
+      instance.howl?.pause(instance.id);
     }
   }
 
   resume(name: string): void {
+    if (name === this.currentTrackerMusic && this.trackerPlayer) {
+      this.trackerPlayer.unpause();
+      return;
+    }
     const instances = this.playing.get(name);
     if (!instances) return;
     for (const instance of instances) {
-      instance.howl.play(instance.id);
+      instance.howl?.play(instance.id);
     }
   }
 
   pauseAll(): void {
     this.playing.forEach((instances) => {
       for (const instance of instances) {
-        instance.howl.pause(instance.id);
+        instance.howl?.pause(instance.id);
       }
     });
+    if (this.trackerPlayer) this.trackerPlayer.pause();
   }
 
   resumeAll(): void {
     this.playing.forEach((instances) => {
       for (const instance of instances) {
-        instance.howl.play(instance.id);
+        instance.howl?.play(instance.id);
       }
     });
+    if (this.trackerPlayer) this.trackerPlayer.unpause();
   }
 
   pauseAllMusic(): void {
     this.playing.forEach((instances) => {
       for (const instance of instances) {
         if (instance.isMusic) {
-          instance.howl.pause(instance.id);
+          instance.howl?.pause(instance.id);
         }
       }
     });
+    if (this.trackerPlayer) this.trackerPlayer.pause();
   }
 
   resumeAllMusic(): void {
     this.playing.forEach((instances) => {
       for (const instance of instances) {
         if (instance.isMusic) {
-          instance.howl.play(instance.id);
+          instance.howl?.play(instance.id);
         }
       }
     });
+    if (this.trackerPlayer) this.trackerPlayer.unpause();
   }
 
   // ============================================================
@@ -381,6 +485,10 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   set muted(value: boolean) {
     this.config.muted = value;
     Howler.mute(value);
+    if (this.trackerPlayer) {
+      const effectiveVolume = this.config.masterVolume * this.config.musicVolume;
+      this.trackerPlayer.setVol(value ? 0 : effectiveVolume);
+    }
   }
 
   toggleMute(): boolean {
@@ -393,15 +501,17 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   // ============================================================
 
   isPlaying(name: string): boolean {
+    if (name === this.currentTrackerMusic) return true; // simplified
     const instances = this.playing.get(name);
     if (!instances || instances.length === 0) return false;
-    return instances.some((i) => i.howl.playing(i.id));
+    return instances.some((i) => i.howl?.playing(i.id));
   }
 
   isAnyMusicPlaying(): boolean {
+    if (this.currentTrackerMusic) return true;
     for (const instances of this.playing.values()) {
       for (const instance of instances) {
-        if (instance.isMusic && instance.howl.playing(instance.id)) {
+        if (instance.isMusic && instance.howl?.playing(instance.id)) {
           return true;
         }
       }
@@ -412,7 +522,7 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   isAnySoundPlaying(): boolean {
     for (const instances of this.playing.values()) {
       for (const instance of instances) {
-        if (!instance.isMusic && instance.howl.playing(instance.id)) {
+        if (!instance.isMusic && instance.howl?.playing(instance.id)) {
           return true;
         }
       }
@@ -421,7 +531,7 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   }
 
   getPlayingCount(name: string): number {
-    return this.playing.get(name)?.length ?? 0;
+    return (this.playing.get(name)?.length ?? 0) + (name === this.currentTrackerMusic ? 1 : 0);
   }
 
   // ============================================================
@@ -464,10 +574,13 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
     this.playing.forEach((instances) => {
       for (const instance of instances) {
         if (instance.isMusic && !instance.fadingOut) {
-          instance.howl.volume(effectiveVolume, instance.id);
+          instance.howl?.volume(effectiveVolume, instance.id);
         }
       }
     });
+    if (this.trackerPlayer) {
+      this.trackerPlayer.setVol(this.config.muted ? 0 : effectiveVolume);
+    }
   }
 
   private updateSfxVolumes(): void {
@@ -475,7 +588,7 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
     this.playing.forEach((instances) => {
       for (const instance of instances) {
         if (!instance.isMusic && !instance.fadingOut) {
-          instance.howl.volume(effectiveVolume, instance.id);
+          instance.howl?.volume(effectiveVolume, instance.id);
         }
       }
     });
