@@ -1,6 +1,7 @@
 import { Container, Graphics, Text, TextStyle } from 'pixi.js';
 import { Scene, SceneConfig } from '../state/Scene';
 import { StateManager } from '../state/StateManager';
+import { SceneTransition } from '../state/SceneTransition';
 
 export class SettingsScene extends Scene {
     private titleText!: Text;
@@ -51,7 +52,7 @@ export class SettingsScene extends Scene {
         this.backButton.position.set(this.app.screen.width / 2 - 100, 350);
         this.backButton.on('pointerdown', () => {
             this.inputElement.remove();
-            this.manager.pop();
+            SceneTransition.popWithFade(this.app);
         });
         this.container.addChild(this.backButton);
     }
@@ -65,9 +66,8 @@ export class SettingsScene extends Scene {
     private createStyledButton(label: string, w: number, h: number): Container {
         const btn = new Container();
         const g = new Graphics();
-        g.beginFill(0x3366ff);
-        g.drawRoundedRect(0, 0, w, h, 10);
-        g.endFill();
+        g.roundRect(0, 0, w, h, 10);
+        g.fill(0x3366ff);
         btn.addChild(g);
 
         const t = new Text({ text: label, style: { fill: '#ffffff', fontSize: 20 } });

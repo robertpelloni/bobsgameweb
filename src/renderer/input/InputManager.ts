@@ -102,6 +102,7 @@ class InputManagerClass extends EventEmitter<InputEvents> {
   private _deadzone: number = 0.15;
 
   private initialized: boolean = false;
+  private locked: boolean = false;
 
   init(): void {
     if (this.initialized) return;
@@ -334,8 +335,23 @@ class InputManagerClass extends EventEmitter<InputEvents> {
     }
   }
 
+  setLocked(locked: boolean): void {
+    this.locked = locked;
+    if (locked) {
+      this.keysHeld.clear();
+      this.keysPressed.clear();
+      this.mouseButtons.clear();
+      this.mouseButtonsPressed.clear();
+    }
+  }
+
+  isLocked(): boolean {
+    return this.locked;
+  }
+
   // Private handlers
   private onKeyDown = (e: KeyboardEvent): void => {
+    if (this.locked) return;
     if (e.repeat) return;
     const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
     this.keysHeld.add(key);
@@ -343,22 +359,26 @@ class InputManagerClass extends EventEmitter<InputEvents> {
   };
 
   private onKeyUp = (e: KeyboardEvent): void => {
+    if (this.locked) return;
     const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
     this.keysHeld.delete(key);
     this.emit('key:up', key);
   };
 
   private onMouseDown = (e: MouseEvent): void => {
+    if (this.locked) return;
     this.mouseButtons.add(e.button as MouseButton);
     this.emit('mouse:down', e.button as MouseButton, e.clientX, e.clientY);
   };
 
   private onMouseUp = (e: MouseEvent): void => {
+    if (this.locked) return;
     this.mouseButtons.delete(e.button as MouseButton);
     this.emit('mouse:up', e.button as MouseButton, e.clientX, e.clientY);
   };
 
   private onMouseMove = (e: MouseEvent): void => {
+    if (this.locked) return;
     const dx = e.clientX - this._mouseX;
     const dy = e.clientY - this._mouseY;
     this._mouseX = e.clientX;
@@ -369,6 +389,7 @@ class InputManagerClass extends EventEmitter<InputEvents> {
   };
 
   private onWheel = (e: WheelEvent): void => {
+    if (this.locked) return;
     e.preventDefault();
     this.emit('mouse:wheel', e.deltaX, e.deltaY);
   };

@@ -62,10 +62,26 @@ export class MapData extends AssetData {
     public eventDataList: EventData[] = [];
     public doorDataList: DoorData[] = [];
 
+    private layerTileIndex: Int32Array[];
+
     constructor(id: number = -1, name: string = "", width: number = 40, height: number = 30) {
         super(id, name);
         this.widthTiles1X = width;
         this.heightTiles1X = height;
+        this.layerTileIndex = [];
+        for (let i = 0; i < MapData.layers; i++) {
+            this.layerTileIndex.push(new Int32Array(width * height));
+        }
+    }
+
+    public getTileIndex(layer: number, x: number, y: number): number {
+        if (x < 0 || x >= this.widthTiles1X || y < 0 || y >= this.heightTiles1X) return 0;
+        return this.layerTileIndex[layer][y * this.widthTiles1X + x];
+    }
+
+    public setTileIndex(layer: number, x: number, y: number, index: number): void {
+        if (x < 0 || x >= this.widthTiles1X || y < 0 || y >= this.heightTiles1X) return;
+        this.layerTileIndex[layer][y * this.widthTiles1X + x] = index;
     }
 
     public static isTileLayer(l: number): boolean {
@@ -91,29 +107,34 @@ export class MapData extends AssetData {
 
     public toString(): string {
         let s = super.toString();
-        let note = this.mapNote.replace(/`/g, '');
+        const bt = String.fromCharCode(96);
+        let note = this.mapNote.replace(new RegExp(bt, 'g'), '');
         
-        s += `mapNote:`${note}`,`;
-        s += `widthTiles1X:`${this.widthTiles1X}`,`;
-        s += `heightTiles1X:`${this.heightTiles1X}`,`;
-        s += `maxRandoms:`${this.maxRandoms}`,`;
-        s += `isOutside:`${this.isOutside}`,`;
-        s += `preload:`${this.preload}`,`;
-        s += `groundLayerMD5:`${this.groundLayerMD5 || ''}`,`;
-        s += `groundObjectsMD5:`${this.groundObjectsMD5 || ''}`,`;
-        s += `groundShadowMD5:`${this.groundShadowMD5 || ''}`,`;
-        s += `objectsMD5:`${this.objectsMD5 || ''}`,`;
-        s += `objects2MD5:`${this.objects2MD5 || ''}`,`;
-        s += `objectShadowMD5:`${this.objectShadowMD5 || ''}`,`;
-        s += `aboveMD5:`${this.aboveMD5 || ''}`,`;
-        s += `above2MD5:`${this.above2MD5 || ''}`,`;
-        s += `spriteShadowMD5:`${this.spriteShadowMD5 || ''}`,`;
-        s += `groundShaderMD5:`${this.groundShaderMD5 || ''}`,`;
-        s += `cameraBoundsMD5:`${this.cameraBoundsMD5 || ''}`,`;
-        s += `hitBoundsMD5:`${this.hitBoundsMD5 || ''}`,`;
-        s += `lightMaskMD5:`${this.lightMaskMD5 || ''}`,`;
-        s += `paletteMD5:`${this.paletteMD5 || ''}`,`;
-        s += `tilesMD5:`${this.tilesMD5 || ''}`,`;
+        const add = (key: string, val: any) => {
+            s += key + ":" + bt + (val || '') + bt + ",";
+        };
+
+        add("mapNote", note);
+        add("widthTiles1X", this.widthTiles1X);
+        add("heightTiles1X", this.heightTiles1X);
+        add("maxRandoms", this.maxRandoms);
+        add("isOutside", this.isOutside);
+        add("preload", this.preload);
+        add("groundLayerMD5", this.groundLayerMD5);
+        add("groundObjectsMD5", this.groundObjectsMD5);
+        add("groundShadowMD5", this.groundShadowMD5);
+        add("objectsMD5", this.objectsMD5);
+        add("objects2MD5", this.objects2MD5);
+        add("objectShadowMD5", this.objectShadowMD5);
+        add("aboveMD5", this.aboveMD5);
+        add("above2MD5", this.above2MD5);
+        add("spriteShadowMD5", this.spriteShadowMD5);
+        add("groundShaderMD5", this.groundShaderMD5);
+        add("cameraBoundsMD5", this.cameraBoundsMD5);
+        add("hitBoundsMD5", this.hitBoundsMD5);
+        add("lightMaskMD5", this.lightMaskMD5);
+        add("paletteMD5", this.paletteMD5);
+        add("tilesMD5", this.tilesMD5);
 
         s += "stateDataList:{";
         this.stateDataList.forEach(d => s += d.toString());
@@ -132,10 +153,12 @@ export class MapData extends AssetData {
 
     public initFromString(t: string): string {
         t = super.initFromString(t);
+        const bt = String.fromCharCode(96);
 
         const getVal = (key: string) => {
-            let start = t.indexOf(`${key}:``) + key.length + 2;
-            let end = t.indexOf("`", start);
+            const k = key + ":" + bt;
+            let start = t.indexOf(k) + k.length;
+            let end = t.indexOf(bt, start);
             const val = t.substring(start, end);
             t = t.substring(end + 2);
             return val;
@@ -164,9 +187,6 @@ export class MapData extends AssetData {
         this.paletteMD5 = getVal("paletteMD5") || null;
         this.tilesMD5 = getVal("tilesMD5") || null;
 
-        // Complex lists need more careful parsing
-        // Skipping for now to keep implementation simple, but stubs are present
-        
         return t;
     }
 }

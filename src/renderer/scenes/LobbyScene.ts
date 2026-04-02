@@ -1,7 +1,10 @@
 import { Container, Graphics, Text, TextStyle } from 'pixi.js';
 import { Scene, SceneConfig } from '../state/Scene';
+import { StateManager } from '../state/StateManager';
+import { SceneTransition } from '../state/SceneTransition';
 import { NetworkManager, LobbyRoom } from '../../shared/puzzle/NetworkManager';
 import { PuzzleScene } from '../puzzle/PuzzleScene';
+import { SERVER_URL } from '../../shared/Config';
 
 export interface LobbyRoomExt extends LobbyRoom {
     hasPassword?: boolean;
@@ -89,11 +92,14 @@ export class LobbyScene extends Scene {
         };
 
         document.getElementById('backBtn')!.onclick = () => {
-            this.manager.pop();
+            SceneTransition.popWithFade(this.app);
         };
 
-        this.networkManager.connect('http://localhost:6065');
+        this.networkManager.connect(SERVER_URL);
         this.setupNetworkHandlers();
+        
+        const playerName = localStorage.getItem('playerName') || 'Player' + Math.floor(Math.random() * 1000);
+        this.networkManager.setName(playerName);
         
         // Initial refresh
         setTimeout(() => {
@@ -207,9 +213,8 @@ export class LobbyScene extends Scene {
     private createStyledButton(label: string, w: number, h: number): Container {
         const btn = new Container();
         const g = new Graphics();
-        g.beginFill(0x3366ff);
-        g.drawRoundedRect(0, 0, w, h, 10);
-        g.endFill();
+        g.roundRect(0, 0, w, h, 10);
+        g.fill(0x3366ff);
         btn.addChild(g);
 
         const t = new Text({ text: label, style: { fill: '#ffffff', fontSize: 20 } });

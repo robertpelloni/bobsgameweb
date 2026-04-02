@@ -111,6 +111,12 @@ export class Block {
         this.color = c;
     }
 
+    public setRandomBlockTypeColor(): void {
+        if (this.blockType.colors.length > 0) {
+            this.color = this.blockType.colors[this.game.getRandomIntLessThan(this.blockType.colors.length, "Block::setRandomBlockTypeColor")];
+        }
+    }
+
     public update(): void {
         const ticks = this.game.ticks();
         this.ticksSinceLastMovement += ticks;

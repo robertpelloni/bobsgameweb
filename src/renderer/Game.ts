@@ -110,7 +110,8 @@ export class Game extends EventEmitter<GameEvents> {
     }
 
     start(): void {
-        if (this.isRunning) return;
+        // Always start the ticker — init() may have already set isRunning=true
+        // but the ticker was stopped during init and needs to be explicitly started.
         console.log('Game starting...');
         this.isRunning = true;
         this.app.ticker.start();

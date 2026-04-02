@@ -34,7 +34,7 @@ export class BobNet {
   }
 
   public static debugServerAddress = "localhost";
-  public static releaseServerAddress = "server.bobsgame.com";
+  public static releaseServerAddress = "bobsgame.com";
   public static serverTCPPort = 6065;
 
   public static clientUDPPortStartRange = 6435;

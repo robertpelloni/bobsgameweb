@@ -5,8 +5,10 @@ import { AudioManager } from '../audio/AudioManager';
 import { PuzzleGame, GameState, MovementType, networkManager } from './index';
 import { PuzzleRenderer } from './PuzzleRenderer';
 import { GameType } from './index';
+import { GameOverScene, GameStats } from '../scenes/GameOverScene';
 import { PauseOverlay } from '../scenes/PauseOverlay';
 import { GameMode } from '../data/HighScoreManager';
+import { SERVER_URL } from '../../shared/Config';
 
 export interface PuzzleSceneConfig extends SceneConfig {
   gameType?: GameType;
@@ -107,7 +109,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     this.setupGameEvents();
 
     if (this.config.multiplayer) {
-      networkManager.connect('http://localhost:6065');
+      networkManager.connect(SERVER_URL);
       networkManager.setGame(this.game);
       this.setupNetworkHandlers();
       this.createChatUI();
@@ -219,6 +221,8 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private showGameOver(): void {
     console.log('Game Over');
     const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+
+    // Report score to server for leaderboard
     networkManager.reportScore({
       mode: this.gameMode,
       name: playerName,
@@ -226,6 +230,34 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       lines: this.game.linesClearedTotal,
       time: this.gameTime
     });
+
+    // Show the GameOverScene with full stats
+    const stats: GameStats = {
+      score: this.game.score,
+      level: this.game.currentLevel,
+      lines: this.game.linesClearedTotal,
+      time: this.gameTime,
+      gameType: this.gameType,
+      gameMode: this.gameMode,
+    };
+
+    const gameOverScene = new GameOverScene({
+      name: 'game-over',
+      app: this.app,
+      stats,
+      onReplay: () => {
+        // Pop the GameOverScene, then restart
+        StateManager.pop();
+        this.restart();
+      },
+      onMainMenu: () => {
+        // Pop both GameOverScene and PuzzleScene
+        StateManager.pop(); // GameOverScene
+        StateManager.pop(); // PuzzleScene
+      },
+    });
+
+    StateManager.push(gameOverScene);
   }
 
   private resumeGame(): void {
