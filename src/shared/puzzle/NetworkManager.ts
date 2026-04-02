@@ -7,6 +7,10 @@ export interface LobbyRoom {
     name: string;
     players: number;
     maxPlayers: number;
+    hasPassword?: boolean;
+    gameMode?: string;
+    startLevel?: number;
+    isTournament?: boolean;
 }
 
 export class NetworkManager extends EventEmitter {
@@ -107,7 +111,14 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
-    public createRoom(options: { name: string, isPrivate?: boolean, password?: string, gameMode?: string, startLevel?: number }): void {
+    public getTournamentBracket(roomId: string, callback: (data: any) => void): void {
+        if (this.socket) {
+            this.socket.once('tournamentBracket', callback);
+            this.socket.emit('getTournamentBracket', roomId);
+        }
+    }
+
+    public createRoom(options: { name: string, isPrivate?: boolean, password?: string, gameMode?: string, startLevel?: number, isTournament?: boolean }): void {
         if (this.socket) {
             this.socket.emit('createRoom', options);
         }

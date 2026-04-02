@@ -5,6 +5,7 @@ import { PuzzleScene } from '../puzzle/PuzzleScene';
 
 export interface LobbyRoomExt extends LobbyRoom {
     hasPassword?: boolean;
+    isTournament?: boolean;
 }
 
 export class LobbyScene extends Scene {
@@ -14,6 +15,7 @@ export class LobbyScene extends Scene {
     private titleText!: Text;
     private uiElements: HTMLElement[] = [];
     private chatContainer: HTMLElement | null = null;
+    private bracketContainer: HTMLElement | null = null;
 
     constructor(config: SceneConfig) {
         super(config);
@@ -63,6 +65,9 @@ export class LobbyScene extends Scene {
                     <label style="display: flex; align-items: center; gap: 5px;">
                         <input type="checkbox" id="roomPrivateInput" /> Private
                     </label>
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" id="roomTournamentInput" /> Tournament
+                    </label>
                 </div>
                 <div style="display: flex; gap: 10px; justify-content: flex-end;">
                     <button id="createRoomBtn" style="padding: 5px 10px; cursor: pointer;">Create Room</button>
@@ -77,9 +82,10 @@ export class LobbyScene extends Scene {
             const name = (document.getElementById('roomNameInput') as HTMLInputElement).value;
             const password = (document.getElementById('roomPasswordInput') as HTMLInputElement).value;
             const isPrivate = (document.getElementById('roomPrivateInput') as HTMLInputElement).checked;
+            const isTournament = (document.getElementById('roomTournamentInput') as HTMLInputElement).checked;
             const gameMode = (document.getElementById('gameModeInput') as HTMLSelectElement).value;
             const startLevel = parseInt((document.getElementById('startLevelInput') as HTMLInputElement).value) || 1;
-            this.networkManager.createRoom({ name, password, isPrivate, gameMode, startLevel });
+            this.networkManager.createRoom({ name, password, isPrivate, gameMode, startLevel, isTournament });
         };
 
         document.getElementById('backBtn')!.onclick = () => {
@@ -108,6 +114,10 @@ export class LobbyScene extends Scene {
             this.roomListContainer.visible = false;
             this.leaderboardContainer.visible = false;
             this.createChatUI();
+            
+            if (room.isTournament) {
+                this.showTournamentBracket(room.id);
+            }
         });
 
         this.networkManager.on('chatMessage', (data: { message: string, name: string, timestamp: number }) => {
@@ -116,7 +126,10 @@ export class LobbyScene extends Scene {
 
         this.networkManager.on('gameStart', (data: { seed: number, gameMode: string, startLevel: number }) => {
             console.log('Game starting with seed:', data.seed, 'Mode:', data.gameMode, 'Level:', data.startLevel);
-            this.manager.push(new PuzzleScene({ 
+            if (this.bracketContainer) {
+                this.bracketContainer.style.display = 'none';
+            }
+            this.manager.push(new PuzzleScene({
                 name: 'Puzzle',
                 app: this.app,
                 multiplayer: true,
@@ -164,11 +177,12 @@ export class LobbyScene extends Scene {
         row.position.set(100, 200 + index * 60);
 
         const lockStr = room.hasPassword ? " 🔒" : "";
-        const text = new Text({ text: `${room.name}${lockStr} (${room.players}/${room.maxPlayers})`, style: { fill: '#ffffff', fontSize: 24 } });
+        const tourneyStr = room.isTournament ? " [TOURNAMENT]" : "";
+        const text = new Text({ text: `${room.name}${lockStr}${tourneyStr} (${room.players}/${room.maxPlayers})`, style: { fill: '#ffffff', fontSize: 24 } });
         row.addChild(text);
 
         const joinBtn = this.createStyledButton('Join', 100, 40);
-        joinBtn.position.set(400, 0);
+        joinBtn.position.set(450, 0);
         joinBtn.on('pointerdown', () => {
             let password = "";
             if (room.hasPassword) {
@@ -177,6 +191,15 @@ export class LobbyScene extends Scene {
             this.networkManager.joinRoom({ id: room.id, password });
         });
         row.addChild(joinBtn);
+
+        if (room.isTournament) {
+            const bracketBtn = this.createStyledButton('Bracket', 120, 40);
+            bracketBtn.position.set(570, 0);
+            bracketBtn.on('pointerdown', () => {
+                this.showTournamentBracket(room.id);
+            });
+            row.addChild(bracketBtn);
+        }
 
         return row;
     }
@@ -204,6 +227,64 @@ export class LobbyScene extends Scene {
         if (Math.floor(Date.now() / 5000) !== Math.floor((Date.now() - delta * 16) / 5000)) {
             this.refreshRoomList();
         }
+    }
+
+    private showTournamentBracket(roomId: string): void {
+        this.networkManager.getTournamentBracket(roomId, (data: any) => {
+            if (this.bracketContainer) {
+                this.bracketContainer.remove();
+            }
+
+            this.bracketContainer = document.createElement('div');
+            this.bracketContainer.style.position = 'absolute';
+            this.bracketContainer.style.left = '50%';
+            this.bracketContainer.style.top = '150px';
+            this.bracketContainer.style.transform = 'translateX(-50%)';
+            this.bracketContainer.style.width = '600px';
+            this.bracketContainer.style.height = '400px';
+            this.bracketContainer.style.background = 'rgba(0,0,0,0.9)';
+            this.bracketContainer.style.color = 'white';
+            this.bracketContainer.style.display = 'flex';
+            this.bracketContainer.style.flexDirection = 'column';
+            this.bracketContainer.style.padding = '20px';
+            this.bracketContainer.style.borderRadius = '8px';
+            this.bracketContainer.style.border = '2px solid #ffcc00';
+
+            let html = `<h2 style="text-align:center; color:#ffcc00; margin-top:0;">TOURNAMENT BRACKET</h2>`;
+            html += `<div style="display:flex; justify-content:space-around; flex-grow:1; align-items:center;">`;
+            
+            // Very basic visual representation using flexbox
+            const rounds = [1, 2]; // Hardcoded for dummy data demo
+            
+            rounds.forEach(r => {
+                const roundMatches = data.matches.filter((m: any) => m.round === r);
+                html += `<div style="display:flex; flex-direction:column; justify-content:space-around; height:100%;">
+`;
+                roundMatches.forEach((m: any) => {
+                    html += `
+                        <div style="border: 1px solid #666; padding: 10px; margin: 10px; background: #222; min-width: 120px; text-align: center;">
+                            <div style="border-bottom: 1px solid #444; padding-bottom: 5px;">${m.p1 || '-'}</div>
+                            <div style="padding-top: 5px;">${m.p2 || '-'}</div>
+                            ${m.winner ? `<div style="color: #ffcc00; margin-top: 5px; font-weight: bold;">Winner: ${m.winner}</div>` : ''}
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            });
+            
+            html += `</div>`;
+            html += `<button id="closeBracketBtn" style="padding: 10px; background: #ffcc00; color: black; font-weight: bold; border: none; cursor: pointer; margin-top: 10px;">Close Bracket</button>`;
+            
+            this.bracketContainer.innerHTML = html;
+            document.body.appendChild(this.bracketContainer);
+            this.uiElements.push(this.bracketContainer);
+
+            document.getElementById('closeBracketBtn')!.onclick = () => {
+                if (this.bracketContainer) {
+                    this.bracketContainer.style.display = 'none';
+                }
+            };
+        });
     }
 
     private createChatUI(): void {
@@ -269,6 +350,7 @@ export class LobbyScene extends Scene {
         this.roomListContainer.destroy({ children: true });
         this.uiElements.forEach(el => el.remove());
         this.uiElements = [];
+        this.chatContainer = null;
+        this.bracketContainer = null;
     }
 }
-
