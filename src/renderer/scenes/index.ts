@@ -12,3 +12,8 @@ export type { HighScoresSceneConfig } from './HighScoresScene';
 
 export { PauseOverlay } from './PauseOverlay';
 export type { PauseOverlayConfig } from './PauseOverlay';
+
+export { TournamentResultsScene } from './TournamentResultsScene';
+export type { TournamentResultData } from './TournamentResultsScene';
+
+export { LobbyScene } from './LobbyScene';
