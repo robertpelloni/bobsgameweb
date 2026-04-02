@@ -65,15 +65,41 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
+    public setName(name: string): void {
+        if (this.socket && this.socket.connected) {
+            this.socket.emit('setName', name);
+        }
+    }
+
     private setupHandlers(): void {
         if (!this.socket) return;
 
         this.socket.on('connect', () => {
             console.log('Connected to game server');
+            this.emit('connected');
         });
 
         this.socket.on('disconnect', () => {
             console.log('Disconnected from game server');
+            this.emit('disconnected');
+        });
+
+        // Forward lobby/room events from the socket to the EventEmitter
+        // so that LobbyScene and other consumers can listen for them.
+        this.socket.on('roomCreated', (data: any) => {
+            this.emit('roomCreated', data);
+        });
+
+        this.socket.on('joinedRoom', (data: any) => {
+            this.emit('joinedRoom', data);
+        });
+
+        this.socket.on('gameStart', (data: any) => {
+            this.emit('gameStart', data);
+        });
+
+        this.socket.on('error', (msg: string) => {
+            this.emit('error', msg);
         });
 
         this.socket.on('chatMessage', (data: any) => {

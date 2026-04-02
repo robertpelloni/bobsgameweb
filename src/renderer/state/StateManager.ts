@@ -37,6 +37,10 @@ export class StateManagerClass extends EventEmitter<StateEvents> {
   async push(state: State): Promise<void> {
     const previous = this.current;
     previous?.onPause?.();
+    // Set the manager back-reference on Scene instances so they can call this.manager.pop() etc.
+    if ('manager' in state) {
+      (state as any).manager = this;
+    }
     this.stack.push(state);
     await state.onEnter?.();
     this.emit('state:push', state);
@@ -46,6 +50,9 @@ export class StateManagerClass extends EventEmitter<StateEvents> {
   pushSync(state: State): void {
     const previous = this.current;
     previous?.onPause?.();
+    if ('manager' in state) {
+      (state as any).manager = this;
+    }
     this.stack.push(state);
     state.onEnter?.();
     this.emit('state:push', state);

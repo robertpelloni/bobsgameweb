@@ -19,20 +19,22 @@ export class AssetData {
 
     public toString(): string {
         let nameClean = this._name;
-        while (nameClean.includes('`')) {
-            nameClean = nameClean.replace('`', '');
+        const bt = String.fromCharCode(96);
+        while (nameClean.includes(bt)) {
+            nameClean = nameClean.replace(bt, '');
         }
-        return `name:`${nameClean}`,id:`${this._id}`,`;
+        return "name:" + bt + nameClean + bt + ",id:" + bt + this._id + bt + ",";
     }
 
     public initFromString(t: string): string {
-        let start = t.indexOf("name:`") + 6;
-        let end = t.indexOf("`", start);
+        const bt = String.fromCharCode(96);
+        let start = t.indexOf("name:" + bt) + 5 + bt.length;
+        let end = t.indexOf(bt, start);
         this._name = t.substring(start, end);
         t = t.substring(end + 2);
 
-        start = t.indexOf("id:`") + 4;
-        end = t.indexOf("`", start);
+        start = t.indexOf("id:" + bt) + 3 + bt.length;
+        end = t.indexOf(bt, start);
         this._id = parseInt(t.substring(start, end));
         t = t.substring(end + 2);
 

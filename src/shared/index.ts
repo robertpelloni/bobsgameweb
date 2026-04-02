@@ -1,5 +1,7 @@
 export * from './platform';
 export * from './AssetData';
+export * from './Palette';
+export * from './Tileset';
 export * from './MapData';
 export * from './MapStateData';
 export * from './EventData';

@@ -210,15 +210,16 @@ export class CustomGameEditor {
     this.currentGameType.maxLockDelayTicks = parseInt(this.lockDelayInput.value);
     this.currentGameType.chainRule_AmountPerChain = parseInt(this.chainAmountInput.value);
     
-    const data = this.currentGameType.toBase64GZippedXML();
-    localStorage.setItem('custom-game-type', data);
-    alert('Game type saved!');
+    this.currentGameType.toBase64GZippedXML().then(data => {
+        localStorage.setItem('custom-game-type', data);
+        alert('Game type saved!');
+    });
   }
 
-  private load() {
+  private async load() {
     const data = localStorage.getItem('custom-game-type');
     if (data) {
-      this.currentGameType = GameType.fromBase64GZippedXML(data);
+      this.currentGameType = await GameType.fromBase64GZippedXML(data);
       this.loadFromGameType();
     }
   }

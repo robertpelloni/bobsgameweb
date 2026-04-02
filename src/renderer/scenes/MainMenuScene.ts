@@ -39,6 +39,7 @@ export class MainMenuScene extends Scene {
     
     private titleText!: Text;
     private subtitleText!: Text;
+    private versionText!: Text;
     private menuButtons: Button[] = [];
     private modeButtons: Button[] = [];
     private selectedIndex = 0;
@@ -210,6 +211,19 @@ export class MainMenuScene extends Scene {
         this.subtitleText.x = this.centerX;
         this.subtitleText.y = this.titleText.y + 60;
         this.container.addChild(this.subtitleText);
+
+        // Version display in the bottom-right corner
+        const versionStyle = new TextStyle({
+            fontFamily: 'Arial, sans-serif',
+            fontSize: 14,
+            fill: 0x445566,
+            letterSpacing: 1,
+        });
+        this.versionText = new Text({ text: 'v2.1.0', style: versionStyle });
+        this.versionText.anchor.set(1, 1);
+        this.versionText.x = this.width - 10;
+        this.versionText.y = this.height - 10;
+        this.container.addChild(this.versionText);
     }
 
     private updateTitleAnimation(dt: number): void {
@@ -228,6 +242,7 @@ export class MainMenuScene extends Scene {
             { label: 'Modern', action: () => this.startGame(GameTypes.MODERN) },
             { label: 'Multiplayer', action: () => this.openLobby() },
             { label: 'High Scores', action: () => this.openHighScores() },
+            { label: 'Options', action: () => this.openOptions() },
             { label: 'Settings', action: () => this.openSettings() },
         ];
 
@@ -244,8 +259,8 @@ export class MainMenuScene extends Scene {
             borderRadius: 8,
         };
 
-        const startY = this.height * 0.48;
-        const spacing = 58;
+        const startY = this.height * 0.45;
+        const spacing = 50;
 
         for (let i = 0; i < this.menuItems.length; i++) {
             const item = this.menuItems[i];

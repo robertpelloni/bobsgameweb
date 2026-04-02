@@ -11,13 +11,13 @@ export interface TournamentResultData {
     };
 }
 
-export class TournamentResultsScene extends Scene {
+export class TournamentResultsScene extends Scene<SceneConfig> {
     private data: TournamentResultData;
     private uiElements: HTMLElement[] = [];
 
     constructor(config: SceneConfig & { data: TournamentResultData }) {
         super(config);
-        this.data = config.data;
+        this.data = (config as any).data;
     }
 
     public async create(): Promise<void> {
@@ -122,8 +122,12 @@ export class TournamentResultsScene extends Scene {
         this.uiElements.push(btnDiv);
 
         document.getElementById('exitTourneyBtn')!.onclick = () => {
-            this.manager.popTo('Lobby');
+            this.manager.pop(); // pop to lobby
         };
+    }
+
+    public onUpdate(dt: number): void {
+        // Nothing to update
     }
 
     protected async destroy(): Promise<void> {

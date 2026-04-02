@@ -2,6 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 import { Howl, Howler } from 'howler';
 // @ts-ignore - chiptune3 lacks official types
 import { ChiptuneJsPlayer } from './tracker/chiptune3';
+import { BobNet } from '../puzzle/BobNet';
 
 export interface AudioEvents {
   'sound:play': (name: string) => void;
@@ -98,7 +99,14 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   // ============================================================
 
   load(name: string, src: string | string[], options?: { preload?: boolean }): any {
-    const mainSrc = Array.isArray(src) ? src[0] : src;
+    let mainSrc = Array.isArray(src) ? src[0] : src;
+    
+    // In production, prepend the S3 URL for relative paths
+    if ((import.meta as any).env.PROD && !mainSrc.startsWith('http') && !mainSrc.startsWith('blob:')) {
+        mainSrc = BobNet.releaseBigDataURL + (mainSrc.startsWith('/') ? mainSrc.substring(1) : mainSrc);
+        if (Array.isArray(src)) src = [mainSrc]; else src = mainSrc;
+    }
+
     if (this.isTrackerFile(mainSrc)) {
       this.trackerCache.set(name, mainSrc);
       return null;
