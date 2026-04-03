@@ -167,6 +167,7 @@ export class LobbyScene extends Scene {
             this.manager.push(new PuzzleScene({
                 name: 'Puzzle',
                 app: this.app,
+                camera: this.camera ?? undefined,
                 multiplayer: true,
                 seed: data.seed,
                 gameMode: data.gameMode as any,

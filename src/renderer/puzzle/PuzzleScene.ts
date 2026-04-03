@@ -309,6 +309,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     const gameOverScene = new GameOverScene({
       name: 'game-over',
       app: this.app,
+      camera: this.camera ?? undefined,
       stats,
       isWin,
       onReplay: () => {
