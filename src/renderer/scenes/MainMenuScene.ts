@@ -15,6 +15,7 @@ import { SceneTransition } from '../state/SceneTransition';
 import { LobbyScene } from './LobbyScene';
 import { SettingsScene } from './SettingsScene';
 import { EngineDemoScene } from './EngineDemoScene';
+import { NDDemoScene } from './NDDemoScene';
 
 // ============================================================
 // Types
@@ -242,6 +243,7 @@ export class MainMenuScene extends Scene {
             { label: 'Classic', action: () => this.startGame(GameTypes.CLASSIC) },
             { label: 'Modern', action: () => this.startGame(GameTypes.MODERN) },
             { label: 'Engine Demo', action: () => this.openEngineDemo() },
+            { label: 'nD Demo', action: () => this.openNDDemo() },
             { label: 'Multiplayer', action: () => this.openLobby() },
             { label: 'High Scores', action: () => this.openHighScores() },
             { label: 'Options', action: () => this.openOptions() },
@@ -380,6 +382,14 @@ export class MainMenuScene extends Scene {
     private openEngineDemo(): void {
         const demoScene = new EngineDemoScene({
             name: 'engine-demo',
+            app: this.app,
+        });
+        SceneTransition.pushWithFade(this.app, demoScene);
+    }
+
+    private openNDDemo(): void {
+        const demoScene = new NDDemoScene({
+            name: 'nd-demo',
             app: this.app,
         });
         SceneTransition.pushWithFade(this.app, demoScene);

@@ -1,6 +1,13 @@
 import { Container, Graphics, Sprite, Texture, Rectangle, RenderTexture } from 'pixi.js';
 import { NDGameEngine } from './NDGameEngine';
 
+export enum NDButton {
+  UP, DOWN, LEFT, RIGHT,
+  A, B, X, Y,
+  L, R,
+  START, SELECT
+}
+
 export class ND {
   public container: Container;
   
@@ -17,11 +24,26 @@ export class ND {
   private readonly SCREEN_HEIGHT = 192;
   private readonly SCREEN_GAP = 90; // The hinge gap
   
+  private buttonStates: Map<NDButton, boolean> = new Map();
+
   constructor() {
     this.container = new Container();
     this.topScreen = new Container();
     this.bottomScreen = new Container();
     this.ndCase = new Graphics();
+    
+    // Initialize buttons to unpressed
+    Object.values(NDButton).forEach(btn => {
+      if (typeof btn === 'number') this.buttonStates.set(btn, false);
+    });
+  }
+  
+  public setButtonState(button: NDButton, pressed: boolean) {
+    this.buttonStates.set(button, pressed);
+  }
+
+  public isButtonPressed(button: NDButton): boolean {
+    return this.buttonStates.get(button) || false;
   }
   
   public init() {
