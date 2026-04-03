@@ -1,5 +1,6 @@
 import { GameType, BlockType, PieceType, GamePlayMode } from '../puzzle';
 import { Rotation } from '../../shared/puzzle/Piece';
+import { BobNet } from '../puzzle/BobNet';
 
 export class CustomGameEditor {
   private container: HTMLElement;
@@ -348,5 +349,17 @@ export class CustomGameEditor {
       this.save();
       const event = new CustomEvent('test-custom-game');
       document.dispatchEvent(event);
+  }
+
+  private shareGame() {
+      this.save();
+      const b64 = BobNet.toBase64GZippedGSON(this.currentGameType);
+      const url = `${window.location.origin}${window.location.pathname}#play=${b64}`;
+      navigator.clipboard.writeText(url).then(() => {
+          alert('Share link copied to clipboard!');
+      }).catch(err => {
+          console.error('Failed to copy: ', err);
+          prompt('Copy this link manually:', url);
+      });
   }
 }

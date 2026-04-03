@@ -20,6 +20,7 @@ import { WorldScene } from './WorldScene';
 import { CustomGameEditorScene } from './CustomGameEditorScene';
 import { WorldEditorScene } from './WorldEditorScene';
 import { RankingsScene } from './RankingsScene';
+import { BobNet } from '../puzzle/BobNet';
 
 // ============================================================
 // Types
@@ -286,6 +287,7 @@ export class MainMenuScene extends Scene {
             { label: 'Settings', action: () => this.openSettings() },
             { label: 'Options', action: () => this.openOptions() },
             { label: 'Watch Last Replay', action: () => this.playLastReplay() },
+            { label: 'Share Last Replay', action: () => this.shareLastReplay() },
         ];
 
         const buttonStyle: ButtonStyle = {
@@ -428,6 +430,37 @@ export class MainMenuScene extends Scene {
         };
         const puzzleScene = new PuzzleScene(puzzleConfig);
         SceneTransition.pushWithFade(this.app, puzzleScene);
+    }
+
+    private shareLastReplay(): void {
+        let lastKey = null;
+        let lastTime = 0;
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('replay_')) {
+                const time = parseInt(key.split('_')[1]);
+                if (time > lastTime) {
+                    lastTime = time;
+                    lastKey = key;
+                }
+            }
+        }
+        
+        if (!lastKey) {
+            alert('No replays found to share!');
+            return;
+        }
+
+        const data = localStorage.getItem(lastKey)!;
+        const jsonObj = JSON.parse(data);
+        const b64 = BobNet.toBase64GZippedGSON(jsonObj);
+        const url = `${window.location.origin}${window.location.pathname}#replay=${b64}`;
+        navigator.clipboard.writeText(url).then(() => {
+            alert('Replay link copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            prompt('Copy this link manually:', url);
+        });
     }
 
     private startGame(gameType: GameType): void {
