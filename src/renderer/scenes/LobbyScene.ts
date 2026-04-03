@@ -17,10 +17,12 @@ export class LobbyScene extends Scene {
     private leaderboardContainer: Container;
     private titleText!: Text;
     private connectingText!: Text;
+    private eloText!: Text;
     private uiElements: HTMLElement[] = [];
     private chatContainer: HTMLElement | null = null;
     private bracketContainer: HTMLElement | null = null;
     private playersContainer: HTMLElement | null = null;
+    private isSpectator: boolean = false;
 
     constructor(config: SceneConfig) {
         super(config);
@@ -48,6 +50,10 @@ export class LobbyScene extends Scene {
         this.connectingText.anchor.set(0.5, 0);
         this.connectingText.position.set(this.app.screen.width / 2, 100);
         this.container.addChild(this.connectingText);
+
+        this.eloText = new Text({ text: 'Elo: ---', style: { fill: '#00ff00', fontSize: 18 } });
+        this.eloText.position.set(20, 20);
+        this.container.addChild(this.eloText);
 
         const createRoomDiv = document.createElement('div');
         createRoomDiv.style.position = 'absolute';
@@ -95,6 +101,7 @@ export class LobbyScene extends Scene {
             const isTournament = (document.getElementById('roomTournamentInput') as HTMLInputElement).checked;
             const gameMode = (document.getElementById('gameModeInput') as HTMLSelectElement).value;
             const startLevel = parseInt((document.getElementById('startLevelInput') as HTMLInputElement).value) || 1;
+            this.isSpectator = false;
             this.networkManager.createRoom({ name, password, isPrivate, gameMode, startLevel, isTournament });
         };
 
@@ -123,6 +130,10 @@ export class LobbyScene extends Scene {
                     if (this.connectingText) this.connectingText.visible = false;
                 }, 1000);
             }
+        });
+
+        this.networkManager.on('eloUpdate', (data: { elo: number }) => {
+            if (this.eloText) this.eloText.text = `Elo: ${data.elo}`;
         });
 
         this.networkManager.on('disconnected', () => {
@@ -169,6 +180,7 @@ export class LobbyScene extends Scene {
                 app: this.app,
                 camera: this.camera ?? undefined,
                 multiplayer: true,
+                isSpectator: this.isSpectator,
                 seed: data.seed,
                 gameMode: data.gameMode as any,
                 startLevel: data.startLevel
@@ -201,7 +213,8 @@ export class LobbyScene extends Scene {
             data.scores.forEach((score, index) => {
                 const row = new Container();
                 row.position.set(600, 250 + index * 40);
-                const text = new Text({ text: `${index + 1}. ${score.name}: ${score.score} pts`, style: { fill: '#ffffff', fontSize: 20 } });
+                const eloStr = score.elo ? ` [${score.elo}]` : "";
+                const text = new Text({ text: `${index + 1}. ${score.name}${eloStr}: ${score.score} pts`, style: { fill: '#ffffff', fontSize: 20 } });
                 row.addChild(text);
                 this.leaderboardContainer.addChild(row);
             });
@@ -234,6 +247,7 @@ export class LobbyScene extends Scene {
             if (room.hasPassword) {
                 password = prompt(`Enter password for room ${room.name}:`) || "";
             }
+            this.isSpectator = false;
             this.networkManager.joinRoom({ id: room.id, password });
         });
         row.addChild(joinBtn);
@@ -241,6 +255,7 @@ export class LobbyScene extends Scene {
         const watchBtn = this.createStyledButton('Watch', 100, 40);
         watchBtn.position.set(670, -5);
         watchBtn.on('pointerdown', () => {
+            this.isSpectator = true;
             this.networkManager.joinRoom({ id: room.id, spectator: true });
         });
         row.addChild(watchBtn);

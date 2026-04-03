@@ -54,6 +54,10 @@ export class Camera {
     this._targets = this._targets.filter(t => t !== target);
   }
 
+  public setContainer(container: Container): void {
+    this.container = container;
+  }
+
   public clearTargets(): void {
     this._targets = [];
   }

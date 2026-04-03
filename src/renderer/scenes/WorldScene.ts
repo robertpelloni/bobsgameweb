@@ -5,10 +5,12 @@ import { MapData } from '../../shared/MapData';
 import { RenderSystem } from '../engine/ecs/systems/RenderSystem';
 import { BehaviorSystem } from '../engine/ecs/systems/BehaviorSystem';
 import { PathfindingSystem } from '../engine/ecs/systems/PathfindingSystem';
+import { LightingSystem } from '../engine/ecs/systems/LightingSystem';
 import { TransformComponent } from '../engine/ecs/components/TransformComponent';
 import { SpriteComponent } from '../engine/ecs/components/SpriteComponent';
 import { BehaviorComponent } from '../engine/ecs/components/BehaviorComponent';
 import { PathfindingComponent } from '../engine/ecs/components/PathfindingComponent';
+import { LightComponent } from '../engine/ecs/components/LightComponent';
 import { EightDirectionBehavior } from '../engine/ecs/behaviors/EightDirectionBehavior';
 import { NPCBehavior } from '../engine/ecs/behaviors/NPCBehavior';
 import { Sprite, Graphics, Texture, Container, Text, TextStyle } from 'pixi.js';
@@ -35,9 +37,14 @@ export class WorldScene extends Scene {
     private consoleContainer: Container | null = null;
     private consoleInput: HTMLInputElement | null = null;
     private consoleActive: boolean = false;
+    private worldContainer: Container;
+
+    private lightingSystem: LightingSystem | null = null;
 
     constructor(config: SceneConfig) {
         super(config);
+        this.worldContainer = new Container();
+        this.container.addChild(this.worldContainer);
         this.world = new World();
         this.tileset = new Tileset(5000);
         this.palette = new Palette(256);
@@ -65,6 +72,9 @@ export class WorldScene extends Scene {
         this.world.addSystem(new BehaviorSystem());
         this.world.addSystem(new PathfindingSystem());
         this.world.addSystem(new RenderSystem(this.container));
+        
+        this.lightingSystem = new LightingSystem(this.app, this.container);
+        this.world.addSystem(this.lightingSystem);
 
         const mapData = new MapData(-1, "MMO World", 100, 100);
         this.map = new GameMap(mapData);
@@ -88,10 +98,18 @@ export class WorldScene extends Scene {
         const behavior = new BehaviorComponent();
         behavior.behaviors.push(new EightDirectionBehavior(this.world));
         this.world.addComponent(playerEntity, behavior);
+        
+        const playerLight = new LightComponent();
+        playerLight.radius = 150;
+        playerLight.baseRadius = 150;
+        playerLight.color = 0xffaa55; // Warm torch light
+        playerLight.flicker = true;
+        this.world.addComponent(playerEntity, playerLight);
 
         this.playerTransform = transform;
 
         if (this.camera) {
+            this.camera.setContainer(this.container);
             this.camera.clearTargets();
             this.camera.addTarget(transform);
             this.camera.setLerp(0.1);
@@ -178,7 +196,23 @@ export class WorldScene extends Scene {
         }
     }
 
-    private handleWorkerMessage(msg: any): void {
+    public onResize(width: number, height: number): void {
+      super.onResize(width, height);
+      if (this.lightingSystem) {
+          this.lightingSystem.resize(width, height);
+      }
+      if (this.dialogueContainer) {
+          // Adjust dialog container on resize
+          this.dialogueContainer.children[0].width = width - 100;
+          this.dialogueContainer.children[0].y = height - 150;
+          if (this.dialogueText) {
+              this.dialogueText.y = height - 130;
+              this.dialogueText.style.wordWrapWidth = width - 140;
+          }
+      }
+  }
+
+  private handleWorkerMessage(msg: any): void {
         if (msg.type === 'pathResult') {
             const components = (this.world as any).entities.get(msg.data.entityId);
             const pathComp = components?.get('Pathfinding') as PathfindingComponent;
@@ -245,6 +279,13 @@ export class WorldScene extends Scene {
             // Add pathfinding component
             const pathComp = new PathfindingComponent();
             this.world.addComponent(entity, pathComp);
+
+            const npcLight = new LightComponent();
+            npcLight.radius = 80;
+            npcLight.baseRadius = 80;
+            npcLight.color = 0x00ff00; // Eerie green glow
+            npcLight.flicker = false;
+            this.world.addComponent(entity, npcLight);
         }
     }
 

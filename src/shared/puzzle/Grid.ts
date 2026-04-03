@@ -1,6 +1,6 @@
 import { Block } from "./Block";
 import { Piece } from "./Piece";
-import { GameType, DifficultyType, GameMode, GarbageType } from "./GameType";
+import { GameType, DifficultyType, GarbageType, GamePlayMode } from "./GameType";
 import { MovementType } from "./MovementType";
 import { GameLogic } from "./GameLogic";
 import { PieceType } from "./PieceType";

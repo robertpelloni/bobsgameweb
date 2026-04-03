@@ -1,4 +1,4 @@
-import { GameType, BlockType, PieceType, GameMode } from '../puzzle';
+import { GameType, BlockType, PieceType, GamePlayMode } from '../puzzle';
 
 export class CustomGameEditor {
   private container: HTMLElement;
@@ -64,6 +64,7 @@ export class CustomGameEditor {
             <button id="btn-new">New</button>
             <button id="btn-load">Load</button>
             <button id="btn-save" style="background:#004400; color:#fff; border:none; padding:5px 15px; border-radius:4px;">Save</button>
+            <button id="btn-test" style="background:#cc6600; color:#fff; border:none; padding:5px 15px; border-radius:4px; margin-left: 10px;">Test Game</button>
         </div>
       </div>
       
@@ -169,6 +170,7 @@ export class CustomGameEditor {
     });
 
     this.container.querySelector('#btn-save')?.addEventListener('click', () => this.save());
+    this.container.querySelector('#btn-test')?.addEventListener('click', () => this.testGame());
     this.container.querySelector('#btn-load')?.addEventListener('click', () => this.load());
     this.container.querySelector('#btn-new')?.addEventListener('click', () => this.createNew());
     
@@ -225,7 +227,7 @@ export class CustomGameEditor {
 
   private save() {
     this.currentGameType.name = this.nameInput.value;
-    this.currentGameType.gameMode = this.modeSelect.value as GameMode;
+    this.currentGameType.gameMode = this.modeSelect.value as GamePlayMode;
     this.currentGameType.gridWidth = parseInt(this.gridWidthInput.value);
     this.currentGameType.gridHeight = parseInt(this.gridHeightInput.value);
     this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = parseInt(this.gravityInput.value);
@@ -242,11 +244,11 @@ export class CustomGameEditor {
     const data = localStorage.getItem('custom-game-type');
     if (data) {
       try {
-          const obj = JSON.parse(data);
-          Object.assign(this.currentGameType, obj);
+          this.currentGameType = GameType.fromJSON(data);
           this.loadFromGameType();
           alert('Game type loaded!');
       } catch (e) {
+          console.error(e);
           alert('Failed to load game type.');
       }
     }
@@ -255,5 +257,12 @@ export class CustomGameEditor {
   private createNew() {
     this.currentGameType = new GameType();
     this.loadFromGameType();
+  }
+
+  private testGame() {
+      // Save temp config, emit an event so CustomGameEditorScene can catch it and push PuzzleScene
+      this.save();
+      const event = new CustomEvent('test-custom-game');
+      document.dispatchEvent(event);
   }
 }

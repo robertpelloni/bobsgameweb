@@ -126,9 +126,14 @@ export class MainMenuScene extends Scene {
         
         // Reposition menu buttons
         const startY = height * 0.45;
-        const spacing = 50;
+        const spacingY = 48;
+
         for (let i = 0; i < this.menuButtons.length; i++) {
-            this.menuButtons[i].setPosition(this.centerX, startY + i * spacing);
+            const col = i % 2;
+            const row = Math.floor(i / 2);
+            const x = this.centerX + (col === 0 ? -150 : 150);
+            const y = startY + row * spacingY;
+            this.menuButtons[i].setPosition(x, y);
         }
 
         // Reposition mode buttons
@@ -269,11 +274,12 @@ export class MainMenuScene extends Scene {
         this.menuItems = [
             { label: 'Classic', action: () => this.startGame(GameTypes.CLASSIC) },
             { label: 'Modern', action: () => this.startGame(GameTypes.MODERN) },
-            { label: 'Engine Demo', action: () => this.openEngineDemo() },
-            { label: 'nD Demo', action: () => this.openNDDemo() },
-            { label: 'MMO World', action: () => this.openWorld() },
+            { label: 'Play Custom Game', action: () => this.startCustomGame() },
             { label: 'Custom Game Editor', action: () => this.openCustomEditor() },
+            { label: 'MMO World', action: () => this.openWorld() },
             { label: 'Multiplayer', action: () => this.openLobby() },
+            { label: 'nD Demo', action: () => this.openNDDemo() },
+            { label: 'Engine Demo', action: () => this.openEngineDemo() },
             { label: 'High Scores', action: () => this.openHighScores() },
             { label: 'Options', action: () => this.openOptions() },
             { label: 'Settings', action: () => this.openSettings() },
@@ -293,12 +299,19 @@ export class MainMenuScene extends Scene {
         };
 
         const startY = this.height * 0.45;
-        const spacing = 50;
+        const spacingY = 48;
+        const colSpacing = 260;
 
         for (let i = 0; i < this.menuItems.length; i++) {
             const item = this.menuItems[i];
+            const col = i % 2;
+            const row = Math.floor(i / 2);
+            
+            const x = this.centerX + (col === 0 ? -150 : 150);
+            const y = startY + row * spacingY;
+            
             const button = new Button(item.label, buttonStyle);
-            button.setPosition(this.centerX, startY + i * spacing);
+            button.setPosition(x, y);
             button.onClick(() => {
                 this.playSelectSound();
                 item.action();
@@ -367,6 +380,33 @@ export class MainMenuScene extends Scene {
     // ============================================================
     // Actions
     // ============================================================
+
+    private startCustomGame(): void {
+        const data = localStorage.getItem('custom-game-type');
+        let gameType = GameTypes.CLASSIC; // Fallback
+        if (data) {
+            try {
+                gameType = GameType.fromJSON(data);
+            } catch (e) {
+                console.error("Failed to load custom game type", e);
+            }
+        } else {
+            console.warn("No custom game saved, falling back to Classic.");
+        }
+        
+        const gameMode = this.categories[this.selectedCategoryIndex];
+        const puzzleConfig: PuzzleSceneConfig = {
+            name: 'puzzle',
+            app: this.app,
+            camera: this.camera ?? undefined,
+            gameType,
+            gameMode,
+            startLevel: 1,
+        };
+
+        const puzzleScene = new PuzzleScene(puzzleConfig);
+        SceneTransition.pushWithFade(this.app, puzzleScene);
+    }
 
     private startGame(gameType: GameType): void {
         const gameMode = this.categories[this.selectedCategoryIndex];
