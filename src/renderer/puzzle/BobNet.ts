@@ -10,7 +10,11 @@ export class BobNet {
     try {
       const json = JSON.stringify(obj);
       const compressed = pako.gzip(json);
-      return btoa(String.fromCharCode.apply(null, Array.from(compressed)));
+      let binary = '';
+      for (let i = 0; i < compressed.length; i++) {
+        binary += String.fromCharCode(compressed[i]);
+      }
+      return btoa(binary);
     } catch (e) {
       console.error(e);
       return "";

@@ -6,6 +6,10 @@ import { StateManager } from './state/StateManager';
 import { InputManager } from './input/InputManager';
 import { AudioManager } from './audio/AudioManager';
 import { MainMenuScene } from './scenes/MainMenuScene';
+import { BobNet } from './puzzle/BobNet';
+import { GameType } from '../shared/puzzle/GameType';
+import { PuzzleScene, PuzzleSceneConfig } from './puzzle/PuzzleScene';
+import { GameMode } from './data/HighScoreManager';
 
 export interface GameConfig {
     skipMenu?: boolean;
@@ -89,7 +93,60 @@ export class Game extends EventEmitter<GameEvents> {
 
         if (!this.config.skipMenu) {
             await this.createMainMenuScene();
-            this.showMainMenu();
+            
+            const hash = window.location.hash;
+            if (hash.startsWith('#play=')) {
+                console.log("[Game] Intercepted deep link for custom game.");
+                try {
+                    const b64 = hash.replace('#play=', '');
+                    const jsonObj = BobNet.fromBase64GZippedGSON(b64);
+                    if (jsonObj) {
+                        const gameType = new GameType();
+                        Object.assign(gameType, jsonObj);
+                        
+                        const puzzleConfig: PuzzleSceneConfig = {
+                            name: 'puzzle',
+                            app: this.app,
+                            camera: this._camera,
+                            gameType,
+                            gameMode: gameType.gameMode as any,
+                            startLevel: 1,
+                        };
+                        const puzzleScene = new PuzzleScene(puzzleConfig);
+                        StateManager.pushSync(this.mainMenuScene!); // Put menu in background
+                        StateManager.pushSync(puzzleScene);
+                    } else {
+                        throw new Error("Failed to parse custom game JSON");
+                    }
+                } catch (e) {
+                    console.error("[Game] Deep link error:", e);
+                    this.showMainMenu();
+                }
+            } else if (hash.startsWith('#replay=')) {
+                console.log("[Game] Intercepted deep link for replay.");
+                try {
+                    const b64 = hash.replace('#replay=', '');
+                    const jsonObj = BobNet.fromBase64GZippedGSON(b64);
+                    if (jsonObj) {
+                        const puzzleConfig: PuzzleSceneConfig = {
+                            name: 'puzzle-replay',
+                            app: this.app,
+                            camera: this._camera,
+                            replayData: JSON.stringify(jsonObj)
+                        };
+                        const puzzleScene = new PuzzleScene(puzzleConfig);
+                        StateManager.pushSync(this.mainMenuScene!);
+                        StateManager.pushSync(puzzleScene);
+                    } else {
+                        throw new Error("Failed to parse replay JSON");
+                    }
+                } catch (e) {
+                    console.error("[Game] Deep link error:", e);
+                    this.showMainMenu();
+                }
+            } else {
+                this.showMainMenu();
+            }
         }
         
         this.isRunning = true;
