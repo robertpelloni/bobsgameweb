@@ -32,5 +32,10 @@ export class EightDirectionBehavior extends Behavior {
             transform.x += (dx / mag) * this.speed * dt;
             transform.y += (dy / mag) * this.speed * dt;
         }
+
+        if (InputManager.isActionPressed()) {
+            // Demo dialogue trigger
+            (this.world as any).scene?.showDialogue("Hello! Welcome to the Omni-Engine MMO World!");
+        }
     }
 }

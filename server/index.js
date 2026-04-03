@@ -54,6 +54,17 @@ function saveLeaderboards(leaderboards) {
 const leaderboards = loadLeaderboards();
 
 // ============================================================
+// Map Persistence
+// ============================================================
+
+const MAPS_DIR = path.join(__dirname, "maps");
+if (!fs.existsSync(MAPS_DIR)) fs.mkdirSync(MAPS_DIR);
+
+function getMapPath(mapId) {
+    return path.join(MAPS_DIR, `map_${mapId}.json`);
+}
+
+// ============================================================
 // Server Setup
 // ============================================================
 
@@ -160,57 +171,63 @@ io.on("connection", (socket) => {
     // Room Joining
     // ----------------------------------------------------------
 
-    socket.on("joinRoom", (data) => {
-        const room = rooms.get(data.id);
-        if (!room) {
-            socket.emit("error", "Room not found");
-            return;
-        }
-        if (room.password && room.password !== data.password) {
-            socket.emit("error", "Invalid password");
-            return;
-        }
-        if (room.players.length >= room.maxPlayers) {
-            socket.emit("error", "Room full");
-            return;
-        }
-        // Prevent joining the same room twice
-        if (room.players.includes(socket.id)) {
-            socket.emit("error", "Already in this room");
-            return;
-        }
+  socket.on("joinRoom", (data) => {
+      const room = rooms.get(data.id);
+      if (!room) {
+          socket.emit("error", "Room not found");
+          return;
+      }
+      
+      const isSpectator = Boolean(data.spectator);
 
+      if (room.password && room.password !== data.password) {
+          socket.emit("error", "Invalid password");
+          return;
+      }
+
+      if (!isSpectator && room.players.length >= room.maxPlayers) {
+          socket.emit("error", "Room full");
+          return;
+      }
+
+      if (!isSpectator) {
         room.players.push(socket.id);
-        socket.join(room.id);
+      } else {
+        if (!room.spectators) room.spectators = [];
+        room.spectators.push(socket.id);
+      }
 
-        const roomInfo = { ...room };
-        delete roomInfo.password;
-        roomInfo.playerNames = room.players.map(pid => players.get(pid)?.name || "Unknown");
-        socket.emit("joinedRoom", roomInfo);
+      socket.join(room.id);
+      
+      const roomInfo = { ...room };
+      delete roomInfo.password;
+      roomInfo.playerNames = room.players.map(pid => players.get(pid)?.name || "Unknown");
+      socket.emit("joinedRoom", roomInfo);
+      
+      // Notify others in room
+      const playerName = players.get(socket.id)?.name || "Unknown";
+      io.to(room.id).emit("chatMessage", { 
+          message: `${playerName} joined the room${isSpectator ? " as spectator" : ""}`, 
+          name: "System", 
+          timestamp: Date.now() 
+      });
 
-        // Notify others in room
-        const playerName = players.get(socket.id)?.name || "Unknown";
-        io.to(room.id).emit("chatMessage", {
-            message: `${playerName} joined the room`,
-            name: "System",
-            timestamp: Date.now()
-        });
-        
-        io.to(room.id).emit("roomUpdated", {
-            playerNames: room.players.map(pid => players.get(pid)?.name || "Unknown")
-        });
+      io.to(room.id).emit("roomUpdated", {
+          playerNames: room.players.map(pid => players.get(pid)?.name || "Unknown"),
+          spectatorCount: (room.spectators || []).length
+      });
 
-        // If room is now full and not a tournament, start the game automatically
-        if (!room.isTournament && room.players.length === room.maxPlayers) {
-            const seed = Math.floor(Math.random() * 1000000);
-            io.to(room.id).emit("gameStart", {
-                seed,
-                gameMode: room.gameMode,
-                startLevel: room.startLevel
-            });
-            room.state = "PLAYING";
-        }
-    });
+      // If room is now full and not a tournament, start the game
+      if (!room.isTournament && room.players.length === room.maxPlayers && room.state !== "PLAYING") {
+          const seed = Math.floor(Math.random() * 1000000);
+          io.to(room.id).emit("gameStart", { 
+              seed, 
+              gameMode: room.gameMode, 
+              startLevel: room.startLevel 
+          });
+          room.state = "PLAYING";
+      }
+  });
 
     // ----------------------------------------------------------
     // Chat Messages
@@ -259,6 +276,61 @@ io.on("connection", (socket) => {
             // Broadcast the edit to everyone else in the room
             socket.to(room).emit("editorAction", action);
         }
+    });
+
+    // ----------------------------------------------------------
+    // Map Saving/Loading
+    // ----------------------------------------------------------
+
+    socket.on("saveMap", (data) => {
+        const { mapId, mapData } = data;
+        try {
+            fs.writeFileSync(getMapPath(mapId), JSON.stringify(mapData));
+            console.log(`Map ${mapId} saved to disk.`);
+            socket.emit("mapSaved", { success: true, mapId });
+        } catch (e) {
+            console.error("Failed to save map:", e);
+            socket.emit("mapSaved", { success: false, error: e.message });
+        }
+    });
+
+    socket.on("loadMap", (mapId) => {
+        try {
+            const path = getMapPath(mapId);
+            if (fs.existsSync(path)) {
+                const data = JSON.parse(fs.readFileSync(path, "utf-8"));
+                socket.emit("mapLoaded", { success: true, mapData: data });
+            } else {
+                socket.emit("mapLoaded", { success: false, error: "Map not found" });
+            }
+        } catch (e) {
+            console.error("Failed to load map:", e);
+            socket.emit("mapLoaded", { success: false, error: e.message });
+        }
+    });
+
+    socket.on("listMaps", () => {
+        try {
+            const files = fs.readdirSync(MAPS_DIR);
+            const maps = files.map(f => f.replace("map_", "").replace(".json", ""));
+            socket.emit("mapList", maps);
+        } catch (e) {
+            socket.emit("mapList", []);
+        }
+    });
+
+    // ----------------------------------------------------------
+    // MMORPG World Sync
+    // ----------------------------------------------------------
+
+    socket.on("playerMove", (pos) => {
+        // Broadcast player position to everyone in the world
+        socket.broadcast.emit("remotePlayerMove", {
+            id: socket.id,
+            name: players.get(socket.id)?.name || "Unknown",
+            x: pos.x,
+            y: pos.y
+        });
     });
 
     // ----------------------------------------------------------

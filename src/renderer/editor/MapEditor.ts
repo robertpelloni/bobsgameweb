@@ -231,6 +231,8 @@ export class MapEditor {
         this.container.querySelector('#btn-new-map')?.addEventListener('click', () => this.createNewMap());
         this.container.querySelector('#btn-save-map')?.addEventListener('click', () => this.saveMap());
         this.container.querySelector('#btn-load-map')?.addEventListener('click', () => this.loadMap());
+        this.container.querySelector('#btn-save-server')?.addEventListener('click', () => this.saveToServer());
+        this.container.querySelector('#btn-load-server')?.addEventListener('click', () => this.loadFromServer());
         this.container.querySelector('#btn-exit-editor')?.addEventListener('click', () => this.destroy());
 
         this.container.querySelector('#btn-shift-up')?.addEventListener('click', () => this.shiftMap(0, -1));
@@ -241,6 +243,34 @@ export class MapEditor {
         // Connect to server for multiplayer editing
         networkManager.connect(SERVER_URL);
         networkManager.on('editorAction', (data: any) => this.handleRemoteAction(data));
+        
+        networkManager.on('mapSaved', (data: any) => {
+            const status = this.container.querySelector('#status-text') as HTMLElement;
+            if (status) status.textContent = data.success ? `MAP SAVED TO SERVER: ${data.mapId}` : `ERROR SAVING: ${data.error}`;
+        });
+
+        networkManager.on('mapLoaded', (data: any) => {
+            if (data.success) {
+                console.log("Map data received from server:", data.mapData);
+            }
+        });
+    }
+
+    private saveToServer(): void {
+        if (this.currentMap) {
+            const mapId = this.currentMap.data.id === -1 ? `new_${Date.now()}` : this.currentMap.data.id;
+            networkManager.emit('saveMap', { 
+                mapId, 
+                mapData: JSON.parse(JSON.stringify(this.currentMap.data)) 
+            });
+        }
+    }
+
+    private loadFromServer(): void {
+        const mapId = prompt("Enter Map ID to load:");
+        if (mapId) {
+            networkManager.emit('loadMap', mapId);
+        }
     }
 
     private shiftMap(x: number, y: number): void {

@@ -238,9 +238,16 @@ export class LobbyScene extends Scene {
         });
         row.addChild(joinBtn);
 
+        const watchBtn = this.createStyledButton('Watch', 100, 40);
+        watchBtn.position.set(670, -5);
+        watchBtn.on('pointerdown', () => {
+            this.networkManager.joinRoom({ id: room.id, spectator: true });
+        });
+        row.addChild(watchBtn);
+
         if (room.isTournament) {
             const bracketBtn = this.createStyledButton('Bracket', 120, 40);
-            bracketBtn.position.set(670, -5);
+            bracketBtn.position.set(790, -5);
             bracketBtn.on('pointerdown', () => {
                 this.showTournamentBracket(room.id);
             });

@@ -155,7 +155,7 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
-    public joinRoom(data: string | { id: string, password?: string }): void {
+    public joinRoom(data: string | { id: string, password?: string, spectator?: boolean }): void {
         if (this.socket) {
             this.socket.emit('joinRoom', data);
         }
@@ -166,5 +166,17 @@ export class NetworkManager extends EventEmitter {
             this.socket.disconnect();
             this.socket = null;
         }
+    }
+
+    public get connected(): boolean {
+        return this.socket?.connected || false;
+    }
+
+    public emit<T extends string | symbol>(event: T, ...args: any[]): boolean {
+        if (this.socket && typeof event === 'string') {
+            this.socket.emit(event, ...args);
+            return true;
+        }
+        return super.emit(event, ...args);
     }
 }

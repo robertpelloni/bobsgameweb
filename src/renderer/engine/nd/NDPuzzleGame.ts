@@ -1,7 +1,7 @@
 import { NDGameEngine } from './NDGameEngine';
 import { ND, NDButton } from './ND';
 import { PuzzleGame, PuzzleRenderer, GameState } from '../../puzzle';
-import { PuzzlePlayer } from '../../shared/puzzle/PuzzlePlayer';
+import { PuzzlePlayer } from '../../../shared/puzzle/PuzzlePlayer';
 import { StateManager } from '../../state/StateManager';
 import { Container, Text, Graphics } from 'pixi.js';
 
