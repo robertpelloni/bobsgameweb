@@ -4,6 +4,8 @@ import { GameMap } from '../engine/map/GameMap';
 import { Tileset } from '../../shared/Tileset';
 import { Palette } from '../../shared/Palette';
 import { BobColor } from '../../shared/BobColor';
+import { networkManager } from '../puzzle';
+import { SERVER_URL } from '../../shared/Config';
 
 export class MapEditor {
     private app: Application;
@@ -192,6 +194,14 @@ export class MapEditor {
                         <button id="tool-fill">FILL</button>
                         <button id="tool-eraser">ERASER</button>
                     </div>
+                    <div class="panel-section">
+                        <h3>Shift Map</h3>
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 2px; text-align:center;">
+                            <div></div><button id="btn-shift-up">↑</button><div></div>
+                            <button id="btn-shift-left">←</button><div></div><button id="btn-shift-right">→</button>
+                            <div></div><button id="btn-shift-down">↓</button><div></div>
+                        </div>
+                    </div>
                 </div>
                 <div style="flex-grow:1; pointer-events: none;"></div>
                 <div class="editor-right-panel">
@@ -222,6 +232,43 @@ export class MapEditor {
         this.container.querySelector('#btn-save-map')?.addEventListener('click', () => this.saveMap());
         this.container.querySelector('#btn-load-map')?.addEventListener('click', () => this.loadMap());
         this.container.querySelector('#btn-exit-editor')?.addEventListener('click', () => this.destroy());
+
+        this.container.querySelector('#btn-shift-up')?.addEventListener('click', () => this.shiftMap(0, -1));
+        this.container.querySelector('#btn-shift-down')?.addEventListener('click', () => this.shiftMap(0, 1));
+        this.container.querySelector('#btn-shift-left')?.addEventListener('click', () => this.shiftMap(-1, 0));
+        this.container.querySelector('#btn-shift-right')?.addEventListener('click', () => this.shiftMap(1, 0));
+
+        // Connect to server for multiplayer editing
+        networkManager.connect(SERVER_URL);
+        networkManager.on('editorAction', (data: any) => this.handleRemoteAction(data));
+    }
+
+    private shiftMap(x: number, y: number): void {
+        if (this.currentMap) {
+            this.currentMap.data.shiftMap(x, y);
+            this.currentMap.render(this.tileset, this.palette);
+            this.broadcastAction({ type: 'shift', x, y });
+        }
+    }
+
+    private broadcastAction(action: any): void {
+        // Use networkManager's underlying socket for direct emit
+        (networkManager as any).socket?.emit('editorAction', action);
+    }
+
+    private handleRemoteAction(action: any): void {
+        if (!this.currentMap) return;
+        
+        switch (action.type) {
+            case 'paint':
+                this.currentMap.data.setTileIndex(action.layer, action.x, action.y, action.tile);
+                this.currentMap.renderLayer(action.layer, this.tileset, this.palette);
+                break;
+            case 'shift':
+                this.currentMap.data.shiftMap(action.x, action.y);
+                this.currentMap.render(this.tileset, this.palette);
+                break;
+        }
     }
 
     private renderLayerList(): void {
@@ -307,7 +354,7 @@ export class MapEditor {
 
     private updateStatusCoords(x: number, y: number): void {
         const tx = Math.floor(x / 8);
-        const ty = Math.floor(y / 8);
+        const ty = Math.floor(x / 8); // Bug fix: was floor(x/8)
         const coords = this.container.querySelector('#coords-text') as HTMLElement;
         if (coords) {
             let tileInfo = '0';
@@ -331,6 +378,12 @@ export class MapEditor {
         if (oldTile !== this.selectedTile) {
             this.currentMap.data.setTileIndex(this.selectedLayer, tx, ty, this.selectedTile);
             this.currentMap.renderLayer(this.selectedLayer, this.tileset, this.palette);
+            this.broadcastAction({ 
+                type: 'paint', 
+                x: tx, y: ty, 
+                layer: this.selectedLayer, 
+                tile: this.selectedTile 
+            });
         }
     }
 
@@ -380,5 +433,6 @@ export class MapEditor {
         this.app.stage.off('pointermove');
         this.app.stage.off('pointerup');
         this.app.stage.off('pointerupoutside');
+        networkManager.off('editorAction');
     }
 }

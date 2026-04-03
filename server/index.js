@@ -250,6 +250,18 @@ io.on("connection", (socket) => {
     });
 
     // ----------------------------------------------------------
+    // Collaborative Map Editing
+    // ----------------------------------------------------------
+
+    socket.on("editorAction", (action) => {
+        const room = Array.from(socket.rooms).find(r => rooms.has(r));
+        if (room) {
+            // Broadcast the edit to everyone else in the room
+            socket.to(room).emit("editorAction", action);
+        }
+    });
+
+    // ----------------------------------------------------------
     // Score Reporting & Leaderboards
     // ----------------------------------------------------------
 
