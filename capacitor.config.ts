@@ -1,9 +1,9 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.bobsgame.okgame',
-  appName: "bob's game",
-  webDir: 'dist',
+  appId: 'com.bobsgame.okengine',
+  appName: "bob's game (Omni-Engine)",
+  webDir: 'dist/renderer',
   server: {
     androidScheme: 'https'
   }

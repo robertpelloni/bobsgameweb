@@ -492,6 +492,15 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, editorScene);
     }
 
+    private openRankings(): void {
+        const rankingsScene = new RankingsScene({
+            name: 'rankings',
+            app: this.app,
+            camera: this.camera ?? undefined,
+        });
+        SceneTransition.pushWithFade(this.app, rankingsScene);
+    }
+
     private openSettings(): void {
         const settingsScene = new SettingsScene({
             name: 'settings',

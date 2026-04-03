@@ -5,20 +5,24 @@ import { MapData } from '../../shared/MapData';
 import { RenderSystem } from '../engine/ecs/systems/RenderSystem';
 import { BehaviorSystem } from '../engine/ecs/systems/BehaviorSystem';
 import { PathfindingSystem } from '../engine/ecs/systems/PathfindingSystem';
-import { LightingSystem } from '../engine/ecs/systems/LightingSystem';
 import { TransformComponent } from '../engine/ecs/components/TransformComponent';
 import { SpriteComponent } from '../engine/ecs/components/SpriteComponent';
 import { BehaviorComponent } from '../engine/ecs/components/BehaviorComponent';
 import { PathfindingComponent } from '../engine/ecs/components/PathfindingComponent';
-import { LightComponent } from '../engine/ecs/components/LightComponent';
+import { CombatComponent } from '../engine/ecs/components/CombatComponent';
 import { EightDirectionBehavior } from '../engine/ecs/behaviors/EightDirectionBehavior';
 import { NPCBehavior } from '../engine/ecs/behaviors/NPCBehavior';
+import { BattleScene } from './BattleScene';
 import { Sprite, Graphics, Texture, Container, Text, TextStyle } from 'pixi.js';
 import { InputManager, Key } from '../input/InputManager';
 import { StateManager } from '../state/StateManager';
+import { SceneTransition } from '../state/SceneTransition';
 import { Tileset } from '../../shared/Tileset';
 import { Palette } from '../../shared/Palette';
 import { AudioManager } from '../audio/AudioManager';
+import { LightingSystem } from '../engine/ecs/systems/LightingSystem';
+import { LightComponent } from '../engine/ecs/components/LightComponent';
+import { TouchControls } from '../ui/TouchControls';
 
 import { networkManager } from '../puzzle';
 import { SERVER_URL } from '../../shared/Config';
@@ -38,6 +42,7 @@ export class WorldScene extends Scene {
     private consoleInput: HTMLInputElement | null = null;
     private consoleActive: boolean = false;
     private worldContainer: Container;
+    private touchControls: TouchControls | null = null;
 
     private lightingSystem: LightingSystem | null = null;
 
@@ -71,17 +76,18 @@ export class WorldScene extends Scene {
 
         this.world.addSystem(new BehaviorSystem());
         this.world.addSystem(new PathfindingSystem());
-        this.world.addSystem(new RenderSystem(this.container));
+        this.world.addSystem(new RenderSystem(this.worldContainer));
         
-        this.lightingSystem = new LightingSystem(this.app, this.container);
+        this.lightingSystem = new LightingSystem(this.app, this.worldContainer);
         this.world.addSystem(this.lightingSystem);
 
         const mapData = new MapData(-1, "MMO World", 100, 100);
         this.map = new GameMap(mapData);
-        this.container.addChild(this.map.container);
+        this.worldContainer.addChild(this.map.container);
         this.map.render(this.tileset, this.palette);
 
         const playerEntity = this.world.createEntity();
+        (this.world as any).playerEntityId = playerEntity;
         const transform = new TransformComponent();
         transform.x = 400;
         transform.y = 300;
@@ -98,18 +104,22 @@ export class WorldScene extends Scene {
         const behavior = new BehaviorComponent();
         behavior.behaviors.push(new EightDirectionBehavior(this.world));
         this.world.addComponent(playerEntity, behavior);
-        
+
+        const playerCombat = new CombatComponent();
+        playerCombat.isPlayer = true;
+        this.world.addComponent(playerEntity, playerCombat);
+
         const playerLight = new LightComponent();
         playerLight.radius = 150;
         playerLight.baseRadius = 150;
-        playerLight.color = 0xffaa55; // Warm torch light
+        playerLight.color = 0xffaa55;
         playerLight.flicker = true;
         this.world.addComponent(playerEntity, playerLight);
 
         this.playerTransform = transform;
 
         if (this.camera) {
-            this.camera.setContainer(this.container);
+            this.camera.setContainer(this.worldContainer);
             this.camera.clearTargets();
             this.camera.addTarget(transform);
             this.camera.setLerp(0.1);
@@ -122,6 +132,164 @@ export class WorldScene extends Scene {
         this.createNPCs();
         this.createDialogueUI();
         this.createConsoleUI();
+        
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            this.touchControls = new TouchControls(this.width, this.height);
+            this.container.addChild(this.touchControls);
+        }
+    }
+
+    private handleWorkerMessage(msg: any): void {
+        if (msg.type === 'pathResult') {
+            const components = (this.world as any).entities.get(msg.data.entityId);
+            const pathComp = components?.get('Pathfinding') as PathfindingComponent;
+            if (pathComp) {
+                pathComp.path = msg.data.path;
+                pathComp.isCalculating = false;
+            }
+        }
+    }
+
+    private createDialogueUI(): void {
+        this.dialogueContainer = new Container();
+        this.dialogueContainer.visible = false;
+        this.container.addChild(this.dialogueContainer);
+
+        const bg = new Graphics();
+        bg.rect(50, this.height - 150, this.width - 100, 100);
+        bg.fill({ color: 0x000000, alpha: 0.8 });
+        bg.stroke({ color: 0xffffff, width: 2 });
+        this.dialogueContainer.addChild(bg);
+
+        const style = new TextStyle({
+            fill: '#ffffff',
+            fontSize: 18,
+            wordWrap: true,
+            wordWrapWidth: this.width - 140
+        });
+
+        this.dialogueText = new Text({ text: '', style });
+        this.dialogueText.position.set(70, this.height - 130);
+        this.dialogueContainer.addChild(this.dialogueText);
+    }
+
+    public showDialogue(message: string): void {
+        if (this.dialogueText && this.dialogueContainer) {
+            this.dialogueText.text = message;
+            this.dialogueContainer.visible = true;
+            setTimeout(() => {
+                if (this.dialogueContainer) this.dialogueContainer.visible = false;
+            }, 3000);
+        }
+    }
+
+    public startBattle(npcEntityId: number): void {
+        const playerCombat = this.world.getComponent<CombatComponent>((this.world as any).playerEntityId, 'Combat');
+        const npcCombat = this.world.getComponent<CombatComponent>(npcEntityId, 'Combat');
+
+        if (playerCombat && npcCombat) {
+            const battleScene = new BattleScene({
+                name: 'battle',
+                app: this.app,
+                camera: this.camera ?? undefined,
+                player: playerCombat,
+                enemy: npcCombat
+            });
+            SceneTransition.pushWithFade(this.app, battleScene);
+        }
+    }
+
+    private createNPCs(): void {
+        for (let i = 0; i < 5; i++) {
+            const entity = this.world.createEntity();
+            const transform = new TransformComponent();
+            transform.x = 200 + Math.random() * 400;
+            transform.y = 200 + Math.random() * 400;
+            this.world.addComponent(entity, transform);
+
+            const sprite = new SpriteComponent();
+            const g = new Graphics();
+            g.rect(-16, -24, 32, 48);
+            g.fill(0x00aa00);
+            const tex = this.app.renderer.generateTexture(g);
+            sprite.sprite = new Sprite(tex);
+            this.world.addComponent(entity, sprite);
+
+            const behavior = new BehaviorComponent();
+            behavior.behaviors.push(new NPCBehavior(this.world));
+            this.world.addComponent(entity, behavior);
+            
+            const pathComp = new PathfindingComponent();
+            this.world.addComponent(entity, pathComp);
+
+            const npcCombat = new CombatComponent();
+            npcCombat.hp = 30;
+            this.world.addComponent(entity, npcCombat);
+
+            const npcLight = new LightComponent();
+            npcLight.radius = 80;
+            npcLight.baseRadius = 80;
+            npcLight.color = 0x00ff00;
+            npcLight.flicker = false;
+            this.world.addComponent(entity, npcLight);
+        }
+    }
+
+    private handleRemotePlayerMove(data: any): void {
+        if (!this.remotePlayers.has(data.id)) {
+            const entity = this.world.createEntity();
+            const transform = new TransformComponent();
+            transform.x = data.x;
+            transform.y = data.y;
+            this.world.addComponent(entity, transform);
+
+            const sprite = new SpriteComponent();
+            const g = new Graphics();
+            g.rect(-16, -24, 32, 48);
+            g.fill(0xffcc00);
+            const tex = this.app.renderer.generateTexture(g);
+            sprite.sprite = new Sprite(tex);
+            this.world.addComponent(entity, sprite);
+            
+            this.remotePlayers.set(data.id, { entityId: entity, transform });
+        } else {
+            const p = this.remotePlayers.get(data.id)!;
+            p.transform.x = data.x;
+            p.transform.y = data.y;
+        }
+    }
+
+    private handleRemotePlayerAction(data: any): void {
+        const p = this.remotePlayers.get(data.id);
+        if (p) {
+            switch (data.type) {
+                case 'emote':
+                    this.showEmoteBubble(p.entityId, data.data.text);
+                    break;
+            }
+        }
+    }
+
+    public showEmoteBubble(entityId: number, text: string): void {
+        const components = (this.world as any).entities.get(entityId);
+        const transform = components?.get('Transform') as TransformComponent;
+        if (transform) {
+            const bubble = new Container();
+            const bg = new Graphics();
+            bg.roundRect(-50, -30, 100, 25, 10);
+            bg.fill({ color: 0xffffff, alpha: 0.9 });
+            bubble.addChild(bg);
+            
+            const txt = new Text({ text, style: { fill: 0x000000, fontSize: 12 } });
+            txt.anchor.set(0.5);
+            txt.position.set(0, -17.5);
+            bubble.addChild(txt);
+            
+            bubble.position.set(transform.x, transform.y - 60);
+            this.worldContainer.addChild(bubble);
+            
+            setTimeout(() => bubble.destroy(), 2000);
+        }
     }
 
     private createConsoleUI(): void {
@@ -185,7 +353,6 @@ export class WorldScene extends Scene {
                 }
                 break;
             case 'spawn':
-                // Dynamic NPC spawn demo
                 this.createNPCs(); 
                 break;
             case 'msg':
@@ -193,156 +360,6 @@ export class WorldScene extends Scene {
                 break;
             default:
                 this.showDialogue(`Unknown command: ${action}`);
-        }
-    }
-
-    public onResize(width: number, height: number): void {
-      super.onResize(width, height);
-      if (this.lightingSystem) {
-          this.lightingSystem.resize(width, height);
-      }
-      if (this.dialogueContainer) {
-          // Adjust dialog container on resize
-          this.dialogueContainer.children[0].width = width - 100;
-          this.dialogueContainer.children[0].y = height - 150;
-          if (this.dialogueText) {
-              this.dialogueText.y = height - 130;
-              this.dialogueText.style.wordWrapWidth = width - 140;
-          }
-      }
-  }
-
-  private handleWorkerMessage(msg: any): void {
-        if (msg.type === 'pathResult') {
-            const components = (this.world as any).entities.get(msg.data.entityId);
-            const pathComp = components?.get('Pathfinding') as PathfindingComponent;
-            if (pathComp) {
-                pathComp.path = msg.data.path;
-                pathComp.isCalculating = false;
-            }
-        }
-    }
-
-    private createDialogueUI(): void {
-        this.dialogueContainer = new Container();
-        this.dialogueContainer.visible = false;
-        this.container.addChild(this.dialogueContainer);
-
-        const bg = new Graphics();
-        bg.rect(50, this.height - 150, this.width - 100, 100);
-        bg.fill({ color: 0x000000, alpha: 0.8 });
-        bg.stroke({ color: 0xffffff, width: 2 });
-        this.dialogueContainer.addChild(bg);
-
-        const style = new TextStyle({
-            fill: '#ffffff',
-            fontSize: 18,
-            wordWrap: true,
-            wordWrapWidth: this.width - 140
-        });
-
-        this.dialogueText = new Text({ text: '', style });
-        this.dialogueText.position.set(70, this.height - 130);
-        this.dialogueContainer.addChild(this.dialogueText);
-    }
-
-    public showDialogue(message: string): void {
-        if (this.dialogueText && this.dialogueContainer) {
-            this.dialogueText.text = message;
-            this.dialogueContainer.visible = true;
-            setTimeout(() => {
-                if (this.dialogueContainer) this.dialogueContainer.visible = false;
-            }, 3000);
-        }
-    }
-
-    private createNPCs(): void {
-        for (let i = 0; i < 5; i++) {
-            const entity = this.world.createEntity();
-            const transform = new TransformComponent();
-            transform.x = 200 + Math.random() * 400;
-            transform.y = 200 + Math.random() * 400;
-            this.world.addComponent(entity, transform);
-
-            const sprite = new SpriteComponent();
-            const g = new Graphics();
-            g.rect(-16, -24, 32, 48);
-            g.fill(0x00aa00);
-            const tex = this.app.renderer.generateTexture(g);
-            sprite.sprite = new Sprite(tex);
-            this.world.addComponent(entity, sprite);
-
-            const behavior = new BehaviorComponent();
-            behavior.behaviors.push(new NPCBehavior(this.world));
-            this.world.addComponent(entity, behavior);
-            
-            // Add pathfinding component
-            const pathComp = new PathfindingComponent();
-            this.world.addComponent(entity, pathComp);
-
-            const npcLight = new LightComponent();
-            npcLight.radius = 80;
-            npcLight.baseRadius = 80;
-            npcLight.color = 0x00ff00; // Eerie green glow
-            npcLight.flicker = false;
-            this.world.addComponent(entity, npcLight);
-        }
-    }
-
-    private handleRemotePlayerMove(data: any): void {
-        if (!this.remotePlayers.has(data.id)) {
-            const entity = this.world.createEntity();
-            const transform = new TransformComponent();
-            transform.x = data.x;
-            transform.y = data.y;
-            this.world.addComponent(entity, transform);
-
-            const sprite = new SpriteComponent();
-            const g = new Graphics();
-            g.rect(-16, -24, 32, 48);
-            g.fill(0xffcc00);
-            const tex = this.app.renderer.generateTexture(g);
-            sprite.sprite = new Sprite(tex);
-            this.world.addComponent(entity, sprite);
-            
-            this.remotePlayers.set(data.id, { entityId: entity, transform });
-        } else {
-            const p = this.remotePlayers.get(data.id)!;
-            p.transform.x = data.x;
-            p.transform.y = data.y;
-        }
-    }
-
-    private handleRemotePlayerAction(data: any): void {
-        const p = this.remotePlayers.get(data.id);
-        if (p) {
-            switch (data.type) {
-                case 'emote':
-                    this.showEmoteBubble(p.entityId, data.data.text);
-                    break;
-            }
-        }
-    }
-
-    public showEmoteBubble(entityId: number, text: string): void {
-        const components = (this.world as any).entities.get(entityId);
-        const transform = components?.get('Transform') as TransformComponent;
-        if (transform) {
-            const bubble = new Container();
-            const bg = new Graphics();
-            bg.roundRect(-50, -30, 100, 25, 10);
-            bg.fill({ color: 0xffffff, alpha: 0.9 });
-            bubble.addChild(bg);
-            
-            const txt = new Text({ text, style: { fill: 0x000000, fontSize: 12 } });
-            txt.anchor.set(0.5);
-            txt.position.set(0, -17.5);
-            bubble.addChild(txt);
-            
-            bubble.position.set(transform.x, transform.y - 60);
-            this.container.addChild(bubble);
-            
-            setTimeout(() => bubble.destroy(), 2000);
         }
     }
 
@@ -362,7 +379,7 @@ export class WorldScene extends Scene {
 
             if (InputManager.isKeyPressed(Key.E)) {
                 const text = "Hello!";
-                this.showEmoteBubble((this.world as any).entities.keys().next().value, text);
+                this.showEmoteBubble((this.world as any).playerEntityId, text);
                 networkManager.emit('playerAction', { type: 'emote', data: { text } });
             }
         }
@@ -377,6 +394,22 @@ export class WorldScene extends Scene {
                 this.camera.setPosition(0, 0);
             }
             StateManager.pop();
+        }
+    }
+
+    public onResize(width: number, height: number): void {
+        super.onResize(width, height);
+        this.touchControls?.resize(width, height);
+        if (this.lightingSystem) {
+            this.lightingSystem.resize(width, height);
+        }
+        if (this.dialogueContainer) {
+            this.dialogueContainer.children[0].width = width - 100;
+            this.dialogueContainer.children[0].y = height - 150;
+            if (this.dialogueText) {
+                this.dialogueText.y = height - 130;
+                this.dialogueText.style.wordWrapWidth = width - 140;
+            }
         }
     }
     
