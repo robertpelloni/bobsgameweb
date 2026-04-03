@@ -16,6 +16,7 @@ import { LobbyScene } from './LobbyScene';
 import { SettingsScene } from './SettingsScene';
 import { EngineDemoScene } from './EngineDemoScene';
 import { NDDemoScene } from './NDDemoScene';
+import { WorldScene } from './WorldScene';
 
 // ============================================================
 // Types
@@ -268,6 +269,7 @@ export class MainMenuScene extends Scene {
             { label: 'Modern', action: () => this.startGame(GameTypes.MODERN) },
             { label: 'Engine Demo', action: () => this.openEngineDemo() },
             { label: 'nD Demo', action: () => this.openNDDemo() },
+            { label: 'MMO World', action: () => this.openWorld() },
             { label: 'Multiplayer', action: () => this.openLobby() },
             { label: 'High Scores', action: () => this.openHighScores() },
             { label: 'Options', action: () => this.openOptions() },
@@ -420,6 +422,15 @@ export class MainMenuScene extends Scene {
             camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, demoScene);
+    }
+
+    private openWorld(): void {
+        const worldScene = new WorldScene({
+            name: 'world',
+            app: this.app,
+            camera: this.camera ?? undefined,
+        });
+        SceneTransition.pushWithFade(this.app, worldScene);
     }
 
     private openSettings(): void {

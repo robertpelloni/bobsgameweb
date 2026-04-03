@@ -11,6 +11,7 @@ export interface AudioEvents {
   'music:play': (name: string) => void;
   'music:stop': (name: string) => void;
   'volume:change': (type: 'master' | 'music' | 'sfx', volume: number) => void;
+  'sound:spatial': (name: string, x: number, y: number, z: number) => void;
 }
 
 interface SoundInstance {
@@ -540,6 +541,32 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
 
   getPlayingCount(name: string): number {
     return (this.playing.get(name)?.length ?? 0) + (name === this.currentTrackerMusic ? 1 : 0);
+  }
+
+  // ============================================================
+  // Spatial Audio (Simple Panning for MMORPG)
+  // ============================================================
+
+  updateListener(x: number, y: number, z: number = 0): void {
+      if ((Howler as any).pos) {
+          (Howler as any).pos(x, y, z);
+      }
+  }
+
+  playSpatialSound(
+    name: string,
+    x: number, y: number, z: number = 0,
+    options?: { volume?: number, loop?: boolean }
+  ): number | null {
+      const id = this.playSound(name, options);
+      if (id !== null) {
+          const howl = this.cache.get(name);
+          if (howl && (howl as any).pos) {
+              (howl as any).pos(x, y, z, id);
+          }
+          this.emit('sound:spatial', name, x, y, z);
+      }
+      return id;
   }
 
   // ============================================================
