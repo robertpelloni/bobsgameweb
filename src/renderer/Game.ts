@@ -97,6 +97,7 @@ export class Game extends EventEmitter<GameEvents> {
         this.mainMenuScene = new MainMenuScene({
             name: 'main-menu',
             app: this.app,
+            camera: this._camera,
         });
         await this.mainMenuScene.create();
     }

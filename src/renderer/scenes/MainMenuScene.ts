@@ -399,6 +399,7 @@ export class MainMenuScene extends Scene {
         const lobbyScene = new LobbyScene({
             name: 'lobby',
             app: this.app,
+            camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, lobbyScene);
     }
@@ -407,6 +408,7 @@ export class MainMenuScene extends Scene {
         const demoScene = new EngineDemoScene({
             name: 'engine-demo',
             app: this.app,
+            camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, demoScene);
     }
@@ -415,6 +417,7 @@ export class MainMenuScene extends Scene {
         const demoScene = new NDDemoScene({
             name: 'nd-demo',
             app: this.app,
+            camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, demoScene);
     }
@@ -423,6 +426,7 @@ export class MainMenuScene extends Scene {
         const settingsScene = new SettingsScene({
             name: 'settings',
             app: this.app,
+            camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, settingsScene);
     }
@@ -431,6 +435,7 @@ export class MainMenuScene extends Scene {
         const highScoresScene = new HighScoresScene({
             name: 'high-scores',
             app: this.app,
+            camera: this.camera ?? undefined,
             initialMode: this.categories[this.selectedCategoryIndex],
         });
         SceneTransition.pushWithFade(this.app, highScoresScene);

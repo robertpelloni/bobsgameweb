@@ -15,6 +15,7 @@ import { InputManager, Key } from '../input/InputManager';
 
 export class EngineDemoScene extends Scene {
     private world: World;
+    private followTarget: TransformComponent | null = null;
 
     constructor(config: SceneConfig) {
         super(config);
@@ -29,7 +30,7 @@ export class EngineDemoScene extends Scene {
 
         // Add a title
         const title = new Text({
-            text: 'Omni-Engine ECS Demo (8-Direction & Platformer)',
+            text: 'Omni-Engine ECS Demo (Camera Follow Platformer)',
             style: { fill: 0xffffff, fontSize: 18 }
         });
         title.position.set(20, 20);
@@ -44,7 +45,6 @@ export class EngineDemoScene extends Scene {
         this.world.addComponent(entity1, transform1);
 
         const sprite1 = new SpriteComponent();
-        // Create a dummy graphics object for now
         const g1 = new Graphics();
         g1.rect(-16, -16, 32, 32);
         g1.fill(0x00ff00);
@@ -76,7 +76,15 @@ export class EngineDemoScene extends Scene {
         behaviors2.behaviors.push(new PlatformerBehavior(this.world));
         this.world.addComponent(entity2, behaviors2);
 
-        // 3. Create an Event-driven entity (Log every tick if variable > 0)
+        // Make camera follow the platformer entity
+        this.followTarget = transform2;
+        if (this.camera) {
+            this.camera.clearTargets();
+            this.camera.addTarget(this.followTarget);
+            this.camera.setLerp(0.05);
+        }
+
+        // 3. Create an Event-driven entity (Log every 100 ticks)
         const entity3 = this.world.createEntity();
         const esComp = new EventSheetComponent();
         esComp.variables.set('counter', 0);
@@ -105,6 +113,11 @@ export class EngineDemoScene extends Scene {
         this.world.update(dt);
         
         if (InputManager.isKeyPressed(Key.Escape)) {
+            if (this.camera) {
+                this.camera.clearTargets();
+                this.camera.setPosition(0, 0);
+                this.camera.zoom = 1.0;
+            }
             StateManager.pop();
         }
     }

@@ -8,6 +8,11 @@ export interface CameraConfig {
   defaultZoom?: number;
 }
 
+export interface CameraTarget {
+  x: number;
+  y: number;
+}
+
 export class Camera {
   private container: Container;
   private _x: number = 0;
@@ -16,6 +21,10 @@ export class Camera {
   private _targetZoom: number;
   private _viewportWidth: number;
   private _viewportHeight: number;
+
+  private _targets: CameraTarget[] = [];
+  private _lerp: number = 0.1;
+  private _bounds: { x: number; y: number; width: number; height: number } | null = null;
 
   readonly minZoom: number;
   readonly maxZoom: number;
@@ -35,6 +44,26 @@ export class Camera {
     this.maxZoom = config.maxZoom ?? 4.0;
     this._zoom = config.defaultZoom ?? 2.0;
     this._targetZoom = this._zoom;
+  }
+
+  public addTarget(target: CameraTarget): void {
+    this._targets.push(target);
+  }
+
+  public removeTarget(target: CameraTarget): void {
+    this._targets = this._targets.filter(t => t !== target);
+  }
+
+  public clearTargets(): void {
+    this._targets = [];
+  }
+
+  public setBounds(x: number, y: number, width: number, height: number): void {
+    this._bounds = { x, y, width, height };
+  }
+
+  public setLerp(value: number): void {
+    this._lerp = Math.max(0, Math.min(1, value));
   }
 
   get x(): number {
@@ -118,6 +147,42 @@ export class Camera {
     const zoomSpeed = 0.1;
     if (Math.abs(this._zoom - this._targetZoom) > 0.001) {
       this._zoom += (this._targetZoom - this._zoom) * zoomSpeed;
+    }
+
+    // Follow targets
+    if (this._targets.length > 0) {
+      let avgX = 0;
+      let avgY = 0;
+      for (const target of this._targets) {
+        avgX += target.x;
+        avgY += target.y;
+      }
+      avgX /= this._targets.length;
+      avgY /= this._targets.length;
+
+      const targetCamX = avgX - this._viewportWidth / (2 * this._zoom);
+      const targetCamY = avgY - this._viewportHeight / (2 * this._zoom);
+
+      this._x += (targetCamX - this._x) * this._lerp;
+      this._y += (targetCamY - this._y) * this._lerp;
+    }
+
+    // Apply bounds
+    if (this._bounds) {
+      const viewWidth = this._viewportWidth / this._zoom;
+      const viewHeight = this._viewportHeight / this._zoom;
+
+      if (this._bounds.width > viewWidth) {
+        this._x = Math.max(this._bounds.x, Math.min(this._x, this._bounds.x + this._bounds.width - viewWidth));
+      } else {
+        this._x = this._bounds.x + (this._bounds.width - viewWidth) / 2;
+      }
+
+      if (this._bounds.height > viewHeight) {
+        this._y = Math.max(this._bounds.y, Math.min(this._y, this._bounds.y + this._bounds.height - viewHeight));
+      } else {
+        this._y = this._bounds.y + (this._bounds.height - viewHeight) / 2;
+      }
     }
 
     if (this.shakeDuration > 0) {
