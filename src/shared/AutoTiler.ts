@@ -40,6 +40,11 @@ export class AutoTiler {
     private static isSameTile(map: MapData, layer: number, x: number, y: number, targetTile: number): boolean {
         // Out of bounds acts as "same tile" to allow maps to connect cleanly
         if (x < 0 || x >= map.widthTiles1X || y < 0 || y >= map.heightTiles1X) return true;
-        return map.getTileIndex(layer, x, y) === targetTile;
+        const t = map.getTileIndex(layer, x, y);
+        // For our specific 16-tile demo, targetTile is 100
+        if (targetTile === 100) {
+            return t >= 100 && t <= 115;
+        }
+        return t === targetTile;
     }
 }

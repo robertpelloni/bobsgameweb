@@ -7,6 +7,8 @@ import { BobColor } from '../../shared/BobColor';
 import { networkManager } from '../puzzle';
 import { SERVER_URL } from '../../shared/Config';
 
+import { AutoTiler } from '../../shared/AutoTiler';
+
 export class MapEditor {
     private app: Application;
     private container: HTMLElement;
@@ -24,7 +26,7 @@ export class MapEditor {
     private currentFrameIndex: number = 0;
     private spriteFrames: Uint8ClampedArray[] = [new Uint8ClampedArray(128 * 128 * 4).fill(0)];
     private spriteTool: 'pencil' | 'fill' = 'pencil';
-    private mapTool: 'pencil' | 'fill' | 'rect' | 'entity' = 'pencil';
+    private mapTool: 'pencil' | 'fill' | 'rect' | 'entity' | 'autotile' = 'pencil';
     private isDrawingSprite: boolean = false;
     private isPaintingMap: boolean = false;
 
@@ -55,6 +57,28 @@ export class MapEditor {
             for (let x = 0; x < 8; x++) {
                 for (let y = 0; y < 8; y++) {
                     this.tileset.setPixel(i, x, y, i);
+                }
+            }
+        }
+
+        // Create 16-tile Auto-Tile blob (Tiles 100-115)
+        const autoColor = new BobColor(0, 200, 0, 255); // Green grass
+        const edgeColor = new BobColor(100, 100, 0, 255); // Brown dirt edge
+        this.palette.setColor(100, autoColor);
+        this.palette.setColor(101, edgeColor);
+
+        for (let i = 0; i < 16; i++) {
+            const tileId = 100 + i;
+            for (let x = 0; x < 8; x++) {
+                for (let y = 0; y < 8; y++) {
+                    let isEdge = false;
+                    // Bitmask: N=1, E=2, S=4, W=8
+                    if (!(i & 1) && y < 2) isEdge = true; // No North neighbor
+                    if (!(i & 2) && x > 5) isEdge = true; // No East neighbor
+                    if (!(i & 4) && y > 5) isEdge = true; // No South neighbor
+                    if (!(i & 8) && x < 2) isEdge = true; // No West neighbor
+
+                    this.tileset.setPixel(tileId, x, y, isEdge ? 101 : 100);
                 }
             }
         }
@@ -121,6 +145,7 @@ export class MapEditor {
                         <h3>Tools</h3>
                         <button id="tool-pencil">PENCIL</button>
                         <button id="tool-fill">FILL</button>
+                        <button id="tool-autotile">AUTO-TILE</button>
                         <div style="margin-top:10px; display:grid; grid-template-columns:repeat(3, 1fr); gap:2px;">
                             <div></div><button id="btn-shift-up">↑</button><div></div>
                             <button id="btn-shift-left">←</button><div></div><button id="btn-shift-right">→</button>
@@ -213,6 +238,10 @@ export class MapEditor {
         });
         this.container.querySelector('#tool-fill')?.addEventListener('click', (e) => {
             this.mapTool = 'fill';
+            this.updateMapToolUI(e.target as HTMLElement);
+        });
+        this.container.querySelector('#tool-autotile')?.addEventListener('click', (e) => {
+            this.mapTool = 'autotile';
             this.updateMapToolUI(e.target as HTMLElement);
         });
         this.container.querySelector('#tool-rect')?.addEventListener('click', (e) => {
@@ -421,7 +450,7 @@ export class MapEditor {
     }
 
     private updateMapToolUI(target: HTMLElement): void {
-        this.container.querySelectorAll('#tool-pencil, #tool-fill, #tool-rect, #tool-entity').forEach(btn => btn.classList.remove('selected'));
+        this.container.querySelectorAll('#tool-pencil, #tool-fill, #tool-rect, #tool-entity, #tool-autotile').forEach(btn => btn.classList.remove('selected'));
         target.classList.add('selected');
     }
 
@@ -531,6 +560,11 @@ export class MapEditor {
             return;
         }
 
+        if (this.mapTool === 'autotile') {
+            this.applyAutoTile(tx, ty);
+            return;
+        }
+
         if (this.mapTool === 'rect') {
             // Demo for rect tool: in a full implementation, you'd record startX/Y on mousedown, 
             // draw a preview box on mousemove, and commit on mouseup. 
@@ -559,6 +593,36 @@ export class MapEditor {
                 networkManager.emit('editorAction', { type: 'paint', x: tx, y: ty, layer: this.selectedLayer, tile: this.selectedTile });
             }
         }
+    }
+
+    private applyAutoTile(tx: number, ty: number): void {
+        if (!this.currentMap || !MapData.isTileLayer(this.selectedLayer)) return;
+        if (tx < 0 || tx >= this.currentMap.data.widthTiles1X || ty < 0 || ty >= this.currentMap.data.heightTiles1X) return;
+
+        // AutoTile Base is 100 for this demo
+        const baseTileId = 100;
+        
+        // Temporarily set it so neighbors calculate correctly
+        this.currentMap.data.setTileIndex(this.selectedLayer, tx, ty, baseTileId);
+        
+        const updateTile = (x: number, y: number) => {
+            if (x < 0 || x >= this.currentMap!.data.widthTiles1X || y < 0 || y >= this.currentMap!.data.heightTiles1X) return;
+            const t = this.currentMap!.data.getTileIndex(this.selectedLayer, x, y);
+            if (t >= 100 && t <= 115) { // If it's part of the autotile set
+                const mask = AutoTiler.getBitmask4(this.currentMap!.data, this.selectedLayer, x, y, baseTileId);
+                const actualTile = baseTileId + mask;
+                this.currentMap!.data.setTileIndex(this.selectedLayer, x, y, actualTile);
+                networkManager.emit('editorAction', { type: 'paint', x, y, layer: this.selectedLayer, tile: actualTile });
+            }
+        };
+
+        updateTile(tx, ty);
+        updateTile(tx, ty - 1);
+        updateTile(tx + 1, ty);
+        updateTile(tx, ty + 1);
+        updateTile(tx - 1, ty);
+
+        this.currentMap.renderLayer(this.selectedLayer, this.tileset, this.palette);
     }
 
     private floodFillMap(startX: number, startY: number): void {
