@@ -1,6 +1,6 @@
 {
   "name": "okgame",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "bob's game - puzzle game engine",
   "main": "dist/main/index.js",
   "type": "module",
@@ -42,6 +42,8 @@
     "@capacitor/core": "^6.0.0",
     "@capacitor/ios": "^6.0.0",
     "@pixi/sound": "^5.2.2",
+    "butterchurn": "^2.6.7",
+    "butterchurn-presets": "^2.4.7",
     "chiptune3": "^0.8.6",
     "eventemitter3": "^5.0.1",
     "howler": "^2.2.4",
