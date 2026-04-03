@@ -73,7 +73,7 @@ export class CustomGameEditorScene extends Scene {
     }
 
     protected onUpdate(dt: number): void {
-        if (InputManager.isKeyPressed(Key.Escape)) {
+        if (InputManager.isCancelPressed()) {
             StateManager.pop();
         }
     }

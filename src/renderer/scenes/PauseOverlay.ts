@@ -124,9 +124,9 @@ export class PauseOverlay {
     public update(): void {
         if (!this.isVisible) return;
 
-        if (InputManager.isKeyPressed(Key.Up) || InputManager.isKeyPressed(Key.W)) {
+        if (InputManager.isUpPressed()) {
             this.moveSelection(-1);
-        } else if (InputManager.isKeyPressed(Key.Down) || InputManager.isKeyPressed(Key.S)) {
+        } else if (InputManager.isDownPressed()) {
             this.moveSelection(1);
         }
 
@@ -134,7 +134,7 @@ export class PauseOverlay {
             this.selectCurrentItem();
         }
 
-        if (InputManager.isKeyPressed(Key.Escape)) {
+        if (InputManager.isCancelPressed()) {
             this.config.onResume();
         }
     }

@@ -260,15 +260,15 @@ export class BattleScene extends Scene<BattleSceneConfig> {
         this.logMessage(`You lunge forward!`);
         
         this.animateLunge(this.playerSprite, this.pOriginalX, this.pOriginalY, 1, () => {
-            // Hit logic
             const dmg = Math.max(1, this.config.player.atk - this.config.enemy.def);
             const crit = Math.random() < 0.1;
             const finalDmg = crit ? dmg * 2 : dmg;
             
             this.config.enemy.hp -= finalDmg;
             
-            // Visuals
             this.triggerShake(crit ? 15 : 8);
+            if (crit) InputManager.vibrate(0, 150, 0.8, 1.0); // Heavy rumble on crits
+            
             this.spawnDamageNumber(this.eOriginalX, this.eOriginalY - 50, finalDmg, crit ? 0xffff00 : 0xffffff);
             if (AudioManager.isLoaded('puzzle_drop')) AudioManager.playSound('puzzle_drop');
             
@@ -291,6 +291,8 @@ export class BattleScene extends Scene<BattleSceneConfig> {
             this.config.player.hp -= dmg;
             
             this.triggerShake(10);
+            InputManager.vibrate(0, 200, 0.5, 0.8); // Medium rumble on taking damage
+            
             this.spawnDamageNumber(this.pOriginalX, this.pOriginalY - 50, dmg, 0xff4444);
             if (AudioManager.isLoaded('puzzle_lock')) AudioManager.playSound('puzzle_lock');
 

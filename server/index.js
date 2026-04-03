@@ -333,6 +333,7 @@ io.on("connection", (socket) => {
             lines: Math.max(0, Math.floor(data.lines || 0)),
             time: Math.max(0, data.time || 0),
             elo: players.get(socket.id)?.elo || DEFAULT_ELO,
+            replay: data.replay || null, // VOD integration
             date: Date.now()
         };
 
@@ -342,7 +343,7 @@ io.on("connection", (socket) => {
         leaderboards[mode] = leaderboards[mode].slice(0, 100);
 
         saveLeaderboards(leaderboards);
-        console.log(`Score reported: ${entry.name} - ${entry.score} pts (${mode}) | Elo: ${entry.elo}`);
+        console.log(`Score reported: ${entry.name} - ${entry.score} pts (${mode}) | Elo: ${entry.elo} | Has Replay: ${!!entry.replay}`);
     });
 
     socket.on("getLeaderboard", (mode) => {

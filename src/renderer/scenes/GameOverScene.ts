@@ -347,9 +347,9 @@ export class GameOverScene extends Scene {
     }
 
     private handleInput(): void {
-        if (InputManager.isKeyPressed(Key.Up) || InputManager.isKeyPressed(Key.W)) {
+        if (InputManager.isUpPressed()) {
             this.moveSelection(-1);
-        } else if (InputManager.isKeyPressed(Key.Down) || InputManager.isKeyPressed(Key.S)) {
+        } else if (InputManager.isDownPressed()) {
             this.moveSelection(1);
         }
 

@@ -245,17 +245,17 @@ export class OptionsScene extends Scene {
     }
 
     private handleInput(): void {
-        if (InputManager.isKeyPressed(Key.Up) || InputManager.isKeyPressed(Key.W)) {
+        if (InputManager.isUpPressed()) {
             this.moveSelection(-1);
-        } else if (InputManager.isKeyPressed(Key.Down) || InputManager.isKeyPressed(Key.S)) {
+        } else if (InputManager.isDownPressed()) {
             this.moveSelection(1);
         }
 
         const item = this.optionItems[this.selectedIndex];
         if (item.type === 'slider' && item.slider) {
-            if (InputManager.isKeyHeld(Key.Left) || InputManager.isKeyHeld(Key.A)) {
+            if (InputManager.isLeftHeld()) {
                 this.adjustSlider(item.slider, -0.02);
-            } else if (InputManager.isKeyHeld(Key.Right) || InputManager.isKeyHeld(Key.D)) {
+            } else if (InputManager.isRightHeld()) {
                 this.adjustSlider(item.slider, 0.02);
             }
         }

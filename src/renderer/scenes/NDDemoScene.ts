@@ -44,7 +44,7 @@ export class NDDemoScene extends Scene {
         this.updateInputs();
         this.nd.update(dt);
         
-        if (InputManager.isKeyPressed(Key.Escape)) {
+        if (InputManager.isCancelPressed()) {
             StateManager.pop();
         }
 

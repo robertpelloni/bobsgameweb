@@ -9,6 +9,7 @@ import { GameOverScene, GameStats } from '../scenes/GameOverScene';
 import { PauseOverlay } from '../scenes/PauseOverlay';
 import { TouchControls } from '../ui/TouchControls';
 import { ReplayRecorder, ReplayPlayer } from '../../shared/puzzle/Replay';
+import { BobNet } from './BobNet';
 import { GameMode } from '../data/HighScoreManager';
 import { SERVER_URL } from '../../shared/Config';
 import { Text, TextStyle, Container } from 'pixi.js';
@@ -370,6 +371,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       } else if (movement === MovementType.HARD_DROP) {
         this.playSound('puzzle_drop');
         this.renderer.shake(3);
+        InputManager.vibrate(0, 100, 0.5, 0.5); // Hard drop rumble
       } else if (movement === MovementType.HOLD) {
         this.playSound('puzzle_hold');
       }
@@ -430,10 +432,12 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
     this.game.on('garbageReceived', (amount: number) => {
       this.renderer.shake(amount * 2 + 5);
+      InputManager.vibrate(0, 200, 0.8, 1.0); // Heavy rumble on taking garbage
     });
 
     this.game.on('gameOver', () => {
       this.playSound('puzzle_gameover');
+      InputManager.vibrate(0, 500, 1.0, 1.0); // Massive rumble on death
       this.showGameOver();
     });
 
@@ -459,12 +463,20 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     localStorage.setItem(`replay_${Date.now()}`, replayJson);
     console.log(`[Replay] Saved to local storage.`);
 
+    let replayB64: string | undefined = undefined;
+    try {
+        replayB64 = BobNet.toBase64GZippedGSON(JSON.parse(replayJson));
+    } catch (e) {
+        console.error("Failed to serialize replay for upload", e);
+    }
+
     networkManager.reportScore({
       mode: this.gameMode,
       name: playerName,
       score: this.game.score,
       lines: this.game.linesClearedTotal,
-      time: this.gameTime
+      time: this.gameTime,
+      replay: replayB64
     });
 
     const stats: GameStats = {

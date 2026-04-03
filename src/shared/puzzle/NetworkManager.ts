@@ -60,7 +60,7 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
-    public reportScore(data: { mode: string, name: string, score: number, lines: number, time: number }): void {
+    public reportScore(data: { mode: string, name: string, score: number, lines: number, time: number, replay?: string }): void {
         if (this.socket && this.socket.connected) {
             this.socket.emit('reportScore', data);
         }

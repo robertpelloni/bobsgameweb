@@ -339,15 +339,15 @@ export class MainMenuScene extends Scene {
     // ============================================================
 
     private handleInput(): void {
-        if (InputManager.isKeyPressed(Key.Up) || InputManager.isKeyPressed(Key.W)) {
+        if (InputManager.isUpPressed()) {
             this.moveSelection(-2);
-        } else if (InputManager.isKeyPressed(Key.Down) || InputManager.isKeyPressed(Key.S)) {
+        } else if (InputManager.isDownPressed()) {
             this.moveSelection(2);
         }
 
-        if (InputManager.isKeyPressed(Key.Left) || InputManager.isKeyPressed(Key.A)) {
+        if (InputManager.isLeftPressed()) {
             this.moveSelection(-1);
-        } else if (InputManager.isKeyPressed(Key.Right) || InputManager.isKeyPressed(Key.D)) {
+        } else if (InputManager.isRightPressed()) {
             this.moveSelection(1);
         }
 
