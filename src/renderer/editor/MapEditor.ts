@@ -24,7 +24,9 @@ export class MapEditor {
     private currentFrameIndex: number = 0;
     private spriteFrames: Uint8ClampedArray[] = [new Uint8ClampedArray(128 * 128 * 4).fill(0)];
     private spriteTool: 'pencil' | 'fill' = 'pencil';
+    private mapTool: 'pencil' | 'fill' | 'rect' | 'entity' = 'pencil';
     private isDrawingSprite: boolean = false;
+    private isPaintingMap: boolean = false;
 
     constructor(parentElementId: string, app: Application) {
         this.app = app;
@@ -204,6 +206,23 @@ export class MapEditor {
         this.container.querySelector('#btn-shift-down')?.addEventListener('click', () => this.shiftMap(0, 1));
         this.container.querySelector('#btn-shift-left')?.addEventListener('click', () => this.shiftMap(-1, 0));
         this.container.querySelector('#btn-shift-right')?.addEventListener('click', () => this.shiftMap(1, 0));
+
+        this.container.querySelector('#tool-pencil')?.addEventListener('click', (e) => {
+            this.mapTool = 'pencil';
+            this.updateMapToolUI(e.target as HTMLElement);
+        });
+        this.container.querySelector('#tool-fill')?.addEventListener('click', (e) => {
+            this.mapTool = 'fill';
+            this.updateMapToolUI(e.target as HTMLElement);
+        });
+        this.container.querySelector('#tool-rect')?.addEventListener('click', (e) => {
+            this.mapTool = 'rect';
+            this.updateMapToolUI(e.target as HTMLElement);
+        });
+        this.container.querySelector('#tool-entity')?.addEventListener('click', (e) => {
+            this.mapTool = 'entity';
+            this.updateMapToolUI(e.target as HTMLElement);
+        });
 
         this.container.querySelector('#btn-list-sprites')?.addEventListener('click', () => this.listAssets('sprites'));
         this.container.querySelector('#btn-list-audio')?.addEventListener('click', () => this.listAssets('audio'));
@@ -401,6 +420,11 @@ export class MapEditor {
         this.container.querySelector(`#panel-${tab}`)?.classList.remove('hidden');
     }
 
+    private updateMapToolUI(target: HTMLElement): void {
+        this.container.querySelectorAll('#tool-pencil, #tool-fill, #tool-rect, #tool-entity').forEach(btn => btn.classList.remove('selected'));
+        target.classList.add('selected');
+    }
+
     private handleRemoteAction(action: any): void {
         if (action.type === 'spritePixel') {
             const frame = this.spriteFrames[action.frame];
@@ -484,10 +508,10 @@ export class MapEditor {
 
     private setupMapInteractions(): void {
         this.app.stage.eventMode = 'static';
-        this.app.stage.on('pointerdown', (e) => { this.isPainting = true; this.paintAt(e.global.x, e.global.y); });
+        this.app.stage.on('pointerdown', (e) => { this.isPainting = true; this.paintAt(e.global.x, e.global.y, false); });
         this.app.stage.on('pointermove', (e) => { 
             this.updateStatusCoords(e.global.x, e.global.y);
-            if (this.isPainting) this.paintAt(e.global.x, e.global.y); 
+            if (this.isPainting) this.paintAt(e.global.x, e.global.y, true); 
         });
         this.app.stage.on('pointerup', () => this.isPainting = false);
     }
@@ -498,14 +522,75 @@ export class MapEditor {
         el.textContent = `X: ${tx}, Y: ${ty} | LAYER: ${this.selectedLayer} | TILE: ${this.selectedTile}`;
     }
 
-    private paintAt(x: number, y: number): void {
+    private paintAt(x: number, y: number, isMove: boolean = false): void {
         if (!this.currentMap || this.activeTab !== 'map') return;
         const tx = Math.floor(x / 8), ty = Math.floor(y / 8);
-        if (this.currentMap.data.getTileIndex(this.selectedLayer, tx, ty) !== this.selectedTile) {
-            this.currentMap.data.setTileIndex(this.selectedLayer, tx, ty, this.selectedTile);
-            this.currentMap.renderLayer(this.selectedLayer, this.tileset, this.palette);
-            networkManager.emit('editorAction', { type: 'paint', x: tx, y: ty, layer: this.selectedLayer, tile: this.selectedTile });
+
+        if (this.mapTool === 'fill' && !isMove) {
+            this.floodFillMap(tx, ty);
+            return;
         }
+
+        if (this.mapTool === 'rect') {
+            // Demo for rect tool: in a full implementation, you'd record startX/Y on mousedown, 
+            // draw a preview box on mousemove, and commit on mouseup. 
+            // For now, we'll just treat it as pencil during 'move' to keep it simple, 
+            // but the architecture is ready.
+        }
+
+        if (this.mapTool === 'entity' && !isMove) {
+            if (this.selectedLayer === MapData.MAP_ENTITY_LAYER) {
+                // In a real engine, this would open an Entity Config dialog and place an EventData
+                alert(`Placed Entity at ${tx}, ${ty}`);
+            } else {
+                alert("Please select the ENTITY layer to place entities.");
+            }
+            return;
+        }
+
+        if (this.mapTool === 'pencil' || this.mapTool === 'rect') {
+            if (!MapData.isTileLayer(this.selectedLayer)) return;
+            if (tx < 0 || tx >= this.currentMap.data.widthTiles1X || ty < 0 || ty >= this.currentMap.data.heightTiles1X) return;
+
+            const oldTile = this.currentMap.data.getTileIndex(this.selectedLayer, tx, ty);
+            if (oldTile !== this.selectedTile) {
+                this.currentMap.data.setTileIndex(this.selectedLayer, tx, ty, this.selectedTile);
+                this.currentMap.renderLayer(this.selectedLayer, this.tileset, this.palette);
+                networkManager.emit('editorAction', { type: 'paint', x: tx, y: ty, layer: this.selectedLayer, tile: this.selectedTile });
+            }
+        }
+    }
+
+    private floodFillMap(startX: number, startY: number): void {
+        if (!this.currentMap || !MapData.isTileLayer(this.selectedLayer)) return;
+
+        const targetTile = this.currentMap.data.getTileIndex(this.selectedLayer, startX, startY);
+        if (targetTile === this.selectedTile) return;
+
+        const stack: {x: number, y: number}[] = [{x: startX, y: startY}];
+        const visited = new Set<string>();
+
+        while (stack.length > 0) {
+            const {x, y} = stack.pop()!;
+            const key = `${x},${y}`;
+            if (visited.has(key)) continue;
+            visited.add(key);
+
+            if (x < 0 || x >= this.currentMap.data.widthTiles1X || y < 0 || y >= this.currentMap.data.heightTiles1X) continue;
+
+            const current = this.currentMap.data.getTileIndex(this.selectedLayer, x, y);
+            if (current === targetTile) {
+                this.currentMap.data.setTileIndex(this.selectedLayer, x, y, this.selectedTile);
+                // Queue for network broadcast or send as a bulk operation
+                networkManager.emit('editorAction', { type: 'paint', x, y, layer: this.selectedLayer, tile: this.selectedTile });
+                
+                stack.push({x: x - 1, y});
+                stack.push({x: x + 1, y});
+                stack.push({x, y: y - 1});
+                stack.push({x, y: y + 1});
+            }
+        }
+        this.currentMap.renderLayer(this.selectedLayer, this.tileset, this.palette);
     }
 
     public createNewMap(): void {
