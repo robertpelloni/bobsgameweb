@@ -9,6 +9,7 @@ import { GameOverScene, GameStats } from '../scenes/GameOverScene';
 import { PauseOverlay } from '../scenes/PauseOverlay';
 import { GameMode } from '../data/HighScoreManager';
 import { SERVER_URL } from '../../shared/Config';
+import { Text, TextStyle } from 'pixi.js';
 
 export interface PuzzleSceneConfig extends SceneConfig {
   gameType?: GameType;
@@ -16,6 +17,7 @@ export interface PuzzleSceneConfig extends SceneConfig {
   startLevel?: number;
   seed?: number;
   multiplayer?: boolean;
+  isSpectator?: boolean;
 }
 
 export interface PuzzleKeyBindings {
@@ -65,6 +67,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private chatContainer: HTMLElement | null = null;
   private chatInputActive: boolean = false;
   private helpOverlay: HTMLElement | null = null;
+  private spectatorBanner: Text | null = null;
 
   constructor(config: PuzzleSceneConfig, bindings?: Partial<PuzzleKeyBindings>) {
     super(config);
@@ -117,9 +120,28 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     }
 
     this.createHelpOverlay();
+    
+    if (this.config.isSpectator) {
+        this.createSpectatorBanner();
+    }
 
     this.game.initGame();
     this.game.start();
+  }
+
+  private createSpectatorBanner(): void {
+    const style = new TextStyle({
+        fontFamily: 'Arial Black, Arial, sans-serif',
+        fontSize: 32,
+        fontWeight: 'bold',
+        fill: 0xff0000,
+        stroke: { color: 0x000000, width: 4 },
+        letterSpacing: 4,
+    });
+    this.spectatorBanner = new Text({ text: 'SPECTATOR MODE', style });
+    this.spectatorBanner.anchor.set(0.5);
+    this.spectatorBanner.position.set(this.width / 2, 50);
+    this.container.addChild(this.spectatorBanner);
   }
 
   private createHelpOverlay(): void {
@@ -163,10 +185,29 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     }
   }
 
+  private knownOpponents: Map<string, PuzzleGame> = new Map();
+
   private setupNetworkHandlers(): void {
-    networkManager.on('opponentFrame', (state: any) => {
-      if (this.opponentGame) {
-        this.opponentGame.applyState(state);
+    networkManager.on('opponentFrame', (data: any) => {
+      const { id, state } = data;
+      
+      if (this.config.isSpectator) {
+          // If spectating, we put the first person we see into `this.game`, 
+          // and the second person into `this.opponentGame`.
+          if (!this.knownOpponents.has(id)) {
+              if (this.knownOpponents.size === 0) {
+                  this.knownOpponents.set(id, this.game);
+              } else if (this.knownOpponents.size === 1 && this.opponentGame) {
+                  this.knownOpponents.set(id, this.opponentGame);
+              }
+          }
+          const targetGame = this.knownOpponents.get(id);
+          if (targetGame) targetGame.applyState(state);
+      } else {
+          // Normal multiplayer (we are playing)
+          if (this.opponentGame) {
+              this.opponentGame.applyState(state);
+          }
       }
     });
   }
@@ -445,6 +486,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     }
 
     if (this.game.state !== GameState.PLAYING) return;
+    if (this.config.isSpectator) return; // Spectators cannot send input
 
     if (this.game.player) {
         this.game.player.LEFT_HELD = InputManager.isKeyHeld(this.bindings.left as Key);
@@ -459,6 +501,9 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   public onResize(width: number, height: number): void {
     this.centerRenderer();
     this.pauseOverlay?.resize(width, height);
+    if (this.spectatorBanner) {
+        this.spectatorBanner.position.set(width / 2, 50);
+    }
   }
 
   restart(): void {
