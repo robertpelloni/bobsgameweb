@@ -1,7 +1,8 @@
 import { Scene, SceneConfig } from '../state/Scene';
 import { ND } from '../engine/nd/ND';
 import { NDPuzzleGame } from '../engine/nd/NDPuzzleGame';
-import { NDButton } from '../engine/nd/ND';
+import { LibretroGame } from '../engine/nd/LibretroGame';
+import { NDButton, ND } from '../engine/nd/ND';
 import { InputManager, Key } from '../input/InputManager';
 import { StateManager } from '../state/StateManager';
 
@@ -23,8 +24,15 @@ export class NDDemoScene extends Scene {
         this.nd.container.position.set(this.centerX, this.centerY);
 
         // Start with the puzzle game
-        const puzzleGame = new NDPuzzleGame(this.nd);
-        this.nd.setGame(puzzleGame);
+        this.openPuzzle();
+    }
+
+    private openPuzzle(): void {
+        this.nd.setGame(new NDPuzzleGame(this.nd));
+    }
+
+    private openLibretro(): void {
+        this.nd.setGame(new LibretroGame(this.nd));
     }
 
     protected onUpdate(dt: number): void {
@@ -34,6 +42,10 @@ export class NDDemoScene extends Scene {
         if (InputManager.isKeyPressed(Key.Escape)) {
             StateManager.pop();
         }
+
+        // Toggle between games for demo
+        if (InputManager.isKeyPressed(Key.Num1)) this.openPuzzle();
+        if (InputManager.isKeyPressed(Key.Num2)) this.openLibretro();
     }
 
     private updateInputs(): void {
