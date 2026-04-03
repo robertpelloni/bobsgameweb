@@ -149,6 +149,7 @@ export class Game extends EventEmitter<GameEvents> {
     resize(width: number, height: number): void {
         this.app.renderer.resize(width, height);
         this._camera.resize(width, height);
+        StateManager.resize(width, height);
     }
 
     get width(): number {

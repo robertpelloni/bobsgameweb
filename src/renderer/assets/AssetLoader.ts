@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import { Assets, Texture as PIXITexture, Spritesheet } from 'pixi.js';
 import { Howl } from 'howler';
+import { BIG_DATA_URL } from '../../shared/Config';
 
 export interface AssetLoaderEvents {
   'progress': (loaded: number, total: number, percent: number) => void;
@@ -115,28 +116,40 @@ class AssetLoaderClass extends EventEmitter<AssetLoaderEvents> {
     this.emit('complete');
   }
 
+  private resolveSrc(src: string): string {
+    if (src.startsWith('http') || src.startsWith('blob:') || src.startsWith('data:')) {
+      return src;
+    }
+    // Prepend the BIG_DATA_URL for relative paths
+    return BIG_DATA_URL + (src.startsWith('/') ? src.substring(1) : src);
+  }
+
   private async loadAsset(item: QueuedAsset): Promise<unknown> {
+    const src = Array.isArray(item.src) 
+      ? item.src.map(s => this.resolveSrc(s)) 
+      : this.resolveSrc(item.src);
+
     switch (item.type) {
       case 'texture':
-        return Assets.load<PIXITexture>(item.src as string);
+        return Assets.load<PIXITexture>(src as string);
 
       case 'spritesheet':
-        return Assets.load<Spritesheet>(item.src as string);
+        return Assets.load<Spritesheet>(src as string);
 
       case 'audio':
         return new Promise<Howl>((resolve, reject) => {
           const howl = new Howl({
-            src: Array.isArray(item.src) ? item.src : [item.src],
+            src: Array.isArray(src) ? src : [src],
             onload: () => resolve(howl),
             onloaderror: (_id, error) => reject(new Error(String(error))),
           });
         });
 
       case 'json':
-        return Assets.load(item.src as string);
+        return Assets.load(src as string);
 
       case 'font':
-        return Assets.load(item.src as string);
+        return Assets.load(src as string);
 
       default:
         throw new Error(`Unknown asset type: ${item.type}`);

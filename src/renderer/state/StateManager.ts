@@ -12,6 +12,7 @@ export interface State {
   onExit?(): void | Promise<void>;
   onPause?(): void;
   onResume?(): void;
+  onResize?(width: number, height: number): void;
   update(dt: number): void;
   render?(): void;
   public?(): void; // Compatibility for some scenes?
@@ -140,6 +141,12 @@ export class StateManagerClass extends EventEmitter<StateEvents> {
   renderAll(): void {
     for (const state of this.stack) {
       state.render?.();
+    }
+  }
+
+  resize(width: number, height: number): void {
+    for (const state of this.stack) {
+      state.onResize?.(width, height);
     }
   }
 }
