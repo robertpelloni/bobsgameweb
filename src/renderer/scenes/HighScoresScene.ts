@@ -6,6 +6,9 @@ import { AudioManager } from '../audio/AudioManager';
 import { Button, ButtonStyle } from '../ui/Button';
 import { HighScoreManager, HighScore, GameMode } from '../data/HighScoreManager';
 import { SceneTransition } from '../state/SceneTransition';
+import { NetworkManager } from '../../shared/puzzle/NetworkManager';
+import { SERVER_URL } from '../../shared/Config';
+import { GameType } from '../puzzle';
 
 export interface HighScoresSceneConfig extends SceneConfig {
     initialMode?: GameMode;
@@ -29,19 +32,89 @@ export class HighScoresScene extends Scene {
         ultra: 'Ultra',
     };
 
+    private networkManager: NetworkManager;
+    private isLoadingScores = false;
+    private loadingText!: Text;
+
     constructor(config: HighScoresSceneConfig) {
         super(config);
         this.sceneConfig = config;
         this.currentMode = config.initialMode ?? 'marathon';
         this.selectedModeIndex = this.modes.indexOf(this.currentMode);
+        this.networkManager = new NetworkManager(null);
     }
 
     public create(): void {
         this.createBackground();
         this.createTitle();
         this.createModeTabs();
-        this.createScoreList();
+        this.createLoadingText();
+        this.createScoreList(HighScoreManager.getScores(this.currentMode, 10)); // Initial local scores
         this.createBackButton();
+
+        // Fetch from server
+        this.networkManager.connect(SERVER_URL);
+        this.fetchServerScores();
+    }
+
+    private fetchServerScores(): void {
+        this.isLoadingScores = true;
+        this.updateLoadingText();
+        
+        this.networkManager.getLeaderboard(this.currentMode, (data: { mode: string, scores: any[] }) => {
+            if (data.mode === this.currentMode) {
+                this.isLoadingScores = false;
+                this.updateLoadingText();
+                
+                // Map server scores to HighScore format
+                const serverScores: HighScore[] = data.scores.map(s => ({
+                    name: s.name,
+                    score: s.score,
+                    lines: s.lines,
+                    time: s.time,
+                    level: 1, // Optional, could parse from server if we add it
+                    gameType: 'classic',
+                    gameMode: this.currentMode,
+                    date: s.date || Date.now()
+                }));
+
+                // Let's just use server scores if available
+                if (serverScores.length > 0) {
+                    this.createScoreList(serverScores);
+                } else {
+                    this.createScoreList(HighScoreManager.getScores(this.currentMode, 10));
+                }
+            }
+        });
+        
+        // Timeout
+        setTimeout(() => {
+            if (this.isLoadingScores) {
+                this.isLoadingScores = false;
+                this.updateLoadingText();
+            }
+        }, 5000);
+    }
+
+    private createLoadingText(): void {
+        const style = new TextStyle({
+            fontFamily: 'Arial',
+            fontSize: 14,
+            fill: 0xffff00,
+            fontStyle: 'italic'
+        });
+        this.loadingText = new Text({ text: 'Loading global scores...', style });
+        this.loadingText.anchor.set(0.5);
+        this.loadingText.x = this.centerX;
+        this.loadingText.y = this.height * 0.25;
+        this.loadingText.visible = false;
+        this.container.addChild(this.loadingText);
+    }
+
+    private updateLoadingText(): void {
+        if (this.loadingText) {
+            this.loadingText.visible = this.isLoadingScores;
+        }
     }
 
     public onUpdate(_dt: number): void {
@@ -110,10 +183,9 @@ export class HighScoresScene extends Scene {
         this.updateModeTabs();
     }
 
-    private createScoreList(): void {
+    private createScoreList(scores: HighScore[]): void {
         this.clearScoreRows();
         
-        const scores = HighScoreManager.getScores(this.currentMode, 10);
         const startY = this.height * 0.28;
         const rowHeight = 36;
 
@@ -264,7 +336,8 @@ export class HighScoresScene extends Scene {
             this.selectedModeIndex = newIndex;
             this.currentMode = this.modes[newIndex];
             this.updateModeTabs();
-            this.createScoreList();
+            this.createScoreList(HighScoreManager.getScores(this.currentMode, 10)); // Show local while fetching
+            this.fetchServerScores();
             this.playMoveSound();
         }
     }
@@ -302,5 +375,9 @@ export class HighScoresScene extends Scene {
         const g = Math.round(g1 + (g2 - g1) * t);
         const b = Math.round(b1 + (b2 - b1) * t);
         return (r << 16) | (g << 8) | b;
+    }
+
+    protected async destroy(): Promise<void> {
+        this.networkManager.disconnect();
     }
 }

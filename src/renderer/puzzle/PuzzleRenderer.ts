@@ -35,6 +35,16 @@ const DEFAULT_CONFIG: Required<PuzzleRendererConfig> = {
   isOpponent: false,
 };
 
+interface PuzzleParticle {
+  g: Graphics;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  maxLife: number;
+}
+
 export class PuzzleRenderer {
   readonly container: Container;
   private readonly config: Required<PuzzleRendererConfig>;
@@ -48,6 +58,10 @@ export class PuzzleRenderer {
   private nextContainer: Container;
   private holdContainer: Container;
   private statsContainer: Container;
+  private particlesContainer: Container;
+
+  private particles: PuzzleParticle[] = [];
+  private currentShake: number = 0;
 
   private gridBackground: Graphics;
   private blockGraphics: Map<string, Graphics> = new Map();
@@ -76,6 +90,7 @@ export class PuzzleRenderer {
     this.nextContainer = new Container();
     this.holdContainer = new Container();
     this.statsContainer = new Container();
+    this.particlesContainer = new Container();
 
     this.gridBackground = new Graphics();
     this.pieceGraphics = new Graphics();
@@ -89,6 +104,7 @@ export class PuzzleRenderer {
     this.container.addChild(this.nextContainer);
     this.container.addChild(this.holdContainer);
     this.container.addChild(this.statsContainer);
+    this.container.addChild(this.particlesContainer);
 
     this.gridContainer.addChild(this.gridBackground);
     this.pieceContainer.addChild(this.pieceGraphics);
@@ -105,11 +121,20 @@ export class PuzzleRenderer {
     this.levelText = new Text({ text: 'Level: 1', style: textStyle });
     this.linesText = new Text({ text: 'Lines: 0', style: textStyle });
     this.timeText = new Text({ text: 'Time: 00:00', style: textStyle });
+    
+    const hintStyle = new TextStyle({
+      fontFamily: 'monospace',
+      fontSize: 14,
+      fill: 0x888888,
+    });
+    const helpHint = new Text({ text: 'Press F1 for Help', style: hintStyle });
+    helpHint.position.set(0, 150);
 
     this.statsContainer.addChild(this.scoreText);
     this.statsContainer.addChild(this.levelText);
     this.statsContainer.addChild(this.linesText);
     this.statsContainer.addChild(this.timeText);
+    this.statsContainer.addChild(helpHint);
 
     this.ghostContainer.alpha = this.config.ghostAlpha;
   }
@@ -132,10 +157,18 @@ export class PuzzleRenderer {
     const gridWidth = this.game.grid.getWidth();
     const gridHeight = this.game.grid.getHeight() - 5; // hidden rows buffer
 
-    this.gridContainer.position.set(gridOffsetX, gridOffsetY);
-    this.blocksContainer.position.set(gridOffsetX, gridOffsetY);
-    this.pieceContainer.position.set(gridOffsetX, gridOffsetY);
-    this.ghostContainer.position.set(gridOffsetX, gridOffsetY);
+    let ox = gridOffsetX;
+    let oy = gridOffsetY;
+    if (this.currentShake > 0) {
+      ox += (Math.random() - 0.5) * this.currentShake;
+      oy += (Math.random() - 0.5) * this.currentShake;
+    }
+
+    this.gridContainer.position.set(ox, oy);
+    this.blocksContainer.position.set(ox, oy);
+    this.pieceContainer.position.set(ox, oy);
+    this.ghostContainer.position.set(ox, oy);
+    this.particlesContainer.position.set(ox, oy);
 
     const gridPixelWidth = gridWidth * cellSize;
 
@@ -219,6 +252,65 @@ export class PuzzleRenderer {
     this.updateNextPieces();
     this.updateHoldPiece();
     this.updateStats();
+    this.updateParticles();
+  }
+
+  private updateParticles(): void {
+    const dt = 1 / 60; // Approximate
+    if (this.currentShake > 0) {
+      this.currentShake -= 300 * dt;
+      if (this.currentShake < 0) this.currentShake = 0;
+      this.setupLayout(); // Re-apply position with/without shake
+    }
+
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.life -= dt;
+      if (p.life <= 0) {
+        p.g.destroy();
+        this.particles.splice(i, 1);
+      } else {
+        p.vy += 400 * dt; // Gravity
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.g.position.set(p.x, p.y);
+        p.g.alpha = p.life / p.maxLife;
+      }
+    }
+  }
+
+  public spawnLineClearParticles(y: number, color: number = 0xffffff): void {
+    const { cellSize } = this.config;
+    const gridWidth = this.game ? this.game.grid.getWidth() : 10;
+    
+    this.shake(5);
+
+    // Spawn 10 particles across the row
+    for (let i = 0; i < gridWidth * 2; i++) {
+      const g = new Graphics();
+      g.rect(-2, -2, 4, 4);
+      g.fill({ color });
+      
+      const px = (Math.random() * gridWidth) * cellSize;
+      const py = y * cellSize + (Math.random() * cellSize);
+      
+      g.position.set(px, py);
+      this.particlesContainer.addChild(g);
+      
+      this.particles.push({
+        g,
+        x: px,
+        y: py,
+        vx: (Math.random() - 0.5) * 200,
+        vy: (Math.random() - 1.0) * 300,
+        life: 0.5 + Math.random() * 0.5,
+        maxLife: 1.0
+      });
+    }
+  }
+
+  public shake(amount: number): void {
+    this.currentShake = Math.max(this.currentShake, amount);
   }
 
   private updateBlocks(): void {

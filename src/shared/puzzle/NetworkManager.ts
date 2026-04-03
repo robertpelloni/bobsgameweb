@@ -11,6 +11,7 @@ export interface LobbyRoom {
     gameMode?: string;
     startLevel?: number;
     isTournament?: boolean;
+    state?: string;
 }
 
 export class NetworkManager extends EventEmitter {
@@ -92,6 +93,10 @@ export class NetworkManager extends EventEmitter {
 
         this.socket.on('joinedRoom', (data: any) => {
             this.emit('joinedRoom', data);
+        });
+
+        this.socket.on('roomUpdated', (data: any) => {
+            this.emit('roomUpdated', data);
         });
 
         this.socket.on('gameStart', (data: any) => {
