@@ -1,4 +1,5 @@
 import { NDGameEngine } from './NDGameEngine';
+import { ND } from './ND';
 
 export class LibretroGame extends NDGameEngine {
   public titleMenuShowing: boolean = true;
@@ -9,11 +10,21 @@ export class LibretroGame extends NDGameEngine {
   private coreWorker: Worker | null = null;
   private canvas: HTMLCanvasElement | null = null;
 
+  constructor(nd: ND) {
+    super(nd);
+  }
+
   public override init() {
     super.init();
     this.titleMenuShowing = true;
-    
     // Initialize offscreen canvas or shared array buffer for WASM core output
+  }
+
+  public override cleanup() {
+    if (this.coreWorker) {
+      this.coreWorker.terminate();
+      this.coreWorker = null;
+    }
   }
 
   public override update(dt: number) {
