@@ -1,0 +1,54 @@
+import { Scene, SceneConfig } from '../state/Scene';
+import { ND } from '../engine/nd/ND';
+import { NDPuzzleGame } from '../engine/nd/NDPuzzleGame';
+import { NDButton } from '../engine/nd/ND';
+import { InputManager, Key } from '../input/InputManager';
+import { StateManager } from '../state/StateManager';
+
+export class NDDemoScene extends Scene {
+    private nd: ND;
+
+    constructor(config: SceneConfig) {
+        super(config);
+        this.nd = new ND();
+    }
+
+    public async create(): Promise<void> {
+        this.nd.init();
+        this.container.addChild(this.nd.container);
+        
+        // Scale the ND to fit the screen
+        const scale = Math.min(this.width / 400, this.height / 600);
+        this.nd.container.scale.set(scale);
+        this.nd.container.position.set(this.centerX, this.centerY);
+
+        // Start with the puzzle game
+        const puzzleGame = new NDPuzzleGame(this.nd);
+        this.nd.setGame(puzzleGame);
+    }
+
+    protected onUpdate(dt: number): void {
+        this.updateInputs();
+        this.nd.update(dt);
+        
+        if (InputManager.isKeyPressed(Key.Escape)) {
+            StateManager.pop();
+        }
+    }
+
+    private updateInputs(): void {
+        // Map keyboard to virtual ND buttons
+        this.nd.setButtonState(NDButton.UP, InputManager.isKeyHeld(Key.Up));
+        this.nd.setButtonState(NDButton.DOWN, InputManager.isKeyHeld(Key.Down));
+        this.nd.setButtonState(NDButton.LEFT, InputManager.isKeyHeld(Key.Left));
+        this.nd.setButtonState(NDButton.RIGHT, InputManager.isKeyHeld(Key.Right));
+        
+        this.nd.setButtonState(NDButton.A, InputManager.isKeyHeld(Key.X) || InputManager.isKeyHeld(Key.Enter));
+        this.nd.setButtonState(NDButton.B, InputManager.isKeyHeld(Key.Z) || InputManager.isKeyHeld(Key.Backspace));
+        this.nd.setButtonState(NDButton.X, InputManager.isKeyHeld(Key.S));
+        this.nd.setButtonState(NDButton.Y, InputManager.isKeyHeld(Key.A));
+        
+        this.nd.setButtonState(NDButton.START, InputManager.isKeyHeld(Key.Enter));
+        this.nd.setButtonState(NDButton.SELECT, InputManager.isKeyHeld(Key.Tab));
+    }
+}
