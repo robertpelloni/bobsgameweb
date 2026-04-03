@@ -1,6 +1,7 @@
-import { Application, Ticker, Container } from 'pixi.js';
+import { Application, Ticker, Container, Filter } from 'pixi.js';
 import { EventEmitter } from 'eventemitter3';
 import { Camera } from './graphics/Camera';
+import { PostProcessing } from './graphics/Filters';
 import { StateManager } from './state/StateManager';
 import { InputManager } from './input/InputManager';
 import { AudioManager } from './audio/AudioManager';
@@ -24,6 +25,7 @@ export class Game extends EventEmitter<GameEvents> {
 
     private _camera: Camera;
     private worldContainer: Container;
+    private crtFilter: Filter | null = null;
     private mainMenuScene: MainMenuScene | null = null;
     
     constructor(app: Application, config: GameConfig = {}) {
@@ -33,6 +35,10 @@ export class Game extends EventEmitter<GameEvents> {
         
         this.worldContainer = new Container();
         this.app.stage.addChild(this.worldContainer);
+        
+        // Initialize Post-processing
+        this.crtFilter = PostProcessing.createCRTFilter();
+        this.worldContainer.filters = [this.crtFilter];
         
         this._camera = new Camera(this.worldContainer, {
             viewportWidth: app.screen.width,
@@ -140,6 +146,11 @@ export class Game extends EventEmitter<GameEvents> {
     private update(ticker: Ticker): void {
         if (this.isPaused) return;
         const dt = ticker.deltaMS / 1000;
+
+        // Update shaders
+        if (this.crtFilter) {
+            (this.crtFilter.resources.uTime as any).value += dt;
+        }
 
         InputManager.update();
         StateManager.update(dt);

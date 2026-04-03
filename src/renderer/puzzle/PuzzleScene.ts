@@ -10,7 +10,7 @@ import { PauseOverlay } from '../scenes/PauseOverlay';
 import { TouchControls } from '../ui/TouchControls';
 import { GameMode } from '../data/HighScoreManager';
 import { SERVER_URL } from '../../shared/Config';
-import { Text, TextStyle } from 'pixi.js';
+import { Text, TextStyle, Container } from 'pixi.js';
 
 export interface PuzzleSceneConfig extends SceneConfig {
   gameType?: GameType;
@@ -70,8 +70,12 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private chatInputActive: boolean = false;
   private helpOverlay: HTMLElement | null = null;
   private spectatorBanner: Text | null = null;
+  private spectatorStatsContainer: Container | null = null;
+  private p1NameText: Text | null = null;
+  private p2NameText: Text | null = null;
 
   private knownOpponents: Map<string, PuzzleGame> = new Map();
+  private knownPlayers: Map<string, { name: string, elo: number }> = new Map();
 
   constructor(config: PuzzleSceneConfig, bindings?: Partial<PuzzleKeyBindings>) {
     super(config);
@@ -134,10 +138,26 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     
     if (this.config.isSpectator) {
         this.createSpectatorBanner();
+        this.createSpectatorStats();
     }
 
     this.game.initGame();
     this.game.start();
+  }
+
+  private createSpectatorStats(): void {
+      this.spectatorStatsContainer = new Container();
+      this.container.addChild(this.spectatorStatsContainer);
+
+      const style = new TextStyle({ fill: '#ffffff', fontSize: 18, fontWeight: 'bold' });
+      
+      this.p1NameText = new Text({ text: 'Player 1: Loading...', style });
+      this.p2NameText = new Text({ text: 'Player 2: Loading...', style });
+
+      this.p1NameText.position.set(200, 100);
+      this.p2NameText.position.set(this.width - 400, 100);
+
+      this.spectatorStatsContainer.addChild(this.p1NameText, this.p2NameText);
   }
 
   private createSpectatorBanner(): void {
@@ -156,6 +176,24 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   }
 
   private setupNetworkHandlers(): void {
+    networkManager.on('joinedRoom', (room: any) => {
+        if (room.playerData) {
+            for (const [id, data] of Object.entries(room.playerData)) {
+                this.knownPlayers.set(id, data as any);
+            }
+            this.updateSpectatorNames();
+        }
+    });
+
+    networkManager.on('roomUpdated', (data: any) => {
+        if (data.playerData) {
+            for (const [id, dataObj] of Object.entries(data.playerData)) {
+                this.knownPlayers.set(id, dataObj as any);
+            }
+            this.updateSpectatorNames();
+        }
+    });
+
     networkManager.on('opponentFrame', (data: any) => {
       const { id, state } = data;
       
@@ -166,6 +204,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
               } else if (this.knownOpponents.size === 1 && this.opponentGame) {
                   this.knownOpponents.set(id, this.opponentGame);
               }
+              this.updateSpectatorNames();
           }
           const targetGame = this.knownOpponents.get(id);
           if (targetGame) targetGame.applyState(state);
@@ -175,6 +214,19 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
           }
       }
     });
+  }
+
+  private updateSpectatorNames(): void {
+      if (!this.config.isSpectator) return;
+      
+      let index = 0;
+      for (const [id, game] of this.knownOpponents) {
+          const data = this.knownPlayers.get(id);
+          const nameStr = data ? `${data.name} [${data.elo}]` : 'Unknown';
+          if (index === 0 && this.p1NameText) this.p1NameText.text = `Player 1: ${nameStr}`;
+          if (index === 1 && this.p2NameText) this.p2NameText.text = `Player 2: ${nameStr}`;
+          index++;
+      }
   }
 
   private createPauseOverlay(): void {
@@ -460,6 +512,8 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     if (this.spectatorBanner) {
         this.spectatorBanner.position.set(width / 2, 50);
     }
+    if (this.p1NameText) this.p1NameText.position.set(200, 100);
+    if (this.p2NameText) this.p2NameText.position.set(width - 400, 100);
   }
 
   private processInput(): void {

@@ -47,6 +47,8 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   private initialized: boolean = false;
   private trackerPlayer: ChiptuneJsPlayer | null = null;
   private currentTrackerMusic: string | null = null;
+  
+  public analyzer: AnalyserNode | null = null;
 
   // ============================================================
   // Initialization
@@ -56,6 +58,11 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
     if (this.initialized) return;
     this.initialized = true;
     Howler.autoUnlock = true;
+    
+    // Setup Global Analyzer
+    this.analyzer = Howler.ctx.createAnalyser();
+    this.analyzer.fftSize = 256;
+    Howler.masterGain.connect(this.analyzer);
     
     // Initialize chiptune3 player using Howler's audio context
     try {

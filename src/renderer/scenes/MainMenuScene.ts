@@ -5,7 +5,7 @@ import { InputManager } from '../input/InputManager';
 import { AudioManager } from '../audio/AudioManager';
 import { Button, ButtonStyle } from '../ui/Button';
 import { PuzzleScene, PuzzleSceneConfig } from '../puzzle';
-import { GameType, GameTypes } from '../puzzle';
+import { GameType, GameTypes, GamePlayMode } from '../puzzle';
 import { Key } from '../input/InputManager';
 import { OptionsScene } from './OptionsScene';
 import { HighScoresScene } from './HighScoresScene';
@@ -19,6 +19,7 @@ import { NDDemoScene } from './NDDemoScene';
 import { WorldScene } from './WorldScene';
 import { CustomGameEditorScene } from './CustomGameEditorScene';
 import { WorldEditorScene } from './WorldEditorScene';
+import { RankingsScene } from './RankingsScene';
 
 // ============================================================
 // Types
@@ -39,7 +40,6 @@ interface MenuItem {
 // ============================================================
 
 export class MainMenuScene extends Scene {
-// ... (rest remains unchanged up to createMenu)
     private menuConfig: MainMenuSceneConfig;
     
     private titleText!: Text;
@@ -115,6 +115,25 @@ export class MainMenuScene extends Scene {
         this.updateCategoryVisuals();
     }
 
+    private selectCategory(index: number): void {
+        this.selectedCategoryIndex = index;
+        this.updateCategoryVisuals();
+    }
+
+    private updateCategoryVisuals(): void {
+        for (let i = 0; i < this.modeButtons.length; i++) {
+            const isSelected = i === this.selectedCategoryIndex;
+            this.modeButtons[i].selected = isSelected;
+            this.modeButtons[i].container.alpha = isSelected ? 1.0 : 0.6;
+        }
+    }
+
+    public onUpdate(dt: number): void {
+        this.updateParticles(dt);
+        this.updateTitleAnimation(dt);
+        this.handleInput();
+    }
+
     public onResize(width: number, height: number): void {
         this.drawBackground();
         this.titleText.x = this.centerX;
@@ -137,30 +156,11 @@ export class MainMenuScene extends Scene {
         }
 
         // Reposition mode buttons
-        const modeStartY = this.centerX - (this.categories.length * 130) / 2 + 65;
+        const modeStartX = this.centerX - (this.categories.length * 130) / 2 + 65;
         const modeY = height * 0.38;
         for (let i = 0; i < this.modeButtons.length; i++) {
-            this.modeButtons[i].setPosition(modeStartY + i * 130, modeY);
+            this.modeButtons[i].setPosition(modeStartX + i * 130, modeY);
         }
-    }
-
-    private selectCategory(index: number): void {
-        this.selectedCategoryIndex = index;
-        this.updateCategoryVisuals();
-    }
-
-    private updateCategoryVisuals(): void {
-        for (let i = 0; i < this.modeButtons.length; i++) {
-            const isSelected = i === this.selectedCategoryIndex;
-            this.modeButtons[i].selected = isSelected;
-            this.modeButtons[i].container.alpha = isSelected ? 1.0 : 0.6;
-        }
-    }
-
-    public onUpdate(dt: number): void {
-        this.updateParticles(dt);
-        this.updateTitleAnimation(dt);
-        this.handleInput();
     }
 
     public async onExit(): Promise<void> {
@@ -253,7 +253,7 @@ export class MainMenuScene extends Scene {
             fill: 0x445566,
             letterSpacing: 1,
         });
-        this.versionText = new Text({ text: 'v2.1.0', style: versionStyle });
+        this.versionText = new Text({ text: 'v2.1.1', style: versionStyle });
         this.versionText.anchor.set(1, 1);
         this.versionText.x = this.width - 10;
         this.versionText.y = this.height - 10;
@@ -277,30 +277,31 @@ export class MainMenuScene extends Scene {
             { label: 'Play Custom Game', action: () => this.startCustomGame() },
             { label: 'Custom Game Editor', action: () => this.openCustomEditor() },
             { label: 'MMO World', action: () => this.openWorld() },
+            { label: 'World Database Editor', action: () => this.openWorldEditor() },
             { label: 'Multiplayer', action: () => this.openLobby() },
+            { label: 'Rankings', action: () => this.openRankings() },
             { label: 'nD Demo', action: () => this.openNDDemo() },
             { label: 'Engine Demo', action: () => this.openEngineDemo() },
             { label: 'High Scores', action: () => this.openHighScores() },
-            { label: 'Options', action: () => this.openOptions() },
             { label: 'Settings', action: () => this.openSettings() },
+            { label: 'Options', action: () => this.openOptions() },
         ];
 
         const buttonStyle: ButtonStyle = {
             width: 240,
-            height: 44,
+            height: 40,
             backgroundColor: 0x1a2a4a,
             backgroundColorHover: 0x2a4a6a,
             backgroundColorPressed: 0x0a1a3a,
             borderColor: 0x4a6a8a,
             borderWidth: 2,
             textColor: 0xffffff,
-            fontSize: 18,
+            fontSize: 16,
             borderRadius: 8,
         };
 
         const startY = this.height * 0.45;
         const spacingY = 48;
-        const colSpacing = 260;
 
         for (let i = 0; i < this.menuItems.length; i++) {
             const item = this.menuItems[i];
@@ -336,29 +337,19 @@ export class MainMenuScene extends Scene {
 
     private handleInput(): void {
         if (InputManager.isKeyPressed(Key.Up) || InputManager.isKeyPressed(Key.W)) {
-            this.moveSelection(-1);
+            this.moveSelection(-2);
         } else if (InputManager.isKeyPressed(Key.Down) || InputManager.isKeyPressed(Key.S)) {
-            this.moveSelection(1);
+            this.moveSelection(2);
         }
 
         if (InputManager.isKeyPressed(Key.Left) || InputManager.isKeyPressed(Key.A)) {
-            this.moveCategorySelection(-1);
+            this.moveSelection(-1);
         } else if (InputManager.isKeyPressed(Key.Right) || InputManager.isKeyPressed(Key.D)) {
-            this.moveCategorySelection(1);
+            this.moveSelection(1);
         }
 
         if (InputManager.isActionPressed() || InputManager.isStartPressed()) {
             this.selectCurrentItem();
-        }
-    }
-
-    private moveCategorySelection(delta: number): void {
-        const prevIndex = this.selectedCategoryIndex;
-        this.selectedCategoryIndex = (this.selectedCategoryIndex + delta + this.categories.length) % this.categories.length;
-        
-        if (prevIndex !== this.selectedCategoryIndex) {
-            this.playMoveSound();
-            this.updateCategoryVisuals();
         }
     }
 
@@ -419,6 +410,7 @@ export class MainMenuScene extends Scene {
         const puzzleConfig: PuzzleSceneConfig = {
             name: 'puzzle',
             app: this.app,
+            camera: this.camera ?? undefined,
             gameType,
             gameMode,
             startLevel: 1,
@@ -436,6 +428,7 @@ export class MainMenuScene extends Scene {
         const optionsScene = new OptionsScene({
             name: 'options',
             app: this.app,
+            camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, optionsScene);
     }
@@ -480,6 +473,7 @@ export class MainMenuScene extends Scene {
         const editorScene = new CustomGameEditorScene({
             name: 'custom-editor',
             app: this.app,
+            camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, editorScene);
     }
@@ -488,6 +482,7 @@ export class MainMenuScene extends Scene {
         const editorScene = new WorldEditorScene({
             name: 'world-editor',
             app: this.app,
+            camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, editorScene);
     }

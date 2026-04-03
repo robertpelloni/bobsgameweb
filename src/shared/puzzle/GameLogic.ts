@@ -1,7 +1,7 @@
 import { Block } from "./Block";
 import { Grid } from "./Grid";
 import { Piece } from "./Piece";
-import { GameType, DifficultyType, VSGarbageRule, GarbageSpawnRule, ScoreType, GamePlayMode, GarbageType, VSGarbageDropRule } from "./GameType";
+import { GameType, DifficultyType, VSGarbageRule, GarbageSpawnRule, ScoreType, GamePlayMode, GarbageType, VSGarbageDropRule, RotationType } from "./GameType";
 import { PieceType } from "./PieceType";
 import { BlockType, BlockTypes } from "./BlockType";
 import { Room, SendGarbageToRule } from "./Room";
@@ -10,6 +10,7 @@ import { BobColor } from "../BobColor";
 import { EventEmitter } from 'eventemitter3';
 import { GameState } from "./GameState";
 import { MovementType } from "./MovementType";
+import { SRS_KICKS, SRS_I_KICKS } from "./SRS";
 
 export class FrameState {
     public ROTATECW_HELD: boolean = false;
@@ -51,35 +52,6 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
     public grid: Grid;
 
     public state: GameState = GameState.IDLE;
-
-    public blockWidth: number = 1;
-    public blockHeight: number = 1;
-    public static readonly aboveGridBuffer: number = 5;
-
-    public lockInputCountdownTicks: number = 0;
-    public canPressRotateCW: boolean = false;
-    public canPressRotateCCW: boolean = false;
-    public canPressRight: boolean = false;
-    public canPressLeft: boolean = false;
-    public canPressDown: boolean = false;
-    public canPressUp: boolean = false;
-    public canPressHoldRaise: boolean = false;
-    public canPressSlam: boolean = false;
-
-    public ticksHoldingRotateCW: number = 0;
-    public ticksHoldingRotateCCW: number = 0;
-    public ticksHoldingRight: number = 0;
-    public ticksHoldingLeft: number = 0;
-    public ticksHoldingDown: number = 0;
-    public ticksHoldingUp: number = 0;
-    public ticksHoldingHoldRaise: number = 0;
-    public ticksHoldingSlam: number = 0;
-
-    public timesToFlashBlocks: number = 20;
-    public flashBlockSpeedTicks: number = 30;
-    public flashScreenSpeedTicks: number = 50;
-    public flashScreenTimesPerLevel: number = 4;
-
     public won: boolean = false;
     public lost: boolean = false;
     public died: boolean = false;
@@ -87,67 +59,42 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
     public complete: boolean = false;
     public didInit: boolean = false;
     public firstInit: boolean = true;
-
     public pieceSetAtBottom: boolean = false;
     public switchedHoldPieceAlready: boolean = false;
     public playingFastMusic: boolean = false;
 
     public gameSpeed: number = 0.0;
-    public currentLineDropSpeedTicks: number = 0;
-    public currentStackRiseSpeedTicks: number = 0;
+    public currentLineDropSpeedTicks: number = 1000;
+    public currentStackRiseSpeedTicks: number = 1000;
     public lockDelayTicksCounter: number = 0;
     public lineDropTicksCounter: number = 0;
     public spawnDelayTicksCounter: number = 0;
-    public lineClearDelayTicksCounter: number = 0;
-    public moveDownLineTicksCounter: number = 0;
-
-    public currentTotalYLockDelay: number = 0;
-    public adjustedMaxLockDelayTicks: number = 0;
-    public adjustedSpawnDelayTicksAmount: number = 0;
-    public currentFloorMovements: number = 0;
-
     public stackRiseTicksCounter: number = 0;
     public stopStackRiseTicksCounter: number = 0;
-    public manualStackRiseTicksCounter: number = 0;
-
-    public timesToFlashScreenQueue: number = 0;
-    public flashScreenTicksCounter: number = 0;
-    public flashScreenOnOffToggle: boolean = false;
-
-    public flashBlocksTicksCounter: number = 0;
-    public timesToFlashBlocksQueue: number = 0;
-    public removeBlocksTicksCounter: number = 0;
-    public currentChainBlocks: Block[] = [];
-    public fadingOutBlocks: Block[] = [];
-
-    public lastSentGarbageToPlayerIndex: number = 0;
-    public queuedVSGarbageAmountToSend: number = 0;
-    public garbageWaitForPiecesSetCount: number = 0;
 
     public currentLevel: number = 0;
     public score: number = 0;
     public timeStarted: number = 0;
     public timeEnded: number = 0;
     public totalTicksPassed: number = 0;
-
-    public blocksClearedThisGame: number = 0;
-    public linesClearedThisGame: number = 0;
-
-    public piecesMadeThisLevel: number = 0;
-    public blocksClearedThisLevel: number = 0;
-    public linesClearedThisLevel: number = 0;
-
-    public piecesPlacedTotal: number = 0;
-    public blocksClearedTotal: number = 0;
     public linesClearedTotal: number = 0;
-    public blocksMadeTotal: number = 0;
+    public piecesMadeThisGame: number = 0;
+
+    public static readonly aboveGridBuffer: number = 5;
 
     public currentPiece: Piece | null = null;
     public currentPieceGhostY: number = 0;
+    public cursorX: number = 0;
+    public cursorY: number = 0;
     public holdPiece: Piece | null = null;
     public nextPieces: Piece[] = [];
 
+    public fadingOutBlocks: Block[] = [];
+    public manuallyApplyGravityWithoutChainChecking(): void {}
+
     public frameState: FrameState = new FrameState();
+
+    private currentChainBlocks: Block[] = [];
 
     constructor(private scene: any, public seed: number = 0) {
         super();
@@ -170,31 +117,17 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
         this.complete = false;
         this.didInit = true;
 
-        this.currentLineDropSpeedTicks = this.getCurrentDifficulty().initialLineDropSpeedTicks;
-        this.currentStackRiseSpeedTicks = this.getCurrentDifficulty().maxStackRise;
-        this.stopStackRiseTicksCounter = 1000;
         if (this.currentGameType.gameMode === GamePlayMode.DROP) {
-            if (this.getCurrentDifficulty().randomlyFillGrid) this.grid.randomlyFillGridWithPlayingFieldPieces(this.getCurrentDifficulty().randomlyFillGridAmount, this.getCurrentDifficulty().randomlyFillGridStartY);
             this.newRandomPiece();
         } else if (this.currentGameType.gameMode === GamePlayMode.STACK) {
-            if (this.getCurrentDifficulty().randomlyFillGrid) this.grid.buildRandomStackRetainingExistingBlocks(this.getCurrentDifficulty().randomlyFillGridAmount, this.getCurrentDifficulty().randomlyFillGridStartY);
-            this.currentPiece = this.grid.getRandomPiece();
-            this.currentPiece.xGrid = Math.floor(this.grid.getWidth() / 2); this.currentPiece.yGrid = 7 + GameLogic.aboveGridBuffer;
+            this.grid.fillBottom(3);
         }
         this.setState(GameState.READY);
     }
 
-    public start(): void {
-        this.setState(GameState.PLAYING);
-    }
-
-    public pause(): void {
-        if (this.state === GameState.PLAYING) this.setState(GameState.PAUSED);
-    }
-
-    public resume(): void {
-        if (this.state === GameState.PAUSED) this.setState(GameState.PLAYING);
-    }
+    public start(): void { this.setState(GameState.PLAYING); }
+    public pause(): void { if (this.state === GameState.PLAYING) this.setState(GameState.PAUSED); }
+    public resume(): void { if (this.state === GameState.PAUSED) this.setState(GameState.PLAYING); }
 
     private setState(s: GameState): void {
         const prev = this.state;
@@ -209,8 +142,8 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
                 if (this.won) this.emit('win');
                 if (this.lost || this.died) this.emit('gameOver');
             }
+            return;
         }
-        if (this.won || this.lost || this.complete || this.died) return;
         if (this.state === GameState.PAUSED) return;
 
         this.totalTicksPassed += this.ticks();
@@ -219,7 +152,6 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
         else if (this.currentGameType.gameMode === GamePlayMode.DROP) this.doFallingBlockGame();
 
         for (let i = 0; i < this.ticks(); i++) {
-            if (this.lockInputCountdownTicks > 0) this.lockInputCountdownTicks--;
             if (this.currentGameType.gameMode === GamePlayMode.DROP && this.pieceSetAtBottom) this.newRandomPiece();
             this.handleInput();
         }
@@ -229,7 +161,6 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
 
     private doFallingBlockGame(): void {
         if (!this.currentPiece) return;
-        
         this.lineDropTicksCounter += this.ticks();
         if (this.lineDropTicksCounter >= this.currentLineDropSpeedTicks) {
             this.lineDropTicksCounter = 0;
@@ -238,7 +169,12 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
     }
 
     private doStackRiseGame(): void {
-        // Logic for stack rise mode
+        this.stackRiseTicksCounter += this.ticks();
+        if (this.stackRiseTicksCounter >= this.currentStackRiseSpeedTicks) {
+            this.stackRiseTicksCounter = 0;
+            this.grid.scrollUpStack(null, 1);
+            if (this.grid.isTopRowOccupied()) this.lost = true;
+        }
     }
 
     private handleInput(): void {
@@ -246,30 +182,88 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
         this.player.setButtonStates();
         this.player.setPressedButtons();
 
-        if (this.player.leftPressed()) this.movePiece(MovementType.LEFT);
-        if (this.player.rightPressed()) this.movePiece(MovementType.RIGHT);
-        if (this.player.downPressed()) this.movePiece(MovementType.DOWN);
-        if (this.player.rotateCWPressed()) this.movePiece(MovementType.ROTATE_CLOCKWISE);
-        if (this.player.rotateCCWPressed()) this.movePiece(MovementType.ROTATE_COUNTERCLOCKWISE);
-        if (this.player.holdRaisePressed()) this.holdPieceAction();
-        if (this.player.slamPressed()) this.movePiece(MovementType.HARD_DROP);
-        
+        if (this.currentGameType.gameMode === GamePlayMode.STACK) {
+            if (this.player.leftPressed()) this.moveCursor(-1, 0);
+            if (this.player.rightPressed()) this.moveCursor(1, 0);
+            if (this.player.upPressed()) this.moveCursor(0, -1);
+            if (this.player.downPressed()) this.moveCursor(0, 1);
+            if (this.player.rotateCWPressed()) this.swapBlocks();
+        } else {
+            if (this.player.leftPressed()) this.movePiece(MovementType.LEFT);
+            if (this.player.rightPressed()) this.movePiece(MovementType.RIGHT);
+            if (this.player.downPressed()) this.movePiece(MovementType.DOWN);
+            if (this.player.rotateCWPressed()) this.movePiece(MovementType.ROTATE_CLOCKWISE);
+            if (this.player.rotateCCWPressed()) this.movePiece(MovementType.ROTATE_COUNTERCLOCKWISE);
+            if (this.player.holdRaisePressed()) this.holdPieceAction();
+            if (this.player.slamPressed()) this.movePiece(MovementType.HARD_DROP);
+        }
         this.player.resetPressedButtons();
+    }
+
+    private moveCursor(dx: number, dy: number): void {
+        this.cursorX = Math.max(0, Math.min(this.grid.getWidth() - 2, this.cursorX + dx));
+        this.cursorY = Math.max(0, Math.min(this.grid.getHeight() - 1, this.cursorY + dy));
+    }
+
+    private swapBlocks(): void {
+        const b1 = this.grid.get(this.cursorX, this.cursorY);
+        const b2 = this.grid.get(this.cursorX + 1, this.cursorY);
+        this.grid.set(this.cursorX, this.cursorY, b2);
+        this.grid.set(this.cursorX + 1, this.cursorY, b1);
+        this.checkForChain();
     }
 
     private movePiece(move: MovementType): boolean {
         if (!this.currentPiece) return false;
         
         const oldX = this.currentPiece.xGrid; const oldY = this.currentPiece.yGrid; const oldRot = this.currentPiece.currentRotation;
-        if (move === MovementType.ROTATE_COUNTERCLOCKWISE) this.currentPiece.rotateCCW();
-        else if (move === MovementType.ROTATE_CLOCKWISE) this.currentPiece.rotateCW();
-        else if (move === MovementType.LEFT) this.currentPiece.xGrid--;
+        
+        if (move === MovementType.ROTATE_COUNTERCLOCKWISE || move === MovementType.ROTATE_CLOCKWISE) {
+            if (this.currentPiece.pieceType.pieceShooterPiece || this.currentPiece.pieceType.pieceRemovalShooterPiece) {
+                const tx = this.currentPiece.xGrid; const ty = this.currentPiece.yGrid;
+                if (this.currentPiece.pieceType.pieceShooterPiece) {
+                    for (let y = ty; y < this.grid.getHeight(); y++) {
+                        if (this.grid.get(tx, y) === null) {
+                            this.grid.add(tx, y, new Block(this, this.grid, this.currentPiece.blocks[0].blockType));
+                            break;
+                        }
+                    }
+                } else if (this.currentPiece.pieceType.pieceRemovalShooterPiece) {
+                    for (let y = ty; y < this.grid.getHeight(); y++) {
+                        const b = this.grid.get(tx, y);
+                        if (b) { this.grid.removeBlock(b, true, true); break; }
+                    }
+                }
+                this.emit('pieceMoved', this.currentPiece, move);
+                return true;
+            }
+
+            const newRot = move === MovementType.ROTATE_CLOCKWISE 
+                ? (oldRot + 1) % this.currentPiece.pieceType.rotationSet.size()
+                : (oldRot + this.currentPiece.pieceType.rotationSet.size() - 1) % this.currentPiece.pieceType.rotationSet.size();
+
+            if (this.currentGameType.rotationType === RotationType.SRS) {
+                const kicks = (this.currentPiece.pieceType.name === 'I') ? SRS_I_KICKS : SRS_KICKS;
+                const kickOffsets = kicks[`${oldRot}-${newRot}`] || [{x: 0, y: 0}];
+
+                for (const kick of kickOffsets) {
+                    if (this.grid.doesPieceFit(this.currentPiece, oldX + kick.x, oldY + kick.y, newRot)) {
+                        this.currentPiece.xGrid = oldX + kick.x; this.currentPiece.yGrid = oldY + kick.y;
+                        this.currentPiece.setRotation(newRot);
+                        this.emit('pieceMoved', this.currentPiece, move);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        if (move === MovementType.LEFT) this.currentPiece.xGrid--;
         else if (move === MovementType.RIGHT) this.currentPiece.xGrid++;
         else if (move === MovementType.DOWN) this.currentPiece.yGrid++;
         else if (move === MovementType.HARD_DROP) {
             while (this.grid.doesPieceFit(this.currentPiece)) { this.currentPiece.yGrid++; }
-            this.currentPiece.yGrid--;
-            this.setPiece();
+            this.currentPiece.yGrid--; this.setPiece();
             this.emit('pieceMoved', this.currentPiece, move);
             return true;
         }
@@ -279,96 +273,110 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
             return true;
         } else {
             this.currentPiece.xGrid = oldX; this.currentPiece.yGrid = oldY; this.currentPiece.currentRotation = oldRot;
-            if (move === MovementType.DOWN) {
-                this.setPiece();
-            }
+            if (move === MovementType.DOWN) this.setPiece();
             return false;
         }
     }
 
     private setPiece(): void {
-        if (this.currentPiece) {
-            this.grid.setPiece(this.currentPiece);
-            this.emit('pieceLocked', this.currentPiece);
-            this.checkLines();
-            this.newRandomPiece();
+        if (!this.currentPiece) return;
+        if (this.currentPiece.pieceType.bombPiece) {
+            const explode: Block[] = [];
+            for (let x = this.currentPiece.xGrid - 1; x < this.currentPiece.xGrid + this.currentPiece.getWidth() + 1; x++) {
+                for (let y = this.currentPiece.yGrid - 1; y < this.currentPiece.yGrid + this.currentPiece.getHeight() + 1; y++) {
+                    const b = this.grid.get(x, y); if (b) explode.push(b);
+                }
+            }
+            for (const b of explode) this.grid.removeBlock(b, true, true);
+            this.grid.shakeHard();
+        }
+        if (this.currentPiece.pieceType.weightPiece) {
+            for (let y = this.currentPiece.yGrid; y < this.grid.getHeight(); y++) {
+                for (let x = 0; x < this.currentPiece.getWidth(); x++) {
+                    const b = this.grid.get(this.currentPiece.xGrid + x, y); if (b) this.grid.removeBlock(b, true, true);
+                }
+            }
+            while (this.grid.doesPieceFit(this.currentPiece)) { this.currentPiece.yGrid++; }
+            this.currentPiece.yGrid--; this.grid.shakeHard();
+        }
+        this.grid.setPiece(this.currentPiece);
+        this.emit('pieceLocked', this.currentPiece);
+        this.checkForChain();
+        this.newRandomPiece();
+    }
+
+    private checkForChain(): void {
+        this.currentChainBlocks = [];
+        const toRow = (this.currentGameType.gameMode === GamePlayMode.STACK) ? this.grid.getHeight() - 1 : this.grid.getHeight();
+        if (this.currentGameType.chainRule_AmountPerChain > 0) {
+            for (let y = 0; y < toRow; y++) {
+                for (let x = 0; x < this.grid.getWidth(); x++) {
+                    const b = this.grid.get(x, y);
+                    if (b) {
+                        if (this.currentGameType.chainRule_CheckRow) this.checkDirection(x, y, 1, 0);
+                        if (this.currentGameType.chainRule_CheckColumn) this.checkDirection(x, y, 0, 1);
+                        if (this.currentGameType.chainRule_CheckDiagonal) { this.checkDirection(x, y, 1, 1); this.checkDirection(x, y, 1, -1); }
+                    }
+                }
+            }
+        }
+        if (this.currentChainBlocks.length > 0) this.handleNewChain();
+    }
+
+    private checkDirection(x: number, y: number, dx: number, dy: number): void {
+        const start = this.grid.get(x, y); if (!start) return;
+        const chain: Block[] = [start]; let tx = x + dx, ty = y + dy;
+        while (tx >= 0 && tx < this.grid.getWidth() && ty >= 0 && ty < this.grid.getHeight()) {
+            const b = this.grid.get(tx, ty);
+            if (b && b.blockType.uuid === start.blockType.uuid) { chain.push(b); tx += dx; ty += dy; } else break;
+        }
+        if (chain.length >= this.currentGameType.chainRule_AmountPerChain) {
+            for (const b of chain) if (!this.currentChainBlocks.includes(b)) this.currentChainBlocks.push(b);
         }
     }
 
-    private checkLines(): void {
-        const linesToClear: number[] = [];
-        for (let y = 0; y < this.grid.getHeight(); y++) {
-            let full = true;
-            for (let x = 0; x < this.grid.getWidth(); x++) {
-                if (this.grid.get(x, y) === null) { full = false; break; }
-            }
-            if (full) linesToClear.push(y);
-        }
-
-        if (linesToClear.length > 0) {
-            for (const y of linesToClear) {
-                this.grid.clearLine(y);
-            }
-            this.linesClearedTotal += linesToClear.length;
-            this.emit('linesCleared', linesToClear, linesToClear.length, 1);
-            this.checkLevelUp();
-        }
-    }
-
-    private checkLevelUp(): void {
-        const levelThreshold = 10;
-        if (this.linesClearedTotal >= (this.currentLevel + 1) * levelThreshold) {
-            this.currentLevel++;
-            this.currentLineDropSpeedTicks = Math.max(10, this.currentLineDropSpeedTicks - 50);
-            this.emit('levelUp', this.currentLevel);
-        }
+    private handleNewChain(): void {
+        const count = this.currentChainBlocks.length;
+        for (const b of this.currentChainBlocks) this.grid.removeBlock(b, true, true);
+        this.score += count * 10; this.emit('linesCleared', [], 1, 1);
+        this.currentChainBlocks = [];
     }
 
     private newRandomPiece(): void {
         this.currentPiece = this.grid.getRandomPiece();
-        this.currentPiece.xGrid = Math.floor(this.grid.getWidth() / 2);
-        this.currentPiece.yGrid = 5;
-        if (!this.grid.doesPieceFit(this.currentPiece)) {
-            this.lost = true;
-        }
+        this.currentPiece.xGrid = Math.floor(this.grid.getWidth() / 2); this.currentPiece.yGrid = 5;
+        if (!this.grid.doesPieceFit(this.currentPiece)) this.lost = true;
         this.emit('pieceSpawned', this.currentPiece);
     }
 
     private holdPieceAction(): void {
-        const prevHold = this.holdPiece;
-        this.holdPiece = this.currentPiece;
-        if (prevHold) {
-            this.currentPiece = prevHold;
-            this.currentPiece.xGrid = Math.floor(this.grid.getWidth() / 2);
-            this.currentPiece.yGrid = 5;
-        } else {
-            this.newRandomPiece();
-        }
-        this.emit('pieceHeld', this.currentPiece, prevHold);
+        const prev = this.holdPiece; this.holdPiece = this.currentPiece;
+        if (prev) { this.currentPiece = prev; this.currentPiece.xGrid = Math.floor(this.grid.getWidth() / 2); this.currentPiece.yGrid = 5; }
+        else this.newRandomPiece();
+        this.emit('pieceHeld', this.currentPiece, prev);
     }
 
-    public getCurrentDifficulty(): DifficultyType {
-        return this.currentGameType.difficultyTypes[0];
-    }
-
-    public getRoom(): Room {
-        return new Room();
-    }
-
+    public getCurrentDifficulty(): DifficultyType { return this.currentGameType.difficultyTypes[0]; }
+    public getRoom(): Room { return new Room(); }
     public ticks(): number { return 1; }
     public cellW(): number { return 8; }
     public cellH(): number { return 8; }
+    public gridW(): number { return this.currentGameType.gridWidth; }
+    public gridH(): number { return this.currentGameType.gridHeight; }
+
+    public getRandomIntLessThan(max: number, _context?: string): number {
+        return Math.floor(Math.random() * max);
+    }
 
     public gotVSGarbageFromOtherPlayer(amount: number): void {
         this.emit('garbageReceived', amount);
-        this.garbageWaitForPiecesSetCount = Math.min(4, this.garbageWaitForPiecesSetCount + 3);
+        if (this.getCurrentDifficulty().name === "Beginner") amount = Math.floor(amount * 0.5);
+        this.frameState.receivedGarbageAmount += amount;
     }
 
     public getFormattedTime(): string {
-        const seconds = Math.floor((Date.now() - this.timeStarted) / 1000);
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
+        const sec = Math.floor((Date.now() - this.timeStarted) / 1000);
+        return `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2, '0')}`;
     }
 
     public getGhostY(): number {
@@ -376,29 +384,18 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
         const oldY = this.currentPiece.yGrid;
         while (this.grid.doesPieceFit(this.currentPiece)) { this.currentPiece.yGrid++; }
         const ghostY = this.currentPiece.yGrid - 1;
-        this.currentPiece.yGrid = oldY;
-        return ghostY;
+        this.currentPiece.yGrid = oldY; return ghostY;
     }
 
     public getState(): any {
         return {
-            grid: this.grid.getState(),
-            piece: this.currentPiece ? {
-                x: this.currentPiece.xGrid,
-                y: this.currentPiece.yGrid,
-                rot: this.currentPiece.currentRotation,
-                type: this.currentPiece.pieceType.name
-            } : null,
-            score: this.score,
-            level: this.currentLevel,
-            lines: this.linesClearedTotal,
+            grid: this.grid.getState(), score: this.score, level: this.currentLevel, lines: this.linesClearedTotal,
+            cursor: { x: this.cursorX, y: this.cursorY }
         };
     }
 
     public applyState(state: any): void {
-        this.grid.applyState(state.grid);
-        this.score = state.score;
-        this.currentLevel = state.level;
-        this.linesClearedTotal = state.lines;
+        this.grid.applyState(state.grid); this.score = state.score; this.currentLevel = state.level; this.linesClearedTotal = state.lines;
+        if (state.cursor) { this.cursorX = state.cursor.x; this.cursorY = state.cursor.y; }
     }
 }

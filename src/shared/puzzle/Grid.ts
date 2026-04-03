@@ -63,6 +63,38 @@ export class Grid {
         this.blocks = Array.from({ length: h }, () => Array(w).fill(null));
     }
 
+    public clear(): void {
+        this.blocks = [];
+        for (let y = 0; y < this.getHeight(); y++) {
+            this.blocks[y] = [];
+            for (let x = 0; x < this.getWidth(); x++) {
+                this.blocks[y][x] = null;
+            }
+        }
+    }
+
+
+
+    public isTopRowOccupied(): boolean {
+        for (let x = 0; x < this.getWidth(); x++) {
+            if (this.blocks[0][x] !== null) return true;
+        }
+        return false;
+    }
+
+    public fillBottom(rows: number): void {
+        for (let y = this.getHeight() - rows; y < this.getHeight(); y++) {
+            this.blocks[y] = [];
+            for (let x = 0; x < this.getWidth(); x++) {
+                const bt = this.game.currentGameType.blockTypes[Math.floor(Math.random() * this.game.currentGameType.blockTypes.length)];
+                const b = new Block(this.game, this, bt);
+                b.xGrid = x;
+                b.yGrid = y;
+                this.blocks[y][x] = b;
+            }
+        }
+    }
+
     public get(x: number, y: number): Block | null {
         if (x < 0 || x >= this.getWidth() || y < 0 || y >= this.getHeight()) return null;
         return this.blocks[y][x];

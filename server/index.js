@@ -54,19 +54,6 @@ function saveLeaderboards(leaderboards) {
 const leaderboards = loadLeaderboards();
 
 // ============================================================
-// Map Persistence
-// ============================================================
-
-const MAPS_DIR = path.join(__dirname, "maps");
-if (!fs.existsSync(MAPS_DIR)) fs.mkdirSync(MAPS_DIR);
-
-const DB_FILE = path.join(__dirname, "rpg_database.json");
-
-function getMapPath(mapId) {
-    return path.join(MAPS_DIR, `map_${mapId}.json`);
-}
-
-// ============================================================
 // Elo Rating System
 // ============================================================
 
@@ -84,6 +71,24 @@ function calculateNewRatings(winnerElo, loserElo) {
         winnerElo: Math.round(newWinnerElo),
         loserElo: Math.round(newLoserElo)
     };
+}
+
+// ============================================================
+// Map Persistence
+// ============================================================
+
+const MAPS_DIR = path.join(__dirname, "maps");
+if (!fs.existsSync(MAPS_DIR)) fs.mkdirSync(MAPS_DIR);
+
+const DB_FILE = path.join(__dirname, "rpg_database.json");
+const CHARS_DIR = path.join(__dirname, "characters");
+if (!fs.existsSync(CHARS_DIR)) fs.mkdirSync(CHARS_DIR);
+
+const EmuStates_DIR = path.join(__dirname, "emulator_states");
+if (!fs.existsSync(EmuStates_DIR)) fs.mkdirSync(EmuStates_DIR);
+
+function getMapPath(mapId) {
+    return path.join(MAPS_DIR, `map_${mapId}.json`);
 }
 
 // ============================================================
@@ -187,7 +192,11 @@ io.on("connection", (socket) => {
         // Send back room info (minus password)
         const roomInfo = { ...newRoom };
         delete roomInfo.password;
-        roomInfo.playerNames = newRoom.players.map(pid => players.get(pid)?.name || "Unknown");
+        roomInfo.playerData = newRoom.players.reduce((acc, pid) => {
+            const p = players.get(pid);
+            acc[pid] = { name: p?.name || "Unknown", elo: p?.elo || 1000 };
+            return acc;
+        }, {});
 
         socket.emit("roomCreated", roomInfo);
         console.log("Room created:", roomName, roomId, isPrivate ? "(Private)" : "", isTournament ? "(Tournament)" : "");
@@ -227,7 +236,12 @@ io.on("connection", (socket) => {
       
       const roomInfo = { ...room };
       delete roomInfo.password;
-      roomInfo.playerNames = room.players.map(pid => players.get(pid)?.name || "Unknown");
+      roomInfo.playerData = room.players.reduce((acc, pid) => {
+          const p = players.get(pid);
+          acc[pid] = { name: p?.name || "Unknown", elo: p?.elo || 1000 };
+          return acc;
+      }, {});
+
       socket.emit("joinedRoom", roomInfo);
       
       // Notify others in room
@@ -239,7 +253,11 @@ io.on("connection", (socket) => {
       });
 
       io.to(room.id).emit("roomUpdated", {
-          playerNames: room.players.map(pid => players.get(pid)?.name || "Unknown"),
+          playerData: room.players.reduce((acc, pid) => {
+              const p = players.get(pid);
+              acc[pid] = { name: p?.name || "Unknown", elo: p?.elo || 1000 };
+              return acc;
+          }, {}),
           spectatorCount: (room.spectators || []).length
       });
 
@@ -256,17 +274,22 @@ io.on("connection", (socket) => {
   });
 
     // ----------------------------------------------------------
-    // Chat Messages
+    // Chat Messages (Multi-Channel)
     // ----------------------------------------------------------
 
     socket.on("chatMessage", (data) => {
-        const room = Array.from(socket.rooms).find(r => rooms.has(r));
-        if (room) {
-            io.to(room).emit("chatMessage", {
-                message: String(data.message || "").substring(0, 500),
-                name: String(data.name || "Unknown").substring(0, 32),
-                timestamp: Date.now()
-            });
+        const { channel, message, to } = data;
+        const playerName = players.get(socket.id)?.name || "Unknown";
+
+        if (channel === "global") {
+            io.emit("chatMessage", { channel, name: playerName, message, timestamp: Date.now() });
+        } else if (channel === "room") {
+            const room = Array.from(socket.rooms).find(r => rooms.has(r));
+            if (room) {
+                io.to(room).emit("chatMessage", { channel, name: playerName, message, timestamp: Date.now() });
+            }
+        } else if (channel === "private" && to) {
+            io.to(to).emit("chatMessage", { channel, name: playerName, message, from: socket.id, timestamp: Date.now() });
         }
     });
 
@@ -293,6 +316,42 @@ io.on("connection", (socket) => {
     });
 
     // ----------------------------------------------------------
+    // Score Reporting & Leaderboards
+    // ----------------------------------------------------------
+
+    socket.on("reportScore", (data) => {
+        if (!data || !data.mode || typeof data.score !== "number") return;
+
+        const mode = String(data.mode);
+        if (!leaderboards[mode]) {
+            leaderboards[mode] = [];
+        }
+
+        const entry = {
+            name: String(data.name || "Unknown").substring(0, 32),
+            score: Math.max(0, Math.floor(data.score)),
+            lines: Math.max(0, Math.floor(data.lines || 0)),
+            time: Math.max(0, data.time || 0),
+            elo: players.get(socket.id)?.elo || DEFAULT_ELO,
+            date: Date.now()
+        };
+
+        leaderboards[mode].push(entry);
+        // Sort descending by score and keep top 100
+        leaderboards[mode].sort((a, b) => b.score - a.score);
+        leaderboards[mode] = leaderboards[mode].slice(0, 100);
+
+        saveLeaderboards(leaderboards);
+        console.log(`Score reported: ${entry.name} - ${entry.score} pts (${mode}) | Elo: ${entry.elo}`);
+    });
+
+    socket.on("getLeaderboard", (mode) => {
+        const modeStr = String(mode || "marathon");
+        const scores = (leaderboards[modeStr] || []).slice(0, 20);
+        socket.emit("leaderboard", { mode: modeStr, scores });
+    });
+
+    // ----------------------------------------------------------
     // Collaborative Map Editing
     // ----------------------------------------------------------
 
@@ -301,6 +360,140 @@ io.on("connection", (socket) => {
         if (room) {
             // Broadcast the edit to everyone else in the room
             socket.to(room).emit("editorAction", action);
+        }
+    });
+
+    // ----------------------------------------------------------
+    // MMORPG World Sync
+    // ----------------------------------------------------------
+
+    socket.on("playerMove", (pos) => {
+        // Broadcast player position to everyone in the world
+        socket.broadcast.emit("remotePlayerMove", {
+            id: socket.id,
+            name: players.get(socket.id)?.name || "Unknown",
+            x: pos.x,
+            y: pos.y
+        });
+    });
+
+    socket.on("playerAction", (action) => {
+        socket.broadcast.emit("remotePlayerAction", {
+            id: socket.id,
+            type: action.type, // e.g. 'jump', 'emote', 'interact'
+            data: action.data
+        });
+    });
+
+    // ----------------------------------------------------------
+    // AI Asset Generation (MOCK)
+    // ----------------------------------------------------------
+
+    socket.on("generateAsset", (data) => {
+        const { type, prompt } = data;
+        console.log(`[AI] Generating ${type} for prompt: ${prompt}`);
+        
+        // In a real implementation, we would call OpenAI DALL-E or Stable Diffusion here
+        setTimeout(() => {
+            const mockAssetId = `ai_${Date.now()}`;
+            const mockUrl = `https://placehold.co/32x48/00ff00/ffffff?text=${encodeURIComponent(prompt)}`;
+            
+            socket.emit("assetGenerated", { 
+                success: true, 
+                assetId: mockAssetId, 
+                url: mockUrl 
+            });
+        }, 2000);
+    });
+
+    // ----------------------------------------------------------
+    // RPG Database Persistence
+    // ----------------------------------------------------------
+
+    socket.on("saveRPGDatabase", (db) => {
+        try {
+            fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+            console.log("RPG Database saved to disk.");
+            socket.emit("rpgDatabaseSaved", { success: true });
+        } catch (e) {
+            console.error("Failed to save RPG database:", e);
+            socket.emit("rpgDatabaseSaved", { success: false, error: e.message });
+        }
+    });
+
+    socket.on("loadRPGDatabase", () => {
+        try {
+            if (fs.existsSync(DB_FILE)) {
+                const db = JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
+                socket.emit("rpgDatabaseLoaded", { success: true, db });
+            } else {
+                socket.emit("rpgDatabaseLoaded", { success: false, error: "Database not found" });
+            }
+        } catch (e) {
+            console.error("Failed to load RPG database:", e);
+            socket.emit("rpgDatabaseLoaded", { success: false, error: e.message });
+        }
+    });
+
+    // ----------------------------------------------------------
+    // Character Persistence
+    // ----------------------------------------------------------
+
+    socket.on("saveCharacter", (data) => {
+        const { name, charData } = data;
+        try {
+            const charFile = path.join(CHARS_DIR, `${name.toLowerCase()}.json`);
+            fs.writeFileSync(charFile, JSON.stringify(charData, null, 2));
+            console.log(`Character ${name} saved.`);
+            socket.emit("characterSaved", { success: true });
+        } catch (e) {
+            console.error("Failed to save character:", e);
+            socket.emit("characterSaved", { success: false, error: e.message });
+        }
+    });
+
+    socket.on("loadCharacter", (name) => {
+        try {
+            const charFile = path.join(CHARS_DIR, `${name.toLowerCase()}.json`);
+            if (fs.existsSync(charFile)) {
+                const charData = JSON.parse(fs.readFileSync(charFile, "utf-8"));
+                socket.emit("characterLoaded", { success: true, charData });
+            } else {
+                socket.emit("characterLoaded", { success: false, error: "Character not found" });
+            }
+        } catch (e) {
+            console.error("Failed to load character:", e);
+            socket.emit("characterLoaded", { success: false, error: e.message });
+        }
+    });
+
+    // ----------------------------------------------------------
+    // Emulator Save State Persistence
+    // ----------------------------------------------------------
+
+    socket.on("saveEmulatorState", (data) => {
+        const { name, state } = data;
+        try {
+            const stateFile = path.join(EmuStates_DIR, `${name.toLowerCase()}.json`);
+            fs.writeFileSync(stateFile, JSON.stringify(state));
+            console.log(`Emulator state for ${name} saved.`);
+        } catch (e) {
+            console.error("Failed to save emulator state:", e);
+        }
+    });
+
+    socket.on("loadEmulatorState", (name) => {
+        try {
+            const stateFile = path.join(EmuStates_DIR, `${name.toLowerCase()}.json`);
+            if (fs.existsSync(stateFile)) {
+                const stateData = JSON.parse(fs.readFileSync(stateFile, "utf-8"));
+                socket.emit("emulatorStateLoaded", { success: true, state: stateData });
+            } else {
+                socket.emit("emulatorStateLoaded", { success: false, error: "State not found" });
+            }
+        } catch (e) {
+            console.error("Failed to load emulator state:", e);
+            socket.emit("emulatorStateLoaded", { success: false, error: e.message });
         }
     });
 
@@ -342,6 +535,27 @@ io.on("connection", (socket) => {
             socket.emit("mapList", maps);
         } catch (e) {
             socket.emit("mapList", []);
+        }
+    });
+
+    // ----------------------------------------------------------
+    // Asset Management
+    // ----------------------------------------------------------
+
+    socket.on("listAssets", (type) => {
+        // type can be 'sprites', 'tilesets', 'audio', etc.
+        const assetDir = path.join(__dirname, "../data", type || "");
+        try {
+            if (fs.existsSync(assetDir)) {
+                const files = fs.readdirSync(assetDir, { recursive: true })
+                    .filter(f => fs.statSync(path.join(assetDir, f)).isFile());
+                socket.emit("assetList", { type, files });
+            } else {
+                socket.emit("assetList", { type, files: [] });
+            }
+        } catch (e) {
+            console.error(`Failed to list assets for ${type}:`, e);
+            socket.emit("assetList", { type, files: [] });
         }
     });
 
@@ -398,151 +612,6 @@ io.on("connection", (socket) => {
             io.to(loserId).emit("eloUpdate", { elo: loser.elo, gain: newRatings.loserElo - loser.elo });
         }
     });
-        const { type, prompt } = data;
-        console.log(`[AI] Generating ${type} for prompt: ${prompt}`);
-        
-        // In a real implementation, we would call OpenAI DALL-E or Stable Diffusion here
-        setTimeout(() => {
-            const mockAssetId = `ai_${Date.now()}`;
-            const mockUrl = `https://placehold.co/32x48/00ff00/ffffff?text=${encodeURIComponent(prompt)}`;
-            
-            socket.emit("assetGenerated", { 
-                success: true, 
-                assetId: mockAssetId, 
-                url: mockUrl 
-            });
-        }, 2000);
-    });
-        try {
-            fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
-            console.log("RPG Database saved to disk.");
-            socket.emit("rpgDatabaseSaved", { success: true });
-        } catch (e) {
-            console.error("Failed to save RPG database:", e);
-            socket.emit("rpgDatabaseSaved", { success: false, error: e.message });
-        }
-    });
-
-    socket.on("loadRPGDatabase", () => {
-        try {
-            if (fs.existsSync(DB_FILE)) {
-                const db = JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
-                socket.emit("rpgDatabaseLoaded", { success: true, db });
-            } else {
-                socket.emit("rpgDatabaseLoaded", { success: false, error: "Database not found" });
-            }
-        } catch (e) {
-            console.error("Failed to load RPG database:", e);
-            socket.emit("rpgDatabaseLoaded", { success: false, error: e.message });
-        }
-    });
-
-    // ----------------------------------------------------------
-    // MMORPG World Sync
-    // ----------------------------------------------------------
-
-    socket.on("playerMove", (pos) => {
-        // Broadcast player position to everyone in the world
-        socket.broadcast.emit("remotePlayerMove", {
-            id: socket.id,
-            name: players.get(socket.id)?.name || "Unknown",
-            x: pos.x,
-            y: pos.y
-        });
-    });
-
-    socket.on("playerAction", (action) => {
-        socket.broadcast.emit("remotePlayerAction", {
-            id: socket.id,
-            type: action.type, // e.g. 'jump', 'emote', 'interact'
-            data: action.data
-        });
-    });
-
-    // ----------------------------------------------------------
-    // Score Reporting & Leaderboards
-    // ----------------------------------------------------------
-
-    socket.on("reportScore", (data) => {
-        if (!data || !data.mode || typeof data.score !== "number") return;
-
-        const mode = String(data.mode);
-        if (!leaderboards[mode]) {
-            leaderboards[mode] = [];
-        }
-
-        const entry = {
-            name: String(data.name || "Unknown").substring(0, 32),
-            score: Math.max(0, Math.floor(data.score)),
-            lines: Math.max(0, Math.floor(data.lines || 0)),
-            time: Math.max(0, data.time || 0),
-            elo: players.get(socket.id)?.elo || DEFAULT_ELO,
-            date: Date.now()
-        };
-
-        leaderboards[mode].push(entry);
-        // Sort descending by score and keep top 100
-        leaderboards[mode].sort((a, b) => b.score - a.score);
-        leaderboards[mode] = leaderboards[mode].slice(0, 100);
-
-        saveLeaderboards(leaderboards);
-        console.log(`Score reported: ${entry.name} - ${entry.score} pts (${mode}) | Elo: ${entry.elo}`);
-    });
-
-    socket.on("getLeaderboard", (mode) => {
-        const modeStr = String(mode || "marathon");
-        const scores = (leaderboards[modeStr] || []).slice(0, 20);
-        socket.emit("leaderboard", { mode: modeStr, scores });
-    });
-
-    // ----------------------------------------------------------
-    // Tournament Bracket
-    // ----------------------------------------------------------
-
-    socket.on("getTournamentBracket", (roomId) => {
-        const room = rooms.get(roomId);
-        if (room && room.isTournament) {
-            // Generate bracket dynamically based on current players
-            const playerNames = room.players.map((pid, i) =>
-                players.get(pid)?.name || `Player ${i + 1}`
-            );
-
-            const matches = [];
-            const numPlayers = playerNames.length;
-            const numFirstRoundMatches = Math.ceil(numPlayers / 2);
-
-            // Round 1: pair up players
-            for (let i = 0; i < numFirstRoundMatches; i++) {
-                const p1 = playerNames[i * 2] || "Waiting...";
-                const p2 = playerNames[i * 2 + 1] || "Waiting...";
-                matches.push({
-                    id: `m${i + 1}`,
-                    p1, p2,
-                    winner: "",
-                    nextMatchId: `m${numFirstRoundMatches + Math.floor(i / 2) + 1}`,
-                    isFinal: numFirstRoundMatches === 1,
-                    round: 1
-                });
-            }
-
-            // Finals (round 2) if more than 2 players
-            if (numFirstRoundMatches > 1) {
-                const numFinals = Math.ceil(numFirstRoundMatches / 2);
-                for (let i = 0; i < numFinals; i++) {
-                    matches.push({
-                        id: `m${numFirstRoundMatches + i + 1}`,
-                        p1: "", p2: "",
-                        winner: "",
-                        nextMatchId: numFinals > 1 ? `m${numFirstRoundMatches + numFinals + 1}` : "",
-                        isFinal: numFinals === 1,
-                        round: 2
-                    });
-                }
-            }
-
-            socket.emit("tournamentBracket", { roomId, matches });
-        }
-    });
 
     // ----------------------------------------------------------
     // Disconnect / Cleanup
@@ -563,8 +632,14 @@ io.on("connection", (socket) => {
                         name: "System",
                         timestamp: Date.now()
                     });
+                    
                     io.to(room).emit("roomUpdated", {
-                        playerNames: r.players.map(pid => players.get(pid)?.name || "Unknown")
+                        playerData: r.players.reduce((acc, pid) => {
+                            const p = players.get(pid);
+                            acc[pid] = { name: p?.name || "Unknown", elo: p?.elo || 1000 };
+                            return acc;
+                        }, {}),
+                        spectatorCount: (r.spectators || []).length
                     });
                 }
             }

@@ -1,4 +1,5 @@
 import { GameType, BlockType, PieceType, GamePlayMode } from '../puzzle';
+import { Rotation } from '../../shared/puzzle/Piece';
 
 export class CustomGameEditor {
   private container: HTMLElement;
@@ -16,6 +17,8 @@ export class CustomGameEditor {
   
   private blockList!: HTMLSelectElement;
   private pieceList!: HTMLSelectElement;
+
+  private currentEditingRotation: number = 0;
 
   constructor(parentElementId: string) {
     const parent = document.getElementById(parentElementId);
@@ -142,7 +145,19 @@ export class CustomGameEditor {
               <button id="btn-remove-piece">-</button>
             </div>
           </div>
-          <div id="piece-details" class="item-details">Select a piece</div>
+          <div id="piece-details" class="item-details">
+            <h4 id="piece-name-display">Select a piece</h4>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <button id="btn-prev-rot"> < </button>
+                <span id="rot-label">Rotation: 0</span>
+                <button id="btn-next-rot"> > </button>
+                <button id="btn-add-rot">+ ROT</button>
+            </div>
+            <div id="piece-shape-editor" style="display:grid; grid-template-columns: repeat(4, 30px); gap: 2px; margin-top:10px;">
+                <!-- 4x4 grid -->
+            </div>
+            <p style="font-size:12px; color:#888; margin-top:10px;">Click grid to toggle blocks</p>
+          </div>
         </div>
       </div>
     `;
@@ -180,6 +195,75 @@ export class CustomGameEditor {
         this.currentGameType.blockTypes.push(bt);
         this.updateBlockList();
     });
+
+    this.container.querySelector('#btn-add-piece')?.addEventListener('click', () => {
+        const pt = new PieceType();
+        pt.name = "New Piece";
+        this.currentGameType.pieceTypes.push(pt);
+        this.updatePieceList();
+    });
+
+    this.container.querySelector('#btn-next-rot')?.addEventListener('click', () => {
+        this.currentEditingRotation++;
+        this.renderPieceShapeEditor();
+    });
+
+    this.container.querySelector('#btn-prev-rot')?.addEventListener('click', () => {
+        this.currentEditingRotation = Math.max(0, this.currentEditingRotation - 1);
+        this.renderPieceShapeEditor();
+    });
+
+    this.container.querySelector('#btn-add-rot')?.addEventListener('click', () => {
+        const ptIndex = this.pieceList.selectedIndex;
+        if (ptIndex === -1) return;
+        const pt = this.currentGameType.pieceTypes[ptIndex];
+        pt.rotationSet.add(new Rotation());
+        this.currentEditingRotation = pt.rotationSet.size() - 1;
+        this.renderPieceShapeEditor();
+    });
+
+    this.pieceList.addEventListener('change', () => {
+        this.currentEditingRotation = 0;
+        this.renderPieceShapeEditor();
+    });
+  }
+
+  private renderPieceShapeEditor() {
+      const ptIndex = this.pieceList.selectedIndex;
+      if (ptIndex === -1) return;
+      
+      const pt = this.currentGameType.pieceTypes[ptIndex];
+      const maxRot = pt.rotationSet.size();
+      this.currentEditingRotation = ((this.currentEditingRotation % maxRot) + maxRot) % maxRot;
+      
+      this.container.querySelector('#rot-label')!.textContent = `Rotation: ${this.currentEditingRotation}`;
+      
+      const grid = this.container.querySelector('#piece-shape-editor')!;
+      grid.innerHTML = '';
+      
+      const rotation = pt.rotationSet.get(this.currentEditingRotation);
+      
+      for (let y = 0; y < 4; y++) {
+          for (let x = 0; x < 4; x++) {
+              const cell = document.createElement('div');
+              cell.style.width = '30px';
+              cell.style.height = '30px';
+              cell.style.border = '1px solid #444';
+              
+              const isSet = rotation.blockOffsets.some((o: any) => o.x === x && o.y === y);
+              cell.style.background = isSet ? '#00ff00' : '#111';
+              
+              cell.onclick = () => {
+                  if (isSet) {
+                      rotation.blockOffsets = rotation.blockOffsets.filter((o: any) => !(o.x === x && o.y === y));
+                  } else {
+                      rotation.blockOffsets.push({ x, y });
+                  }
+                  this.renderPieceShapeEditor();
+              };
+              grid.appendChild(cell);
+          }
+      }
   }
 
   private switchTab(tabName: string) {

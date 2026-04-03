@@ -106,11 +106,24 @@ export class WorldEditor {
             const row = document.createElement('div');
             row.className = 'actor-row';
             row.innerHTML = `
-                <span>ID: ${actor.id}</span>
-                <input type="text" value="${actor.name}" data-index="${index}" class="actor-name-input">
-                <input type="text" placeholder="Character Sprite" value="${actor.characterName}" class="actor-sprite-input">
+                <div class="actor-row">
+                    <span>ID: ${actor.id}</span>
+                    <input type="text" value="${actor.name}" class="actor-name-input">
+                    <input type="text" placeholder="Character Sprite" value="${actor.characterName}" class="actor-sprite-input">
+                    <button class="btn-edit-interaction" data-id="${actor.id}">INTERACTIONS</button>
+                </div>
             `;
             list.appendChild(row);
+        });
+
+        list.querySelectorAll('.btn-edit-interaction').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = (e.target as HTMLElement).dataset.id;
+                const text = prompt("Enter NPC Dialogue:");
+                if (text) {
+                    alert(`Interaction saved for NPC ${id}: "${text}"`);
+                }
+            });
         });
     }
 }
