@@ -1,5 +1,6 @@
 import { NDGameEngine } from './NDGameEngine';
 import { ND, NDButton } from './ND';
+import { networkManager } from '../../puzzle';
 import { Sprite, Texture, RenderTexture, Container, Graphics, Text, Application } from 'pixi.js';
 
 export class LibretroGame extends NDGameEngine {
@@ -49,7 +50,19 @@ export class LibretroGame extends NDGameEngine {
           case 'rom_loaded':
               console.log('[LibretroGame] ROM ready. Starting...');
               break;
+          case 'state_saved':
+              this.saveStateToCloud(msg.data);
+              break;
       }
+  }
+
+  private saveStateToCloud(data: Uint8Array) {
+      const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+      networkManager.emit('saveEmulatorState', {
+          name: playerName,
+          state: Array.from(data) // Convert to array for JSON serialization
+      });
+      console.log('[LibretroGame] Save state pushed to cloud.');
   }
 
   private updateScreen(data: Uint8ClampedArray) {
@@ -60,7 +73,7 @@ export class LibretroGame extends NDGameEngine {
       canvas.width = 256;
       canvas.height = 256;
       const ctx = canvas.getContext('2d')!;
-      const imgData = new ImageData(data as any, 256, 256);
+      const imgData = new ImageData(new Uint8ClampedArray(data.buffer) as any, 256, 256);
       ctx.putImageData(imgData, 0, 0);
       
       const tex = Texture.from(canvas);
@@ -119,7 +132,44 @@ export class LibretroGame extends NDGameEngine {
     romBtn.on('pointerdown', () => this.loadTestRom());
     this.menuContainer!.addChild(romBtn);
 
+    const saveStateBtn = new Container();
+    saveStateBtn.position.set(64, 160);
+    const saveBg = new Graphics();
+    saveBg.rect(-50, -12, 100, 24);
+    saveBg.fill(0xaa6600);
+    saveStateBtn.addChild(saveBg);
+    const saveTxt = new Text({ text: 'SAVE STATE', style: { fill: '#fff', fontSize: 10 } });
+    saveTxt.anchor.set(0.5);
+    saveStateBtn.addChild(saveTxt);
+    saveStateBtn.eventMode = 'static';
+    saveStateBtn.on('pointerdown', () => this.coreWorker?.postMessage({ type: 'save_state' }));
+    this.menuContainer!.addChild(saveStateBtn);
+
+    const loadStateBtn = new Container();
+    loadStateBtn.position.set(192, 160);
+    const loadBg = new Graphics();
+    loadBg.rect(-50, -12, 100, 24);
+    loadBg.fill(0x0066aa);
+    loadStateBtn.addChild(loadBg);
+    const loadTxt = new Text({ text: 'LOAD STATE', style: { fill: '#fff', fontSize: 10 } });
+    loadTxt.anchor.set(0.5);
+    loadStateBtn.addChild(loadTxt);
+    loadStateBtn.eventMode = 'static';
+    loadStateBtn.on('pointerdown', () => this.requestStateFromCloud());
+    this.menuContainer!.addChild(loadStateBtn);
+
     this.nd.bottomScreen.addChild(this.menuContainer);
+  }
+
+  private requestStateFromCloud() {
+      const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+      networkManager.emit('loadEmulatorState', playerName);
+      networkManager.once('emulatorStateLoaded', (data: any) => {
+          if (data.success) {
+              const buffer = new Uint8Array(data.state);
+              this.coreWorker?.postMessage({ type: 'load_state', data: buffer }, [buffer.buffer]);
+          }
+      });
   }
 
   private loadTestRom() {

@@ -166,7 +166,7 @@ export class LobbyScene extends Scene {
             this.updatePlayersUI(data.playerNames);
         });
 
-        this.networkManager.on('chatMessage', (data: { message: string, name: string, timestamp: number }) => {
+        this.networkManager.on('chatMessage', (data: { channel: string, message: string, name: string, timestamp: number }) => {
             this.handleChatMessage(data);
         });
 
@@ -416,6 +416,12 @@ export class LobbyScene extends Scene {
 
         this.chatContainer.innerHTML = `
             <div id="chatMessages" style="flex-grow: 1; overflow-y: auto; margin-bottom: 10px; font-family: monospace; font-size: 14px;"></div>
+            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                <select id="chatChannel" style="background:#222; color:white; border:1px solid #444;">
+                    <option value="global">Global</option>
+                    <option value="room">Room</option>
+                </select>
+            </div>
             <div style="display: flex; gap: 5px;">
                 <input type="text" id="chatInput" placeholder="Type a message..." style="flex-grow: 1; padding: 5px; background: #222; color: white; border: 1px solid #444;" />
                 <button id="sendChatBtn" style="padding: 5px 10px; background: #3366ff; color: white; border: none; cursor: pointer;">Send</button>
@@ -427,12 +433,15 @@ export class LobbyScene extends Scene {
 
         const input = document.getElementById('chatInput') as HTMLInputElement;
         const sendBtn = document.getElementById('sendChatBtn') as HTMLButtonElement;
+        const channelSelect = document.getElementById('chatChannel') as HTMLSelectElement;
 
         const sendMessage = () => {
             const msg = input.value.trim();
             if (msg) {
-                const name = localStorage.getItem('playerName') || 'Player';
-                this.networkManager.sendChat(msg, name);
+                this.networkManager.emit('chatMessage', { 
+                    channel: channelSelect.value, 
+                    message: msg 
+                });
                 input.value = '';
             }
         };
@@ -443,12 +452,13 @@ export class LobbyScene extends Scene {
         };
     }
 
-    private handleChatMessage(data: { message: string, name: string, timestamp: number }): void {
+    private handleChatMessage(data: { channel: string, message: string, name: string, timestamp: number }): void {
         const messagesDiv = document.getElementById('chatMessages');
         if (messagesDiv) {
             const msgEl = document.createElement('div');
             const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            msgEl.innerHTML = `<span style="color: #888;">[${time}]</span> <span style="color: #3366ff; font-weight: bold;">${data.name}:</span> ${data.message}`;
+            const channelStr = `[${data.channel.toUpperCase()}]`;
+            msgEl.innerHTML = `<span style="color: #888;">${channelStr}</span> <span style="color: #3366ff; font-weight: bold;">${data.name}:</span> ${data.message}`;
             messagesDiv.appendChild(msgEl);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }

@@ -1,5 +1,6 @@
 import { BlockType, BlockTypes } from "./BlockType";
 import { PieceType, PieceTypes, STANDARD_PIECE_TYPES } from "./PieceType";
+import { RotationSet, Rotation } from "./Piece";
 
 export type VSGarbageRule = "NONE" | "SEND_GARBAGE";
 
@@ -104,6 +105,8 @@ export class GameType {
     public chainRule_CheckTouchSameColor: boolean = true;
     public chainRule_CheckTouchAnyColor: boolean = false;
 
+    public playingFieldGarbageType: GarbageType = GarbageType.MATCH_BOTTOM_ROW;
+
     public scoreType: ScoreType = ScoreType.LINES_CLEARED;
     public scoreTypeAmountPerLevelGained: number = 10;
 
@@ -141,7 +144,27 @@ export class GameType {
 
         // Add standard pieces
         this.pieceTypes = [...STANDARD_PIECE_TYPES];
-        this.blockTypes = [...BlockTypes];
+        this.blockTypes = Object.values(BlockTypes);
+    }
+
+    public getNormalBlockTypes(d: DifficultyType): BlockType[] {
+        return this.blockTypes.filter(bt => !bt.isSpecialType && !bt.isGarbageBlockType);
+    }
+
+    public getGarbageBlockTypes(d: DifficultyType): BlockType[] {
+        return this.blockTypes.filter(bt => bt.isGarbageBlockType);
+    }
+
+    public getNormalPieceTypes(d: DifficultyType): PieceType[] {
+        return this.pieceTypes.filter(pt => !pt.isSpecialType() && !pt.isGarbagePieceType);
+    }
+
+    public getGarbagePieceTypes(d: DifficultyType): PieceType[] {
+        return this.pieceTypes.filter(pt => pt.isGarbagePieceType);
+    }
+
+    public getPlayingFieldBlockTypes(d: DifficultyType): BlockType[] {
+        return this.getNormalBlockTypes(d);
     }
 
     public static fromJSON(jsonStr: string): GameType {
@@ -161,6 +184,17 @@ export class GameType {
             gt.pieceTypes = obj.pieceTypes.map((ptObj: any) => {
                 const pt = new PieceType();
                 Object.assign(pt, ptObj);
+                
+                // Hydrate RotationSet
+                const rs = new RotationSet(ptObj.rotationSet?.name || "");
+                if (ptObj.rotationSet?.rotations) {
+                    ptObj.rotationSet.rotations.forEach((rObj: any) => {
+                        const r = new Rotation();
+                        r.blockOffsets = rObj.blockOffsets.map((o: any) => ({ x: o.x, y: o.y }));
+                        rs.add(r);
+                    });
+                }
+                pt.rotationSet = rs;
                 return pt;
             });
         }

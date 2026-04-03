@@ -1,40 +1,36 @@
-# Deployment Guide: bobsgameweb
+# Deployment Guide: bobsgame.com
 
-This guide outlines the steps to deploy the web port to `bobsgame.com`.
+The Omni-Engine web port is ready for deployment to DreamHost.
 
 ## 1. Prerequisites
-- Node.js 20+
-- A server with Docker support or a static file host (e.g., Netlify, Vercel, or custom VPS).
+- `sshpass` installed (for automated password entry) or SSH keys configured.
+- `rsync` installed on your local machine.
 
-## 2. Build the Web Client
-Run the following commands in the `bobsgameweb/` directory:
+## 2. Automated Deployment
+Run the following command from the `bobsgameweb` directory:
+
 ```bash
-npm install
-npm run build
-```
-The output will be in `dist/renderer/`. These files should be uploaded to your static file host (e.g., the root of `bobsgame.com`).
-
-## 3. Deploy the Socket.io Server
-The multiplayer server is located in `bobsgameweb/server/`. You can deploy it using Docker:
-
-### Using Docker
-```bash
-cd server
-docker build -t bobsgame-server .
-docker run -d -p 6065:6065 --name bobsgame-server bobsgame-server
+./scripts/deploy.sh
 ```
 
-### Manual Deployment
-```bash
-cd server
-npm install
-npm start
-```
-Ensure that port `6065` is open on your firewall.
+## 3. Manual Deployment Steps
+If you prefer manual deployment:
 
-## 4. Environment Configuration
-- **Client:** The client is configured to connect to `bobsgame.com:6065` in production. If your server is on a different domain, update `src/renderer/puzzle/BobNet.ts`.
-- **Assets:** The client is configured to fetch assets from the S3 bucket: `https://bobsgame.s3.amazonaws.com/z/`. Ensure your CORS settings on S3 allow requests from `bobsgame.com`.
+1.  **Build the project:**
+    ```bash
+    npm run build
+    ```
+2.  **Transfer files via SCP/RSYNC:**
+    ```bash
+    rsync -avz dist/renderer/ robertpelloni@pdx1-shared-a1-33.dreamhost.com:~/bobsgame.com/
+    ```
+3.  **Deploy the Multiplayer Server:**
+    ```bash
+    rsync -avz server/ robertpelloni@pdx1-shared-a1-33.dreamhost.com:~/bobsgame.com/server/
+    ssh robertpelloni@pdx1-shared-a1-33.dreamhost.com "cd ~/bobsgame.com/server && npm install && pm2 restart index.js"
+    ```
 
-## 5. Continuous Deployment (Recommended)
-Consider setting up a GitHub Action to automate the build and deployment process.
+## 4. Server Configuration
+Ensure your DreamHost panel is configured to:
+- Point `bobsgame.com` to `~/bobsgame.com/`.
+- Allow WebSocket connections (usually enabled by default on shared hosting, but might require a Passenger or Node setup).

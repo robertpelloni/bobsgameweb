@@ -66,6 +66,18 @@ self.onmessage = async (e) => {
         case 'stop':
             isRunning = false;
             break;
+
+        case 'save_state':
+            console.log('[LibretroWorker] Generating save state...');
+            const mockState = new Uint8Array(1024);
+            (self as any).postMessage({ type: 'state_saved', data: mockState }, [mockState.buffer]);
+            break;
+
+        case 'load_state':
+            console.log('[LibretroWorker] Loading save state...');
+            // core.retro_unserialize(data);
+            self.postMessage({ type: 'state_loaded' });
+            break;
     }
 };
 

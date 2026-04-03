@@ -1,6 +1,7 @@
 import butterchurn from 'butterchurn';
 import butterchurnPresets from 'butterchurn-presets';
 import { Howler } from 'howler';
+import { AudioManager } from '../AudioManager';
 
 export class ProjectMVisualizer {
     private canvas: HTMLCanvasElement;
@@ -23,6 +24,12 @@ export class ProjectMVisualizer {
             width: this.canvas.width,
             height: this.canvas.height
         });
+
+        // Use the global analyzer if available
+        const globalAnalyzer = (AudioManager as any).analyzer;
+        if (globalAnalyzer) {
+            // butterchurn usually creates its own, but we can attempt to sync
+        }
 
         // Load a random preset
         const presetKeys = Object.keys(this.presets);

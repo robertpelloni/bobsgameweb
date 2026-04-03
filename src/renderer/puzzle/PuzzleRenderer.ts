@@ -1,5 +1,5 @@
 import { Container, Graphics, Text, TextStyle } from 'pixi.js';
-import { PuzzleGame, GameState, Block, AnimationState, Piece, Color } from './index';
+import { PuzzleGame, GameState, Block, AnimationState, Piece, Color, GamePlayMode } from './index';
 
 export interface PuzzleRendererConfig {
   cellSize?: number;
@@ -60,13 +60,7 @@ export class PuzzleRenderer {
   private statsContainer: Container;
   private particlesContainer: Container;
   private popupsContainer: Container;
-
-  private particles: PuzzleParticle[] = [];
-  private popups: { text: Text, vx: number, vy: number, life: number, maxLife: number }[] = [];
-  private displayScore: number = 0;
-  private currentShake: number = 0;
-  
-  private currentPieceDisplay: { x: number, y: number, rot: number, pieceRef: Piece | null } | null = null;
+  private cursorGraphics: Graphics;
 
   private gridBackground: Graphics;
   private blockGraphics: Map<string, Graphics> = new Map();
@@ -81,6 +75,11 @@ export class PuzzleRenderer {
   private timeText: Text;
 
   private destroyed: boolean = false;
+  private particles: PuzzleParticle[] = [];
+  private popups: { text: Text, vx: number, vy: number, life: number, maxLife: number }[] = [];
+  private displayScore: number = 0;
+  private currentShake: number = 0;
+  private currentPieceDisplay: { x: number, y: number, rot: number, pieceRef: Piece | null } | null = null;
 
   constructor(config?: PuzzleRendererConfig) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -97,6 +96,7 @@ export class PuzzleRenderer {
     this.statsContainer = new Container();
     this.particlesContainer = new Container();
     this.popupsContainer = new Container();
+    this.cursorGraphics = new Graphics();
 
     this.gridBackground = new Graphics();
     this.pieceGraphics = new Graphics();
@@ -112,37 +112,24 @@ export class PuzzleRenderer {
     this.container.addChild(this.statsContainer);
     this.container.addChild(this.particlesContainer);
     this.container.addChild(this.popupsContainer);
+    this.container.addChild(this.cursorGraphics);
 
     this.gridContainer.addChild(this.gridBackground);
     this.pieceContainer.addChild(this.pieceGraphics);
     this.ghostContainer.addChild(this.ghostGraphics);
     this.holdContainer.addChild(this.holdGraphics);
 
-    const textStyle = new TextStyle({
-      fontFamily: 'monospace',
-      fontSize: 18,
-      fill: 0xffffff,
-    });
-
+    const textStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 18, fill: 0xffffff });
     this.scoreText = new Text({ text: 'Score: 0', style: textStyle });
     this.levelText = new Text({ text: 'Level: 1', style: textStyle });
     this.linesText = new Text({ text: 'Lines: 0', style: textStyle });
     this.timeText = new Text({ text: 'Time: 00:00', style: textStyle });
     
-    const hintStyle = new TextStyle({
-      fontFamily: 'monospace',
-      fontSize: 14,
-      fill: 0x888888,
-    });
+    const hintStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 14, fill: 0x888888 });
     const helpHint = new Text({ text: 'Press F1 for Help', style: hintStyle });
     helpHint.position.set(0, 150);
 
-    this.statsContainer.addChild(this.scoreText);
-    this.statsContainer.addChild(this.levelText);
-    this.statsContainer.addChild(this.linesText);
-    this.statsContainer.addChild(this.timeText);
-    this.statsContainer.addChild(helpHint);
-
+    this.statsContainer.addChild(this.scoreText, this.levelText, this.linesText, this.timeText, helpHint);
     this.ghostContainer.alpha = this.config.ghostAlpha;
   }
 
@@ -159,17 +146,11 @@ export class PuzzleRenderer {
 
   private setupLayout(): void {
     if (!this.game) return;
-
     const { cellSize, gridOffsetX, gridOffsetY, isOpponent } = this.config;
     const gridWidth = this.game.grid.getWidth();
-    const gridHeight = this.game.grid.getHeight() - 5; // hidden rows buffer
-
-    let ox = gridOffsetX;
-    let oy = gridOffsetY;
-    if (this.currentShake > 0) {
-      ox += (Math.random() - 0.5) * this.currentShake;
-      oy += (Math.random() - 0.5) * this.currentShake;
-    }
+    const gridHeight = this.game.grid.getHeight() - 5;
+    let ox = gridOffsetX, oy = gridOffsetY;
+    if (this.currentShake > 0) { ox += (Math.random() - 0.5) * this.currentShake; oy += (Math.random() - 0.5) * this.currentShake; }
 
     this.gridContainer.position.set(ox, oy);
     this.blocksContainer.position.set(ox, oy);
@@ -179,519 +160,214 @@ export class PuzzleRenderer {
     this.popupsContainer.position.set(ox, oy);
 
     const gridPixelWidth = gridWidth * cellSize;
-
     if (isOpponent) {
-      this.nextContainer.visible = false;
-      this.holdContainer.visible = false;
-      this.ghostContainer.visible = false;
+      this.nextContainer.visible = false; this.holdContainer.visible = false; this.ghostContainer.visible = false;
       this.statsContainer.position.set(gridOffsetX, gridOffsetY + gridHeight * cellSize + 10);
     } else {
-      this.nextContainer.position.set(
-        gridOffsetX + gridPixelWidth + 40,
-        gridOffsetY
-      );
-
+      this.nextContainer.position.set(gridOffsetX + gridPixelWidth + 40, gridOffsetY);
       this.holdContainer.position.set(gridOffsetX - 140, gridOffsetY);
-
       this.statsContainer.position.set(gridOffsetX - 180, gridOffsetY + 200);
     }
-
-    this.scoreText.position.set(0, 0);
-    this.levelText.position.set(0, 30);
-    this.linesText.position.set(0, 60);
-    this.timeText.position.set(0, 90);
-
+    this.scoreText.position.set(0, 0); this.levelText.position.set(0, 30); this.linesText.position.set(0, 60); this.timeText.position.set(0, 90);
     this.drawGridBackground();
   }
 
   private setupNextPieceGraphics(): void {
     if (!this.game) return;
-
-    this.nextGraphics.forEach((g) => g.destroy());
-    this.nextGraphics = [];
-
-    // Default to 3 next pieces for now
-    const showCount = 3;
-    for (let i = 0; i < showCount; i++) {
-      const g = new Graphics();
-      g.position.set(0, i * (this.config.cellSize * 3 + 20));
-      this.nextContainer.addChild(g);
-      this.nextGraphics.push(g);
+    this.nextGraphics.forEach((g) => g.destroy()); this.nextGraphics = [];
+    for (let i = 0; i < 3; i++) {
+      const g = new Graphics(); g.position.set(0, i * (this.config.cellSize * 3 + 20));
+      this.nextContainer.addChild(g); this.nextGraphics.push(g);
     }
   }
 
   private drawGridBackground(): void {
     if (!this.game) return;
-
     const { cellSize, borderWidth, gridLineColor, borderColor, backgroundColor } = this.config;
-    const gridWidth = this.game.grid.getWidth();
-    const gridHeight = this.game.grid.getHeight() - 5;
-    const pixelWidth = gridWidth * cellSize;
-    const pixelHeight = gridHeight * cellSize;
-
+    const gridWidth = this.game.grid.getWidth(); const gridHeight = this.game.grid.getHeight() - 5;
+    const pixelWidth = gridWidth * cellSize; const pixelHeight = gridHeight * cellSize;
     this.gridBackground.clear();
-
     this.gridBackground.rect(-borderWidth, -borderWidth, pixelWidth + borderWidth * 2, pixelHeight + borderWidth * 2);
     this.gridBackground.fill(borderColor);
-
     this.gridBackground.rect(0, 0, pixelWidth, pixelHeight);
     this.gridBackground.fill(backgroundColor);
-
     if (this.config.showGrid) {
       this.gridBackground.setStrokeStyle({ width: 1, color: gridLineColor });
-      for (let x = 1; x < gridWidth; x++) {
-        this.gridBackground.moveTo(x * cellSize, 0);
-        this.gridBackground.lineTo(x * cellSize, pixelHeight);
-      }
-      for (let y = 1; y < gridHeight; y++) {
-        this.gridBackground.moveTo(0, y * cellSize);
-        this.gridBackground.lineTo(pixelWidth, y * cellSize);
-      }
+      for (let x = 1; x < gridWidth; x++) { this.gridBackground.moveTo(x * cellSize, 0); this.gridBackground.lineTo(x * cellSize, pixelHeight); }
+      for (let y = 1; y < gridHeight; y++) { this.gridBackground.moveTo(0, y * cellSize); this.gridBackground.lineTo(pixelWidth, y * cellSize); }
       this.gridBackground.stroke();
     }
   }
 
   update(): void {
     if (!this.game || this.destroyed) return;
-
-    this.updateBlocks();
-    this.updateCurrentPiece();
-    this.updateGhostPiece();
-    this.updateNextPieces();
-    this.updateHoldPiece();
-    this.updateStats();
-    this.updateParticles();
-    this.updatePopups();
-  }
-
-  private updateParticles(): void {
-    const dt = 1 / 60; // Approximate
-    if (this.currentShake > 0) {
-      this.currentShake -= 300 * dt;
-      if (this.currentShake < 0) this.currentShake = 0;
-      this.setupLayout(); // Re-apply position with/without shake
-    }
-
-    for (let i = this.particles.length - 1; i >= 0; i--) {
-      const p = this.particles[i];
-      p.life -= dt;
-      if (p.life <= 0) {
-        p.g.destroy();
-        this.particles.splice(i, 1);
-      } else {
-        p.vy += 400 * dt; // Gravity
-        p.x += p.vx * dt;
-        p.y += p.vy * dt;
-        p.g.position.set(p.x, p.y);
-        p.g.alpha = p.life / p.maxLife;
-      }
-    }
-  }
-
-  public spawnLineClearParticles(y: number, color: number = 0xffffff): void {
-    const { cellSize } = this.config;
-    const gridWidth = this.game ? this.game.grid.getWidth() : 10;
-    
-    this.shake(5);
-
-    // Spawn 10 particles across the row
-    for (let i = 0; i < gridWidth * 2; i++) {
-      const g = new Graphics();
-      g.rect(-2, -2, 4, 4);
-      g.fill({ color });
-      
-      const px = (Math.random() * gridWidth) * cellSize;
-      const py = y * cellSize + (Math.random() * cellSize);
-      
-      g.position.set(px, py);
-      this.particlesContainer.addChild(g);
-      
-      this.particles.push({
-        g,
-        x: px,
-        y: py,
-        vx: (Math.random() - 0.5) * 200,
-        vy: (Math.random() - 1.0) * 300,
-        life: 0.5 + Math.random() * 0.5,
-        maxLife: 1.0
-      });
-    }
-  }
-
-  public shake(amount: number): void {
-    this.currentShake = Math.max(this.currentShake, amount);
+    this.updateBlocks(); this.updateCurrentPiece(); this.updateGhostPiece(); this.updateNextPieces(); this.updateHoldPiece(); this.updateCursor(); this.updateStats(); this.updateParticles(); this.updatePopups();
   }
 
   private updateBlocks(): void {
     if (!this.game) return;
-
-    const { cellSize } = this.config;
-    const grid = this.game.grid;
-    const hiddenRows = 5;
-
+    const { cellSize } = this.config; const grid = this.game.grid; const hiddenRows = 5;
     const activeKeys = new Set<string>();
-
     for (let y = hiddenRows; y < grid.getHeight(); y++) {
       for (let x = 0; x < grid.getWidth(); x++) {
-        const block = grid.get(x, y);
-        if (!block) continue;
-
-        const key = `${x},${y}`;
-        activeKeys.add(key);
-
+        const block = grid.get(x, y); if (!block) continue;
+        const key = `${x},${y}`; activeKeys.add(key);
         let g = this.blockGraphics.get(key);
-        if (!g) {
-          g = new Graphics();
-          this.blocksContainer.addChild(g);
-          this.blockGraphics.set(key, g);
-        }
-
-        const visualY = y - hiddenRows;
-        this.drawBlock(g, x * cellSize, visualY * cellSize, cellSize, block);
+        if (!g) { g = new Graphics(); this.blocksContainer.addChild(g); this.blockGraphics.set(key, g); }
+        this.drawBlock(g, x * cellSize, (y - hiddenRows) * cellSize, cellSize, block);
       }
     }
-
-    for (const [key, g] of this.blockGraphics) {
-      if (!activeKeys.has(key)) {
-        g.destroy();
-        this.blockGraphics.delete(key);
-      }
-    }
+    for (const [key, g] of this.blockGraphics) { if (!activeKeys.has(key)) { g.destroy(); this.blockGraphics.delete(key); } }
   }
 
   private updateCurrentPiece(): void {
     if (!this.game) return;
-
     this.pieceGraphics.clear();
-
     const piece = this.game.currentPiece;
-    if (!piece || this.game.state === GameState.IDLE || this.game.state === GameState.PAUSED) {
-        this.currentPieceDisplay = null;
-        return;
-    }
-
-    // Initialize or reset if piece changes
+    if (!piece || this.game.state === GameState.IDLE || this.game.state === GameState.PAUSED) { this.currentPieceDisplay = null; return; }
     if (!this.currentPieceDisplay || this.currentPieceDisplay.pieceRef !== piece) {
-        this.currentPieceDisplay = { 
-            x: piece.xGrid, 
-            y: piece.yGrid, 
-            rot: piece.currentRotation,
-            pieceRef: piece 
-        };
+        this.currentPieceDisplay = { x: piece.xGrid, y: piece.yGrid, rot: piece.currentRotation, pieceRef: piece };
     } else {
-        // Interpolate position
-        const lerpSpeed = 0.5; // Fast lerp for snappy but smooth feel
-        
-        // Don't lerp X or Rotation, just snap them for precision, only lerp Y (drop)
-        this.currentPieceDisplay.x = piece.xGrid;
-        this.currentPieceDisplay.rot = piece.currentRotation;
-        
-        // Lerp Y (smooth drop)
+        const lerpSpeed = 0.5; this.currentPieceDisplay.x = piece.xGrid; this.currentPieceDisplay.rot = piece.currentRotation;
         this.currentPieceDisplay.y += (piece.yGrid - this.currentPieceDisplay.y) * lerpSpeed;
-        
-        // Prevent overshoot or visual clipping if it suddenly jumps up (e.g. hold piece swap)
-        if (Math.abs(piece.yGrid - this.currentPieceDisplay.y) > 3) {
-            this.currentPieceDisplay.y = piece.yGrid;
-        }
+        if (Math.abs(piece.yGrid - this.currentPieceDisplay.y) > 3) this.currentPieceDisplay.y = piece.yGrid;
     }
-
-    // Draw the piece at the interpolated Y position
     this.drawPiece(this.pieceGraphics, piece, this.currentPieceDisplay.x, this.currentPieceDisplay.y - 5);
   }
 
   private updateGhostPiece(): void {
     if (!this.game || !this.config.showGhost) return;
-
     this.ghostGraphics.clear();
-
     const piece = this.game.currentPiece;
     if (!piece || this.game.state === GameState.IDLE || this.game.state === GameState.PAUSED) return;
-
-    const ghostY = this.game.getGhostY();
-    if (ghostY === piece.yGrid) return;
-
+    const ghostY = this.game.getGhostY(); if (ghostY === piece.yGrid) return;
     this.drawPiece(this.ghostGraphics, piece, piece.xGrid, ghostY - 5);
   }
 
   private updateNextPieces(): void {
     if (!this.game || !this.config.showNextPieces) return;
-
     const nextPieces = this.game.nextPieces;
-
     for (let i = 0; i < this.nextGraphics.length; i++) {
-      const g = this.nextGraphics[i];
-      g.clear();
-
-      if (i < nextPieces.length) {
-        const piece = nextPieces[i];
-        this.drawPiecePreview(g, piece);
-      }
+      const g = this.nextGraphics[i]; g.clear();
+      if (i < nextPieces.length) this.drawPiecePreview(g, nextPieces[i]);
     }
   }
 
   private updateHoldPiece(): void {
     if (!this.game || !this.config.showHoldPiece) return;
-
     this.holdGraphics.clear();
-
-    const holdPiece = this.game.holdPiece;
-    if (!holdPiece) return;
-
+    const holdPiece = this.game.holdPiece; if (!holdPiece) return;
     this.drawPiecePreview(this.holdGraphics, holdPiece);
+  }
+
+  private updateCursor(): void {
+      if (!this.game || this.game.currentGameType.gameMode !== GamePlayMode.STACK) { this.cursorGraphics.visible = false; return; }
+      this.cursorGraphics.visible = true; this.cursorGraphics.clear();
+      const { cellSize } = this.config; const ox = this.config.gridOffsetX; const oy = this.config.gridOffsetY;
+      const cx = this.game.cursorX * cellSize + ox; const cy = (this.game.cursorY - 5) * cellSize + oy;
+      this.cursorGraphics.rect(cx, cy, cellSize * 2, cellSize);
+      this.cursorGraphics.stroke({ color: 0xffffff, width: 4, alpha: 0.8 });
   }
 
   private updateStats(): void {
     if (!this.game || !this.config.showStats) return;
-
     const targetScore = this.game.score;
-    if (this.displayScore < targetScore) {
-      this.displayScore += Math.max(1, (targetScore - this.displayScore) * 0.1);
-      if (this.displayScore > targetScore) this.displayScore = targetScore;
-    } else if (this.displayScore > targetScore) {
-      this.displayScore = targetScore;
-    }
-
+    if (this.displayScore < targetScore) { this.displayScore += Math.max(1, (targetScore - this.displayScore) * 0.1); if (this.displayScore > targetScore) this.displayScore = targetScore; }
+    else if (this.displayScore > targetScore) { this.displayScore = targetScore; }
     this.scoreText.text = `Score: ${Math.floor(this.displayScore)}`;
     this.levelText.text = `Level: ${this.game.currentLevel}`;
     this.linesText.text = `Lines: ${this.game.linesClearedTotal}`;
     this.timeText.text = `Time: ${this.game.getFormattedTime()}`;
   }
 
+  private updateParticles(): void {
+    const dt = 1 / 60;
+    if (this.currentShake > 0) { this.currentShake -= 300 * dt; if (this.currentShake < 0) this.currentShake = 0; this.setupLayout(); }
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i]; p.life -= dt;
+      if (p.life <= 0) { p.g.destroy(); this.particles.splice(i, 1); }
+      else { p.vy += 400 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.g.position.set(p.x, p.y); p.g.alpha = p.life / p.maxLife; }
+    }
+  }
+
+  public spawnLineClearParticles(y: number, color: number = 0xffffff): void {
+    const { cellSize } = this.config; const gridWidth = this.game ? this.game.grid.getWidth() : 10;
+    this.shake(5);
+    for (let i = 0; i < gridWidth * 2; i++) {
+      const g = new Graphics(); g.rect(-2, -2, 4, 4); g.fill({ color });
+      const px = (Math.random() * gridWidth) * cellSize, py = y * cellSize + (Math.random() * cellSize);
+      g.position.set(px, py); this.particlesContainer.addChild(g);
+      this.particles.push({ g, x: px, y: py, vx: (Math.random() - 0.5) * 200, vy: (Math.random() - 1.0) * 300, life: 0.5 + Math.random() * 0.5, maxLife: 1.0 });
+    }
+  }
+
   public spawnPopup(message: string, color: number = 0xffffff, scale: number = 1.0): void {
-    const { cellSize } = this.config;
-    const gridWidth = this.game ? this.game.grid.getWidth() : 10;
+    const { cellSize } = this.config; const gridWidth = this.game ? this.game.grid.getWidth() : 10;
     const gridHeight = this.game ? this.game.grid.getHeight() - 5 : 20;
-
-    const style = new TextStyle({
-      fontFamily: 'Arial Black, Arial, sans-serif',
-      fontSize: 24 * scale,
-      fontWeight: 'bold',
-      fill: color,
-      stroke: { color: 0x000000, width: 4 },
-      dropShadow: { color: 0x000000, blur: 4, distance: 3 },
-      align: 'center'
-    });
-
-    const text = new Text({ text: message, style });
-    text.anchor.set(0.5);
-    
+    const style = new TextStyle({ fontFamily: 'Arial Black, Arial, sans-serif', fontSize: 24 * scale, fontWeight: 'bold', fill: color, stroke: { color: 0x000000, width: 4 }, dropShadow: { color: 0x000000, blur: 4, distance: 3 }, align: 'center' });
+    const text = new Text({ text: message, style }); text.anchor.set(0.5);
     text.position.set((gridWidth * cellSize) / 2, (gridHeight * cellSize) / 2 + 20);
-    
     this.popupsContainer.addChild(text);
-
-    this.popups.push({
-      text,
-      vx: (Math.random() - 0.5) * 20,
-      vy: -50 - Math.random() * 50,
-      life: 1.5,
-      maxLife: 1.5
-    });
+    this.popups.push({ text, vx: (Math.random() - 0.5) * 20, vy: -50 - Math.random() * 50, life: 1.5, maxLife: 1.5 });
   }
 
   private updatePopups(): void {
     const dt = 1 / 60;
     for (let i = this.popups.length - 1; i >= 0; i--) {
-      const p = this.popups[i];
-      p.life -= dt;
-      if (p.life <= 0) {
-        p.text.destroy();
-        this.popups.splice(i, 1);
-      } else {
-        p.vy += 20 * dt;
-        p.text.x += p.vx * dt;
-        p.text.y += p.vy * dt;
-        
-        if (p.life < 0.5) {
-          p.text.alpha = p.life / 0.5;
-        }
-        
-        if (p.maxLife - p.life < 0.2) {
-          const t = (p.maxLife - p.life) / 0.2;
-          p.text.scale.set(1 + Math.sin(t * Math.PI) * 0.5);
-        } else {
-          p.text.scale.set(1.0);
-        }
+      const p = this.popups[i]; p.life -= dt;
+      if (p.life <= 0) { p.text.destroy(); this.popups.splice(i, 1); }
+      else { p.vy += 20 * dt; p.text.x += p.vx * dt; p.text.y += p.vy * dt;
+        if (p.life < 0.5) p.text.alpha = p.life / 0.5;
+        if (p.maxLife - p.life < 0.2) { const t = (p.maxLife - p.life) / 0.2; p.text.scale.set(1 + Math.sin(t * Math.PI) * 0.5); } else p.text.scale.set(1.0);
       }
     }
   }
 
+  public shake(amount: number): void { this.currentShake = Math.max(this.currentShake, amount); }
+
   private drawBlock(g: Graphics, px: number, py: number, size: number, block: Block): void {
-    const color = block.getColor() || Color.gray;
-    const hexColor = color.toInt();
-    const darkerColor = color.clone(); darkerColor.darker(0.5);
-    const lighterColor = color.clone(); lighterColor.lighter(0.5);
-
-    const inset = 2;
-    const innerSize = size - inset * 2;
-
-    let alpha = 1;
-    if (block.fadingOut) {
-      alpha = block.disappearingAlpha;
-    }
-    if (block.flashingToBeRemoved) {
-      alpha = 0.5 + Math.sin(Date.now() * 0.01) * 0.5;
-    }
-
-    g.clear();
-
-    g.rect(px + inset, py + inset, innerSize, innerSize);
-    g.fill({ color: hexColor, alpha });
-
-    g.rect(px + inset, py + inset, innerSize, 3);
-    g.fill({ color: lighterColor.toInt(), alpha });
-
-    g.rect(px + inset, py + inset, 3, innerSize);
-    g.fill({ color: lighterColor.toInt(), alpha });
-
-    g.rect(px + inset, py + size - inset - 3, innerSize, 3);
-    g.fill({ color: darkerColor.toInt(), alpha });
-
-    g.rect(px + size - inset - 3, py + inset, 3, innerSize);
-    g.fill({ color: darkerColor.toInt(), alpha });
-
-    if (block.connectedUp || block.connectedDown || block.connectedLeft || block.connectedRight) {
-      this.drawBlockConnections(g, px, py, size, block, hexColor, alpha);
-    }
-  }
-
-  private drawBlockConnections(
-    g: Graphics,
-    px: number,
-    py: number,
-    size: number,
-    block: Block,
-    color: number,
-    alpha: number
-  ): void {
-    const inset = 2;
-    const connectorSize = 4;
-
-    if (block.connectedUp) {
-      g.rect(px + size / 2 - connectorSize / 2, py, connectorSize, inset);
-      g.fill({ color, alpha });
-    }
-    if (block.connectedDown) {
-      g.rect(px + size / 2 - connectorSize / 2, py + size - inset, connectorSize, inset);
-      g.fill({ color, alpha });
-    }
-    if (block.connectedLeft) {
-      g.rect(px, py + size / 2 - connectorSize / 2, inset, connectorSize);
-      g.fill({ color, alpha });
-    }
-    if (block.connectedRight) {
-      g.rect(px + size - inset, py + size / 2 - connectorSize / 2, inset, connectorSize);
-      g.fill({ color, alpha });
-    }
+    const color = block.getColor() || Color.gray; const hexColor = color.toInt();
+    const inset = 2, innerSize = size - inset * 2;
+    let alpha = 1; if (block.fadingOut) alpha = block.disappearingAlpha;
+    if (block.flashingToBeRemoved) alpha = 0.5 + Math.sin(Date.now() * 0.01) * 0.5;
+    g.clear(); g.rect(px + inset, py + inset, innerSize, innerSize); g.fill({ color: hexColor, alpha });
   }
 
   private drawPiece(g: Graphics, piece: Piece, gridX: number, gridY: number): void {
     const { cellSize } = this.config;
-
     for (const block of piece.blocks) {
-      const px = (gridX + block.xInPiece) * cellSize;
-      const py = (gridY + block.yInPiece) * cellSize;
+      const px = (gridX + block.xInPiece) * cellSize, py = (gridY + block.yInPiece) * cellSize;
       const color = block.getColor() || Color.gray;
-      this.drawBlockSimple(g, px, py, cellSize, color);
+      const inset = 2, innerSize = cellSize - inset * 2;
+      g.rect(px + inset, py + inset, innerSize, innerSize); g.fill(color.toInt());
     }
   }
 
   private drawPiecePreview(g: Graphics, piece: Piece): void {
     const previewCellSize = this.config.cellSize * 0.75;
-
-    const width = piece.getWidth();
-    const height = piece.getHeight();
-    const offsetX = (4 - width) * previewCellSize / 2;
-    const offsetY = (2 - height) * previewCellSize / 2;
-
+    const width = piece.getWidth(); const height = piece.getHeight();
+    const offsetX = (4 - width) * previewCellSize / 2, offsetY = (2 - height) * previewCellSize / 2;
     for (const block of piece.blocks) {
-      const px = offsetX + block.xInPiece * previewCellSize;
-      const py = offsetY + block.yInPiece * previewCellSize;
+      const px = offsetX + block.xInPiece * previewCellSize, py = offsetY + block.yInPiece * previewCellSize;
       const color = block.getColor() || Color.gray;
-      this.drawBlockSimple(g, px, py, previewCellSize, color);
+      const inset = 2, innerSize = previewCellSize - inset * 2;
+      g.rect(px + inset, py + inset, innerSize, innerSize); g.fill(color.toInt());
     }
   }
 
-  private drawBlockSimple(g: Graphics, px: number, py: number, size: number, color: Color): void {
-    const hexColor = color.toInt();
-    const darkerColor = color.clone(); darkerColor.darker(0.5);
-    const lighterColor = color.clone(); lighterColor.lighter(0.5);
-
-    const inset = 2;
-    const innerSize = size - inset * 2;
-
-    g.rect(px + inset, py + inset, innerSize, innerSize);
-    g.fill(hexColor);
-
-    g.rect(px + inset, py + inset, innerSize, 2);
-    g.fill(lighterColor.toInt());
-
-    g.rect(px + inset, py + inset, 2, innerSize);
-    g.fill(lighterColor.toInt());
-
-    g.rect(px + inset, py + size - inset - 2, innerSize, 2);
-    g.fill(darkerColor.toInt());
-
-    g.rect(px + size - inset - 2, py + inset, 2, innerSize);
-    g.fill(darkerColor.toInt());
+  public clearAllGraphics(): void {
+    this.blockGraphics.forEach(g => g.destroy()); this.blockGraphics.clear();
+    this.pieceGraphics.clear(); this.ghostGraphics.clear(); this.holdGraphics.clear();
+    for (const g of this.nextGraphics) g.clear();
   }
 
-  private clearAllGraphics(): void {
-    this.gridBackground.clear();
-    this.pieceGraphics.clear();
-    this.ghostGraphics.clear();
-    this.holdGraphics.clear();
-
-    for (const g of this.blockGraphics.values()) {
-      g.destroy();
-    }
-    this.blockGraphics.clear();
-
-    for (const g of this.nextGraphics) {
-      g.clear();
-    }
-  }
-
-  setPosition(x: number, y: number): void {
-    this.container.position.set(x, y);
-  }
-
-  setScale(scale: number): void {
-    this.container.scale.set(scale);
-  }
-
-  get visible(): boolean {
-    return this.container.visible;
-  }
-
-  set visible(value: boolean) {
-    this.container.visible = value;
-  }
-
+  setPosition(x: number, y: number): void { this.container.position.set(x, y); }
+  setScale(scale: number): void { this.container.scale.set(scale); }
   getGridBounds(): { x: number; y: number; width: number; height: number } {
-    if (!this.game) {
-      return { x: 0, y: 0, width: 0, height: 0 };
-    }
-
-    const { cellSize, gridOffsetX, gridOffsetY } = this.config;
-    return {
-      x: gridOffsetX,
-      y: gridOffsetY,
-      width: this.game.grid.getWidth() * cellSize,
-      height: (this.game.grid.getHeight() - 5) * cellSize,
-    };
+    if (!this.game) return { x: 0, y: 0, width: 0, height: 0 };
+    return { x: this.config.gridOffsetX, y: this.config.gridOffsetY, width: this.game.grid.getWidth() * this.config.cellSize, height: (this.game.grid.getHeight() - 5) * this.config.cellSize };
   }
 
-  destroy(): void {
-    if (this.destroyed) return;
-    this.destroyed = true;
-
-    this.detachGame();
-
-    for (const g of this.nextGraphics) {
-      g.destroy();
-    }
-    this.nextGraphics = [];
-
-    this.container.destroy({ children: true });
-  }
+  set visible(value: boolean) { this.container.visible = value; }
+  destroy(): void { this.destroyed = true; this.container.destroy({ children: true }); }
 }
