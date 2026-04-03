@@ -9,6 +9,10 @@ import { EventSheetComponent } from '../engine/ecs/components/EventSheetComponen
 import { VisualScriptSystem } from '../engine/ecs/systems/VisualScriptSystem';
 import { EightDirectionBehavior } from '../engine/ecs/behaviors/EightDirectionBehavior';
 import { PlatformerBehavior } from '../engine/ecs/behaviors/PlatformerBehavior';
+import { GraphicsComponent } from '../engine/ecs/components/GraphicsComponent';
+import { GraphicsSystem } from '../engine/ecs/systems/GraphicsSystem';
+import { ScriptComponent } from '../engine/ecs/components/ScriptComponent';
+import { ScriptSystem } from '../engine/ecs/systems/ScriptSystem';
 import { Sprite, Graphics, Text } from 'pixi.js';
 import { StateManager } from '../state/StateManager';
 import { InputManager, Key } from '../input/InputManager';
@@ -26,6 +30,9 @@ export class EngineDemoScene extends Scene {
         // Setup systems
         this.world.addSystem(new BehaviorSystem());
         this.world.addSystem(new VisualScriptSystem());
+        const scriptSystem = new ScriptSystem(this.world);
+        this.world.addSystem(scriptSystem);
+        this.world.addSystem(new GraphicsSystem(this.container));
         this.world.addSystem(new RenderSystem(this.container));
 
         // Add a title
@@ -107,11 +114,77 @@ export class EngineDemoScene extends Scene {
         };
         esComp.eventSheets.push(sheet);
         this.world.addComponent(entity3, esComp);
+
+        // 4. Create a LÖVE-style immediate mode entity (Spinning Star)
+        const entity4 = this.world.createEntity();
+        const transform4 = new TransformComponent();
+        transform4.x = 600;
+        transform4.y = 300;
+        this.world.addComponent(entity4, transform4);
+
+        const gfxComp = new GraphicsComponent();
+        let rotation = 0;
+        gfxComp.renderCallback = (g) => {
+            rotation += 0.05;
+            const points = [];
+            for (let i = 0; i < 5; i++) {
+                const angle = rotation + (i * Math.PI * 2) / 5;
+                points.push(Math.cos(angle) * 30, Math.sin(angle) * 30);
+                const angle2 = rotation + ((i + 0.5) * Math.PI * 2) / 5;
+                points.push(Math.cos(angle2) * 15, Math.sin(angle2) * 15);
+            }
+            g.fillPolygon(points, 0xffff00);
+            g.strokePolygon(points, 0xffffff, 1, 2);
+        };
+        this.world.addComponent(entity4, gfxComp);
+
+        // 5. Create a Scripted entity (Hot-reloadable circular movement)
+        const entity5 = this.world.createEntity();
+        const transform5 = new TransformComponent();
+        transform5.x = 200;
+        transform5.y = 400;
+        this.world.addComponent(entity5, transform5);
+
+        const sprite5 = new SpriteComponent();
+        const g5 = new Graphics();
+        g5.circle(0, 0, 10);
+        g5.fill(0x00ffff);
+        const tex5 = this.app.renderer.generateTexture(g5);
+        sprite5.sprite = new Sprite(tex5);
+        this.world.addComponent(entity5, sprite5);
+
+        const scriptComp = new ScriptComponent();
+        scriptComp.scriptName = 'CircularMove';
+        scriptComp.sourceCode = `
+            const transform = world.getComponent(entityId, 'Transform');
+            if (transform) {
+                const t = Date.now() / 1000;
+                transform.x = 200 + Math.cos(t) * 50;
+                transform.y = 400 + Math.sin(t) * 50;
+            }
+        `;
+        scriptComp.updateFn = new Function('dt', 'entityId', 'world', scriptComp.sourceCode) as any;
+        this.world.addComponent(entity5, scriptComp);
+
+        // Demo hot-reload on key press
+        this.app.stage.on('hot-reload-test', () => {
+            scriptSystem.hotReload(entity5, `
+                const transform = world.getComponent(entityId, 'Transform');
+                if (transform) {
+                    const t = Date.now() / 500;
+                    transform.x = 200 + Math.cos(t) * 100;
+                    transform.y = 400 + Math.sin(t) * 20;
+                    transform.rotation += 0.1;
+                }
+            `);
+        });
     }
 
     protected onUpdate(dt: number): void {
         this.world.update(dt);
         
+        if (InputManager.isKeyPressed(Key.Num1)) this.app.stage.emit('hot-reload-test');
+
         if (InputManager.isKeyPressed(Key.Escape)) {
             if (this.camera) {
                 this.camera.clearTargets();

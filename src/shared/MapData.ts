@@ -63,6 +63,8 @@ export class MapData extends AssetData {
     public doorDataList: DoorData[] = [];
 
     private layerTileIndex: Int32Array[];
+    private chunks: globalThis.Map<string, Int32Array[]> = new globalThis.Map();
+    private isInfinite: boolean = false;
 
     constructor(id: number = -1, name: string = "", width: number = 40, height: number = 30) {
         super(id, name);
@@ -74,14 +76,93 @@ export class MapData extends AssetData {
         }
     }
 
+    public setInfinite(infinite: boolean): void {
+        this.isInfinite = infinite;
+    }
+
+    private getChunk(cx: number, cy: number): Int32Array[] {
+        const key = `${cx},${cy}`;
+        if (!this.chunks.has(key)) {
+            const newChunk: Int32Array[] = [];
+            for (let i = 0; i < MapData.layers; i++) {
+                newChunk.push(new Int32Array(16 * 16));
+            }
+            this.chunks.set(key, newChunk);
+        }
+        return this.chunks.get(key)!;
+    }
+
     public getTileIndex(layer: number, x: number, y: number): number {
+        if (this.isInfinite) {
+            const cx = Math.floor(x / 16);
+            const cy = Math.floor(y / 16);
+            const tx = (x % 16 + 16) % 16;
+            const ty = (y % 16 + 16) % 16;
+            return this.getChunk(cx, cy)[layer][ty * 16 + tx];
+        }
         if (x < 0 || x >= this.widthTiles1X || y < 0 || y >= this.heightTiles1X) return 0;
         return this.layerTileIndex[layer][y * this.widthTiles1X + x];
     }
 
     public setTileIndex(layer: number, x: number, y: number, index: number): void {
+        if (this.isInfinite) {
+            const cx = Math.floor(x / 16);
+            const cy = Math.floor(y / 16);
+            const tx = (x % 16 + 16) % 16;
+            const ty = (y % 16 + 16) % 16;
+            this.getChunk(cx, cy)[layer][ty * 16 + tx] = index;
+            return;
+        }
         if (x < 0 || x >= this.widthTiles1X || y < 0 || y >= this.heightTiles1X) return;
         this.layerTileIndex[layer][y * this.widthTiles1X + x] = index;
+    }
+
+    public clearTileLayer(layer: number): void {
+        if (this.isInfinite) {
+            this.chunks.forEach(c => c[layer].fill(0));
+        } else {
+            this.layerTileIndex[layer].fill(0);
+        }
+    }
+
+    public shiftMap(dirX: number, dirY: number): void {
+        if (this.isInfinite) {
+            // Infinite maps don't really need shifting in the same way, but we could translate the chunk keys
+            return;
+        }
+        const newData: Int32Array[] = [];
+        for (let l = 0; l < MapData.layers; l++) {
+            const oldLayer = this.layerTileIndex[l];
+            const newLayer = new Int32Array(this.widthTiles1X * this.heightTiles1X);
+
+            for (let y = 0; y < this.heightTiles1X; y++) {
+                for (let x = 0; x < this.widthTiles1X; x++) {
+                    const newX = (x + dirX + this.widthTiles1X) % this.widthTiles1X;
+                    const newY = (y + dirY + this.heightTiles1X) % this.heightTiles1X;
+                    newLayer[newY * this.widthTiles1X + newX] = oldLayer[y * this.widthTiles1X + x];
+                }
+            }
+            newData.push(newLayer);
+        }
+        this.layerTileIndex = newData;
+    }
+
+    public resizeMap(newWidth: number, newHeight: number): void {
+        const newData: Int32Array[] = [];
+        for (let l = 0; l < MapData.layers; l++) {
+            const oldLayer = this.layerTileIndex[l];
+            const newLayer = new Int32Array(newWidth * newHeight);
+
+            for (let y = 0; y < Math.min(this.heightTiles1X, newHeight); y++) {
+                for (let x = 0; x < Math.min(this.widthTiles1X, newWidth); x++) {
+                    newLayer[y * newWidth + x] = oldLayer[y * this.widthTiles1X + x];
+                }
+            }
+            newData.push(newLayer);
+        }
+        this.widthTiles1X = newWidth;
+        this.heightTiles1X = newHeight;
+        this.layerTileIndex = newData;
     }
 
     public static isTileLayer(l: number): boolean {
@@ -103,90 +184,5 @@ export class MapData extends AssetData {
         if (l === MapData.MAP_CAMERA_BOUNDS_LAYER) return true;
         if (l === MapData.MAP_LIGHT_MASK_LAYER) return true;
         return false;
-    }
-
-    public toString(): string {
-        let s = super.toString();
-        const bt = String.fromCharCode(96);
-        let note = this.mapNote.replace(new RegExp(bt, 'g'), '');
-        
-        const add = (key: string, val: any) => {
-            s += key + ":" + bt + (val || '') + bt + ",";
-        };
-
-        add("mapNote", note);
-        add("widthTiles1X", this.widthTiles1X);
-        add("heightTiles1X", this.heightTiles1X);
-        add("maxRandoms", this.maxRandoms);
-        add("isOutside", this.isOutside);
-        add("preload", this.preload);
-        add("groundLayerMD5", this.groundLayerMD5);
-        add("groundObjectsMD5", this.groundObjectsMD5);
-        add("groundShadowMD5", this.groundShadowMD5);
-        add("objectsMD5", this.objectsMD5);
-        add("objects2MD5", this.objects2MD5);
-        add("objectShadowMD5", this.objectShadowMD5);
-        add("aboveMD5", this.aboveMD5);
-        add("above2MD5", this.above2MD5);
-        add("spriteShadowMD5", this.spriteShadowMD5);
-        add("groundShaderMD5", this.groundShaderMD5);
-        add("cameraBoundsMD5", this.cameraBoundsMD5);
-        add("hitBoundsMD5", this.hitBoundsMD5);
-        add("lightMaskMD5", this.lightMaskMD5);
-        add("paletteMD5", this.paletteMD5);
-        add("tilesMD5", this.tilesMD5);
-
-        s += "stateDataList:{";
-        this.stateDataList.forEach(d => s += d.toString());
-        s += "},";
-
-        s += "eventDataList:{";
-        this.eventDataList.forEach(d => s += d.toString());
-        s += "},";
-
-        s += "doorDataList:{";
-        this.doorDataList.forEach(d => s += d.toString());
-        s += "},";
-
-        return s;
-    }
-
-    public initFromString(t: string): string {
-        t = super.initFromString(t);
-        const bt = String.fromCharCode(96);
-
-        const getVal = (key: string) => {
-            const k = key + ":" + bt;
-            let start = t.indexOf(k) + k.length;
-            let end = t.indexOf(bt, start);
-            const val = t.substring(start, end);
-            t = t.substring(end + 2);
-            return val;
-        };
-
-        this.mapNote = getVal("mapNote");
-        this.widthTiles1X = parseInt(getVal("widthTiles1X"));
-        this.heightTiles1X = parseInt(getVal("heightTiles1X"));
-        this.maxRandoms = parseInt(getVal("maxRandoms"));
-        this.isOutside = getVal("isOutside") === "true";
-        this.preload = getVal("preload") === "true";
-
-        this.groundLayerMD5 = getVal("groundLayerMD5") || null;
-        this.groundObjectsMD5 = getVal("groundObjectsMD5") || null;
-        this.groundShadowMD5 = getVal("groundShadowMD5") || null;
-        this.objectsMD5 = getVal("objectsMD5") || null;
-        this.objects2MD5 = getVal("objects2MD5") || null;
-        this.objectShadowMD5 = getVal("objectShadowMD5") || null;
-        this.aboveMD5 = getVal("aboveMD5") || null;
-        this.above2MD5 = getVal("above2MD5") || null;
-        this.spriteShadowMD5 = getVal("spriteShadowMD5") || null;
-        this.groundShaderMD5 = getVal("groundShaderMD5") || null;
-        this.cameraBoundsMD5 = getVal("cameraBoundsMD5") || null;
-        this.hitBoundsMD5 = getVal("hitBoundsMD5") || null;
-        this.lightMaskMD5 = getVal("lightMaskMD5") || null;
-        this.paletteMD5 = getVal("paletteMD5") || null;
-        this.tilesMD5 = getVal("tilesMD5") || null;
-
-        return t;
     }
 }

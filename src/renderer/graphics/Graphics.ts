@@ -1,4 +1,4 @@
-import { Graphics as PIXIGraphics, Container, GraphicsContext } from 'pixi.js';
+import { Graphics as PIXIGraphics, Container, GraphicsContext, Filter, ColorMatrixFilter, GlProgram, Shader } from 'pixi.js';
 
 export interface DrawStyle {
   fillColor?: number;
@@ -10,11 +10,34 @@ export interface DrawStyle {
 
 export class Graphics extends Container {
   private gfx: PIXIGraphics;
+  private customFilters: Filter[] = [];
 
   constructor() {
     super();
     this.gfx = new PIXIGraphics();
     this.addChild(this.gfx);
+  }
+
+  public applyShader(vertex: string, fragment: string, uniforms: any = {}): void {
+      const program = GlProgram.from({ vertex, fragment });
+      // In PIXI v8, custom shaders are usually applied via Filters or custom Renderables
+      const filter = new Filter({
+          glProgram: program,
+          resources: {
+              uTime: { value: 0, type: 'f32' },
+              ...uniforms
+          }
+      });
+      this.customFilters.push(filter);
+      this.gfx.filters = this.customFilters;
+  }
+
+  public updateShaders(dt: number): void {
+      for (const filter of this.customFilters) {
+          if (filter.resources.uTime) {
+              (filter.resources.uTime as any).value += dt;
+          }
+      }
   }
 
   clear(): this {
