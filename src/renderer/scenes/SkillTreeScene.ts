@@ -82,7 +82,7 @@ export class SkillTreeScene extends Scene<SkillTreeSceneConfig> {
             this.unlockSkill(0); // Demo first skill
         }
 
-        if (InputManager.isKeyPressed(Key.Escape) || InputManager.isKeyPressed(Key.K)) {
+        if (InputManager.isCancelPressed() || InputManager.isKeyPressed(Key.K)) {
             StateManager.pop();
         }
     }

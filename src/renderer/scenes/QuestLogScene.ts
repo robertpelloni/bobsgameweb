@@ -68,7 +68,7 @@ export class QuestLogScene extends Scene<QuestLogSceneConfig> {
     }
 
     protected onUpdate(dt: number): void {
-        if (InputManager.isKeyPressed(Key.Escape) || InputManager.isKeyPressed(Key.Q)) {
+        if (InputManager.isCancelPressed() || InputManager.isKeyPressed(Key.Q)) {
             StateManager.pop();
         }
     }

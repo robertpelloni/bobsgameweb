@@ -319,13 +319,13 @@ export class HighScoresScene extends Scene {
     }
 
     private handleInput(): void {
-        if (InputManager.isKeyPressed(Key.Left) || InputManager.isKeyPressed(Key.A)) {
+        if (InputManager.isLeftPressed()) {
             this.selectMode(this.selectedModeIndex - 1);
-        } else if (InputManager.isKeyPressed(Key.Right) || InputManager.isKeyPressed(Key.D)) {
+        } else if (InputManager.isRightPressed()) {
             this.selectMode(this.selectedModeIndex + 1);
         }
 
-        if (InputManager.isCancelPressed() || InputManager.isKeyPressed(Key.Escape)) {
+        if (InputManager.isCancelPressed()) {
             this.goBack();
         }
     }

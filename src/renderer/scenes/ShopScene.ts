@@ -72,7 +72,7 @@ export class ShopScene extends Scene<ShopSceneConfig> {
             this.buyItem(0); // Buy first item for demo
         }
 
-        if (InputManager.isKeyPressed(Key.Escape)) {
+        if (InputManager.isCancelPressed()) {
             StateManager.pop();
         }
     }

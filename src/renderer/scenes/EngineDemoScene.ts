@@ -186,7 +186,7 @@ export class EngineDemoScene extends Scene {
         
         if (InputManager.isKeyPressed(Key.Num1)) this.app.stage.emit('hot-reload-test');
 
-        if (InputManager.isKeyPressed(Key.Escape)) {
+        if (InputManager.isCancelPressed()) {
             if (this.camera) {
                 this.camera.clearTargets();
                 this.camera.setPosition(0, 0);

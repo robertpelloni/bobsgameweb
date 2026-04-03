@@ -68,7 +68,18 @@ export class WorldScene extends Scene {
     private touchControls: TouchControls | null = null;
     private minimapContainer: Container | null = null;
     private minimapGraphics: Graphics | null = null;
+    
+    private hudContainer: Container | null = null;
+    private hpText: Text | null = null;
+    private goldText: Text | null = null;
+
     public isActionJustPressed: boolean = false;
+    
+    private dialoguePages: string[] = [];
+    private currentDialoguePage: number = 0;
+    private dialogueTypingIndex: number = 0;
+    private dialogueTimer: number = 0;
+    public isDialogueActive: boolean = false;
     
     private saveTimer: number = 0;
     private readonly SAVE_INTERVAL = 10;
@@ -167,7 +178,7 @@ export class WorldScene extends Scene {
         networkManager.on('remotePlayerMove', (data: any) => this.handleRemotePlayerMove(data));
         networkManager.on('remotePlayerAction', (data: any) => this.handleRemotePlayerAction(data));
 
-        this.createNPCs(); this.createTorches(); this.createShops(); this.createTeleports(); this.createDialogueUI(); this.createConsoleUI(); this.createMinimapUI();
+        this.createNPCs(); this.createTorches(); this.createShops(); this.createTeleports(); this.createDialogueUI(); this.createConsoleUI(); this.createMinimapUI(); this.createHudUI();
         
         if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
             this.touchControls = new TouchControls(this.width, this.height);
@@ -204,6 +215,35 @@ export class WorldScene extends Scene {
         this.minimapContainer.addChild(this.minimapGraphics);
     }
 
+    private createHudUI(): void {
+        this.hudContainer = new Container();
+        this.hudContainer.position.set(20, 20);
+        this.container.addChild(this.hudContainer);
+
+        const bg = new Graphics();
+        bg.roundRect(0, 0, 180, 60, 10);
+        bg.fill({ color: 0x000000, alpha: 0.6 });
+        bg.stroke({ color: 0x3366ff, width: 2 });
+        this.hudContainer.addChild(bg);
+
+        const style = new TextStyle({ fill: '#ffffff', fontSize: 16, fontWeight: 'bold' });
+        this.hpText = new Text({ text: 'HP: 100/100', style });
+        this.hpText.position.set(15, 10);
+        this.goldText = new Text({ text: 'GOLD: 500', style: { fill: '#ffd700', fontSize: 16, fontWeight: 'bold' } });
+        this.goldText.position.set(15, 35);
+        
+        this.hudContainer.addChild(this.hpText, this.goldText);
+    }
+
+    private updateHud(): void {
+        if (!this.hudContainer) return;
+        const combat = this.world.getComponent<CombatComponent>((this.world as any).playerEntityId, 'Combat');
+        const inv = this.world.getComponent<InventoryComponent>((this.world as any).playerEntityId, 'Inventory');
+        
+        if (combat && this.hpText) this.hpText.text = `HP: ${combat.hp}/${combat.maxHp}`;
+        if (inv && this.goldText) this.goldText.text = `GOLD: ${inv.gold}`;
+    }
+
     private updateMinimap(): void {
         if (!this.minimapGraphics || !this.playerTransform || !this.map) return;
         this.minimapGraphics.clear();
@@ -226,12 +266,55 @@ export class WorldScene extends Scene {
         const style = new TextStyle({ fill: '#ffffff', fontSize: 18, wordWrap: true, wordWrapWidth: this.width - 140 });
         this.dialogueText = new Text({ text: '', style }); this.dialogueText.position.set(70, this.height - 130);
         this.dialogueContainer.addChild(this.dialogueText);
+        
+        const prompt = new Text({ text: 'Press A to continue', style: { fill: '#888888', fontSize: 14 } });
+        prompt.position.set(this.width - 250, this.height - 70);
+        this.dialogueContainer.addChild(prompt);
     }
 
-    public showDialogue(message: string): void {
-        if (this.dialogueText && this.dialogueContainer) {
-            this.dialogueText.text = message; this.dialogueContainer.visible = true;
-            setTimeout(() => { if (this.dialogueContainer) this.dialogueContainer.visible = false; }, 3000);
+    public showDialogue(messages: string | string[]): void {
+        if (!this.dialogueText || !this.dialogueContainer) return;
+        
+        this.dialoguePages = Array.isArray(messages) ? messages : [messages];
+        this.currentDialoguePage = 0;
+        this.dialogueTypingIndex = 0;
+        this.dialogueTimer = 0;
+        this.isDialogueActive = true;
+        this.dialogueContainer.visible = true;
+        this.dialogueText.text = '';
+    }
+
+    private updateDialogue(dt: number): void {
+        if (!this.isDialogueActive || !this.dialogueText || !this.dialogueContainer) return;
+
+        const currentText = this.dialoguePages[this.currentDialoguePage];
+        
+        if (this.dialogueTypingIndex < currentText.length) {
+            this.dialogueTimer += dt;
+            if (this.dialogueTimer > 0.02) { // Typwriter speed
+                this.dialogueTimer = 0;
+                this.dialogueTypingIndex++;
+                this.dialogueText.text = currentText.substring(0, this.dialogueTypingIndex);
+                if (AudioManager.isLoaded('menu_move')) AudioManager.playSound('menu_move', { volume: 0.1 });
+            }
+            if (this.isActionJustPressed) {
+                // Skip typing
+                this.dialogueTypingIndex = currentText.length;
+                this.dialogueText.text = currentText;
+                this.isActionJustPressed = false; // consume
+            }
+        } else {
+            if (this.isActionJustPressed) {
+                this.currentDialoguePage++;
+                if (this.currentDialoguePage >= this.dialoguePages.length) {
+                    this.isDialogueActive = false;
+                    this.dialogueContainer.visible = false;
+                } else {
+                    this.dialogueTypingIndex = 0;
+                    this.dialogueText.text = '';
+                }
+                this.isActionJustPressed = false; // consume
+            }
         }
     }
 
@@ -297,7 +380,7 @@ export class WorldScene extends Scene {
         const tex = this.app.renderer.generateTexture(g); sprite.sprite = new Sprite(tex); this.world.addComponent(entity, sprite);
         const shop = new ShopComponent(); shop.shopName = "Bobs Store"; shop.inventory.push({ itemId: 1, priceOverride: 20 });
         this.world.addComponent(entity, shop);
-        const inter = new InteractionComponent(); inter.interactions.push({ type: 'dialogue', params: { text: "Welcome!" } }); inter.interactions.push({ type: 'shop', params: {} });
+        const inter = new InteractionComponent(); inter.interactions.push({ type: 'dialogue', params: { text: ["Welcome to my store!", "Would you like to buy something?"] } }); inter.interactions.push({ type: 'shop', params: {} });
         this.world.addComponent(entity, inter);
     }
 
@@ -324,7 +407,7 @@ export class WorldScene extends Scene {
             if (i === 0) { const ai = new AIComponent(); ai.detectionRadius = 200; this.world.addComponent(entity, ai); }
             const npcCombat = new CombatComponent(); npcCombat.hp = 30; this.world.addComponent(entity, npcCombat);
             const npcLight = new LightComponent(); npcLight.radius = 80; npcLight.color = 0x00ff00; this.world.addComponent(entity, npcLight);
-            const inter = new InteractionComponent(); inter.interactions.push({ type: 'dialogue', params: { text: "Wandering..." } }); this.world.addComponent(entity, inter);
+            const inter = new InteractionComponent(); inter.interactions.push({ type: 'dialogue', params: { text: ["Hello there, traveler.", "This world is quite large, isn't it?"] } }); this.world.addComponent(entity, inter);
         }
     }
 
@@ -386,7 +469,14 @@ export class WorldScene extends Scene {
 
     protected onUpdate(dt: number): void {
         this.isActionJustPressed = InputManager.isActionPressed();
-        this.world.update(dt); if (this.map) this.map.update(dt); this.updateMinimap();
+        
+        if (this.isDialogueActive) {
+            this.updateDialogue(dt);
+            if (InputManager.isKeyPressed(Key.Tilde)) this.toggleConsole();
+            return;
+        }
+
+        this.world.update(dt); if (this.map) this.map.update(dt); this.updateMinimap(); this.updateHud();
         this.saveTimer += dt; if (this.saveTimer >= this.SAVE_INTERVAL) { this.saveTimer = 0; this.saveCharacterToCloud(); }
         if (this.playerTransform) { AudioManager.updateListener(this.playerTransform.x, this.playerTransform.y, 0); }
         if (this.playerTransform && networkManager.connected) {

@@ -287,6 +287,39 @@ class InputManagerClass extends EventEmitter<InputEvents> {
     );
   }
 
+  // --- Pressed states for Menus ---
+  isUpPressed(gamepadIndex: number = 0): boolean {
+    return (
+      this.isKeyPressed(Key.Up) ||
+      this.isKeyPressed(Key.W) ||
+      this.isGamepadButtonPressed(GamepadButton.DPadUp, gamepadIndex)
+    );
+  }
+
+  isDownPressed(gamepadIndex: number = 0): boolean {
+    return (
+      this.isKeyPressed(Key.Down) ||
+      this.isKeyPressed(Key.S) ||
+      this.isGamepadButtonPressed(GamepadButton.DPadDown, gamepadIndex)
+    );
+  }
+
+  isLeftPressed(gamepadIndex: number = 0): boolean {
+    return (
+      this.isKeyPressed(Key.Left) ||
+      this.isKeyPressed(Key.A) ||
+      this.isGamepadButtonPressed(GamepadButton.DPadLeft, gamepadIndex)
+    );
+  }
+
+  isRightPressed(gamepadIndex: number = 0): boolean {
+    return (
+      this.isKeyPressed(Key.Right) ||
+      this.isKeyPressed(Key.D) ||
+      this.isGamepadButtonPressed(GamepadButton.DPadRight, gamepadIndex)
+    );
+  }
+
   isActionPressed(gamepadIndex: number = 0): boolean {
     return (
       this.isKeyPressed(Key.Space) ||

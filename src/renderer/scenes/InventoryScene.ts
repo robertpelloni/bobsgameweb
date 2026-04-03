@@ -68,7 +68,7 @@ export class InventoryScene extends Scene<InventorySceneConfig> {
     }
 
     protected onUpdate(dt: number): void {
-        if (InputManager.isKeyPressed(Key.Escape) || InputManager.isKeyPressed(Key.I)) {
+        if (InputManager.isCancelPressed() || InputManager.isKeyPressed(Key.I)) {
             StateManager.pop();
         }
     }
