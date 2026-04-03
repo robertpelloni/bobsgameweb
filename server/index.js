@@ -67,6 +67,26 @@ function getMapPath(mapId) {
 }
 
 // ============================================================
+// Elo Rating System
+// ============================================================
+
+const DEFAULT_ELO = 1000;
+const K_FACTOR = 32;
+
+function calculateNewRatings(winnerElo, loserElo) {
+    const expectedWinner = 1 / (1 + Math.pow(10, (loserElo - winnerElo) / 400));
+    const expectedLoser = 1 / (1 + Math.pow(10, (winnerElo - loserElo) / 400));
+    
+    const newWinnerElo = winnerElo + K_FACTOR * (1 - expectedWinner);
+    const newLoserElo = loserElo + K_FACTOR * (0 - expectedLoser);
+    
+    return {
+        winnerElo: Math.round(newWinnerElo),
+        loserElo: Math.round(newLoserElo)
+    };
+}
+
+// ============================================================
 // Server Setup
 // ============================================================
 
@@ -97,8 +117,12 @@ io.on("connection", (socket) => {
 
     socket.on("setName", (name) => {
         const safeName = String(name || "Player").substring(0, 32);
-        players.set(socket.id, { id: socket.id, name: safeName });
-        console.log(`Player ${socket.id} set name to ${safeName}`);
+        players.set(socket.id, { 
+            id: socket.id, 
+            name: safeName,
+            elo: DEFAULT_ELO 
+        });
+        console.log(`Player ${socket.id} set name to ${safeName} (Elo: ${DEFAULT_ELO})`);
     });
 
     // ----------------------------------------------------------
@@ -356,6 +380,24 @@ io.on("connection", (socket) => {
             console.log(`Tournament match started: ${p1} vs ${p2}`);
         }
     });
+
+    socket.on("tournamentMatchEnd", (data) => {
+        const { tournamentId, winnerId, loserId } = data;
+        const winner = players.get(winnerId);
+        const loser = players.get(loserId);
+        
+        if (winner && loser) {
+            const newRatings = calculateNewRatings(winner.elo, loser.elo);
+            
+            console.log(`Match End: Winner ${winner.name} (${winner.elo} -> ${newRatings.winnerElo}) | Loser ${loser.name} (${loser.elo} -> ${newRatings.loserElo})`);
+            
+            winner.elo = newRatings.winnerElo;
+            loser.elo = newRatings.loserElo;
+            
+            io.to(winnerId).emit("eloUpdate", { elo: winner.elo, gain: newRatings.winnerElo - winner.elo });
+            io.to(loserId).emit("eloUpdate", { elo: loser.elo, gain: newRatings.loserElo - loser.elo });
+        }
+    });
         const { type, prompt } = data;
         console.log(`[AI] Generating ${type} for prompt: ${prompt}`);
         
@@ -434,6 +476,7 @@ io.on("connection", (socket) => {
             score: Math.max(0, Math.floor(data.score)),
             lines: Math.max(0, Math.floor(data.lines || 0)),
             time: Math.max(0, data.time || 0),
+            elo: players.get(socket.id)?.elo || DEFAULT_ELO,
             date: Date.now()
         };
 
@@ -443,7 +486,7 @@ io.on("connection", (socket) => {
         leaderboards[mode] = leaderboards[mode].slice(0, 100);
 
         saveLeaderboards(leaderboards);
-        console.log(`Score reported: ${entry.name} - ${entry.score} pts (${mode})`);
+        console.log(`Score reported: ${entry.name} - ${entry.score} pts (${mode}) | Elo: ${entry.elo}`);
     });
 
     socket.on("getLeaderboard", (mode) => {

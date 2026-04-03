@@ -116,6 +116,24 @@ class AssetLoaderClass extends EventEmitter<AssetLoaderEvents> {
     this.emit('complete');
   }
 
+  async loadManifest(url: string): Promise<void> {
+    try {
+      const response = await fetch(this.resolveSrc(url));
+      const manifest = await response.json();
+      console.log(`[AssetLoader] Loading manifest v${manifest.version}`);
+      
+      if (manifest.assets.textures) {
+          for (const [key, src] of Object.entries(manifest.assets.textures)) {
+              this.addTexture(key, src as string);
+          }
+      }
+      // Process other asset types...
+      await this.load();
+    } catch (e) {
+      console.error("[AssetLoader] Failed to load manifest:", e);
+    }
+  }
+
   private resolveSrc(src: string): string {
     if (src.startsWith('http') || src.startsWith('blob:') || src.startsWith('data:')) {
       return src;

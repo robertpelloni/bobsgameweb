@@ -86,6 +86,7 @@ export class EngineDemoScene extends Scene {
         // Make camera follow the platformer entity
         this.followTarget = transform2;
         if (this.camera) {
+            this.camera.setContainer(this.container);
             this.camera.clearTargets();
             this.camera.addTarget(this.followTarget);
             this.camera.setLerp(0.05);
