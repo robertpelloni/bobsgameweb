@@ -7,6 +7,7 @@ import { PuzzleRenderer } from './PuzzleRenderer';
 import { GameType } from './index';
 import { GameOverScene, GameStats } from '../scenes/GameOverScene';
 import { PauseOverlay } from '../scenes/PauseOverlay';
+import { TouchControls } from '../ui/TouchControls';
 import { GameMode } from '../data/HighScoreManager';
 import { SERVER_URL } from '../../shared/Config';
 import { Text, TextStyle } from 'pixi.js';
@@ -51,6 +52,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private renderer: PuzzleRenderer;
   private bindings: PuzzleKeyBindings;
   private pauseOverlay: PauseOverlay | null = null;
+  private touchControls: TouchControls | null = null;
 
   private opponentGame: PuzzleGame | null = null;
   private opponentRenderer: PuzzleRenderer | null = null;
@@ -68,6 +70,8 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private chatInputActive: boolean = false;
   private helpOverlay: HTMLElement | null = null;
   private spectatorBanner: Text | null = null;
+
+  private knownOpponents: Map<string, PuzzleGame> = new Map();
 
   constructor(config: PuzzleSceneConfig, bindings?: Partial<PuzzleKeyBindings>) {
     super(config);
@@ -109,6 +113,13 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
     this.centerRenderer();
     this.createPauseOverlay();
+    
+    // Auto-enable touch controls on mobile/touch devices
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        this.touchControls = new TouchControls(this.width, this.height);
+        this.container.addChild(this.touchControls);
+    }
+
     this.loadSounds();
     this.setupGameEvents();
 
@@ -142,6 +153,39 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     this.spectatorBanner.anchor.set(0.5);
     this.spectatorBanner.position.set(this.width / 2, 50);
     this.container.addChild(this.spectatorBanner);
+  }
+
+  private setupNetworkHandlers(): void {
+    networkManager.on('opponentFrame', (data: any) => {
+      const { id, state } = data;
+      
+      if (this.config.isSpectator) {
+          if (!this.knownOpponents.has(id)) {
+              if (this.knownOpponents.size === 0) {
+                  this.knownOpponents.set(id, this.game);
+              } else if (this.knownOpponents.size === 1 && this.opponentGame) {
+                  this.knownOpponents.set(id, this.opponentGame);
+              }
+          }
+          const targetGame = this.knownOpponents.get(id);
+          if (targetGame) targetGame.applyState(state);
+      } else {
+          if (this.opponentGame) {
+              this.opponentGame.applyState(state);
+          }
+      }
+    });
+  }
+
+  private createPauseOverlay(): void {
+    this.pauseOverlay = new PauseOverlay({
+      width: this.width,
+      height: this.height,
+      onResume: () => this.resumeGame(),
+      onRestart: () => this.restartFromPause(),
+      onQuit: () => this.quitToMenu(),
+    });
+    this.container.addChild(this.pauseOverlay.container);
   }
 
   private createHelpOverlay(): void {
@@ -185,44 +229,6 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     }
   }
 
-  private knownOpponents: Map<string, PuzzleGame> = new Map();
-
-  private setupNetworkHandlers(): void {
-    networkManager.on('opponentFrame', (data: any) => {
-      const { id, state } = data;
-      
-      if (this.config.isSpectator) {
-          // If spectating, we put the first person we see into `this.game`, 
-          // and the second person into `this.opponentGame`.
-          if (!this.knownOpponents.has(id)) {
-              if (this.knownOpponents.size === 0) {
-                  this.knownOpponents.set(id, this.game);
-              } else if (this.knownOpponents.size === 1 && this.opponentGame) {
-                  this.knownOpponents.set(id, this.opponentGame);
-              }
-          }
-          const targetGame = this.knownOpponents.get(id);
-          if (targetGame) targetGame.applyState(state);
-      } else {
-          // Normal multiplayer (we are playing)
-          if (this.opponentGame) {
-              this.opponentGame.applyState(state);
-          }
-      }
-    });
-  }
-
-  private createPauseOverlay(): void {
-    this.pauseOverlay = new PauseOverlay({
-      width: this.width,
-      height: this.height,
-      onResume: () => this.resumeGame(),
-      onRestart: () => this.restartFromPause(),
-      onQuit: () => this.quitToMenu(),
-    });
-    this.container.addChild(this.pauseOverlay.container);
-  }
-
   private centerRenderer(): void {
     if (this.opponentRenderer) {
       const pBounds = this.renderer.getGridBounds();
@@ -243,22 +249,22 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
   private loadSounds(): void {
     const sounds = [
-      { name: 'puzzle_move', src: 'assets/audio/sfx/move.wav' },
-      { name: 'puzzle_rotate', src: 'assets/audio/sfx/rotate.wav' },
-      { name: 'puzzle_drop', src: 'assets/audio/sfx/drop.wav' },
-      { name: 'puzzle_lock', src: 'assets/audio/sfx/lock.wav' },
-      { name: 'puzzle_clear', src: 'assets/audio/sfx/clear.wav' },
-      { name: 'puzzle_tetris', src: 'assets/audio/sfx/tetris.wav' },
-      { name: 'puzzle_hold', src: 'assets/audio/sfx/hold.wav' },
-      { name: 'puzzle_levelup', src: 'assets/audio/sfx/levelup.wav' },
-      { name: 'puzzle_gameover', src: 'assets/audio/sfx/gameover.wav' },
+      { name: 'puzzle_move', src: 'audio/sfx/move.wav' },
+      { name: 'puzzle_rotate', src: 'audio/sfx/rotate.wav' },
+      { name: 'puzzle_drop', src: 'audio/sfx/drop.wav' },
+      { name: 'puzzle_lock', src: 'audio/sfx/lock.wav' },
+      { name: 'puzzle_clear', src: 'audio/sfx/clear.wav' },
+      { name: 'puzzle_tetris', src: 'audio/sfx/tetris.wav' },
+      { name: 'puzzle_hold', src: 'audio/sfx/hold.wav' },
+      { name: 'puzzle_levelup', src: 'audio/sfx/levelup.wav' },
+      { name: 'puzzle_gameover', src: 'audio/sfx/gameover.wav' },
     ];
 
     for (const sound of sounds) {
       try {
         AudioManager.load(sound.name, sound.src);
       } catch {
-        // Intentionally empty - sounds are optional
+        // Intentionally empty
       }
     }
     this.soundsLoaded = true;
@@ -323,9 +329,8 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
           this.renderer.spawnPopup(popupText, popupColor, scale);
       }
 
-      // Spawn particles
       for (const y of lines) {
-        this.renderer.spawnLineClearParticles(y - 5, popupColor); // 5 is the hidden rows buffer
+        this.renderer.spawnLineClearParticles(y - 5, popupColor);
       }
     });
 
@@ -334,12 +339,10 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     });
 
     this.game.on('garbageSent', (amount: number) => {
-      // we could add a sound effect here
     });
 
     this.game.on('garbageReceived', (amount: number) => {
       this.renderer.shake(amount * 2 + 5);
-      // could add sound effect
     });
 
     this.game.on('gameOver', () => {
@@ -348,7 +351,6 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     });
 
     this.game.on('win', () => {
-      // Just reuse game over sound and UI for now, but we could add a specific win sound
       this.playSound('puzzle_gameover');
       this.showGameOver(true);
     });
@@ -358,7 +360,6 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     console.log(isWin ? 'Game Won!' : 'Game Over');
     const playerName = localStorage.getItem('playerName') || 'WebPlayer';
 
-    // Report score to server for leaderboard
     networkManager.reportScore({
       mode: this.gameMode,
       name: playerName,
@@ -367,7 +368,6 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       time: this.gameTime
     });
 
-    // Show the GameOverScene with full stats
     const stats: GameStats = {
       score: this.game.score,
       level: this.game.currentLevel,
@@ -384,14 +384,12 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       stats,
       isWin,
       onReplay: () => {
-        // Pop the GameOverScene, then restart
         StateManager.pop();
         this.restart();
       },
       onMainMenu: () => {
-        // Pop both GameOverScene and PuzzleScene
-        StateManager.pop(); // GameOverScene
-        StateManager.pop(); // PuzzleScene
+        StateManager.pop();
+        StateManager.pop();
       },
     });
 
@@ -411,7 +409,6 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private quitToMenu(): void {
     if (this.config.multiplayer) {
       networkManager.disconnect();
-      // Pop everything until we reach the main menu
       while (StateManager.current && StateManager.current.name !== 'main-menu') {
         StateManager.popSync();
       }
@@ -436,15 +433,13 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       this.gameTime += dt;
       this.frameCount++;
 
-      // Sprint mode win condition (40 lines)
       if (this.gameMode === 'sprint' && this.game.linesClearedTotal >= 40 && !this.game.won) {
         this.game.won = true;
       }
 
-      // Ultra mode time condition (3 minutes)
       if (this.gameMode === 'ultra' && this.gameTime >= 180 && !this.game.complete) {
         this.game.complete = true;
-        this.game.emit('gameOver'); // End the game
+        this.game.emit('gameOver');
       }
 
       if (this.config.multiplayer && this.frameCount % 5 === 0) {
@@ -456,6 +451,15 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     this.game.update();
     this.renderer.update();
     this.opponentRenderer?.update();
+  }
+
+  public onResize(width: number, height: number): void {
+    this.centerRenderer();
+    this.pauseOverlay?.resize(width, height);
+    this.touchControls?.resize(width, height);
+    if (this.spectatorBanner) {
+        this.spectatorBanner.position.set(width / 2, 50);
+    }
   }
 
   private processInput(): void {
@@ -486,23 +490,16 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     }
 
     if (this.game.state !== GameState.PLAYING) return;
-    if (this.config.isSpectator) return; // Spectators cannot send input
+    if (this.config.isSpectator) return;
 
     if (this.game.player) {
         this.game.player.LEFT_HELD = InputManager.isKeyHeld(this.bindings.left as Key);
         this.game.player.RIGHT_HELD = InputManager.isKeyHeld(this.bindings.right as Key);
         this.game.player.DOWN_HELD = InputManager.isKeyHeld(this.bindings.down as Key);
-        this.game.player.ROTATECW_HELD = InputManager.isKeyPressed(this.bindings.rotateCW as Key);
-        this.game.player.ROTATECCW_HELD = InputManager.isKeyPressed(this.bindings.rotateCCW as Key);
-        // Add more mapping as needed
-    }
-  }
-
-  public onResize(width: number, height: number): void {
-    this.centerRenderer();
-    this.pauseOverlay?.resize(width, height);
-    if (this.spectatorBanner) {
-        this.spectatorBanner.position.set(width / 2, 50);
+        this.game.player.ROTATECW_HELD = InputManager.isKeyHeld(this.bindings.rotateCW as Key);
+        this.game.player.ROTATECCW_HELD = InputManager.isKeyHeld(this.bindings.rotateCCW as Key);
+        this.game.player.SLAM_HELD = InputManager.isKeyHeld(this.bindings.hardDrop as Key);
+        this.game.player.HOLDRAISE_HELD = InputManager.isKeyHeld(this.bindings.hold as Key);
     }
   }
 
@@ -554,8 +551,6 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
         msgEl.innerHTML = `<span style="color: #3366ff; font-weight: bold;">${data.name}:</span> ${data.message}`;
         messagesDiv.appendChild(msgEl);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        
-        // Auto-fade messages or keep them visible? Let's keep them for now.
     }
   }
 
@@ -567,7 +562,6 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     if (this.chatInputActive) {
         input.style.display = 'block';
         input.focus();
-        // Lock game input
         InputManager.setLocked(true);
         
         input.onkeydown = (e) => {

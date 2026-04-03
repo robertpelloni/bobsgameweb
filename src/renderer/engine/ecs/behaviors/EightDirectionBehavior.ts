@@ -34,7 +34,21 @@ export class EightDirectionBehavior extends Behavior {
         }
 
         if (InputManager.isActionPressed()) {
-            // Demo dialogue trigger
+            // Check for nearby NPCs to battle
+            const entities = (this.world as any).entities as Map<number, Map<string, any>>;
+            for (const [id, components] of entities) {
+                if (id === this.entityId) continue;
+                const npcTransform = components.get('Transform') as TransformComponent;
+                if (npcTransform) {
+                    const dx = npcTransform.x - transform.x;
+                    const dy = npcTransform.y - transform.y;
+                    if (Math.sqrt(dx * dx + dy * dy) < 40) {
+                        (this.world as any).scene?.startBattle(id);
+                        return;
+                    }
+                }
+            }
+            
             (this.world as any).scene?.showDialogue("Hello! Welcome to the Omni-Engine MMO World!");
         }
     }
