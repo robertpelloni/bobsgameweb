@@ -42,6 +42,32 @@ export class PuzzlePlayer {
     public CONFIRM_HELD: boolean = false;
     public CANCEL_HELD: boolean = false;
 
+    public getInputMask(): number {
+        let mask = 0;
+        if (this.UP_HELD) mask |= (1 << 0);
+        if (this.DOWN_HELD) mask |= (1 << 1);
+        if (this.LEFT_HELD) mask |= (1 << 2);
+        if (this.RIGHT_HELD) mask |= (1 << 3);
+        if (this.ROTATECW_HELD) mask |= (1 << 4);
+        if (this.ROTATECCW_HELD) mask |= (1 << 5);
+        if (this.HOLDRAISE_HELD) mask |= (1 << 6);
+        if (this.SLAM_HELD) mask |= (1 << 7);
+        if (this.PAUSE_HELD) mask |= (1 << 8);
+        return mask;
+    }
+
+    public setInputMask(mask: number): void {
+        this.UP_HELD = (mask & (1 << 0)) !== 0;
+        this.DOWN_HELD = (mask & (1 << 1)) !== 0;
+        this.LEFT_HELD = (mask & (1 << 2)) !== 0;
+        this.RIGHT_HELD = (mask & (1 << 3)) !== 0;
+        this.ROTATECW_HELD = (mask & (1 << 4)) !== 0;
+        this.ROTATECCW_HELD = (mask & (1 << 5)) !== 0;
+        this.HOLDRAISE_HELD = (mask & (1 << 6)) !== 0;
+        this.SLAM_HELD = (mask & (1 << 7)) !== 0;
+        this.PAUSE_HELD = (mask & (1 << 8)) !== 0;
+    }
+
     public LAST_UP_HELD: boolean = false;
     public LAST_DOWN_HELD: boolean = false;
     public LAST_LEFT_HELD: boolean = false;

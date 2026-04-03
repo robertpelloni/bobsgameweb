@@ -285,6 +285,7 @@ export class MainMenuScene extends Scene {
             { label: 'High Scores', action: () => this.openHighScores() },
             { label: 'Settings', action: () => this.openSettings() },
             { label: 'Options', action: () => this.openOptions() },
+            { label: 'Watch Last Replay', action: () => this.playLastReplay() },
         ];
 
         const buttonStyle: ButtonStyle = {
@@ -395,6 +396,36 @@ export class MainMenuScene extends Scene {
             startLevel: 1,
         };
 
+        const puzzleScene = new PuzzleScene(puzzleConfig);
+        SceneTransition.pushWithFade(this.app, puzzleScene);
+    }
+
+    private playLastReplay(): void {
+        let lastKey = null;
+        let lastTime = 0;
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('replay_')) {
+                const time = parseInt(key.split('_')[1]);
+                if (time > lastTime) {
+                    lastTime = time;
+                    lastKey = key;
+                }
+            }
+        }
+        
+        if (!lastKey) {
+            alert('No replays found!');
+            return;
+        }
+        
+        const data = localStorage.getItem(lastKey)!;
+        const puzzleConfig: PuzzleSceneConfig = {
+            name: 'puzzle-replay',
+            app: this.app,
+            camera: this.camera ?? undefined,
+            replayData: data
+        };
         const puzzleScene = new PuzzleScene(puzzleConfig);
         SceneTransition.pushWithFade(this.app, puzzleScene);
     }

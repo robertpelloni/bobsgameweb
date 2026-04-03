@@ -8,6 +8,7 @@ import { GameType } from './index';
 import { GameOverScene, GameStats } from '../scenes/GameOverScene';
 import { PauseOverlay } from '../scenes/PauseOverlay';
 import { TouchControls } from '../ui/TouchControls';
+import { ReplayRecorder, ReplayPlayer } from '../../shared/puzzle/Replay';
 import { GameMode } from '../data/HighScoreManager';
 import { SERVER_URL } from '../../shared/Config';
 import { Text, TextStyle, Container } from 'pixi.js';
@@ -19,6 +20,7 @@ export interface PuzzleSceneConfig extends SceneConfig {
   seed?: number;
   multiplayer?: boolean;
   isSpectator?: boolean;
+  replayData?: string;
 }
 
 export interface PuzzleKeyBindings {
@@ -77,6 +79,10 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private knownOpponents: Map<string, PuzzleGame> = new Map();
   private knownPlayers: Map<string, { name: string, elo: number }> = new Map();
 
+  private isReplayMode: boolean = false;
+  private replayPlayer: ReplayPlayer | null = null;
+  private replayRecorder: ReplayRecorder = new ReplayRecorder();
+
   constructor(config: PuzzleSceneConfig, bindings?: Partial<PuzzleKeyBindings>) {
     super(config);
     this.gameType = config.gameType ?? new GameType();
@@ -87,6 +93,18 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
     this.game = new PuzzleGame(this, this.seed ?? Date.now());
     this.game.currentGameType = this.gameType;
+
+    if (this.config.replayData) {
+        this.isReplayMode = true;
+        this.replayPlayer = new ReplayPlayer();
+        const data = this.replayPlayer.loadJSON(this.config.replayData);
+        if (data && data.seed) {
+            this.seed = data.seed;
+            this.game = new PuzzleGame(this, this.seed);
+            this.game.currentGameType = this.gameType;
+            console.log(`[Replay] Loaded replay for ${data.playerName} with seed ${data.seed}`);
+        }
+    }
 
     this.renderer = new PuzzleRenderer({
       cellSize: 32,
@@ -139,6 +157,8 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     if (this.config.isSpectator) {
         this.createSpectatorBanner();
         this.createSpectatorStats();
+    } else if (this.isReplayMode) {
+        this.createReplayBanner();
     }
 
     this.game.initGame();
@@ -173,6 +193,21 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     this.spectatorBanner.anchor.set(0.5);
     this.spectatorBanner.position.set(this.width / 2, 50);
     this.container.addChild(this.spectatorBanner);
+  }
+
+  private createReplayBanner(): void {
+    const style = new TextStyle({
+        fontFamily: 'Arial Black, Arial, sans-serif',
+        fontSize: 32,
+        fontWeight: 'bold',
+        fill: 0xffaa00,
+        stroke: { color: 0x000000, width: 4 },
+        letterSpacing: 4,
+    });
+    const banner = new Text({ text: 'REPLAY MODE', style });
+    banner.anchor.set(0.5);
+    banner.position.set(this.width / 2, 50);
+    this.container.addChild(banner);
   }
 
   private setupNetworkHandlers(): void {
@@ -412,6 +447,18 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     console.log(isWin ? 'Game Won!' : 'Game Over');
     const playerName = localStorage.getItem('playerName') || 'WebPlayer';
 
+    // Save replay locally
+    const replayJson = this.replayRecorder.exportJSON({
+        gameTypeUUID: this.gameType.uuid,
+        seed: this.seed,
+        playerName,
+        score: this.game.score,
+        lines: this.game.linesClearedTotal,
+        time: this.gameTime
+    });
+    localStorage.setItem(`replay_${Date.now()}`, replayJson);
+    console.log(`[Replay] Saved to local storage.`);
+
     networkManager.reportScore({
       mode: this.gameMode,
       name: playerName,
@@ -546,14 +593,24 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     if (this.game.state !== GameState.PLAYING) return;
     if (this.config.isSpectator) return;
 
+    if (this.isReplayMode && this.replayPlayer && this.game.player) {
+        // Inject recorded inputs
+        const mask = this.replayPlayer.getInputMaskForTick(this.game.totalTicksPassed);
+        this.game.player.setInputMask(mask);
+        return;
+    }
+
     if (this.game.player) {
         this.game.player.LEFT_HELD = InputManager.isKeyHeld(this.bindings.left as Key);
         this.game.player.RIGHT_HELD = InputManager.isKeyHeld(this.bindings.right as Key);
         this.game.player.DOWN_HELD = InputManager.isKeyHeld(this.bindings.down as Key);
+        this.game.player.UP_HELD = InputManager.isKeyHeld(Key.Up);
         this.game.player.ROTATECW_HELD = InputManager.isKeyHeld(this.bindings.rotateCW as Key);
         this.game.player.ROTATECCW_HELD = InputManager.isKeyHeld(this.bindings.rotateCCW as Key);
         this.game.player.SLAM_HELD = InputManager.isKeyHeld(this.bindings.hardDrop as Key);
         this.game.player.HOLDRAISE_HELD = InputManager.isKeyHeld(this.bindings.hold as Key);
+
+        this.replayRecorder.recordFrame(this.game.totalTicksPassed, this.game.player.getInputMask());
     }
   }
 
