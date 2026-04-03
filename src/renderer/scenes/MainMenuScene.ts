@@ -14,6 +14,7 @@ import { SceneTransition } from '../state/SceneTransition';
 
 import { LobbyScene } from './LobbyScene';
 import { SettingsScene } from './SettingsScene';
+import { EngineDemoScene } from './EngineDemoScene';
 
 // ============================================================
 // Types
@@ -240,6 +241,7 @@ export class MainMenuScene extends Scene {
         this.menuItems = [
             { label: 'Classic', action: () => this.startGame(GameTypes.CLASSIC) },
             { label: 'Modern', action: () => this.startGame(GameTypes.MODERN) },
+            { label: 'Engine Demo', action: () => this.openEngineDemo() },
             { label: 'Multiplayer', action: () => this.openLobby() },
             { label: 'High Scores', action: () => this.openHighScores() },
             { label: 'Options', action: () => this.openOptions() },
@@ -373,6 +375,14 @@ export class MainMenuScene extends Scene {
             app: this.app,
         });
         SceneTransition.pushWithFade(this.app, lobbyScene);
+    }
+
+    private openEngineDemo(): void {
+        const demoScene = new EngineDemoScene({
+            name: 'engine-demo',
+            app: this.app,
+        });
+        SceneTransition.pushWithFade(this.app, demoScene);
     }
 
     private openSettings(): void {
