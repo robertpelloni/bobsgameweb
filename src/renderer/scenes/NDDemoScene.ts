@@ -31,7 +31,7 @@ export class NDDemoScene extends Scene {
     }
 
     private openLibretro(): void {
-        this.nd.setGame(new LibretroGame(this.nd));
+        this.nd.setGame(new LibretroGame(this.nd, this.app));
     }
 
     public onResize(width: number, height: number): void {

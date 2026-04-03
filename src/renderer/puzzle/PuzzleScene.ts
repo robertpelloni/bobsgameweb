@@ -246,15 +246,45 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     });
 
     this.game.on('linesCleared', (lines: number[], chain: number, combo: number) => {
-      if (chain >= 4) {
-        this.playSound('puzzle_tetris');
-      } else {
-        this.playSound('puzzle_clear');
+      const lineCount = lines.length;
+      let popupText = '';
+      let popupColor = 0xffffff;
+      let scale = 1.0;
+
+      if (lineCount === 1) {
+          popupText = 'SINGLE';
+          popupColor = 0x88ccff;
+      } else if (lineCount === 2) {
+          popupText = 'DOUBLE!';
+          popupColor = 0x44ff44;
+          scale = 1.1;
+      } else if (lineCount === 3) {
+          popupText = 'TRIPLE!!';
+          popupColor = 0xffaa00;
+          scale = 1.3;
+      } else if (lineCount >= 4) {
+          popupText = 'TETRIS!!!';
+          popupColor = 0xff00ff;
+          scale = 1.6;
+          this.playSound('puzzle_tetris');
       }
-      
+
+      if (combo > 1) {
+          popupText += `\n${combo} COMBO!`;
+          scale += 0.2;
+      }
+
+      if (lineCount < 4) {
+          this.playSound('puzzle_clear');
+      }
+
+      if (popupText) {
+          this.renderer.spawnPopup(popupText, popupColor, scale);
+      }
+
       // Spawn particles
       for (const y of lines) {
-        this.renderer.spawnLineClearParticles(y - 5, 0xffff00); // 5 is the hidden rows buffer
+        this.renderer.spawnLineClearParticles(y - 5, popupColor); // 5 is the hidden rows buffer
       }
     });
 

@@ -60,6 +60,8 @@ const leaderboards = loadLeaderboards();
 const MAPS_DIR = path.join(__dirname, "maps");
 if (!fs.existsSync(MAPS_DIR)) fs.mkdirSync(MAPS_DIR);
 
+const DB_FILE = path.join(__dirname, "rpg_database.json");
+
 function getMapPath(mapId) {
     return path.join(MAPS_DIR, `map_${mapId}.json`);
 }
@@ -320,6 +322,80 @@ io.on("connection", (socket) => {
     });
 
     // ----------------------------------------------------------
+    // Tournament Orchestration
+    // ----------------------------------------------------------
+
+    const tournaments = new Map();
+
+    socket.on("joinTournament", (tournamentId) => {
+        if (!tournaments.has(tournamentId)) {
+            tournaments.set(tournamentId, {
+                id: tournamentId,
+                players: [],
+                brackets: [],
+                state: "WAITING"
+            });
+        }
+        
+        const tournament = tournaments.get(tournamentId);
+        if (!tournament.players.includes(socket.id)) {
+            tournament.players.push(socket.id);
+            console.log(`Player ${socket.id} joined tournament ${tournamentId}`);
+        }
+
+        // If we have 2 players, start a match
+        if (tournament.players.length >= 2 && tournament.state === "WAITING") {
+            tournament.state = "RUNNING";
+            const p1 = tournament.players[0];
+            const p2 = tournament.players[1];
+            
+            const seed = Math.floor(Math.random() * 1000000);
+            io.to(p1).emit("gameStart", { seed, opponent: players.get(p2)?.name || "Opponent", isTournament: true });
+            io.to(p2).emit("gameStart", { seed, opponent: players.get(p1)?.name || "Opponent", isTournament: true });
+            
+            console.log(`Tournament match started: ${p1} vs ${p2}`);
+        }
+    });
+        const { type, prompt } = data;
+        console.log(`[AI] Generating ${type} for prompt: ${prompt}`);
+        
+        // In a real implementation, we would call OpenAI DALL-E or Stable Diffusion here
+        setTimeout(() => {
+            const mockAssetId = `ai_${Date.now()}`;
+            const mockUrl = `https://placehold.co/32x48/00ff00/ffffff?text=${encodeURIComponent(prompt)}`;
+            
+            socket.emit("assetGenerated", { 
+                success: true, 
+                assetId: mockAssetId, 
+                url: mockUrl 
+            });
+        }, 2000);
+    });
+        try {
+            fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+            console.log("RPG Database saved to disk.");
+            socket.emit("rpgDatabaseSaved", { success: true });
+        } catch (e) {
+            console.error("Failed to save RPG database:", e);
+            socket.emit("rpgDatabaseSaved", { success: false, error: e.message });
+        }
+    });
+
+    socket.on("loadRPGDatabase", () => {
+        try {
+            if (fs.existsSync(DB_FILE)) {
+                const db = JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
+                socket.emit("rpgDatabaseLoaded", { success: true, db });
+            } else {
+                socket.emit("rpgDatabaseLoaded", { success: false, error: "Database not found" });
+            }
+        } catch (e) {
+            console.error("Failed to load RPG database:", e);
+            socket.emit("rpgDatabaseLoaded", { success: false, error: e.message });
+        }
+    });
+
+    // ----------------------------------------------------------
     // MMORPG World Sync
     // ----------------------------------------------------------
 
@@ -330,6 +406,14 @@ io.on("connection", (socket) => {
             name: players.get(socket.id)?.name || "Unknown",
             x: pos.x,
             y: pos.y
+        });
+    });
+
+    socket.on("playerAction", (action) => {
+        socket.broadcast.emit("remotePlayerAction", {
+            id: socket.id,
+            type: action.type, // e.g. 'jump', 'emote', 'interact'
+            data: action.data
         });
     });
 

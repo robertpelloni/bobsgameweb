@@ -1,4 +1,4 @@
-import { GameType, BlockType, PieceType } from '../puzzle';
+import { GameType, BlockType, PieceType, GameMode } from '../puzzle';
 
 export class CustomGameEditor {
   private container: HTMLElement;
@@ -12,8 +12,7 @@ export class CustomGameEditor {
   private gravityInput!: HTMLInputElement;
   private lockDelayInput!: HTMLInputElement;
   private chainAmountInput!: HTMLInputElement;
-  private holdPieceCheck!: HTMLInputElement;
-  private nextPieceCheck!: HTMLInputElement;
+  private nextPiecesInput!: HTMLInputElement;
   
   private blockList!: HTMLSelectElement;
   private pieceList!: HTMLSelectElement;
@@ -34,11 +33,38 @@ export class CustomGameEditor {
 
   private buildUI() {
     this.container.innerHTML = `
+      <style>
+        .custom-game-editor {
+          background: #1a1a1a;
+          color: #eee;
+          padding: 20px;
+          border-radius: 8px;
+          font-family: sans-serif;
+          width: 600px;
+          box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .editor-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px; }
+        .tab-btn { background: #333; border: none; color: #888; padding: 5px 15px; cursor: pointer; border-radius: 4px; }
+        .tab-btn.active { background: #00ff00; color: #000; font-weight: bold; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #aaa; }
+        .form-row { display: flex; gap: 20px; }
+        input, select { background: #222; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 4px; width: 100%; }
+        .hidden { display: none; }
+        .editor-columns { display: flex; gap: 20px; }
+        .item-list { flex: 1; }
+        .item-details { flex: 1; background: #222; padding: 10px; border-radius: 4px; }
+        button { cursor: pointer; }
+      </style>
+
       <div class="editor-header">
         <h2>Custom Game Editor</h2>
-        <button id="btn-save">Save</button>
-        <button id="btn-load">Load</button>
-        <button id="btn-new">New</button>
+        <div>
+            <button id="btn-new">New</button>
+            <button id="btn-load">Load</button>
+            <button id="btn-save" style="background:#004400; color:#fff; border:none; padding:5px 15px; border-radius:4px;">Save</button>
+        </div>
       </div>
       
       <div class="editor-tabs">
@@ -71,27 +97,23 @@ export class CustomGameEditor {
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Gravity (ms)</label>
-            <input type="number" id="gravity" min="0" step="10">
+            <label>Gravity (Ticks)</label>
+            <input type="number" id="gravity" min="0">
           </div>
           <div class="form-group">
-            <label>Lock Delay (ms)</label>
-            <input type="number" id="lock-delay" min="0" step="10">
+            <label>Lock Delay (Ticks)</label>
+            <input type="number" id="lock-delay" min="0">
           </div>
-        </div>
-        <div class="form-group">
-          <label>Chain Amount</label>
-          <input type="number" id="chain-amount" min="2" max="10">
         </div>
         <div class="form-row">
-          <div class="checkbox-group">
-            <input type="checkbox" id="hold-enabled">
-            <label for="hold-enabled">Enable Hold</label>
-          </div>
-          <div class="checkbox-group">
-            <input type="checkbox" id="next-enabled">
-            <label for="next-enabled">Enable Next</label>
-          </div>
+            <div class="form-group">
+                <label>Chain Amount</label>
+                <input type="number" id="chain-amount" min="2" max="10">
+            </div>
+            <div class="form-group">
+                <label>Next Pieces</label>
+                <input type="number" id="next-pieces" min="0" max="6">
+            </div>
         </div>
       </div>
       
@@ -105,9 +127,7 @@ export class CustomGameEditor {
               <button id="btn-remove-block">-</button>
             </div>
           </div>
-          <div class="item-details" id="block-details">
-            <!-- Dynamic block details -->
-          </div>
+          <div id="block-details" class="item-details">Select a block</div>
         </div>
       </div>
       
@@ -121,9 +141,7 @@ export class CustomGameEditor {
               <button id="btn-remove-piece">-</button>
             </div>
           </div>
-          <div class="item-details" id="piece-details">
-            <!-- Dynamic piece details -->
-          </div>
+          <div id="piece-details" class="item-details">Select a piece</div>
         </div>
       </div>
     `;
@@ -135,12 +153,10 @@ export class CustomGameEditor {
     this.gravityInput = this.container.querySelector('#gravity') as HTMLInputElement;
     this.lockDelayInput = this.container.querySelector('#lock-delay') as HTMLInputElement;
     this.chainAmountInput = this.container.querySelector('#chain-amount') as HTMLInputElement;
-    this.holdPieceCheck = this.container.querySelector('#hold-enabled') as HTMLInputElement;
-    this.nextPieceCheck = this.container.querySelector('#next-enabled') as HTMLInputElement;
+    this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
     this.blockList = this.container.querySelector('#block-list') as HTMLSelectElement;
     this.pieceList = this.container.querySelector('#piece-list') as HTMLSelectElement;
 
-    // Add event listeners
     this.setupEventListeners();
   }
 
@@ -155,6 +171,13 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-save')?.addEventListener('click', () => this.save());
     this.container.querySelector('#btn-load')?.addEventListener('click', () => this.load());
     this.container.querySelector('#btn-new')?.addEventListener('click', () => this.createNew());
+    
+    this.container.querySelector('#btn-add-block')?.addEventListener('click', () => {
+        const bt = new BlockType();
+        bt.name = "New Block";
+        this.currentGameType.blockTypes.push(bt);
+        this.updateBlockList();
+    });
   }
 
   private switchTab(tabName: string) {
@@ -174,8 +197,7 @@ export class CustomGameEditor {
     this.gravityInput.value = this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces.toString();
     this.lockDelayInput.value = this.currentGameType.maxLockDelayTicks.toString();
     this.chainAmountInput.value = this.currentGameType.chainRule_AmountPerChain.toString();
-    // this.holdPieceCheck.checked = this.currentGameType.holdPieceEnabled; // Field might be named differently
-    // this.nextPieceCheck.checked = this.currentGameType.nextPieceEnabled;
+    this.nextPiecesInput.value = this.currentGameType.numberOfNextPiecesToShow.toString();
     
     this.updateBlockList();
     this.updatePieceList();
@@ -203,24 +225,30 @@ export class CustomGameEditor {
 
   private save() {
     this.currentGameType.name = this.nameInput.value;
-    this.currentGameType.gameMode = this.modeSelect.value as any;
+    this.currentGameType.gameMode = this.modeSelect.value as GameMode;
     this.currentGameType.gridWidth = parseInt(this.gridWidthInput.value);
     this.currentGameType.gridHeight = parseInt(this.gridHeightInput.value);
     this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = parseInt(this.gravityInput.value);
     this.currentGameType.maxLockDelayTicks = parseInt(this.lockDelayInput.value);
     this.currentGameType.chainRule_AmountPerChain = parseInt(this.chainAmountInput.value);
+    this.currentGameType.numberOfNextPiecesToShow = parseInt(this.nextPiecesInput.value);
     
-    this.currentGameType.toBase64GZippedXML().then(data => {
-        localStorage.setItem('custom-game-type', data);
-        alert('Game type saved!');
-    });
+    // Save to local storage for now
+    localStorage.setItem('custom-game-type', JSON.stringify(this.currentGameType));
+    alert('Game type saved to local browser storage!');
   }
 
   private async load() {
     const data = localStorage.getItem('custom-game-type');
     if (data) {
-      this.currentGameType = await GameType.fromBase64GZippedXML(data);
-      this.loadFromGameType();
+      try {
+          const obj = JSON.parse(data);
+          Object.assign(this.currentGameType, obj);
+          this.loadFromGameType();
+          alert('Game type loaded!');
+      } catch (e) {
+          alert('Failed to load game type.');
+      }
     }
   }
 
