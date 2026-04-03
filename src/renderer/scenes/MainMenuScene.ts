@@ -112,6 +112,30 @@ export class MainMenuScene extends Scene {
         this.updateCategoryVisuals();
     }
 
+    public onResize(width: number, height: number): void {
+        this.drawBackground();
+        this.titleText.x = this.centerX;
+        this.titleText.y = height * 0.2;
+        this.subtitleText.x = this.centerX;
+        this.subtitleText.y = this.titleText.y + 60;
+        this.versionText.x = width - 10;
+        this.versionText.y = height - 10;
+        
+        // Reposition menu buttons
+        const startY = height * 0.45;
+        const spacing = 50;
+        for (let i = 0; i < this.menuButtons.length; i++) {
+            this.menuButtons[i].setPosition(this.centerX, startY + i * spacing);
+        }
+
+        // Reposition mode buttons
+        const modeStartY = this.centerX - (this.categories.length * 130) / 2 + 65;
+        const modeY = height * 0.38;
+        for (let i = 0; i < this.modeButtons.length; i++) {
+            this.modeButtons[i].setPosition(modeStartY + i * 130, modeY);
+        }
+    }
+
     private selectCategory(index: number): void {
         this.selectedCategoryIndex = index;
         this.updateCategoryVisuals();

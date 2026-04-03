@@ -425,6 +425,11 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     }
   }
 
+  public onResize(width: number, height: number): void {
+    this.centerRenderer();
+    this.pauseOverlay?.resize(width, height);
+  }
+
   restart(): void {
     this.gameTime = 0;
     this.game.initGame();

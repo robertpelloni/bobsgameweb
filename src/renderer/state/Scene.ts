@@ -55,6 +55,10 @@ export abstract class Scene<T extends SceneConfig = SceneConfig> implements Stat
     this.onRender();
   }
 
+  onResize(width: number, height: number): void {
+    this.container.label = this.name; // Keep label
+  }
+
   public abstract create(): void | Promise<void>;
 
   protected abstract onUpdate(dt: number): void;

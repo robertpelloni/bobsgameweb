@@ -35,6 +35,12 @@ export class NDDemoScene extends Scene {
         this.nd.setGame(new LibretroGame(this.nd));
     }
 
+    public onResize(width: number, height: number): void {
+        const scale = Math.min(width / 400, height / 600);
+        this.nd.container.scale.set(scale);
+        this.nd.container.position.set(this.centerX, this.centerY);
+    }
+
     protected onUpdate(dt: number): void {
         this.updateInputs();
         this.nd.update(dt);

@@ -563,6 +563,10 @@ export class PuzzleRenderer {
     this.container.visible = value;
   }
 
+  setPosition(x: number, y: number): void {
+    this.container.position.set(x, y);
+  }
+
   getGridBounds(): { x: number; y: number; width: number; height: number } {
     if (!this.game) {
       return { x: 0, y: 0, width: 0, height: 0 };
