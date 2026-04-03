@@ -16,9 +16,11 @@ export class LobbyScene extends Scene {
     private roomListContainer: Container;
     private leaderboardContainer: Container;
     private titleText!: Text;
+    private connectingText!: Text;
     private uiElements: HTMLElement[] = [];
     private chatContainer: HTMLElement | null = null;
     private bracketContainer: HTMLElement | null = null;
+    private playersContainer: HTMLElement | null = null;
 
     constructor(config: SceneConfig) {
         super(config);
@@ -41,6 +43,11 @@ export class LobbyScene extends Scene {
         this.titleText.anchor.set(0.5, 0);
         this.titleText.position.set(this.app.screen.width / 2, 50);
         this.container.addChild(this.titleText);
+
+        this.connectingText = new Text({ text: 'Connecting to Server...', style: { fill: '#ffff00', fontSize: 24 } });
+        this.connectingText.anchor.set(0.5, 0);
+        this.connectingText.position.set(this.app.screen.width / 2, 100);
+        this.container.addChild(this.connectingText);
 
         const createRoomDiv = document.createElement('div');
         createRoomDiv.style.position = 'absolute';
@@ -109,21 +116,43 @@ export class LobbyScene extends Scene {
     }
 
     private setupNetworkHandlers(): void {
+        this.networkManager.on('connected', () => {
+            if (this.connectingText) {
+                this.connectingText.text = 'Connected!';
+                setTimeout(() => {
+                    if (this.connectingText) this.connectingText.visible = false;
+                }, 1000);
+            }
+        });
+
+        this.networkManager.on('disconnected', () => {
+            if (this.connectingText) {
+                this.connectingText.text = 'Disconnected. Reconnecting...';
+                this.connectingText.visible = true;
+            }
+        });
+
         this.networkManager.on('roomCreated', (room: LobbyRoom) => {
             const password = (document.getElementById('roomPasswordInput') as HTMLInputElement)?.value || "";
             this.networkManager.joinRoom({ id: room.id, password });
         });
 
-        this.networkManager.on('joinedRoom', (room: LobbyRoom) => {
+        this.networkManager.on('joinedRoom', (room: any) => {
             this.titleText.text = `Waiting in ${room.name}...`;
             this.uiElements.forEach(el => el.style.display = 'none');
             this.roomListContainer.visible = false;
             this.leaderboardContainer.visible = false;
+            
+            this.createPlayersUI(room.playerNames || []);
             this.createChatUI();
             
             if (room.isTournament) {
                 this.showTournamentBracket(room.id);
             }
+        });
+
+        this.networkManager.on('roomUpdated', (data: { playerNames: string[] }) => {
+            this.updatePlayersUI(data.playerNames);
         });
 
         this.networkManager.on('chatMessage', (data: { message: string, name: string, timestamp: number }) => {
@@ -184,11 +213,21 @@ export class LobbyScene extends Scene {
 
         const lockStr = room.hasPassword ? " 🔒" : "";
         const tourneyStr = room.isTournament ? " [TOURNAMENT]" : "";
+        
+        // Display state
+        let stateColor = '#aaaaaa';
+        if (room.state === 'LOBBY') stateColor = '#00ff00';
+        else if (room.state === 'PLAYING') stateColor = '#ffaa00';
+        
+        const stateText = new Text({ text: `[${room.state}]`, style: { fill: stateColor, fontSize: 20, fontWeight: 'bold' } });
+        row.addChild(stateText);
+
         const text = new Text({ text: `${room.name}${lockStr}${tourneyStr} (${room.players}/${room.maxPlayers})`, style: { fill: '#ffffff', fontSize: 24 } });
+        text.position.set(120, -2);
         row.addChild(text);
 
         const joinBtn = this.createStyledButton('Join', 100, 40);
-        joinBtn.position.set(450, 0);
+        joinBtn.position.set(550, -5);
         joinBtn.on('pointerdown', () => {
             let password = "";
             if (room.hasPassword) {
@@ -200,7 +239,7 @@ export class LobbyScene extends Scene {
 
         if (room.isTournament) {
             const bracketBtn = this.createStyledButton('Bracket', 120, 40);
-            bracketBtn.position.set(570, 0);
+            bracketBtn.position.set(670, -5);
             bracketBtn.on('pointerdown', () => {
                 this.showTournamentBracket(room.id);
             });
@@ -292,6 +331,41 @@ export class LobbyScene extends Scene {
         });
     }
 
+    private createPlayersUI(playerNames: string[]): void {
+        if (this.playersContainer) return;
+
+        this.playersContainer = document.createElement('div');
+        this.playersContainer.style.position = 'absolute';
+        this.playersContainer.style.left = '20px';
+        this.playersContainer.style.top = '120px';
+        this.playersContainer.style.width = '200px';
+        this.playersContainer.style.background = 'rgba(0,0,0,0.8)';
+        this.playersContainer.style.color = 'white';
+        this.playersContainer.style.display = 'flex';
+        this.playersContainer.style.flexDirection = 'column';
+        this.playersContainer.style.padding = '10px';
+        this.playersContainer.style.borderRadius = '8px';
+        this.playersContainer.style.border = '1px solid #00ff00';
+
+        document.body.appendChild(this.playersContainer);
+        this.uiElements.push(this.playersContainer);
+        
+        this.updatePlayersUI(playerNames);
+    }
+
+    private updatePlayersUI(playerNames: string[]): void {
+        if (!this.playersContainer) return;
+        
+        let html = `<h3 style="margin-top:0; color:#00ff00; border-bottom:1px solid #444; padding-bottom:5px;">Players (${playerNames.length})</h3>`;
+        html += `<ul style="list-style:none; padding:0; margin:0; margin-top:10px;">`;
+        playerNames.forEach(name => {
+            html += `<li style="padding: 5px 0; font-size: 16px;">• ${name}</li>`;
+        });
+        html += `</ul>`;
+        
+        this.playersContainer.innerHTML = html;
+    }
+
     private createChatUI(): void {
         if (this.chatContainer) return;
 
@@ -357,5 +431,6 @@ export class LobbyScene extends Scene {
         this.uiElements = [];
         this.chatContainer = null;
         this.bracketContainer = null;
+        this.playersContainer = null;
     }
 }

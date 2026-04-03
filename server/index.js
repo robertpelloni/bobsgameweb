@@ -150,6 +150,7 @@ io.on("connection", (socket) => {
         // Send back room info (minus password)
         const roomInfo = { ...newRoom };
         delete roomInfo.password;
+        roomInfo.playerNames = newRoom.players.map(pid => players.get(pid)?.name || "Unknown");
 
         socket.emit("roomCreated", roomInfo);
         console.log("Room created:", roomName, roomId, isPrivate ? "(Private)" : "", isTournament ? "(Tournament)" : "");
@@ -184,6 +185,7 @@ io.on("connection", (socket) => {
 
         const roomInfo = { ...room };
         delete roomInfo.password;
+        roomInfo.playerNames = room.players.map(pid => players.get(pid)?.name || "Unknown");
         socket.emit("joinedRoom", roomInfo);
 
         // Notify others in room
@@ -192,6 +194,10 @@ io.on("connection", (socket) => {
             message: `${playerName} joined the room`,
             name: "System",
             timestamp: Date.now()
+        });
+        
+        io.to(room.id).emit("roomUpdated", {
+            playerNames: room.players.map(pid => players.get(pid)?.name || "Unknown")
         });
 
         // If room is now full and not a tournament, start the game automatically
@@ -345,6 +351,9 @@ io.on("connection", (socket) => {
                         message: `${playerName} left the room`,
                         name: "System",
                         timestamp: Date.now()
+                    });
+                    io.to(room).emit("roomUpdated", {
+                        playerNames: r.players.map(pid => players.get(pid)?.name || "Unknown")
                     });
                 }
             }

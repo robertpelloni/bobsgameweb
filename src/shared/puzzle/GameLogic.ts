@@ -40,6 +40,7 @@ export interface GameLogicEvents {
     'tick': (ticks: number) => void;
     'announcement': (text: string, color?: BobColor) => void;
     'garbageSent': (amount: number) => void;
+    'garbageReceived': (amount: number) => void;
 }
 
 export class GameLogic extends EventEmitter<GameLogicEvents> {
@@ -678,6 +679,7 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
     }
 
     public gotVSGarbageFromOtherPlayer(amount: number): void {
+        this.emit('garbageReceived', amount);
         this.garbageWaitForPiecesSetCount = Math.min(4, this.garbageWaitForPiecesSetCount + 3);
         if (this.getRoom().multiplayer_GarbageScaleByDifficulty) {
             if (this.getCurrentDifficulty().name === "Beginner") amount = Math.floor(amount * 0.5);

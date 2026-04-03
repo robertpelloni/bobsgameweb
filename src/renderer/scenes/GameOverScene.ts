@@ -19,6 +19,7 @@ export interface GameStats {
 
 export interface GameOverSceneConfig extends SceneConfig {
     stats: GameStats;
+    isWin?: boolean;
     onReplay?: () => void;
     onMainMenu?: () => void;
 }
@@ -115,7 +116,7 @@ export class GameOverScene extends Scene {
         });
 
         this.titleText = new Text({
-            text: this.isHighScore ? 'NEW HIGH SCORE!' : 'GAME OVER',
+            text: this.gameOverConfig.isWin ? 'YOU WIN!' : (this.isHighScore ? 'NEW HIGH SCORE!' : 'GAME OVER'),
             style: titleStyle
         });
         this.titleText.anchor.set(0.5);

@@ -64,6 +64,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
   private chatContainer: HTMLElement | null = null;
   private chatInputActive: boolean = false;
+  private helpOverlay: HTMLElement | null = null;
 
   constructor(config: PuzzleSceneConfig, bindings?: Partial<PuzzleKeyBindings>) {
     super(config);
@@ -115,8 +116,51 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       this.createChatUI();
     }
 
+    this.createHelpOverlay();
+
     this.game.initGame();
     this.game.start();
+  }
+
+  private createHelpOverlay(): void {
+    this.helpOverlay = document.createElement('div');
+    this.helpOverlay.style.position = 'absolute';
+    this.helpOverlay.style.right = '20px';
+    this.helpOverlay.style.top = '20px';
+    this.helpOverlay.style.background = 'rgba(0,0,0,0.8)';
+    this.helpOverlay.style.color = '#fff';
+    this.helpOverlay.style.padding = '15px';
+    this.helpOverlay.style.borderRadius = '8px';
+    this.helpOverlay.style.border = '1px solid #4a6a8a';
+    this.helpOverlay.style.fontFamily = 'monospace';
+    this.helpOverlay.style.display = 'none';
+    this.helpOverlay.style.zIndex = '1000';
+    
+    this.helpOverlay.innerHTML = `
+      <h3 style="margin-top:0; color:#ffcc00;">Controls</h3>
+      <p><b>Left/Right:</b> Move Piece</p>
+      <p><b>Down:</b> Soft Drop</p>
+      <p><b>Space:</b> Hard Drop</p>
+      <p><b>Up/X:</b> Rotate CW</p>
+      <p><b>Z:</b> Rotate CCW</p>
+      <p><b>C:</b> Hold Piece</p>
+      <p><b>ESC:</b> Pause Game</p>
+      <p><b>R:</b> Restart</p>
+      ${this.config.multiplayer ? '<p><b>T:</b> Chat</p>' : ''}
+      <hr style="border-color:#4a6a8a; margin:10px 0;">
+      <p style="color:#888; margin-bottom:0;">Press F1 to close</p>
+    `;
+    
+    document.body.appendChild(this.helpOverlay);
+  }
+
+  private toggleHelpOverlay(): void {
+    if (!this.helpOverlay) return;
+    if (this.helpOverlay.style.display === 'none') {
+      this.helpOverlay.style.display = 'block';
+    } else {
+      this.helpOverlay.style.display = 'none';
+    }
   }
 
   private setupNetworkHandlers(): void {
@@ -191,6 +235,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
         this.playSound('puzzle_rotate');
       } else if (movement === MovementType.HARD_DROP) {
         this.playSound('puzzle_drop');
+        this.renderer.shake(3);
       } else if (movement === MovementType.HOLD) {
         this.playSound('puzzle_hold');
       }
@@ -200,11 +245,16 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       this.playSound('puzzle_lock');
     });
 
-    this.game.on('linesCleared', (lines, chain, combo) => {
+    this.game.on('linesCleared', (lines: number[], chain: number, combo: number) => {
       if (chain >= 4) {
         this.playSound('puzzle_tetris');
       } else {
         this.playSound('puzzle_clear');
+      }
+      
+      // Spawn particles
+      for (const y of lines) {
+        this.renderer.spawnLineClearParticles(y - 5, 0xffff00); // 5 is the hidden rows buffer
       }
     });
 
@@ -212,14 +262,29 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       this.playSound('puzzle_levelup');
     });
 
+    this.game.on('garbageSent', (amount: number) => {
+      // we could add a sound effect here
+    });
+
+    this.game.on('garbageReceived', (amount: number) => {
+      this.renderer.shake(amount * 2 + 5);
+      // could add sound effect
+    });
+
     this.game.on('gameOver', () => {
       this.playSound('puzzle_gameover');
       this.showGameOver();
     });
+
+    this.game.on('win', () => {
+      // Just reuse game over sound and UI for now, but we could add a specific win sound
+      this.playSound('puzzle_gameover');
+      this.showGameOver(true);
+    });
   }
 
-  private showGameOver(): void {
-    console.log('Game Over');
+  private showGameOver(isWin: boolean = false): void {
+    console.log(isWin ? 'Game Won!' : 'Game Over');
     const playerName = localStorage.getItem('playerName') || 'WebPlayer';
 
     // Report score to server for leaderboard
@@ -245,6 +310,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       name: 'game-over',
       app: this.app,
       stats,
+      isWin,
       onReplay: () => {
         // Pop the GameOverScene, then restart
         StateManager.pop();
@@ -271,7 +337,15 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   }
 
   private quitToMenu(): void {
-    StateManager.pop();
+    if (this.config.multiplayer) {
+      networkManager.disconnect();
+      // Pop everything until we reach the main menu
+      while (StateManager.current && StateManager.current.name !== 'main-menu') {
+        StateManager.popSync();
+      }
+    } else {
+      StateManager.popSync();
+    }
   }
 
   private playSound(name: string): void {
@@ -289,6 +363,17 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     if (this.game.state === GameState.PLAYING) {
       this.gameTime += dt;
       this.frameCount++;
+
+      // Sprint mode win condition (40 lines)
+      if (this.gameMode === 'sprint' && this.game.linesClearedTotal >= 40 && !this.game.won) {
+        this.game.won = true;
+      }
+
+      // Ultra mode time condition (3 minutes)
+      if (this.gameMode === 'ultra' && this.gameTime >= 180 && !this.game.complete) {
+        this.game.complete = true;
+        this.game.emit('gameOver'); // End the game
+      }
 
       if (this.config.multiplayer && this.frameCount % 5 === 0) {
         networkManager.sendFrame(this.game.getState());
@@ -310,6 +395,10 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
         this.resumeGame();
       }
       return;
+    }
+
+    if (InputManager.isKeyPressed(Key.F1)) {
+        this.toggleHelpOverlay();
     }
 
     if (InputManager.isKeyPressed(Key.T) && this.config.multiplayer) {
@@ -428,6 +517,10 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     if (this.chatContainer) {
         this.chatContainer.remove();
         this.chatContainer = null;
+    }
+    if (this.helpOverlay) {
+        this.helpOverlay.remove();
+        this.helpOverlay = null;
     }
     if (this.config.multiplayer) {
       networkManager.setGame(null);

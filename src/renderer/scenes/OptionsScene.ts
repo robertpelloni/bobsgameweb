@@ -108,7 +108,13 @@ export class OptionsScene extends Scene {
             'SFX Volume',
             AudioManager.sfxVolume,
             startY + spacing * 2,
-            (v) => { AudioManager.sfxVolume = v; }
+            (v) => { 
+                AudioManager.sfxVolume = v;
+                // Play a sound to preview the SFX volume change
+                if (AudioManager.isLoaded('menu_move')) {
+                    AudioManager.playSound('menu_move', { volume: 1.0 });
+                }
+            }
         );
         this.optionItems.push({ type: 'slider', label: 'SFX Volume', slider: this.sfxSlider });
 
@@ -126,10 +132,18 @@ export class OptionsScene extends Scene {
         };
 
         const backButton = new Button('Back', buttonStyle);
-        backButton.setPosition(this.centerX, startY + spacing * 3.5);
+        backButton.setPosition(this.centerX - 120, startY + spacing * 3.5);
         backButton.onClick(() => this.goBack());
         this.container.addChild(backButton.container);
         this.optionItems.push({ type: 'button', label: 'Back', button: backButton });
+
+        const testSoundBtn = new Button('Test Sound', buttonStyle);
+        testSoundBtn.setPosition(this.centerX + 120, startY + spacing * 3.5);
+        testSoundBtn.onClick(() => {
+            this.playSelectSound();
+        });
+        this.container.addChild(testSoundBtn.container);
+        this.optionItems.push({ type: 'button', label: 'Test Sound', button: testSoundBtn });
     }
 
     private createSlider(label: string, initialValue: number, y: number, onChange: (value: number) => void): Slider {
