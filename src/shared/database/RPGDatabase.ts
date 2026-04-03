@@ -8,6 +8,7 @@ export interface ActorData {
     initialLevel: number;
     faceName: string;
     characterName: string;
+    description: string;
 }
 
 export interface SkillData {
@@ -16,6 +17,8 @@ export interface SkillData {
     description: string;
     mpCost: number;
     tpCost: number;
+    scope: number; // 0: None, 1: One Enemy, 2: All Enemies, etc.
+    actionType: number; // Damage, Recover, etc.
 }
 
 export interface ItemData {
@@ -24,6 +27,22 @@ export interface ItemData {
     description: string;
     price: number;
     consumable: boolean;
+    itypeId: number; // 1: Regular, 2: Key
+}
+
+export interface EnemyData {
+    id: number;
+    name: string;
+    mhp: number;
+    mmp: number;
+    atk: number;
+    def: number;
+    mat: number;
+    mdf: number;
+    agi: number;
+    luk: number;
+    exp: number;
+    gold: number;
 }
 
 export class RPGDatabase {
@@ -32,7 +51,7 @@ export class RPGDatabase {
     public items: ItemData[] = [];
     public weapons: any[] = [];
     public armors: any[] = [];
-    public enemies: any[] = [];
+    public enemies: EnemyData[] = [];
     public troops: any[] = [];
     public states: any[] = [];
     
