@@ -59,8 +59,11 @@ export class PuzzleRenderer {
   private holdContainer: Container;
   private statsContainer: Container;
   private particlesContainer: Container;
+  private popupsContainer: Container;
 
   private particles: PuzzleParticle[] = [];
+  private popups: { text: Text, vx: number, vy: number, life: number, maxLife: number }[] = [];
+  private displayScore: number = 0;
   private currentShake: number = 0;
 
   private gridBackground: Graphics;
@@ -91,6 +94,7 @@ export class PuzzleRenderer {
     this.holdContainer = new Container();
     this.statsContainer = new Container();
     this.particlesContainer = new Container();
+    this.popupsContainer = new Container();
 
     this.gridBackground = new Graphics();
     this.pieceGraphics = new Graphics();
@@ -105,6 +109,7 @@ export class PuzzleRenderer {
     this.container.addChild(this.holdContainer);
     this.container.addChild(this.statsContainer);
     this.container.addChild(this.particlesContainer);
+    this.container.addChild(this.popupsContainer);
 
     this.gridContainer.addChild(this.gridBackground);
     this.pieceContainer.addChild(this.pieceGraphics);
@@ -169,6 +174,7 @@ export class PuzzleRenderer {
     this.pieceContainer.position.set(ox, oy);
     this.ghostContainer.position.set(ox, oy);
     this.particlesContainer.position.set(ox, oy);
+    this.popupsContainer.position.set(ox, oy);
 
     const gridPixelWidth = gridWidth * cellSize;
 
@@ -253,6 +259,7 @@ export class PuzzleRenderer {
     this.updateHoldPiece();
     this.updateStats();
     this.updateParticles();
+    this.updatePopups();
   }
 
   private updateParticles(): void {
@@ -405,10 +412,76 @@ export class PuzzleRenderer {
   private updateStats(): void {
     if (!this.game || !this.config.showStats) return;
 
-    this.scoreText.text = `Score: ${this.game.score}`;
+    const targetScore = this.game.score;
+    if (this.displayScore < targetScore) {
+      this.displayScore += Math.max(1, (targetScore - this.displayScore) * 0.1);
+      if (this.displayScore > targetScore) this.displayScore = targetScore;
+    } else if (this.displayScore > targetScore) {
+      this.displayScore = targetScore;
+    }
+
+    this.scoreText.text = `Score: ${Math.floor(this.displayScore)}`;
     this.levelText.text = `Level: ${this.game.currentLevel}`;
     this.linesText.text = `Lines: ${this.game.linesClearedTotal}`;
     this.timeText.text = `Time: ${this.game.getFormattedTime()}`;
+  }
+
+  public spawnPopup(message: string, color: number = 0xffffff, scale: number = 1.0): void {
+    const { cellSize } = this.config;
+    const gridWidth = this.game ? this.game.grid.getWidth() : 10;
+    const gridHeight = this.game ? this.game.grid.getHeight() - 5 : 20;
+
+    const style = new TextStyle({
+      fontFamily: 'Arial Black, Arial, sans-serif',
+      fontSize: 24 * scale,
+      fontWeight: 'bold',
+      fill: color,
+      stroke: { color: 0x000000, width: 4 },
+      dropShadow: { color: 0x000000, blur: 4, distance: 3 },
+      align: 'center'
+    });
+
+    const text = new Text({ text: message, style });
+    text.anchor.set(0.5);
+    
+    text.position.set((gridWidth * cellSize) / 2, (gridHeight * cellSize) / 2 + 20);
+    
+    this.popupsContainer.addChild(text);
+
+    this.popups.push({
+      text,
+      vx: (Math.random() - 0.5) * 20,
+      vy: -50 - Math.random() * 50,
+      life: 1.5,
+      maxLife: 1.5
+    });
+  }
+
+  private updatePopups(): void {
+    const dt = 1 / 60;
+    for (let i = this.popups.length - 1; i >= 0; i--) {
+      const p = this.popups[i];
+      p.life -= dt;
+      if (p.life <= 0) {
+        p.text.destroy();
+        this.popups.splice(i, 1);
+      } else {
+        p.vy += 20 * dt;
+        p.text.x += p.vx * dt;
+        p.text.y += p.vy * dt;
+        
+        if (p.life < 0.5) {
+          p.text.alpha = p.life / 0.5;
+        }
+        
+        if (p.maxLife - p.life < 0.2) {
+          const t = (p.maxLife - p.life) / 0.2;
+          p.text.scale.set(1 + Math.sin(t * Math.PI) * 0.5);
+        } else {
+          p.text.scale.set(1.0);
+        }
+      }
+    }
   }
 
   private drawBlock(g: Graphics, px: number, py: number, size: number, block: Block): void {

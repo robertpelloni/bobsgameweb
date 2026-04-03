@@ -252,16 +252,23 @@ export class LobbyScene extends Scene {
                 this.showTournamentBracket(room.id);
             });
             row.addChild(bracketBtn);
+
+            const enterBtn = this.createStyledButton('Enter', 100, 40, 0xaa0000);
+            enterBtn.position.set(920, -5);
+            enterBtn.on('pointerdown', () => {
+                this.networkManager.emit('joinTournament', room.id);
+            });
+            row.addChild(enterBtn);
         }
 
         return row;
     }
 
-    private createStyledButton(label: string, w: number, h: number): Container {
+    private createStyledButton(label: string, w: number, h: number, color: number = 0x3366ff): Container {
         const btn = new Container();
         const g = new Graphics();
         g.roundRect(0, 0, w, h, 10);
-        g.fill(0x3366ff);
+        g.fill(color);
         btn.addChild(g);
 
         const t = new Text({ text: label, style: { fill: '#ffffff', fontSize: 20 } });

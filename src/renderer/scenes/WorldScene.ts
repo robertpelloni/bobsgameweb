@@ -4,17 +4,19 @@ import { GameMap } from '../engine/map/GameMap';
 import { MapData } from '../../shared/MapData';
 import { RenderSystem } from '../engine/ecs/systems/RenderSystem';
 import { BehaviorSystem } from '../engine/ecs/systems/BehaviorSystem';
+import { PathfindingSystem } from '../engine/ecs/systems/PathfindingSystem';
 import { TransformComponent } from '../engine/ecs/components/TransformComponent';
 import { SpriteComponent } from '../engine/ecs/components/SpriteComponent';
 import { BehaviorComponent } from '../engine/ecs/components/BehaviorComponent';
+import { PathfindingComponent } from '../engine/ecs/components/PathfindingComponent';
 import { EightDirectionBehavior } from '../engine/ecs/behaviors/EightDirectionBehavior';
 import { NPCBehavior } from '../engine/ecs/behaviors/NPCBehavior';
-import { AudioManager } from '../audio/AudioManager';
 import { Sprite, Graphics, Texture, Container, Text, TextStyle } from 'pixi.js';
 import { InputManager, Key } from '../input/InputManager';
 import { StateManager } from '../state/StateManager';
 import { Tileset } from '../../shared/Tileset';
 import { Palette } from '../../shared/Palette';
+import { AudioManager } from '../audio/AudioManager';
 
 import { networkManager } from '../puzzle';
 import { SERVER_URL } from '../../shared/Config';
@@ -28,6 +30,11 @@ export class WorldScene extends Scene {
     private remotePlayers: Map<string, { entityId: number, transform: TransformComponent }> = new Map();
     private dialogueContainer: Container | null = null;
     private dialogueText: Text | null = null;
+    private worker: Worker | null = null;
+    
+    private consoleContainer: Container | null = null;
+    private consoleInput: HTMLInputElement | null = null;
+    private consoleActive: boolean = false;
 
     constructor(config: SceneConfig) {
         super(config);
@@ -38,7 +45,6 @@ export class WorldScene extends Scene {
     }
 
     private createDummyTiles() {
-        // Just for demo purposes
         for (let i = 1; i < 10; i++) {
             for (let x = 0; x < 8; x++) {
                 for (let y = 0; y < 8; y++) {
@@ -49,18 +55,22 @@ export class WorldScene extends Scene {
     }
 
     public async create(): Promise<void> {
-        // Setup systems
         (this.world as any).scene = this;
+        
+        // Initialize Worker for heavy pathfinding
+        this.worker = new Worker(new URL('../engine/GameWorker.ts', import.meta.url), { type: 'module' });
+        this.worker.onmessage = (e) => this.handleWorkerMessage(e.data);
+        (this.world as any).worker = this.worker;
+
         this.world.addSystem(new BehaviorSystem());
+        this.world.addSystem(new PathfindingSystem());
         this.world.addSystem(new RenderSystem(this.container));
 
-        // Load a default map
         const mapData = new MapData(-1, "MMO World", 100, 100);
         this.map = new GameMap(mapData);
         this.container.addChild(this.map.container);
         this.map.render(this.tileset, this.palette);
 
-        // Create the local player entity
         const playerEntity = this.world.createEntity();
         const transform = new TransformComponent();
         transform.x = 400;
@@ -69,7 +79,7 @@ export class WorldScene extends Scene {
 
         const sprite = new SpriteComponent();
         const g = new Graphics();
-        g.rect(-16, -24, 32, 48); // Tall character shape
+        g.rect(-16, -24, 32, 48);
         g.fill(0x3366ff);
         const tex = this.app.renderer.generateTexture(g);
         sprite.sprite = new Sprite(tex);
@@ -81,19 +91,102 @@ export class WorldScene extends Scene {
 
         this.playerTransform = transform;
 
-        // Center camera on player
         if (this.camera) {
             this.camera.clearTargets();
             this.camera.addTarget(transform);
             this.camera.setLerp(0.1);
         }
 
-        // Networking
         networkManager.connect(SERVER_URL);
         networkManager.on('remotePlayerMove', (data: any) => this.handleRemotePlayerMove(data));
+        networkManager.on('remotePlayerAction', (data: any) => this.handleRemotePlayerAction(data));
 
         this.createNPCs();
         this.createDialogueUI();
+        this.createConsoleUI();
+    }
+
+    private createConsoleUI(): void {
+        this.consoleContainer = new Container();
+        this.consoleContainer.visible = false;
+        this.container.addChild(this.consoleContainer);
+
+        const bg = new Graphics();
+        bg.rect(0, 0, this.width, 200);
+        bg.fill({ color: 0x000000, alpha: 0.8 });
+        this.consoleContainer.addChild(bg);
+
+        this.consoleInput = document.createElement('input');
+        this.consoleInput.type = 'text';
+        this.consoleInput.placeholder = 'Enter console command...';
+        this.consoleInput.style.position = 'absolute';
+        this.consoleInput.style.left = '10px';
+        this.consoleInput.style.top = '10px';
+        this.consoleInput.style.width = (this.width - 20) + 'px';
+        this.consoleInput.style.background = 'transparent';
+        this.consoleInput.style.color = '#00ff00';
+        this.consoleInput.style.border = 'none';
+        this.consoleInput.style.fontFamily = 'monospace';
+        this.consoleInput.style.outline = 'none';
+        this.consoleInput.style.display = 'none';
+        document.body.appendChild(this.consoleInput);
+
+        this.consoleInput.onkeydown = (e) => {
+            if (e.key === 'Enter') {
+                this.executeCommand(this.consoleInput!.value);
+                this.consoleInput!.value = '';
+                this.toggleConsole();
+            } else if (e.key === 'Escape') {
+                this.toggleConsole();
+            }
+        };
+    }
+
+    private toggleConsole(): void {
+        this.consoleActive = !this.consoleActive;
+        this.consoleContainer!.visible = this.consoleActive;
+        this.consoleInput!.style.display = this.consoleActive ? 'block' : 'none';
+        if (this.consoleActive) {
+            this.consoleInput!.focus();
+            InputManager.setLocked(true);
+        } else {
+            InputManager.setLocked(false);
+        }
+    }
+
+    private executeCommand(cmd: string): void {
+        console.log(`[Console] Executing: ${cmd}`);
+        const args = cmd.split(' ');
+        const action = args[0].toLowerCase();
+
+        switch (action) {
+            case 'tp':
+                if (this.playerTransform) {
+                    this.playerTransform.x = parseInt(args[1]) || 0;
+                    this.playerTransform.y = parseInt(args[2]) || 0;
+                }
+                break;
+            case 'spawn':
+                // Dynamic NPC spawn demo
+                this.createNPCs(); 
+                break;
+            case 'msg':
+                this.showDialogue(args.slice(1).join(' '));
+                break;
+            default:
+                this.showDialogue(`Unknown command: ${action}`);
+        }
+    }
+
+    private handleWorkerMessage(msg: any): void {
+        if (msg.type === 'pathResult') {
+            const components = (this.world as any).entities.get(msg.data.entityId);
+            const pathComp = components?.get('Pathfinding') as PathfindingComponent;
+            if (pathComp) {
+                pathComp.path = msg.data.path;
+                pathComp.isCalculating = false;
+            }
+        }
     }
 
     private createDialogueUI(): void {
@@ -140,7 +233,7 @@ export class WorldScene extends Scene {
             const sprite = new SpriteComponent();
             const g = new Graphics();
             g.rect(-16, -24, 32, 48);
-            g.fill(0x00aa00); // Green for NPCs
+            g.fill(0x00aa00);
             const tex = this.app.renderer.generateTexture(g);
             sprite.sprite = new Sprite(tex);
             this.world.addComponent(entity, sprite);
@@ -148,6 +241,10 @@ export class WorldScene extends Scene {
             const behavior = new BehaviorComponent();
             behavior.behaviors.push(new NPCBehavior(this.world));
             this.world.addComponent(entity, behavior);
+            
+            // Add pathfinding component
+            const pathComp = new PathfindingComponent();
+            this.world.addComponent(entity, pathComp);
         }
     }
 
@@ -162,7 +259,7 @@ export class WorldScene extends Scene {
             const sprite = new SpriteComponent();
             const g = new Graphics();
             g.rect(-16, -24, 32, 48);
-            g.fill(0xffcc00); // Yellow for remote players
+            g.fill(0xffcc00);
             const tex = this.app.renderer.generateTexture(g);
             sprite.sprite = new Sprite(tex);
             this.world.addComponent(entity, sprite);
@@ -175,21 +272,62 @@ export class WorldScene extends Scene {
         }
     }
 
+    private handleRemotePlayerAction(data: any): void {
+        const p = this.remotePlayers.get(data.id);
+        if (p) {
+            switch (data.type) {
+                case 'emote':
+                    this.showEmoteBubble(p.entityId, data.data.text);
+                    break;
+            }
+        }
+    }
+
+    public showEmoteBubble(entityId: number, text: string): void {
+        const components = (this.world as any).entities.get(entityId);
+        const transform = components?.get('Transform') as TransformComponent;
+        if (transform) {
+            const bubble = new Container();
+            const bg = new Graphics();
+            bg.roundRect(-50, -30, 100, 25, 10);
+            bg.fill({ color: 0xffffff, alpha: 0.9 });
+            bubble.addChild(bg);
+            
+            const txt = new Text({ text, style: { fill: 0x000000, fontSize: 12 } });
+            txt.anchor.set(0.5);
+            txt.position.set(0, -17.5);
+            bubble.addChild(txt);
+            
+            bubble.position.set(transform.x, transform.y - 60);
+            this.container.addChild(bubble);
+            
+            setTimeout(() => bubble.destroy(), 2000);
+        }
+    }
+
     protected onUpdate(dt: number): void {
         this.world.update(dt);
         if (this.map) this.map.update(dt);
 
-        // Update spatial audio listener position
         if (this.playerTransform) {
             AudioManager.updateListener(this.playerTransform.x, this.playerTransform.y, 0);
         }
 
-        // Broadcast local position
         if (this.playerTransform && networkManager.connected) {
             networkManager.emit('playerMove', {
                 x: this.playerTransform.x,
                 y: this.playerTransform.y
             });
+
+            if (InputManager.isKeyPressed(Key.E)) {
+                const text = "Hello!";
+                this.showEmoteBubble((this.world as any).entities.keys().next().value, text);
+                networkManager.emit('playerAction', { type: 'emote', data: { text } });
+            }
+        }
+
+        if (InputManager.isKeyPressed(Key.Tilde)) {
+            this.toggleConsole();
         }
 
         if (InputManager.isKeyPressed(Key.Escape)) {
@@ -199,5 +337,11 @@ export class WorldScene extends Scene {
             }
             StateManager.pop();
         }
+    }
+    
+    protected async destroy(): Promise<void> {
+        if (this.worker) this.worker.terminate();
+        if (this.consoleInput) this.consoleInput.remove();
+        await super.destroy();
     }
 }

@@ -17,6 +17,8 @@ import { SettingsScene } from './SettingsScene';
 import { EngineDemoScene } from './EngineDemoScene';
 import { NDDemoScene } from './NDDemoScene';
 import { WorldScene } from './WorldScene';
+import { CustomGameEditorScene } from './CustomGameEditorScene';
+import { WorldEditorScene } from './WorldEditorScene';
 
 // ============================================================
 // Types
@@ -270,6 +272,7 @@ export class MainMenuScene extends Scene {
             { label: 'Engine Demo', action: () => this.openEngineDemo() },
             { label: 'nD Demo', action: () => this.openNDDemo() },
             { label: 'MMO World', action: () => this.openWorld() },
+            { label: 'Custom Game Editor', action: () => this.openCustomEditor() },
             { label: 'Multiplayer', action: () => this.openLobby() },
             { label: 'High Scores', action: () => this.openHighScores() },
             { label: 'Options', action: () => this.openOptions() },
@@ -431,6 +434,22 @@ export class MainMenuScene extends Scene {
             camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, worldScene);
+    }
+
+    private openCustomEditor(): void {
+        const editorScene = new CustomGameEditorScene({
+            name: 'custom-editor',
+            app: this.app,
+        });
+        SceneTransition.pushWithFade(this.app, editorScene);
+    }
+
+    private openWorldEditor(): void {
+        const editorScene = new WorldEditorScene({
+            name: 'world-editor',
+            app: this.app,
+        });
+        SceneTransition.pushWithFade(this.app, editorScene);
     }
 
     private openSettings(): void {

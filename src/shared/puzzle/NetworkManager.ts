@@ -44,7 +44,13 @@ export class NetworkManager extends EventEmitter {
 
     public connect(url: string): void {
         if (this.socket) return;
-        this.socket = io(url);
+        this.socket = io(url, {
+            reconnection: true,
+            reconnectionAttempts: 10,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+            randomizationFactor: 0.5
+        });
         this.setupHandlers();
     }
 
@@ -146,6 +152,20 @@ export class NetworkManager extends EventEmitter {
         if (this.socket) {
             this.socket.once('tournamentBracket', callback);
             this.socket.emit('getTournamentBracket', roomId);
+        }
+    }
+
+    public loadRPGDatabase(callback: (data: any) => void): void {
+        if (this.socket) {
+            this.socket.once('rpgDatabaseLoaded', callback);
+            this.socket.emit('loadRPGDatabase');
+        }
+    }
+
+    public saveRPGDatabase(db: any, callback: (data: any) => void): void {
+        if (this.socket) {
+            this.socket.once('rpgDatabaseSaved', callback);
+            this.socket.emit('saveRPGDatabase', db);
         }
     }
 

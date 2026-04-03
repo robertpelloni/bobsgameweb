@@ -1,6 +1,6 @@
 import { NDGameEngine } from './NDGameEngine';
 import { ND, NDButton } from './ND';
-import { Sprite, Texture, RenderTexture, Container, Graphics, Text } from 'pixi.js';
+import { Sprite, Texture, RenderTexture, Container, Graphics, Text, Application } from 'pixi.js';
 
 export class LibretroGame extends NDGameEngine {
   public titleMenuShowing: boolean = true;
@@ -9,6 +9,7 @@ export class LibretroGame extends NDGameEngine {
   private screenSprite: Sprite | null = null;
   private screenTexture: RenderTexture | null = null;
   private menuContainer: Container | null = null;
+  private app: Application | null = null;
 
   private cores = [
     { name: 'Nestopia (NES)', url: '/cores/nestopia.wasm' },
@@ -16,8 +17,9 @@ export class LibretroGame extends NDGameEngine {
     { name: 'Genesis Plus GX (MegaDrive)', url: '/cores/genesis_plus_gx.wasm' }
   ];
 
-  constructor(nd: ND) {
+  constructor(nd: ND, app?: Application) {
     super(nd);
+    this.app = app || null;
   }
 
   public override init() {
@@ -31,10 +33,44 @@ export class LibretroGame extends NDGameEngine {
 
     this.createMenu();
     
-    // Initialize the WebWorker
-    // Note: in Vite, we use new Worker(new URL('./LibretroWorker.ts', import.meta.url))
-    // For this demo we'll use a placeholder
-    console.log('[LibretroGame] Initializing Libretro Worker...');
+    // Initialize the WebWorker using Vite's worker loader
+    this.coreWorker = new Worker(new URL('./LibretroWorker.ts', import.meta.url), { type: 'module' });
+    this.coreWorker.onmessage = (e) => this.handleWorkerMessage(e.data);
+  }
+
+  private handleWorkerMessage(msg: any) {
+      switch (msg.type) {
+          case 'frame':
+              this.updateScreen(msg.data);
+              break;
+          case 'core_loaded':
+              console.log('[LibretroGame] Core ready.');
+              break;
+          case 'rom_loaded':
+              console.log('[LibretroGame] ROM ready. Starting...');
+              break;
+      }
+  }
+
+  private updateScreen(data: Uint8ClampedArray) {
+      if (!this.screenTexture || !this.app) return;
+      
+      // Zero-copy update would be better, but for demo we use a canvas source
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d')!;
+      const imgData = new ImageData(data as any, 256, 256);
+      ctx.putImageData(imgData, 0, 0);
+      
+      const tex = Texture.from(canvas);
+      const sprite = new Sprite(tex);
+      
+      this.app.renderer.render({
+          container: sprite,
+          target: this.screenTexture,
+          clear: true
+      });
   }
 
   private createMenu() {
@@ -70,7 +106,26 @@ export class LibretroGame extends NDGameEngine {
         this.menuContainer!.addChild(btn);
     });
 
+    const romBtn = new Container();
+    romBtn.position.set(128, 160);
+    const romBg = new Graphics();
+    romBg.rect(-100, -12, 200, 24);
+    romBg.fill(0x006600);
+    romBtn.addChild(romBg);
+    const romTxt = new Text({ text: 'LOAD TEST ROM', style: { fill: '#ffffff', fontSize: 12 } });
+    romTxt.anchor.set(0.5);
+    romBtn.addChild(romTxt);
+    romBtn.eventMode = 'static';
+    romBtn.on('pointerdown', () => this.loadTestRom());
+    this.menuContainer!.addChild(romBtn);
+
     this.nd.bottomScreen.addChild(this.menuContainer);
+  }
+
+  private loadTestRom() {
+      // For demo, we'll send a dummy buffer to trigger the worker loop
+      const dummyRom = new ArrayBuffer(1024);
+      this.coreWorker?.postMessage({ type: 'load_rom', data: dummyRom }, [dummyRom]);
   }
 
   public override cleanup() {
@@ -114,11 +169,8 @@ export class LibretroGame extends NDGameEngine {
     this.titleMenuShowing = false;
     this.menuContainer!.visible = false;
     
-    // In a real environment, we'd start the worker and send the message
-    // this.coreWorker = new Worker(new URL('./LibretroWorker.ts', import.meta.url));
-    // this.coreWorker.postMessage({ type: 'load_core', data: { url: coreUrl } });
+    this.coreWorker?.postMessage({ type: 'load_core', data: { url: coreUrl } });
   }
 
   public override titleMenuUpdate() {}
 }
-
