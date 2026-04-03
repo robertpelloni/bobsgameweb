@@ -253,7 +253,7 @@ io.on("connection", (socket) => {
     socket.on("frame", (state) => {
         const room = Array.from(socket.rooms).find(r => rooms.has(r));
         if (room) {
-            socket.to(room).emit("opponentFrame", state);
+            socket.to(room).emit("opponentFrame", { id: socket.id, state });
         }
     });
 

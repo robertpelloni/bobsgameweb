@@ -121,16 +121,16 @@ export class NetworkManager extends EventEmitter {
             if (this.game) this.game.gotVSGarbageFromOtherPlayer(amount);
         });
 
-        this.socket.on('opponentFrame', (state: any) => {
-            if (typeof state === 'string') {
+        this.socket.on('opponentFrame', (data: any) => {
+            if (data && data.state && typeof data.state === 'string') {
                 try {
-                    state = JSON.parse(state);
+                    data.state = JSON.parse(data.state);
                 } catch (e) {
                     console.error("Failed to parse opponent frame state", e);
                     return;
                 }
             }
-            this.emit('opponentFrame', state);
+            this.emit('opponentFrame', data);
         });
     }
 

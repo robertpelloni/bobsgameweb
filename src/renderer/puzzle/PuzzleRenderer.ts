@@ -65,6 +65,8 @@ export class PuzzleRenderer {
   private popups: { text: Text, vx: number, vy: number, life: number, maxLife: number }[] = [];
   private displayScore: number = 0;
   private currentShake: number = 0;
+  
+  private currentPieceDisplay: { x: number, y: number, rot: number, pieceRef: Piece | null } | null = null;
 
   private gridBackground: Graphics;
   private blockGraphics: Map<string, Graphics> = new Map();
@@ -363,9 +365,38 @@ export class PuzzleRenderer {
     this.pieceGraphics.clear();
 
     const piece = this.game.currentPiece;
-    if (!piece || this.game.state === GameState.IDLE || this.game.state === GameState.PAUSED) return;
+    if (!piece || this.game.state === GameState.IDLE || this.game.state === GameState.PAUSED) {
+        this.currentPieceDisplay = null;
+        return;
+    }
 
-    this.drawPiece(this.pieceGraphics, piece, piece.xGrid, piece.yGrid - 5);
+    // Initialize or reset if piece changes
+    if (!this.currentPieceDisplay || this.currentPieceDisplay.pieceRef !== piece) {
+        this.currentPieceDisplay = { 
+            x: piece.xGrid, 
+            y: piece.yGrid, 
+            rot: piece.currentRotation,
+            pieceRef: piece 
+        };
+    } else {
+        // Interpolate position
+        const lerpSpeed = 0.5; // Fast lerp for snappy but smooth feel
+        
+        // Don't lerp X or Rotation, just snap them for precision, only lerp Y (drop)
+        this.currentPieceDisplay.x = piece.xGrid;
+        this.currentPieceDisplay.rot = piece.currentRotation;
+        
+        // Lerp Y (smooth drop)
+        this.currentPieceDisplay.y += (piece.yGrid - this.currentPieceDisplay.y) * lerpSpeed;
+        
+        // Prevent overshoot or visual clipping if it suddenly jumps up (e.g. hold piece swap)
+        if (Math.abs(piece.yGrid - this.currentPieceDisplay.y) > 3) {
+            this.currentPieceDisplay.y = piece.yGrid;
+        }
+    }
+
+    // Draw the piece at the interpolated Y position
+    this.drawPiece(this.pieceGraphics, piece, this.currentPieceDisplay.x, this.currentPieceDisplay.y - 5);
   }
 
   private updateGhostPiece(): void {
