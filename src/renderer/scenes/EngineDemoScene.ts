@@ -5,6 +5,8 @@ import { BehaviorSystem } from '../engine/ecs/systems/BehaviorSystem';
 import { TransformComponent } from '../engine/ecs/components/TransformComponent';
 import { SpriteComponent } from '../engine/ecs/components/SpriteComponent';
 import { BehaviorComponent } from '../engine/ecs/components/BehaviorComponent';
+import { EventSheetComponent } from '../engine/ecs/components/EventSheetComponent';
+import { VisualScriptSystem } from '../engine/ecs/systems/VisualScriptSystem';
 import { EightDirectionBehavior } from '../engine/ecs/behaviors/EightDirectionBehavior';
 import { PlatformerBehavior } from '../engine/ecs/behaviors/PlatformerBehavior';
 import { Sprite, Graphics, Text } from 'pixi.js';
@@ -22,6 +24,7 @@ export class EngineDemoScene extends Scene {
     public async create(): Promise<void> {
         // Setup systems
         this.world.addSystem(new BehaviorSystem());
+        this.world.addSystem(new VisualScriptSystem());
         this.world.addSystem(new RenderSystem(this.container));
 
         // Add a title
@@ -72,6 +75,30 @@ export class EngineDemoScene extends Scene {
         const behaviors2 = new BehaviorComponent();
         behaviors2.behaviors.push(new PlatformerBehavior(this.world));
         this.world.addComponent(entity2, behaviors2);
+
+        // 3. Create an Event-driven entity (Log every tick if variable > 0)
+        const entity3 = this.world.createEntity();
+        const esComp = new EventSheetComponent();
+        esComp.variables.set('counter', 0);
+        
+        const sheet = {
+            name: "Test Sheet",
+            blocks: [
+                {
+                    conditions: [{ type: 'Always', params: {} }],
+                    actions: [{ type: 'AddVariable', params: { name: 'counter', value: 1 } }]
+                },
+                {
+                    conditions: [{ type: 'VariableGreaterThan', params: { name: 'counter', value: 100 } }],
+                    actions: [
+                        { type: 'Log', params: { message: "Counter reached 100! Resetting." } },
+                        { type: 'SetVariable', params: { name: 'counter', value: 0 } }
+                    ]
+                }
+            ]
+        };
+        esComp.eventSheets.push(sheet);
+        this.world.addComponent(entity3, esComp);
     }
 
     protected onUpdate(dt: number): void {
