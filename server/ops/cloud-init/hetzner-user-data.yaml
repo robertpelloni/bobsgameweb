@@ -1,0 +1,21 @@
+#cloud-config
+package_update: true
+package_upgrade: false
+packages:
+  - nginx
+  - curl
+  - git
+  - ufw
+  - ca-certificates
+  - gnupg
+
+runcmd:
+  - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+  - apt-get install -y nodejs
+  - id bobsgame || useradd --system --create-home --shell /usr/sbin/nologin bobsgame
+  - mkdir -p /opt/bobsgameweb
+  - chown -R bobsgame:bobsgame /opt/bobsgameweb
+  - ufw allow OpenSSH || true
+  - ufw allow 'Nginx Full' || true
+
+final_message: "bobsgameweb Hetzner cloud-init bootstrap complete. Upload backend to /opt/bobsgameweb/server and continue with service/nginx install."

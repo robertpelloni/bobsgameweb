@@ -49,6 +49,12 @@ This can:
 - install the nginx site config
 - optionally request TLS
 
+## 3c. Hetzner Cloud-Init Option
+A cloud-init template is also included:
+- `server/ops/cloud-init/hetzner-user-data.yaml`
+
+You can paste/adapt this in the Hetzner Cloud server creation flow to pre-install nginx, Node 20, the `bobsgame` service user, and base firewall allowances before the first SSH session.
+
 ## 4. Manual Base Packages / Node 20
 If you prefer doing it manually:
 
@@ -203,6 +209,18 @@ BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsga
 ```
 
 ## 15. Final production test
+If you want a single local handoff step after backend verification, use:
+
+```bash
+BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/cutover-production.sh
+```
+
+That will:
+- verify backend readiness
+- rebuild the frontend for `ws.bobsgame.com`
+- trigger static deploy
+
+Then:
 - open `https://bobsgame.com`
 - verify browser network requests target `https://ws.bobsgame.com`
 - test lobby creation / leaderboard / multiplayer handshake
