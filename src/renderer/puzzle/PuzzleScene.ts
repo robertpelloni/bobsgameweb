@@ -12,7 +12,7 @@ import { ReplayRecorder, ReplayPlayer } from '../../shared/puzzle/Replay';
 import { BobNet } from './BobNet';
 import { GameMode } from '../data/HighScoreManager';
 import { AchievementManager } from '../data/AchievementManager';
-import { getAchievementProfileName } from '../data/AchievementIdentity';
+import { getAchievementIdentity, getPlayerDisplayName } from '../data/AchievementIdentity';
 import { SERVER_URL } from '../../shared/Config';
 import { Text, TextStyle, Container } from 'pixi.js';
 
@@ -465,7 +465,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
   private showGameOver(isWin: boolean = false): void {
     console.log(isWin ? 'Game Won!' : 'Game Over');
-    const playerName = getAchievementProfileName();
+    const playerName = getPlayerDisplayName();
 
     // ── Achievement tracking on game end ──
     AchievementManager.setStatMax('highestScore', this.game.score);
@@ -576,8 +576,8 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
   private loadAchievementSnapshot(): void {
     if (!networkManager.connected) return;
-    const playerName = getAchievementProfileName();
-    networkManager.loadAchievementData(playerName, (data: any) => {
+    const identity = getAchievementIdentity();
+    networkManager.loadAchievementData(identity, (data: any) => {
       if (data?.success && data.snapshot) {
         AchievementManager.mergeSnapshot(data.snapshot);
       }
@@ -586,8 +586,8 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
   private saveAchievementSnapshot(): void {
     if (!networkManager.connected) return;
-    const playerName = getAchievementProfileName();
-    networkManager.saveAchievementData(playerName, AchievementManager.exportSnapshot());
+    const identity = getAchievementIdentity();
+    networkManager.saveAchievementData(identity, AchievementManager.exportSnapshot());
   }
 
   private playSound(name: string): void {
@@ -753,7 +753,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
             if (e.key === 'Enter') {
                 const msg = input.value.trim();
                 if (msg) {
-                    const name = getAchievementProfileName();
+                    const name = getPlayerDisplayName();
                     networkManager.sendChat(msg, name);
                 }
                 input.value = '';

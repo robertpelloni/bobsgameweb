@@ -1,6 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 import { EventEmitter } from 'eventemitter3';
 import { GameLogic } from './GameLogic';
+import type { AchievementIdentity } from '../../renderer/data/AchievementIdentity';
 
 export interface LobbyRoom {
     id: string;
@@ -169,19 +170,19 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
-    public loadAchievementData(name: string, callback: (data: any) => void): void {
+    public loadAchievementData(identity: string | AchievementIdentity, callback: (data: any) => void): void {
         if (this.socket) {
             this.socket.once('achievementDataLoaded', callback);
-            this.socket.emit('loadAchievementData', name);
+            this.socket.emit('loadAchievementData', identity);
         }
     }
 
-    public saveAchievementData(name: string, snapshot: any, callback?: (data: any) => void): void {
+    public saveAchievementData(identity: string | AchievementIdentity, snapshot: any, callback?: (data: any) => void): void {
         if (this.socket) {
             if (callback) {
                 this.socket.once('achievementDataSaved', callback);
             }
-            this.socket.emit('saveAchievementData', { name, snapshot });
+            this.socket.emit('saveAchievementData', { identity, snapshot });
         }
     }
 

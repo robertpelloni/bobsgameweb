@@ -5,6 +5,7 @@ import { SceneTransition } from '../state/SceneTransition';
 import { NetworkManager, LobbyRoom } from '../../shared/puzzle/NetworkManager';
 import { PuzzleScene } from '../puzzle/PuzzleScene';
 import { SERVER_URL } from '../../shared/Config';
+import { getPlayerDisplayName } from '../data/AchievementIdentity';
 
 export interface LobbyRoomExt extends LobbyRoom {
     hasPassword?: boolean;
@@ -112,7 +113,7 @@ export class LobbyScene extends Scene {
         this.networkManager.connect(SERVER_URL);
         this.setupNetworkHandlers();
         
-        const playerName = localStorage.getItem('playerName') || 'Player' + Math.floor(Math.random() * 1000);
+        const playerName = getPlayerDisplayName();
         this.networkManager.setName(playerName);
         
         // Initial refresh
