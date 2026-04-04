@@ -43,6 +43,16 @@ pm2 start ecosystem.config.cjs
 pm2 save
 ```
 
+### Systemd environment file
+For VPS/systemd deployments, a separate env file path is now supported via the unit file:
+```bash
+/etc/bobsgameweb-server.env
+```
+Use the helper script:
+```bash
+BACKEND_HOST=YOUR-BACKEND-HOST BACKEND_USER=root ENV_ALLOWED_ORIGIN=https://bobsgame.com ./scripts/install-backend-env.sh
+```
+
 ### Docker
 ```bash
 cd server
@@ -97,6 +107,7 @@ BACKEND_URL=https://YOUR-BACKEND-HOST DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobs
   - `server/ops/bootstrap-ubuntu.sh`
   - `server/ops/cloud-init/hetzner-user-data.yaml`
   - `scripts/deploy-backend-vps.sh`
+  - `scripts/install-backend-env.sh`
   - `scripts/install-backend-service.sh`
   - `scripts/collect-backend-diagnostics.sh`
   - `scripts/provision-hetzner-backend.sh`
