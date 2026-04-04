@@ -1,5 +1,8 @@
 import { RPGDatabase, ActorData } from '../../shared/database/RPGDatabase';
 import { networkManager } from '../puzzle';
+import { SERVER_URL } from '../../shared/Config';
+import { AchievementManager } from '../data/AchievementManager';
+import { ToastManager } from '../ui/ToastManager';
 
 export class WorldEditor {
     private container: HTMLElement;
@@ -12,9 +15,15 @@ export class WorldEditor {
         this.container = document.createElement('div');
         this.container.className = 'world-editor';
         parent.appendChild(this.container);
+
+        if (!networkManager.connected) {
+            networkManager.connect(SERVER_URL);
+        }
+        networkManager.on('connected', () => this.loadAchievementSnapshot());
         
         this.buildUI();
         this.loadFromServer();
+        this.loadAchievementSnapshot();
     }
 
     private buildUI() {
@@ -48,11 +57,13 @@ export class WorldEditor {
         const userInput = window.prompt("Enter prompt for NPC sprite (e.g. 'Old wizard with a blue robe'):");
         if (userInput) {
             networkManager.emit('generateAsset', { type: 'npc_sprite', prompt: userInput });
-            alert("AI generation started... please wait.");
+            ToastManager.showInfo("AI sprite generation started...");
             
             networkManager.once('assetGenerated', (data: any) => {
                 if (data.success) {
-                    alert(`AI Sprite generated! ID: ${data.assetId}`);
+                    AchievementManager.incrementStat('aiSpritesGenerated');
+                    ToastManager.showInfo(`AI Sprite generated: ${data.assetId}`);
+                    this.saveAchievementSnapshot();
                     // Automatically add an actor with this sprite
                     const actor: ActorData = {
                         id: this.db.actors.length + 1,
@@ -81,7 +92,12 @@ export class WorldEditor {
 
     private saveToServer() {
         networkManager.saveRPGDatabase(this.db, (data) => {
-            alert(data.success ? "Database saved!" : "Save failed: " + data.error);
+            if (data.success) {
+                ToastManager.showInfo("Database saved to server.");
+                this.saveAchievementSnapshot();
+            } else {
+                ToastManager.showError("Save failed: " + data.error);
+            }
         });
     }
 
@@ -96,7 +112,24 @@ export class WorldEditor {
             description: ""
         };
         this.db.actors.push(actor);
+        AchievementManager.incrementStat('actorsCreated');
+        ToastManager.showInfo("Actor added to world database.");
+        this.saveAchievementSnapshot();
         this.renderActors();
+    }
+
+    private loadAchievementSnapshot() {
+        const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+        networkManager.loadAchievementData(playerName, (data) => {
+            if (data?.success && data.snapshot) {
+                AchievementManager.mergeSnapshot(data.snapshot);
+            }
+        });
+    }
+
+    private saveAchievementSnapshot() {
+        const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+        networkManager.saveAchievementData(playerName, AchievementManager.exportSnapshot());
     }
 
     private renderActors() {

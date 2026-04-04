@@ -84,6 +84,9 @@ const DB_FILE = path.join(__dirname, "rpg_database.json");
 const CHARS_DIR = path.join(__dirname, "characters");
 if (!fs.existsSync(CHARS_DIR)) fs.mkdirSync(CHARS_DIR);
 
+const ACHIEVEMENTS_DIR = path.join(__dirname, "achievement_profiles");
+if (!fs.existsSync(ACHIEVEMENTS_DIR)) fs.mkdirSync(ACHIEVEMENTS_DIR);
+
 const EmuStates_DIR = path.join(__dirname, "emulator_states");
 if (!fs.existsSync(EmuStates_DIR)) fs.mkdirSync(EmuStates_DIR);
 
@@ -433,6 +436,39 @@ io.on("connection", (socket) => {
         } catch (e) {
             console.error("Failed to load RPG database:", e);
             socket.emit("rpgDatabaseLoaded", { success: false, error: e.message });
+        }
+    });
+
+    // ----------------------------------------------------------
+    // Achievement Snapshot Persistence
+    // ----------------------------------------------------------
+
+    socket.on("saveAchievementData", (data) => {
+        const safeName = String(data?.name || "webplayer").substring(0, 64).toLowerCase();
+        const snapshot = data?.snapshot || { version: "2.1.4", stats: {}, unlockedIds: [] };
+        try {
+            const file = path.join(ACHIEVEMENTS_DIR, `${safeName}.json`);
+            fs.writeFileSync(file, JSON.stringify(snapshot, null, 2));
+            socket.emit("achievementDataSaved", { success: true, name: safeName });
+        } catch (e) {
+            console.error("Failed to save achievement data:", e);
+            socket.emit("achievementDataSaved", { success: false, error: e.message });
+        }
+    });
+
+    socket.on("loadAchievementData", (name) => {
+        try {
+            const safeName = String(name || "webplayer").substring(0, 64).toLowerCase();
+            const file = path.join(ACHIEVEMENTS_DIR, `${safeName}.json`);
+            if (fs.existsSync(file)) {
+                const snapshot = JSON.parse(fs.readFileSync(file, "utf-8"));
+                socket.emit("achievementDataLoaded", { success: true, snapshot });
+            } else {
+                socket.emit("achievementDataLoaded", { success: false, error: "Achievement data not found" });
+            }
+        } catch (e) {
+            console.error("Failed to load achievement data:", e);
+            socket.emit("achievementDataLoaded", { success: false, error: e.message });
         }
     });
 

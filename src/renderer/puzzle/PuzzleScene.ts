@@ -153,6 +153,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       networkManager.setGame(this.game);
       this.setupNetworkHandlers();
       this.createChatUI();
+      this.loadAchievementSnapshot();
     }
 
     this.createHelpOverlay();
@@ -214,6 +215,10 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   }
 
   private setupNetworkHandlers(): void {
+    networkManager.on('connected', () => {
+        this.loadAchievementSnapshot();
+    });
+
     networkManager.on('joinedRoom', (room: any) => {
         if (room.playerData) {
             for (const [id, data] of Object.entries(room.playerData)) {
@@ -507,6 +512,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       time: this.gameTime,
       replay: replayB64
     });
+    this.saveAchievementSnapshot();
 
     const stats: GameStats = {
       score: this.game.score,
@@ -565,6 +571,22 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     } else {
       StateManager.popSync();
     }
+  }
+
+  private loadAchievementSnapshot(): void {
+    if (!networkManager.connected) return;
+    const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+    networkManager.loadAchievementData(playerName, (data: any) => {
+      if (data?.success && data.snapshot) {
+        AchievementManager.mergeSnapshot(data.snapshot);
+      }
+    });
+  }
+
+  private saveAchievementSnapshot(): void {
+    if (!networkManager.connected) return;
+    const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+    networkManager.saveAchievementData(playerName, AchievementManager.exportSnapshot());
   }
 
   private playSound(name: string): void {
