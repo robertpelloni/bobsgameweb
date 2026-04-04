@@ -35,6 +35,7 @@ bash bootstrap-ubuntu.sh
 A higher-level local helper is also included:
 - `scripts/provision-hetzner-backend.sh`
 - `scripts/print-hetzner-first-deploy.sh`
+- `scripts/render-hetzner-configs.sh`
 - `HETZNER_FIRST_DEPLOY.md`
 
 Typical usage from your local machine:
@@ -47,6 +48,12 @@ If you want the exact command sequence for the full first deploy, use:
 
 ```bash
 BACKEND_HOST=YOUR_SERVER_IP DOMAIN_NAME=ws.bobsgame.com ./scripts/print-hetzner-first-deploy.sh
+```
+
+If you want locally rendered domain/path-specific config artifacts first, use:
+
+```bash
+DOMAIN_NAME=ws.bobsgame.com APP_ROOT=/opt/bobsgameweb APP_USER=bobsgame SERVICE_NAME=bobsgameweb-server ./scripts/render-hetzner-configs.sh
 ```
 
 Or follow:
