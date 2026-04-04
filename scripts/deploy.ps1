@@ -25,8 +25,12 @@ function Copy-Directory([string]$Source, [string]$Destination) {
 Write-Host '=== Starting Deployment to bobsgame.com ==='
 Write-Host "Target: $UserName@$HostName`:$RemotePath"
 
-Write-Host '[1/5] Building production assets...'
-npm run build
+if ($env:DEPLOY_SKIP_BUILD -eq '1') {
+    Write-Host '[1/5] Skipping build (DEPLOY_SKIP_BUILD=1)...'
+} else {
+    Write-Host '[1/5] Building production assets...'
+    npm run build
+}
 
 Write-Host '[2/5] Ensuring remote directories exist...'
 Invoke-SshCommand "mkdir -p $RemotePath $RemotePath/server"

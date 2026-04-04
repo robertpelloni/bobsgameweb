@@ -33,6 +33,9 @@ HAS_RSYNC=0
 if command -v rsync >/dev/null 2>&1; then
   HAS_RSYNC=1
 fi
+if [[ "${DEPLOY_FORCE_SCP:-0}" == "1" ]]; then
+  HAS_RSYNC=0
+fi
 
 run_ssh() {
   "${SSH_BASE[@]}" "$USER_NAME@$HOST_NAME" "$1"
@@ -54,8 +57,12 @@ echo "=== Starting Deployment to bobsgame.com ==="
 echo "Target: $USER_NAME@$HOST_NAME:$REMOTE_PATH"
 
 # 1. Build
-echo "[1/5] Building production assets..."
-npm run build
+if [[ "${DEPLOY_SKIP_BUILD:-0}" == "1" ]]; then
+  echo "[1/5] Skipping build (DEPLOY_SKIP_BUILD=1)..."
+else
+  echo "[1/5] Building production assets..."
+  npm run build
+fi
 
 # 2. Ensure remote directories exist
 echo "[2/5] Ensuring remote directories exist..."
