@@ -91,9 +91,16 @@ This will:
 Follow:
 - `POST_DEPLOY_CHECKLIST.md`
 
+Quick combined verification:
+
+```bash
+BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com ./scripts/verify-production-stack.sh
+```
+
 If anything fails, use:
 - `BACKEND_RECOVERY.md`
 - `./scripts/collect-backend-diagnostics.sh`
+- `./scripts/tail-backend-logs.sh`
 
 ## Handy helpers
 You can print a customized version of the above commands with:
