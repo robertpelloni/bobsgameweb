@@ -22,6 +22,15 @@ export default defineConfig(({ command, mode }) => {
         input: {
           main: resolve(__dirname, 'index.html'),
         },
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return;
+            if (id.includes('pixi.js')) return 'pixi';
+            if (id.includes('pako')) return 'compression-vendor';
+            if (id.includes('howler') || id.includes('@pixi/sound') || id.includes('chiptune3') || id.includes('butterchurn')) return 'audio-vendor';
+            return 'vendor';
+          },
+        },
       },
     },
     plugins: isElectron

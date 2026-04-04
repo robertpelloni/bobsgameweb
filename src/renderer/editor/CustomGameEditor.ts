@@ -2,6 +2,7 @@ import { GameType, BlockType, PieceType, GamePlayMode, networkManager } from '..
 import { Rotation } from '../../shared/puzzle/Piece';
 import { BobNet } from '../puzzle/BobNet';
 import { AchievementManager } from '../data/AchievementManager';
+import { getAchievementProfileName } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
 
 export class CustomGameEditor {
@@ -375,7 +376,7 @@ export class CustomGameEditor {
 
   private saveAchievementSnapshot() {
       if (!networkManager.connected) return;
-      const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+      const playerName = getAchievementProfileName();
       networkManager.saveAchievementData(playerName, AchievementManager.exportSnapshot());
   }
 }
