@@ -81,6 +81,8 @@ Then redeploy static assets to `bobsgame.com`.
 - for Hetzner specifically, see `HETZNER_SETUP.md` plus:
   - `server/ops/nginx/ws.bobsgame.com.conf`
   - `server/ops/systemd/bobsgameweb-server.service`
+  - `server/ops/bootstrap-ubuntu.sh`
+  - `scripts/deploy-backend-vps.sh`
 
 ### PaaS / Railway / Render
 - set `HOST`, `PORT`, and `ALLOWED_ORIGIN`
