@@ -17,6 +17,11 @@ import path from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const SERVER_VERSION = "2.1.11";
+const HOST = process.env.HOST || "0.0.0.0";
+const PORT = parseInt(process.env.PORT || "6065", 10);
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
+
 // ============================================================
 // Leaderboard Persistence
 // ============================================================
@@ -98,8 +103,6 @@ function getMapPath(mapId) {
 // Server Setup
 // ============================================================
 
-const SERVER_VERSION = "2.1.10";
-
 const httpServer = createServer((req, res) => {
     const url = req.url || "/";
 
@@ -127,7 +130,7 @@ const httpServer = createServer((req, res) => {
 
 const io = new Server(httpServer, {
     cors: {
-        origin: "*",
+        origin: ALLOWED_ORIGIN,
         methods: ["GET", "POST"]
     }
 });
@@ -478,7 +481,7 @@ io.on("connection", (socket) => {
             ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
             : String(identity || "webplayer").substring(0, 64).toLowerCase();
         const storageKey = profileId || safeName;
-        const snapshot = data?.snapshot || { version: "2.1.10", stats: {}, unlockedIds: [] };
+        const snapshot = data?.snapshot || { version: "2.1.11", stats: {}, unlockedIds: [] };
         try {
             const file = path.join(ACHIEVEMENTS_DIR, `${storageKey}.json`);
             fs.writeFileSync(file, JSON.stringify({ identity: { profileId, name: safeName }, snapshot }, null, 2));
@@ -771,9 +774,9 @@ io.on("connection", (socket) => {
 // Start Server
 // ============================================================
 
-const PORT = process.env.PORT || 6065;
-httpServer.listen(PORT, () => {
-    console.log(`bob's game Socket.io server running on port ${PORT}`);
+httpServer.listen(PORT, HOST, () => {
+    console.log(`bob's game Socket.io server running on ${HOST}:${PORT}`);
+    console.log(`Allowed origin: ${ALLOWED_ORIGIN}`);
     console.log(`Health endpoint: /healthz | Version: ${SERVER_VERSION}`);
     console.log(`Leaderboard entries: marathon=${(leaderboards.marathon || []).length}, sprint=${(leaderboards.sprint || []).length}, ultra=${(leaderboards.ultra || []).length}`);
 });
