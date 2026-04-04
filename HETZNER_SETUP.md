@@ -31,6 +31,24 @@ You can run it on the VPS as root/sudo to install the core base packages and Nod
 bash bootstrap-ubuntu.sh
 ```
 
+## 3b. One-Shot Provisioning Option
+A higher-level local helper is also included:
+- `scripts/provision-hetzner-backend.sh`
+
+Typical usage from your local machine:
+
+```bash
+BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/provision-hetzner-backend.sh
+```
+
+This can:
+- run the bootstrap script remotely
+- upload the backend
+- install dependencies
+- install the systemd unit
+- install the nginx site config
+- optionally request TLS
+
 ## 4. Manual Base Packages / Node 20
 If you prefer doing it manually:
 
@@ -62,6 +80,8 @@ Typical usage:
 ```bash
 BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root BACKEND_INSTALL_DEPS=1 ./scripts/deploy-backend-vps.sh
 ```
+
+If you already used `provision-hetzner-backend.sh`, this lower-level deploy script becomes your normal update path.
 
 At minimum that directory should contain:
 - `index.js`
