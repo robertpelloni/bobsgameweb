@@ -452,7 +452,7 @@ io.on("connection", (socket) => {
             ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
             : String(identity || "webplayer").substring(0, 64).toLowerCase();
         const storageKey = profileId || safeName;
-        const snapshot = data?.snapshot || { version: "2.1.7", stats: {}, unlockedIds: [] };
+        const snapshot = data?.snapshot || { version: "2.1.8", stats: {}, unlockedIds: [] };
         try {
             const file = path.join(ACHIEVEMENTS_DIR, `${storageKey}.json`);
             fs.writeFileSync(file, JSON.stringify({ identity: { profileId, name: safeName }, snapshot }, null, 2));
