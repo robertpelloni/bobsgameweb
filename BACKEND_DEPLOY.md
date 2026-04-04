@@ -92,6 +92,7 @@ BACKEND_URL=https://YOUR-BACKEND-HOST DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobs
 - terminate TLS at the proxy
 - for Hetzner specifically, see `HETZNER_SETUP.md` plus:
   - `server/ops/nginx/ws.bobsgame.com.conf`
+  - `server/ops/nginx/ws.bobsgame.com.ssl.conf`
   - `server/ops/systemd/bobsgameweb-server.service`
   - `server/ops/bootstrap-ubuntu.sh`
   - `server/ops/cloud-init/hetzner-user-data.yaml`
@@ -100,6 +101,7 @@ BACKEND_URL=https://YOUR-BACKEND-HOST DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobs
   - `scripts/collect-backend-diagnostics.sh`
   - `scripts/provision-hetzner-backend.sh`
   - `scripts/cutover-production.sh`
+  - `HARDENING_CHECKLIST.md`
 
 ### PaaS / Railway / Render
 - set `HOST`, `PORT`, and `ALLOWED_ORIGIN`

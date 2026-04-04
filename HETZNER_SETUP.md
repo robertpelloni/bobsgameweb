@@ -189,6 +189,9 @@ sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d ws.bobsgame.com
 ```
 
+An HTTPS nginx example is also included:
+- `server/ops/nginx/ws.bobsgame.com.ssl.conf`
+
 Then retest:
 
 ```bash
@@ -236,6 +239,7 @@ Then:
 - verify browser network requests target `https://ws.bobsgame.com`
 - test lobby creation / leaderboard / multiplayer handshake
 - run through `POST_DEPLOY_CHECKLIST.md`
+- run through `HARDENING_CHECKLIST.md`
 - keep `BACKEND_RECOVERY.md` handy for rollback/recovery
 
 ## Troubleshooting
