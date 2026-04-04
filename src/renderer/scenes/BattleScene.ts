@@ -4,6 +4,7 @@ import { StateManager } from '../state/StateManager';
 import { InputManager, Key } from '../input/InputManager';
 import { CombatComponent } from '../engine/ecs/components/CombatComponent';
 import { AudioManager } from '../audio/AudioManager';
+import { AchievementManager } from '../data/AchievementManager';
 
 export interface BattleSceneConfig extends SceneConfig {
     player: CombatComponent;
@@ -310,7 +311,8 @@ export class BattleScene extends Scene<BattleSceneConfig> {
         if (this.config.enemy.hp <= 0) {
             this.logMessage("VICTORY! Enemy defeated.");
             this.enemySprite.alpha = 0.5;
-            this.enemySprite.rotation = Math.PI / 2; // Fall over
+            this.enemySprite.rotation = Math.PI / 2;
+            AchievementManager.incrementStat('battlesWon');
             if (AudioManager.isLoaded('puzzle_levelup')) AudioManager.playSound('puzzle_levelup');
             setTimeout(() => this.exitBattle(), 2000);
         } else if (this.config.player.hp <= 0) {

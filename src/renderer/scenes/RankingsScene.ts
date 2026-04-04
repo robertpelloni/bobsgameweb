@@ -3,9 +3,10 @@ import { Scene, SceneConfig } from '../state/Scene';
 import { networkManager } from '../puzzle';
 import { SceneTransition } from '../state/SceneTransition';
 import { StateManager } from '../state/StateManager';
-import { InputManager, Key } from '../input/InputManager';
+import { InputManager } from '../input/InputManager';
 import { PuzzleScene, PuzzleSceneConfig } from '../puzzle/PuzzleScene';
 import { BobNet } from '../puzzle/BobNet';
+import { AchievementManager } from '../data/AchievementManager';
 
 export class RankingsScene extends Scene {
     private background!: Graphics;
@@ -57,8 +58,6 @@ export class RankingsScene extends Scene {
         headers.position.set(this.width / 2 - 250, 120);
         this.listContainer.addChild(headers);
 
-        let interactiveIndex = 0;
-
         scores.forEach((s, i) => {
             const row = new Container();
             row.position.set(this.width / 2 - 250, 160 + i * 35);
@@ -103,6 +102,7 @@ export class RankingsScene extends Scene {
         try {
             const jsonObj = BobNet.fromBase64GZippedGSON(replayB64);
             if (jsonObj) {
+                AchievementManager.incrementStat('matchesSpectated');
                 const puzzleConfig: PuzzleSceneConfig = {
                     name: 'puzzle-replay',
                     app: this.app,

@@ -92,7 +92,7 @@ export class NPCBehavior extends Behavior {
         for (const inter of comp.interactions) {
             switch (inter.type) {
                 case 'dialogue':
-                    (this.world as any).scene?.showDialogue(inter.params.text);
+                    (this.world as any).scene?.showDialogue(inter.params.text, true);
                     break;
                 case 'battle':
                     (this.world as any).scene?.startBattle(this.entityId);

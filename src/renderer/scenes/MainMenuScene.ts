@@ -20,6 +20,7 @@ import { WorldScene } from './WorldScene';
 import { CustomGameEditorScene } from './CustomGameEditorScene';
 import { WorldEditorScene } from './WorldEditorScene';
 import { RankingsScene } from './RankingsScene';
+import { AchievementsScene } from './AchievementsScene';
 import { BobNet } from '../puzzle/BobNet';
 
 // ============================================================
@@ -254,7 +255,7 @@ export class MainMenuScene extends Scene {
             fill: 0x445566,
             letterSpacing: 1,
         });
-        this.versionText = new Text({ text: 'v2.1.1', style: versionStyle });
+        this.versionText = new Text({ text: 'v2.1.2', style: versionStyle });
         this.versionText.anchor.set(1, 1);
         this.versionText.x = this.width - 10;
         this.versionText.y = this.height - 10;
@@ -284,6 +285,7 @@ export class MainMenuScene extends Scene {
             { label: 'nD Demo', action: () => this.openNDDemo() },
             { label: 'Engine Demo', action: () => this.openEngineDemo() },
             { label: 'High Scores', action: () => this.openHighScores() },
+            { label: 'Achievements', action: () => this.openAchievements() },
             { label: 'Settings', action: () => this.openSettings() },
             { label: 'Options', action: () => this.openOptions() },
             { label: 'Watch Last Replay', action: () => this.playLastReplay() },
@@ -577,6 +579,15 @@ export class MainMenuScene extends Scene {
             initialMode: this.categories[this.selectedCategoryIndex],
         });
         SceneTransition.pushWithFade(this.app, highScoresScene);
+    }
+
+    private openAchievements(): void {
+        const achievementsScene = new AchievementsScene({
+            name: 'achievements',
+            app: this.app,
+            camera: this.camera ?? undefined,
+        });
+        SceneTransition.pushWithFade(this.app, achievementsScene);
     }
 
     // ============================================================

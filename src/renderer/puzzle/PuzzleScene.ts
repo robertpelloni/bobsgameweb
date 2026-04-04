@@ -11,6 +11,7 @@ import { TouchControls } from '../ui/TouchControls';
 import { ReplayRecorder, ReplayPlayer } from '../../shared/puzzle/Replay';
 import { BobNet } from './BobNet';
 import { GameMode } from '../data/HighScoreManager';
+import { AchievementManager } from '../data/AchievementManager';
 import { SERVER_URL } from '../../shared/Config';
 import { Text, TextStyle, Container } from 'pixi.js';
 
@@ -371,7 +372,8 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       } else if (movement === MovementType.HARD_DROP) {
         this.playSound('puzzle_drop');
         this.renderer.shake(3);
-        InputManager.vibrate(0, 100, 0.5, 0.5); // Hard drop rumble
+        InputManager.vibrate(0, 100, 0.5, 0.5);
+        AchievementManager.incrementStat('totalHardDrops');
       } else if (movement === MovementType.HOLD) {
         this.playSound('puzzle_hold');
       }
@@ -386,6 +388,13 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       let popupText = '';
       let popupColor = 0xffffff;
       let scale = 1.0;
+
+      // Achievement tracking
+      AchievementManager.incrementStat('totalLinesCleared', lineCount);
+      AchievementManager.setStatMax('maxCombo', combo);
+      if (lineCount >= 4) {
+          AchievementManager.incrementStat('tetrisClears');
+      }
 
       if (lineCount === 1) {
           popupText = 'SINGLE';
@@ -450,6 +459,24 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private showGameOver(isWin: boolean = false): void {
     console.log(isWin ? 'Game Won!' : 'Game Over');
     const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+
+    // ── Achievement tracking on game end ──
+    AchievementManager.setStatMax('highestScore', this.game.score);
+    if (this.gameMode === 'sprint' && this.game.linesClearedTotal >= 40) {
+        if (this.gameTime < 60) AchievementManager.setStat('sprintSub60', 1);
+        if (this.gameTime < 30) AchievementManager.setStat('sprintSub30', 1);
+    }
+    // Track which modes have been played
+    const modesKey = `_played_${this.gameMode}`;
+    if (!AchievementManager.getStat(modesKey)) {
+        AchievementManager.setStat(modesKey, 1);
+        const marathonPlayed = AchievementManager.getStat('_played_marathon');
+        const sprintPlayed = AchievementManager.getStat('_played_sprint');
+        const ultraPlayed = AchievementManager.getStat('_played_ultra');
+        const stackPlayed = AchievementManager.getStat('_played_stack');
+        const total = (marathonPlayed ? 1 : 0) + (sprintPlayed ? 1 : 0) + (ultraPlayed ? 1 : 0) + (stackPlayed ? 1 : 0);
+        AchievementManager.setStat('modesPlayed', total);
+    }
 
     // Save replay locally
     const replayJson = this.replayRecorder.exportJSON({

@@ -10,6 +10,8 @@ import { BobNet } from './puzzle/BobNet';
 import { GameType } from '../shared/puzzle/GameType';
 import { PuzzleScene, PuzzleSceneConfig } from './puzzle/PuzzleScene';
 import { GameMode } from './data/HighScoreManager';
+import { AchievementManager } from './data/AchievementManager';
+import { ToastManager } from './ui/ToastManager';
 
 export interface GameConfig {
     skipMenu?: boolean;
@@ -31,6 +33,7 @@ export class Game extends EventEmitter<GameEvents> {
     private worldContainer: Container;
     private crtFilter: Filter | null = null;
     private mainMenuScene: MainMenuScene | null = null;
+    private playTimeAccumulator = 0;
     
     constructor(app: Application, config: GameConfig = {}) {
         super();
@@ -85,6 +88,8 @@ export class Game extends EventEmitter<GameEvents> {
     async init(): Promise<void> {
         console.log('Game initializing...');
         InputManager.init();
+        AchievementManager.init();
+        ToastManager.init(this.app);
         
         this.app.ticker.add(this.update, this);
         this.app.ticker.stop();
@@ -203,6 +208,17 @@ export class Game extends EventEmitter<GameEvents> {
     private update(ticker: Ticker): void {
         if (this.isPaused) return;
         const dt = ticker.deltaMS / 1000;
+
+        // Track total play time for achievements in whole-second batches
+        this.playTimeAccumulator += dt;
+        if (this.playTimeAccumulator >= 1) {
+            const wholeSeconds = Math.floor(this.playTimeAccumulator);
+            this.playTimeAccumulator -= wholeSeconds;
+            AchievementManager.incrementStat('totalPlayTimeSeconds', wholeSeconds);
+        }
+
+        // Update toast notifications
+        ToastManager.update(dt);
 
         // Update shaders
         if (this.crtFilter) {
