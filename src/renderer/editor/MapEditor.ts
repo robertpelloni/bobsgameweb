@@ -9,6 +9,7 @@ import { SERVER_URL } from '../../shared/Config';
 
 import { AutoTiler } from '../../shared/AutoTiler';
 import { AchievementManager } from '../data/AchievementManager';
+import { getAchievementProfileName } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
 
 export class MapEditor {
@@ -685,7 +686,7 @@ export class MapEditor {
 
     private saveAchievementSnapshot(): void {
         if (!networkManager.connected) return;
-        const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+        const playerName = getAchievementProfileName();
         networkManager.saveAchievementData(playerName, AchievementManager.exportSnapshot());
     }
 

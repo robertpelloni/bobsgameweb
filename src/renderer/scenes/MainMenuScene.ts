@@ -4,23 +4,12 @@ import { StateManager } from '../state/StateManager';
 import { InputManager } from '../input/InputManager';
 import { AudioManager } from '../audio/AudioManager';
 import { Button, ButtonStyle } from '../ui/Button';
-import { PuzzleScene, PuzzleSceneConfig } from '../puzzle';
+import { PuzzleScene } from '../puzzle/PuzzleScene';
+import type { PuzzleSceneConfig } from '../puzzle';
 import { GameType, GameTypes, GamePlayMode } from '../puzzle';
 import { Key } from '../input/InputManager';
-import { OptionsScene } from './OptionsScene';
-import { HighScoresScene } from './HighScoresScene';
 import { GameMode } from '../data/HighScoreManager';
 import { SceneTransition } from '../state/SceneTransition';
-
-import { LobbyScene } from './LobbyScene';
-import { SettingsScene } from './SettingsScene';
-import { EngineDemoScene } from './EngineDemoScene';
-import { NDDemoScene } from './NDDemoScene';
-import { WorldScene } from './WorldScene';
-import { CustomGameEditorScene } from './CustomGameEditorScene';
-import { WorldEditorScene } from './WorldEditorScene';
-import { RankingsScene } from './RankingsScene';
-import { AchievementsScene } from './AchievementsScene';
 import { BobNet } from '../puzzle/BobNet';
 
 // ============================================================
@@ -34,7 +23,7 @@ export interface MainMenuSceneConfig extends SceneConfig {
 
 interface MenuItem {
     label: string;
-    action: () => void;
+    action: () => void | Promise<void>;
 }
 
 // ============================================================
@@ -255,7 +244,7 @@ export class MainMenuScene extends Scene {
             fill: 0x445566,
             letterSpacing: 1,
         });
-        this.versionText = new Text({ text: 'v2.1.4', style: versionStyle });
+        this.versionText = new Text({ text: 'v2.1.5', style: versionStyle });
         this.versionText.anchor.set(1, 1);
         this.versionText.x = this.width - 10;
         this.versionText.y = this.height - 10;
@@ -486,11 +475,12 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, puzzleScene);
     }
 
-    private openOptions(): void {
+    private async openOptions(): Promise<void> {
         if (this.menuConfig.onOptions) {
             this.menuConfig.onOptions();
             return;
         }
+        const { OptionsScene } = await import('./OptionsScene');
         const optionsScene = new OptionsScene({
             name: 'options',
             app: this.app,
@@ -499,7 +489,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, optionsScene);
     }
 
-    private openLobby(): void {
+    private async openLobby(): Promise<void> {
+        const { LobbyScene } = await import('./LobbyScene');
         const lobbyScene = new LobbyScene({
             name: 'lobby',
             app: this.app,
@@ -508,7 +499,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, lobbyScene);
     }
 
-    private openEngineDemo(): void {
+    private async openEngineDemo(): Promise<void> {
+        const { EngineDemoScene } = await import('./EngineDemoScene');
         const demoScene = new EngineDemoScene({
             name: 'engine-demo',
             app: this.app,
@@ -517,7 +509,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, demoScene);
     }
 
-    private openNDDemo(): void {
+    private async openNDDemo(): Promise<void> {
+        const { NDDemoScene } = await import('./NDDemoScene');
         const demoScene = new NDDemoScene({
             name: 'nd-demo',
             app: this.app,
@@ -526,7 +519,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, demoScene);
     }
 
-    private openWorld(): void {
+    private async openWorld(): Promise<void> {
+        const { WorldScene } = await import('./WorldScene');
         const worldScene = new WorldScene({
             name: 'world',
             app: this.app,
@@ -535,7 +529,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, worldScene);
     }
 
-    private openCustomEditor(): void {
+    private async openCustomEditor(): Promise<void> {
+        const { CustomGameEditorScene } = await import('./CustomGameEditorScene');
         const editorScene = new CustomGameEditorScene({
             name: 'custom-editor',
             app: this.app,
@@ -544,7 +539,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, editorScene);
     }
 
-    private openWorldEditor(): void {
+    private async openWorldEditor(): Promise<void> {
+        const { WorldEditorScene } = await import('./WorldEditorScene');
         const editorScene = new WorldEditorScene({
             name: 'world-editor',
             app: this.app,
@@ -553,7 +549,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, editorScene);
     }
 
-    private openRankings(): void {
+    private async openRankings(): Promise<void> {
+        const { RankingsScene } = await import('./RankingsScene');
         const rankingsScene = new RankingsScene({
             name: 'rankings',
             app: this.app,
@@ -562,7 +559,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, rankingsScene);
     }
 
-    private openSettings(): void {
+    private async openSettings(): Promise<void> {
+        const { SettingsScene } = await import('./SettingsScene');
         const settingsScene = new SettingsScene({
             name: 'settings',
             app: this.app,
@@ -571,7 +569,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, settingsScene);
     }
 
-    private openHighScores(): void {
+    private async openHighScores(): Promise<void> {
+        const { HighScoresScene } = await import('./HighScoresScene');
         const highScoresScene = new HighScoresScene({
             name: 'high-scores',
             app: this.app,
@@ -581,7 +580,8 @@ export class MainMenuScene extends Scene {
         SceneTransition.pushWithFade(this.app, highScoresScene);
     }
 
-    private openAchievements(): void {
+    private async openAchievements(): Promise<void> {
+        const { AchievementsScene } = await import('./AchievementsScene');
         const achievementsScene = new AchievementsScene({
             name: 'achievements',
             app: this.app,

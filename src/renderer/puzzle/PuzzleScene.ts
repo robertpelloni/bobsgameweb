@@ -7,12 +7,12 @@ import { PuzzleRenderer } from './PuzzleRenderer';
 import { GameType } from './index';
 import { GameOverScene, GameStats } from '../scenes/GameOverScene';
 import { PauseOverlay } from '../scenes/PauseOverlay';
-import { AchievementsScene } from '../scenes/AchievementsScene';
 import { TouchControls } from '../ui/TouchControls';
 import { ReplayRecorder, ReplayPlayer } from '../../shared/puzzle/Replay';
 import { BobNet } from './BobNet';
 import { GameMode } from '../data/HighScoreManager';
 import { AchievementManager } from '../data/AchievementManager';
+import { getAchievementProfileName } from '../data/AchievementIdentity';
 import { SERVER_URL } from '../../shared/Config';
 import { Text, TextStyle, Container } from 'pixi.js';
 
@@ -465,7 +465,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
   private showGameOver(isWin: boolean = false): void {
     console.log(isWin ? 'Game Won!' : 'Game Over');
-    const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+    const playerName = getAchievementProfileName();
 
     // ── Achievement tracking on game end ──
     AchievementManager.setStatMax('highestScore', this.game.score);
@@ -552,8 +552,9 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
     this.restart();
   }
 
-  private openAchievementsFromPause(): void {
+  private async openAchievementsFromPause(): Promise<void> {
     this.pauseOverlay?.hide();
+    const { AchievementsScene } = await import('../scenes/AchievementsScene');
     const achievementsScene = new AchievementsScene({
       name: 'achievements',
       app: this.app,
@@ -575,7 +576,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
   private loadAchievementSnapshot(): void {
     if (!networkManager.connected) return;
-    const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+    const playerName = getAchievementProfileName();
     networkManager.loadAchievementData(playerName, (data: any) => {
       if (data?.success && data.snapshot) {
         AchievementManager.mergeSnapshot(data.snapshot);
@@ -585,7 +586,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
 
   private saveAchievementSnapshot(): void {
     if (!networkManager.connected) return;
-    const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+    const playerName = getAchievementProfileName();
     networkManager.saveAchievementData(playerName, AchievementManager.exportSnapshot());
   }
 
@@ -752,7 +753,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
             if (e.key === 'Enter') {
                 const msg = input.value.trim();
                 if (msg) {
-                    const name = localStorage.getItem('playerName') || 'WebPlayer';
+                    const name = getAchievementProfileName();
                     networkManager.sendChat(msg, name);
                 }
                 input.value = '';
