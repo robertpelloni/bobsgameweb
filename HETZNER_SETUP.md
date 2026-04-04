@@ -172,6 +172,13 @@ sudo ufw allow 'Nginx Full'
 sudo ufw enable
 ```
 
+## 10b. Optional log rotation / backup hygiene
+Optional ops assets are also included:
+- `server/ops/logrotate/bobsgameweb-server`
+- `server/ops/prune-backups.sh`
+
+These help keep nginx logs and backup retention under control over time.
+
 ## 11. Smoke tests before TLS
 From your local machine:
 

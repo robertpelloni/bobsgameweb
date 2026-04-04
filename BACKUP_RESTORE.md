@@ -65,6 +65,17 @@ BACKEND_URL=https://ws.bobsgame.com ./scripts/check-backend-host.sh
 - take a backup before first production cutover
 - take a backup before schema/storage changes
 - keep at least one known-good off-server copy
+- periodically prune old on-server backups so disk usage stays predictable
+
+## Prune old backups on the server
+A prune helper is included:
+- `server/ops/prune-backups.sh`
+
+Example:
+
+```bash
+KEEP_COUNT=10 bash prune-backups.sh
+```
 
 ## Related runbooks
 - `BACKEND_RECOVERY.md`
