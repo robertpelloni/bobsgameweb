@@ -74,10 +74,13 @@ Then redeploy static assets to `bobsgame.com`.
 
 ## Suggested Provider Shapes
 ### VPS / Hetzner / DigitalOcean
-- run `node index.js` or PM2
+- run `node index.js` or PM2/systemd
 - bind backend to localhost or `0.0.0.0`
 - put nginx/Caddy in front
 - terminate TLS at the proxy
+- for Hetzner specifically, see `HETZNER_SETUP.md` plus:
+  - `server/ops/nginx/ws.bobsgame.com.conf`
+  - `server/ops/systemd/bobsgameweb-server.service`
 
 ### PaaS / Railway / Render
 - set `HOST`, `PORT`, and `ALLOWED_ORIGIN`

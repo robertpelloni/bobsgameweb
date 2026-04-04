@@ -1,0 +1,24 @@
+[Unit]
+Description=bobsgameweb Socket.io backend
+After=network.target
+
+[Service]
+Type=simple
+User=bobsgame
+Group=bobsgame
+WorkingDirectory=/opt/bobsgameweb/server
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=6065
+Environment=ALLOWED_ORIGIN=https://bobsgame.com
+ExecStart=/usr/bin/node /opt/bobsgameweb/server/index.js
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/bobsgameweb/server
+
+[Install]
+WantedBy=multi-user.target
