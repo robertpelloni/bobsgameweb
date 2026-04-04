@@ -1,0 +1,7 @@
+-- Example SQL for provisioning an application database/user on the Hetzner MySQL host.
+-- Replace placeholders before use.
+
+CREATE DATABASE IF NOT EXISTS APP_DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'APP_USER'@'localhost' IDENTIFIED BY 'CHANGE_ME_STRONG_PASSWORD';
+GRANT ALL PRIVILEGES ON APP_DATABASE.* TO 'APP_USER'@'localhost';
+FLUSH PRIVILEGES;
