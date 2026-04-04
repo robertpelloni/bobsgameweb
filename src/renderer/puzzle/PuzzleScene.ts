@@ -7,6 +7,7 @@ import { PuzzleRenderer } from './PuzzleRenderer';
 import { GameType } from './index';
 import { GameOverScene, GameStats } from '../scenes/GameOverScene';
 import { PauseOverlay } from '../scenes/PauseOverlay';
+import { AchievementsScene } from '../scenes/AchievementsScene';
 import { TouchControls } from '../ui/TouchControls';
 import { ReplayRecorder, ReplayPlayer } from '../../shared/puzzle/Replay';
 import { BobNet } from './BobNet';
@@ -272,6 +273,7 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
       height: this.height,
       onResume: () => this.resumeGame(),
       onRestart: () => this.restartFromPause(),
+      onAchievements: () => this.openAchievementsFromPause(),
       onQuit: () => this.quitToMenu(),
     });
     this.container.addChild(this.pauseOverlay.container);
@@ -542,6 +544,16 @@ export class PuzzleScene extends Scene<PuzzleSceneConfig> {
   private restartFromPause(): void {
     this.pauseOverlay?.hide();
     this.restart();
+  }
+
+  private openAchievementsFromPause(): void {
+    this.pauseOverlay?.hide();
+    const achievementsScene = new AchievementsScene({
+      name: 'achievements',
+      app: this.app,
+      camera: this.camera ?? undefined,
+    });
+    StateManager.push(achievementsScene);
   }
 
   private quitToMenu(): void {

@@ -8,6 +8,7 @@ import { networkManager } from '../puzzle';
 import { SERVER_URL } from '../../shared/Config';
 
 import { AutoTiler } from '../../shared/AutoTiler';
+import { AchievementManager } from '../data/AchievementManager';
 
 export class MapEditor {
     private app: Application;
@@ -29,6 +30,8 @@ export class MapEditor {
     private mapTool: 'pencil' | 'fill' | 'rect' | 'entity' | 'autotile' = 'pencil';
     private isDrawingSprite: boolean = false;
     private isPaintingMap: boolean = false;
+    private spriteAchievementAwarded: boolean = false;
+    private mapAchievementAwarded: boolean = false;
 
     constructor(parentElementId: string, app: Application) {
         this.app = app;
@@ -362,6 +365,11 @@ export class MapEditor {
         const {x, y} = pos;
         if (x < 0 || x >= 128 || y < 0 || y >= 128) return;
         
+        if (!this.spriteAchievementAwarded) {
+            this.spriteAchievementAwarded = true;
+            AchievementManager.incrementStat('spritesDrawn');
+        }
+
         const frame = this.spriteFrames[this.currentFrameIndex];
         const color = this.palette.getColor(this.selectedTile);
         const r = (color.toInt() >> 16) & 0xff;
@@ -486,6 +494,10 @@ export class MapEditor {
 
     private saveToServer(): void {
         if (this.currentMap) {
+            if (!this.mapAchievementAwarded) {
+                this.mapAchievementAwarded = true;
+                AchievementManager.incrementStat('mapsCreated');
+            }
             networkManager.emit('saveMap', { mapId: this.currentMap.data.id, mapData: this.currentMap.data });
         }
     }
@@ -659,6 +671,7 @@ export class MapEditor {
 
     public createNewMap(): void {
         this.currentMap = new GameMap(new MapData(-1, "New Map", 100, 100));
+        this.mapAchievementAwarded = false;
         this.mapContainer.removeChildren();
         this.mapContainer.addChild(this.currentMap.container);
         this.currentMap.render(this.tileset, this.palette);

@@ -9,6 +9,7 @@ export interface PauseOverlayConfig {
     onResume: () => void;
     onRestart: () => void;
     onQuit: () => void;
+    onAchievements?: () => void;
 }
 
 interface PauseMenuItem {
@@ -48,7 +49,7 @@ export class PauseOverlay {
 
     private createPanel(): void {
         const panelWidth = 320;
-        const panelHeight = 280;
+        const panelHeight = this.config.onAchievements ? 335 : 280;
         const panelX = (this.config.width - panelWidth) / 2;
         const panelY = (this.config.height - panelHeight) / 2;
 
@@ -79,6 +80,7 @@ export class PauseOverlay {
         this.menuItems = [
             { label: 'Resume', action: () => this.config.onResume() },
             { label: 'Restart', action: () => this.config.onRestart() },
+            ...(this.config.onAchievements ? [{ label: 'Achievements', action: () => this.config.onAchievements!() }] : []),
             { label: 'Quit to Menu', action: () => this.config.onQuit() },
         ];
 
@@ -180,7 +182,7 @@ export class PauseOverlay {
         this.background.fill({ color: 0x000000, alpha: 0.7 });
 
         const panelWidth = 320;
-        const panelHeight = 280;
+        const panelHeight = this.config.onAchievements ? 335 : 280;
         const panelX = (width - panelWidth) / 2;
         const panelY = (height - panelHeight) / 2;
 

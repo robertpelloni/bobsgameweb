@@ -1,6 +1,7 @@
 import { GameType, BlockType, PieceType, GamePlayMode } from '../puzzle';
 import { Rotation } from '../../shared/puzzle/Piece';
 import { BobNet } from '../puzzle/BobNet';
+import { AchievementManager } from '../data/AchievementManager';
 
 export class CustomGameEditor {
   private container: HTMLElement;
@@ -68,6 +69,7 @@ export class CustomGameEditor {
             <button id="btn-new">New</button>
             <button id="btn-load">Load</button>
             <button id="btn-save" style="background:#004400; color:#fff; border:none; padding:5px 15px; border-radius:4px;">Save</button>
+            <button id="btn-share" style="background:#004488; color:#fff; border:none; padding:5px 15px; border-radius:4px; margin-left: 10px;">Share</button>
             <button id="btn-test" style="background:#cc6600; color:#fff; border:none; padding:5px 15px; border-radius:4px; margin-left: 10px;">Test Game</button>
         </div>
       </div>
@@ -186,6 +188,7 @@ export class CustomGameEditor {
     });
 
     this.container.querySelector('#btn-save')?.addEventListener('click', () => this.save());
+    this.container.querySelector('#btn-share')?.addEventListener('click', () => this.shareGame());
     this.container.querySelector('#btn-test')?.addEventListener('click', () => this.testGame());
     this.container.querySelector('#btn-load')?.addEventListener('click', () => this.load());
     this.container.querySelector('#btn-new')?.addEventListener('click', () => this.createNew());
@@ -322,6 +325,7 @@ export class CustomGameEditor {
     
     // Save to local storage for now
     localStorage.setItem('custom-game-type', JSON.stringify(this.currentGameType));
+    AchievementManager.incrementStat('customGamesCreated');
     alert('Game type saved to local browser storage!');
   }
 
@@ -356,9 +360,11 @@ export class CustomGameEditor {
       const b64 = BobNet.toBase64GZippedGSON(this.currentGameType);
       const url = `${window.location.origin}${window.location.pathname}#play=${b64}`;
       navigator.clipboard.writeText(url).then(() => {
+          AchievementManager.incrementStat('gamesShared');
           alert('Share link copied to clipboard!');
       }).catch(err => {
           console.error('Failed to copy: ', err);
+          AchievementManager.incrementStat('gamesShared');
           prompt('Copy this link manually:', url);
       });
   }
