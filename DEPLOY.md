@@ -83,14 +83,38 @@ Ensure your DreamHost panel is configured to:
 - Allow WebSocket connections (usually enabled by default on shared hosting, but might require Passenger/Node configuration).
 - Permit SSH login for the target user.
 
-## 6. Easiest Future Setup
+## 6. Recommended Production Backend Shape
+Based on live probing of the DreamHost environment:
+- the static site is deployable to `bobsgame.com`
+- `/socket.io` on `https://bobsgame.com` currently returns `404`
+- `node` exists remotely, but shell tooling is limited and Apache is not currently proxying Socket.io
+- `Passenger` tooling exists, but does not appear to be actively running for this site right now
+
+### Recommended setup
+Use a **dedicated backend subdomain**, for example:
+- `ws.bobsgame.com`
+
+Suggested DreamHost shape:
+1. Create subdomain `ws.bobsgame.com`
+2. Point its web directory/app root at `~/bobsgame.com/server`
+3. Configure it as a Node/Passenger app if DreamHost panel supports that for the subdomain
+4. Use `server/app.js` as the startup entrypoint
+5. Build the web client with:
+   ```bash
+   VITE_SERVER_URL=https://ws.bobsgame.com npm run build
+   ```
+
+The web client now supports this via `.env.production.example` and `src/shared/Config.ts`.
+
+## 7. Easiest Future Setup
 For the easiest one-command deploys, the best improvement is:
 
 1. **Add an SSH key to DreamHost** for `robertpelloni`
 2. optionally install `rsync` locally
-3. then run:
+3. configure a dedicated backend host/subdomain such as `ws.bobsgame.com`
+4. then run:
    ```bash
-   DEPLOY_INSTALL_SERVER=1 DEPLOY_RESTART_SERVER=1 ./scripts/deploy.sh
+   VITE_SERVER_URL=https://ws.bobsgame.com DEPLOY_INSTALL_SERVER=1 ./scripts/deploy.sh
    ```
 
-That avoids interactive password prompts and is the most reliable path for agent-driven deployment.
+That avoids interactive password prompts and gives the cleanest separation between static frontend hosting and websocket backend hosting.

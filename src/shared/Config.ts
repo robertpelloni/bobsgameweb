@@ -1,32 +1,35 @@
 /**
  * Application-wide configuration constants.
  * 
- * Server URLs are determined by the build mode (dev vs production).
- * In development, connects to localhost. In production, connects to bobsgame.com.
+ * Supports production overrides via Vite env vars so the static web shell can
+ * point at a dedicated websocket/backend host without code changes.
  */
 
-// Determine if we're in production mode (Vite sets import.meta.env.PROD)
-const isProd = typeof import.meta !== 'undefined' && (import.meta as any).env?.PROD;
+const env = (typeof import.meta !== 'undefined' ? (import.meta as any).env : undefined) ?? {};
+const isProd = !!env.PROD;
+const envServerUrl = typeof env.VITE_SERVER_URL === 'string' ? env.VITE_SERVER_URL.trim() : '';
+const envBigDataUrl = typeof env.VITE_BIG_DATA_URL === 'string' ? env.VITE_BIG_DATA_URL.trim() : '';
 
 /**
- * The WebSocket server URL for multiplayer functionality.
- * - Dev: http://localhost:6065
- * - Production: https://bobsgame.com (using the same port behind a reverse proxy)
+ * The WebSocket / backend URL for multiplayer functionality.
+ * - Dev default: http://localhost:6065
+ * - Prod default: https://bobsgame.com
+ * - Preferred prod override for dedicated backend host: VITE_SERVER_URL=https://ws.bobsgame.com
  */
-export const SERVER_URL = isProd
+export const SERVER_URL = envServerUrl || (isProd
     ? 'https://bobsgame.com'
-    : 'http://localhost:6065';
+    : 'http://localhost:6065');
 
 /**
  * The current application version string.
  * Should be kept in sync with VERSION.md and CHANGELOG.md.
  */
-export const APP_VERSION = '2.1.0';
+export const APP_VERSION = '2.1.9';
 
 /**
  * Base URL for large assets (sprites, maps, audio).
- * In production, fetched from S3. In dev, served locally from /data.
+ * In production, fetched from S3 unless overridden.
  */
-export const BIG_DATA_URL = isProd
+export const BIG_DATA_URL = envBigDataUrl || (isProd
     ? 'https://bobsgame.s3.amazonaws.com/z/'
-    : '/';
+    : '/');
