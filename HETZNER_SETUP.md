@@ -224,6 +224,8 @@ Then:
 - open `https://bobsgame.com`
 - verify browser network requests target `https://ws.bobsgame.com`
 - test lobby creation / leaderboard / multiplayer handshake
+- run through `POST_DEPLOY_CHECKLIST.md`
+- keep `BACKEND_RECOVERY.md` handy for rollback/recovery
 
 ## Troubleshooting
 ### `502 Bad Gateway`
