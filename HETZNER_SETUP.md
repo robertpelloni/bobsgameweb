@@ -34,12 +34,23 @@ bash bootstrap-ubuntu.sh
 ## 3b. One-Shot Provisioning Option
 A higher-level local helper is also included:
 - `scripts/provision-hetzner-backend.sh`
+- `scripts/print-hetzner-first-deploy.sh`
+- `HETZNER_FIRST_DEPLOY.md`
 
 Typical usage from your local machine:
 
 ```bash
 BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/provision-hetzner-backend.sh
 ```
+
+If you want the exact command sequence for the full first deploy, use:
+
+```bash
+BACKEND_HOST=YOUR_SERVER_IP DOMAIN_NAME=ws.bobsgame.com ./scripts/print-hetzner-first-deploy.sh
+```
+
+Or follow:
+- `HETZNER_FIRST_DEPLOY.md`
 
 This can:
 - run the bootstrap script remotely
