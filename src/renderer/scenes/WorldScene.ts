@@ -49,6 +49,7 @@ import { Localization, Language } from '../../shared/Localization';
 import { Easing } from '../../shared/Easing';
 import { networkManager } from '../puzzle';
 import { SERVER_URL } from '../../shared/Config';
+import { AchievementManager } from '../data/AchievementManager';
 
 export class WorldScene extends Scene {
     private world: World;
@@ -272,9 +273,12 @@ export class WorldScene extends Scene {
         this.dialogueContainer.addChild(prompt);
     }
 
-    public showDialogue(messages: string | string[]): void {
+    public showDialogue(messages: string | string[], countAsNpcInteraction: boolean = false): void {
         if (!this.dialogueText || !this.dialogueContainer) return;
         
+        if (countAsNpcInteraction) {
+            AchievementManager.incrementStat('npcsInteracted');
+        }
         this.dialoguePages = Array.isArray(messages) ? messages : [messages];
         this.currentDialoguePage = 0;
         this.dialogueTypingIndex = 0;
@@ -323,6 +327,7 @@ export class WorldScene extends Scene {
     }
 
     public startBattle(npcEntityId: number): void {
+        AchievementManager.incrementStat('battlesStarted');
         const playerCombat = this.world.getComponent<CombatComponent>((this.world as any).playerEntityId, 'Combat');
         const npcCombat = this.world.getComponent<CombatComponent>(npcEntityId, 'Combat');
         if (playerCombat && npcCombat) {

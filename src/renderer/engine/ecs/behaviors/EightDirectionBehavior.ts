@@ -49,7 +49,7 @@ export class EightDirectionBehavior extends Behavior {
                 }
             }
             
-            (this.world as any).scene?.showDialogue("Hello! Welcome to the Omni-Engine MMO World!");
+            (this.world as any).scene?.showDialogue("Hello! Welcome to the Omni-Engine MMO World!", true);
         }
     }
 }
