@@ -83,9 +83,12 @@ If anything fails, use:
 - `BACKEND_RECOVERY.md`
 - `./scripts/collect-backend-diagnostics.sh`
 
-## Handy helper
+## Handy helpers
 You can print a customized version of the above commands with:
 
 ```bash
 BACKEND_HOST=YOUR_SERVER_IP DOMAIN_NAME=ws.bobsgame.com ./scripts/print-hetzner-first-deploy.sh
 ```
+
+For a compact command reference, see:
+- `OPS_CHEATSHEET.md`
