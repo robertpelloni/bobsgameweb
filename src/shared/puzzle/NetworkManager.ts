@@ -169,6 +169,22 @@ export class NetworkManager extends EventEmitter {
         }
     }
 
+    public loadAchievementData(name: string, callback: (data: any) => void): void {
+        if (this.socket) {
+            this.socket.once('achievementDataLoaded', callback);
+            this.socket.emit('loadAchievementData', name);
+        }
+    }
+
+    public saveAchievementData(name: string, snapshot: any, callback?: (data: any) => void): void {
+        if (this.socket) {
+            if (callback) {
+                this.socket.once('achievementDataSaved', callback);
+            }
+            this.socket.emit('saveAchievementData', { name, snapshot });
+        }
+    }
+
     public createRoom(options: { name: string, isPrivate?: boolean, password?: string, gameMode?: string, startLevel?: number, isTournament?: boolean }): void {
         if (this.socket) {
             this.socket.emit('createRoom', options);

@@ -88,6 +88,8 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     { id: 'first_game',      name: 'Game Designer',       description: 'Create and test a custom puzzle game.',         icon: '🎮', category: 'editor', rarity: 'uncommon',  hidden: false, condition: { type: 'stat_gte', stat: 'customGamesCreated', value: 1 } },
     { id: 'share_game',      name: 'Publisher',           description: 'Share a custom game via deep link.',            icon: '🔗', category: 'editor', rarity: 'uncommon',  hidden: false, condition: { type: 'stat_gte', stat: 'gamesShared', value: 1 } },
     { id: 'sprite_drawn',    name: 'Pixel Artist',        description: 'Draw a sprite in the sprite editor.',           icon: '🎨', category: 'editor', rarity: 'common',    hidden: false, condition: { type: 'stat_gte', stat: 'spritesDrawn', value: 1 } },
+    { id: 'first_actor',     name: 'Worldsmith',          description: 'Add your first actor in the world database editor.', icon: '🧬', category: 'editor', rarity: 'common', hidden: false, condition: { type: 'stat_gte', stat: 'actorsCreated', value: 1 } },
+    { id: 'ai_sprite',       name: 'Prompt Alchemist',    description: 'Generate an AI NPC sprite.',                    icon: '🤖', category: 'editor', rarity: 'uncommon',  hidden: false, condition: { type: 'stat_gte', stat: 'aiSpritesGenerated', value: 1 } },
     { id: 'maps_10',         name: 'Cartographer',        description: 'Create 10 maps.',                               icon: '🧭', category: 'editor', rarity: 'rare',      hidden: false, condition: { type: 'stat_gte', stat: 'mapsCreated', value: 10 }, maxProgress: 10 },
 
     // ── Social ──
@@ -112,6 +114,12 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
 
 export interface PlayerStats {
     [key: string]: number;
+}
+
+export interface AchievementSnapshot {
+    version: string;
+    stats: PlayerStats;
+    unlockedIds: string[];
 }
 
 const STORAGE_KEY_STATS = 'bg_player_stats';
@@ -230,6 +238,32 @@ class AchievementManagerClass {
         return ALL_ACHIEVEMENTS.length > 0 
             ? (this.unlockedIds.size / ALL_ACHIEVEMENTS.length) * 100 
             : 0;
+    }
+
+    public exportSnapshot(): AchievementSnapshot {
+        return {
+            version: '2.1.4',
+            stats: { ...this.stats },
+            unlockedIds: [...this.unlockedIds]
+        };
+    }
+
+    public mergeSnapshot(snapshot: Partial<AchievementSnapshot> | null | undefined): void {
+        if (!snapshot) return;
+
+        const incomingStats = snapshot.stats || {};
+        for (const [key, value] of Object.entries(incomingStats)) {
+            if (typeof value !== 'number') continue;
+            this.stats[key] = Math.max(this.stats[key] || 0, value);
+        }
+
+        for (const id of snapshot.unlockedIds || []) {
+            this.unlockedIds.add(id);
+        }
+
+        this.persistStats();
+        this.persistUnlocks();
+        this.checkAll();
     }
 
     public getRarityColor(rarity: AchievementRarity): number {

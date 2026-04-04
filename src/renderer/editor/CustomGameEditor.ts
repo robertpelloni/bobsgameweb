@@ -1,7 +1,8 @@
-import { GameType, BlockType, PieceType, GamePlayMode } from '../puzzle';
+import { GameType, BlockType, PieceType, GamePlayMode, networkManager } from '../puzzle';
 import { Rotation } from '../../shared/puzzle/Piece';
 import { BobNet } from '../puzzle/BobNet';
 import { AchievementManager } from '../data/AchievementManager';
+import { ToastManager } from '../ui/ToastManager';
 
 export class CustomGameEditor {
   private container: HTMLElement;
@@ -326,7 +327,8 @@ export class CustomGameEditor {
     // Save to local storage for now
     localStorage.setItem('custom-game-type', JSON.stringify(this.currentGameType));
     AchievementManager.incrementStat('customGamesCreated');
-    alert('Game type saved to local browser storage!');
+    this.saveAchievementSnapshot();
+    ToastManager.showInfo('Custom game saved to local browser storage.');
   }
 
   private async load() {
@@ -361,11 +363,19 @@ export class CustomGameEditor {
       const url = `${window.location.origin}${window.location.pathname}#play=${b64}`;
       navigator.clipboard.writeText(url).then(() => {
           AchievementManager.incrementStat('gamesShared');
-          alert('Share link copied to clipboard!');
+          this.saveAchievementSnapshot();
+          ToastManager.showInfo('Share link copied to clipboard.');
       }).catch(err => {
           console.error('Failed to copy: ', err);
           AchievementManager.incrementStat('gamesShared');
+          this.saveAchievementSnapshot();
           prompt('Copy this link manually:', url);
       });
+  }
+
+  private saveAchievementSnapshot() {
+      if (!networkManager.connected) return;
+      const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+      networkManager.saveAchievementData(playerName, AchievementManager.exportSnapshot());
   }
 }

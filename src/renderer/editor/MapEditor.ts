@@ -9,6 +9,7 @@ import { SERVER_URL } from '../../shared/Config';
 
 import { AutoTiler } from '../../shared/AutoTiler';
 import { AchievementManager } from '../data/AchievementManager';
+import { ToastManager } from '../ui/ToastManager';
 
 export class MapEditor {
     private app: Application;
@@ -499,12 +500,17 @@ export class MapEditor {
                 AchievementManager.incrementStat('mapsCreated');
             }
             networkManager.emit('saveMap', { mapId: this.currentMap.data.id, mapData: this.currentMap.data });
+            this.saveAchievementSnapshot();
+            ToastManager.showInfo(`Map ${this.currentMap.data.id} saved to server.`);
         }
     }
 
     private loadFromServer(): void {
         const id = prompt("Enter Map ID:");
-        if (id) networkManager.emit('loadMap', id);
+        if (id) {
+            networkManager.emit('loadMap', id);
+            ToastManager.showInfo(`Loading map ${id}...`);
+        }
     }
 
     private shiftMap(x: number, y: number): void {
@@ -675,6 +681,12 @@ export class MapEditor {
         this.mapContainer.removeChildren();
         this.mapContainer.addChild(this.currentMap.container);
         this.currentMap.render(this.tileset, this.palette);
+    }
+
+    private saveAchievementSnapshot(): void {
+        if (!networkManager.connected) return;
+        const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+        networkManager.saveAchievementData(playerName, AchievementManager.exportSnapshot());
     }
 
     public destroy(): void {
