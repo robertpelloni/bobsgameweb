@@ -444,28 +444,46 @@ io.on("connection", (socket) => {
     // ----------------------------------------------------------
 
     socket.on("saveAchievementData", (data) => {
-        const safeName = String(data?.name || "webplayer").substring(0, 64).toLowerCase();
-        const snapshot = data?.snapshot || { version: "2.1.4", stats: {}, unlockedIds: [] };
+        const identity = data?.identity ?? data?.name;
+        const profileId = typeof identity === 'object' && identity !== null
+            ? String(identity.profileId || '').substring(0, 128).toLowerCase()
+            : '';
+        const safeName = typeof identity === 'object' && identity !== null
+            ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
+            : String(identity || "webplayer").substring(0, 64).toLowerCase();
+        const storageKey = profileId || safeName;
+        const snapshot = data?.snapshot || { version: "2.1.6", stats: {}, unlockedIds: [] };
         try {
-            const file = path.join(ACHIEVEMENTS_DIR, `${safeName}.json`);
-            fs.writeFileSync(file, JSON.stringify(snapshot, null, 2));
-            socket.emit("achievementDataSaved", { success: true, name: safeName });
+            const file = path.join(ACHIEVEMENTS_DIR, `${storageKey}.json`);
+            fs.writeFileSync(file, JSON.stringify({ identity: { profileId, name: safeName }, snapshot }, null, 2));
+            socket.emit("achievementDataSaved", { success: true, key: storageKey, profileId, name: safeName });
         } catch (e) {
             console.error("Failed to save achievement data:", e);
             socket.emit("achievementDataSaved", { success: false, error: e.message });
         }
     });
 
-    socket.on("loadAchievementData", (name) => {
+    socket.on("loadAchievementData", (identity) => {
         try {
-            const safeName = String(name || "webplayer").substring(0, 64).toLowerCase();
-            const file = path.join(ACHIEVEMENTS_DIR, `${safeName}.json`);
-            if (fs.existsSync(file)) {
-                const snapshot = JSON.parse(fs.readFileSync(file, "utf-8"));
-                socket.emit("achievementDataLoaded", { success: true, snapshot });
-            } else {
-                socket.emit("achievementDataLoaded", { success: false, error: "Achievement data not found" });
+            const profileId = typeof identity === 'object' && identity !== null
+                ? String(identity.profileId || '').substring(0, 128).toLowerCase()
+                : '';
+            const safeName = typeof identity === 'object' && identity !== null
+                ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
+                : String(identity || "webplayer").substring(0, 64).toLowerCase();
+            const candidateKeys = [profileId, safeName].filter(Boolean);
+
+            for (const key of candidateKeys) {
+                const file = path.join(ACHIEVEMENTS_DIR, `${key}.json`);
+                if (fs.existsSync(file)) {
+                    const data = JSON.parse(fs.readFileSync(file, "utf-8"));
+                    const snapshot = data?.snapshot ?? data;
+                    socket.emit("achievementDataLoaded", { success: true, snapshot, identity: data?.identity || { profileId, name: safeName } });
+                    return;
+                }
             }
+
+            socket.emit("achievementDataLoaded", { success: false, error: "Achievement data not found" });
         } catch (e) {
             console.error("Failed to load achievement data:", e);
             socket.emit("achievementDataLoaded", { success: false, error: e.message });

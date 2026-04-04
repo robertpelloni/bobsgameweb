@@ -1,6 +1,7 @@
 import { NDGameEngine } from './NDGameEngine';
 import { ND, NDButton } from './ND';
 import { networkManager } from '../../puzzle';
+import { getPlayerDisplayName } from '../../data/AchievementIdentity';
 import { Sprite, Texture, RenderTexture, Container, Graphics, Text, Application } from 'pixi.js';
 
 export class LibretroGame extends NDGameEngine {
@@ -57,7 +58,7 @@ export class LibretroGame extends NDGameEngine {
   }
 
   private saveStateToCloud(data: Uint8Array) {
-      const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+      const playerName = getPlayerDisplayName();
       networkManager.emit('saveEmulatorState', {
           name: playerName,
           state: Array.from(data) // Convert to array for JSON serialization
@@ -162,7 +163,7 @@ export class LibretroGame extends NDGameEngine {
   }
 
   private requestStateFromCloud() {
-      const playerName = localStorage.getItem('playerName') || 'WebPlayer';
+      const playerName = getPlayerDisplayName();
       networkManager.emit('loadEmulatorState', playerName);
       networkManager.once('emulatorStateLoaded', (data: any) => {
           if (data.success) {

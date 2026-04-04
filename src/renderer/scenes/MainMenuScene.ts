@@ -71,6 +71,7 @@ export class MainMenuScene extends Scene {
         this.createCategorySelector();
         this.createMenu();
         this.playMenuMusic();
+        this.scheduleScenePrefetch();
     }
 
     private createCategorySelector(): void {
@@ -244,7 +245,7 @@ export class MainMenuScene extends Scene {
             fill: 0x445566,
             letterSpacing: 1,
         });
-        this.versionText = new Text({ text: 'v2.1.5', style: versionStyle });
+        this.versionText = new Text({ text: 'v2.1.6', style: versionStyle });
         this.versionText.anchor.set(1, 1);
         this.versionText.x = this.width - 10;
         this.versionText.y = this.height - 10;
@@ -360,6 +361,23 @@ export class MainMenuScene extends Scene {
     private selectCurrentItem(): void {
         this.playSelectSound();
         this.menuItems[this.selectedIndex].action();
+    }
+
+    private scheduleScenePrefetch(): void {
+        const prefetch = () => {
+            void import('./OptionsScene');
+            void import('./AchievementsScene');
+            void import('./HighScoresScene');
+            void import('./RankingsScene');
+            void import('./LobbyScene');
+        };
+
+        const idleCallback = (window as any).requestIdleCallback as ((cb: () => void) => void) | undefined;
+        if (idleCallback) {
+            idleCallback(() => prefetch());
+        } else {
+            window.setTimeout(prefetch, 1200);
+        }
     }
 
     // ============================================================

@@ -2,7 +2,7 @@ import { RPGDatabase, ActorData } from '../../shared/database/RPGDatabase';
 import { networkManager } from '../puzzle';
 import { SERVER_URL } from '../../shared/Config';
 import { AchievementManager } from '../data/AchievementManager';
-import { getAchievementProfileName } from '../data/AchievementIdentity';
+import { getAchievementIdentity } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
 
 export class WorldEditor {
@@ -120,8 +120,8 @@ export class WorldEditor {
     }
 
     private loadAchievementSnapshot() {
-        const playerName = getAchievementProfileName();
-        networkManager.loadAchievementData(playerName, (data) => {
+        const identity = getAchievementIdentity();
+        networkManager.loadAchievementData(identity, (data) => {
             if (data?.success && data.snapshot) {
                 AchievementManager.mergeSnapshot(data.snapshot);
             }
@@ -129,8 +129,8 @@ export class WorldEditor {
     }
 
     private saveAchievementSnapshot() {
-        const playerName = getAchievementProfileName();
-        networkManager.saveAchievementData(playerName, AchievementManager.exportSnapshot());
+        const identity = getAchievementIdentity();
+        networkManager.saveAchievementData(identity, AchievementManager.exportSnapshot());
     }
 
     private renderActors() {

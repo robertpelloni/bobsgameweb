@@ -1,7 +1,7 @@
 import { Container, Graphics, Text, TextStyle } from 'pixi.js';
 import { Scene, SceneConfig } from '../state/Scene';
-import { StateManager } from '../state/StateManager';
 import { SceneTransition } from '../state/SceneTransition';
+import { getOrCreateAchievementProfileId, getPlayerDisplayName, setPlayerDisplayName } from '../data/AchievementIdentity';
 
 export class SettingsScene extends Scene {
     private titleText!: Text;
@@ -26,11 +26,16 @@ export class SettingsScene extends Scene {
         this.titleText.position.set(this.app.screen.width / 2, 50);
         this.container.addChild(this.titleText);
 
-        const currentName = localStorage.getItem('playerName') || 'WebPlayer';
+        const currentName = getPlayerDisplayName();
+        const profileId = getOrCreateAchievementProfileId();
 
         this.nameText = new Text({ text: `Current Name: ${currentName}`, style: { fill: '#ffff00', fontSize: 24 } });
         this.nameText.position.set(this.app.screen.width / 2 - 150, 150);
         this.container.addChild(this.nameText);
+
+        const profileText = new Text({ text: `Profile ID: ${profileId}`, style: { fill: '#88ccff', fontSize: 14 } });
+        profileText.position.set(this.app.screen.width / 2 - 150, 185);
+        this.container.addChild(profileText);
 
         this.inputElement = document.createElement('input');
         this.inputElement.type = 'text';
@@ -58,8 +63,7 @@ export class SettingsScene extends Scene {
     }
 
     private saveName(): void {
-        const newName = this.inputElement.value.trim() || 'WebPlayer';
-        localStorage.setItem('playerName', newName);
+        const newName = setPlayerDisplayName(this.inputElement.value);
         this.nameText.text = `Current Name: ${newName}`;
     }
 
