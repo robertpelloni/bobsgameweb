@@ -21,10 +21,13 @@ Create an `A` record:
 
 Wait until DNS resolves before attempting TLS.
 
-## 2b. Shared Redis on Hetzner
-This host can also serve as the shared internal Redis box for both `bobsgame` and `fwber` realtime services.
+## 2b. Shared datastores on Hetzner
+This host can also serve as the shared internal datastore box for both `bobsgame` and `fwber` services.
 See:
 - `REDIS_SHARED_SERVICES.md`
+- `MYSQL_MIGRATION.md`
+- `POSTGRES_SHARED_SERVICES.md`
+- `HETZNER_UNIFIED_STACK_STATUS.md`
 
 ## 3. Fast Bootstrap Option
 A bootstrap helper is now included:

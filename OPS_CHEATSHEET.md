@@ -92,6 +92,11 @@ BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-redis-hetzner.sh
 BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-mysql-hetzner.sh
 ```
 
+## Check Hetzner PostgreSQL
+```bash
+BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-postgres-hetzner.sh
+```
+
 ## Helpful docs
 - `HETZNER_FIRST_DEPLOY.md`
 - `HETZNER_SETUP.md`
@@ -102,3 +107,5 @@ BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-mysql-hetzner.sh
 - `HARDENING_CHECKLIST.md`
 - `REDIS_SHARED_SERVICES.md`
 - `MYSQL_MIGRATION.md`
+- `POSTGRES_SHARED_SERVICES.md`
+- `HETZNER_UNIFIED_STACK_STATUS.md`
