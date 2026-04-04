@@ -50,7 +50,7 @@ import { Easing } from '../../shared/Easing';
 import { networkManager } from '../puzzle';
 import { SERVER_URL } from '../../shared/Config';
 import { AchievementManager } from '../data/AchievementManager';
-import { getPlayerDisplayName } from '../data/AchievementIdentity';
+import { getPersistenceIdentity, getPlayerDisplayName } from '../data/AchievementIdentity';
 
 export class WorldScene extends Scene {
     private world: World;
@@ -142,9 +142,9 @@ export class WorldScene extends Scene {
         const transform = new TransformComponent();
         this.world.addComponent(playerEntity, transform);
 
-        const playerName = getPlayerDisplayName();
+        const identity = getPersistenceIdentity();
         networkManager.connect(SERVER_URL);
-        networkManager.emit('loadCharacter', playerName);
+        networkManager.emit('loadCharacter', identity);
         networkManager.once('characterLoaded', (data: any) => {
             if (data.success) { transform.x = data.charData.x; transform.y = data.charData.y; }
             else { transform.x = 400; transform.y = 300; }
@@ -494,8 +494,8 @@ export class WorldScene extends Scene {
     }
 
     private saveCharacterToCloud(): void {
-        const playerName = getPlayerDisplayName();
-        if (this.playerTransform && networkManager.connected) { networkManager.emit('saveCharacter', { name: playerName, charData: { x: this.playerTransform.x, y: this.playerTransform.y } }); }
+        const identity = getPersistenceIdentity();
+        if (this.playerTransform && networkManager.connected) { networkManager.emit('saveCharacter', { identity, charData: { x: this.playerTransform.x, y: this.playerTransform.y } }); }
     }
 
     public onResize(width: number, height: number): void {

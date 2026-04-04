@@ -3,6 +3,11 @@ export interface AchievementIdentity {
     name: string;
 }
 
+export interface PersistenceIdentity {
+    profileId: string;
+    name: string;
+}
+
 const PROFILE_ID_KEY = 'bg_profile_id';
 const PLAYER_NAME_KEY = 'playerName';
 
@@ -40,6 +45,13 @@ export function getAchievementProfileName(): string {
 }
 
 export function getAchievementIdentity(): AchievementIdentity {
+    return {
+        profileId: getOrCreateAchievementProfileId(),
+        name: getPlayerDisplayName(),
+    };
+}
+
+export function getPersistenceIdentity(): PersistenceIdentity {
     return {
         profileId: getOrCreateAchievementProfileId(),
         name: getPlayerDisplayName(),

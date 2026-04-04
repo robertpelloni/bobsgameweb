@@ -24,6 +24,7 @@ export interface MainMenuSceneConfig extends SceneConfig {
 interface MenuItem {
     label: string;
     action: () => void | Promise<void>;
+    prefetch?: () => void;
 }
 
 // ============================================================
@@ -245,7 +246,7 @@ export class MainMenuScene extends Scene {
             fill: 0x445566,
             letterSpacing: 1,
         });
-        this.versionText = new Text({ text: 'v2.1.6', style: versionStyle });
+        this.versionText = new Text({ text: 'v2.1.7', style: versionStyle });
         this.versionText.anchor.set(1, 1);
         this.versionText.x = this.width - 10;
         this.versionText.y = this.height - 10;
@@ -267,17 +268,17 @@ export class MainMenuScene extends Scene {
             { label: 'Classic', action: () => this.startGame(GameTypes.CLASSIC) },
             { label: 'Modern', action: () => this.startGame(GameTypes.MODERN) },
             { label: 'Play Custom Game', action: () => this.startCustomGame() },
-            { label: 'Custom Game Editor', action: () => this.openCustomEditor() },
-            { label: 'MMO World', action: () => this.openWorld() },
-            { label: 'World Database Editor', action: () => this.openWorldEditor() },
-            { label: 'Multiplayer', action: () => this.openLobby() },
-            { label: 'Rankings', action: () => this.openRankings() },
-            { label: 'nD Demo', action: () => this.openNDDemo() },
-            { label: 'Engine Demo', action: () => this.openEngineDemo() },
-            { label: 'High Scores', action: () => this.openHighScores() },
-            { label: 'Achievements', action: () => this.openAchievements() },
-            { label: 'Settings', action: () => this.openSettings() },
-            { label: 'Options', action: () => this.openOptions() },
+            { label: 'Custom Game Editor', action: () => this.openCustomEditor(), prefetch: () => { void import('./CustomGameEditorScene'); } },
+            { label: 'MMO World', action: () => this.openWorld(), prefetch: () => { void import('./WorldScene'); } },
+            { label: 'World Database Editor', action: () => this.openWorldEditor(), prefetch: () => { void import('./WorldEditorScene'); } },
+            { label: 'Multiplayer', action: () => this.openLobby(), prefetch: () => { void import('./LobbyScene'); } },
+            { label: 'Rankings', action: () => this.openRankings(), prefetch: () => { void import('./RankingsScene'); } },
+            { label: 'nD Demo', action: () => this.openNDDemo(), prefetch: () => { void import('./NDDemoScene'); } },
+            { label: 'Engine Demo', action: () => this.openEngineDemo(), prefetch: () => { void import('./EngineDemoScene'); } },
+            { label: 'High Scores', action: () => this.openHighScores(), prefetch: () => { void import('./HighScoresScene'); } },
+            { label: 'Achievements', action: () => this.openAchievements(), prefetch: () => { void import('./AchievementsScene'); } },
+            { label: 'Settings', action: () => this.openSettings(), prefetch: () => { void import('./SettingsScene'); } },
+            { label: 'Options', action: () => this.openOptions(), prefetch: () => { void import('./OptionsScene'); } },
             { label: 'Watch Last Replay', action: () => this.playLastReplay() },
             { label: 'Share Last Replay', action: () => this.shareLastReplay() },
         ];
@@ -324,6 +325,7 @@ export class MainMenuScene extends Scene {
         for (let i = 0; i < this.menuButtons.length; i++) {
             this.menuButtons[i].selected = i === this.selectedIndex;
         }
+        this.prefetchSelectionNeighborhood();
     }
 
     // ============================================================
@@ -377,6 +379,15 @@ export class MainMenuScene extends Scene {
             idleCallback(() => prefetch());
         } else {
             window.setTimeout(prefetch, 1200);
+        }
+    }
+
+    private prefetchSelectionNeighborhood(): void {
+        const indices = [this.selectedIndex - 1, this.selectedIndex, this.selectedIndex + 1]
+            .filter((index) => index >= 0 && index < this.menuItems.length);
+
+        for (const index of indices) {
+            this.menuItems[index].prefetch?.();
         }
     }
 

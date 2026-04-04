@@ -452,7 +452,7 @@ io.on("connection", (socket) => {
             ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
             : String(identity || "webplayer").substring(0, 64).toLowerCase();
         const storageKey = profileId || safeName;
-        const snapshot = data?.snapshot || { version: "2.1.6", stats: {}, unlockedIds: [] };
+        const snapshot = data?.snapshot || { version: "2.1.7", stats: {}, unlockedIds: [] };
         try {
             const file = path.join(ACHIEVEMENTS_DIR, `${storageKey}.json`);
             fs.writeFileSync(file, JSON.stringify({ identity: { profileId, name: safeName }, snapshot }, null, 2));
@@ -495,27 +495,44 @@ io.on("connection", (socket) => {
     // ----------------------------------------------------------
 
     socket.on("saveCharacter", (data) => {
-        const { name, charData } = data;
+        const identity = data?.identity ?? data?.name;
+        const profileId = typeof identity === 'object' && identity !== null
+            ? String(identity.profileId || '').substring(0, 128).toLowerCase()
+            : '';
+        const safeName = typeof identity === 'object' && identity !== null
+            ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
+            : String(identity || "webplayer").substring(0, 64).toLowerCase();
+        const storageKey = profileId || safeName;
+        const charData = data?.charData;
         try {
-            const charFile = path.join(CHARS_DIR, `${name.toLowerCase()}.json`);
-            fs.writeFileSync(charFile, JSON.stringify(charData, null, 2));
-            console.log(`Character ${name} saved.`);
-            socket.emit("characterSaved", { success: true });
+            const charFile = path.join(CHARS_DIR, `${storageKey}.json`);
+            fs.writeFileSync(charFile, JSON.stringify({ identity: { profileId, name: safeName }, charData }, null, 2));
+            console.log(`Character ${safeName} saved under ${storageKey}.`);
+            socket.emit("characterSaved", { success: true, key: storageKey, profileId, name: safeName });
         } catch (e) {
             console.error("Failed to save character:", e);
             socket.emit("characterSaved", { success: false, error: e.message });
         }
     });
 
-    socket.on("loadCharacter", (name) => {
+    socket.on("loadCharacter", (identity) => {
         try {
-            const charFile = path.join(CHARS_DIR, `${name.toLowerCase()}.json`);
-            if (fs.existsSync(charFile)) {
-                const charData = JSON.parse(fs.readFileSync(charFile, "utf-8"));
-                socket.emit("characterLoaded", { success: true, charData });
-            } else {
-                socket.emit("characterLoaded", { success: false, error: "Character not found" });
+            const profileId = typeof identity === 'object' && identity !== null
+                ? String(identity.profileId || '').substring(0, 128).toLowerCase()
+                : '';
+            const safeName = typeof identity === 'object' && identity !== null
+                ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
+                : String(identity || "webplayer").substring(0, 64).toLowerCase();
+            const candidateKeys = [profileId, safeName].filter(Boolean);
+            for (const key of candidateKeys) {
+                const charFile = path.join(CHARS_DIR, `${key}.json`);
+                if (fs.existsSync(charFile)) {
+                    const data = JSON.parse(fs.readFileSync(charFile, "utf-8"));
+                    socket.emit("characterLoaded", { success: true, charData: data?.charData ?? data, identity: data?.identity || { profileId, name: safeName } });
+                    return;
+                }
             }
+            socket.emit("characterLoaded", { success: false, error: "Character not found" });
         } catch (e) {
             console.error("Failed to load character:", e);
             socket.emit("characterLoaded", { success: false, error: e.message });
@@ -527,25 +544,42 @@ io.on("connection", (socket) => {
     // ----------------------------------------------------------
 
     socket.on("saveEmulatorState", (data) => {
-        const { name, state } = data;
+        const identity = data?.identity ?? data?.name;
+        const profileId = typeof identity === 'object' && identity !== null
+            ? String(identity.profileId || '').substring(0, 128).toLowerCase()
+            : '';
+        const safeName = typeof identity === 'object' && identity !== null
+            ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
+            : String(identity || "webplayer").substring(0, 64).toLowerCase();
+        const storageKey = profileId || safeName;
+        const state = data?.state;
         try {
-            const stateFile = path.join(EmuStates_DIR, `${name.toLowerCase()}.json`);
-            fs.writeFileSync(stateFile, JSON.stringify(state));
-            console.log(`Emulator state for ${name} saved.`);
+            const stateFile = path.join(EmuStates_DIR, `${storageKey}.json`);
+            fs.writeFileSync(stateFile, JSON.stringify({ identity: { profileId, name: safeName }, state }));
+            console.log(`Emulator state for ${safeName} saved under ${storageKey}.`);
         } catch (e) {
             console.error("Failed to save emulator state:", e);
         }
     });
 
-    socket.on("loadEmulatorState", (name) => {
+    socket.on("loadEmulatorState", (identity) => {
         try {
-            const stateFile = path.join(EmuStates_DIR, `${name.toLowerCase()}.json`);
-            if (fs.existsSync(stateFile)) {
-                const stateData = JSON.parse(fs.readFileSync(stateFile, "utf-8"));
-                socket.emit("emulatorStateLoaded", { success: true, state: stateData });
-            } else {
-                socket.emit("emulatorStateLoaded", { success: false, error: "State not found" });
+            const profileId = typeof identity === 'object' && identity !== null
+                ? String(identity.profileId || '').substring(0, 128).toLowerCase()
+                : '';
+            const safeName = typeof identity === 'object' && identity !== null
+                ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
+                : String(identity || "webplayer").substring(0, 64).toLowerCase();
+            const candidateKeys = [profileId, safeName].filter(Boolean);
+            for (const key of candidateKeys) {
+                const stateFile = path.join(EmuStates_DIR, `${key}.json`);
+                if (fs.existsSync(stateFile)) {
+                    const data = JSON.parse(fs.readFileSync(stateFile, "utf-8"));
+                    socket.emit("emulatorStateLoaded", { success: true, state: data?.state ?? data, identity: data?.identity || { profileId, name: safeName } });
+                    return;
+                }
             }
+            socket.emit("emulatorStateLoaded", { success: false, error: "State not found" });
         } catch (e) {
             console.error("Failed to load emulator state:", e);
             socket.emit("emulatorStateLoaded", { success: false, error: e.message });
