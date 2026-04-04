@@ -64,7 +64,7 @@ Expected:
 - `/healthz` → 200 JSON with `ok: true`
 - `/socket.io/...` → Socket.io response, not provider 404
 
-## Frontend Rebuild
+## Frontend Rebuild / Cutover
 Once the backend host works, you can use the helper scripts:
 
 ```bash
@@ -78,6 +78,12 @@ To rebuild and immediately redeploy static assets:
 BACKEND_URL=https://YOUR-BACKEND-HOST DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/rebuild-for-backend.sh
 ```
 
+Or use the combined cutover helper:
+
+```bash
+BACKEND_URL=https://YOUR-BACKEND-HOST DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/cutover-production.sh
+```
+
 ## Suggested Provider Shapes
 ### VPS / Hetzner / DigitalOcean
 - run `node index.js` or PM2/systemd
@@ -88,10 +94,12 @@ BACKEND_URL=https://YOUR-BACKEND-HOST DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobs
   - `server/ops/nginx/ws.bobsgame.com.conf`
   - `server/ops/systemd/bobsgameweb-server.service`
   - `server/ops/bootstrap-ubuntu.sh`
+  - `server/ops/cloud-init/hetzner-user-data.yaml`
   - `scripts/deploy-backend-vps.sh`
   - `scripts/install-backend-service.sh`
   - `scripts/collect-backend-diagnostics.sh`
   - `scripts/provision-hetzner-backend.sh`
+  - `scripts/cutover-production.sh`
 
 ### PaaS / Railway / Render
 - set `HOST`, `PORT`, and `ALLOWED_ORIGIN`
