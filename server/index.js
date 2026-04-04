@@ -98,7 +98,33 @@ function getMapPath(mapId) {
 // Server Setup
 // ============================================================
 
-const httpServer = createServer();
+const SERVER_VERSION = "2.1.10";
+
+const httpServer = createServer((req, res) => {
+    const url = req.url || "/";
+
+    if (url === "/" || url.startsWith("/?")) {
+        res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+        res.end("bob's game backend is running\n");
+        return;
+    }
+
+    if (url === "/healthz" || url.startsWith("/healthz?")) {
+        const payload = {
+            ok: true,
+            service: "bobsgameweb-socket-server",
+            version: SERVER_VERSION,
+            time: Date.now(),
+        };
+        res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+        res.end(JSON.stringify(payload));
+        return;
+    }
+
+    res.writeHead(404, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(JSON.stringify({ ok: false, error: "Not Found", path: url }));
+});
+
 const io = new Server(httpServer, {
     cors: {
         origin: "*",
@@ -452,7 +478,7 @@ io.on("connection", (socket) => {
             ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
             : String(identity || "webplayer").substring(0, 64).toLowerCase();
         const storageKey = profileId || safeName;
-        const snapshot = data?.snapshot || { version: "2.1.9", stats: {}, unlockedIds: [] };
+        const snapshot = data?.snapshot || { version: "2.1.10", stats: {}, unlockedIds: [] };
         try {
             const file = path.join(ACHIEVEMENTS_DIR, `${storageKey}.json`);
             fs.writeFileSync(file, JSON.stringify({ identity: { profileId, name: safeName }, snapshot }, null, 2));
@@ -748,5 +774,6 @@ io.on("connection", (socket) => {
 const PORT = process.env.PORT || 6065;
 httpServer.listen(PORT, () => {
     console.log(`bob's game Socket.io server running on port ${PORT}`);
+    console.log(`Health endpoint: /healthz | Version: ${SERVER_VERSION}`);
     console.log(`Leaderboard entries: marathon=${(leaderboards.marathon || []).length}, sprint=${(leaderboards.sprint || []).length}, ultra=${(leaderboards.ultra || []).length}`);
 });

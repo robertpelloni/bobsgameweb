@@ -99,12 +99,17 @@ Suggested DreamHost shape:
 2. Point its web directory/app root at `~/bobsgame.com/server`
 3. Configure it as a Node/Passenger app if DreamHost panel supports that for the subdomain
 4. Use `server/app.js` as the startup entrypoint
-5. Build the web client with:
+5. Verify backend health with:
+   ```bash
+   curl -i https://ws.bobsgame.com/healthz
+   ```
+6. Build the web client with:
    ```bash
    VITE_SERVER_URL=https://ws.bobsgame.com npm run build
    ```
 
 The web client now supports this via `.env.production.example` and `src/shared/Config.ts`.
+A dedicated step-by-step checklist is available in `WS_BACKEND_SETUP.md`.
 
 ## 7. Easiest Future Setup
 For the easiest one-command deploys, the best improvement is:
