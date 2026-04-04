@@ -7,6 +7,11 @@ Short command reference for the backend rollout and maintenance workflow.
 BACKEND_HOST=YOUR_SERVER_IP DOMAIN_NAME=ws.bobsgame.com ./scripts/print-hetzner-first-deploy.sh
 ```
 
+## Preflight before provisioning
+```bash
+BACKEND_HOST=YOUR_SERVER_IP BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/preflight-hetzner-backend.sh
+```
+
 ## One-shot provisioning
 ```bash
 BACKEND_HOST=YOUR_SERVER_IP BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com INSTALL_DEPS=1 INSTALL_SYSTEMD=1 INSTALL_NGINX=1 ENABLE_TLS=0 ./scripts/provision-hetzner-backend.sh
@@ -30,6 +35,11 @@ BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsga
 ## Full frontend cutover
 ```bash
 BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/cutover-production.sh
+```
+
+## Quick frontend verification after cutover
+```bash
+FRONTEND_URL=https://bobsgame.com EXPECTED_BACKEND=https://ws.bobsgame.com ./scripts/check-production-frontend.sh
 ```
 
 ## Backend-only upload to VPS

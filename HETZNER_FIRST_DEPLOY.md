@@ -21,7 +21,13 @@ Create an A record:
 
 Wait until it resolves.
 
-## 1. Provision backend over HTTP first
+## 1. Preflight checks
+```bash
+cd bobsgameweb
+BACKEND_HOST=YOUR_SERVER_IP BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/preflight-hetzner-backend.sh
+```
+
+## 2. Provision backend over HTTP first
 ```bash
 cd bobsgameweb
 BACKEND_HOST=YOUR_SERVER_IP \
@@ -34,7 +40,7 @@ ENABLE_TLS=0 \
 ./scripts/provision-hetzner-backend.sh
 ```
 
-## 2. Verify backend over HTTP
+## 3. Verify backend over HTTP
 ```bash
 BACKEND_URL=http://ws.bobsgame.com ./scripts/check-backend-host.sh
 ```
@@ -44,7 +50,7 @@ This should verify:
 - `/healthz`
 - `/socket.io/?EIO=4&transport=polling`
 
-## 3. Turn on TLS
+## 4. Turn on TLS
 ```bash
 BACKEND_HOST=YOUR_SERVER_IP \
 BACKEND_USER=root \
@@ -57,12 +63,12 @@ ENABLE_TLS=1 \
 ./scripts/provision-hetzner-backend.sh
 ```
 
-## 4. Verify backend over HTTPS
+## 5. Verify backend over HTTPS
 ```bash
 BACKEND_URL=https://ws.bobsgame.com ./scripts/check-backend-host.sh
 ```
 
-## 5. Cut over the frontend
+## 6. Cut over the frontend
 ```bash
 BACKEND_URL=https://ws.bobsgame.com \
 DEPLOY_STATIC=1 \
@@ -70,12 +76,18 @@ DEPLOY_HOST=dreamhost-bobsgame \
 ./scripts/cutover-production.sh
 ```
 
+Optional quick frontend verification:
+
+```bash
+FRONTEND_URL=https://bobsgame.com EXPECTED_BACKEND=https://ws.bobsgame.com ./scripts/check-production-frontend.sh
+```
+
 This will:
 - verify backend again
 - rebuild the frontend against `https://ws.bobsgame.com`
 - deploy static assets to DreamHost
 
-## 6. Post-deploy verification
+## 7. Post-deploy verification
 Follow:
 - `POST_DEPLOY_CHECKLIST.md`
 
