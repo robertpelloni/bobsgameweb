@@ -21,18 +21,22 @@ Create an `A` record:
 
 Wait until DNS resolves before attempting TLS.
 
-## 3. Base packages
-SSH into the server and run:
+## 3. Fast Bootstrap Option
+A bootstrap helper is now included:
+- `server/ops/bootstrap-ubuntu.sh`
+
+You can run it on the VPS as root/sudo to install the core base packages and Node 20:
+
+```bash
+bash bootstrap-ubuntu.sh
+```
+
+## 4. Manual Base Packages / Node 20
+If you prefer doing it manually:
 
 ```bash
 sudo apt update
 sudo apt install -y nginx curl git ufw
-```
-
-## 4. Install Node 20
-Example using NodeSource:
-
-```bash
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
 node -v
@@ -49,6 +53,15 @@ sudo chown -R $USER:$USER /opt/bobsgameweb
 ## 6. Upload backend files
 Copy `bobsgameweb/server/` to:
 - `/opt/bobsgameweb/server`
+
+A deploy helper is now included locally:
+- `scripts/deploy-backend-vps.sh`
+
+Typical usage:
+
+```bash
+BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root BACKEND_INSTALL_DEPS=1 ./scripts/deploy-backend-vps.sh
+```
 
 At minimum that directory should contain:
 - `index.js`
