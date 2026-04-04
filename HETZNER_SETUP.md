@@ -98,7 +98,19 @@ cd /opt/bobsgameweb/server
 npm install --omit=dev
 ```
 
-## 8. Systemd service
+## 8. Systemd service + nginx site install
+If you want the helper path, use:
+- `scripts/install-backend-service.sh`
+
+Example:
+
+```bash
+BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/install-backend-service.sh
+```
+
+Manual path is still available if preferred:
+
+### Systemd service
 Copy:
 - `server/ops/systemd/bobsgameweb-server.service`
 
@@ -115,7 +127,7 @@ sudo systemctl start bobsgameweb-server
 sudo systemctl status bobsgameweb-server
 ```
 
-## 9. Nginx reverse proxy
+### Nginx reverse proxy
 Copy:
 - `server/ops/nginx/ws.bobsgame.com.conf`
 
@@ -198,7 +210,11 @@ BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsga
 ## Troubleshooting
 ### `502 Bad Gateway`
 - backend process probably not running
-- check:
+- quick diagnostic helper:
+  ```bash
+  BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/collect-backend-diagnostics.sh
+  ```
+- manual checks:
   ```bash
   sudo systemctl status bobsgameweb-server
   journalctl -u bobsgameweb-server -n 100 --no-pager
