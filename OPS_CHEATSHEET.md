@@ -87,6 +87,11 @@ BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root ./scripts/fetch-backend-backup.sh
 BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-redis-hetzner.sh
 ```
 
+## Check Hetzner MySQL
+```bash
+BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-mysql-hetzner.sh
+```
+
 ## Helpful docs
 - `HETZNER_FIRST_DEPLOY.md`
 - `HETZNER_SETUP.md`
@@ -96,3 +101,4 @@ BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-redis-hetzner.sh
 - `BACKUP_RESTORE.md`
 - `HARDENING_CHECKLIST.md`
 - `REDIS_SHARED_SERVICES.md`
+- `MYSQL_MIGRATION.md`
