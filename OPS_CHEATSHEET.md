@@ -7,6 +7,11 @@ Short command reference for the backend rollout and maintenance workflow.
 BACKEND_HOST=YOUR_SERVER_IP DOMAIN_NAME=ws.bobsgame.com ./scripts/print-hetzner-first-deploy.sh
 ```
 
+## Render local config artifacts
+```bash
+DOMAIN_NAME=ws.bobsgame.com APP_ROOT=/opt/bobsgameweb APP_USER=bobsgame SERVICE_NAME=bobsgameweb-server ./scripts/render-hetzner-configs.sh
+```
+
 ## Preflight before provisioning
 ```bash
 BACKEND_HOST=YOUR_SERVER_IP BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/preflight-hetzner-backend.sh
