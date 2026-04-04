@@ -20,6 +20,7 @@ Use this after the backend is functional on the VPS.
 - [ ] HSTS enabled if appropriate
 - [ ] `/healthz` works over HTTPS
 - [ ] `/socket.io/?EIO=4&transport=polling` works over HTTPS
+- [ ] nginx log rotation policy is in place if file logs are being used
 
 ## Backend Process
 - [ ] systemd service is enabled
@@ -32,6 +33,7 @@ Use this after the backend is functional on the VPS.
 - [ ] app files live under `/opt/bobsgameweb`
 - [ ] service user owns only what it must write
 - [ ] backups/rollback plan exists for backend files and config
+- [ ] backup retention/pruning policy exists for `/opt/bobsgameweb/backups`
 
 ## Final Checks
 - [ ] `POST_DEPLOY_CHECKLIST.md` completed
