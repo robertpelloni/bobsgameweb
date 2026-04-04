@@ -65,12 +65,18 @@ Expected:
 - `/socket.io/...` → Socket.io response, not provider 404
 
 ## Frontend Rebuild
-Once the backend host works, rebuild the frontend with:
+Once the backend host works, you can use the helper scripts:
+
 ```bash
-VITE_SERVER_URL=https://YOUR-BACKEND-HOST npm run build
+BACKEND_URL=https://YOUR-BACKEND-HOST ./scripts/check-backend-host.sh
+BACKEND_URL=https://YOUR-BACKEND-HOST ./scripts/rebuild-for-backend.sh
 ```
 
-Then redeploy static assets to `bobsgame.com`.
+To rebuild and immediately redeploy static assets:
+
+```bash
+BACKEND_URL=https://YOUR-BACKEND-HOST DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/rebuild-for-backend.sh
+```
 
 ## Suggested Provider Shapes
 ### VPS / Hetzner / DigitalOcean

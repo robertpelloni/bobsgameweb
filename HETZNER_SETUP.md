@@ -166,17 +166,31 @@ Then retest:
 curl -i https://ws.bobsgame.com/healthz
 ```
 
-## 13. Rebuild frontend against the backend host
+## 13. Verify backend from your local machine
+A local verification helper is now included:
+- `scripts/check-backend-host.sh`
+
+Example:
+
+```bash
+BACKEND_URL=https://ws.bobsgame.com ./scripts/check-backend-host.sh
+```
+
+## 14. Rebuild frontend against the backend host
 On your local machine:
 
 ```bash
 cd bobsgameweb
-VITE_SERVER_URL=https://ws.bobsgame.com npm run build
+BACKEND_URL=https://ws.bobsgame.com ./scripts/rebuild-for-backend.sh
 ```
 
-Then redeploy the static frontend to DreamHost.
+To rebuild and immediately redeploy static assets:
 
-## 14. Final production test
+```bash
+BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/rebuild-for-backend.sh
+```
+
+## 15. Final production test
 - open `https://bobsgame.com`
 - verify browser network requests target `https://ws.bobsgame.com`
 - test lobby creation / leaderboard / multiplayer handshake
