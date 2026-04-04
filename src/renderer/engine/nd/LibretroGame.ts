@@ -1,7 +1,7 @@
 import { NDGameEngine } from './NDGameEngine';
 import { ND, NDButton } from './ND';
 import { networkManager } from '../../puzzle';
-import { getPlayerDisplayName } from '../../data/AchievementIdentity';
+import { getPersistenceIdentity } from '../../data/AchievementIdentity';
 import { Sprite, Texture, RenderTexture, Container, Graphics, Text, Application } from 'pixi.js';
 
 export class LibretroGame extends NDGameEngine {
@@ -58,9 +58,9 @@ export class LibretroGame extends NDGameEngine {
   }
 
   private saveStateToCloud(data: Uint8Array) {
-      const playerName = getPlayerDisplayName();
+      const identity = getPersistenceIdentity();
       networkManager.emit('saveEmulatorState', {
-          name: playerName,
+          identity,
           state: Array.from(data) // Convert to array for JSON serialization
       });
       console.log('[LibretroGame] Save state pushed to cloud.');
@@ -163,8 +163,8 @@ export class LibretroGame extends NDGameEngine {
   }
 
   private requestStateFromCloud() {
-      const playerName = getPlayerDisplayName();
-      networkManager.emit('loadEmulatorState', playerName);
+      const identity = getPersistenceIdentity();
+      networkManager.emit('loadEmulatorState', identity);
       networkManager.once('emulatorStateLoaded', (data: any) => {
           if (data.success) {
               const buffer = new Uint8Array(data.state);
