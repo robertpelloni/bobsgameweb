@@ -13,25 +13,32 @@ Verified on the Hetzner host:
 This is already a good default for an internal shared Redis.
 
 ## Recommended usage model
-Because multiple apps/services will share Redis on the same host, use separate logical DB indexes by responsibility.
+Because multiple apps/services will share Redis on the same host, prefer a **shared Redis instance with key prefixes** instead of relying on separate logical DB indexes.
 
-Suggested split:
-- **DB 0** — `bobsgame` websocket / matchmaking / ephemeral shared state
-- **DB 1** — `fwber` websocket / Mercure / Reverb / pub-sub-related state
-- **DB 2** — shared rate limits / locks / cross-service transient coordination (optional)
-- **DB 3+** — reserved for future growth
+Recommended prefixes:
+- **`bg:`** — `bobsgame` keys
+- **`fw:`** — `fwber` keys
+
+Recommended service-level sub-prefixes:
+- `bg:ws:`
+- `bg:match:`
+- `fw:ws:`
+- `fw:reverb:`
+- `fw:mercure:`
+- `shared:lock:` (only for intentionally cross-app coordination)
+
+Logical DB indexes can still be used later for staging/experimentation, but the primary isolation model should now be **prefix-based namespacing**.
 
 ## Recommended connection style
 For services running on the Hetzner box itself, use localhost:
 
 ```txt
 redis://127.0.0.1:6379/0
-redis://127.0.0.1:6379/1
 ```
 
 Examples:
-- `bobsgame` → `redis://127.0.0.1:6379/0`
-- `fwber` realtime side → `redis://127.0.0.1:6379/1`
+- `bobsgame` → `redis://127.0.0.1:6379/0` with prefix `bg:`
+- `fwber` realtime side → `redis://127.0.0.1:6379/0` with prefix `fw:`
 
 ## Security posture
 Current setup is good because:
@@ -43,6 +50,7 @@ Current setup is good because:
 Not required immediately, but worth considering later:
 - configure `maxmemory` + eviction policy if cache-like usage grows
 - add `requirepass` only if you later need to support non-local clients or stronger local auth separation
+- consider enabling AOF if key state becomes important enough that warm restarts should preserve more than transient coordination data
 - enable AOF persistence if the Redis usage evolves from ephemeral coordination into durability-sensitive data
 
 ## Operational reminder
