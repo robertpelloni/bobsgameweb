@@ -21,6 +21,11 @@ Create an `A` record:
 
 Wait until DNS resolves before attempting TLS.
 
+## 2b. Shared Redis on Hetzner
+This host can also serve as the shared internal Redis box for both `bobsgame` and `fwber` realtime services.
+See:
+- `REDIS_SHARED_SERVICES.md`
+
 ## 3. Fast Bootstrap Option
 A bootstrap helper is now included:
 - `server/ops/bootstrap-ubuntu.sh`

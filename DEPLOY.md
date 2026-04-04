@@ -44,6 +44,8 @@ Both deploy scripts support:
 - `DEPLOY_HOST` — defaults to `pdx1-shared-a1-33.dreamhost.com`
 - `DEPLOY_REMOTE_PATH` — defaults to `~/bobsgame.com`
 - `DEPLOY_PASSWORD` — optional; used with `sshpass` if available
+- `DEPLOY_SKIP_BUILD=1` — skips rebuilding before upload
+- `DEPLOY_FORCE_SCP=1` — disables `rsync` even if present and forces `scp`
 - `DEPLOY_INSTALL_SERVER=1` — optionally runs `npm install` remotely in `server/`
 - `DEPLOY_RESTART_SERVER=1` — optionally attempts `pm2 restart index.js` remotely
 
@@ -51,6 +53,12 @@ Example:
 
 ```bash
 DEPLOY_PASSWORD='your-password' DEPLOY_INSTALL_SERVER=1 DEPLOY_RESTART_SERVER=1 ./scripts/deploy.sh
+```
+
+Example for a prebuilt frontend where you want to avoid an extra build and force `scp`:
+
+```bash
+DEPLOY_SKIP_BUILD=1 DEPLOY_FORCE_SCP=1 ./scripts/deploy.sh
 ```
 
 ## 4. Manual Deployment Steps

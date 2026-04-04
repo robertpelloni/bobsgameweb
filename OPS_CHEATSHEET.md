@@ -82,6 +82,11 @@ BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root ./scripts/tail-backend-logs.sh
 BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root ./scripts/fetch-backend-backup.sh
 ```
 
+## Check shared Redis on Hetzner
+```bash
+BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-redis-hetzner.sh
+```
+
 ## Helpful docs
 - `HETZNER_FIRST_DEPLOY.md`
 - `HETZNER_SETUP.md`
@@ -90,3 +95,4 @@ BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root ./scripts/fetch-backend-backup.sh
 - `BACKEND_RECOVERY.md`
 - `BACKUP_RESTORE.md`
 - `HARDENING_CHECKLIST.md`
+- `REDIS_SHARED_SERVICES.md`
