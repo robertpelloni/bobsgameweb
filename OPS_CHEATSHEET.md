@@ -52,10 +52,16 @@ BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scr
 BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/collect-backend-diagnostics.sh
 ```
 
+## Fetch backend backup locally
+```bash
+BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root ./scripts/fetch-backend-backup.sh
+```
+
 ## Helpful docs
 - `HETZNER_FIRST_DEPLOY.md`
 - `HETZNER_SETUP.md`
 - `BACKEND_DEPLOY.md`
 - `POST_DEPLOY_CHECKLIST.md`
 - `BACKEND_RECOVERY.md`
+- `BACKUP_RESTORE.md`
 - `HARDENING_CHECKLIST.md`
