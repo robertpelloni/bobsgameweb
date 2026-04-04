@@ -42,6 +42,11 @@ BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsga
 FRONTEND_URL=https://bobsgame.com EXPECTED_BACKEND=https://ws.bobsgame.com ./scripts/check-production-frontend.sh
 ```
 
+## Full backend + frontend verification
+```bash
+BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com ./scripts/verify-production-stack.sh
+```
+
 ## Backend-only upload to VPS
 ```bash
 BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root BACKEND_INSTALL_DEPS=1 ./scripts/deploy-backend-vps.sh
@@ -60,6 +65,11 @@ BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scr
 ## Collect backend diagnostics
 ```bash
 BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/collect-backend-diagnostics.sh
+```
+
+## Tail backend logs live
+```bash
+BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root ./scripts/tail-backend-logs.sh
 ```
 
 ## Fetch backend backup locally
