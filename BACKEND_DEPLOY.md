@@ -89,6 +89,8 @@ BACKEND_URL=https://YOUR-BACKEND-HOST DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobs
   - `server/ops/systemd/bobsgameweb-server.service`
   - `server/ops/bootstrap-ubuntu.sh`
   - `scripts/deploy-backend-vps.sh`
+  - `scripts/install-backend-service.sh`
+  - `scripts/collect-backend-diagnostics.sh`
   - `scripts/provision-hetzner-backend.sh`
 
 ### PaaS / Railway / Render
