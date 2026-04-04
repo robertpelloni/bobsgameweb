@@ -11,6 +11,9 @@ set -euo pipefail
 #   APP_USER=bobsgame
 #   BACKEND_SERVICE_NAME=bobsgameweb-server
 #   DEPLOY_PASSWORD=...  (uses sshpass if available)
+#
+# Note:
+#   Pair with scripts/install-backend-env.sh to manage /etc/bobsgameweb-server.env cleanly.
 
 BACKEND_USER="${BACKEND_USER:-root}"
 BACKEND_HOST="${BACKEND_HOST:-}"
@@ -48,5 +51,6 @@ nginx -t
 systemctl reload nginx
 
 echo "=== install-backend-service complete ==="
+echo "Environment file expected at: /etc/bobsgameweb-server.env"
 systemctl status "$BACKEND_SERVICE_NAME" --no-pager || true
 EOF

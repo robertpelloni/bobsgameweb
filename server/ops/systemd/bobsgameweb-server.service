@@ -7,10 +7,8 @@ Type=simple
 User=bobsgame
 Group=bobsgame
 WorkingDirectory=/opt/bobsgameweb/server
+EnvironmentFile=-/etc/bobsgameweb-server.env
 Environment=NODE_ENV=production
-Environment=HOST=127.0.0.1
-Environment=PORT=6065
-Environment=ALLOWED_ORIGIN=https://bobsgame.com
 ExecStart=/usr/bin/node /opt/bobsgameweb/server/index.js
 Restart=always
 RestartSec=5

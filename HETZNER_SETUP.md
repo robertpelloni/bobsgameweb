@@ -109,6 +109,9 @@ At minimum that directory should contain:
 - `ecosystem.config.cjs`
 - `ops/`
 
+For systemd-managed production runtime, the host-level environment file path is:
+- `/etc/bobsgameweb-server.env`
+
 ## 7. Install backend dependencies
 ```bash
 cd /opt/bobsgameweb/server
@@ -117,11 +120,13 @@ npm install --omit=dev
 
 ## 8. Systemd service + nginx site install
 If you want the helper path, use:
+- `scripts/install-backend-env.sh`
 - `scripts/install-backend-service.sh`
 
 Example:
 
 ```bash
+BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root ENV_ALLOWED_ORIGIN=https://bobsgame.com ./scripts/install-backend-env.sh
 BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/install-backend-service.sh
 ```
 
@@ -262,3 +267,4 @@ Then:
 ### CORS / connection refused
 - verify `ALLOWED_ORIGIN=https://bobsgame.com`
 - verify backend is listening on `127.0.0.1:6065` or expected host/port
+- verify `/etc/bobsgameweb-server.env` contains the intended values
