@@ -83,6 +83,7 @@ Then redeploy static assets to `bobsgame.com`.
   - `server/ops/systemd/bobsgameweb-server.service`
   - `server/ops/bootstrap-ubuntu.sh`
   - `scripts/deploy-backend-vps.sh`
+  - `scripts/provision-hetzner-backend.sh`
 
 ### PaaS / Railway / Render
 - set `HOST`, `PORT`, and `ALLOWED_ORIGIN`
