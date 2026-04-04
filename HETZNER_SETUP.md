@@ -245,6 +245,7 @@ Then:
 - test lobby creation / leaderboard / multiplayer handshake
 - run through `POST_DEPLOY_CHECKLIST.md`
 - run through `HARDENING_CHECKLIST.md`
+- take and store an initial backup using `BACKUP_RESTORE.md`
 - keep `BACKEND_RECOVERY.md` handy for rollback/recovery
 
 ## Troubleshooting
