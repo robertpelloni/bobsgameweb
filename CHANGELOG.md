@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.37] - 2026-04-05
+
+### Added
+- **Deeper Block Rule Editing:** `CustomGameEditor.ts` now exposes a focused second-pass block authoring set with special color, special chance/frequency, flashing special, match-any-color, and counter-type controls.
+
+### Changed
+- Expanded selected-block summary details so creators can see authored special behavior and spawning knobs at a glance.
+- Bumped project version to `2.1.37`.
+
+### Verified
+- `npm run build` passes successfully after the deeper block-rule editing changes.
+
 ## [2.1.36] - 2026-04-05
 
 ### Added

@@ -109,8 +109,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Fixed the Pixi v8 custom filter resource shape to use `UniformGroup`, addressing the surfaced CRT startup crash path.
 - Bumped the repo version again to `2.1.36`.
 
+## Additional Follow-Up - 2026-04-05 (Deeper Block Rule Editing)
+- Added a focused second-pass block authoring set with special color, special chance/frequency, flashing special, match-any-color, and counter-type controls.
+- Expanded selected-block summary details so authored special behavior is visible without reopening every control cluster.
+- Bumped the repo version again to `2.1.37`.
+
 ## Recommended Next Steps
-1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, and focused block controls there after the lock clears.
+1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, and deeper block-rule editing there after the lock clears.
 2. Add compact presets for classic rule families once editor state persistence is richer.
-3. Consider deeper block-rule editing (special block behaviors, extra colors, special colors) as a follow-up expansion.
+3. Consider further block-rule depth like extra colors, special piece conversion hooks, and chain-behavior flags.
 4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.
