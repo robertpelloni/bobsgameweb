@@ -91,6 +91,8 @@ export class GameType {
     public vsGarbageDropRule: VSGarbageDropRule = VSGarbageDropRule.FALL_FROM_CEILING_IN_EVEN_ROWS;
     public rotationType: RotationType = RotationType.SRS;
     public numberOfNextPiecesToShow: number = 3;
+    public nextPieceEnabled: boolean = true;
+    public holdPieceEnabled: boolean = true;
 
     public maxLockDelayTicks: number = 500;
     public gravityRule_ticksToMoveDownBlocksOverBlankSpaces: number = 100;
@@ -106,6 +108,14 @@ export class GameType {
     public chainRule_CheckTouchAnyColor: boolean = false;
 
     public playingFieldGarbageType: GarbageType = GarbageType.MATCH_BOTTOM_ROW;
+
+    public hardDropPunchThroughToLowestValidGridPosition: boolean = false;
+    public twoSpaceWallKickAllowed: boolean = true;
+    public diagonalWallKickAllowed: boolean = true;
+    public pieceClimbingAllowed: boolean = true;
+    public flip180Allowed: boolean = true;
+    public floorKickAllowed: boolean = true;
+    public currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty: boolean = false;
 
     public scoreType: ScoreType = ScoreType.LINES_CLEARED;
     public scoreTypeAmountPerLevelGained: number = 10;

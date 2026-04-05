@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.24] - 2026-04-05
+
+### Added
+- **Movement / Randomizer Toggles:** `CustomGameEditor.ts` now exposes next-piece, hold-piece, bag-randomizer, hard-drop punch-through, and multiple movement / kick toggles alongside the earlier gravity and chain controls.
+
+### Changed
+- The web editor summary now includes enabled movement/randomizer rules together with the earlier advanced rule set.
+- Bumped project version to `2.1.24`.
+
+### Verified
+- `npm run build` passes successfully after the movement/randomizer toggle changes.
+
 ## [2.1.23] - 2026-04-05
 
 ### Added
