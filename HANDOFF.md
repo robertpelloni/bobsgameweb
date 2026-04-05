@@ -1,0 +1,33 @@
+# Handoff - 2026-04-05
+
+## Scope
+Focused on the web-port custom puzzle editor as part of a broader 3-port parity pass.
+
+## What Changed
+- Enhanced `src/renderer/editor/CustomGameEditor.ts` with a live summary panel.
+- Added real-time reporting for:
+  - mode
+  - grid size
+  - gravity / lock delay
+  - chain / next-piece settings
+  - total piece count
+  - total rotation count
+  - total filled cells across all rotations
+  - current piece being edited
+  - encoded share payload length
+- Ensured the summary reflects the current draft form values by applying the form state before generating the summary and before saving.
+- Updated the piece editor header text so the selected piece name is visible during rotation editing.
+- Bumped the repo version to `2.1.18` and created a local `CHANGELOG.md` for future subrepo-level tracking.
+
+## Validation
+- `npm run build` ✅
+
+## Notes
+- This work was intentionally scoped to editor UX and feedback; it does not change server deployment behavior.
+- The version bump also updated frontend-visible version strings and backend version constants inside this repo for consistency.
+
+## Recommended Next Steps
+1. Add import/paste support for `#play=` links directly inside the editor UI.
+2. Add remove-piece / remove-rotation controls with guardrails.
+3. Add a small visual histogram or preview of total occupied cells per rotation.
+4. Consider exposing advanced rule toggles currently hidden behind raw `GameType` defaults.
