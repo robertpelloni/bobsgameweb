@@ -121,6 +121,14 @@ export class CustomGameEditor {
           <button id="btn-load-slot-3">Load Slot 3</button>
         </div>
       </div>
+      <div class="form-group">
+        <label>Quick Rule Presets</label>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <button id="btn-preset-classic">Classic Drop</button>
+          <button id="btn-preset-cascade">Cascade Puzzle</button>
+          <button id="btn-preset-stack">Stack Arcade</button>
+        </div>
+      </div>
       
       <div class="editor-tabs">
         <button class="tab-btn active" data-tab="settings">Settings</button>
@@ -296,6 +304,9 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-load-slot-2')?.addEventListener('click', () => this.loadPresetSlot(2));
     this.container.querySelector('#btn-save-slot-3')?.addEventListener('click', () => this.savePresetSlot(3));
     this.container.querySelector('#btn-load-slot-3')?.addEventListener('click', () => this.loadPresetSlot(3));
+    this.container.querySelector('#btn-preset-classic')?.addEventListener('click', () => this.applyPreset('classic'));
+    this.container.querySelector('#btn-preset-cascade')?.addEventListener('click', () => this.applyPreset('cascade'));
+    this.container.querySelector('#btn-preset-stack')?.addEventListener('click', () => this.applyPreset('stack'));
 
     [
       this.nameInput,
@@ -802,6 +813,83 @@ export class CustomGameEditor {
 
   private getPresetSlotKey(slot: number): string {
       return `custom-game-type-slot-${slot}`;
+  }
+
+  private applyPreset(preset: 'classic' | 'cascade' | 'stack'): void {
+      this.applyFormValuesToGameType();
+
+      switch (preset) {
+          case 'classic':
+              this.currentGameType.name = 'Classic Drop';
+              this.currentGameType.gameMode = GamePlayMode.DROP;
+              this.currentGameType.gridWidth = 10;
+              this.currentGameType.gridHeight = 20;
+              this.currentGameType.chainRule_AmountPerChain = 4;
+              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
+              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              this.currentGameType.chainRule_CheckRow = true;
+              this.currentGameType.chainRule_CheckColumn = false;
+              this.currentGameType.chainRule_CheckDiagonal = false;
+              this.currentGameType.chainRule_CheckRecursive = false;
+              this.currentGameType.nextPieceEnabled = true;
+              this.currentGameType.holdPieceEnabled = true;
+              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = true;
+              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
+              this.currentGameType.twoSpaceWallKickAllowed = true;
+              this.currentGameType.diagonalWallKickAllowed = true;
+              this.currentGameType.pieceClimbingAllowed = true;
+              this.currentGameType.flip180Allowed = true;
+              this.currentGameType.floorKickAllowed = true;
+              break;
+          case 'cascade':
+              this.currentGameType.name = 'Cascade Puzzle';
+              this.currentGameType.gameMode = GamePlayMode.DROP;
+              this.currentGameType.gridWidth = 8;
+              this.currentGameType.gridHeight = 16;
+              this.currentGameType.chainRule_AmountPerChain = 3;
+              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = true;
+              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = true;
+              this.currentGameType.chainRule_CheckRow = true;
+              this.currentGameType.chainRule_CheckColumn = true;
+              this.currentGameType.chainRule_CheckDiagonal = true;
+              this.currentGameType.chainRule_CheckRecursive = true;
+              this.currentGameType.nextPieceEnabled = true;
+              this.currentGameType.holdPieceEnabled = false;
+              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = false;
+              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
+              this.currentGameType.twoSpaceWallKickAllowed = false;
+              this.currentGameType.diagonalWallKickAllowed = false;
+              this.currentGameType.pieceClimbingAllowed = false;
+              this.currentGameType.flip180Allowed = false;
+              this.currentGameType.floorKickAllowed = false;
+              break;
+          case 'stack':
+              this.currentGameType.name = 'Stack Arcade';
+              this.currentGameType.gameMode = GamePlayMode.STACK;
+              this.currentGameType.gridWidth = 6;
+              this.currentGameType.gridHeight = 12;
+              this.currentGameType.chainRule_AmountPerChain = 3;
+              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
+              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              this.currentGameType.chainRule_CheckRow = true;
+              this.currentGameType.chainRule_CheckColumn = true;
+              this.currentGameType.chainRule_CheckDiagonal = false;
+              this.currentGameType.chainRule_CheckRecursive = false;
+              this.currentGameType.nextPieceEnabled = true;
+              this.currentGameType.holdPieceEnabled = false;
+              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = false;
+              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
+              this.currentGameType.twoSpaceWallKickAllowed = true;
+              this.currentGameType.diagonalWallKickAllowed = false;
+              this.currentGameType.pieceClimbingAllowed = false;
+              this.currentGameType.flip180Allowed = false;
+              this.currentGameType.floorKickAllowed = false;
+              break;
+      }
+
+      this.loadFromGameType();
+      this.selectPiece(0);
+      ToastManager.showInfo(`Applied preset: ${this.currentGameType.name}`);
   }
 
   private savePresetSlot(slot: number): void {

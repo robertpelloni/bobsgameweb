@@ -58,6 +58,10 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Added localStorage-backed preset slots to the web custom editor for quick save/load iteration.
 - Bumped the repo version again to `2.1.25`.
 
+## Additional Follow-Up - 2026-04-05 (Preset Shortcut Buttons)
+- Added one-click Classic Drop, Cascade Puzzle, and Stack Arcade preset buttons on top of the web preset-slot workflow.
+- Bumped the repo version again to `2.1.26`.
+
 ## Recommended Next Steps
 1. Add import history or recent-share history alongside the preset slots.
 2. If native becomes writable again, mirror the same rotation-overview and advanced-toggle UX there.
