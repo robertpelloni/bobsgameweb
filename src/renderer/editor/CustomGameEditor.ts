@@ -1,5 +1,6 @@
 import { GameType, BlockType, PieceType, GamePlayMode, networkManager } from '../puzzle';
 import { Rotation } from '../../shared/puzzle/Piece';
+import { BobColor } from '../../shared/BobColor';
 import { BobNet } from '../puzzle/BobNet';
 import { AchievementManager } from '../data/AchievementManager';
 import { getAchievementIdentity } from '../data/AchievementIdentity';
@@ -53,6 +54,12 @@ export class CustomGameEditor {
   
   private blockList!: HTMLSelectElement;
   private pieceList!: HTMLSelectElement;
+  private blockNameInput!: HTMLInputElement;
+  private blockColorInput!: HTMLInputElement;
+  private blockNormalCheckbox!: HTMLInputElement;
+  private blockGarbageCheckbox!: HTMLInputElement;
+  private blockFillerCheckbox!: HTMLInputElement;
+  private pieceBlockOverrideSelect!: HTMLSelectElement;
 
   private currentEditingRotation: number = 0;
   private recentActions: RecentEditorActionEntry[] = [];
@@ -244,7 +251,26 @@ export class CustomGameEditor {
               <button id="btn-remove-block">-</button>
             </div>
           </div>
-          <div id="block-details" class="item-details">Select a block</div>
+          <div id="block-details" class="item-details">
+            <div class="form-group">
+              <label>Block Name</label>
+              <input type="text" id="block-name">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Primary Color</label>
+                <input type="color" id="block-color" value="#808080">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Usage</label>
+              <div class="toggle-grid">
+                <label><input type="checkbox" id="block-use-normal"> Use in normal pieces</label>
+                <label><input type="checkbox" id="block-use-garbage"> Use as garbage</label>
+                <label><input type="checkbox" id="block-use-filler"> Use as filler</label>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -279,6 +305,14 @@ export class CustomGameEditor {
                 <!-- 4x4 grid -->
             </div>
             <p style="font-size:12px; color:#888; margin-top:10px;">Click grid to toggle blocks</p>
+            <div class="form-group" style="margin-top:12px;">
+              <label>Primary Block Override</label>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <select id="piece-block-override"></select>
+                <button id="btn-apply-piece-block">Apply Block</button>
+                <button id="btn-clear-piece-block">Clear Block</button>
+              </div>
+            </div>
             <div class="rotation-overview">
               <h5>Rotation Overview</h5>
               <div id="rotation-overview-list" class="rotation-overview-list"></div>
@@ -316,6 +350,12 @@ export class CustomGameEditor {
     this.floorKickCheckbox = this.container.querySelector('#toggle-floor-kick') as HTMLInputElement;
     this.blockList = this.container.querySelector('#block-list') as HTMLSelectElement;
     this.pieceList = this.container.querySelector('#piece-list') as HTMLSelectElement;
+    this.blockNameInput = this.container.querySelector('#block-name') as HTMLInputElement;
+    this.blockColorInput = this.container.querySelector('#block-color') as HTMLInputElement;
+    this.blockNormalCheckbox = this.container.querySelector('#block-use-normal') as HTMLInputElement;
+    this.blockGarbageCheckbox = this.container.querySelector('#block-use-garbage') as HTMLInputElement;
+    this.blockFillerCheckbox = this.container.querySelector('#block-use-filler') as HTMLInputElement;
+    this.pieceBlockOverrideSelect = this.container.querySelector('#piece-block-override') as HTMLSelectElement;
 
     this.setupEventListeners();
   }
@@ -389,9 +429,65 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-add-block')?.addEventListener('click', () => {
         const bt = new BlockType();
         bt.name = `Block ${this.currentGameType.blockTypes.length + 1}`;
+        bt.colors = [new BobColor(128, 128, 128)];
         this.currentGameType.blockTypes.push(bt);
         this.updateBlockList();
+        this.blockList.selectedIndex = this.currentGameType.blockTypes.length - 1;
+        this.updateBlockDetails();
         this.updateSummary();
+        this.pushRecentAction(`Added block: ${bt.name}`);
+    });
+
+    this.container.querySelector('#btn-remove-block')?.addEventListener('click', () => {
+        this.removeSelectedBlock();
+    });
+
+    this.blockList.addEventListener('change', () => {
+        this.updateBlockDetails();
+        this.syncPieceBlockOverrideControl();
+    });
+
+    this.blockNameInput.addEventListener('change', () => {
+        const block = this.getSelectedBlock();
+        if (!block) return;
+        block.name = this.blockNameInput.value;
+        this.updateBlockList();
+        this.syncPieceBlockOverrideControl();
+        this.updateSummary();
+        this.pushRecentAction(`Renamed block to ${block.name || 'Unnamed Block'}.`);
+    });
+
+    this.blockColorInput.addEventListener('change', () => {
+        const block = this.getSelectedBlock();
+        if (!block) return;
+        block.colors = [this.hexToBobColor(this.blockColorInput.value, block.colors[0])];
+        this.updateSummary();
+        this.pushRecentAction(`Updated block color for ${block.name || 'selected block'}.`);
+    });
+
+    [
+      this.blockNormalCheckbox,
+      this.blockGarbageCheckbox,
+      this.blockFillerCheckbox,
+    ].forEach((checkbox) => {
+      checkbox.addEventListener('change', () => {
+        const block = this.getSelectedBlock();
+        if (!block) return;
+        block.useInNormalPieces = this.blockNormalCheckbox.checked;
+        block.useAsGarbage = this.blockGarbageCheckbox.checked;
+        block.isGarbageBlockType = this.blockGarbageCheckbox.checked;
+        block.useAsPlayingFieldFiller = this.blockFillerCheckbox.checked;
+        this.updateSummary();
+        this.pushRecentAction(`Updated usage flags for ${block.name || 'selected block'}.`);
+      });
+    });
+
+    this.container.querySelector('#btn-apply-piece-block')?.addEventListener('click', () => {
+        this.applySelectedBlockToPiece();
+    });
+
+    this.container.querySelector('#btn-clear-piece-block')?.addEventListener('click', () => {
+        this.clearSelectedPieceBlockOverride();
     });
 
     this.container.querySelector('#btn-add-piece')?.addEventListener('click', () => {
@@ -469,6 +565,7 @@ export class CustomGameEditor {
     this.pieceList.addEventListener('change', () => {
         this.currentEditingRotation = 0;
         this.renderPieceShapeEditor();
+        this.syncPieceBlockOverrideControl();
         this.updateSummary();
     });
   }
@@ -568,6 +665,7 @@ export class CustomGameEditor {
   }
 
   private updateBlockList() {
+    const previousValue = this.blockList.value;
     this.blockList.innerHTML = '';
     this.currentGameType.blockTypes.forEach(bt => {
       const option = document.createElement('option');
@@ -575,6 +673,148 @@ export class CustomGameEditor {
       option.textContent = bt.name || 'Unnamed Block';
       this.blockList.appendChild(option);
     });
+    if (this.currentGameType.blockTypes.length === 0) {
+      this.blockList.selectedIndex = -1;
+    } else if (previousValue) {
+      const restoredIndex = this.currentGameType.blockTypes.findIndex((bt) => bt.uuid === previousValue);
+      this.blockList.selectedIndex = restoredIndex >= 0 ? restoredIndex : Math.min(this.blockList.selectedIndex, this.currentGameType.blockTypes.length - 1);
+      if (this.blockList.selectedIndex < 0) this.blockList.selectedIndex = 0;
+    } else if (this.blockList.selectedIndex < 0) {
+      this.blockList.selectedIndex = 0;
+    }
+    this.updateBlockDetails();
+    this.syncPieceBlockOverrideControl();
+  }
+
+  private getSelectedBlock(): BlockType | null {
+    const blockIndex = this.blockList.selectedIndex;
+    return blockIndex >= 0 ? this.currentGameType.blockTypes[blockIndex] ?? null : null;
+  }
+
+  private bobColorToHex(color: BobColor | null | undefined): string {
+    const fallback = '#808080';
+    if (!color) return fallback;
+    const toHex = (value: number) => value.toString(16).padStart(2, '0');
+    return `#${toHex(color.r)}${toHex(color.g)}${toHex(color.b)}`;
+  }
+
+  private hexToBobColor(hex: string, fallback?: BobColor | null): BobColor {
+    const normalized = hex.replace('#', '').trim();
+    if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
+      return fallback?.clone() ?? new BobColor(128, 128, 128);
+    }
+    return new BobColor(
+      parseInt(normalized.slice(0, 2), 16),
+      parseInt(normalized.slice(2, 4), 16),
+      parseInt(normalized.slice(4, 6), 16),
+    );
+  }
+
+  private updateBlockDetails(): void {
+    const block = this.getSelectedBlock();
+    const disabled = !block;
+    this.blockNameInput.disabled = disabled;
+    this.blockColorInput.disabled = disabled;
+    this.blockNormalCheckbox.disabled = disabled;
+    this.blockGarbageCheckbox.disabled = disabled;
+    this.blockFillerCheckbox.disabled = disabled;
+
+    if (!block) {
+      this.blockNameInput.value = '';
+      this.blockColorInput.value = '#808080';
+      this.blockNormalCheckbox.checked = false;
+      this.blockGarbageCheckbox.checked = false;
+      this.blockFillerCheckbox.checked = false;
+      return;
+    }
+
+    this.blockNameInput.value = block.name || 'Unnamed Block';
+    this.blockColorInput.value = this.bobColorToHex(block.colors[0] ?? block.specialColor);
+    this.blockNormalCheckbox.checked = block.useInNormalPieces;
+    this.blockGarbageCheckbox.checked = block.useAsGarbage || block.isGarbageBlockType;
+    this.blockFillerCheckbox.checked = block.useAsPlayingFieldFiller;
+  }
+
+  private syncPieceBlockOverrideControl(): void {
+    if (!this.pieceBlockOverrideSelect) return;
+    const selectedPiece = this.currentGameType.pieceTypes[this.pieceList.selectedIndex] ?? null;
+    const currentOverride = selectedPiece?.overrideBlockTypes_UUID?.[0] ?? '';
+    this.pieceBlockOverrideSelect.innerHTML = '<option value="">Use random/default block pool</option>';
+    this.currentGameType.blockTypes.forEach((block) => {
+      const option = document.createElement('option');
+      option.value = block.uuid;
+      option.textContent = block.name || 'Unnamed Block';
+      this.pieceBlockOverrideSelect.appendChild(option);
+    });
+    this.pieceBlockOverrideSelect.value = currentOverride;
+    this.pieceBlockOverrideSelect.disabled = this.pieceList.selectedIndex === -1;
+  }
+
+  private removeSelectedBlock(): void {
+    const block = this.getSelectedBlock();
+    if (!block) {
+      ToastManager.showInfo('Select a block to remove.');
+      return;
+    }
+
+    const confirmed = window.confirm(`Remove block "${block.name || 'Unnamed Block'}"? Any piece overrides using it will be cleared.`);
+    if (!confirmed) {
+      ToastManager.showInfo('Block removal cancelled.');
+      return;
+    }
+
+    const removedUuid = block.uuid;
+    const removedName = block.name || 'Unnamed Block';
+    this.currentGameType.blockTypes = this.currentGameType.blockTypes.filter((candidate) => candidate.uuid !== removedUuid);
+    this.currentGameType.pieceTypes.forEach((piece) => {
+      piece.overrideBlockTypes_UUID = piece.overrideBlockTypes_UUID.filter((uuid) => uuid !== removedUuid);
+    });
+    this.updateBlockList();
+    this.updateSummary();
+    this.pushRecentAction(`Removed block: ${removedName}`);
+    ToastManager.showInfo(`Removed block: ${removedName}`);
+  }
+
+  private applySelectedBlockToPiece(): void {
+    const selectedPiece = this.currentGameType.pieceTypes[this.pieceList.selectedIndex] ?? null;
+    if (!selectedPiece) {
+      ToastManager.showInfo('Select a piece first.');
+      return;
+    }
+
+    const blockUuid = this.pieceBlockOverrideSelect.value;
+    if (!blockUuid) {
+      selectedPiece.overrideBlockTypes_UUID = [];
+      this.updateSummary();
+      this.pushRecentAction(`Cleared block override for ${selectedPiece.name || 'selected piece'}.`);
+      ToastManager.showInfo('Cleared piece block override.');
+      return;
+    }
+
+    const block = this.currentGameType.blockTypes.find((candidate) => candidate.uuid === blockUuid);
+    if (!block) {
+      ToastManager.showInfo('Selected block is no longer available.');
+      return;
+    }
+
+    selectedPiece.overrideBlockTypes_UUID = [block.uuid];
+    this.syncPieceBlockOverrideControl();
+    this.updateSummary();
+    this.pushRecentAction(`Assigned block ${block.name || 'selected block'} to ${selectedPiece.name || 'selected piece'}.`);
+    ToastManager.showInfo(`Assigned block override: ${block.name || 'selected block'}.`);
+  }
+
+  private clearSelectedPieceBlockOverride(): void {
+    const selectedPiece = this.currentGameType.pieceTypes[this.pieceList.selectedIndex] ?? null;
+    if (!selectedPiece) {
+      ToastManager.showInfo('Select a piece first.');
+      return;
+    }
+    selectedPiece.overrideBlockTypes_UUID = [];
+    this.syncPieceBlockOverrideControl();
+    this.updateSummary();
+    this.pushRecentAction(`Cleared block override for ${selectedPiece.name || 'selected piece'}.`);
+    ToastManager.showInfo('Cleared piece block override.');
   }
 
   private updatePieceList() {
@@ -606,6 +846,7 @@ export class CustomGameEditor {
     this.pieceList.selectedIndex = clampedIndex;
     this.currentEditingRotation = 0;
     this.renderPieceShapeEditor();
+    this.syncPieceBlockOverrideControl();
     this.updateSummary();
   }
 
@@ -1105,6 +1346,9 @@ export class CustomGameEditor {
     const selectedRotation = selectedPiece && selectedRotationCount > 0 ? selectedPiece.rotationSet.get(this.currentEditingRotation) : null;
     const analytics = this.getSelectedPieceAnalytics();
     const symmetry = this.getRotationSymmetry(selectedRotation);
+    const selectedBlockOverride = selectedPiece?.overrideBlockTypes_UUID?.[0]
+      ? this.currentGameType.blockTypes.find((block) => block.uuid === selectedPiece.overrideBlockTypes_UUID[0])?.name || 'custom block override'
+      : 'default/random pool';
 
     this.summaryPanel.innerHTML = `
       <h3>Rules Summary</h3>
@@ -1116,6 +1360,7 @@ export class CustomGameEditor {
         <li><span class="summary-highlight">Pieces:</span> ${pieceCount} total, ${rotationCount} rotations, ${filledCells} filled cells</li>
         <li><span class="summary-highlight">Blocks:</span> ${blockCount} configured block types</li>
         <li><span class="summary-highlight">Editing:</span> ${selectedPieceName} (${selectedRotationCount} rotations)</li>
+        <li><span class="summary-highlight">Piece block override:</span> ${selectedBlockOverride}</li>
         <li><span class="summary-highlight">Current rotation:</span> ${this.getRotationBlockCount(selectedRotation)} blocks in a ${this.getRotationBoundingBox(selectedRotation)} box</li>
         <li><span class="summary-highlight">Current symmetry:</span> ${symmetry}</li>
         <li><span class="summary-highlight">Rotation uniqueness:</span> ${analytics.uniqueRotations} unique / ${analytics.duplicateRotations} duplicate</li>

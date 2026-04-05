@@ -1,4 +1,4 @@
-import { Filter, GlProgram } from 'pixi.js';
+import { Filter, GlProgram, UniformGroup } from 'pixi.js';
 
 export const CRT_VERTEX = `
     attribute vec2 aVertexPosition;
@@ -36,9 +36,11 @@ export const CRT_FRAGMENT = `
 export class PostProcessing {
     public static createCRTFilter(): Filter {
         return new Filter({
-            glProgram: GlProgram.from({ vertex: CRT_VERTEX, fragment: CRT_FRAGMENT }),
+            glProgram: GlProgram.from({ vertex: CRT_VERTEX, fragment: CRT_FRAGMENT, name: 'crt-filter' }),
             resources: {
-                uTime: { value: 0, type: 'f32' }
+                timeUniforms: new UniformGroup({
+                    uTime: { value: 0, type: 'f32' },
+                }),
             }
         });
     }
