@@ -114,8 +114,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded selected-block summary details so authored special behavior is visible without reopening every control cluster.
 - Bumped the repo version again to `2.1.37`.
 
+## Additional Follow-Up - 2026-04-05 (Richer Block Color Set Editing)
+- Added clickable block palette swatches plus add/remove palette color controls so creators can author multi-color block sets directly in the editor.
+- Reused the existing primary color control as the editor for the currently selected palette swatch to keep the richer color workflow compact.
+- Bumped the repo version again to `2.1.38`.
+
 ## Recommended Next Steps
-1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, and deeper block-rule editing there after the lock clears.
+1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, and richer block color-set editing there after the lock clears.
 2. Add compact presets for classic rule families once editor state persistence is richer.
-3. Consider further block-rule depth like extra colors, special piece conversion hooks, and chain-behavior flags.
+3. Consider further block-rule depth like special piece conversion hooks and chain-behavior flags.
 4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.

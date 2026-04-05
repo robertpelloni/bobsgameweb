@@ -59,6 +59,7 @@ export class CustomGameEditor {
   private blockSpecialColorInput!: HTMLInputElement;
   private blockSpecialChanceInput!: HTMLInputElement;
   private blockSpecialFrequencyInput!: HTMLInputElement;
+  private blockPaletteList!: HTMLDivElement;
   private blockNormalCheckbox!: HTMLInputElement;
   private blockGarbageCheckbox!: HTMLInputElement;
   private blockFillerCheckbox!: HTMLInputElement;
@@ -68,6 +69,7 @@ export class CustomGameEditor {
   private pieceBlockOverrideSelect!: HTMLSelectElement;
 
   private currentEditingRotation: number = 0;
+  private currentBlockPaletteIndex: number = 0;
   private recentActions: RecentEditorActionEntry[] = [];
 
   constructor(parentElementId: string) {
@@ -128,6 +130,10 @@ export class CustomGameEditor {
         .rotation-mini-cell { width: 10px; height: 10px; background: #0f0f0f; border: 1px solid #252525; }
         .rotation-mini-cell.filled { background: #00ff88; border-color: #00cc6e; }
         .recent-history-panel, .recent-actions-panel { margin-top: 16px; background: #151515; border: 1px solid #333; border-radius: 6px; padding: 12px; }
+        .block-palette-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+        .block-palette-list { display:flex; gap:6px; flex-wrap:wrap; }
+        .block-palette-swatch { width:24px; height:24px; border-radius:6px; border:2px solid #444; cursor:pointer; padding:0; }
+        .block-palette-swatch.active { border-color:#fff; box-shadow:0 0 0 1px #00ff88; }
         .recent-history-panel h3, .recent-actions-panel h3 { margin: 0 0 8px 0; color: #9ed0ff; }
         .recent-history-empty, .recent-actions-empty { color: #888; font-size: 13px; }
         .recent-history-entry, .recent-action-entry { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #1b1b1b; border: 1px solid #2f2f2f; border-radius: 6px; padding: 8px; margin-top: 8px; }
@@ -283,6 +289,14 @@ export class CustomGameEditor {
               </div>
             </div>
             <div class="form-group">
+              <label>Color Palette</label>
+              <div class="block-palette-row">
+                <div id="block-color-palette" class="block-palette-list"></div>
+                <button id="btn-add-block-color">Add Color</button>
+                <button id="btn-remove-block-color">Remove Color</button>
+              </div>
+            </div>
+            <div class="form-group">
               <label>Usage</label>
               <div class="toggle-grid">
                 <label><input type="checkbox" id="block-use-normal"> Use in normal pieces</label>
@@ -378,6 +392,7 @@ export class CustomGameEditor {
     this.blockSpecialColorInput = this.container.querySelector('#block-special-color') as HTMLInputElement;
     this.blockSpecialChanceInput = this.container.querySelector('#block-special-chance') as HTMLInputElement;
     this.blockSpecialFrequencyInput = this.container.querySelector('#block-special-frequency') as HTMLInputElement;
+    this.blockPaletteList = this.container.querySelector('#block-color-palette') as HTMLDivElement;
     this.blockNormalCheckbox = this.container.querySelector('#block-use-normal') as HTMLInputElement;
     this.blockGarbageCheckbox = this.container.querySelector('#block-use-garbage') as HTMLInputElement;
     this.blockFillerCheckbox = this.container.querySelector('#block-use-filler') as HTMLInputElement;
@@ -489,9 +504,12 @@ export class CustomGameEditor {
     this.blockColorInput.addEventListener('change', () => {
         const block = this.getSelectedBlock();
         if (!block) return;
-        block.colors = [this.hexToBobColor(this.blockColorInput.value, block.colors[0])];
+        const nextColor = this.hexToBobColor(this.blockColorInput.value, block.colors[this.currentBlockPaletteIndex] ?? block.colors[0]);
+        if (block.colors.length === 0) block.colors = [nextColor];
+        else block.colors[this.currentBlockPaletteIndex] = nextColor;
+        this.updateBlockDetails();
         this.updateSummary();
-        this.pushRecentAction(`Updated block color for ${block.name || 'selected block'}.`);
+        this.pushRecentAction(`Updated block palette color for ${block.name || 'selected block'}.`);
     });
 
     this.blockSpecialColorInput.addEventListener('change', () => {
@@ -511,6 +529,46 @@ export class CustomGameEditor {
         this.updateSummary();
         this.pushRecentAction(`Updated special spawning rules for ${block.name || 'selected block'}.`);
       });
+    });
+
+    this.blockPaletteList.addEventListener('click', (event) => {
+      const target = (event.target as HTMLElement).closest('button[data-palette-index]') as HTMLButtonElement | null;
+      if (!target) return;
+      const index = Number(target.dataset.paletteIndex);
+      if (Number.isNaN(index)) return;
+      this.currentBlockPaletteIndex = index;
+      this.updateBlockDetails();
+    });
+
+    this.container.querySelector('#btn-add-block-color')?.addEventListener('click', () => {
+      const block = this.getSelectedBlock();
+      if (!block) {
+        ToastManager.showInfo('Select a block first.');
+        return;
+      }
+      const sourceColor = block.colors[this.currentBlockPaletteIndex] ?? block.colors[0] ?? new BobColor(128, 128, 128);
+      block.colors.push(sourceColor.clone());
+      this.currentBlockPaletteIndex = block.colors.length - 1;
+      this.updateBlockDetails();
+      this.updateSummary();
+      this.pushRecentAction(`Added palette color to ${block.name || 'selected block'}.`);
+    });
+
+    this.container.querySelector('#btn-remove-block-color')?.addEventListener('click', () => {
+      const block = this.getSelectedBlock();
+      if (!block) {
+        ToastManager.showInfo('Select a block first.');
+        return;
+      }
+      if (block.colors.length <= 1) {
+        ToastManager.showInfo('A block needs at least one palette color.');
+        return;
+      }
+      block.colors.splice(this.currentBlockPaletteIndex, 1);
+      this.currentBlockPaletteIndex = Math.max(0, Math.min(this.currentBlockPaletteIndex, block.colors.length - 1));
+      this.updateBlockDetails();
+      this.updateSummary();
+      this.pushRecentAction(`Removed palette color from ${block.name || 'selected block'}.`);
     });
 
     [
@@ -791,11 +849,18 @@ export class CustomGameEditor {
       this.blockFlashingCheckbox.checked = false;
       this.blockMatchAnyColorCheckbox.checked = false;
       this.blockCounterCheckbox.checked = false;
+      this.blockPaletteList.innerHTML = '';
+      this.currentBlockPaletteIndex = 0;
       return;
     }
 
+    if (!block.colors || block.colors.length === 0) {
+      block.colors = [new BobColor(128, 128, 128)];
+    }
+    this.currentBlockPaletteIndex = Math.max(0, Math.min(this.currentBlockPaletteIndex, block.colors.length - 1));
+
     this.blockNameInput.value = block.name || 'Unnamed Block';
-    this.blockColorInput.value = this.bobColorToHex(block.colors[0] ?? block.specialColor);
+    this.blockColorInput.value = this.bobColorToHex(block.colors[this.currentBlockPaletteIndex] ?? block.colors[0] ?? block.specialColor);
     this.blockSpecialColorInput.value = this.bobColorToHex(block.specialColor ?? block.colors[0] ?? null);
     this.blockSpecialChanceInput.value = String(block.randomSpecialBlockChanceOneOutOf || 0);
     this.blockSpecialFrequencyInput.value = String(block.frequencySpecialBlockTypeOnceEveryNPieces || 0);
@@ -805,6 +870,10 @@ export class CustomGameEditor {
     this.blockFlashingCheckbox.checked = block.flashingSpecialType;
     this.blockMatchAnyColorCheckbox.checked = block.matchAnyColor;
     this.blockCounterCheckbox.checked = block.counterType;
+    this.blockPaletteList.innerHTML = block.colors.map((color, index) => {
+      const activeClass = index === this.currentBlockPaletteIndex ? ' active' : '';
+      return `<button type="button" class="block-palette-swatch${activeClass}" data-palette-index="${index}" style="background:${this.bobColorToHex(color)}" title="Palette color ${index + 1}"></button>`;
+    }).join('');
   }
 
   private syncPieceBlockOverrideControl(): void {

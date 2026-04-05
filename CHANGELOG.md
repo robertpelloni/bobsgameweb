@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.38] - 2026-04-05
+
+### Added
+- **Richer Block Color Set Editing:** `CustomGameEditor.ts` now supports clickable block palette swatches plus add/remove palette color controls, letting creators author multi-color block sets directly in the editor.
+
+### Changed
+- Reused the existing primary color control as the editor for the currently selected palette swatch, keeping the richer palette workflow compact instead of exploding the form.
+- Bumped project version to `2.1.38`.
+
+### Verified
+- `npm run build` passes successfully after the richer block color-set editing changes.
+
 ## [2.1.37] - 2026-04-05
 
 ### Added
