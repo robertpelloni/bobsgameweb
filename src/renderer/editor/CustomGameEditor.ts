@@ -25,6 +25,15 @@ export class CustomGameEditor {
   private chainColumnCheckbox!: HTMLInputElement;
   private chainDiagonalCheckbox!: HTMLInputElement;
   private recursiveChainCheckbox!: HTMLInputElement;
+  private nextPieceEnabledCheckbox!: HTMLInputElement;
+  private holdPieceEnabledCheckbox!: HTMLInputElement;
+  private bagRandomizerCheckbox!: HTMLInputElement;
+  private hardDropPunchCheckbox!: HTMLInputElement;
+  private twoSpaceWallKickCheckbox!: HTMLInputElement;
+  private diagonalWallKickCheckbox!: HTMLInputElement;
+  private pieceClimbingCheckbox!: HTMLInputElement;
+  private flip180Checkbox!: HTMLInputElement;
+  private floorKickCheckbox!: HTMLInputElement;
   
   private blockList!: HTMLSelectElement;
   private pieceList!: HTMLSelectElement;
@@ -161,6 +170,20 @@ export class CustomGameEditor {
             <label><input type="checkbox" id="toggle-chain-recursive"> Recursive chain search</label>
           </div>
         </div>
+        <div class="form-group">
+          <label>Movement / Randomizer Toggles</label>
+          <div class="toggle-grid">
+            <label><input type="checkbox" id="toggle-next-piece-enabled"> Show next pieces</label>
+            <label><input type="checkbox" id="toggle-hold-piece-enabled"> Enable hold piece</label>
+            <label><input type="checkbox" id="toggle-bag-randomizer"> Use bag randomizer</label>
+            <label><input type="checkbox" id="toggle-hard-drop-punch"> Hard drop punch-through</label>
+            <label><input type="checkbox" id="toggle-two-space-kick"> Two-space wall kick</label>
+            <label><input type="checkbox" id="toggle-diagonal-kick"> Diagonal wall kick</label>
+            <label><input type="checkbox" id="toggle-piece-climbing"> Piece climbing</label>
+            <label><input type="checkbox" id="toggle-flip180"> Allow 180 flip</label>
+            <label><input type="checkbox" id="toggle-floor-kick"> Allow floor kick</label>
+          </div>
+        </div>
         <div id="rules-summary" class="summary-panel"></div>
       </div>
       
@@ -227,6 +250,15 @@ export class CustomGameEditor {
     this.chainColumnCheckbox = this.container.querySelector('#toggle-chain-column') as HTMLInputElement;
     this.chainDiagonalCheckbox = this.container.querySelector('#toggle-chain-diagonal') as HTMLInputElement;
     this.recursiveChainCheckbox = this.container.querySelector('#toggle-chain-recursive') as HTMLInputElement;
+    this.nextPieceEnabledCheckbox = this.container.querySelector('#toggle-next-piece-enabled') as HTMLInputElement;
+    this.holdPieceEnabledCheckbox = this.container.querySelector('#toggle-hold-piece-enabled') as HTMLInputElement;
+    this.bagRandomizerCheckbox = this.container.querySelector('#toggle-bag-randomizer') as HTMLInputElement;
+    this.hardDropPunchCheckbox = this.container.querySelector('#toggle-hard-drop-punch') as HTMLInputElement;
+    this.twoSpaceWallKickCheckbox = this.container.querySelector('#toggle-two-space-kick') as HTMLInputElement;
+    this.diagonalWallKickCheckbox = this.container.querySelector('#toggle-diagonal-kick') as HTMLInputElement;
+    this.pieceClimbingCheckbox = this.container.querySelector('#toggle-piece-climbing') as HTMLInputElement;
+    this.flip180Checkbox = this.container.querySelector('#toggle-flip180') as HTMLInputElement;
+    this.floorKickCheckbox = this.container.querySelector('#toggle-floor-kick') as HTMLInputElement;
     this.blockList = this.container.querySelector('#block-list') as HTMLSelectElement;
     this.pieceList = this.container.querySelector('#piece-list') as HTMLSelectElement;
 
@@ -263,6 +295,15 @@ export class CustomGameEditor {
       this.chainColumnCheckbox,
       this.chainDiagonalCheckbox,
       this.recursiveChainCheckbox,
+      this.nextPieceEnabledCheckbox,
+      this.holdPieceEnabledCheckbox,
+      this.bagRandomizerCheckbox,
+      this.hardDropPunchCheckbox,
+      this.twoSpaceWallKickCheckbox,
+      this.diagonalWallKickCheckbox,
+      this.pieceClimbingCheckbox,
+      this.flip180Checkbox,
+      this.floorKickCheckbox,
     ].forEach((input) => {
       input.addEventListener('input', () => this.updateSummary());
       input.addEventListener('change', () => this.updateSummary());
@@ -406,6 +447,15 @@ export class CustomGameEditor {
     this.chainColumnCheckbox.checked = this.currentGameType.chainRule_CheckColumn;
     this.chainDiagonalCheckbox.checked = this.currentGameType.chainRule_CheckDiagonal;
     this.recursiveChainCheckbox.checked = this.currentGameType.chainRule_CheckRecursive;
+    this.nextPieceEnabledCheckbox.checked = this.currentGameType.nextPieceEnabled;
+    this.holdPieceEnabledCheckbox.checked = this.currentGameType.holdPieceEnabled;
+    this.bagRandomizerCheckbox.checked = this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty;
+    this.hardDropPunchCheckbox.checked = this.currentGameType.hardDropPunchThroughToLowestValidGridPosition;
+    this.twoSpaceWallKickCheckbox.checked = this.currentGameType.twoSpaceWallKickAllowed;
+    this.diagonalWallKickCheckbox.checked = this.currentGameType.diagonalWallKickAllowed;
+    this.pieceClimbingCheckbox.checked = this.currentGameType.pieceClimbingAllowed;
+    this.flip180Checkbox.checked = this.currentGameType.flip180Allowed;
+    this.floorKickCheckbox.checked = this.currentGameType.floorKickAllowed;
     
     this.updateBlockList();
     this.updatePieceList();
@@ -653,6 +703,15 @@ export class CustomGameEditor {
     if (this.currentGameType.chainRule_CheckColumn) labels.push('column chains');
     if (this.currentGameType.chainRule_CheckDiagonal) labels.push('diagonal chains');
     if (this.currentGameType.chainRule_CheckRecursive) labels.push('recursive search');
+    if (this.currentGameType.nextPieceEnabled) labels.push('next preview');
+    if (this.currentGameType.holdPieceEnabled) labels.push('hold piece');
+    if (this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty) labels.push('bag randomizer');
+    if (this.currentGameType.hardDropPunchThroughToLowestValidGridPosition) labels.push('hard-drop punch');
+    if (this.currentGameType.twoSpaceWallKickAllowed) labels.push('two-space kick');
+    if (this.currentGameType.diagonalWallKickAllowed) labels.push('diagonal kick');
+    if (this.currentGameType.pieceClimbingAllowed) labels.push('piece climbing');
+    if (this.currentGameType.flip180Allowed) labels.push('180 flip');
+    if (this.currentGameType.floorKickAllowed) labels.push('floor kick');
     return labels;
   }
 
@@ -702,6 +761,15 @@ export class CustomGameEditor {
     this.currentGameType.chainRule_CheckColumn = this.chainColumnCheckbox.checked;
     this.currentGameType.chainRule_CheckDiagonal = this.chainDiagonalCheckbox.checked;
     this.currentGameType.chainRule_CheckRecursive = this.recursiveChainCheckbox.checked;
+    this.currentGameType.nextPieceEnabled = this.nextPieceEnabledCheckbox.checked;
+    this.currentGameType.holdPieceEnabled = this.holdPieceEnabledCheckbox.checked;
+    this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = this.bagRandomizerCheckbox.checked;
+    this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = this.hardDropPunchCheckbox.checked;
+    this.currentGameType.twoSpaceWallKickAllowed = this.twoSpaceWallKickCheckbox.checked;
+    this.currentGameType.diagonalWallKickAllowed = this.diagonalWallKickCheckbox.checked;
+    this.currentGameType.pieceClimbingAllowed = this.pieceClimbingCheckbox.checked;
+    this.currentGameType.flip180Allowed = this.flip180Checkbox.checked;
+    this.currentGameType.floorKickAllowed = this.floorKickCheckbox.checked;
   }
 
   private save() {

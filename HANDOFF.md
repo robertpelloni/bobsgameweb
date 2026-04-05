@@ -49,8 +49,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded the summary to report enabled advanced rules directly.
 - Bumped the repo version again to `2.1.23`.
 
+## Additional Follow-Up - 2026-04-05 (Movement / Randomizer Toggles)
+- Added next-piece, hold-piece, bag-randomizer, hard-drop punch-through, and movement/kick toggles to the web custom editor.
+- Expanded the summary so those enabled movement/randomizer rules are visible immediately.
+- Bumped the repo version again to `2.1.24`.
+
 ## Recommended Next Steps
 1. Add named preset slots or import history for quick editor iteration.
 2. If native becomes writable again, mirror the same rotation-overview and advanced-toggle UX there.
 3. Consider richer per-rotation analytics like bounding-box size or symmetry hints.
-4. Add more advanced rule categories like bag/randomizer and wall-kick options when the editor surface is ready.
+4. Add compact presets for classic rule families once editor state persistence is richer.
