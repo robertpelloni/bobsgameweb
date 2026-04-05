@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.20] - 2026-04-05
+
+### Changed
+- **Safer Deletes:** Piece and rotation removals in `CustomGameEditor.ts` now require explicit confirmation before destructive edits are applied.
+- Bumped project version to `2.1.20`.
+
+### Verified
+- `npm run build` passes successfully after the delete-confirmation changes.
+
 ## [2.1.19] - 2026-04-05
 
 ### Added

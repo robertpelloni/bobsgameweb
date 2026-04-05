@@ -32,8 +32,12 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - The editor now handles empty-piece and empty-rotation states more gracefully after destructive edits.
 - Bumped the repo version again to `2.1.19`.
 
+## Additional Follow-Up - 2026-04-05 (Delete Confirmations)
+- Added confirmation prompts before removing a piece or rotation in the web custom editor.
+- Bumped the repo version again to `2.1.20`.
+
 ## Recommended Next Steps
 1. Add a small visual histogram or preview of total occupied cells per rotation.
 2. Consider exposing advanced rule toggles currently hidden behind raw `GameType` defaults.
 3. Add named preset slots or import history for quick editor iteration.
-4. Add confirmation prompts for destructive delete actions if user testing shows accidental removals.
+4. If native becomes writable again, mirror the same confirmation UX there.
