@@ -18,6 +18,7 @@ export class CustomGameEditor {
   private lockDelayInput!: HTMLInputElement;
   private chainAmountInput!: HTMLInputElement;
   private nextPiecesInput!: HTMLInputElement;
+  private summaryPanel!: HTMLDivElement;
   
   private blockList!: HTMLSelectElement;
   private pieceList!: HTMLSelectElement;
@@ -62,6 +63,11 @@ export class CustomGameEditor {
         .editor-columns { display: flex; gap: 20px; }
         .item-list { flex: 1; }
         .item-details { flex: 1; background: #222; padding: 10px; border-radius: 4px; }
+        .summary-panel { margin-top: 16px; background: #151515; border: 1px solid #333; border-radius: 6px; padding: 12px; }
+        .summary-panel h3 { margin: 0 0 8px 0; color: #7cff7c; }
+        .summary-panel ul { margin: 0; padding-left: 18px; color: #bbb; }
+        .summary-panel li { margin-bottom: 4px; }
+        .summary-highlight { color: #fff; }
         button { cursor: pointer; }
       </style>
 
@@ -124,6 +130,7 @@ export class CustomGameEditor {
                 <input type="number" id="next-pieces" min="0" max="6">
             </div>
         </div>
+        <div id="rules-summary" class="summary-panel"></div>
       </div>
       
       <div class="tab-content hidden" id="tab-blocks">
@@ -175,6 +182,7 @@ export class CustomGameEditor {
     this.lockDelayInput = this.container.querySelector('#lock-delay') as HTMLInputElement;
     this.chainAmountInput = this.container.querySelector('#chain-amount') as HTMLInputElement;
     this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
+    this.summaryPanel = this.container.querySelector('#rules-summary') as HTMLDivElement;
     this.blockList = this.container.querySelector('#block-list') as HTMLSelectElement;
     this.pieceList = this.container.querySelector('#piece-list') as HTMLSelectElement;
 
@@ -194,29 +202,50 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-test')?.addEventListener('click', () => this.testGame());
     this.container.querySelector('#btn-load')?.addEventListener('click', () => this.load());
     this.container.querySelector('#btn-new')?.addEventListener('click', () => this.createNew());
+
+    [
+      this.nameInput,
+      this.modeSelect,
+      this.gridWidthInput,
+      this.gridHeightInput,
+      this.gravityInput,
+      this.lockDelayInput,
+      this.chainAmountInput,
+      this.nextPiecesInput,
+    ].forEach((input) => {
+      input.addEventListener('input', () => this.updateSummary());
+      input.addEventListener('change', () => this.updateSummary());
+    });
     
     this.container.querySelector('#btn-add-block')?.addEventListener('click', () => {
         const bt = new BlockType();
-        bt.name = "New Block";
+        bt.name = `Block ${this.currentGameType.blockTypes.length + 1}`;
         this.currentGameType.blockTypes.push(bt);
         this.updateBlockList();
+        this.updateSummary();
     });
 
     this.container.querySelector('#btn-add-piece')?.addEventListener('click', () => {
         const pt = new PieceType();
-        pt.name = "New Piece";
+        pt.name = `Piece ${this.currentGameType.pieceTypes.length + 1}`;
         this.currentGameType.pieceTypes.push(pt);
         this.updatePieceList();
+        this.pieceList.selectedIndex = this.currentGameType.pieceTypes.length - 1;
+        this.currentEditingRotation = 0;
+        this.renderPieceShapeEditor();
+        this.updateSummary();
     });
 
     this.container.querySelector('#btn-next-rot')?.addEventListener('click', () => {
         this.currentEditingRotation++;
         this.renderPieceShapeEditor();
+        this.updateSummary();
     });
 
     this.container.querySelector('#btn-prev-rot')?.addEventListener('click', () => {
         this.currentEditingRotation = Math.max(0, this.currentEditingRotation - 1);
         this.renderPieceShapeEditor();
+        this.updateSummary();
     });
 
     this.container.querySelector('#btn-add-rot')?.addEventListener('click', () => {
@@ -226,11 +255,13 @@ export class CustomGameEditor {
         pt.rotationSet.add(new Rotation());
         this.currentEditingRotation = pt.rotationSet.size() - 1;
         this.renderPieceShapeEditor();
+        this.updateSummary();
     });
 
     this.pieceList.addEventListener('change', () => {
         this.currentEditingRotation = 0;
         this.renderPieceShapeEditor();
+        this.updateSummary();
     });
   }
 
@@ -239,13 +270,22 @@ export class CustomGameEditor {
       if (ptIndex === -1) return;
       
       const pt = this.currentGameType.pieceTypes[ptIndex];
+      const grid = this.container.querySelector('#piece-shape-editor')!;
+      const pieceNameDisplay = this.container.querySelector('#piece-name-display');
+      if (pieceNameDisplay) {
+          pieceNameDisplay.textContent = pt.name || `Piece ${ptIndex + 1}`;
+      }
+      grid.innerHTML = '';
       const maxRot = pt.rotationSet.size();
+      if (maxRot <= 0) {
+          this.container.querySelector('#rot-label')!.textContent = 'Rotation: none';
+          grid.innerHTML = '<div style="grid-column: span 4; color:#888;">Add a rotation to start editing this piece.</div>';
+          this.updateSummary();
+          return;
+      }
       this.currentEditingRotation = ((this.currentEditingRotation % maxRot) + maxRot) % maxRot;
       
       this.container.querySelector('#rot-label')!.textContent = `Rotation: ${this.currentEditingRotation}`;
-      
-      const grid = this.container.querySelector('#piece-shape-editor')!;
-      grid.innerHTML = '';
       
       const rotation = pt.rotationSet.get(this.currentEditingRotation);
       
@@ -266,6 +306,7 @@ export class CustomGameEditor {
                       rotation.blockOffsets.push({ x, y });
                   }
                   this.renderPieceShapeEditor();
+                  this.updateSummary();
               };
               grid.appendChild(cell);
           }
@@ -293,6 +334,7 @@ export class CustomGameEditor {
     
     this.updateBlockList();
     this.updatePieceList();
+    this.updateSummary();
   }
 
   private updateBlockList() {
@@ -313,9 +355,53 @@ export class CustomGameEditor {
       option.textContent = pt.name || 'Unnamed Piece';
       this.pieceList.appendChild(option);
     });
+    this.updateSummary();
   }
 
-  private save() {
+  private getTotalRotationCount(): number {
+    return this.currentGameType.pieceTypes.reduce((sum, pt) => sum + pt.rotationSet.size(), 0);
+  }
+
+  private getTotalFilledCellCount(): number {
+    let total = 0;
+    this.currentGameType.pieceTypes.forEach((pt) => {
+      for (let i = 0; i < pt.rotationSet.size(); i++) {
+        total += pt.rotationSet.get(i).blockOffsets.length;
+      }
+    });
+    return total;
+  }
+
+  private updateSummary(): void {
+    if (!this.summaryPanel) return;
+
+    this.applyFormValuesToGameType();
+
+    const pieceCount = this.currentGameType.pieceTypes.length;
+    const blockCount = this.currentGameType.blockTypes.length;
+    const rotationCount = this.getTotalRotationCount();
+    const filledCells = this.getTotalFilledCellCount();
+    const selectedPiece = this.currentGameType.pieceTypes[this.pieceList.selectedIndex] ?? null;
+    const selectedRotationCount = selectedPiece ? selectedPiece.rotationSet.size() : 0;
+    const selectedPieceName = selectedPiece?.name || 'None selected';
+    const sharePayload = BobNet.toBase64GZippedGSON(this.currentGameType);
+
+    this.summaryPanel.innerHTML = `
+      <h3>Rules Summary</h3>
+      <ul>
+        <li><span class="summary-highlight">Mode:</span> ${this.modeSelect.value || this.currentGameType.gameMode}</li>
+        <li><span class="summary-highlight">Grid:</span> ${this.gridWidthInput.value || this.currentGameType.gridWidth} × ${this.gridHeightInput.value || this.currentGameType.gridHeight}</li>
+        <li><span class="summary-highlight">Gravity / Lock:</span> ${this.gravityInput.value || this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces} / ${this.lockDelayInput.value || this.currentGameType.maxLockDelayTicks}</li>
+        <li><span class="summary-highlight">Chain / Next:</span> ${this.chainAmountInput.value || this.currentGameType.chainRule_AmountPerChain} / ${this.nextPiecesInput.value || this.currentGameType.numberOfNextPiecesToShow}</li>
+        <li><span class="summary-highlight">Pieces:</span> ${pieceCount} total, ${rotationCount} rotations, ${filledCells} filled cells</li>
+        <li><span class="summary-highlight">Blocks:</span> ${blockCount} configured block types</li>
+        <li><span class="summary-highlight">Editing:</span> ${selectedPieceName} (${selectedRotationCount} rotations)</li>
+        <li><span class="summary-highlight">Share payload:</span> ${sharePayload.length} encoded chars</li>
+      </ul>
+    `;
+  }
+
+  private applyFormValuesToGameType(): void {
     this.currentGameType.name = this.nameInput.value;
     this.currentGameType.gameMode = this.modeSelect.value as GamePlayMode;
     this.currentGameType.gridWidth = parseInt(this.gridWidthInput.value);
@@ -324,11 +410,16 @@ export class CustomGameEditor {
     this.currentGameType.maxLockDelayTicks = parseInt(this.lockDelayInput.value);
     this.currentGameType.chainRule_AmountPerChain = parseInt(this.chainAmountInput.value);
     this.currentGameType.numberOfNextPiecesToShow = parseInt(this.nextPiecesInput.value);
+  }
+
+  private save() {
+    this.applyFormValuesToGameType();
     
     // Save to local storage for now
     localStorage.setItem('custom-game-type', JSON.stringify(this.currentGameType));
     AchievementManager.incrementStat('customGamesCreated');
     this.saveAchievementSnapshot();
+    this.updateSummary();
     ToastManager.showInfo('Custom game saved to local browser storage.');
   }
 
@@ -349,6 +440,7 @@ export class CustomGameEditor {
   private createNew() {
     this.currentGameType = new GameType();
     this.loadFromGameType();
+    this.updateSummary();
   }
 
   private testGame() {
