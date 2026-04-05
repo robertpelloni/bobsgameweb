@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.34] - 2026-04-05
+
+### Added
+- **Center-All Helper:** `CustomGameEditor.ts` now provides a one-click helper to center every rotation in the selected piece, making full-set layout cleanup faster after import, duplication, and normalize-all passes.
+
+### Changed
+- Reused a shared centering helper so single-rotation and full-set centering follow the same geometry logic.
+- Bumped project version to `2.1.34`.
+
+### Verified
+- `npm run build` passes successfully after the center-all helper changes.
+
 ## [2.1.33] - 2026-04-05
 
 ### Added

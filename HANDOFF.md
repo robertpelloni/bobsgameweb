@@ -93,8 +93,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Escaped imported names before rendering the history UI to avoid turning share metadata into injected markup.
 - Bumped the repo version again to `2.1.33`.
 
+## Additional Follow-Up - 2026-04-05 (Center-All Helper)
+- Added a one-click helper to center every rotation in the selected piece.
+- Reused the same centering logic for both single-rotation and full-set centering to keep geometry behavior consistent.
+- Bumped the repo version again to `2.1.34`.
+
 ## Recommended Next Steps
-1. If native becomes writable again, mirror the same recent-history workflow there after the lock clears.
-2. Consider further shape intelligence like center-all helpers.
-3. Add compact presets for classic rule families once editor state persistence is richer.
-4. Consider lightweight action history / undo breadcrumbs for editor experimentation.
+1. If native becomes writable again, mirror the same recent-history workflow and center-all helper there after the lock clears.
+2. Add compact presets for classic rule families once editor state persistence is richer.
+3. Consider lightweight action history / undo breadcrumbs for editor experimentation.
+4. Consider block-type/color controls as the next broader authoring-capability step.
