@@ -14,6 +14,11 @@ type RecentGameHistoryEntry = {
   timestamp: number;
 };
 
+type RecentEditorActionEntry = {
+  label: string;
+  timestamp: number;
+};
+
 export class CustomGameEditor {
   private container: HTMLElement;
   private currentGameType: GameType;
@@ -29,6 +34,7 @@ export class CustomGameEditor {
   private nextPiecesInput!: HTMLInputElement;
   private summaryPanel!: HTMLDivElement;
   private recentHistoryPanel!: HTMLDivElement;
+  private recentActionsPanel!: HTMLDivElement;
   private cascadeGravityCheckbox!: HTMLInputElement;
   private disconnectedGravityCheckbox!: HTMLInputElement;
   private chainRowCheckbox!: HTMLInputElement;
@@ -49,6 +55,7 @@ export class CustomGameEditor {
   private pieceList!: HTMLSelectElement;
 
   private currentEditingRotation: number = 0;
+  private recentActions: RecentEditorActionEntry[] = [];
 
   constructor(parentElementId: string) {
     const parent = document.getElementById(parentElementId);
@@ -107,13 +114,13 @@ export class CustomGameEditor {
         .rotation-mini-grid { display: grid; grid-template-columns: repeat(4, 10px); gap: 1px; }
         .rotation-mini-cell { width: 10px; height: 10px; background: #0f0f0f; border: 1px solid #252525; }
         .rotation-mini-cell.filled { background: #00ff88; border-color: #00cc6e; }
-        .recent-history-panel { margin-top: 16px; background: #151515; border: 1px solid #333; border-radius: 6px; padding: 12px; }
-        .recent-history-panel h3 { margin: 0 0 8px 0; color: #9ed0ff; }
-        .recent-history-empty { color: #888; font-size: 13px; }
-        .recent-history-entry { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #1b1b1b; border: 1px solid #2f2f2f; border-radius: 6px; padding: 8px; margin-top: 8px; }
-        .recent-history-meta { display: flex; flex-direction: column; gap: 4px; }
-        .recent-history-title { color: #fff; font-size: 13px; }
-        .recent-history-details { color: #9a9a9a; font-size: 11px; }
+        .recent-history-panel, .recent-actions-panel { margin-top: 16px; background: #151515; border: 1px solid #333; border-radius: 6px; padding: 12px; }
+        .recent-history-panel h3, .recent-actions-panel h3 { margin: 0 0 8px 0; color: #9ed0ff; }
+        .recent-history-empty, .recent-actions-empty { color: #888; font-size: 13px; }
+        .recent-history-entry, .recent-action-entry { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #1b1b1b; border: 1px solid #2f2f2f; border-radius: 6px; padding: 8px; margin-top: 8px; }
+        .recent-history-meta, .recent-action-meta { display: flex; flex-direction: column; gap: 4px; }
+        .recent-history-title, .recent-action-title { color: #fff; font-size: 13px; }
+        .recent-history-details, .recent-action-details { color: #9a9a9a; font-size: 11px; }
         .recent-history-actions { display: flex; gap: 6px; flex-wrap: wrap; }
         button { cursor: pointer; }
       </style>
@@ -149,6 +156,7 @@ export class CustomGameEditor {
         </div>
       </div>
       <div id="recent-history" class="recent-history-panel"></div>
+      <div id="recent-actions" class="recent-actions-panel"></div>
       
       <div class="editor-tabs">
         <button class="tab-btn active" data-tab="settings">Settings</button>
@@ -290,6 +298,7 @@ export class CustomGameEditor {
     this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
     this.summaryPanel = this.container.querySelector('#rules-summary') as HTMLDivElement;
     this.recentHistoryPanel = this.container.querySelector('#recent-history') as HTMLDivElement;
+    this.recentActionsPanel = this.container.querySelector('#recent-actions') as HTMLDivElement;
     this.cascadeGravityCheckbox = this.container.querySelector('#toggle-cascade-gravity') as HTMLInputElement;
     this.disconnectedGravityCheckbox = this.container.querySelector('#toggle-disconnected-gravity') as HTMLInputElement;
     this.chainRowCheckbox = this.container.querySelector('#toggle-chain-row') as HTMLInputElement;
@@ -391,6 +400,7 @@ export class CustomGameEditor {
         this.currentGameType.pieceTypes.push(pt);
         this.updatePieceList();
         this.selectPiece(this.currentGameType.pieceTypes.length - 1);
+        this.pushRecentAction(`Added piece: ${pt.name}`);
     });
 
     this.container.querySelector('#btn-duplicate-piece')?.addEventListener('click', () => {
@@ -421,6 +431,7 @@ export class CustomGameEditor {
         this.currentEditingRotation = pt.rotationSet.size() - 1;
         this.renderPieceShapeEditor();
         this.updateSummary();
+        this.pushRecentAction(`Added rotation ${this.currentEditingRotation} to ${pt.name || 'selected piece'}.`);
     });
 
     this.container.querySelector('#btn-duplicate-rot')?.addEventListener('click', () => {
@@ -553,6 +564,7 @@ export class CustomGameEditor {
     this.updatePieceList();
     this.updateSummary();
     this.renderRecentHistory();
+    this.renderRecentActions();
   }
 
   private updateBlockList() {
@@ -643,6 +655,7 @@ export class CustomGameEditor {
     this.currentGameType.pieceTypes.splice(ptIndex + 1, 0, duplicated);
     this.updatePieceList();
     this.selectPiece(ptIndex + 1);
+    this.pushRecentAction(`Duplicated piece: ${duplicated.name}`);
     ToastManager.showInfo(`Duplicated piece: ${duplicated.name}`);
   }
 
@@ -663,6 +676,7 @@ export class CustomGameEditor {
     const removed = this.currentGameType.pieceTypes.splice(ptIndex, 1)[0];
     this.updatePieceList();
     this.selectPiece(Math.min(ptIndex, this.currentGameType.pieceTypes.length - 1));
+    this.pushRecentAction(`Removed piece: ${removed?.name || 'Unnamed Piece'}`);
     ToastManager.showInfo(`Removed piece: ${removed?.name || 'Unnamed Piece'}`);
   }
 
@@ -684,6 +698,7 @@ export class CustomGameEditor {
     this.currentEditingRotation += 1;
     this.renderPieceShapeEditor();
     this.updateSummary();
+    this.pushRecentAction(`Duplicated rotation for ${pt.name || 'selected piece'}.`);
     ToastManager.showInfo(`Duplicated rotation for ${pt.name || 'selected piece'}.`);
   }
 
@@ -705,6 +720,7 @@ export class CustomGameEditor {
     rotation.blockOffsets = rotation.blockOffsets.map((offset) => ({ x: offset.x - minX, y: offset.y - minY }));
     this.renderPieceShapeEditor();
     this.updateSummary();
+    this.pushRecentAction('Normalized the current rotation.');
     ToastManager.showInfo('Normalized current rotation to top-left origin.');
   }
 
@@ -724,6 +740,7 @@ export class CustomGameEditor {
     this.centerRotation(rotation);
     this.renderPieceShapeEditor();
     this.updateSummary();
+    this.pushRecentAction('Centered the current rotation.');
     ToastManager.showInfo('Centered current rotation inside the 4×4 editor grid.');
   }
 
@@ -748,6 +765,7 @@ export class CustomGameEditor {
 
     this.renderPieceShapeEditor();
     this.updateSummary();
+    this.pushRecentAction(`Centered all rotations for ${pt.name || 'selected piece'}.`);
     ToastManager.showInfo(`Centered all rotations for ${pt.name || 'selected piece'}.`);
   }
 
@@ -774,6 +792,7 @@ export class CustomGameEditor {
 
     this.renderPieceShapeEditor();
     this.updateSummary();
+    this.pushRecentAction(`Normalized all rotations for ${pt.name || 'selected piece'}.`);
     ToastManager.showInfo(`Normalized all rotations for ${pt.name || 'selected piece'}.`);
   }
 
@@ -824,6 +843,7 @@ export class CustomGameEditor {
     this.currentEditingRotation = Math.min(this.currentEditingRotation, Math.max(0, pt.rotationSet.size() - 1));
     this.renderPieceShapeEditor();
     this.updateSummary();
+    this.pushRecentAction(`Cleared ${duplicateIndices.length} duplicate rotation(s).`);
     ToastManager.showInfo(`Removed ${duplicateIndices.length} duplicate rotation(s).`);
   }
 
@@ -862,6 +882,7 @@ export class CustomGameEditor {
     this.currentEditingRotation = Math.min(this.currentEditingRotation, Math.max(0, pt.rotationSet.size() - 1));
     this.renderPieceShapeEditor();
     this.updateSummary();
+    this.pushRecentAction(`Cleared ${emptyIndices.length} empty rotation(s).`);
     ToastManager.showInfo(`Removed ${emptyIndices.length} empty rotation(s).`);
   }
 
@@ -892,6 +913,7 @@ export class CustomGameEditor {
     }
     this.renderPieceShapeEditor();
     this.updateSummary();
+    this.pushRecentAction(`Removed a rotation from ${pt.name || 'selected piece'}.`);
     ToastManager.showInfo(`Removed rotation from ${pt.name || 'selected piece'}.`);
   }
 
@@ -1137,6 +1159,7 @@ export class CustomGameEditor {
     AchievementManager.incrementStat('customGamesCreated');
     this.saveAchievementSnapshot();
     this.updateSummary();
+    this.pushRecentAction('Saved the current ruleset to browser storage.');
     ToastManager.showInfo('Custom game saved to local browser storage.');
   }
 
@@ -1218,12 +1241,14 @@ export class CustomGameEditor {
 
       this.loadFromGameType();
       this.selectPiece(0);
+      this.pushRecentAction(`Applied preset: ${this.currentGameType.name}`);
       ToastManager.showInfo(`Applied preset: ${this.currentGameType.name}`);
   }
 
   private savePresetSlot(slot: number): void {
       this.applyFormValuesToGameType();
       localStorage.setItem(this.getPresetSlotKey(slot), JSON.stringify(this.currentGameType));
+      this.pushRecentAction(`Saved the current ruleset to preset slot ${slot}.`);
       ToastManager.showInfo(`Saved current ruleset to preset slot ${slot}.`);
   }
 
@@ -1245,6 +1270,37 @@ export class CustomGameEditor {
 
   private saveRecentHistory(entries: RecentGameHistoryEntry[]): void {
       localStorage.setItem(this.getRecentHistoryKey(), JSON.stringify(entries.slice(0, 5)));
+  }
+
+  private pushRecentAction(label: string): void {
+      this.recentActions = [{ label, timestamp: Date.now() }, ...this.recentActions].slice(0, 8);
+      this.renderRecentActions();
+  }
+
+  private renderRecentActions(): void {
+      if (!this.recentActionsPanel) return;
+      if (this.recentActions.length === 0) {
+          this.recentActionsPanel.innerHTML = `
+            <h3>Recent Actions</h3>
+            <div class="recent-actions-empty">No recent editor actions yet.</div>
+          `;
+          return;
+      }
+
+      const rows = this.recentActions.map((entry) => {
+          const safeLabel = this.escapeHistoryText(entry.label);
+          const when = new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          return `
+            <div class="recent-action-entry">
+              <div class="recent-action-meta">
+                <div class="recent-action-title">${safeLabel}</div>
+                <div class="recent-action-details">${when}</div>
+              </div>
+            </div>
+          `;
+      }).join('');
+
+      this.recentActionsPanel.innerHTML = `<h3>Recent Actions</h3>${rows}`;
   }
 
   private escapeHistoryText(value: string): string {
@@ -1345,6 +1401,7 @@ export class CustomGameEditor {
           this.currentGameType = GameType.fromJSON(data);
           this.loadFromGameType();
           this.selectPiece(0);
+          this.pushRecentAction(`Loaded preset slot ${slot}.`);
           ToastManager.showInfo(`Loaded preset slot ${slot}.`);
       } catch (e) {
           console.error(e);
@@ -1359,6 +1416,7 @@ export class CustomGameEditor {
           this.currentGameType = GameType.fromJSON(data);
           this.loadFromGameType();
           this.selectPiece(0);
+          this.pushRecentAction('Loaded the saved browser ruleset.');
           alert('Game type loaded!');
       } catch (e) {
           console.error(e);
@@ -1382,6 +1440,7 @@ export class CustomGameEditor {
           this.loadFromGameType();
           this.selectPiece(0);
           this.pushRecentHistoryEntry('import', payload, this.currentGameType);
+          this.pushRecentAction(`Imported shared ruleset: ${this.currentGameType.name || 'Imported Ruleset'}.`);
           ToastManager.showInfo('Imported shared game configuration.');
       } catch (e) {
           console.error(e);
@@ -1394,6 +1453,7 @@ export class CustomGameEditor {
     this.loadFromGameType();
     this.selectPiece(0);
     this.updateSummary();
+    this.pushRecentAction('Started a new custom ruleset.');
   }
 
   private testGame() {
@@ -1408,6 +1468,7 @@ export class CustomGameEditor {
       const b64 = BobNet.toBase64GZippedGSON(this.currentGameType);
       const url = `${window.location.origin}${window.location.pathname}#play=${b64}`;
       this.pushRecentHistoryEntry('share', b64, this.currentGameType);
+      this.pushRecentAction(`Generated a share link for ${this.currentGameType.name || 'current ruleset'}.`);
       navigator.clipboard.writeText(url).then(() => {
           AchievementManager.incrementStat('gamesShared');
           this.saveAchievementSnapshot();

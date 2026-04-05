@@ -98,8 +98,14 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Reused the same centering logic for both single-rotation and full-set centering to keep geometry behavior consistent.
 - Bumped the repo version again to `2.1.34`.
 
+## Additional Follow-Up - 2026-04-05 (Recent Action Breadcrumbs)
+- Added a bounded recent-action panel that tracks meaningful authoring operations like presets, imports, shares, geometry helpers, and cleanup actions.
+- Intentionally left noisy navigation clicks out of the breadcrumb feed so it behaves like useful workflow memory instead of spam.
+- Positioned this as lightweight undo-adjacent guidance rather than a fake full undo system.
+- Bumped the repo version again to `2.1.35`.
+
 ## Recommended Next Steps
-1. If native becomes writable again, mirror the same recent-history workflow and center-all helper there after the lock clears.
+1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, and action breadcrumbs there after the lock clears.
 2. Add compact presets for classic rule families once editor state persistence is richer.
-3. Consider lightweight action history / undo breadcrumbs for editor experimentation.
-4. Consider block-type/color controls as the next broader authoring-capability step.
+3. Consider block-type/color controls as the next broader authoring-capability step.
+4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.
