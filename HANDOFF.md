@@ -26,8 +26,14 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - This work was intentionally scoped to editor UX and feedback; it does not change server deployment behavior.
 - The version bump also updated frontend-visible version strings and backend version constants inside this repo for consistency.
 
+## Additional Follow-Up - 2026-04-05
+- Added `Import` support for full shared URLs and raw `#play=` payloads.
+- Added remove-piece and remove-rotation controls with selection recovery.
+- The editor now handles empty-piece and empty-rotation states more gracefully after destructive edits.
+- Bumped the repo version again to `2.1.19`.
+
 ## Recommended Next Steps
-1. Add import/paste support for `#play=` links directly inside the editor UI.
-2. Add remove-piece / remove-rotation controls with guardrails.
-3. Add a small visual histogram or preview of total occupied cells per rotation.
-4. Consider exposing advanced rule toggles currently hidden behind raw `GameType` defaults.
+1. Add a small visual histogram or preview of total occupied cells per rotation.
+2. Consider exposing advanced rule toggles currently hidden behind raw `GameType` defaults.
+3. Add named preset slots or import history for quick editor iteration.
+4. Add confirmation prompts for destructive delete actions if user testing shows accidental removals.

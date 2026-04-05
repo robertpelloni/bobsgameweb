@@ -76,6 +76,7 @@ export class CustomGameEditor {
         <div>
             <button id="btn-new">New</button>
             <button id="btn-load">Load</button>
+            <button id="btn-import">Import</button>
             <button id="btn-save" style="background:#004400; color:#fff; border:none; padding:5px 15px; border-radius:4px;">Save</button>
             <button id="btn-share" style="background:#004488; color:#fff; border:none; padding:5px 15px; border-radius:4px; margin-left: 10px;">Share</button>
             <button id="btn-test" style="background:#cc6600; color:#fff; border:none; padding:5px 15px; border-radius:4px; margin-left: 10px;">Test Game</button>
@@ -159,11 +160,12 @@ export class CustomGameEditor {
           </div>
           <div id="piece-details" class="item-details">
             <h4 id="piece-name-display">Select a piece</h4>
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap: wrap; align-items:center;">
                 <button id="btn-prev-rot"> < </button>
                 <span id="rot-label">Rotation: 0</span>
                 <button id="btn-next-rot"> > </button>
                 <button id="btn-add-rot">+ ROT</button>
+                <button id="btn-remove-rot">- ROT</button>
             </div>
             <div id="piece-shape-editor" style="display:grid; grid-template-columns: repeat(4, 30px); gap: 2px; margin-top:10px;">
                 <!-- 4x4 grid -->
@@ -201,6 +203,7 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-share')?.addEventListener('click', () => this.shareGame());
     this.container.querySelector('#btn-test')?.addEventListener('click', () => this.testGame());
     this.container.querySelector('#btn-load')?.addEventListener('click', () => this.load());
+    this.container.querySelector('#btn-import')?.addEventListener('click', () => this.importSharedGame());
     this.container.querySelector('#btn-new')?.addEventListener('click', () => this.createNew());
 
     [
@@ -230,10 +233,11 @@ export class CustomGameEditor {
         pt.name = `Piece ${this.currentGameType.pieceTypes.length + 1}`;
         this.currentGameType.pieceTypes.push(pt);
         this.updatePieceList();
-        this.pieceList.selectedIndex = this.currentGameType.pieceTypes.length - 1;
-        this.currentEditingRotation = 0;
-        this.renderPieceShapeEditor();
-        this.updateSummary();
+        this.selectPiece(this.currentGameType.pieceTypes.length - 1);
+    });
+
+    this.container.querySelector('#btn-remove-piece')?.addEventListener('click', () => {
+        this.removeSelectedPiece();
     });
 
     this.container.querySelector('#btn-next-rot')?.addEventListener('click', () => {
@@ -256,6 +260,10 @@ export class CustomGameEditor {
         this.currentEditingRotation = pt.rotationSet.size() - 1;
         this.renderPieceShapeEditor();
         this.updateSummary();
+    });
+
+    this.container.querySelector('#btn-remove-rot')?.addEventListener('click', () => {
+        this.removeSelectedRotation();
     });
 
     this.pieceList.addEventListener('change', () => {
@@ -358,6 +366,64 @@ export class CustomGameEditor {
     this.updateSummary();
   }
 
+  private selectPiece(index: number): void {
+    if (this.currentGameType.pieceTypes.length === 0) {
+      this.pieceList.selectedIndex = -1;
+      this.currentEditingRotation = 0;
+      const pieceNameDisplay = this.container.querySelector('#piece-name-display');
+      if (pieceNameDisplay) pieceNameDisplay.textContent = 'Select a piece';
+      const grid = this.container.querySelector('#piece-shape-editor');
+      if (grid) grid.innerHTML = '<div style="grid-column: span 4; color:#888;">Add a piece to start editing.</div>';
+      const rotLabel = this.container.querySelector('#rot-label');
+      if (rotLabel) rotLabel.textContent = 'Rotation: none';
+      this.updateSummary();
+      return;
+    }
+
+    const clampedIndex = Math.max(0, Math.min(index, this.currentGameType.pieceTypes.length - 1));
+    this.pieceList.selectedIndex = clampedIndex;
+    this.currentEditingRotation = 0;
+    this.renderPieceShapeEditor();
+    this.updateSummary();
+  }
+
+  private removeSelectedPiece(): void {
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      ToastManager.showInfo('Select a piece to remove.');
+      return;
+    }
+
+    const removed = this.currentGameType.pieceTypes.splice(ptIndex, 1)[0];
+    this.updatePieceList();
+    this.selectPiece(Math.min(ptIndex, this.currentGameType.pieceTypes.length - 1));
+    ToastManager.showInfo(`Removed piece: ${removed?.name || 'Unnamed Piece'}`);
+  }
+
+  private removeSelectedRotation(): void {
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      ToastManager.showInfo('Select a piece first.');
+      return;
+    }
+
+    const pt = this.currentGameType.pieceTypes[ptIndex];
+    if (pt.rotationSet.size() === 0) {
+      ToastManager.showInfo('No rotations to remove.');
+      return;
+    }
+
+    pt.rotationSet.rotations.splice(this.currentEditingRotation, 1);
+    if (pt.rotationSet.size() === 0) {
+      this.currentEditingRotation = 0;
+    } else {
+      this.currentEditingRotation = Math.min(this.currentEditingRotation, pt.rotationSet.size() - 1);
+    }
+    this.renderPieceShapeEditor();
+    this.updateSummary();
+    ToastManager.showInfo(`Removed rotation from ${pt.name || 'selected piece'}.`);
+  }
+
   private getTotalRotationCount(): number {
     return this.currentGameType.pieceTypes.reduce((sum, pt) => sum + pt.rotationSet.size(), 0);
   }
@@ -429,6 +495,7 @@ export class CustomGameEditor {
       try {
           this.currentGameType = GameType.fromJSON(data);
           this.loadFromGameType();
+          this.selectPiece(0);
           alert('Game type loaded!');
       } catch (e) {
           console.error(e);
@@ -437,9 +504,31 @@ export class CustomGameEditor {
     }
   }
 
+  private importSharedGame(): void {
+      const input = prompt('Paste a full share URL or raw #play payload:');
+      if (!input) return;
+
+      const trimmed = input.trim();
+      const playIndex = trimmed.indexOf('#play=');
+      const payload = playIndex >= 0 ? trimmed.substring(playIndex + 6) : trimmed;
+
+      try {
+          const decoded = BobNet.fromBase64GZippedGSON(payload);
+          if (!decoded) throw new Error('Decoded payload was empty.');
+          this.currentGameType = GameType.fromJSON(JSON.stringify(decoded));
+          this.loadFromGameType();
+          this.selectPiece(0);
+          ToastManager.showInfo('Imported shared game configuration.');
+      } catch (e) {
+          console.error(e);
+          alert('Failed to import shared game configuration.');
+      }
+  }
+
   private createNew() {
     this.currentGameType = new GameType();
     this.loadFromGameType();
+    this.selectPiece(0);
     this.updateSummary();
   }
 
