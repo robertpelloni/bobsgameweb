@@ -37,9 +37,14 @@ BACKEND_URL=https://ws.bobsgame.com ./scripts/rebuild-for-backend.sh
 BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/rebuild-for-backend.sh
 ```
 
-## Full frontend cutover
+## Full frontend cutover (DreamHost static)
 ```bash
 BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/cutover-production.sh
+```
+
+## Upload static frontend to Hetzner
+```bash
+FRONTEND_HOST=5.161.250.43 FRONTEND_USER=root FRONTEND_BUILD=1 BACKEND_URL=https://ws.bobsgame.com ./scripts/deploy-frontend-hetzner.sh
 ```
 
 ## Quick frontend verification after cutover
@@ -109,3 +114,4 @@ BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-postgres-hetzner.sh
 - `MYSQL_MIGRATION.md`
 - `POSTGRES_SHARED_SERVICES.md`
 - `HETZNER_UNIFIED_STACK_STATUS.md`
+- `HETZNER_SETUP.md` (now also relevant for `bobsgame.com` static hosting on Hetzner)

@@ -14,6 +14,8 @@ Use this after backend deployment or production cutover.
 ## Frontend (`bobsgame.com`)
 - [ ] web build used `VITE_SERVER_URL=https://ws.bobsgame.com`
 - [ ] static deploy completed successfully
+- [ ] `bobsgame.com` resolves to the intended host (DreamHost or Hetzner)
+- [ ] TLS certificate served for `bobsgame.com` matches the hostname
 - [ ] browser loads new assets without 404s
 - [ ] network panel shows requests to `https://ws.bobsgame.com`
 - [ ] main menu loads and version string matches the intended release
