@@ -244,6 +244,7 @@ export class CustomGameEditor {
                 <button id="btn-center-rot">Center ROT</button>
                 <button id="btn-normalize-all-rot">Normalize All</button>
                 <button id="btn-remove-dup-rot">Clear Duplicates</button>
+                <button id="btn-remove-empty-rot">Clear Empty</button>
                 <button id="btn-remove-rot">- ROT</button>
             </div>
             <div id="piece-shape-editor" style="display:grid; grid-template-columns: repeat(4, 30px); gap: 2px; margin-top:10px;">
@@ -406,6 +407,10 @@ export class CustomGameEditor {
 
     this.container.querySelector('#btn-remove-dup-rot')?.addEventListener('click', () => {
         this.removeDuplicateRotations();
+    });
+
+    this.container.querySelector('#btn-remove-empty-rot')?.addEventListener('click', () => {
+        this.removeEmptyRotations();
     });
 
     this.container.querySelector('#btn-remove-rot')?.addEventListener('click', () => {
@@ -753,6 +758,44 @@ export class CustomGameEditor {
     this.renderPieceShapeEditor();
     this.updateSummary();
     ToastManager.showInfo(`Removed ${duplicateIndices.length} duplicate rotation(s).`);
+  }
+
+  private removeEmptyRotations(): void {
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      ToastManager.showInfo('Select a piece first.');
+      return;
+    }
+
+    const pt = this.currentGameType.pieceTypes[ptIndex];
+    const emptyIndices = pt.rotationSet.rotations
+      .map((rotation, index) => ({ rotation, index }))
+      .filter(({ rotation }) => rotation.blockOffsets.length === 0)
+      .map(({ index }) => index)
+      .sort((a, b) => b - a);
+
+    if (emptyIndices.length === 0) {
+      ToastManager.showInfo('No empty rotations to remove.');
+      return;
+    }
+
+    const confirmed = window.confirm(`Remove ${emptyIndices.length} empty rotation(s) from "${pt.name || 'selected piece'}"?`);
+    if (!confirmed) {
+      ToastManager.showInfo('Empty-rotation cleanup cancelled.');
+      return;
+    }
+
+    emptyIndices.forEach((index) => {
+      pt.rotationSet.rotations.splice(index, 1);
+      if (this.currentEditingRotation >= index && this.currentEditingRotation > 0) {
+        this.currentEditingRotation -= 1;
+      }
+    });
+
+    this.currentEditingRotation = Math.min(this.currentEditingRotation, Math.max(0, pt.rotationSet.size() - 1));
+    this.renderPieceShapeEditor();
+    this.updateSummary();
+    ToastManager.showInfo(`Removed ${emptyIndices.length} empty rotation(s).`);
   }
 
   private removeSelectedRotation(): void {

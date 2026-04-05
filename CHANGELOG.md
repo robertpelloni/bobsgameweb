@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.32] - 2026-04-05
+
+### Added
+- **Empty Rotation Cleanup:** `CustomGameEditor.ts` now provides a one-click helper to remove empty rotations after confirmation, making cleanup easier after experimentation and duplication.
+
+### Changed
+- Bumped project version to `2.1.32`.
+
+### Verified
+- `npm run build` passes successfully after the empty-rotation cleanup changes.
+
 ## [2.1.31] - 2026-04-05
 
 ### Added
