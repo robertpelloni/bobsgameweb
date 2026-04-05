@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.35] - 2026-04-05
+
+### Added
+- **Recent Action Breadcrumbs:** `CustomGameEditor.ts` now shows a bounded recent-action panel that tracks meaningful authoring operations like presets, imports, shares, piece/rotation edits, and cleanup helpers.
+
+### Changed
+- Kept the breadcrumb feed intentionally focused on meaningful edits rather than noisy navigation clicks, making it useful as lightweight workflow memory without pretending to be full undo.
+- Bumped project version to `2.1.35`.
+
+### Verified
+- `npm run build` passes successfully after the recent-action breadcrumb changes.
+
 ## [2.1.34] - 2026-04-05
 
 ### Added
