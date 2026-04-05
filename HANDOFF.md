@@ -40,8 +40,12 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Added duplicate-piece and duplicate-rotation actions to the web custom editor.
 - Bumped the repo version again to `2.1.21`.
 
+## Additional Follow-Up - 2026-04-05 (Rotation Overview)
+- Added clickable mini rotation preview cards with occupied-cell counts in the web custom editor.
+- Bumped the repo version again to `2.1.22`.
+
 ## Recommended Next Steps
-1. Add a small visual histogram or preview of total occupied cells per rotation.
-2. Consider exposing advanced rule toggles currently hidden behind raw `GameType` defaults.
-3. Add named preset slots or import history for quick editor iteration.
-4. If native becomes writable again, mirror the same duplication UX there.
+1. Consider exposing advanced rule toggles currently hidden behind raw `GameType` defaults.
+2. Add named preset slots or import history for quick editor iteration.
+3. If native becomes writable again, mirror the same rotation-overview UX there.
+4. Consider richer per-rotation analytics like bounding-box size or symmetry hints.

@@ -68,6 +68,16 @@ export class CustomGameEditor {
         .summary-panel ul { margin: 0; padding-left: 18px; color: #bbb; }
         .summary-panel li { margin-bottom: 4px; }
         .summary-highlight { color: #fff; }
+        .rotation-overview { margin-top: 12px; }
+        .rotation-overview h5 { margin: 0 0 8px 0; color: #9ed0ff; }
+        .rotation-overview-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .rotation-card { background: #181818; border: 1px solid #3a3a3a; border-radius: 6px; padding: 8px; min-width: 72px; cursor: pointer; }
+        .rotation-card.active { border-color: #00ff88; box-shadow: 0 0 0 1px rgba(0,255,136,0.2); }
+        .rotation-card-title { font-size: 11px; color: #ccc; margin-bottom: 6px; }
+        .rotation-card-count { font-size: 10px; color: #8d8d8d; margin-top: 6px; }
+        .rotation-mini-grid { display: grid; grid-template-columns: repeat(4, 10px); gap: 1px; }
+        .rotation-mini-cell { width: 10px; height: 10px; background: #0f0f0f; border: 1px solid #252525; }
+        .rotation-mini-cell.filled { background: #00ff88; border-color: #00cc6e; }
         button { cursor: pointer; }
       </style>
 
@@ -173,6 +183,10 @@ export class CustomGameEditor {
                 <!-- 4x4 grid -->
             </div>
             <p style="font-size:12px; color:#888; margin-top:10px;">Click grid to toggle blocks</p>
+            <div class="rotation-overview">
+              <h5>Rotation Overview</h5>
+              <div id="rotation-overview-list" class="rotation-overview-list"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -285,7 +299,10 @@ export class CustomGameEditor {
 
   private renderPieceShapeEditor() {
       const ptIndex = this.pieceList.selectedIndex;
-      if (ptIndex === -1) return;
+      if (ptIndex === -1) {
+          this.renderRotationOverview();
+          return;
+      }
       
       const pt = this.currentGameType.pieceTypes[ptIndex];
       const grid = this.container.querySelector('#piece-shape-editor')!;
@@ -298,6 +315,7 @@ export class CustomGameEditor {
       if (maxRot <= 0) {
           this.container.querySelector('#rot-label')!.textContent = 'Rotation: none';
           grid.innerHTML = '<div style="grid-column: span 4; color:#888;">Add a rotation to start editing this piece.</div>';
+          this.renderRotationOverview();
           this.updateSummary();
           return;
       }
@@ -306,6 +324,7 @@ export class CustomGameEditor {
       this.container.querySelector('#rot-label')!.textContent = `Rotation: ${this.currentEditingRotation}`;
       
       const rotation = pt.rotationSet.get(this.currentEditingRotation);
+      this.renderRotationOverview();
       
       for (let y = 0; y < 4; y++) {
           for (let x = 0; x < 4; x++) {
@@ -515,6 +534,63 @@ export class CustomGameEditor {
     this.renderPieceShapeEditor();
     this.updateSummary();
     ToastManager.showInfo(`Removed rotation from ${pt.name || 'selected piece'}.`);
+  }
+
+  private getRotationBlockCount(rotation: Rotation | null): number {
+    return rotation?.blockOffsets.length ?? 0;
+  }
+
+  private renderRotationOverview(): void {
+    const list = this.container.querySelector('#rotation-overview-list');
+    if (!list) return;
+
+    list.innerHTML = '';
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      list.innerHTML = '<div style="color:#777; font-size:12px;">Select a piece to inspect its rotations.</div>';
+      return;
+    }
+
+    const pt = this.currentGameType.pieceTypes[ptIndex];
+    if (!pt || pt.rotationSet.size() === 0) {
+      list.innerHTML = '<div style="color:#777; font-size:12px;">No rotations yet.</div>';
+      return;
+    }
+
+    for (let i = 0; i < pt.rotationSet.size(); i++) {
+      const rotation = pt.rotationSet.get(i);
+      const card = document.createElement('div');
+      card.className = `rotation-card${i === this.currentEditingRotation ? ' active' : ''}`;
+      card.onclick = () => {
+        this.currentEditingRotation = i;
+        this.renderPieceShapeEditor();
+        this.updateSummary();
+      };
+
+      const title = document.createElement('div');
+      title.className = 'rotation-card-title';
+      title.textContent = `R${i}`;
+      card.appendChild(title);
+
+      const miniGrid = document.createElement('div');
+      miniGrid.className = 'rotation-mini-grid';
+      for (let y = 0; y < 4; y++) {
+        for (let x = 0; x < 4; x++) {
+          const cell = document.createElement('div');
+          const filled = rotation.blockOffsets.some((offset) => offset.x === x && offset.y === y);
+          cell.className = `rotation-mini-cell${filled ? ' filled' : ''}`;
+          miniGrid.appendChild(cell);
+        }
+      }
+      card.appendChild(miniGrid);
+
+      const count = document.createElement('div');
+      count.className = 'rotation-card-count';
+      count.textContent = `${this.getRotationBlockCount(rotation)} blocks`;
+      card.appendChild(count);
+
+      list.appendChild(card);
+    }
   }
 
   private getTotalRotationCount(): number {

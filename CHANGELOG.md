@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.22] - 2026-04-05
+
+### Added
+- **Rotation Overview:** `CustomGameEditor.ts` now renders clickable mini rotation preview cards with per-rotation occupied-cell counts so authors can jump directly to any rotation state.
+
+### Changed
+- Bumped project version to `2.1.22`.
+
+### Verified
+- `npm run build` passes successfully after the rotation overview changes.
+
 ## [2.1.21] - 2026-04-05
 
 ### Added
