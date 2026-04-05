@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.40] - 2026-04-05
+
+### Added
+- **Block Gameplay Hooks:** `CustomGameEditor.ts` now exposes reward-piece assignment plus focused chain-behavior toggles for selected blocks, including clear-every-other-line, ignore-chain, required-in-chain, and exploding-chain-link hooks.
+
+### Changed
+- Expanded block details and summary reporting so reward-piece and chain-behavior authoring is visible without digging back through every control cluster.
+- Bumped project version to `2.1.40`.
+
+### Verified
+- `npm run build` passes successfully after the block gameplay-hook changes.
+
 ## [2.1.39] - 2026-04-05
 
 ### Fixed

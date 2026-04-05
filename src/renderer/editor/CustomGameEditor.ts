@@ -66,6 +66,11 @@ export class CustomGameEditor {
   private blockFlashingCheckbox!: HTMLInputElement;
   private blockMatchAnyColorCheckbox!: HTMLInputElement;
   private blockCounterCheckbox!: HTMLInputElement;
+  private blockClearEveryOtherLineCheckbox!: HTMLInputElement;
+  private blockIgnoreChainConnectionsCheckbox!: HTMLInputElement;
+  private blockRequireChainPresenceCheckbox!: HTMLInputElement;
+  private blockAddToExplodingChainCheckbox!: HTMLInputElement;
+  private blockRewardLabel!: HTMLDivElement;
   private pieceBlockOverrideSelect!: HTMLSelectElement;
 
   private currentEditingRotation: number = 0;
@@ -305,6 +310,18 @@ export class CustomGameEditor {
                 <label><input type="checkbox" id="block-flashing"> Flashing special</label>
                 <label><input type="checkbox" id="block-match-any-color"> Match any color</label>
                 <label><input type="checkbox" id="block-counter-type"> Counter type</label>
+                <label><input type="checkbox" id="block-clear-every-other-line"> Clear every other line</label>
+                <label><input type="checkbox" id="block-ignore-chain-connections"> Ignore chain connections</label>
+                <label><input type="checkbox" id="block-require-chain-presence"> Required in chain</label>
+                <label><input type="checkbox" id="block-add-to-exploding-chain"> Add to exploding chain</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Clear Reward Hook</label>
+              <div id="block-reward-label" style="font-size:12px; color:#aaa; margin-bottom:8px;">No reward piece assigned.</div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <button id="btn-block-reward-selected-piece">Use Selected Piece</button>
+                <button id="btn-block-reward-clear">Clear Reward</button>
               </div>
             </div>
           </div>
@@ -399,6 +416,11 @@ export class CustomGameEditor {
     this.blockFlashingCheckbox = this.container.querySelector('#block-flashing') as HTMLInputElement;
     this.blockMatchAnyColorCheckbox = this.container.querySelector('#block-match-any-color') as HTMLInputElement;
     this.blockCounterCheckbox = this.container.querySelector('#block-counter-type') as HTMLInputElement;
+    this.blockClearEveryOtherLineCheckbox = this.container.querySelector('#block-clear-every-other-line') as HTMLInputElement;
+    this.blockIgnoreChainConnectionsCheckbox = this.container.querySelector('#block-ignore-chain-connections') as HTMLInputElement;
+    this.blockRequireChainPresenceCheckbox = this.container.querySelector('#block-require-chain-presence') as HTMLInputElement;
+    this.blockAddToExplodingChainCheckbox = this.container.querySelector('#block-add-to-exploding-chain') as HTMLInputElement;
+    this.blockRewardLabel = this.container.querySelector('#block-reward-label') as HTMLDivElement;
     this.pieceBlockOverrideSelect = this.container.querySelector('#piece-block-override') as HTMLSelectElement;
 
     this.setupEventListeners();
@@ -578,6 +600,10 @@ export class CustomGameEditor {
       this.blockFlashingCheckbox,
       this.blockMatchAnyColorCheckbox,
       this.blockCounterCheckbox,
+      this.blockClearEveryOtherLineCheckbox,
+      this.blockIgnoreChainConnectionsCheckbox,
+      this.blockRequireChainPresenceCheckbox,
+      this.blockAddToExplodingChainCheckbox,
     ].forEach((checkbox) => {
       checkbox.addEventListener('change', () => {
         const block = this.getSelectedBlock();
@@ -589,9 +615,21 @@ export class CustomGameEditor {
         block.flashingSpecialType = this.blockFlashingCheckbox.checked;
         block.matchAnyColor = this.blockMatchAnyColorCheckbox.checked;
         block.counterType = this.blockCounterCheckbox.checked;
+        block.clearEveryOtherLineOnGridWhenCleared = this.blockClearEveryOtherLineCheckbox.checked;
+        block.ignoreWhenCheckingChainConnections = this.blockIgnoreChainConnectionsCheckbox.checked;
+        block.chainConnectionsMustContainAtLeastOneBlockWithThisTrue = this.blockRequireChainPresenceCheckbox.checked;
+        block.addToChainIfConnectedUpDownLeftRightToExplodingChainBlocks = this.blockAddToExplodingChainCheckbox.checked;
         this.updateSummary();
         this.pushRecentAction(`Updated block behavior flags for ${block.name || 'selected block'}.`);
       });
+    });
+
+    this.container.querySelector('#btn-block-reward-selected-piece')?.addEventListener('click', () => {
+      this.assignSelectedPieceAsBlockReward();
+    });
+
+    this.container.querySelector('#btn-block-reward-clear')?.addEventListener('click', () => {
+      this.clearSelectedBlockReward();
     });
 
     this.container.querySelector('#btn-apply-piece-block')?.addEventListener('click', () => {
@@ -836,6 +874,10 @@ export class CustomGameEditor {
     this.blockFlashingCheckbox.disabled = disabled;
     this.blockMatchAnyColorCheckbox.disabled = disabled;
     this.blockCounterCheckbox.disabled = disabled;
+    this.blockClearEveryOtherLineCheckbox.disabled = disabled;
+    this.blockIgnoreChainConnectionsCheckbox.disabled = disabled;
+    this.blockRequireChainPresenceCheckbox.disabled = disabled;
+    this.blockAddToExplodingChainCheckbox.disabled = disabled;
 
     if (!block) {
       this.blockNameInput.value = '';
@@ -849,6 +891,11 @@ export class CustomGameEditor {
       this.blockFlashingCheckbox.checked = false;
       this.blockMatchAnyColorCheckbox.checked = false;
       this.blockCounterCheckbox.checked = false;
+      this.blockClearEveryOtherLineCheckbox.checked = false;
+      this.blockIgnoreChainConnectionsCheckbox.checked = false;
+      this.blockRequireChainPresenceCheckbox.checked = false;
+      this.blockAddToExplodingChainCheckbox.checked = false;
+      this.blockRewardLabel.textContent = 'No reward piece assigned.';
       this.blockPaletteList.innerHTML = '';
       this.currentBlockPaletteIndex = 0;
       return;
@@ -870,6 +917,14 @@ export class CustomGameEditor {
     this.blockFlashingCheckbox.checked = block.flashingSpecialType;
     this.blockMatchAnyColorCheckbox.checked = block.matchAnyColor;
     this.blockCounterCheckbox.checked = block.counterType;
+    this.blockClearEveryOtherLineCheckbox.checked = block.clearEveryOtherLineOnGridWhenCleared;
+    this.blockIgnoreChainConnectionsCheckbox.checked = block.ignoreWhenCheckingChainConnections;
+    this.blockRequireChainPresenceCheckbox.checked = block.chainConnectionsMustContainAtLeastOneBlockWithThisTrue;
+    this.blockAddToExplodingChainCheckbox.checked = block.addToChainIfConnectedUpDownLeftRightToExplodingChainBlocks;
+    const rewardPiece = block.makePieceTypeWhenCleared_UUID?.[0]
+      ? this.currentGameType.pieceTypes.find((piece) => piece.uuid === block.makePieceTypeWhenCleared_UUID[0])?.name || 'custom reward piece'
+      : null;
+    this.blockRewardLabel.textContent = rewardPiece ? `Reward piece on clear: ${rewardPiece}` : 'No reward piece assigned.';
     this.blockPaletteList.innerHTML = block.colors.map((color, index) => {
       const activeClass = index === this.currentBlockPaletteIndex ? ' active' : '';
       return `<button type="button" class="block-palette-swatch${activeClass}" data-palette-index="${index}" style="background:${this.bobColorToHex(color)}" title="Palette color ${index + 1}"></button>`;
@@ -956,6 +1011,37 @@ export class CustomGameEditor {
     this.updateSummary();
     this.pushRecentAction(`Cleared block override for ${selectedPiece.name || 'selected piece'}.`);
     ToastManager.showInfo('Cleared piece block override.');
+  }
+
+  private assignSelectedPieceAsBlockReward(): void {
+    const block = this.getSelectedBlock();
+    const selectedPiece = this.currentGameType.pieceTypes[this.pieceList.selectedIndex] ?? null;
+    if (!block) {
+      ToastManager.showInfo('Select a block first.');
+      return;
+    }
+    if (!selectedPiece) {
+      ToastManager.showInfo('Select a piece to use as the clear reward.');
+      return;
+    }
+    block.makePieceTypeWhenCleared_UUID = [selectedPiece.uuid];
+    this.updateBlockDetails();
+    this.updateSummary();
+    this.pushRecentAction(`Assigned clear reward piece ${selectedPiece.name || 'selected piece'} to ${block.name || 'selected block'}.`);
+    ToastManager.showInfo(`Assigned clear reward: ${selectedPiece.name || 'selected piece'}.`);
+  }
+
+  private clearSelectedBlockReward(): void {
+    const block = this.getSelectedBlock();
+    if (!block) {
+      ToastManager.showInfo('Select a block first.');
+      return;
+    }
+    block.makePieceTypeWhenCleared_UUID = [];
+    this.updateBlockDetails();
+    this.updateSummary();
+    this.pushRecentAction(`Cleared reward piece for ${block.name || 'selected block'}.`);
+    ToastManager.showInfo('Cleared block reward piece.');
   }
 
   private updatePieceList() {
@@ -1496,7 +1582,14 @@ export class CustomGameEditor {
           selectedBlock.flashingSpecialType ? 'flashing' : null,
           selectedBlock.matchAnyColor ? 'match-any' : null,
           selectedBlock.counterType ? 'counter' : null,
+          selectedBlock.clearEveryOtherLineOnGridWhenCleared ? 'clear-alt-lines' : null,
+          selectedBlock.ignoreWhenCheckingChainConnections ? 'ignore-chain' : null,
+          selectedBlock.chainConnectionsMustContainAtLeastOneBlockWithThisTrue ? 'required-in-chain' : null,
+          selectedBlock.addToChainIfConnectedUpDownLeftRightToExplodingChainBlocks ? 'exploding-chain-link' : null,
         ].filter(Boolean).join(', ') || 'none'
+      : 'none';
+    const selectedBlockReward = selectedBlock?.makePieceTypeWhenCleared_UUID?.[0]
+      ? this.currentGameType.pieceTypes.find((piece) => piece.uuid === selectedBlock.makePieceTypeWhenCleared_UUID[0])?.name || 'custom reward piece'
       : 'none';
 
     this.summaryPanel.innerHTML = `
@@ -1510,6 +1603,7 @@ export class CustomGameEditor {
         <li><span class="summary-highlight">Blocks:</span> ${blockCount} configured block types</li>
         <li><span class="summary-highlight">Selected block:</span> ${selectedBlock?.name || 'None selected'} (${selectedBlockFlags})</li>
         <li><span class="summary-highlight">Special block rules:</span> chance ${selectedBlock?.randomSpecialBlockChanceOneOutOf || 0}, frequency ${selectedBlock?.frequencySpecialBlockTypeOnceEveryNPieces || 0}</li>
+        <li><span class="summary-highlight">Block clear reward:</span> ${selectedBlockReward}</li>
         <li><span class="summary-highlight">Editing:</span> ${selectedPieceName} (${selectedRotationCount} rotations)</li>
         <li><span class="summary-highlight">Piece block override:</span> ${selectedBlockOverride}</li>
         <li><span class="summary-highlight">Current rotation:</span> ${this.getRotationBlockCount(selectedRotation)} blocks in a ${this.getRotationBoundingBox(selectedRotation)} box</li>
