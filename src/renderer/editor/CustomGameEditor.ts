@@ -19,6 +19,12 @@ export class CustomGameEditor {
   private chainAmountInput!: HTMLInputElement;
   private nextPiecesInput!: HTMLInputElement;
   private summaryPanel!: HTMLDivElement;
+  private cascadeGravityCheckbox!: HTMLInputElement;
+  private disconnectedGravityCheckbox!: HTMLInputElement;
+  private chainRowCheckbox!: HTMLInputElement;
+  private chainColumnCheckbox!: HTMLInputElement;
+  private chainDiagonalCheckbox!: HTMLInputElement;
+  private recursiveChainCheckbox!: HTMLInputElement;
   
   private blockList!: HTMLSelectElement;
   private pieceList!: HTMLSelectElement;
@@ -68,6 +74,9 @@ export class CustomGameEditor {
         .summary-panel ul { margin: 0; padding-left: 18px; color: #bbb; }
         .summary-panel li { margin-bottom: 4px; }
         .summary-highlight { color: #fff; }
+        .toggle-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; margin-top: 8px; }
+        .toggle-grid label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #ccc; }
+        .toggle-grid input[type="checkbox"] { width: auto; }
         .rotation-overview { margin-top: 12px; }
         .rotation-overview h5 { margin: 0 0 8px 0; color: #9ed0ff; }
         .rotation-overview-list { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -141,6 +150,17 @@ export class CustomGameEditor {
                 <input type="number" id="next-pieces" min="0" max="6">
             </div>
         </div>
+        <div class="form-group">
+          <label>Advanced Rule Toggles</label>
+          <div class="toggle-grid">
+            <label><input type="checkbox" id="toggle-cascade-gravity"> Cascade gravity</label>
+            <label><input type="checkbox" id="toggle-disconnected-gravity"> Only move disconnected blocks</label>
+            <label><input type="checkbox" id="toggle-chain-row"> Chain checks rows</label>
+            <label><input type="checkbox" id="toggle-chain-column"> Chain checks columns</label>
+            <label><input type="checkbox" id="toggle-chain-diagonal"> Chain checks diagonals</label>
+            <label><input type="checkbox" id="toggle-chain-recursive"> Recursive chain search</label>
+          </div>
+        </div>
         <div id="rules-summary" class="summary-panel"></div>
       </div>
       
@@ -201,6 +221,12 @@ export class CustomGameEditor {
     this.chainAmountInput = this.container.querySelector('#chain-amount') as HTMLInputElement;
     this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
     this.summaryPanel = this.container.querySelector('#rules-summary') as HTMLDivElement;
+    this.cascadeGravityCheckbox = this.container.querySelector('#toggle-cascade-gravity') as HTMLInputElement;
+    this.disconnectedGravityCheckbox = this.container.querySelector('#toggle-disconnected-gravity') as HTMLInputElement;
+    this.chainRowCheckbox = this.container.querySelector('#toggle-chain-row') as HTMLInputElement;
+    this.chainColumnCheckbox = this.container.querySelector('#toggle-chain-column') as HTMLInputElement;
+    this.chainDiagonalCheckbox = this.container.querySelector('#toggle-chain-diagonal') as HTMLInputElement;
+    this.recursiveChainCheckbox = this.container.querySelector('#toggle-chain-recursive') as HTMLInputElement;
     this.blockList = this.container.querySelector('#block-list') as HTMLSelectElement;
     this.pieceList = this.container.querySelector('#piece-list') as HTMLSelectElement;
 
@@ -231,6 +257,12 @@ export class CustomGameEditor {
       this.lockDelayInput,
       this.chainAmountInput,
       this.nextPiecesInput,
+      this.cascadeGravityCheckbox,
+      this.disconnectedGravityCheckbox,
+      this.chainRowCheckbox,
+      this.chainColumnCheckbox,
+      this.chainDiagonalCheckbox,
+      this.recursiveChainCheckbox,
     ].forEach((input) => {
       input.addEventListener('input', () => this.updateSummary());
       input.addEventListener('change', () => this.updateSummary());
@@ -368,6 +400,12 @@ export class CustomGameEditor {
     this.lockDelayInput.value = this.currentGameType.maxLockDelayTicks.toString();
     this.chainAmountInput.value = this.currentGameType.chainRule_AmountPerChain.toString();
     this.nextPiecesInput.value = this.currentGameType.numberOfNextPiecesToShow.toString();
+    this.cascadeGravityCheckbox.checked = this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce;
+    this.disconnectedGravityCheckbox.checked = this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks;
+    this.chainRowCheckbox.checked = this.currentGameType.chainRule_CheckRow;
+    this.chainColumnCheckbox.checked = this.currentGameType.chainRule_CheckColumn;
+    this.chainDiagonalCheckbox.checked = this.currentGameType.chainRule_CheckDiagonal;
+    this.recursiveChainCheckbox.checked = this.currentGameType.chainRule_CheckRecursive;
     
     this.updateBlockList();
     this.updatePieceList();
@@ -607,6 +645,17 @@ export class CustomGameEditor {
     return total;
   }
 
+  private getEnabledRuleLabels(): string[] {
+    const labels: string[] = [];
+    if (this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce) labels.push('cascade gravity');
+    if (this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks) labels.push('disconnected gravity');
+    if (this.currentGameType.chainRule_CheckRow) labels.push('row chains');
+    if (this.currentGameType.chainRule_CheckColumn) labels.push('column chains');
+    if (this.currentGameType.chainRule_CheckDiagonal) labels.push('diagonal chains');
+    if (this.currentGameType.chainRule_CheckRecursive) labels.push('recursive search');
+    return labels;
+  }
+
   private updateSummary(): void {
     if (!this.summaryPanel) return;
 
@@ -620,6 +669,7 @@ export class CustomGameEditor {
     const selectedRotationCount = selectedPiece ? selectedPiece.rotationSet.size() : 0;
     const selectedPieceName = selectedPiece?.name || 'None selected';
     const sharePayload = BobNet.toBase64GZippedGSON(this.currentGameType);
+    const enabledRules = this.getEnabledRuleLabels();
 
     this.summaryPanel.innerHTML = `
       <h3>Rules Summary</h3>
@@ -631,6 +681,7 @@ export class CustomGameEditor {
         <li><span class="summary-highlight">Pieces:</span> ${pieceCount} total, ${rotationCount} rotations, ${filledCells} filled cells</li>
         <li><span class="summary-highlight">Blocks:</span> ${blockCount} configured block types</li>
         <li><span class="summary-highlight">Editing:</span> ${selectedPieceName} (${selectedRotationCount} rotations)</li>
+        <li><span class="summary-highlight">Enabled rules:</span> ${enabledRules.length > 0 ? enabledRules.join(', ') : 'none'}</li>
         <li><span class="summary-highlight">Share payload:</span> ${sharePayload.length} encoded chars</li>
       </ul>
     `;
@@ -645,6 +696,12 @@ export class CustomGameEditor {
     this.currentGameType.maxLockDelayTicks = parseInt(this.lockDelayInput.value);
     this.currentGameType.chainRule_AmountPerChain = parseInt(this.chainAmountInput.value);
     this.currentGameType.numberOfNextPiecesToShow = parseInt(this.nextPiecesInput.value);
+    this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = this.cascadeGravityCheckbox.checked;
+    this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = this.disconnectedGravityCheckbox.checked;
+    this.currentGameType.chainRule_CheckRow = this.chainRowCheckbox.checked;
+    this.currentGameType.chainRule_CheckColumn = this.chainColumnCheckbox.checked;
+    this.currentGameType.chainRule_CheckDiagonal = this.chainDiagonalCheckbox.checked;
+    this.currentGameType.chainRule_CheckRecursive = this.recursiveChainCheckbox.checked;
   }
 
   private save() {
