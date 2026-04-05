@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.26] - 2026-04-05
+
+### Added
+- **Preset Shortcut Buttons:** `CustomGameEditor.ts` now includes one-click classic preset buttons for Classic Drop, Cascade Puzzle, and Stack Arcade, layered on top of the preset-slot workflow.
+
+### Changed
+- Bumped project version to `2.1.26`.
+
+### Verified
+- `npm run build` passes successfully after the preset-shortcut changes.
+
 ## [2.1.25] - 2026-04-05
 
 ### Added
