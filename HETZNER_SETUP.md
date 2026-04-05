@@ -1,10 +1,10 @@
 # Hetzner Backend Setup Guide
 
 This guide assumes:
-- static frontend stays on `bobsgame.com`
 - backend runs on a Hetzner Ubuntu server
 - backend public hostname will be `ws.bobsgame.com`
-- nginx reverse proxies to the Node/Socket.io process on localhost `127.0.0.1:6065`
+- static frontend may also run on the same Hetzner host as `bobsgame.com`
+- nginx reverse proxies to the Node/Socket.io process on localhost `127.0.0.1:6065` and can also serve the built static frontend from disk
 
 ## 1. Provision the server
 Recommended starting size:
@@ -16,8 +16,9 @@ Recommended OS:
 - Ubuntu 24.04 LTS
 
 ## 2. DNS
-Create an `A` record:
+Create `A` records as needed:
 - `ws.bobsgame.com` → your Hetzner server IP
+- `bobsgame.com` → your Hetzner server IP (if the static frontend is moving off DreamHost)
 
 Wait until DNS resolves before attempting TLS.
 
@@ -216,8 +217,15 @@ sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d ws.bobsgame.com
 ```
 
-An HTTPS nginx example is also included:
+If the static frontend is also moving to Hetzner, request a certificate for:
+
+```bash
+sudo certbot --nginx -d bobsgame.com
+```
+
+HTTPS nginx examples are included:
 - `server/ops/nginx/ws.bobsgame.com.ssl.conf`
+- `server/ops/nginx/bobsgame.com.ssl.conf`
 
 Then retest:
 
@@ -243,14 +251,24 @@ cd bobsgameweb
 BACKEND_URL=https://ws.bobsgame.com ./scripts/rebuild-for-backend.sh
 ```
 
-To rebuild and immediately redeploy static assets:
+To rebuild and immediately redeploy static assets to DreamHost:
 
 ```bash
 BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/rebuild-for-backend.sh
 ```
 
+To upload the static frontend to Hetzner instead:
+
+```bash
+FRONTEND_HOST=YOUR_SERVER_IP FRONTEND_USER=root FRONTEND_BUILD=1 BACKEND_URL=https://ws.bobsgame.com ./scripts/deploy-frontend-hetzner.sh
+```
+
+Tracked nginx configs for the static site:
+- `server/ops/nginx/bobsgame.com.conf`
+- `server/ops/nginx/bobsgame.com.ssl.conf`
+
 ## 15. Final production test
-If you want a single local handoff step after backend verification, use:
+If you want a single local handoff step after backend verification for the legacy DreamHost static path, use:
 
 ```bash
 BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/cutover-production.sh
@@ -259,7 +277,9 @@ BACKEND_URL=https://ws.bobsgame.com DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsga
 That will:
 - verify backend readiness
 - rebuild the frontend for `ws.bobsgame.com`
-- trigger static deploy
+- trigger DreamHost static deploy
+
+If `bobsgame.com` DNS already points to Hetzner, prefer the tracked Hetzner static-site path instead.
 
 Then:
 - open `https://bobsgame.com`
