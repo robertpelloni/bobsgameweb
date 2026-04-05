@@ -56,9 +56,15 @@ export class CustomGameEditor {
   private pieceList!: HTMLSelectElement;
   private blockNameInput!: HTMLInputElement;
   private blockColorInput!: HTMLInputElement;
+  private blockSpecialColorInput!: HTMLInputElement;
+  private blockSpecialChanceInput!: HTMLInputElement;
+  private blockSpecialFrequencyInput!: HTMLInputElement;
   private blockNormalCheckbox!: HTMLInputElement;
   private blockGarbageCheckbox!: HTMLInputElement;
   private blockFillerCheckbox!: HTMLInputElement;
+  private blockFlashingCheckbox!: HTMLInputElement;
+  private blockMatchAnyColorCheckbox!: HTMLInputElement;
+  private blockCounterCheckbox!: HTMLInputElement;
   private pieceBlockOverrideSelect!: HTMLSelectElement;
 
   private currentEditingRotation: number = 0;
@@ -261,6 +267,20 @@ export class CustomGameEditor {
                 <label>Primary Color</label>
                 <input type="color" id="block-color" value="#808080">
               </div>
+              <div class="form-group">
+                <label>Special Color</label>
+                <input type="color" id="block-special-color" value="#ff00ff">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Special Chance (1 in N)</label>
+                <input type="number" id="block-special-chance" min="0" value="0">
+              </div>
+              <div class="form-group">
+                <label>Special Frequency</label>
+                <input type="number" id="block-special-frequency" min="0" value="0">
+              </div>
             </div>
             <div class="form-group">
               <label>Usage</label>
@@ -268,6 +288,9 @@ export class CustomGameEditor {
                 <label><input type="checkbox" id="block-use-normal"> Use in normal pieces</label>
                 <label><input type="checkbox" id="block-use-garbage"> Use as garbage</label>
                 <label><input type="checkbox" id="block-use-filler"> Use as filler</label>
+                <label><input type="checkbox" id="block-flashing"> Flashing special</label>
+                <label><input type="checkbox" id="block-match-any-color"> Match any color</label>
+                <label><input type="checkbox" id="block-counter-type"> Counter type</label>
               </div>
             </div>
           </div>
@@ -352,9 +375,15 @@ export class CustomGameEditor {
     this.pieceList = this.container.querySelector('#piece-list') as HTMLSelectElement;
     this.blockNameInput = this.container.querySelector('#block-name') as HTMLInputElement;
     this.blockColorInput = this.container.querySelector('#block-color') as HTMLInputElement;
+    this.blockSpecialColorInput = this.container.querySelector('#block-special-color') as HTMLInputElement;
+    this.blockSpecialChanceInput = this.container.querySelector('#block-special-chance') as HTMLInputElement;
+    this.blockSpecialFrequencyInput = this.container.querySelector('#block-special-frequency') as HTMLInputElement;
     this.blockNormalCheckbox = this.container.querySelector('#block-use-normal') as HTMLInputElement;
     this.blockGarbageCheckbox = this.container.querySelector('#block-use-garbage') as HTMLInputElement;
     this.blockFillerCheckbox = this.container.querySelector('#block-use-filler') as HTMLInputElement;
+    this.blockFlashingCheckbox = this.container.querySelector('#block-flashing') as HTMLInputElement;
+    this.blockMatchAnyColorCheckbox = this.container.querySelector('#block-match-any-color') as HTMLInputElement;
+    this.blockCounterCheckbox = this.container.querySelector('#block-counter-type') as HTMLInputElement;
     this.pieceBlockOverrideSelect = this.container.querySelector('#piece-block-override') as HTMLSelectElement;
 
     this.setupEventListeners();
@@ -465,10 +494,32 @@ export class CustomGameEditor {
         this.pushRecentAction(`Updated block color for ${block.name || 'selected block'}.`);
     });
 
+    this.blockSpecialColorInput.addEventListener('change', () => {
+        const block = this.getSelectedBlock();
+        if (!block) return;
+        block.specialColor = this.hexToBobColor(this.blockSpecialColorInput.value, block.specialColor);
+        this.updateSummary();
+        this.pushRecentAction(`Updated special block color for ${block.name || 'selected block'}.`);
+    });
+
+    [this.blockSpecialChanceInput, this.blockSpecialFrequencyInput].forEach((input) => {
+      input.addEventListener('change', () => {
+        const block = this.getSelectedBlock();
+        if (!block) return;
+        block.randomSpecialBlockChanceOneOutOf = Math.max(0, parseInt(this.blockSpecialChanceInput.value || '0', 10) || 0);
+        block.frequencySpecialBlockTypeOnceEveryNPieces = Math.max(0, parseInt(this.blockSpecialFrequencyInput.value || '0', 10) || 0);
+        this.updateSummary();
+        this.pushRecentAction(`Updated special spawning rules for ${block.name || 'selected block'}.`);
+      });
+    });
+
     [
       this.blockNormalCheckbox,
       this.blockGarbageCheckbox,
       this.blockFillerCheckbox,
+      this.blockFlashingCheckbox,
+      this.blockMatchAnyColorCheckbox,
+      this.blockCounterCheckbox,
     ].forEach((checkbox) => {
       checkbox.addEventListener('change', () => {
         const block = this.getSelectedBlock();
@@ -477,8 +528,11 @@ export class CustomGameEditor {
         block.useAsGarbage = this.blockGarbageCheckbox.checked;
         block.isGarbageBlockType = this.blockGarbageCheckbox.checked;
         block.useAsPlayingFieldFiller = this.blockFillerCheckbox.checked;
+        block.flashingSpecialType = this.blockFlashingCheckbox.checked;
+        block.matchAnyColor = this.blockMatchAnyColorCheckbox.checked;
+        block.counterType = this.blockCounterCheckbox.checked;
         this.updateSummary();
-        this.pushRecentAction(`Updated usage flags for ${block.name || 'selected block'}.`);
+        this.pushRecentAction(`Updated block behavior flags for ${block.name || 'selected block'}.`);
       });
     });
 
@@ -715,24 +769,42 @@ export class CustomGameEditor {
     const disabled = !block;
     this.blockNameInput.disabled = disabled;
     this.blockColorInput.disabled = disabled;
+    this.blockSpecialColorInput.disabled = disabled;
+    this.blockSpecialChanceInput.disabled = disabled;
+    this.blockSpecialFrequencyInput.disabled = disabled;
     this.blockNormalCheckbox.disabled = disabled;
     this.blockGarbageCheckbox.disabled = disabled;
     this.blockFillerCheckbox.disabled = disabled;
+    this.blockFlashingCheckbox.disabled = disabled;
+    this.blockMatchAnyColorCheckbox.disabled = disabled;
+    this.blockCounterCheckbox.disabled = disabled;
 
     if (!block) {
       this.blockNameInput.value = '';
       this.blockColorInput.value = '#808080';
+      this.blockSpecialColorInput.value = '#ff00ff';
+      this.blockSpecialChanceInput.value = '0';
+      this.blockSpecialFrequencyInput.value = '0';
       this.blockNormalCheckbox.checked = false;
       this.blockGarbageCheckbox.checked = false;
       this.blockFillerCheckbox.checked = false;
+      this.blockFlashingCheckbox.checked = false;
+      this.blockMatchAnyColorCheckbox.checked = false;
+      this.blockCounterCheckbox.checked = false;
       return;
     }
 
     this.blockNameInput.value = block.name || 'Unnamed Block';
     this.blockColorInput.value = this.bobColorToHex(block.colors[0] ?? block.specialColor);
+    this.blockSpecialColorInput.value = this.bobColorToHex(block.specialColor ?? block.colors[0] ?? null);
+    this.blockSpecialChanceInput.value = String(block.randomSpecialBlockChanceOneOutOf || 0);
+    this.blockSpecialFrequencyInput.value = String(block.frequencySpecialBlockTypeOnceEveryNPieces || 0);
     this.blockNormalCheckbox.checked = block.useInNormalPieces;
     this.blockGarbageCheckbox.checked = block.useAsGarbage || block.isGarbageBlockType;
     this.blockFillerCheckbox.checked = block.useAsPlayingFieldFiller;
+    this.blockFlashingCheckbox.checked = block.flashingSpecialType;
+    this.blockMatchAnyColorCheckbox.checked = block.matchAnyColor;
+    this.blockCounterCheckbox.checked = block.counterType;
   }
 
   private syncPieceBlockOverrideControl(): void {
@@ -1346,9 +1418,17 @@ export class CustomGameEditor {
     const selectedRotation = selectedPiece && selectedRotationCount > 0 ? selectedPiece.rotationSet.get(this.currentEditingRotation) : null;
     const analytics = this.getSelectedPieceAnalytics();
     const symmetry = this.getRotationSymmetry(selectedRotation);
+    const selectedBlock = this.getSelectedBlock();
     const selectedBlockOverride = selectedPiece?.overrideBlockTypes_UUID?.[0]
       ? this.currentGameType.blockTypes.find((block) => block.uuid === selectedPiece.overrideBlockTypes_UUID[0])?.name || 'custom block override'
       : 'default/random pool';
+    const selectedBlockFlags = selectedBlock
+      ? [
+          selectedBlock.flashingSpecialType ? 'flashing' : null,
+          selectedBlock.matchAnyColor ? 'match-any' : null,
+          selectedBlock.counterType ? 'counter' : null,
+        ].filter(Boolean).join(', ') || 'none'
+      : 'none';
 
     this.summaryPanel.innerHTML = `
       <h3>Rules Summary</h3>
@@ -1359,6 +1439,8 @@ export class CustomGameEditor {
         <li><span class="summary-highlight">Chain / Next:</span> ${this.chainAmountInput.value || this.currentGameType.chainRule_AmountPerChain} / ${this.nextPiecesInput.value || this.currentGameType.numberOfNextPiecesToShow}</li>
         <li><span class="summary-highlight">Pieces:</span> ${pieceCount} total, ${rotationCount} rotations, ${filledCells} filled cells</li>
         <li><span class="summary-highlight">Blocks:</span> ${blockCount} configured block types</li>
+        <li><span class="summary-highlight">Selected block:</span> ${selectedBlock?.name || 'None selected'} (${selectedBlockFlags})</li>
+        <li><span class="summary-highlight">Special block rules:</span> chance ${selectedBlock?.randomSpecialBlockChanceOneOutOf || 0}, frequency ${selectedBlock?.frequencySpecialBlockTypeOnceEveryNPieces || 0}</li>
         <li><span class="summary-highlight">Editing:</span> ${selectedPieceName} (${selectedRotationCount} rotations)</li>
         <li><span class="summary-highlight">Piece block override:</span> ${selectedBlockOverride}</li>
         <li><span class="summary-highlight">Current rotation:</span> ${this.getRotationBlockCount(selectedRotation)} blocks in a ${this.getRotationBoundingBox(selectedRotation)} box</li>
