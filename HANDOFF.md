@@ -126,8 +126,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Used the tracked Hetzner frontend upload path to refresh the actual public root and verified the live site now serves `assets/main-B8AxVX-p.js` and `assets/pixi-DddiEjlE.js` instead of the stale crash-era hashes.
 - Bumped the repo version again to `2.1.39`.
 
+## Additional Follow-Up - 2026-04-05 (Block Gameplay Hooks)
+- Added reward-piece assignment plus focused chain-behavior toggles for selected blocks.
+- Expanded block details and summary reporting so reward-piece and chain-behavior authoring is visible without reopening every control cluster.
+- Bumped the repo version again to `2.1.40`.
+
 ## Recommended Next Steps
-1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, and richer block color-set editing there after the lock clears.
+1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, and block gameplay hooks there after the lock clears.
 2. Add compact presets for classic rule families once editor state persistence is richer.
-3. Consider further block-rule depth like special piece conversion hooks and chain-behavior flags.
+3. Consider further block-rule depth like special piece conversion chains and more advanced field-effect toggles.
 4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.
