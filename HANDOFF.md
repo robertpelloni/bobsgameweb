@@ -79,8 +79,12 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Added a one-click duplicate-rotation cleanup action to the web custom editor.
 - Bumped the repo version again to `2.1.30`.
 
+## Additional Follow-Up - 2026-04-05 (Normalize-All Helper)
+- Added a one-click helper to normalize every rotation in the selected piece.
+- Bumped the repo version again to `2.1.31`.
+
 ## Recommended Next Steps
 1. Add import history or recent-share history alongside the preset slots.
 2. If native becomes writable again, mirror the same rotation-overview and advanced-toggle UX there.
-3. Consider further shape intelligence like normalize-all / center-all helpers.
+3. Consider further shape intelligence like center-all or empty-rotation cleanup helpers.
 4. Add compact presets for classic rule families once editor state persistence is richer.

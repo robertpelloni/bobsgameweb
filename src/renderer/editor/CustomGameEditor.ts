@@ -242,6 +242,7 @@ export class CustomGameEditor {
                 <button id="btn-duplicate-rot">Duplicate ROT</button>
                 <button id="btn-normalize-rot">Normalize ROT</button>
                 <button id="btn-center-rot">Center ROT</button>
+                <button id="btn-normalize-all-rot">Normalize All</button>
                 <button id="btn-remove-dup-rot">Clear Duplicates</button>
                 <button id="btn-remove-rot">- ROT</button>
             </div>
@@ -397,6 +398,10 @@ export class CustomGameEditor {
 
     this.container.querySelector('#btn-center-rot')?.addEventListener('click', () => {
         this.centerCurrentRotation();
+    });
+
+    this.container.querySelector('#btn-normalize-all-rot')?.addEventListener('click', () => {
+        this.normalizeAllRotations();
     });
 
     this.container.querySelector('#btn-remove-dup-rot')?.addEventListener('click', () => {
@@ -689,6 +694,32 @@ export class CustomGameEditor {
     this.renderPieceShapeEditor();
     this.updateSummary();
     ToastManager.showInfo('Centered current rotation inside the 4×4 editor grid.');
+  }
+
+  private normalizeAllRotations(): void {
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      ToastManager.showInfo('Select a piece first.');
+      return;
+    }
+
+    const pt = this.currentGameType.pieceTypes[ptIndex];
+    if (pt.rotationSet.size() === 0) {
+      ToastManager.showInfo('No rotations to normalize.');
+      return;
+    }
+
+    for (let i = 0; i < pt.rotationSet.size(); i++) {
+      const rotation = pt.rotationSet.get(i);
+      if (!rotation || rotation.blockOffsets.length === 0) continue;
+      const minX = Math.min(...rotation.blockOffsets.map((offset) => offset.x));
+      const minY = Math.min(...rotation.blockOffsets.map((offset) => offset.y));
+      rotation.blockOffsets = rotation.blockOffsets.map((offset) => ({ x: offset.x - minX, y: offset.y - minY }));
+    }
+
+    this.renderPieceShapeEditor();
+    this.updateSummary();
+    ToastManager.showInfo(`Normalized all rotations for ${pt.name || 'selected piece'}.`);
   }
 
   private removeDuplicateRotations(): void {
