@@ -17,7 +17,7 @@ import path from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const SERVER_VERSION = "2.1.32";
+const SERVER_VERSION = "2.1.33";
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = parseInt(process.env.PORT || "6065", 10);
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
@@ -481,7 +481,7 @@ io.on("connection", (socket) => {
             ? String(identity.name || "webplayer").substring(0, 64).toLowerCase()
             : String(identity || "webplayer").substring(0, 64).toLowerCase();
         const storageKey = profileId || safeName;
-        const snapshot = data?.snapshot || { version: "2.1.32", stats: {}, unlockedIds: [] };
+        const snapshot = data?.snapshot || { version: "2.1.33", stats: {}, unlockedIds: [] };
         try {
             const file = path.join(ACHIEVEMENTS_DIR, `${storageKey}.json`);
             fs.writeFileSync(file, JSON.stringify({ identity: { profileId, name: safeName }, snapshot }, null, 2));

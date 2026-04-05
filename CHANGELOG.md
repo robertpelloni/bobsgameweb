@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.33] - 2026-04-05
+
+### Added
+- **Recent Share / Import History:** `CustomGameEditor.ts` now keeps a bounded recent-history list in `localStorage`, recording imported payloads and generated share links with quick load/copy actions.
+
+### Changed
+- Hardened history rendering by escaping imported ruleset names before injecting the history UI.
+- Bumped project version to `2.1.33`.
+
+### Verified
+- `npm run build` passes successfully after the recent-history workflow changes.
+
 ## [2.1.32] - 2026-04-05
 
 ### Added
