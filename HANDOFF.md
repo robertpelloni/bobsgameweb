@@ -67,8 +67,12 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded rotation overview cards to show bounding-box info.
 - Bumped the repo version again to `2.1.27`.
 
+## Additional Follow-Up - 2026-04-05 (Symmetry & Duplicate Hints)
+- Added current-rotation symmetry reporting plus duplicate-rotation warnings in the web rotation overview.
+- Bumped the repo version again to `2.1.28`.
+
 ## Recommended Next Steps
 1. Add import history or recent-share history alongside the preset slots.
 2. If native becomes writable again, mirror the same rotation-overview and advanced-toggle UX there.
-3. Consider richer per-rotation analytics like symmetry hints.
+3. Consider further shape intelligence like centering/normalization helpers.
 4. Add compact presets for classic rule families once editor state persistence is richer.

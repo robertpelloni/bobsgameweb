@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.28] - 2026-04-05
+
+### Added
+- **Symmetry & Duplicate Warnings:** `CustomGameEditor.ts` now reports current-rotation symmetry and flags duplicate rotations directly in the overview cards, giving authors immediate feedback about redundant rotation states.
+
+### Changed
+- Bumped project version to `2.1.28`.
+
+### Verified
+- `npm run build` passes successfully after the symmetry/duplicate analytics changes.
+
 ## [2.1.27] - 2026-04-05
 
 ### Added

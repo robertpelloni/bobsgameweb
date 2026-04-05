@@ -91,6 +91,7 @@ export class CustomGameEditor {
         .rotation-overview-list { display: flex; flex-wrap: wrap; gap: 8px; }
         .rotation-card { background: #181818; border: 1px solid #3a3a3a; border-radius: 6px; padding: 8px; min-width: 72px; cursor: pointer; }
         .rotation-card.active { border-color: #00ff88; box-shadow: 0 0 0 1px rgba(0,255,136,0.2); }
+        .rotation-card.duplicate { border-color: #d4a017; }
         .rotation-card-title { font-size: 11px; color: #ccc; margin-bottom: 6px; }
         .rotation-card-count { font-size: 10px; color: #8d8d8d; margin-top: 6px; }
         .rotation-mini-grid { display: grid; grid-template-columns: repeat(4, 10px); gap: 1px; }
@@ -673,6 +674,48 @@ export class CustomGameEditor {
     return `${width}×${height}`;
   }
 
+  private getRotationSymmetry(rotation: Rotation | null): string {
+    if (!rotation || rotation.blockOffsets.length === 0) return 'none';
+    const xs = rotation.blockOffsets.map((offset) => offset.x);
+    const ys = rotation.blockOffsets.map((offset) => offset.y);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const occupied = new Set(rotation.blockOffsets.map((offset) => `${offset.x},${offset.y}`));
+
+    let horizontal = true;
+    let vertical = true;
+    for (const offset of rotation.blockOffsets) {
+      const mirrorX = maxX - (offset.x - minX);
+      const mirrorY = maxY - (offset.y - minY);
+      if (!occupied.has(`${mirrorX},${offset.y}`)) horizontal = false;
+      if (!occupied.has(`${offset.x},${mirrorY}`)) vertical = false;
+    }
+
+    if (horizontal && vertical) return 'horizontal + vertical';
+    if (horizontal) return 'horizontal';
+    if (vertical) return 'vertical';
+    return 'none';
+  }
+
+  private getDuplicateRotationIndices(): Set<number> {
+    const selectedPiece = this.currentGameType.pieceTypes[this.pieceList.selectedIndex] ?? null;
+    const duplicates = new Set<number>();
+    if (!selectedPiece) return duplicates;
+
+    const firstSeen = new Map<string, number>();
+    for (let i = 0; i < selectedPiece.rotationSet.size(); i++) {
+      const signature = this.getRotationSignature(selectedPiece.rotationSet.get(i));
+      if (firstSeen.has(signature)) {
+        duplicates.add(i);
+      } else {
+        firstSeen.set(signature, i);
+      }
+    }
+    return duplicates;
+  }
+
   private getSelectedPieceAnalytics(): { uniqueRotations: number; duplicateRotations: number } {
     const selectedPiece = this.currentGameType.pieceTypes[this.pieceList.selectedIndex] ?? null;
     if (!selectedPiece) {
@@ -707,10 +750,13 @@ export class CustomGameEditor {
       return;
     }
 
+    const duplicateIndices = this.getDuplicateRotationIndices();
+
     for (let i = 0; i < pt.rotationSet.size(); i++) {
       const rotation = pt.rotationSet.get(i);
+      const duplicateClass = duplicateIndices.has(i) ? ' duplicate' : '';
       const card = document.createElement('div');
-      card.className = `rotation-card${i === this.currentEditingRotation ? ' active' : ''}`;
+      card.className = `rotation-card${i === this.currentEditingRotation ? ' active' : ''}${duplicateClass}`;
       card.onclick = () => {
         this.currentEditingRotation = i;
         this.renderPieceShapeEditor();
@@ -736,7 +782,8 @@ export class CustomGameEditor {
 
       const count = document.createElement('div');
       count.className = 'rotation-card-count';
-      count.textContent = `${this.getRotationBlockCount(rotation)} blocks • ${this.getRotationBoundingBox(rotation)}`;
+      const duplicateLabel = duplicateIndices.has(i) ? ' • duplicate' : '';
+      count.textContent = `${this.getRotationBlockCount(rotation)} blocks • ${this.getRotationBoundingBox(rotation)} • ${this.getRotationSymmetry(rotation)}${duplicateLabel}`;
       card.appendChild(count);
 
       list.appendChild(card);
@@ -793,6 +840,7 @@ export class CustomGameEditor {
     const enabledRules = this.getEnabledRuleLabels();
     const selectedRotation = selectedPiece && selectedRotationCount > 0 ? selectedPiece.rotationSet.get(this.currentEditingRotation) : null;
     const analytics = this.getSelectedPieceAnalytics();
+    const symmetry = this.getRotationSymmetry(selectedRotation);
 
     this.summaryPanel.innerHTML = `
       <h3>Rules Summary</h3>
@@ -805,6 +853,7 @@ export class CustomGameEditor {
         <li><span class="summary-highlight">Blocks:</span> ${blockCount} configured block types</li>
         <li><span class="summary-highlight">Editing:</span> ${selectedPieceName} (${selectedRotationCount} rotations)</li>
         <li><span class="summary-highlight">Current rotation:</span> ${this.getRotationBlockCount(selectedRotation)} blocks in a ${this.getRotationBoundingBox(selectedRotation)} box</li>
+        <li><span class="summary-highlight">Current symmetry:</span> ${symmetry}</li>
         <li><span class="summary-highlight">Rotation uniqueness:</span> ${analytics.uniqueRotations} unique / ${analytics.duplicateRotations} duplicate</li>
         <li><span class="summary-highlight">Enabled rules:</span> ${enabledRules.length > 0 ? enabledRules.join(', ') : 'none'}</li>
         <li><span class="summary-highlight">Share payload:</span> ${sharePayload.length} encoded chars</li>
