@@ -394,6 +394,13 @@ export class CustomGameEditor {
       return;
     }
 
+    const target = this.currentGameType.pieceTypes[ptIndex];
+    const confirmed = window.confirm(`Remove piece "${target?.name || 'Unnamed Piece'}" and all of its rotations?`);
+    if (!confirmed) {
+      ToastManager.showInfo('Piece removal cancelled.');
+      return;
+    }
+
     const removed = this.currentGameType.pieceTypes.splice(ptIndex, 1)[0];
     this.updatePieceList();
     this.selectPiece(Math.min(ptIndex, this.currentGameType.pieceTypes.length - 1));
@@ -410,6 +417,12 @@ export class CustomGameEditor {
     const pt = this.currentGameType.pieceTypes[ptIndex];
     if (pt.rotationSet.size() === 0) {
       ToastManager.showInfo('No rotations to remove.');
+      return;
+    }
+
+    const confirmed = window.confirm(`Remove rotation ${this.currentEditingRotation} from "${pt.name || 'selected piece'}"?`);
+    if (!confirmed) {
+      ToastManager.showInfo('Rotation removal cancelled.');
       return;
     }
 

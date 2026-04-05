@@ -31,7 +31,7 @@ export class ReplayRecorder {
 
     public exportJSON(meta: Partial<ReplayData>): string {
         const data: ReplayData = {
-            version: '2.1.19',
+            version: '2.1.20',
             gameTypeUUID: meta.gameTypeUUID || '',
             seed: meta.seed || 0,
             frames: this.frames,

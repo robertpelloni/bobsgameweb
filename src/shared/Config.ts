@@ -24,7 +24,7 @@ export const SERVER_URL = envServerUrl || (isProd
  * The current application version string.
  * Should be kept in sync with VERSION.md and CHANGELOG.md.
  */
-export const APP_VERSION = '2.1.19';
+export const APP_VERSION = '2.1.20';
 
 /**
  * Base URL for large assets (sprites, maps, audio).
