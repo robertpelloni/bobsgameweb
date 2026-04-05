@@ -44,8 +44,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Added clickable mini rotation preview cards with occupied-cell counts in the web custom editor.
 - Bumped the repo version again to `2.1.22`.
 
+## Additional Follow-Up - 2026-04-05 (Advanced Rule Toggles)
+- Added gameplay-rule checkboxes for cascade gravity, disconnected gravity, row/column/diagonal chains, and recursive chain search.
+- Expanded the summary to report enabled advanced rules directly.
+- Bumped the repo version again to `2.1.23`.
+
 ## Recommended Next Steps
-1. Consider exposing advanced rule toggles currently hidden behind raw `GameType` defaults.
-2. Add named preset slots or import history for quick editor iteration.
-3. If native becomes writable again, mirror the same rotation-overview UX there.
-4. Consider richer per-rotation analytics like bounding-box size or symmetry hints.
+1. Add named preset slots or import history for quick editor iteration.
+2. If native becomes writable again, mirror the same rotation-overview and advanced-toggle UX there.
+3. Consider richer per-rotation analytics like bounding-box size or symmetry hints.
+4. Add more advanced rule categories like bag/randomizer and wall-kick options when the editor surface is ready.

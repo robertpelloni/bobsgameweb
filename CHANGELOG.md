@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.23] - 2026-04-05
+
+### Added
+- **Advanced Rule Toggles:** `CustomGameEditor.ts` now exposes gameplay-rule checkboxes for cascade gravity, disconnected-only gravity, row/column/diagonal chain checks, and recursive chain search.
+
+### Changed
+- The web editor summary now reports enabled advanced rules explicitly.
+- Bumped project version to `2.1.23`.
+
+### Verified
+- `npm run build` passes successfully after the advanced-rule toggle changes.
+
 ## [2.1.22] - 2026-04-05
 
 ### Added
