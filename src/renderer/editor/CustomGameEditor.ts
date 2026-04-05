@@ -5,6 +5,15 @@ import { AchievementManager } from '../data/AchievementManager';
 import { getAchievementIdentity } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
 
+type RecentGameHistoryEntry = {
+  source: 'import' | 'share';
+  payload: string;
+  gameName: string;
+  pieceCount: number;
+  rotationCount: number;
+  timestamp: number;
+};
+
 export class CustomGameEditor {
   private container: HTMLElement;
   private currentGameType: GameType;
@@ -19,6 +28,7 @@ export class CustomGameEditor {
   private chainAmountInput!: HTMLInputElement;
   private nextPiecesInput!: HTMLInputElement;
   private summaryPanel!: HTMLDivElement;
+  private recentHistoryPanel!: HTMLDivElement;
   private cascadeGravityCheckbox!: HTMLInputElement;
   private disconnectedGravityCheckbox!: HTMLInputElement;
   private chainRowCheckbox!: HTMLInputElement;
@@ -97,6 +107,14 @@ export class CustomGameEditor {
         .rotation-mini-grid { display: grid; grid-template-columns: repeat(4, 10px); gap: 1px; }
         .rotation-mini-cell { width: 10px; height: 10px; background: #0f0f0f; border: 1px solid #252525; }
         .rotation-mini-cell.filled { background: #00ff88; border-color: #00cc6e; }
+        .recent-history-panel { margin-top: 16px; background: #151515; border: 1px solid #333; border-radius: 6px; padding: 12px; }
+        .recent-history-panel h3 { margin: 0 0 8px 0; color: #9ed0ff; }
+        .recent-history-empty { color: #888; font-size: 13px; }
+        .recent-history-entry { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #1b1b1b; border: 1px solid #2f2f2f; border-radius: 6px; padding: 8px; margin-top: 8px; }
+        .recent-history-meta { display: flex; flex-direction: column; gap: 4px; }
+        .recent-history-title { color: #fff; font-size: 13px; }
+        .recent-history-details { color: #9a9a9a; font-size: 11px; }
+        .recent-history-actions { display: flex; gap: 6px; flex-wrap: wrap; }
         button { cursor: pointer; }
       </style>
 
@@ -130,6 +148,7 @@ export class CustomGameEditor {
           <button id="btn-preset-stack">Stack Arcade</button>
         </div>
       </div>
+      <div id="recent-history" class="recent-history-panel"></div>
       
       <div class="editor-tabs">
         <button class="tab-btn active" data-tab="settings">Settings</button>
@@ -269,6 +288,7 @@ export class CustomGameEditor {
     this.chainAmountInput = this.container.querySelector('#chain-amount') as HTMLInputElement;
     this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
     this.summaryPanel = this.container.querySelector('#rules-summary') as HTMLDivElement;
+    this.recentHistoryPanel = this.container.querySelector('#recent-history') as HTMLDivElement;
     this.cascadeGravityCheckbox = this.container.querySelector('#toggle-cascade-gravity') as HTMLInputElement;
     this.disconnectedGravityCheckbox = this.container.querySelector('#toggle-disconnected-gravity') as HTMLInputElement;
     this.chainRowCheckbox = this.container.querySelector('#toggle-chain-row') as HTMLInputElement;
@@ -313,6 +333,19 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-preset-classic')?.addEventListener('click', () => this.applyPreset('classic'));
     this.container.querySelector('#btn-preset-cascade')?.addEventListener('click', () => this.applyPreset('cascade'));
     this.container.querySelector('#btn-preset-stack')?.addEventListener('click', () => this.applyPreset('stack'));
+
+    this.recentHistoryPanel?.addEventListener('click', (event) => {
+      const target = (event.target as HTMLElement).closest('button[data-history-action]') as HTMLButtonElement | null;
+      if (!target) return;
+      const index = Number(target.dataset.historyIndex);
+      if (Number.isNaN(index)) return;
+      const action = target.dataset.historyAction;
+      if (action === 'load') {
+        this.loadRecentHistoryEntry(index);
+      } else if (action === 'copy') {
+        this.copyRecentHistoryEntry(index);
+      }
+    });
 
     [
       this.nameInput,
@@ -514,6 +547,7 @@ export class CustomGameEditor {
     this.updateBlockList();
     this.updatePieceList();
     this.updateSummary();
+    this.renderRecentHistory();
   }
 
   private updateBlockList() {
@@ -1160,6 +1194,114 @@ export class CustomGameEditor {
       ToastManager.showInfo(`Saved current ruleset to preset slot ${slot}.`);
   }
 
+  private getRecentHistoryKey(): string {
+      return 'custom-game-history';
+  }
+
+  private getRecentHistory(): RecentGameHistoryEntry[] {
+      try {
+          const raw = localStorage.getItem(this.getRecentHistoryKey());
+          if (!raw) return [];
+          const parsed = JSON.parse(raw) as RecentGameHistoryEntry[];
+          return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+          console.error('Failed to read custom game history', error);
+          return [];
+      }
+  }
+
+  private saveRecentHistory(entries: RecentGameHistoryEntry[]): void {
+      localStorage.setItem(this.getRecentHistoryKey(), JSON.stringify(entries.slice(0, 5)));
+  }
+
+  private escapeHistoryText(value: string): string {
+      return value
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+  }
+
+  private pushRecentHistoryEntry(source: 'import' | 'share', payload: string, gameType: GameType): void {
+      const entry: RecentGameHistoryEntry = {
+          source,
+          payload,
+          gameName: gameType.name || (source === 'share' ? 'Shared Ruleset' : 'Imported Ruleset'),
+          pieceCount: gameType.pieceTypes.length,
+          rotationCount: gameType.pieceTypes.reduce((sum, pt) => sum + pt.rotationSet.size(), 0),
+          timestamp: Date.now(),
+      };
+      const deduped = this.getRecentHistory().filter((existing) => existing.payload !== payload);
+      this.saveRecentHistory([entry, ...deduped]);
+      this.renderRecentHistory();
+  }
+
+  private renderRecentHistory(): void {
+      if (!this.recentHistoryPanel) return;
+      const entries = this.getRecentHistory();
+      if (entries.length === 0) {
+          this.recentHistoryPanel.innerHTML = `
+            <h3>Recent Share / Import History</h3>
+            <div class="recent-history-empty">No recent shared or imported rulesets yet.</div>
+          `;
+          return;
+      }
+
+      const rows = entries.map((entry, index) => {
+          const when = new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const safeName = this.escapeHistoryText(entry.gameName || 'Unnamed Ruleset');
+          return `
+            <div class="recent-history-entry">
+              <div class="recent-history-meta">
+                <div class="recent-history-title">${safeName} • ${entry.source === 'share' ? 'shared' : 'imported'}</div>
+                <div class="recent-history-details">${entry.pieceCount} pieces • ${entry.rotationCount} rotations • ${when}</div>
+              </div>
+              <div class="recent-history-actions">
+                <button data-history-action="load" data-history-index="${index}">Load</button>
+                <button data-history-action="copy" data-history-index="${index}">Copy Link</button>
+              </div>
+            </div>
+          `;
+      }).join('');
+
+      this.recentHistoryPanel.innerHTML = `<h3>Recent Share / Import History</h3>${rows}`;
+  }
+
+  private loadRecentHistoryEntry(index: number): void {
+      const entry = this.getRecentHistory()[index];
+      if (!entry) {
+          ToastManager.showInfo('That history entry is no longer available.');
+          return;
+      }
+      try {
+          const decoded = BobNet.fromBase64GZippedGSON(entry.payload);
+          if (!decoded) throw new Error('Decoded payload was empty.');
+          this.currentGameType = GameType.fromJSON(JSON.stringify(decoded));
+          this.loadFromGameType();
+          this.selectPiece(0);
+          ToastManager.showInfo(`Loaded recent ${entry.source} history: ${entry.gameName || 'ruleset'}.`);
+      } catch (error) {
+          console.error(error);
+          alert('Failed to load the selected history entry.');
+      }
+  }
+
+  private copyRecentHistoryEntry(index: number): void {
+      const entry = this.getRecentHistory()[index];
+      if (!entry) {
+          ToastManager.showInfo('That history entry is no longer available.');
+          return;
+      }
+      const url = `${window.location.origin}${window.location.pathname}#play=${entry.payload}`;
+      navigator.clipboard.writeText(url).then(() => {
+          ToastManager.showInfo(`Copied recent ${entry.source} link to clipboard.`);
+      }).catch((error) => {
+          console.error('Failed to copy recent history link:', error);
+          prompt('Copy this link manually:', url);
+      });
+  }
+
   private loadPresetSlot(slot: number): void {
       const data = localStorage.getItem(this.getPresetSlotKey(slot));
       if (!data) {
@@ -1206,6 +1348,7 @@ export class CustomGameEditor {
           this.currentGameType = GameType.fromJSON(JSON.stringify(decoded));
           this.loadFromGameType();
           this.selectPiece(0);
+          this.pushRecentHistoryEntry('import', payload, this.currentGameType);
           ToastManager.showInfo('Imported shared game configuration.');
       } catch (e) {
           console.error(e);
@@ -1231,6 +1374,7 @@ export class CustomGameEditor {
       this.save();
       const b64 = BobNet.toBase64GZippedGSON(this.currentGameType);
       const url = `${window.location.origin}${window.location.pathname}#play=${b64}`;
+      this.pushRecentHistoryEntry('share', b64, this.currentGameType);
       navigator.clipboard.writeText(url).then(() => {
           AchievementManager.incrementStat('gamesShared');
           this.saveAchievementSnapshot();

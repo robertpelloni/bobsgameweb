@@ -87,8 +87,14 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Added a one-click helper to remove empty rotations after confirmation.
 - Bumped the repo version again to `2.1.32`.
 
+## Additional Follow-Up - 2026-04-05 (Recent Share / Import History)
+- Added a bounded recent-history panel that tracks imported payloads and generated share links in `localStorage`.
+- Added quick load/copy actions so recent rulesets can be recalled without re-pasting payloads.
+- Escaped imported names before rendering the history UI to avoid turning share metadata into injected markup.
+- Bumped the repo version again to `2.1.33`.
+
 ## Recommended Next Steps
-1. Add import history or recent-share history alongside the preset slots.
-2. If native becomes writable again, mirror the same rotation-overview and advanced-toggle UX there.
-3. Consider further shape intelligence like center-all helpers.
-4. Add compact presets for classic rule families once editor state persistence is richer.
+1. If native becomes writable again, mirror the same recent-history workflow there after the lock clears.
+2. Consider further shape intelligence like center-all helpers.
+3. Add compact presets for classic rule families once editor state persistence is richer.
+4. Consider lightweight action history / undo breadcrumbs for editor experimentation.
