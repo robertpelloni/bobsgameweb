@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.41] - 2026-04-05
+
+### Added
+- **Advanced Field-Effect Toggles:** `CustomGameEditor.ts` now exposes engine-backed field-effect toggles for ignoring move-down gravity, removing same-color field blocks on set, and diamond-color field swaps.
+
+### Changed
+- Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
+- Bumped project version to `2.1.41`.
+
+### Verified
+- `npm run build` passes successfully after the advanced field-effect toggle changes.
+
 ## [2.1.40] - 2026-04-05
 
 ### Added

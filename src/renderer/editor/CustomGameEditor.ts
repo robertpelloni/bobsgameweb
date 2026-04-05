@@ -68,8 +68,11 @@ export class CustomGameEditor {
   private blockCounterCheckbox!: HTMLInputElement;
   private blockClearEveryOtherLineCheckbox!: HTMLInputElement;
   private blockIgnoreChainConnectionsCheckbox!: HTMLInputElement;
+  private blockIgnoreMovingDownCheckbox!: HTMLInputElement;
   private blockRequireChainPresenceCheckbox!: HTMLInputElement;
   private blockAddToExplodingChainCheckbox!: HTMLInputElement;
+  private blockRemoveColorFieldCheckbox!: HTMLInputElement;
+  private blockDiamondColorFieldCheckbox!: HTMLInputElement;
   private blockRewardLabel!: HTMLDivElement;
   private pieceBlockOverrideSelect!: HTMLSelectElement;
 
@@ -312,8 +315,11 @@ export class CustomGameEditor {
                 <label><input type="checkbox" id="block-counter-type"> Counter type</label>
                 <label><input type="checkbox" id="block-clear-every-other-line"> Clear every other line</label>
                 <label><input type="checkbox" id="block-ignore-chain-connections"> Ignore chain connections</label>
+                <label><input type="checkbox" id="block-ignore-moving-down"> Ignore moving down</label>
                 <label><input type="checkbox" id="block-require-chain-presence"> Required in chain</label>
                 <label><input type="checkbox" id="block-add-to-exploding-chain"> Add to exploding chain</label>
+                <label><input type="checkbox" id="block-remove-color-field"> Remove same-color field blocks</label>
+                <label><input type="checkbox" id="block-diamond-color-field"> Diamond-color field swap</label>
               </div>
             </div>
             <div class="form-group">
@@ -418,8 +424,11 @@ export class CustomGameEditor {
     this.blockCounterCheckbox = this.container.querySelector('#block-counter-type') as HTMLInputElement;
     this.blockClearEveryOtherLineCheckbox = this.container.querySelector('#block-clear-every-other-line') as HTMLInputElement;
     this.blockIgnoreChainConnectionsCheckbox = this.container.querySelector('#block-ignore-chain-connections') as HTMLInputElement;
+    this.blockIgnoreMovingDownCheckbox = this.container.querySelector('#block-ignore-moving-down') as HTMLInputElement;
     this.blockRequireChainPresenceCheckbox = this.container.querySelector('#block-require-chain-presence') as HTMLInputElement;
     this.blockAddToExplodingChainCheckbox = this.container.querySelector('#block-add-to-exploding-chain') as HTMLInputElement;
+    this.blockRemoveColorFieldCheckbox = this.container.querySelector('#block-remove-color-field') as HTMLInputElement;
+    this.blockDiamondColorFieldCheckbox = this.container.querySelector('#block-diamond-color-field') as HTMLInputElement;
     this.blockRewardLabel = this.container.querySelector('#block-reward-label') as HTMLDivElement;
     this.pieceBlockOverrideSelect = this.container.querySelector('#piece-block-override') as HTMLSelectElement;
 
@@ -602,8 +611,11 @@ export class CustomGameEditor {
       this.blockCounterCheckbox,
       this.blockClearEveryOtherLineCheckbox,
       this.blockIgnoreChainConnectionsCheckbox,
+      this.blockIgnoreMovingDownCheckbox,
       this.blockRequireChainPresenceCheckbox,
       this.blockAddToExplodingChainCheckbox,
+      this.blockRemoveColorFieldCheckbox,
+      this.blockDiamondColorFieldCheckbox,
     ].forEach((checkbox) => {
       checkbox.addEventListener('change', () => {
         const block = this.getSelectedBlock();
@@ -617,8 +629,11 @@ export class CustomGameEditor {
         block.counterType = this.blockCounterCheckbox.checked;
         block.clearEveryOtherLineOnGridWhenCleared = this.blockClearEveryOtherLineCheckbox.checked;
         block.ignoreWhenCheckingChainConnections = this.blockIgnoreChainConnectionsCheckbox.checked;
+        block.ignoreWhenMovingDownBlocks = this.blockIgnoreMovingDownCheckbox.checked;
         block.chainConnectionsMustContainAtLeastOneBlockWithThisTrue = this.blockRequireChainPresenceCheckbox.checked;
         block.addToChainIfConnectedUpDownLeftRightToExplodingChainBlocks = this.blockAddToExplodingChainCheckbox.checked;
+        block.removeAllBlocksOfColorOnFieldBlockIsSetOn = this.blockRemoveColorFieldCheckbox.checked;
+        block.changeAllBlocksOfColorOnFieldBlockIsSetOnToDiamondColor = this.blockDiamondColorFieldCheckbox.checked;
         this.updateSummary();
         this.pushRecentAction(`Updated block behavior flags for ${block.name || 'selected block'}.`);
       });
@@ -876,8 +891,11 @@ export class CustomGameEditor {
     this.blockCounterCheckbox.disabled = disabled;
     this.blockClearEveryOtherLineCheckbox.disabled = disabled;
     this.blockIgnoreChainConnectionsCheckbox.disabled = disabled;
+    this.blockIgnoreMovingDownCheckbox.disabled = disabled;
     this.blockRequireChainPresenceCheckbox.disabled = disabled;
     this.blockAddToExplodingChainCheckbox.disabled = disabled;
+    this.blockRemoveColorFieldCheckbox.disabled = disabled;
+    this.blockDiamondColorFieldCheckbox.disabled = disabled;
 
     if (!block) {
       this.blockNameInput.value = '';
@@ -893,8 +911,11 @@ export class CustomGameEditor {
       this.blockCounterCheckbox.checked = false;
       this.blockClearEveryOtherLineCheckbox.checked = false;
       this.blockIgnoreChainConnectionsCheckbox.checked = false;
+      this.blockIgnoreMovingDownCheckbox.checked = false;
       this.blockRequireChainPresenceCheckbox.checked = false;
       this.blockAddToExplodingChainCheckbox.checked = false;
+      this.blockRemoveColorFieldCheckbox.checked = false;
+      this.blockDiamondColorFieldCheckbox.checked = false;
       this.blockRewardLabel.textContent = 'No reward piece assigned.';
       this.blockPaletteList.innerHTML = '';
       this.currentBlockPaletteIndex = 0;
@@ -919,8 +940,11 @@ export class CustomGameEditor {
     this.blockCounterCheckbox.checked = block.counterType;
     this.blockClearEveryOtherLineCheckbox.checked = block.clearEveryOtherLineOnGridWhenCleared;
     this.blockIgnoreChainConnectionsCheckbox.checked = block.ignoreWhenCheckingChainConnections;
+    this.blockIgnoreMovingDownCheckbox.checked = block.ignoreWhenMovingDownBlocks;
     this.blockRequireChainPresenceCheckbox.checked = block.chainConnectionsMustContainAtLeastOneBlockWithThisTrue;
     this.blockAddToExplodingChainCheckbox.checked = block.addToChainIfConnectedUpDownLeftRightToExplodingChainBlocks;
+    this.blockRemoveColorFieldCheckbox.checked = block.removeAllBlocksOfColorOnFieldBlockIsSetOn;
+    this.blockDiamondColorFieldCheckbox.checked = block.changeAllBlocksOfColorOnFieldBlockIsSetOnToDiamondColor;
     const rewardPiece = block.makePieceTypeWhenCleared_UUID?.[0]
       ? this.currentGameType.pieceTypes.find((piece) => piece.uuid === block.makePieceTypeWhenCleared_UUID[0])?.name || 'custom reward piece'
       : null;
@@ -1584,8 +1608,11 @@ export class CustomGameEditor {
           selectedBlock.counterType ? 'counter' : null,
           selectedBlock.clearEveryOtherLineOnGridWhenCleared ? 'clear-alt-lines' : null,
           selectedBlock.ignoreWhenCheckingChainConnections ? 'ignore-chain' : null,
+          selectedBlock.ignoreWhenMovingDownBlocks ? 'ignore-moving-down' : null,
           selectedBlock.chainConnectionsMustContainAtLeastOneBlockWithThisTrue ? 'required-in-chain' : null,
           selectedBlock.addToChainIfConnectedUpDownLeftRightToExplodingChainBlocks ? 'exploding-chain-link' : null,
+          selectedBlock.removeAllBlocksOfColorOnFieldBlockIsSetOn ? 'remove-color-field' : null,
+          selectedBlock.changeAllBlocksOfColorOnFieldBlockIsSetOnToDiamondColor ? 'diamond-color-field' : null,
         ].filter(Boolean).join(', ') || 'none'
       : 'none';
     const selectedBlockReward = selectedBlock?.makePieceTypeWhenCleared_UUID?.[0]
