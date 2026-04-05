@@ -131,8 +131,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block details and summary reporting so reward-piece and chain-behavior authoring is visible without reopening every control cluster.
 - Bumped the repo version again to `2.1.40`.
 
+## Additional Follow-Up - 2026-04-05 (Advanced Field-Effect Toggles)
+- Added engine-backed field-effect toggles for ignoring move-down gravity, removing same-color field blocks on set, and diamond-color field swaps.
+- Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
+- Bumped the repo version again to `2.1.41`.
+
 ## Recommended Next Steps
-1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, and block gameplay hooks there after the lock clears.
+1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, and field-effect toggles there after the lock clears.
 2. Add compact presets for classic rule families once editor state persistence is richer.
-3. Consider further block-rule depth like special piece conversion chains and more advanced field-effect toggles.
+3. Consider further block-rule depth like true conversion-chain editing and multi-step transformation graphs.
 4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.
