@@ -240,6 +240,8 @@ export class CustomGameEditor {
                 <button id="btn-next-rot"> > </button>
                 <button id="btn-add-rot">+ ROT</button>
                 <button id="btn-duplicate-rot">Duplicate ROT</button>
+                <button id="btn-normalize-rot">Normalize ROT</button>
+                <button id="btn-center-rot">Center ROT</button>
                 <button id="btn-remove-rot">- ROT</button>
             </div>
             <div id="piece-shape-editor" style="display:grid; grid-template-columns: repeat(4, 30px); gap: 2px; margin-top:10px;">
@@ -386,6 +388,14 @@ export class CustomGameEditor {
 
     this.container.querySelector('#btn-duplicate-rot')?.addEventListener('click', () => {
         this.duplicateSelectedRotation();
+    });
+
+    this.container.querySelector('#btn-normalize-rot')?.addEventListener('click', () => {
+        this.normalizeCurrentRotation();
+    });
+
+    this.container.querySelector('#btn-center-rot')?.addEventListener('click', () => {
+        this.centerCurrentRotation();
     });
 
     this.container.querySelector('#btn-remove-rot')?.addEventListener('click', () => {
@@ -621,6 +631,59 @@ export class CustomGameEditor {
     this.renderPieceShapeEditor();
     this.updateSummary();
     ToastManager.showInfo(`Duplicated rotation for ${pt.name || 'selected piece'}.`);
+  }
+
+  private normalizeCurrentRotation(): void {
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      ToastManager.showInfo('Select a piece first.');
+      return;
+    }
+
+    const rotation = this.currentGameType.pieceTypes[ptIndex].rotationSet.get(this.currentEditingRotation);
+    if (!rotation || rotation.blockOffsets.length === 0) {
+      ToastManager.showInfo('No blocks to normalize.');
+      return;
+    }
+
+    const minX = Math.min(...rotation.blockOffsets.map((offset) => offset.x));
+    const minY = Math.min(...rotation.blockOffsets.map((offset) => offset.y));
+    rotation.blockOffsets = rotation.blockOffsets.map((offset) => ({ x: offset.x - minX, y: offset.y - minY }));
+    this.renderPieceShapeEditor();
+    this.updateSummary();
+    ToastManager.showInfo('Normalized current rotation to top-left origin.');
+  }
+
+  private centerCurrentRotation(): void {
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      ToastManager.showInfo('Select a piece first.');
+      return;
+    }
+
+    const rotation = this.currentGameType.pieceTypes[ptIndex].rotationSet.get(this.currentEditingRotation);
+    if (!rotation || rotation.blockOffsets.length === 0) {
+      ToastManager.showInfo('No blocks to center.');
+      return;
+    }
+
+    const xs = rotation.blockOffsets.map((offset) => offset.x);
+    const ys = rotation.blockOffsets.map((offset) => offset.y);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const width = maxX - minX + 1;
+    const height = maxY - minY + 1;
+    const targetMinX = Math.floor((4 - width) / 2);
+    const targetMinY = Math.floor((4 - height) / 2);
+    rotation.blockOffsets = rotation.blockOffsets.map((offset) => ({
+      x: offset.x - minX + targetMinX,
+      y: offset.y - minY + targetMinY,
+    }));
+    this.renderPieceShapeEditor();
+    this.updateSummary();
+    ToastManager.showInfo('Centered current rotation inside the 4×4 editor grid.');
   }
 
   private removeSelectedRotation(): void {

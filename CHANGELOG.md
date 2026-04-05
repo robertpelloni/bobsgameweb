@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.29] - 2026-04-05
+
+### Added
+- **Normalize / Center Helpers:** `CustomGameEditor.ts` now provides one-click normalize and center helpers for the current rotation, speeding up cleanup of custom piece layouts inside the 4x4 editor grid.
+
+### Changed
+- Bumped project version to `2.1.29`.
+
+### Verified
+- `npm run build` passes successfully after the normalize/center helper changes.
+
 ## [2.1.28] - 2026-04-05
 
 ### Added
