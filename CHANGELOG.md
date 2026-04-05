@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.39] - 2026-04-05
+
+### Fixed
+- **DreamHost Frontend Deploy Freshness:** corrected the Bash deploy script fallback so non-`rsync` uploads use tar-over-ssh content extraction instead of nesting `dist/renderer/` under `~/bobsgame.com/renderer/`, which had left the live site serving stale root assets.
+
+### Changed
+- Bumped project version to `2.1.39`.
+
+### Verified
+- Re-ran the tracked frontend deploy path after the fix.
+- Confirmed the public site now serves the newer Hetzner-hosted asset pair `assets/main-B8AxVX-p.js` and `assets/pixi-DddiEjlE.js` instead of the stale `assets/main-BZgwYkC_.js` / `assets/pixi-B4hwJKJB.js` pair from the reported CRT crash.
+
 ## [2.1.38] - 2026-04-05
 
 ### Added
