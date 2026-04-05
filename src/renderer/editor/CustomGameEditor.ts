@@ -155,6 +155,7 @@ export class CustomGameEditor {
             <select id="piece-list" size="10"></select>
             <div class="list-actions">
               <button id="btn-add-piece">+</button>
+              <button id="btn-duplicate-piece">Duplicate</button>
               <button id="btn-remove-piece">-</button>
             </div>
           </div>
@@ -165,6 +166,7 @@ export class CustomGameEditor {
                 <span id="rot-label">Rotation: 0</span>
                 <button id="btn-next-rot"> > </button>
                 <button id="btn-add-rot">+ ROT</button>
+                <button id="btn-duplicate-rot">Duplicate ROT</button>
                 <button id="btn-remove-rot">- ROT</button>
             </div>
             <div id="piece-shape-editor" style="display:grid; grid-template-columns: repeat(4, 30px); gap: 2px; margin-top:10px;">
@@ -236,6 +238,10 @@ export class CustomGameEditor {
         this.selectPiece(this.currentGameType.pieceTypes.length - 1);
     });
 
+    this.container.querySelector('#btn-duplicate-piece')?.addEventListener('click', () => {
+        this.duplicateSelectedPiece();
+    });
+
     this.container.querySelector('#btn-remove-piece')?.addEventListener('click', () => {
         this.removeSelectedPiece();
     });
@@ -260,6 +266,10 @@ export class CustomGameEditor {
         this.currentEditingRotation = pt.rotationSet.size() - 1;
         this.renderPieceShapeEditor();
         this.updateSummary();
+    });
+
+    this.container.querySelector('#btn-duplicate-rot')?.addEventListener('click', () => {
+        this.duplicateSelectedRotation();
     });
 
     this.container.querySelector('#btn-remove-rot')?.addEventListener('click', () => {
@@ -387,6 +397,55 @@ export class CustomGameEditor {
     this.updateSummary();
   }
 
+  private cloneRotation(source: Rotation): Rotation {
+    const rotation = new Rotation();
+    rotation.blockOffsets = source.blockOffsets.map((offset) => ({ x: offset.x, y: offset.y }));
+    return rotation;
+  }
+
+  private clonePieceType(source: PieceType): PieceType {
+    const clone = new PieceType();
+    clone.name = source.name ? `${source.name} Copy` : 'Piece Copy';
+    clone.color = source.color ? source.color.clone() : null;
+    clone.frequencySpecialPieceTypeOnceEveryNPieces = source.frequencySpecialPieceTypeOnceEveryNPieces;
+    clone.randomSpecialPieceChanceOneOutOf = source.randomSpecialPieceChanceOneOutOf;
+    clone.flashingSpecialType = source.flashingSpecialType;
+    clone.clearEveryRowPieceIsOnIfAnySingleRowCleared = source.clearEveryRowPieceIsOnIfAnySingleRowCleared;
+    clone.turnBackToNormalPieceAfterNPiecesLock = source.turnBackToNormalPieceAfterNPiecesLock;
+    clone.fadeOutOnceSetInsteadOfAddedToGrid = source.fadeOutOnceSetInsteadOfAddedToGrid;
+    clone.useAsNormalPiece = source.useAsNormalPiece;
+    clone.useAsGarbagePiece = source.useAsGarbagePiece;
+    clone.useAsPlayingFieldFillerPiece = source.useAsPlayingFieldFillerPiece;
+    clone.disallowAsFirstPiece = source.disallowAsFirstPiece;
+    clone.spriteName = source.spriteName;
+    clone.bombPiece = source.bombPiece;
+    clone.weightPiece = source.weightPiece;
+    clone.pieceRemovalShooterPiece = source.pieceRemovalShooterPiece;
+    clone.pieceShooterPiece = source.pieceShooterPiece;
+    clone.overrideBlockTypes_UUID = [...source.overrideBlockTypes_UUID];
+    clone.isGarbagePieceType = source.isGarbagePieceType;
+    clone.isBomb = source.isBomb;
+    clone.isWeight = source.isWeight;
+    clone.isSubtractor = source.isSubtractor;
+    clone.isShooter = source.isShooter;
+    clone.rotationSet.rotations = source.rotationSet.rotations.map((rotation) => this.cloneRotation(rotation));
+    return clone;
+  }
+
+  private duplicateSelectedPiece(): void {
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      ToastManager.showInfo('Select a piece to duplicate.');
+      return;
+    }
+
+    const duplicated = this.clonePieceType(this.currentGameType.pieceTypes[ptIndex]);
+    this.currentGameType.pieceTypes.splice(ptIndex + 1, 0, duplicated);
+    this.updatePieceList();
+    this.selectPiece(ptIndex + 1);
+    ToastManager.showInfo(`Duplicated piece: ${duplicated.name}`);
+  }
+
   private removeSelectedPiece(): void {
     const ptIndex = this.pieceList.selectedIndex;
     if (ptIndex === -1) {
@@ -405,6 +464,27 @@ export class CustomGameEditor {
     this.updatePieceList();
     this.selectPiece(Math.min(ptIndex, this.currentGameType.pieceTypes.length - 1));
     ToastManager.showInfo(`Removed piece: ${removed?.name || 'Unnamed Piece'}`);
+  }
+
+  private duplicateSelectedRotation(): void {
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      ToastManager.showInfo('Select a piece first.');
+      return;
+    }
+
+    const pt = this.currentGameType.pieceTypes[ptIndex];
+    if (pt.rotationSet.size() === 0) {
+      ToastManager.showInfo('No rotations to duplicate.');
+      return;
+    }
+
+    const duplicate = this.cloneRotation(pt.rotationSet.get(this.currentEditingRotation));
+    pt.rotationSet.rotations.splice(this.currentEditingRotation + 1, 0, duplicate);
+    this.currentEditingRotation += 1;
+    this.renderPieceShapeEditor();
+    this.updateSummary();
+    ToastManager.showInfo(`Duplicated rotation for ${pt.name || 'selected piece'}.`);
   }
 
   private removeSelectedRotation(): void {

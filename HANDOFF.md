@@ -36,8 +36,12 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Added confirmation prompts before removing a piece or rotation in the web custom editor.
 - Bumped the repo version again to `2.1.20`.
 
+## Additional Follow-Up - 2026-04-05 (Duplication Workflow)
+- Added duplicate-piece and duplicate-rotation actions to the web custom editor.
+- Bumped the repo version again to `2.1.21`.
+
 ## Recommended Next Steps
 1. Add a small visual histogram or preview of total occupied cells per rotation.
 2. Consider exposing advanced rule toggles currently hidden behind raw `GameType` defaults.
 3. Add named preset slots or import history for quick editor iteration.
-4. If native becomes writable again, mirror the same confirmation UX there.
+4. If native becomes writable again, mirror the same duplication UX there.

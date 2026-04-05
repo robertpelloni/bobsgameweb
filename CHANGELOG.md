@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.21] - 2026-04-05
+
+### Added
+- **Duplication Workflow:** `CustomGameEditor.ts` now supports duplicating the selected piece and duplicating the selected rotation for faster custom-rule iteration.
+
+### Changed
+- Bumped project version to `2.1.21`.
+
+### Verified
+- `npm run build` passes successfully after the duplication workflow changes.
+
 ## [2.1.20] - 2026-04-05
 
 ### Changed
