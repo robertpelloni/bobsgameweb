@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.36] - 2026-04-05
+
+### Added
+- **Block Type / Color Controls:** `CustomGameEditor.ts` now exposes focused block authoring controls for block names, primary colors, normal/garbage/filler usage flags, and primary block override assignment for the selected piece.
+
+### Fixed
+- **Pixi v8 CRT Startup Crash:** corrected custom filter uniform resources to use Pixi v8 `UniformGroup` structure, addressing the runtime `Cannot create property 'name' on number '0'` crash path surfaced during startup.
+
+### Changed
+- Bumped project version to `2.1.36`.
+
+### Verified
+- `npm run build` passes successfully after the block-authoring and Pixi filter resource fixes.
+
 ## [2.1.35] - 2026-04-05
 
 ### Added

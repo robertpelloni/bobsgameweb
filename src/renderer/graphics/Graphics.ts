@@ -1,4 +1,4 @@
-import { Graphics as PIXIGraphics, Container, GraphicsContext, Filter, ColorMatrixFilter, GlProgram, Shader } from 'pixi.js';
+import { Graphics as PIXIGraphics, Container, GraphicsContext, Filter, ColorMatrixFilter, GlProgram, Shader, UniformGroup } from 'pixi.js';
 
 export interface DrawStyle {
   fillColor?: number;
@@ -24,8 +24,10 @@ export class Graphics extends Container {
       const filter = new Filter({
           glProgram: program,
           resources: {
-              uTime: { value: 0, type: 'f32' },
-              ...uniforms
+              shaderUniforms: new UniformGroup({
+                  uTime: { value: 0, type: 'f32' },
+                  ...uniforms,
+              })
           }
       });
       this.customFilters.push(filter);
@@ -34,8 +36,9 @@ export class Graphics extends Container {
 
   public updateShaders(dt: number): void {
       for (const filter of this.customFilters) {
-          if (filter.resources.uTime) {
-              (filter.resources.uTime as any).value += dt;
+          const uniforms = (filter.resources as any).shaderUniforms?.uniforms;
+          if (uniforms?.uTime !== undefined) {
+              uniforms.uTime += dt;
           }
       }
   }

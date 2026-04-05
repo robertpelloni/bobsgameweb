@@ -104,8 +104,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Positioned this as lightweight undo-adjacent guidance rather than a fake full undo system.
 - Bumped the repo version again to `2.1.35`.
 
+## Additional Follow-Up - 2026-04-05 (Block Type / Color Controls + Pixi Filter Fix)
+- Added focused block authoring controls for block names, primary colors, normal/garbage/filler usage flags, and primary block override assignment for the selected piece.
+- Fixed the Pixi v8 custom filter resource shape to use `UniformGroup`, addressing the surfaced CRT startup crash path.
+- Bumped the repo version again to `2.1.36`.
+
 ## Recommended Next Steps
-1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, and action breadcrumbs there after the lock clears.
+1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, and focused block controls there after the lock clears.
 2. Add compact presets for classic rule families once editor state persistence is richer.
-3. Consider block-type/color controls as the next broader authoring-capability step.
+3. Consider deeper block-rule editing (special block behaviors, extra colors, special colors) as a follow-up expansion.
 4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.
