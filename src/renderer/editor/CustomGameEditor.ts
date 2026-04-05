@@ -656,6 +656,40 @@ export class CustomGameEditor {
     return rotation?.blockOffsets.length ?? 0;
   }
 
+  private getRotationSignature(rotation: Rotation | null): string {
+    if (!rotation) return 'empty';
+    return [...rotation.blockOffsets]
+      .map((offset) => `${offset.x},${offset.y}`)
+      .sort()
+      .join('|');
+  }
+
+  private getRotationBoundingBox(rotation: Rotation | null): string {
+    if (!rotation || rotation.blockOffsets.length === 0) return '0×0';
+    const xs = rotation.blockOffsets.map((offset) => offset.x);
+    const ys = rotation.blockOffsets.map((offset) => offset.y);
+    const width = Math.max(...xs) - Math.min(...xs) + 1;
+    const height = Math.max(...ys) - Math.min(...ys) + 1;
+    return `${width}×${height}`;
+  }
+
+  private getSelectedPieceAnalytics(): { uniqueRotations: number; duplicateRotations: number } {
+    const selectedPiece = this.currentGameType.pieceTypes[this.pieceList.selectedIndex] ?? null;
+    if (!selectedPiece) {
+      return { uniqueRotations: 0, duplicateRotations: 0 };
+    }
+
+    const signatures = new Set<string>();
+    for (let i = 0; i < selectedPiece.rotationSet.size(); i++) {
+      signatures.add(this.getRotationSignature(selectedPiece.rotationSet.get(i)));
+    }
+
+    return {
+      uniqueRotations: signatures.size,
+      duplicateRotations: Math.max(0, selectedPiece.rotationSet.size() - signatures.size),
+    };
+  }
+
   private renderRotationOverview(): void {
     const list = this.container.querySelector('#rotation-overview-list');
     if (!list) return;
@@ -702,7 +736,7 @@ export class CustomGameEditor {
 
       const count = document.createElement('div');
       count.className = 'rotation-card-count';
-      count.textContent = `${this.getRotationBlockCount(rotation)} blocks`;
+      count.textContent = `${this.getRotationBlockCount(rotation)} blocks • ${this.getRotationBoundingBox(rotation)}`;
       card.appendChild(count);
 
       list.appendChild(card);
@@ -757,6 +791,8 @@ export class CustomGameEditor {
     const selectedPieceName = selectedPiece?.name || 'None selected';
     const sharePayload = BobNet.toBase64GZippedGSON(this.currentGameType);
     const enabledRules = this.getEnabledRuleLabels();
+    const selectedRotation = selectedPiece && selectedRotationCount > 0 ? selectedPiece.rotationSet.get(this.currentEditingRotation) : null;
+    const analytics = this.getSelectedPieceAnalytics();
 
     this.summaryPanel.innerHTML = `
       <h3>Rules Summary</h3>
@@ -768,6 +804,8 @@ export class CustomGameEditor {
         <li><span class="summary-highlight">Pieces:</span> ${pieceCount} total, ${rotationCount} rotations, ${filledCells} filled cells</li>
         <li><span class="summary-highlight">Blocks:</span> ${blockCount} configured block types</li>
         <li><span class="summary-highlight">Editing:</span> ${selectedPieceName} (${selectedRotationCount} rotations)</li>
+        <li><span class="summary-highlight">Current rotation:</span> ${this.getRotationBlockCount(selectedRotation)} blocks in a ${this.getRotationBoundingBox(selectedRotation)} box</li>
+        <li><span class="summary-highlight">Rotation uniqueness:</span> ${analytics.uniqueRotations} unique / ${analytics.duplicateRotations} duplicate</li>
         <li><span class="summary-highlight">Enabled rules:</span> ${enabledRules.length > 0 ? enabledRules.join(', ') : 'none'}</li>
         <li><span class="summary-highlight">Share payload:</span> ${sharePayload.length} encoded chars</li>
       </ul>

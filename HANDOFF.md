@@ -62,8 +62,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Added one-click Classic Drop, Cascade Puzzle, and Stack Arcade preset buttons on top of the web preset-slot workflow.
 - Bumped the repo version again to `2.1.26`.
 
+## Additional Follow-Up - 2026-04-05 (Rotation Analytics)
+- Added current-rotation bounding-box size, unique rotation count, and duplicate rotation count to the web custom editor summary.
+- Expanded rotation overview cards to show bounding-box info.
+- Bumped the repo version again to `2.1.27`.
+
 ## Recommended Next Steps
 1. Add import history or recent-share history alongside the preset slots.
 2. If native becomes writable again, mirror the same rotation-overview and advanced-toggle UX there.
-3. Consider richer per-rotation analytics like bounding-box size or symmetry hints.
+3. Consider richer per-rotation analytics like symmetry hints.
 4. Add compact presets for classic rule families once editor state persistence is richer.

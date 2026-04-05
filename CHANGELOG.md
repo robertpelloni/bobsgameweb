@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.27] - 2026-04-05
+
+### Added
+- **Rotation Analytics Hints:** `CustomGameEditor.ts` now reports current rotation bounding-box size plus unique-vs-duplicate rotation counts for the selected piece, and the rotation cards show block count plus bounding-box info.
+
+### Changed
+- Bumped project version to `2.1.27`.
+
+### Verified
+- `npm run build` passes successfully after the rotation analytics changes.
+
 ## [2.1.26] - 2026-04-05
 
 ### Added

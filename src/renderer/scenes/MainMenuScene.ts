@@ -246,7 +246,7 @@ export class MainMenuScene extends Scene {
             fill: 0x445566,
             letterSpacing: 1,
         });
-        this.versionText = new Text({ text: 'v2.1.26', style: versionStyle });
+        this.versionText = new Text({ text: 'v2.1.27', style: versionStyle });
         this.versionText.anchor.set(1, 1);
         this.versionText.x = this.width - 10;
         this.versionText.y = this.height - 10;
