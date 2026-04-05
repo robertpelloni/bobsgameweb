@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.25] - 2026-04-05
+
+### Added
+- **Preset Slots:** `CustomGameEditor.ts` now supports quick save/load preset slots backed by localStorage so multiple custom rulesets can be iterated on quickly without replacing the primary working draft.
+
+### Changed
+- Bumped project version to `2.1.25`.
+
+### Verified
+- `npm run build` passes successfully after the preset-slot workflow changes.
+
 ## [2.1.24] - 2026-04-05
 
 ### Added

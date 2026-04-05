@@ -54,8 +54,12 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded the summary so those enabled movement/randomizer rules are visible immediately.
 - Bumped the repo version again to `2.1.24`.
 
+## Additional Follow-Up - 2026-04-05 (Preset Slots)
+- Added localStorage-backed preset slots to the web custom editor for quick save/load iteration.
+- Bumped the repo version again to `2.1.25`.
+
 ## Recommended Next Steps
-1. Add named preset slots or import history for quick editor iteration.
+1. Add import history or recent-share history alongside the preset slots.
 2. If native becomes writable again, mirror the same rotation-overview and advanced-toggle UX there.
 3. Consider richer per-rotation analytics like bounding-box size or symmetry hints.
 4. Add compact presets for classic rule families once editor state persistence is richer.

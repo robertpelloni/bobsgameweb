@@ -110,6 +110,17 @@ export class CustomGameEditor {
             <button id="btn-test" style="background:#cc6600; color:#fff; border:none; padding:5px 15px; border-radius:4px; margin-left: 10px;">Test Game</button>
         </div>
       </div>
+      <div class="form-group">
+        <label>Quick Preset Slots</label>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <button id="btn-save-slot-1">Save Slot 1</button>
+          <button id="btn-load-slot-1">Load Slot 1</button>
+          <button id="btn-save-slot-2">Save Slot 2</button>
+          <button id="btn-load-slot-2">Load Slot 2</button>
+          <button id="btn-save-slot-3">Save Slot 3</button>
+          <button id="btn-load-slot-3">Load Slot 3</button>
+        </div>
+      </div>
       
       <div class="editor-tabs">
         <button class="tab-btn active" data-tab="settings">Settings</button>
@@ -279,6 +290,12 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-load')?.addEventListener('click', () => this.load());
     this.container.querySelector('#btn-import')?.addEventListener('click', () => this.importSharedGame());
     this.container.querySelector('#btn-new')?.addEventListener('click', () => this.createNew());
+    this.container.querySelector('#btn-save-slot-1')?.addEventListener('click', () => this.savePresetSlot(1));
+    this.container.querySelector('#btn-load-slot-1')?.addEventListener('click', () => this.loadPresetSlot(1));
+    this.container.querySelector('#btn-save-slot-2')?.addEventListener('click', () => this.savePresetSlot(2));
+    this.container.querySelector('#btn-load-slot-2')?.addEventListener('click', () => this.loadPresetSlot(2));
+    this.container.querySelector('#btn-save-slot-3')?.addEventListener('click', () => this.savePresetSlot(3));
+    this.container.querySelector('#btn-load-slot-3')?.addEventListener('click', () => this.loadPresetSlot(3));
 
     [
       this.nameInput,
@@ -781,6 +798,33 @@ export class CustomGameEditor {
     this.saveAchievementSnapshot();
     this.updateSummary();
     ToastManager.showInfo('Custom game saved to local browser storage.');
+  }
+
+  private getPresetSlotKey(slot: number): string {
+      return `custom-game-type-slot-${slot}`;
+  }
+
+  private savePresetSlot(slot: number): void {
+      this.applyFormValuesToGameType();
+      localStorage.setItem(this.getPresetSlotKey(slot), JSON.stringify(this.currentGameType));
+      ToastManager.showInfo(`Saved current ruleset to preset slot ${slot}.`);
+  }
+
+  private loadPresetSlot(slot: number): void {
+      const data = localStorage.getItem(this.getPresetSlotKey(slot));
+      if (!data) {
+          ToastManager.showInfo(`Preset slot ${slot} is empty.`);
+          return;
+      }
+      try {
+          this.currentGameType = GameType.fromJSON(data);
+          this.loadFromGameType();
+          this.selectPiece(0);
+          ToastManager.showInfo(`Loaded preset slot ${slot}.`);
+      } catch (e) {
+          console.error(e);
+          alert(`Failed to load preset slot ${slot}.`);
+      }
   }
 
   private async load() {
