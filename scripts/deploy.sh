@@ -48,8 +48,13 @@ copy_dir() {
   if [[ "$HAS_RSYNC" -eq 1 ]]; then
     RSYNC_RSH="$RSYNC_SSH" rsync -avz --delete "$src" "$USER_NAME@$HOST_NAME:$dest"
   else
-    echo "[info] rsync not found, falling back to scp for $src"
-    "${SCP_BASE[@]}" -r "$src" "$USER_NAME@$HOST_NAME:$dest"
+    echo "[info] rsync not found, falling back to tar-over-ssh for $src"
+    local src_no_trailing="${src%/}"
+    local src_parent
+    local src_name
+    src_parent="$(dirname "$src_no_trailing")"
+    src_name="$(basename "$src_no_trailing")"
+    tar -C "$src_parent" -cf - "$src_name" | "${SSH_BASE[@]}" "$USER_NAME@$HOST_NAME" "tar -xf - -C $dest --strip-components=1"
   fi
 }
 

@@ -20,7 +20,7 @@ Optional:
 - `sshpass` installed if you truly want password-driven automation.
 - `rsync` installed for faster incremental uploads.
 
-If `rsync` is not installed, the scripts now automatically fall back to `scp`.
+If `rsync` is not installed, the Bash deploy script now automatically falls back to **tar-over-ssh** so `dist/renderer/` contents land directly in the target directory instead of nesting an extra `renderer/` directory.
 
 ## 2. Automated Deployment
 ### Bash / Git Bash
@@ -45,7 +45,7 @@ Both deploy scripts support:
 - `DEPLOY_REMOTE_PATH` — defaults to `~/bobsgame.com`
 - `DEPLOY_PASSWORD` — optional; used with `sshpass` if available
 - `DEPLOY_SKIP_BUILD=1` — skips rebuilding before upload
-- `DEPLOY_FORCE_SCP=1` — disables `rsync` even if present and forces `scp`
+- `DEPLOY_FORCE_SCP=1` — disables `rsync` even if present and forces the non-rsync fallback path (Bash uses tar-over-ssh)
 - `DEPLOY_INSTALL_SERVER=1` — optionally runs `npm install` remotely in `server/`
 - `DEPLOY_RESTART_SERVER=1` — optionally attempts `pm2 restart index.js` remotely
 
@@ -55,7 +55,7 @@ Example:
 DEPLOY_PASSWORD='your-password' DEPLOY_INSTALL_SERVER=1 DEPLOY_RESTART_SERVER=1 ./scripts/deploy.sh
 ```
 
-Example for a prebuilt frontend where you want to avoid an extra build and force `scp`:
+Example for a prebuilt frontend where you want to avoid an extra build and force the non-rsync fallback path:
 
 ```bash
 DEPLOY_SKIP_BUILD=1 DEPLOY_FORCE_SCP=1 ./scripts/deploy.sh
