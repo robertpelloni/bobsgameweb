@@ -242,6 +242,7 @@ export class CustomGameEditor {
                 <button id="btn-duplicate-rot">Duplicate ROT</button>
                 <button id="btn-normalize-rot">Normalize ROT</button>
                 <button id="btn-center-rot">Center ROT</button>
+                <button id="btn-remove-dup-rot">Clear Duplicates</button>
                 <button id="btn-remove-rot">- ROT</button>
             </div>
             <div id="piece-shape-editor" style="display:grid; grid-template-columns: repeat(4, 30px); gap: 2px; margin-top:10px;">
@@ -396,6 +397,10 @@ export class CustomGameEditor {
 
     this.container.querySelector('#btn-center-rot')?.addEventListener('click', () => {
         this.centerCurrentRotation();
+    });
+
+    this.container.querySelector('#btn-remove-dup-rot')?.addEventListener('click', () => {
+        this.removeDuplicateRotations();
     });
 
     this.container.querySelector('#btn-remove-rot')?.addEventListener('click', () => {
@@ -684,6 +689,39 @@ export class CustomGameEditor {
     this.renderPieceShapeEditor();
     this.updateSummary();
     ToastManager.showInfo('Centered current rotation inside the 4×4 editor grid.');
+  }
+
+  private removeDuplicateRotations(): void {
+    const ptIndex = this.pieceList.selectedIndex;
+    if (ptIndex === -1) {
+      ToastManager.showInfo('Select a piece first.');
+      return;
+    }
+
+    const pt = this.currentGameType.pieceTypes[ptIndex];
+    const duplicateIndices = [...this.getDuplicateRotationIndices()].sort((a, b) => b - a);
+    if (duplicateIndices.length === 0) {
+      ToastManager.showInfo('No duplicate rotations to remove.');
+      return;
+    }
+
+    const confirmed = window.confirm(`Remove ${duplicateIndices.length} duplicate rotation(s) from "${pt.name || 'selected piece'}"?`);
+    if (!confirmed) {
+      ToastManager.showInfo('Duplicate cleanup cancelled.');
+      return;
+    }
+
+    duplicateIndices.forEach((index) => {
+      pt.rotationSet.rotations.splice(index, 1);
+      if (this.currentEditingRotation >= index && this.currentEditingRotation > 0) {
+        this.currentEditingRotation -= 1;
+      }
+    });
+
+    this.currentEditingRotation = Math.min(this.currentEditingRotation, Math.max(0, pt.rotationSet.size() - 1));
+    this.renderPieceShapeEditor();
+    this.updateSummary();
+    ToastManager.showInfo(`Removed ${duplicateIndices.length} duplicate rotation(s).`);
   }
 
   private removeSelectedRotation(): void {

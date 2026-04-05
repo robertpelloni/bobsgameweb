@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.30] - 2026-04-05
+
+### Added
+- **Duplicate Cleanup Helper:** `CustomGameEditor.ts` now provides a one-click duplicate-rotation cleanup action that removes redundant rotations after confirmation.
+
+### Changed
+- Bumped project version to `2.1.30`.
+
+### Verified
+- `npm run build` passes successfully after the duplicate-cleanup helper changes.
+
 ## [2.1.29] - 2026-04-05
 
 ### Added
