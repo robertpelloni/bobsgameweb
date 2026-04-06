@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.43] - 2026-04-06
+
+### Added
+- **Saved Template Slot Summaries:** `CustomGameEditor.ts` now renders a dedicated preset-slot status panel showing each slot's stored ruleset name, mode, piece count, rotation count, and most recent save time.
+
+### Changed
+- Preset slot saves now write lightweight metadata alongside the serialized `GameType`, keeping browser storage backward-compatible while making saved templates recognizable before loading.
+- The custom editor now refreshes slot summaries after save/load so template status remains visible without guessing which numbered slot contains which ruleset.
+- Bumped project version to `2.1.43`.
+
+### Verified
+- `npm run build` passes successfully after the saved-template UX upgrade.
+
 ## [2.1.42] - 2026-04-05
 
 ### Added

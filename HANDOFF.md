@@ -136,13 +136,14 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
-## Additional Follow-Up - 2026-04-05 (Conversion-Pair Editing)
-- Added focused first-pass touching-block conversion authoring with editable conversion pairs, visible conversion summaries, and add/remove pair controls.
-- Expanded block summary reporting so conversion-pair counts appear alongside reward, chain, palette, and field-effect data.
-- Bumped the repo version again to `2.1.42`.
+## Additional Follow-Up - 2026-04-06 (Saved Template Slot Summaries)
+- Added a dedicated saved-template slot panel that shows each preset slot's stored ruleset name, mode, piece count, rotation count, and latest save time.
+- Preset saves now write lightweight metadata beside the serialized `GameType`, preserving old slot data compatibility while making saved templates recognizable before loading.
+- Refreshed preset-slot status after save/load so numbered slots behave more like identifiable reusable templates.
+- Bumped the repo version again to `2.1.43`.
 
 ## Recommended Next Steps
-1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, and conversion-pair editing there after the lock clears.
-2. Add compact presets for classic rule families once editor state persistence is richer.
+1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, conversion-pair editing, and saved-template slot summaries there after the lock clears.
+2. Add compact preset families with stronger category grouping now that saved slot recognition is better.
 3. Consider further block-rule depth like multi-step transformation graphs and exploding-block conversion targets.
 4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.
