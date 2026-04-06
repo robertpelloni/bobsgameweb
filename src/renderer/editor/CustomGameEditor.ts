@@ -30,6 +30,18 @@ type PresetSlotMetadata = {
   timestamp: number;
 };
 
+type PresetCatalogEntry = {
+  key: 'classic' | 'sprint' | 'cascade' | 'zen' | 'stack' | 'micro';
+  family: string;
+  title: string;
+  description: string;
+  mode: 'DROP' | 'STACK';
+  grid: string;
+  gravityLock: string;
+  preview: string;
+  chain: string;
+};
+
 export class CustomGameEditor {
   private container: HTMLElement;
   private currentGameType: GameType;
@@ -47,6 +59,7 @@ export class CustomGameEditor {
   private recentHistoryPanel!: HTMLDivElement;
   private recentActionsPanel!: HTMLDivElement;
   private presetSlotsPanel!: HTMLDivElement;
+  private templateCatalogPanel!: HTMLDivElement;
   private cascadeGravityCheckbox!: HTMLInputElement;
   private disconnectedGravityCheckbox!: HTMLInputElement;
   private chainRowCheckbox!: HTMLInputElement;
@@ -93,6 +106,7 @@ export class CustomGameEditor {
   private currentEditingRotation: number = 0;
   private currentBlockPaletteIndex: number = 0;
   private recentActions: RecentEditorActionEntry[] = [];
+  private templateCatalogModeFilter: 'all' | 'DROP' | 'STACK' = 'all';
 
   constructor(parentElementId: string) {
     const parent = document.getElementById(parentElementId);
@@ -162,6 +176,13 @@ export class CustomGameEditor {
         .preset-family-title { color:#fff; font-size:13px; margin-bottom:4px; }
         .preset-family-description { color:#9a9a9a; font-size:11px; margin-bottom:8px; }
         .preset-family-buttons { display:flex; flex-wrap:wrap; gap:8px; }
+        .template-catalog-filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+        .template-catalog-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; }
+        .template-catalog-card { background:#1b1b1b; border:1px solid #2f2f2f; border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:6px; }
+        .template-catalog-title { color:#fff; font-size:13px; }
+        .template-catalog-family { color:#7cff7c; font-size:11px; }
+        .template-catalog-description, .template-catalog-details { color:#9a9a9a; font-size:11px; }
+        .template-catalog-actions { display:flex; gap:8px; margin-top:4px; }
         .block-palette-list { display:flex; gap:6px; flex-wrap:wrap; }
         .block-palette-swatch { width:24px; height:24px; border-radius:6px; border:2px solid #444; cursor:pointer; padding:0; }
         .block-palette-swatch.active { border-color:#fff; box-shadow:0 0 0 1px #00ff88; }
@@ -226,6 +247,7 @@ export class CustomGameEditor {
           </div>
         </div>
       </div>
+      <div id="template-catalog-panel" class="preset-slots-panel"></div>
       <div id="preset-slots-panel" class="preset-slots-panel"></div>
       <div id="recent-history" class="recent-history-panel"></div>
       <div id="recent-actions" class="recent-actions-panel"></div>
@@ -446,6 +468,7 @@ export class CustomGameEditor {
     this.chainAmountInput = this.container.querySelector('#chain-amount') as HTMLInputElement;
     this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
     this.summaryPanel = this.container.querySelector('#rules-summary') as HTMLDivElement;
+    this.templateCatalogPanel = this.container.querySelector('#template-catalog-panel') as HTMLDivElement;
     this.presetSlotsPanel = this.container.querySelector('#preset-slots-panel') as HTMLDivElement;
     this.recentHistoryPanel = this.container.querySelector('#recent-history') as HTMLDivElement;
     this.recentActionsPanel = this.container.querySelector('#recent-actions') as HTMLDivElement;
@@ -520,6 +543,20 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-preset-zen')?.addEventListener('click', () => this.applyPreset('zen'));
     this.container.querySelector('#btn-preset-stack')?.addEventListener('click', () => this.applyPreset('stack'));
     this.container.querySelector('#btn-preset-micro')?.addEventListener('click', () => this.applyPreset('micro'));
+
+    this.templateCatalogPanel?.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement | null;
+      const button = target?.closest('[data-template-apply], [data-template-filter]') as HTMLElement | null;
+      if (!button) return;
+      const filter = button.getAttribute('data-template-filter') as 'all' | 'DROP' | 'STACK' | null;
+      if (filter) {
+        this.templateCatalogModeFilter = filter;
+        this.renderTemplateCatalog();
+        return;
+      }
+      const preset = button.getAttribute('data-template-apply') as PresetCatalogEntry['key'] | null;
+      if (preset) this.applyPreset(preset);
+    });
 
     this.recentHistoryPanel?.addEventListener('click', (event) => {
       const target = (event.target as HTMLElement).closest('button[data-history-action]') as HTMLButtonElement | null;
@@ -903,6 +940,7 @@ export class CustomGameEditor {
     this.updateBlockList();
     this.updatePieceList();
     this.updateSummary();
+    this.renderTemplateCatalog();
     this.renderPresetSlotStatus();
     this.renderRecentHistory();
     this.renderRecentActions();
@@ -1847,8 +1885,40 @@ export class CustomGameEditor {
       return `custom-game-type-slot-${slot}`;
   }
 
+  private getPresetCatalogEntries(): PresetCatalogEntry[] {
+      return [
+          { key: 'classic', family: 'Competitive Drop', title: 'Classic Drop', description: 'Balanced modern drop rules with hold and bag randomizer enabled.', mode: 'DROP', grid: '10×20', gravityLock: '100 / 500', preview: '3 next • hold on', chain: '4-chain • row focus' },
+          { key: 'sprint', family: 'Competitive Drop', title: 'Sprint Drop', description: 'Fast preview-heavy drop tuning for speed clears and quick retries.', mode: 'DROP', grid: '10×20', gravityLock: '40 / 240', preview: '5 next • hold on', chain: '4-chain • row focus' },
+          { key: 'cascade', family: 'Puzzle Chainers', title: 'Cascade Puzzle', description: 'Compact chain-oriented board with recursive cascade checks enabled.', mode: 'DROP', grid: '8×16', gravityLock: '120 / 450', preview: '3 next • hold off', chain: '3-chain • row/column/diag' },
+          { key: 'zen', family: 'Puzzle Chainers', title: 'Zen Garden', description: 'Slower forgiving chain sandbox for calm experimentation and pattern setup.', mode: 'DROP', grid: '10×18', gravityLock: '220 / 900', preview: '5 next • hold on', chain: '4-chain • recursive' },
+          { key: 'stack', family: 'Arcade Stackers', title: 'Stack Arcade', description: 'Compact stack rules tuned for quick arcade rounds and pressure play.', mode: 'STACK', grid: '6×12', gravityLock: '90 / 350', preview: '3 next • hold off', chain: '3-chain • row/column' },
+          { key: 'micro', family: 'Arcade Stackers', title: 'Micro Stack', description: 'Tiny-grid stack challenge for dense short-form sessions.', mode: 'STACK', grid: '5×10', gravityLock: '70 / 220', preview: '2 next • hold off', chain: '3-chain • row/column' },
+      ];
+  }
+
   private getPresetSlotMetaKey(slot: number): string {
       return `custom-game-type-slot-meta-${slot}`;
+  }
+
+  private renderTemplateCatalog(): void {
+      if (!this.templateCatalogPanel) return;
+      const entries = this.getPresetCatalogEntries().filter((entry) => this.templateCatalogModeFilter === 'all' || entry.mode === this.templateCatalogModeFilter);
+      const filterButtons = [
+          { key: 'all', label: 'All Templates' },
+          { key: 'DROP', label: 'Drop Templates' },
+          { key: 'STACK', label: 'Stack Templates' },
+      ].map((filter) => `<button data-template-filter="${filter.key}"${this.templateCatalogModeFilter === filter.key ? ' style="background:#00ff88; color:#111;"' : ''}>${filter.label}</button>`).join('');
+      const cards = entries.map((entry) => `
+        <div class="template-catalog-card">
+          <div class="template-catalog-family">${entry.family}</div>
+          <div class="template-catalog-title">${entry.title}</div>
+          <div class="template-catalog-description">${entry.description}</div>
+          <div class="template-catalog-details">${entry.mode} • Grid ${entry.grid} • Gravity/Lock ${entry.gravityLock}</div>
+          <div class="template-catalog-details">${entry.preview} • ${entry.chain}</div>
+          <div class="template-catalog-actions"><button data-template-apply="${entry.key}">Apply</button></div>
+        </div>
+      `).join('');
+      this.templateCatalogPanel.innerHTML = `<h3>Template Browser</h3><div class="template-catalog-filters">${filterButtons}</div><div class="template-catalog-grid">${cards}</div>`;
   }
 
   private getPresetSlotMetadata(slot: number): PresetSlotMetadata | null {

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.54] - 2026-04-06
+
+### Added
+- **Template Browser:** `CustomGameEditor.ts` now renders a browsable built-in template catalog with mode filters, preset summaries, and one-click apply actions for the grouped preset families.
+
+### Changed
+- Preset browsing now surfaces family, mode, grid, gravity/lock, preview, and chain summaries directly in the editor instead of hiding that context behind a flat row of buttons.
+- Bumped project version to `2.1.54`.
+
+### Verified
+- `npm run build` passes successfully after the template-browser pass.
+
 ## [2.1.53] - 2026-04-06
 
 ### Added
