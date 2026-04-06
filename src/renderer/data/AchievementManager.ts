@@ -242,7 +242,7 @@ class AchievementManagerClass {
 
     public exportSnapshot(): AchievementSnapshot {
         return {
-            version: '2.1.46',
+            version: '2.1.47',
             stats: { ...this.stats },
             unlockedIds: [...this.unlockedIds]
         };

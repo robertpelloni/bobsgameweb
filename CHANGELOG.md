@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.47] - 2026-04-06
+
+### Added
+- **Backend Drift Audit:** added `scripts/audit-backend-drift.sh` to compare local tracked backend source, remote Hetzner backend files, and the live running backend process version exposed by `/healthz`.
+
+### Changed
+- Synced `server/package.json` version metadata with the tracked backend runtime version so source-level backend version reporting is internally consistent again.
+- Hardened `scripts/deploy-backend-vps.sh` with a tar-over-ssh fallback and a `BACKEND_FORCE_TAR=1` switch so no-restart backend file syncs remain usable even when `rsync` is present but broken in the current shell environment.
+- Bumped project version to `2.1.47`.
+
+### Verified
+- Audited the live Hetzner backend and confirmed the exact current state:
+  - local tracked backend files: `2.1.47`
+  - remote backend files on disk: `2.1.47`
+  - live running backend process from `/healthz`: `2.1.17`
+- Confirmed the no-restart backend file sync aligned `/opt/bobsgameweb/server/index.js` and `/opt/bobsgameweb/server/package.json` on disk without touching the running process.
+
 ## [2.1.46] - 2026-04-06
 
 ### Added
