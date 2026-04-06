@@ -39,17 +39,22 @@ BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.49 ALLOW_BACKEN
 
 ## Restart-readiness snapshot (read-only)
 ```bash
-BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.50 ./scripts/snapshot-backend-restart-readiness.sh
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/snapshot-backend-restart-readiness.sh
+```
+
+## Compare current state to a saved restart-readiness snapshot
+```bash
+SNAPSHOT_FILE=artifacts/pre-restart.txt BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/compare-backend-restart-snapshot.sh
 ```
 
 ## Planned backend maintenance restart (dry-run by default)
 ```bash
-BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.50 ./scripts/run-backend-maintenance-restart.sh
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/run-backend-maintenance-restart.sh
 ```
 
 ## Planned backend maintenance restart (execute only when allowed)
 ```bash
-BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.50 EXECUTE_BACKEND_RESTART=1 ./scripts/run-backend-maintenance-restart.sh
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 EXECUTE_BACKEND_RESTART=1 ./scripts/run-backend-maintenance-restart.sh
 ```
 
 ## Audit backend drift

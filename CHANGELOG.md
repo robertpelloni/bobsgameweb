@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.51] - 2026-04-06
+
+### Added
+- **Post-Restart Snapshot Comparison Helper:** added `scripts/compare-backend-restart-snapshot.sh`, a read-only helper that compares a saved pre-maintenance snapshot against current backend/frontend/service state and highlights what changed, what stayed stable, and whether the backend runtime version advanced as expected.
+
+### Changed
+- Completed the planned backend maintenance toolkit so the future allowed restart flow now has three tracked phases: pre-restart snapshot, dry-run/execute restart helper, and post-restart comparison.
+- Bumped project version to `2.1.51`.
+
+### Verified
+- Confirmed the comparison helper can read a saved readiness snapshot and report the current no-restart state with warnings instead of failing hard when runtime drift and unchanged PID are still expected.
+
 ## [2.1.50] - 2026-04-06
 
 ### Added
