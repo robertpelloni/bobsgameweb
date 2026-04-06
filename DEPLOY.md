@@ -13,6 +13,7 @@ BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com ./scripts/
 ```
 
 The production verification step now also scans the deployed JS bundles to ensure they actually contain `https://ws.bobsgame.com`.
+It additionally checks for expected custom-editor markers in the live asset set so editor-focused releases can be verified against production without relying solely on interactive browser automation.
 
 ## Legacy DreamHost Notes
 
