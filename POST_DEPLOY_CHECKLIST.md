@@ -37,10 +37,11 @@ Use this after backend deployment or production cutover.
   ```
 - for planned maintenance windows, capture a restart-readiness baseline first:
   ```bash
-  BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/snapshot-backend-restart-readiness.sh
+  BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ./scripts/snapshot-backend-restart-readiness.sh
   ```
 - after the restart window, compare against that baseline:
   ```bash
-  SNAPSHOT_FILE=artifacts/pre-restart.txt BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/compare-backend-restart-snapshot.sh
+  SNAPSHOT_FILE=artifacts/pre-restart.txt BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ./scripts/compare-backend-restart-snapshot.sh
   ```
 - consult `BACKEND_RECOVERY.md`
+- for the full planned restart sequence, consult `MAINTENANCE_WINDOW_RUNBOOK.md`

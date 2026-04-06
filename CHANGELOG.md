@@ -2,17 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.1.51] - 2026-04-06
+## [2.1.52] - 2026-04-06
 
 ### Added
-- **Post-Restart Snapshot Comparison Helper:** added `scripts/compare-backend-restart-snapshot.sh`, a read-only helper that compares a saved pre-maintenance snapshot against current backend/frontend/service state and highlights what changed, what stayed stable, and whether the backend runtime version advanced as expected.
+- **Maintenance Window Orchestrator Runbook:** added `MAINTENANCE_WINDOW_RUNBOOK.md`, a single top-level procedure that orders the future allowed backend restart into six explicit phases: pre-restart snapshot, dry-run helper, explicit restart, snapshot comparison, strict backend verification, and strict full production verification.
 
 ### Changed
-- Completed the planned backend maintenance toolkit so the future allowed restart flow now has three tracked phases: pre-restart snapshot, dry-run/execute restart helper, and post-restart comparison.
-- Bumped project version to `2.1.51`.
+- Linked the new runbook from `BACKEND_DEPLOY.md`, `BACKEND_RECOVERY.md`, `POST_DEPLOY_CHECKLIST.md`, and `OPS_CHEATSHEET.md` so the full maintenance-window path is discoverable from the existing ops docs.
+- Bumped project version to `2.1.52`.
 
 ### Verified
-- Confirmed the comparison helper can read a saved readiness snapshot and report the current no-restart state with warnings instead of failing hard when runtime drift and unchanged PID are still expected.
+- Confirmed the current live no-restart state still passes the drift-aware production verification flow while the new runbook documents the future strict restart-window path.
 
 ## [2.1.50] - 2026-04-06
 
@@ -33,7 +33,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Expanded backend docs/runbooks so maintenance restarts now have a tracked dry-run path instead of relying on ad hoc shell history.
-- Bumped project version to `2.1.50`.
+- Bumped project version to `2.1.49`.
 
 ### Verified
 - Confirmed the new helper remains dry-run by default and does not restart anything unless `EXECUTE_BACKEND_RESTART=1` is explicitly supplied.

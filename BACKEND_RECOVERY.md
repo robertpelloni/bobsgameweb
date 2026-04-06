@@ -12,7 +12,7 @@ BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scr
 Before any planned maintenance-window restart, capture a read-only readiness snapshot too:
 
 ```bash
-BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.50 ./scripts/snapshot-backend-restart-readiness.sh
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ./scripts/snapshot-backend-restart-readiness.sh
 ```
 
 This will show:
@@ -51,15 +51,17 @@ BACKEND_URL=https://ws.bobsgame.com ./scripts/check-backend-host.sh
 For a controlled maintenance-window restart with pre/post checks, prefer:
 
 ```bash
-BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/run-backend-maintenance-restart.sh
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ./scripts/run-backend-maintenance-restart.sh
 ```
 
 That helper is dry-run by default. It only performs the restart if `EXECUTE_BACKEND_RESTART=1` is explicitly supplied.
 
+For the complete ordered maintenance-window flow, see `MAINTENANCE_WINDOW_RUNBOOK.md`.
+
 Afterward, compare the current state against the saved readiness snapshot with:
 
 ```bash
-SNAPSHOT_FILE=artifacts/pre-restart.txt BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/compare-backend-restart-snapshot.sh
+SNAPSHOT_FILE=artifacts/pre-restart.txt BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ./scripts/compare-backend-restart-snapshot.sh
 ```
 
 ## 4. Frontend rollback strategy
