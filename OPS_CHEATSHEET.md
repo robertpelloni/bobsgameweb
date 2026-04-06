@@ -27,6 +27,11 @@ BACKEND_HOST=YOUR_SERVER_IP BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com INSTAL
 BACKEND_URL=https://ws.bobsgame.com ./scripts/check-backend-host.sh
 ```
 
+## Audit backend drift
+```bash
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com ./scripts/audit-backend-drift.sh
+```
+
 ## Rebuild frontend for backend host
 ```bash
 BACKEND_URL=https://ws.bobsgame.com ./scripts/rebuild-for-backend.sh
@@ -60,6 +65,11 @@ BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com ./scripts/
 ## Backend-only upload to VPS
 ```bash
 BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root BACKEND_INSTALL_DEPS=1 ./scripts/deploy-backend-vps.sh
+```
+
+## Backend-only upload to VPS without restart (force tar-over-ssh path)
+```bash
+BACKEND_HOST=5.161.250.43 BACKEND_USER=root BACKEND_FORCE_TAR=1 BACKEND_RESTART=0 ./scripts/deploy-backend-vps.sh
 ```
 
 ## Install / refresh backend env file on VPS

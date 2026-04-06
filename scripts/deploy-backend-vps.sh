@@ -14,6 +14,7 @@ set -euo pipefail
 #   BACKEND_SERVICE_NAME=bobsgameweb-server
 #   BACKEND_INSTALL_DEPS=1
 #   BACKEND_RESTART=1
+#   BACKEND_FORCE_TAR=1   # skip rsync and use tar-over-ssh even if rsync exists
 #   DEPLOY_PASSWORD=...   (uses sshpass if available)
 
 BACKEND_USER="${BACKEND_USER:-root}"
@@ -42,6 +43,9 @@ HAS_RSYNC=0
 if command -v rsync >/dev/null 2>&1; then
   HAS_RSYNC=1
 fi
+if [[ "${BACKEND_FORCE_TAR:-0}" == "1" ]]; then
+  HAS_RSYNC=0
+fi
 
 run_ssh() {
   "${SSH_BASE[@]}" "$BACKEND_USER@$BACKEND_HOST" "$1"
@@ -54,8 +58,10 @@ copy_dir() {
   if [[ "$HAS_RSYNC" -eq 1 ]]; then
     RSYNC_RSH="$RSYNC_SSH" rsync -avz --delete "$src" "$BACKEND_USER@$BACKEND_HOST:$dest"
   else
-    echo "[info] rsync not found, falling back to scp for $src"
-    "${SCP_BASE[@]}" -r "$src" "$BACKEND_USER@$BACKEND_HOST:$dest"
+    echo "[info] using tar-over-ssh upload path for $src"
+    local src_trimmed="${src%/}"
+    run_ssh "mkdir -p $dest"
+    tar -C "$src_trimmed" -czf - . | run_ssh "tar xzf - -C $dest"
   fi
 }
 

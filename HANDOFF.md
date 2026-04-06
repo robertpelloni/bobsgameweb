@@ -136,14 +136,19 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
-## Additional Follow-Up - 2026-04-06 (Production Runtime Chunk Smoke Coverage)
-- Added `scripts/check-production-runtime-chunks.sh` to verify that critical lazy-loaded scene chunk families are discoverable from the live production asset graph and fetch successfully.
-- Wired the runtime chunk smoke check into `scripts/verify-production-stack.sh`, so production verification now checks backend health, websocket polling, frontend asset references, backend-origin embedding, editor markers, and targeted lazy chunk availability together.
-- Verified the live site passes the stricter end-to-end production verification flow for key scene families like `CustomGameEditorScene`, `AchievementsScene`, `WorldScene`, `WorldEditorScene`, and `LobbyScene`.
-- Bumped the repo version again to `2.1.46`.
+## Additional Follow-Up - 2026-04-06 (Backend Drift Audit + No-Restart File Alignment)
+- Added `scripts/audit-backend-drift.sh` to compare local tracked backend source, remote Hetzner backend files, and the currently running backend process version exposed by `/healthz`.
+- Synced `server/package.json` version metadata with the tracked backend runtime version so source-level backend reporting is internally consistent again.
+- Hardened `scripts/deploy-backend-vps.sh` with a tar-over-ssh fallback plus `BACKEND_FORCE_TAR=1`, after proving the current shell environment can expose a broken `rsync` path (`dup() in/out/err failed`) even when `rsync` exists.
+- Performed a no-restart backend file sync to Hetzner and verified the exact current truth:
+  - `/opt/bobsgameweb/server/index.js` on disk -> `2.1.47`
+  - `/opt/bobsgameweb/server/package.json` on disk -> `2.1.47`
+  - public `/healthz` runtime -> `2.1.17`
+- That means the backend files on disk are now aligned, but the running systemd-managed Node process is still serving the older loaded code until a planned restart happens.
+- Bumped the repo version again to `2.1.47`.
 
 ## Recommended Next Steps
-1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, conversion-pair editing, and saved-template slot summaries there after the lock clears.
-2. Add compact preset families with stronger category grouping now that saved slot recognition is better.
-3. Consider further block-rule depth like multi-step transformation graphs and exploding-block conversion targets.
+1. Keep the current no-restart truth documented: backend disk state is aligned, runtime state is intentionally older until a planned restart window exists.
+2. If/when restart is allowed, perform a controlled `bobsgameweb-server` restart and immediately rerun `audit-backend-drift.sh` plus `check-backend-host.sh` to collapse runtime drift from `2.1.17` to `2.1.47`.
+3. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, conversion-pair editing, and saved-template slot summaries there after the lock clears.
 4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.

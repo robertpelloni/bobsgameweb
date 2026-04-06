@@ -69,6 +69,17 @@ curl -i https://YOUR-BACKEND-HOST/healthz
 curl -i "https://YOUR-BACKEND-HOST/socket.io/?EIO=4&transport=polling"
 ```
 
+For drift-aware verification on Hetzner/VPS installs, also run:
+
+```bash
+BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST ./scripts/audit-backend-drift.sh
+```
+
+This compares:
+- local tracked backend source
+- remote backend files on disk
+- live running backend process version from `/healthz`
+
 Expected:
 - `/` → 200 plain text
 - `/healthz` → 200 JSON with `ok: true`
@@ -93,6 +104,18 @@ Or use the combined cutover helper:
 ```bash
 BACKEND_URL=https://YOUR-BACKEND-HOST DEPLOY_STATIC=1 DEPLOY_HOST=dreamhost-bobsgame ./scripts/cutover-production.sh
 ```
+
+## No-Restart Backend File Syncs
+If you need to align backend files on disk without restarting the live service:
+
+```bash
+BACKEND_HOST=YOUR_SERVER_IP BACKEND_USER=root BACKEND_FORCE_TAR=1 BACKEND_RESTART=0 ./scripts/deploy-backend-vps.sh
+```
+
+This is useful when:
+- you must not kill/restart processes right now
+- you still want `/opt/bobsgameweb/server` to match tracked source
+- you want the next planned restart to pick up already-synced code
 
 ## Suggested Provider Shapes
 ### VPS / Hetzner / DigitalOcean
