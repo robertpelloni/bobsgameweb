@@ -35,4 +35,8 @@ Use this after backend deployment or production cutover.
   ```bash
   BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/collect-backend-diagnostics.sh
   ```
+- for planned maintenance windows, capture a restart-readiness baseline first:
+  ```bash
+  BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.50 ./scripts/snapshot-backend-restart-readiness.sh
+  ```
 - consult `BACKEND_RECOVERY.md`
