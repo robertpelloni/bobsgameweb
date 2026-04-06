@@ -89,7 +89,19 @@ BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.48 ./scripts/
 If a no-restart maintenance window intentionally leaves runtime drift in place, use:
 
 ```bash
-BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.48 ALLOW_BACKEND_RUNTIME_DRIFT=1 ./scripts/check-backend-host.sh
+BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.49 ALLOW_BACKEND_RUNTIME_DRIFT=1 ./scripts/check-backend-host.sh
+```
+
+When a real restart window becomes available, you can prepare with the dry-run maintenance helper:
+
+```bash
+BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.49 ./scripts/run-backend-maintenance-restart.sh
+```
+
+And only execute the restart when explicitly allowed:
+
+```bash
+BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.49 EXECUTE_BACKEND_RESTART=1 ./scripts/run-backend-maintenance-restart.sh
 ```
 
 Expected:

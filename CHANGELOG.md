@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.49] - 2026-04-06
+
+### Added
+- **Planned Backend Maintenance Restart Helper:** added `scripts/run-backend-maintenance-restart.sh`, a dry-run-first helper that sequences pre-restart audit, restart, strict backend version verification, post-restart audit, and optional full production stack verification when a restart window is explicitly allowed.
+
+### Changed
+- Expanded backend docs/runbooks so maintenance restarts now have a tracked dry-run path instead of relying on ad hoc shell history.
+- Bumped project version to `2.1.49`.
+
+### Verified
+- Confirmed the new helper remains dry-run by default and does not restart anything unless `EXECUTE_BACKEND_RESTART=1` is explicitly supplied.
+
 ## [2.1.48] - 2026-04-06
 
 ### Added

@@ -29,12 +29,22 @@ BACKEND_URL=https://ws.bobsgame.com ./scripts/check-backend-host.sh
 
 ## Verify backend against an expected runtime version
 ```bash
-BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.48 ./scripts/check-backend-host.sh
+BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.49 ./scripts/check-backend-host.sh
 ```
 
 ## Verify backend while temporarily allowing documented runtime drift
 ```bash
-BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.48 ALLOW_BACKEND_RUNTIME_DRIFT=1 ./scripts/check-backend-host.sh
+BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.49 ALLOW_BACKEND_RUNTIME_DRIFT=1 ./scripts/check-backend-host.sh
+```
+
+## Planned backend maintenance restart (dry-run by default)
+```bash
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.49 ./scripts/run-backend-maintenance-restart.sh
+```
+
+## Planned backend maintenance restart (execute only when allowed)
+```bash
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.49 EXECUTE_BACKEND_RESTART=1 ./scripts/run-backend-maintenance-restart.sh
 ```
 
 ## Audit backend drift

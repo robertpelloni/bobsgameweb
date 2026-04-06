@@ -42,6 +42,14 @@ BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root BACKEND_INSTALL_DEPS=1 ./scripts/
 BACKEND_URL=https://ws.bobsgame.com ./scripts/check-backend-host.sh
 ```
 
+For a controlled maintenance-window restart with pre/post checks, prefer:
+
+```bash
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.49 ./scripts/run-backend-maintenance-restart.sh
+```
+
+That helper is dry-run by default. It only performs the restart if `EXECUTE_BACKEND_RESTART=1` is explicitly supplied.
+
 ## 4. Frontend rollback strategy
 If the frontend has already been rebuilt to the new backend but the backend is unstable:
 
