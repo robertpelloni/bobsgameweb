@@ -136,6 +136,12 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
+## Additional Follow-Up - 2026-04-06 (Compact Preset Families)
+- Reworked the flat preset strip into compact preset-family groupings for competitive drop, puzzle chainers, and arcade stackers.
+- Added new curated starter templates: `Sprint Drop`, `Zen Garden`, and `Micro Stack`.
+- Expanded preset application so those starters seed gravity, lock delay, and next-piece preview counts more deliberately instead of only toggling a few gameplay flags.
+- Bumped the repo version again to `2.1.53`.
+
 ## Additional Follow-Up - 2026-04-06 (Maintenance Window Orchestrator Runbook)
 - Added `MAINTENANCE_WINDOW_RUNBOOK.md` as the single top-level operator procedure for the future allowed backend restart window.
 - The runbook stitches the toolkit into one ordered sequence: pre-restart snapshot, dry-run helper, explicit restart, post-restart comparison, strict backend verification, and strict full production verification.

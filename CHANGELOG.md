@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.53] - 2026-04-06
+
+### Added
+- **Compact Preset Families:** `CustomGameEditor.ts` now groups starter presets into compact family cards and adds curated new templates for `Sprint Drop`, `Zen Garden`, and `Micro Stack` alongside the existing classic presets.
+
+### Changed
+- Expanded preset authoring coverage so creators can jump between competitive drop, puzzle-chain, and arcade-stack starting points without treating presets like a flat unorganized button strip.
+- Presets now also seed gravity, lock delay, and next-piece preview counts more explicitly for each family starter.
+- Bumped project version to `2.1.53`.
+
+### Verified
+- `npm run build` passes successfully after the preset-family UX expansion.
+
 ## [2.1.52] - 2026-04-06
 
 ### Added
