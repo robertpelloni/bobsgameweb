@@ -136,11 +136,11 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
-## Additional Follow-Up - 2026-04-06 (Production Editor Smoke Coverage)
-- Added `scripts/check-production-editor.sh` to verify that the live public site contains expected custom-editor markers, including saved-template slot UI and conversion authoring hooks.
-- Wired the new editor smoke check into `scripts/verify-production-stack.sh` so production verification now checks backend health, websocket polling, frontend asset references, backend-origin embedding, and editor feature markers together.
-- Verified the live site passes the stricter end-to-end production verification flow.
-- Bumped the repo version again to `2.1.45`.
+## Additional Follow-Up - 2026-04-06 (Production Runtime Chunk Smoke Coverage)
+- Added `scripts/check-production-runtime-chunks.sh` to verify that critical lazy-loaded scene chunk families are discoverable from the live production asset graph and fetch successfully.
+- Wired the runtime chunk smoke check into `scripts/verify-production-stack.sh`, so production verification now checks backend health, websocket polling, frontend asset references, backend-origin embedding, editor markers, and targeted lazy chunk availability together.
+- Verified the live site passes the stricter end-to-end production verification flow for key scene families like `CustomGameEditorScene`, `AchievementsScene`, `WorldScene`, `WorldEditorScene`, and `LobbyScene`.
+- Bumped the repo version again to `2.1.46`.
 
 ## Recommended Next Steps
 1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, conversion-pair editing, and saved-template slot summaries there after the lock clears.
