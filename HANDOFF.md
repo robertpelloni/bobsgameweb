@@ -136,19 +136,16 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
-## Additional Follow-Up - 2026-04-06 (Backend Drift Audit + No-Restart File Alignment)
-- Added `scripts/audit-backend-drift.sh` to compare local tracked backend source, remote Hetzner backend files, and the currently running backend process version exposed by `/healthz`.
-- Synced `server/package.json` version metadata with the tracked backend runtime version so source-level backend reporting is internally consistent again.
-- Hardened `scripts/deploy-backend-vps.sh` with a tar-over-ssh fallback plus `BACKEND_FORCE_TAR=1`, after proving the current shell environment can expose a broken `rsync` path (`dup() in/out/err failed`) even when `rsync` exists.
-- Performed a no-restart backend file sync to Hetzner and verified the exact current truth:
-  - `/opt/bobsgameweb/server/index.js` on disk -> `2.1.47`
-  - `/opt/bobsgameweb/server/package.json` on disk -> `2.1.47`
-  - public `/healthz` runtime -> `2.1.17`
-- That means the backend files on disk are now aligned, but the running systemd-managed Node process is still serving the older loaded code until a planned restart happens.
-- Bumped the repo version again to `2.1.47`.
+## Additional Follow-Up - 2026-04-06 (Version-Aware Backend Runtime Checks)
+- Upgraded `scripts/check-backend-host.sh` to support `EXPECTED_BACKEND_VERSION` plus `ALLOW_BACKEND_RUNTIME_DRIFT=1`, so backend checks can now explicitly enforce runtime version alignment or allow a documented mismatch during no-restart maintenance windows.
+- Wired those optional controls through `scripts/verify-production-stack.sh` so full production verification can operate in drift-strict or drift-aware mode.
+- Verified the current live backend behaves correctly under both modes:
+  - strict mode fails because `/healthz` still reports `2.1.17`
+  - drift-aware mode passes with a warning when runtime drift is intentionally tolerated
+- Bumped the repo version again to `2.1.48`.
 
 ## Recommended Next Steps
 1. Keep the current no-restart truth documented: backend disk state is aligned, runtime state is intentionally older until a planned restart window exists.
-2. If/when restart is allowed, perform a controlled `bobsgameweb-server` restart and immediately rerun `audit-backend-drift.sh` plus `check-backend-host.sh` to collapse runtime drift from `2.1.17` to `2.1.47`.
+2. If/when restart is allowed, perform a controlled `bobsgameweb-server` restart and immediately rerun `audit-backend-drift.sh` plus `check-backend-host.sh EXPECTED_BACKEND_VERSION=2.1.48` to collapse runtime drift from `2.1.17` to `2.1.48`.
 3. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, conversion-pair editing, and saved-template slot summaries there after the lock clears.
 4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.
