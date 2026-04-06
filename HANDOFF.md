@@ -136,6 +136,12 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
+## Additional Follow-Up - 2026-04-06 (Post-Restart Snapshot Comparison)
+- Added `scripts/compare-backend-restart-snapshot.sh` to compare a saved pre-maintenance snapshot against the current live backend/frontend/service state.
+- The comparison helper highlights runtime-version movement, frontend asset stability, service state, and PID changes, making post-restart verification much less manual.
+- Verified it works safely in the current no-restart state by reporting warnings instead of pretending a restart happened.
+- Bumped the repo version again to `2.1.51`.
+
 ## Additional Follow-Up - 2026-04-06 (Backend Restart Readiness Snapshot)
 - Added `scripts/snapshot-backend-restart-readiness.sh` to capture a read-only baseline before any future allowed backend restart window.
 - The snapshot bundles drift audit output, version-aware backend health output, remote service status, journal tail, and public frontend asset references into one repeatable pre-maintenance view.

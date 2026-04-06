@@ -95,19 +95,25 @@ BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.49 ALLOW_BACK
 When a real restart window becomes available, capture a readiness snapshot first:
 
 ```bash
-BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.50 ./scripts/snapshot-backend-restart-readiness.sh
+BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/snapshot-backend-restart-readiness.sh
 ```
 
 Then prepare with the dry-run maintenance helper:
 
 ```bash
-BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.50 ./scripts/run-backend-maintenance-restart.sh
+BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/run-backend-maintenance-restart.sh
+```
+
+After the restart window, compare the current state against the saved snapshot:
+
+```bash
+SNAPSHOT_FILE=artifacts/pre-restart.txt BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/compare-backend-restart-snapshot.sh
 ```
 
 And only execute the restart when explicitly allowed:
 
 ```bash
-BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.50 EXECUTE_BACKEND_RESTART=1 ./scripts/run-backend-maintenance-restart.sh
+BACKEND_HOST=YOUR_SERVER_IP BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.51 EXECUTE_BACKEND_RESTART=1 ./scripts/run-backend-maintenance-restart.sh
 ```
 
 Expected:
