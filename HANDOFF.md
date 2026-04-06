@@ -136,6 +136,11 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
+## Additional Follow-Up - 2026-04-06 (Template Browser)
+- Added a browsable built-in template catalog with mode filters, summary cards, and one-click apply actions on top of the preset-family pass.
+- The editor now exposes family, mode, grid, gravity/lock, preview, and chain summaries before applying a starter template.
+- Bumped the repo version again to `2.1.54`.
+
 ## Additional Follow-Up - 2026-04-06 (Compact Preset Families)
 - Reworked the flat preset strip into compact preset-family groupings for competitive drop, puzzle chainers, and arcade stackers.
 - Added new curated starter templates: `Sprint Drop`, `Zen Garden`, and `Micro Stack`.
