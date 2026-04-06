@@ -136,6 +136,12 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
+## Additional Follow-Up - 2026-04-06 (Unified Template Library)
+- Added a unified, filterable "Template Library" surface that combines built-in presets, user-saved slots, and import/share history into a single browsing experience.
+- Refactored internal rendering to reuse summary cards and action hooks across all template sources.
+- Preserved existing dedicated panels as fallback/secondary UI while positioning the Unified Library as the primary browsing workflow.
+- Bumped the repo version again to `2.1.56`.
+
 ## Additional Follow-Up - 2026-04-06 (Template-to-Slot Shortcuts)
 - Added direct save-to-slot actions on built-in template cards so curated starter templates can be banked into user preset slots without first overwriting the active draft.
 - This is the first real bridge between the built-in template browser and the saved-slot workflow.
