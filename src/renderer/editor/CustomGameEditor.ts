@@ -56,6 +56,7 @@ export class CustomGameEditor {
   private chainAmountInput!: HTMLInputElement;
   private nextPiecesInput!: HTMLInputElement;
   private summaryPanel!: HTMLDivElement;
+  private unifiedTemplateLibraryPanel!: HTMLDivElement;
   private recentHistoryPanel!: HTMLDivElement;
   private recentActionsPanel!: HTMLDivElement;
   private presetSlotsPanel!: HTMLDivElement;
@@ -107,6 +108,7 @@ export class CustomGameEditor {
   private currentBlockPaletteIndex: number = 0;
   private recentActions: RecentEditorActionEntry[] = [];
   private templateCatalogModeFilter: 'all' | 'DROP' | 'STACK' = 'all';
+  private unifiedTemplateLibraryFilter: 'all' | 'built-in' | 'slot' | 'history' = 'all';
 
   constructor(parentElementId: string) {
     const parent = document.getElementById(parentElementId);
@@ -182,7 +184,14 @@ export class CustomGameEditor {
         .template-catalog-title { color:#fff; font-size:13px; }
         .template-catalog-family { color:#7cff7c; font-size:11px; }
         .template-catalog-description, .template-catalog-details { color:#9a9a9a; font-size:11px; }
-        .template-catalog-actions { display:flex; gap:8px; margin-top:4px; }
+        .template-catalog-actions { display:flex; gap:8px; margin-top:4px; flex-wrap:wrap; }
+        .library-filter-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+        .library-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; }
+        .library-card { background:#1b1b1b; border:1px solid #2f2f2f; border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:6px; }
+        .library-source { color:#7cff7c; font-size:11px; }
+        .library-title { color:#fff; font-size:13px; }
+        .library-details { color:#9a9a9a; font-size:11px; }
+        .library-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
         .block-palette-list { display:flex; gap:6px; flex-wrap:wrap; }
         .block-palette-swatch { width:24px; height:24px; border-radius:6px; border:2px solid #444; cursor:pointer; padding:0; }
         .block-palette-swatch.active { border-color:#fff; box-shadow:0 0 0 1px #00ff88; }
@@ -247,6 +256,7 @@ export class CustomGameEditor {
           </div>
         </div>
       </div>
+      <div id="unified-template-library-panel" class="preset-slots-panel"></div>
       <div id="template-catalog-panel" class="preset-slots-panel"></div>
       <div id="preset-slots-panel" class="preset-slots-panel"></div>
       <div id="recent-history" class="recent-history-panel"></div>
@@ -468,6 +478,7 @@ export class CustomGameEditor {
     this.chainAmountInput = this.container.querySelector('#chain-amount') as HTMLInputElement;
     this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
     this.summaryPanel = this.container.querySelector('#rules-summary') as HTMLDivElement;
+    this.unifiedTemplateLibraryPanel = this.container.querySelector('#unified-template-library-panel') as HTMLDivElement;
     this.templateCatalogPanel = this.container.querySelector('#template-catalog-panel') as HTMLDivElement;
     this.presetSlotsPanel = this.container.querySelector('#preset-slots-panel') as HTMLDivElement;
     this.recentHistoryPanel = this.container.querySelector('#recent-history') as HTMLDivElement;
@@ -561,6 +572,42 @@ export class CustomGameEditor {
         return;
       }
       if (preset) this.applyPreset(preset);
+    });
+
+    this.unifiedTemplateLibraryPanel?.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement | null;
+      const button = target?.closest('[data-library-filter], [data-library-preset], [data-library-save-slot], [data-library-load-slot], [data-library-history-load], [data-library-history-copy]') as HTMLElement | null;
+      if (!button) return;
+      const filter = button.getAttribute('data-library-filter') as 'all' | 'built-in' | 'slot' | 'history' | null;
+      if (filter) {
+        this.unifiedTemplateLibraryFilter = filter;
+        this.renderUnifiedTemplateLibrary();
+        return;
+      }
+      const preset = button.getAttribute('data-library-preset') as PresetCatalogEntry['key'] | null;
+      const saveSlot = button.getAttribute('data-library-save-slot');
+      if (preset && saveSlot) {
+        this.savePresetTemplateToSlot(preset, Number.parseInt(saveSlot, 10));
+        return;
+      }
+      if (preset) {
+        this.applyPreset(preset);
+        return;
+      }
+      const slot = button.getAttribute('data-library-load-slot');
+      if (slot) {
+        this.loadPresetSlot(Number.parseInt(slot, 10));
+        return;
+      }
+      const historyLoad = button.getAttribute('data-library-history-load');
+      if (historyLoad) {
+        this.loadRecentHistoryEntry(Number.parseInt(historyLoad, 10));
+        return;
+      }
+      const historyCopy = button.getAttribute('data-library-history-copy');
+      if (historyCopy) {
+        this.copyRecentHistoryEntry(Number.parseInt(historyCopy, 10));
+      }
     });
 
     this.recentHistoryPanel?.addEventListener('click', (event) => {
@@ -945,6 +992,7 @@ export class CustomGameEditor {
     this.updateBlockList();
     this.updatePieceList();
     this.updateSummary();
+    this.renderUnifiedTemplateLibrary();
     this.renderTemplateCatalog();
     this.renderPresetSlotStatus();
     this.renderRecentHistory();
@@ -1903,6 +1951,72 @@ export class CustomGameEditor {
 
   private getPresetSlotMetaKey(slot: number): string {
       return `custom-game-type-slot-meta-${slot}`;
+  }
+
+  private renderUnifiedTemplateLibrary(): void {
+      if (!this.unifiedTemplateLibraryPanel) return;
+      const filterButtons = [
+          { key: 'all', label: 'All Sources' },
+          { key: 'built-in', label: 'Built-In' },
+          { key: 'slot', label: 'Saved Slots' },
+          { key: 'history', label: 'History' },
+      ].map((filter) => `<button data-library-filter="${filter.key}"${this.unifiedTemplateLibraryFilter === filter.key ? ' style="background:#00ff88; color:#111;"' : ''}>${filter.label}</button>`).join('');
+
+      const builtInCards = this.unifiedTemplateLibraryFilter === 'all' || this.unifiedTemplateLibraryFilter === 'built-in'
+        ? this.getPresetCatalogEntries().map((entry) => `
+          <div class="library-card">
+            <div class="library-source">Built-In Template • ${entry.family}</div>
+            <div class="library-title">${entry.title}</div>
+            <div class="library-details">${entry.description}</div>
+            <div class="library-details">${entry.mode} • Grid ${entry.grid} • Gravity/Lock ${entry.gravityLock}</div>
+            <div class="library-details">${entry.preview} • ${entry.chain}</div>
+            <div class="library-actions">
+              <button data-library-preset="${entry.key}">Apply</button>
+              <button data-library-save-slot="1" data-library-preset="${entry.key}">Save 1</button>
+              <button data-library-save-slot="2" data-library-preset="${entry.key}">Save 2</button>
+              <button data-library-save-slot="3" data-library-preset="${entry.key}">Save 3</button>
+            </div>
+          </div>
+        `).join('')
+        : '';
+
+      const slotCards = this.unifiedTemplateLibraryFilter === 'all' || this.unifiedTemplateLibraryFilter === 'slot'
+        ? [1, 2, 3].map((slot) => {
+            const meta = this.getPresetSlotMetadata(slot);
+            if (!meta) {
+              return `<div class="library-card"><div class="library-source">Saved Slot</div><div class="library-title">Slot ${slot}</div><div class="library-details">Empty</div></div>`;
+            }
+            const when = meta.timestamp ? new Date(meta.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'saved earlier';
+            return `
+              <div class="library-card">
+                <div class="library-source">Saved Slot</div>
+                <div class="library-title">Slot ${slot}: ${this.escapeHistoryText(meta.gameName || `Slot ${slot}`)}</div>
+                <div class="library-details">${meta.mode} • ${meta.pieceCount} pieces • ${meta.rotationCount} rotations • ${when}</div>
+                <div class="library-actions"><button data-library-load-slot="${slot}">Load</button></div>
+              </div>
+            `;
+          }).join('')
+        : '';
+
+      const historyCards = this.unifiedTemplateLibraryFilter === 'all' || this.unifiedTemplateLibraryFilter === 'history'
+        ? this.getRecentHistory().map((entry, index) => {
+            const when = new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return `
+              <div class="library-card">
+                <div class="library-source">Recent ${entry.source === 'share' ? 'Share' : 'Import'}</div>
+                <div class="library-title">${this.escapeHistoryText(entry.gameName || 'Unnamed Ruleset')}</div>
+                <div class="library-details">${entry.pieceCount} pieces • ${entry.rotationCount} rotations • ${when}</div>
+                <div class="library-actions">
+                  <button data-library-history-load="${index}">Load</button>
+                  <button data-library-history-copy="${index}">Copy Link</button>
+                </div>
+              </div>
+            `;
+          }).join('')
+        : '';
+
+      const cards = `${builtInCards}${slotCards}${historyCards}` || `<div class="library-card"><div class="library-title">No templates in this view yet.</div></div>`;
+      this.unifiedTemplateLibraryPanel.innerHTML = `<h3>Unified Template Library</h3><div class="library-filter-row">${filterButtons}</div><div class="library-grid">${cards}</div>`;
   }
 
   private renderTemplateCatalog(): void {

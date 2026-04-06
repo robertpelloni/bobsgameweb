@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.56] - 2026-04-06
+
+### Added
+- **Unified Template Library:** Added a dedicated browsing surface that combines built-in templates, user-saved preset slots, and recent import/share history into a single filterable view.
+- Added "My Library" source badges and refined summary cards for all template types.
+
+### Changed
+- Refactored the template catalog to support direct loading/applying of history and slots alongside curated built-ins.
+- Bumped project version to `2.1.56`.
+
+### Verified
+- `npm run build` passes successfully after the unified library integration.
+
 ## [2.1.55] - 2026-04-06
 
 ### Added
