@@ -157,6 +157,11 @@ export class CustomGameEditor {
         .preset-slot-meta { display:flex; flex-direction:column; gap:4px; }
         .preset-slot-title { color:#fff; font-size:13px; }
         .preset-slot-details { color:#9a9a9a; font-size:11px; }
+        .preset-family-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; }
+        .preset-family-card { background:#151515; border:1px solid #333; border-radius:6px; padding:10px; }
+        .preset-family-title { color:#fff; font-size:13px; margin-bottom:4px; }
+        .preset-family-description { color:#9a9a9a; font-size:11px; margin-bottom:8px; }
+        .preset-family-buttons { display:flex; flex-wrap:wrap; gap:8px; }
         .block-palette-list { display:flex; gap:6px; flex-wrap:wrap; }
         .block-palette-swatch { width:24px; height:24px; border-radius:6px; border:2px solid #444; cursor:pointer; padding:0; }
         .block-palette-swatch.active { border-color:#fff; box-shadow:0 0 0 1px #00ff88; }
@@ -193,11 +198,32 @@ export class CustomGameEditor {
         </div>
       </div>
       <div class="form-group">
-        <label>Quick Rule Presets</label>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-          <button id="btn-preset-classic">Classic Drop</button>
-          <button id="btn-preset-cascade">Cascade Puzzle</button>
-          <button id="btn-preset-stack">Stack Arcade</button>
+        <label>Preset Families</label>
+        <div class="preset-family-grid">
+          <div class="preset-family-card">
+            <div class="preset-family-title">Competitive Drop</div>
+            <div class="preset-family-description">Fast preview-friendly drop presets for familiar versus play and sprint tuning.</div>
+            <div class="preset-family-buttons">
+              <button id="btn-preset-classic">Classic Drop</button>
+              <button id="btn-preset-sprint">Sprint Drop</button>
+            </div>
+          </div>
+          <div class="preset-family-card">
+            <div class="preset-family-title">Puzzle Chainers</div>
+            <div class="preset-family-description">Chain-heavy presets tuned for cascade play, calmer experiments, and board-clearing setups.</div>
+            <div class="preset-family-buttons">
+              <button id="btn-preset-cascade">Cascade Puzzle</button>
+              <button id="btn-preset-zen">Zen Garden</button>
+            </div>
+          </div>
+          <div class="preset-family-card">
+            <div class="preset-family-title">Arcade Stackers</div>
+            <div class="preset-family-description">Compact stack presets for quick arcade rounds and tiny-grid challenge layouts.</div>
+            <div class="preset-family-buttons">
+              <button id="btn-preset-stack">Stack Arcade</button>
+              <button id="btn-preset-micro">Micro Stack</button>
+            </div>
+          </div>
         </div>
       </div>
       <div id="preset-slots-panel" class="preset-slots-panel"></div>
@@ -489,8 +515,11 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-save-slot-3')?.addEventListener('click', () => this.savePresetSlot(3));
     this.container.querySelector('#btn-load-slot-3')?.addEventListener('click', () => this.loadPresetSlot(3));
     this.container.querySelector('#btn-preset-classic')?.addEventListener('click', () => this.applyPreset('classic'));
+    this.container.querySelector('#btn-preset-sprint')?.addEventListener('click', () => this.applyPreset('sprint'));
     this.container.querySelector('#btn-preset-cascade')?.addEventListener('click', () => this.applyPreset('cascade'));
+    this.container.querySelector('#btn-preset-zen')?.addEventListener('click', () => this.applyPreset('zen'));
     this.container.querySelector('#btn-preset-stack')?.addEventListener('click', () => this.applyPreset('stack'));
+    this.container.querySelector('#btn-preset-micro')?.addEventListener('click', () => this.applyPreset('micro'));
 
     this.recentHistoryPanel?.addEventListener('click', (event) => {
       const target = (event.target as HTMLElement).closest('button[data-history-action]') as HTMLButtonElement | null;
@@ -1856,7 +1885,7 @@ export class CustomGameEditor {
       this.presetSlotsPanel.innerHTML = `<h3>Saved Template Slots</h3>${rows}`;
   }
 
-  private applyPreset(preset: 'classic' | 'cascade' | 'stack'): void {
+  private applyPreset(preset: 'classic' | 'sprint' | 'cascade' | 'zen' | 'stack' | 'micro'): void {
       this.applyFormValuesToGameType();
 
       switch (preset) {
@@ -1865,6 +1894,34 @@ export class CustomGameEditor {
               this.currentGameType.gameMode = GamePlayMode.DROP;
               this.currentGameType.gridWidth = 10;
               this.currentGameType.gridHeight = 20;
+              this.currentGameType.numberOfNextPiecesToShow = 3;
+              this.currentGameType.maxLockDelayTicks = 500;
+              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 100;
+              this.currentGameType.chainRule_AmountPerChain = 4;
+              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
+              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              this.currentGameType.chainRule_CheckRow = true;
+              this.currentGameType.chainRule_CheckColumn = false;
+              this.currentGameType.chainRule_CheckDiagonal = false;
+              this.currentGameType.chainRule_CheckRecursive = false;
+              this.currentGameType.nextPieceEnabled = true;
+              this.currentGameType.holdPieceEnabled = true;
+              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = true;
+              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
+              this.currentGameType.twoSpaceWallKickAllowed = true;
+              this.currentGameType.diagonalWallKickAllowed = true;
+              this.currentGameType.pieceClimbingAllowed = true;
+              this.currentGameType.flip180Allowed = true;
+              this.currentGameType.floorKickAllowed = true;
+              break;
+          case 'sprint':
+              this.currentGameType.name = 'Sprint Drop';
+              this.currentGameType.gameMode = GamePlayMode.DROP;
+              this.currentGameType.gridWidth = 10;
+              this.currentGameType.gridHeight = 20;
+              this.currentGameType.numberOfNextPiecesToShow = 5;
+              this.currentGameType.maxLockDelayTicks = 240;
+              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 40;
               this.currentGameType.chainRule_AmountPerChain = 4;
               this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
               this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
@@ -1887,6 +1944,9 @@ export class CustomGameEditor {
               this.currentGameType.gameMode = GamePlayMode.DROP;
               this.currentGameType.gridWidth = 8;
               this.currentGameType.gridHeight = 16;
+              this.currentGameType.numberOfNextPiecesToShow = 3;
+              this.currentGameType.maxLockDelayTicks = 450;
+              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 120;
               this.currentGameType.chainRule_AmountPerChain = 3;
               this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = true;
               this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = true;
@@ -1904,11 +1964,64 @@ export class CustomGameEditor {
               this.currentGameType.flip180Allowed = false;
               this.currentGameType.floorKickAllowed = false;
               break;
+          case 'zen':
+              this.currentGameType.name = 'Zen Garden';
+              this.currentGameType.gameMode = GamePlayMode.DROP;
+              this.currentGameType.gridWidth = 10;
+              this.currentGameType.gridHeight = 18;
+              this.currentGameType.numberOfNextPiecesToShow = 5;
+              this.currentGameType.maxLockDelayTicks = 900;
+              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 220;
+              this.currentGameType.chainRule_AmountPerChain = 4;
+              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = true;
+              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              this.currentGameType.chainRule_CheckRow = true;
+              this.currentGameType.chainRule_CheckColumn = true;
+              this.currentGameType.chainRule_CheckDiagonal = false;
+              this.currentGameType.chainRule_CheckRecursive = true;
+              this.currentGameType.nextPieceEnabled = true;
+              this.currentGameType.holdPieceEnabled = true;
+              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = true;
+              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
+              this.currentGameType.twoSpaceWallKickAllowed = false;
+              this.currentGameType.diagonalWallKickAllowed = false;
+              this.currentGameType.pieceClimbingAllowed = false;
+              this.currentGameType.flip180Allowed = true;
+              this.currentGameType.floorKickAllowed = false;
+              break;
           case 'stack':
               this.currentGameType.name = 'Stack Arcade';
               this.currentGameType.gameMode = GamePlayMode.STACK;
               this.currentGameType.gridWidth = 6;
               this.currentGameType.gridHeight = 12;
+              this.currentGameType.numberOfNextPiecesToShow = 3;
+              this.currentGameType.maxLockDelayTicks = 350;
+              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 90;
+              this.currentGameType.chainRule_AmountPerChain = 3;
+              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
+              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              this.currentGameType.chainRule_CheckRow = true;
+              this.currentGameType.chainRule_CheckColumn = true;
+              this.currentGameType.chainRule_CheckDiagonal = false;
+              this.currentGameType.chainRule_CheckRecursive = false;
+              this.currentGameType.nextPieceEnabled = true;
+              this.currentGameType.holdPieceEnabled = false;
+              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = false;
+              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
+              this.currentGameType.twoSpaceWallKickAllowed = true;
+              this.currentGameType.diagonalWallKickAllowed = false;
+              this.currentGameType.pieceClimbingAllowed = false;
+              this.currentGameType.flip180Allowed = false;
+              this.currentGameType.floorKickAllowed = false;
+              break;
+          case 'micro':
+              this.currentGameType.name = 'Micro Stack';
+              this.currentGameType.gameMode = GamePlayMode.STACK;
+              this.currentGameType.gridWidth = 5;
+              this.currentGameType.gridHeight = 10;
+              this.currentGameType.numberOfNextPiecesToShow = 2;
+              this.currentGameType.maxLockDelayTicks = 220;
+              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 70;
               this.currentGameType.chainRule_AmountPerChain = 3;
               this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
               this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
