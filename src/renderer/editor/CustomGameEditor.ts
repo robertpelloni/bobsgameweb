@@ -1,4 +1,5 @@
 import { GameType, BlockType, PieceType, GamePlayMode, networkManager } from '../puzzle';
+import { TurnFromBlockTypeToType } from '../../shared/puzzle/BlockType';
 import { Rotation } from '../../shared/puzzle/Piece';
 import { BobColor } from '../../shared/BobColor';
 import { BobNet } from '../puzzle/BobNet';
@@ -74,6 +75,9 @@ export class CustomGameEditor {
   private blockRemoveColorFieldCheckbox!: HTMLInputElement;
   private blockDiamondColorFieldCheckbox!: HTMLInputElement;
   private blockRewardLabel!: HTMLDivElement;
+  private blockConversionFromSelect!: HTMLSelectElement;
+  private blockConversionToSelect!: HTMLSelectElement;
+  private blockConversionList!: HTMLDivElement;
   private pieceBlockOverrideSelect!: HTMLSelectElement;
 
   private currentEditingRotation: number = 0;
@@ -330,6 +334,16 @@ export class CustomGameEditor {
                 <button id="btn-block-reward-clear">Clear Reward</button>
               </div>
             </div>
+            <div class="form-group">
+              <label>Conversion Chain Hooks</label>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
+                <select id="block-conversion-from"></select>
+                <select id="block-conversion-to"></select>
+                <button id="btn-block-add-conversion">Add Pair</button>
+                <button id="btn-block-clear-conversions">Clear Pairs</button>
+              </div>
+              <div id="block-conversion-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -430,6 +444,9 @@ export class CustomGameEditor {
     this.blockRemoveColorFieldCheckbox = this.container.querySelector('#block-remove-color-field') as HTMLInputElement;
     this.blockDiamondColorFieldCheckbox = this.container.querySelector('#block-diamond-color-field') as HTMLInputElement;
     this.blockRewardLabel = this.container.querySelector('#block-reward-label') as HTMLDivElement;
+    this.blockConversionFromSelect = this.container.querySelector('#block-conversion-from') as HTMLSelectElement;
+    this.blockConversionToSelect = this.container.querySelector('#block-conversion-to') as HTMLSelectElement;
+    this.blockConversionList = this.container.querySelector('#block-conversion-list') as HTMLDivElement;
     this.pieceBlockOverrideSelect = this.container.querySelector('#piece-block-override') as HTMLSelectElement;
 
     this.setupEventListeners();
@@ -645,6 +662,22 @@ export class CustomGameEditor {
 
     this.container.querySelector('#btn-block-reward-clear')?.addEventListener('click', () => {
       this.clearSelectedBlockReward();
+    });
+
+    this.container.querySelector('#btn-block-add-conversion')?.addEventListener('click', () => {
+      this.addSelectedBlockConversionPair();
+    });
+
+    this.container.querySelector('#btn-block-clear-conversions')?.addEventListener('click', () => {
+      this.clearSelectedBlockConversionPairs();
+    });
+
+    this.blockConversionList.addEventListener('click', (event) => {
+      const target = (event.target as HTMLElement).closest('button[data-conversion-index]') as HTMLButtonElement | null;
+      if (!target) return;
+      const index = Number(target.dataset.conversionIndex);
+      if (Number.isNaN(index)) return;
+      this.removeSelectedBlockConversionPair(index);
     });
 
     this.container.querySelector('#btn-apply-piece-block')?.addEventListener('click', () => {
@@ -953,6 +986,7 @@ export class CustomGameEditor {
       const activeClass = index === this.currentBlockPaletteIndex ? ' active' : '';
       return `<button type="button" class="block-palette-swatch${activeClass}" data-palette-index="${index}" style="background:${this.bobColorToHex(color)}" title="Palette color ${index + 1}"></button>`;
     }).join('');
+    this.syncBlockConversionControls();
   }
 
   private syncPieceBlockOverrideControl(): void {
@@ -988,6 +1022,9 @@ export class CustomGameEditor {
     this.currentGameType.blockTypes = this.currentGameType.blockTypes.filter((candidate) => candidate.uuid !== removedUuid);
     this.currentGameType.pieceTypes.forEach((piece) => {
       piece.overrideBlockTypes_UUID = piece.overrideBlockTypes_UUID.filter((uuid) => uuid !== removedUuid);
+    });
+    this.currentGameType.blockTypes.forEach((candidate) => {
+      candidate.whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut = candidate.whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut.filter((pair) => pair.fromType_UUID !== removedUuid && pair.toType_UUID !== removedUuid);
     });
     this.updateBlockList();
     this.updateSummary();
@@ -1066,6 +1103,84 @@ export class CustomGameEditor {
     this.updateSummary();
     this.pushRecentAction(`Cleared reward piece for ${block.name || 'selected block'}.`);
     ToastManager.showInfo('Cleared block reward piece.');
+  }
+
+  private syncBlockConversionControls(): void {
+    const block = this.getSelectedBlock();
+    const options = ['<option value="">Select block</option>']
+      .concat(this.currentGameType.blockTypes.map((candidate) => `<option value="${candidate.uuid}">${candidate.name || 'Unnamed Block'}</option>`));
+    this.blockConversionFromSelect.innerHTML = options.join('');
+    this.blockConversionToSelect.innerHTML = options.join('');
+    const disabled = !block;
+    this.blockConversionFromSelect.disabled = disabled;
+    this.blockConversionToSelect.disabled = disabled;
+
+    if (!block) {
+      this.blockConversionList.innerHTML = '<div style="font-size:12px; color:#888;">Select a block to edit conversion pairs.</div>';
+      return;
+    }
+
+    const entries = block.whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut;
+    if (!entries.length) {
+      this.blockConversionList.innerHTML = '<div style="font-size:12px; color:#888;">No conversion pairs configured.</div>';
+      return;
+    }
+
+    this.blockConversionList.innerHTML = entries.map((pair, index) => {
+      const fromName = this.currentGameType.blockTypes.find((candidate) => candidate.uuid === pair.fromType_UUID)?.name || 'Unknown From';
+      const toName = this.currentGameType.blockTypes.find((candidate) => candidate.uuid === pair.toType_UUID)?.name || 'Unknown To';
+      return `<div style="display:flex; gap:8px; align-items:center; justify-content:space-between; background:#1b1b1b; border:1px solid #2f2f2f; border-radius:6px; padding:6px 8px;"><span style="font-size:12px; color:#ddd;">${fromName} → ${toName}</span><button data-conversion-index="${index}">Remove</button></div>`;
+    }).join('');
+  }
+
+  private addSelectedBlockConversionPair(): void {
+    const block = this.getSelectedBlock();
+    if (!block) {
+      ToastManager.showInfo('Select a block first.');
+      return;
+    }
+    const fromUuid = this.blockConversionFromSelect.value;
+    const toUuid = this.blockConversionToSelect.value;
+    if (!fromUuid || !toUuid) {
+      ToastManager.showInfo('Select both a source and target block.');
+      return;
+    }
+    block.whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut.push(new TurnFromBlockTypeToType(fromUuid, toUuid));
+    this.syncBlockConversionControls();
+    this.updateSummary();
+    const fromName = this.currentGameType.blockTypes.find((candidate) => candidate.uuid === fromUuid)?.name || 'source block';
+    const toName = this.currentGameType.blockTypes.find((candidate) => candidate.uuid === toUuid)?.name || 'target block';
+    this.pushRecentAction(`Added conversion pair ${fromName} → ${toName} for ${block.name || 'selected block'}.`);
+    ToastManager.showInfo(`Added conversion pair ${fromName} → ${toName}.`);
+  }
+
+  private removeSelectedBlockConversionPair(index: number): void {
+    const block = this.getSelectedBlock();
+    if (!block) return;
+    const removed = block.whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut.splice(index, 1)[0];
+    this.syncBlockConversionControls();
+    this.updateSummary();
+    const fromName = this.currentGameType.blockTypes.find((candidate) => candidate.uuid === removed?.fromType_UUID)?.name || 'source block';
+    const toName = this.currentGameType.blockTypes.find((candidate) => candidate.uuid === removed?.toType_UUID)?.name || 'target block';
+    this.pushRecentAction(`Removed conversion pair ${fromName} → ${toName} from ${block.name || 'selected block'}.`);
+    ToastManager.showInfo(`Removed conversion pair ${fromName} → ${toName}.`);
+  }
+
+  private clearSelectedBlockConversionPairs(): void {
+    const block = this.getSelectedBlock();
+    if (!block) {
+      ToastManager.showInfo('Select a block first.');
+      return;
+    }
+    if (!block.whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut.length) {
+      ToastManager.showInfo('No conversion pairs to clear.');
+      return;
+    }
+    block.whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut = [];
+    this.syncBlockConversionControls();
+    this.updateSummary();
+    this.pushRecentAction(`Cleared conversion pairs for ${block.name || 'selected block'}.`);
+    ToastManager.showInfo('Cleared conversion pairs.');
   }
 
   private updatePieceList() {
@@ -1618,6 +1733,7 @@ export class CustomGameEditor {
     const selectedBlockReward = selectedBlock?.makePieceTypeWhenCleared_UUID?.[0]
       ? this.currentGameType.pieceTypes.find((piece) => piece.uuid === selectedBlock.makePieceTypeWhenCleared_UUID[0])?.name || 'custom reward piece'
       : 'none';
+    const selectedBlockConversionCount = selectedBlock?.whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut?.length || 0;
 
     this.summaryPanel.innerHTML = `
       <h3>Rules Summary</h3>
@@ -1631,6 +1747,7 @@ export class CustomGameEditor {
         <li><span class="summary-highlight">Selected block:</span> ${selectedBlock?.name || 'None selected'} (${selectedBlockFlags})</li>
         <li><span class="summary-highlight">Special block rules:</span> chance ${selectedBlock?.randomSpecialBlockChanceOneOutOf || 0}, frequency ${selectedBlock?.frequencySpecialBlockTypeOnceEveryNPieces || 0}</li>
         <li><span class="summary-highlight">Block clear reward:</span> ${selectedBlockReward}</li>
+        <li><span class="summary-highlight">Block conversions:</span> ${selectedBlockConversionCount} pair(s)</li>
         <li><span class="summary-highlight">Editing:</span> ${selectedPieceName} (${selectedRotationCount} rotations)</li>
         <li><span class="summary-highlight">Piece block override:</span> ${selectedBlockOverride}</li>
         <li><span class="summary-highlight">Current rotation:</span> ${this.getRotationBlockCount(selectedRotation)} blocks in a ${this.getRotationBoundingBox(selectedRotation)} box</li>
