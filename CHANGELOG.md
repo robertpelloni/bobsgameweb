@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.42] - 2026-04-05
+
+### Added
+- **Conversion-Pair Editing:** `CustomGameEditor.ts` now supports focused first-pass block conversion authoring with editable touching-block conversion pairs, visible conversion summaries, and add/remove pair controls.
+
+### Changed
+- Expanded block summary reporting so conversion-pair counts appear alongside reward, chain, palette, and field-effect data.
+- Bumped project version to `2.1.42`.
+
+### Verified
+- `npm run build` passes successfully after the conversion-pair editing changes.
+
 ## [2.1.41] - 2026-04-05
 
 ### Added
