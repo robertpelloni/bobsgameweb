@@ -21,6 +21,15 @@ type RecentEditorActionEntry = {
   timestamp: number;
 };
 
+type PresetSlotMetadata = {
+  slot: number;
+  gameName: string;
+  mode: string;
+  pieceCount: number;
+  rotationCount: number;
+  timestamp: number;
+};
+
 export class CustomGameEditor {
   private container: HTMLElement;
   private currentGameType: GameType;
@@ -37,6 +46,7 @@ export class CustomGameEditor {
   private summaryPanel!: HTMLDivElement;
   private recentHistoryPanel!: HTMLDivElement;
   private recentActionsPanel!: HTMLDivElement;
+  private presetSlotsPanel!: HTMLDivElement;
   private cascadeGravityCheckbox!: HTMLInputElement;
   private disconnectedGravityCheckbox!: HTMLInputElement;
   private chainRowCheckbox!: HTMLInputElement;
@@ -141,8 +151,12 @@ export class CustomGameEditor {
         .rotation-mini-grid { display: grid; grid-template-columns: repeat(4, 10px); gap: 1px; }
         .rotation-mini-cell { width: 10px; height: 10px; background: #0f0f0f; border: 1px solid #252525; }
         .rotation-mini-cell.filled { background: #00ff88; border-color: #00cc6e; }
-        .recent-history-panel, .recent-actions-panel { margin-top: 16px; background: #151515; border: 1px solid #333; border-radius: 6px; padding: 12px; }
+        .recent-history-panel, .recent-actions-panel, .preset-slots-panel { margin-top: 16px; background: #151515; border: 1px solid #333; border-radius: 6px; padding: 12px; }
         .block-palette-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+        .preset-slot-entry { display:flex; justify-content:space-between; align-items:center; gap:10px; background:#1b1b1b; border:1px solid #2f2f2f; border-radius:6px; padding:8px; margin-top:8px; }
+        .preset-slot-meta { display:flex; flex-direction:column; gap:4px; }
+        .preset-slot-title { color:#fff; font-size:13px; }
+        .preset-slot-details { color:#9a9a9a; font-size:11px; }
         .block-palette-list { display:flex; gap:6px; flex-wrap:wrap; }
         .block-palette-swatch { width:24px; height:24px; border-radius:6px; border:2px solid #444; cursor:pointer; padding:0; }
         .block-palette-swatch.active { border-color:#fff; box-shadow:0 0 0 1px #00ff88; }
@@ -186,6 +200,7 @@ export class CustomGameEditor {
           <button id="btn-preset-stack">Stack Arcade</button>
         </div>
       </div>
+      <div id="preset-slots-panel" class="preset-slots-panel"></div>
       <div id="recent-history" class="recent-history-panel"></div>
       <div id="recent-actions" class="recent-actions-panel"></div>
       
@@ -405,6 +420,7 @@ export class CustomGameEditor {
     this.chainAmountInput = this.container.querySelector('#chain-amount') as HTMLInputElement;
     this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
     this.summaryPanel = this.container.querySelector('#rules-summary') as HTMLDivElement;
+    this.presetSlotsPanel = this.container.querySelector('#preset-slots-panel') as HTMLDivElement;
     this.recentHistoryPanel = this.container.querySelector('#recent-history') as HTMLDivElement;
     this.recentActionsPanel = this.container.querySelector('#recent-actions') as HTMLDivElement;
     this.cascadeGravityCheckbox = this.container.querySelector('#toggle-cascade-gravity') as HTMLInputElement;
@@ -858,6 +874,7 @@ export class CustomGameEditor {
     this.updateBlockList();
     this.updatePieceList();
     this.updateSummary();
+    this.renderPresetSlotStatus();
     this.renderRecentHistory();
     this.renderRecentActions();
   }
@@ -1801,6 +1818,44 @@ export class CustomGameEditor {
       return `custom-game-type-slot-${slot}`;
   }
 
+  private getPresetSlotMetaKey(slot: number): string {
+      return `custom-game-type-slot-meta-${slot}`;
+  }
+
+  private getPresetSlotMetadata(slot: number): PresetSlotMetadata | null {
+      try {
+          const raw = localStorage.getItem(this.getPresetSlotMetaKey(slot));
+          if (raw) return JSON.parse(raw) as PresetSlotMetadata;
+          const data = localStorage.getItem(this.getPresetSlotKey(slot));
+          if (!data) return null;
+          const gameType = GameType.fromJSON(data);
+          return {
+              slot,
+              gameName: gameType.name || `Slot ${slot}`,
+              mode: gameType.gameMode,
+              pieceCount: gameType.pieceTypes.length,
+              rotationCount: gameType.pieceTypes.reduce((sum, pt) => sum + pt.rotationSet.size(), 0),
+              timestamp: 0,
+          };
+      } catch (error) {
+          console.error('Failed to read preset slot metadata', error);
+          return null;
+      }
+  }
+
+  private renderPresetSlotStatus(): void {
+      if (!this.presetSlotsPanel) return;
+      const rows = [1, 2, 3].map((slot) => {
+          const meta = this.getPresetSlotMetadata(slot);
+          if (!meta) {
+              return `<div class="preset-slot-entry"><div class="preset-slot-meta"><div class="preset-slot-title">Slot ${slot}</div><div class="preset-slot-details">Empty</div></div></div>`;
+          }
+          const when = meta.timestamp ? new Date(meta.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'saved earlier';
+          return `<div class="preset-slot-entry"><div class="preset-slot-meta"><div class="preset-slot-title">Slot ${slot}: ${this.escapeHistoryText(meta.gameName || `Slot ${slot}`)}</div><div class="preset-slot-details">${meta.mode} • ${meta.pieceCount} pieces • ${meta.rotationCount} rotations • ${when}</div></div></div>`;
+      }).join('');
+      this.presetSlotsPanel.innerHTML = `<h3>Saved Template Slots</h3>${rows}`;
+  }
+
   private applyPreset(preset: 'classic' | 'cascade' | 'stack'): void {
       this.applyFormValuesToGameType();
 
@@ -1882,6 +1937,16 @@ export class CustomGameEditor {
   private savePresetSlot(slot: number): void {
       this.applyFormValuesToGameType();
       localStorage.setItem(this.getPresetSlotKey(slot), JSON.stringify(this.currentGameType));
+      const metadata: PresetSlotMetadata = {
+          slot,
+          gameName: this.currentGameType.name || `Slot ${slot}`,
+          mode: this.currentGameType.gameMode,
+          pieceCount: this.currentGameType.pieceTypes.length,
+          rotationCount: this.currentGameType.pieceTypes.reduce((sum, pt) => sum + pt.rotationSet.size(), 0),
+          timestamp: Date.now(),
+      };
+      localStorage.setItem(this.getPresetSlotMetaKey(slot), JSON.stringify(metadata));
+      this.renderPresetSlotStatus();
       this.pushRecentAction(`Saved the current ruleset to preset slot ${slot}.`);
       ToastManager.showInfo(`Saved current ruleset to preset slot ${slot}.`);
   }
@@ -2035,6 +2100,7 @@ export class CustomGameEditor {
           this.currentGameType = GameType.fromJSON(data);
           this.loadFromGameType();
           this.selectPiece(0);
+          this.renderPresetSlotStatus();
           this.pushRecentAction(`Loaded preset slot ${slot}.`);
           ToastManager.showInfo(`Loaded preset slot ${slot}.`);
       } catch (e) {
