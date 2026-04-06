@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.45] - 2026-04-06
+
+### Added
+- **Production Editor Smoke Check:** added `scripts/check-production-editor.sh` to verify that the live site contains expected custom-editor markers like saved-template slot UI and conversion-list authoring hooks.
+
+### Changed
+- `scripts/verify-production-stack.sh` now includes the production editor marker scan in addition to backend health, Socket.io polling, frontend asset discovery, and backend-origin validation.
+- Bumped project version to `2.1.45`.
+
+### Verified
+- The live public site passes the stricter verification flow, including editor marker checks against the deployed JS bundles.
+
 ## [2.1.44] - 2026-04-06
 
 ### Fixed
