@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.44] - 2026-04-06
+
+### Fixed
+- **Production Backend-Origin Safety:** changed the production `SERVER_URL` fallback in `src/shared/Config.ts` from `https://bobsgame.com` to `https://ws.bobsgame.com`, preventing generic production builds from silently targeting the wrong origin.
+- **Deployment Verification Hardening:** upgraded `scripts/check-production-frontend.sh` so it now scans deployed asset bundles for the expected backend origin and fails verification if that origin is missing.
+
+### Verified
+- Rebuilt with `VITE_SERVER_URL=https://ws.bobsgame.com`.
+- Redeployed the frontend to the live Hetzner origin at `/var/www/bobsgame.com/current`.
+- Confirmed the public site now serves `assets/main-WfqiSzMA.js` and that the deployed bundle contains `https://ws.bobsgame.com`.
+- `BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com ./scripts/verify-production-stack.sh` passes with the stricter backend-origin scan.
+
 ## [2.1.43] - 2026-04-06
 
 ### Added
