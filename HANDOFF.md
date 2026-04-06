@@ -136,6 +136,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
+## Additional Follow-Up - 2026-04-06 (Maintenance Window Orchestrator Runbook)
+- Added `MAINTENANCE_WINDOW_RUNBOOK.md` as the single top-level operator procedure for the future allowed backend restart window.
+- The runbook stitches the toolkit into one ordered sequence: pre-restart snapshot, dry-run helper, explicit restart, post-restart comparison, strict backend verification, and strict full production verification.
+- Linked the runbook from the existing backend deploy/recovery/checklist docs so the complete maintenance path is discoverable from the current ops surface area.
+- Verified the current no-restart live state still passes drift-aware verification while the new runbook documents the future strict restart-window path.
+- Bumped the repo version again to `2.1.52`.
+
 ## Additional Follow-Up - 2026-04-06 (Post-Restart Snapshot Comparison)
 - Added `scripts/compare-backend-restart-snapshot.sh` to compare a saved pre-maintenance snapshot against the current live backend/frontend/service state.
 - The comparison helper highlights runtime-version movement, frontend asset stability, service state, and PID changes, making post-restart verification much less manual.
@@ -154,7 +161,7 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - The helper performs pre-restart drift audit immediately, but only executes the actual `systemctl restart` when `EXECUTE_BACKEND_RESTART=1` is explicitly provided.
 - It also codifies the desired post-restart sequence: strict backend version check, post-restart drift audit, and optional full production stack verification.
 - Verified the helper stays in dry-run mode by default, which keeps the current session compliant with the no-process-kill rule.
-- Bumped the repo version again to `2.1.50`.
+- Bumped the repo version again to `2.1.49`.
 
 ## Additional Follow-Up - 2026-04-06 (Version-Aware Backend Runtime Checks)
 - Upgraded `scripts/check-backend-host.sh` to support `EXPECTED_BACKEND_VERSION` plus `ALLOW_BACKEND_RUNTIME_DRIFT=1`, so backend checks can now explicitly enforce runtime version alignment or allow a documented mismatch during no-restart maintenance windows.
@@ -166,6 +173,7 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 
 ## Recommended Next Steps
 1. Keep the current no-restart truth documented: backend disk state is aligned, runtime state is intentionally older until a planned restart window exists.
-2. If/when restart is allowed, perform a controlled `bobsgameweb-server` restart and immediately rerun `audit-backend-drift.sh` plus `check-backend-host.sh EXPECTED_BACKEND_VERSION=2.1.48` to collapse runtime drift from `2.1.17` to `2.1.48`.
-3. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, conversion-pair editing, and saved-template slot summaries there after the lock clears.
-4. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.
+2. If/when restart is allowed, perform a controlled `bobsgameweb-server` restart and immediately rerun `audit-backend-drift.sh` plus `check-backend-host.sh EXPECTED_BACKEND_VERSION=2.1.52` to collapse runtime drift from `2.1.17` to `2.1.52`.
+3. Use `MAINTENANCE_WINDOW_RUNBOOK.md` as the operator source of truth for that restart window rather than ad hoc command history.
+4. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, conversion-pair editing, and saved-template slot summaries there after the lock clears.
+5. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.

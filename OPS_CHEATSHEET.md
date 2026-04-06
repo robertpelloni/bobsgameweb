@@ -29,32 +29,32 @@ BACKEND_URL=https://ws.bobsgame.com ./scripts/check-backend-host.sh
 
 ## Verify backend against an expected runtime version
 ```bash
-BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.49 ./scripts/check-backend-host.sh
+BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ./scripts/check-backend-host.sh
 ```
 
 ## Verify backend while temporarily allowing documented runtime drift
 ```bash
-BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.49 ALLOW_BACKEND_RUNTIME_DRIFT=1 ./scripts/check-backend-host.sh
+BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ALLOW_BACKEND_RUNTIME_DRIFT=1 ./scripts/check-backend-host.sh
 ```
 
 ## Restart-readiness snapshot (read-only)
 ```bash
-BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/snapshot-backend-restart-readiness.sh
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ./scripts/snapshot-backend-restart-readiness.sh
 ```
 
 ## Compare current state to a saved restart-readiness snapshot
 ```bash
-SNAPSHOT_FILE=artifacts/pre-restart.txt BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/compare-backend-restart-snapshot.sh
+SNAPSHOT_FILE=artifacts/pre-restart.txt BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ./scripts/compare-backend-restart-snapshot.sh
 ```
 
 ## Planned backend maintenance restart (dry-run by default)
 ```bash
-BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 ./scripts/run-backend-maintenance-restart.sh
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 ./scripts/run-backend-maintenance-restart.sh
 ```
 
 ## Planned backend maintenance restart (execute only when allowed)
 ```bash
-BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.51 EXECUTE_BACKEND_RESTART=1 ./scripts/run-backend-maintenance-restart.sh
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.52 EXECUTE_BACKEND_RESTART=1 ./scripts/run-backend-maintenance-restart.sh
 ```
 
 ## Audit backend drift
@@ -143,6 +143,7 @@ BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/check-postgres-hetzner.sh
 ```
 
 ## Helpful docs
+- `MAINTENANCE_WINDOW_RUNBOOK.md`
 - `HETZNER_FIRST_DEPLOY.md`
 - `HETZNER_SETUP.md`
 - `BACKEND_DEPLOY.md`
