@@ -136,11 +136,13 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
-## Additional Follow-Up - 2026-04-06 (Saved Template Slot Summaries)
-- Added a dedicated saved-template slot panel that shows each preset slot's stored ruleset name, mode, piece count, rotation count, and latest save time.
-- Preset saves now write lightweight metadata beside the serialized `GameType`, preserving old slot data compatibility while making saved templates recognizable before loading.
-- Refreshed preset-slot status after save/load so numbered slots behave more like identifiable reusable templates.
-- Bumped the repo version again to `2.1.43`.
+## Additional Follow-Up - 2026-04-06 (Production Backend-Origin Hotfix)
+- Diagnosed a real live-risk regression after deployment: a generic production build could still fall back to `https://bobsgame.com` instead of the dedicated websocket host if `VITE_SERVER_URL` was omitted.
+- Fixed `src/shared/Config.ts` so the production fallback is now `https://ws.bobsgame.com` by default.
+- Hardened `scripts/check-production-frontend.sh` so it now scans deployed JS assets for the expected backend origin and fails verification when the string is missing.
+- Rebuilt with `VITE_SERVER_URL=https://ws.bobsgame.com`, redeployed to Hetzner, and verified the public site now serves `assets/main-WfqiSzMA.js` containing `https://ws.bobsgame.com`.
+- `verify-production-stack.sh` now passes with the stricter asset-origin check.
+- Bumped the repo version again to `2.1.44`.
 
 ## Recommended Next Steps
 1. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, conversion-pair editing, and saved-template slot summaries there after the lock clears.

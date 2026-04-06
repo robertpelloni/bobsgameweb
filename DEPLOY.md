@@ -1,5 +1,21 @@
 # Deployment Guide: bobsgame.com
 
+The current live public frontend for `bobsgame.com` is served from the Hetzner nginx host at `/var/www/bobsgame.com/current`.
+DreamHost notes below remain useful historical fallback guidance, but the primary live deployment path is now the tracked Hetzner upload + verification workflow.
+
+## Hetzner Frontend Deploy (Current Live Path)
+From `bobsgameweb/`:
+
+```bash
+VITE_SERVER_URL=https://ws.bobsgame.com npm run build
+FRONTEND_HOST=5.161.250.43 FRONTEND_USER=root BACKEND_URL=https://ws.bobsgame.com ./scripts/deploy-frontend-hetzner.sh
+BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com ./scripts/verify-production-stack.sh
+```
+
+The production verification step now also scans the deployed JS bundles to ensure they actually contain `https://ws.bobsgame.com`.
+
+## Legacy DreamHost Notes
+
 The Omni-Engine web port is ready for deployment to DreamHost.
 
 ## Current Observed Blockers
