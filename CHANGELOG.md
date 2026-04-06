@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.46] - 2026-04-06
+
+### Added
+- **Production Runtime Chunk Smoke Check:** added `scripts/check-production-runtime-chunks.sh` to verify that critical lazy-loaded scene chunk families like `CustomGameEditorScene`, `AchievementsScene`, `WorldScene`, `WorldEditorScene`, and `LobbyScene` are discoverable from the live production asset graph and fetch successfully.
+
+### Changed
+- `scripts/verify-production-stack.sh` now includes runtime chunk-family verification in addition to backend health, websocket polling, frontend asset discovery, backend-origin validation, and editor marker validation.
+- Bumped project version to `2.1.46`.
+
+### Verified
+- The live public site passes the stricter verification flow, including lazy chunk discovery and fetch checks for the targeted scene families.
+
 ## [2.1.45] - 2026-04-06
 
 ### Added

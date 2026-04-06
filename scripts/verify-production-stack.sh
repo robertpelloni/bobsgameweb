@@ -17,5 +17,6 @@ fi
 BACKEND_URL="$BACKEND_URL" ./scripts/check-backend-host.sh
 FRONTEND_URL="$FRONTEND_URL" EXPECTED_BACKEND="$BACKEND_URL" ./scripts/check-production-frontend.sh
 FRONTEND_URL="$FRONTEND_URL" ./scripts/check-production-editor.sh
+FRONTEND_URL="$FRONTEND_URL" ./scripts/check-production-runtime-chunks.sh
 
 echo "=== Production stack verification complete ==="
