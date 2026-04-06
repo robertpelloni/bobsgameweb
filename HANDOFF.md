@@ -136,12 +136,19 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
+## Additional Follow-Up - 2026-04-06 (Backend Restart Readiness Snapshot)
+- Added `scripts/snapshot-backend-restart-readiness.sh` to capture a read-only baseline before any future allowed backend restart window.
+- The snapshot bundles drift audit output, version-aware backend health output, remote service status, journal tail, and public frontend asset references into one repeatable pre-maintenance view.
+- Updated backend runbooks/checklists so planned restarts now begin with snapshot capture, then dry-run maintenance, then eventual explicit restart if allowed.
+- Verified the new helper remains read-only and does not restart anything.
+- Bumped the repo version again to `2.1.50`.
+
 ## Additional Follow-Up - 2026-04-06 (Planned Backend Maintenance Restart Helper)
 - Added `scripts/run-backend-maintenance-restart.sh` as a dry-run-first maintenance helper for the future allowed backend restart window.
 - The helper performs pre-restart drift audit immediately, but only executes the actual `systemctl restart` when `EXECUTE_BACKEND_RESTART=1` is explicitly provided.
 - It also codifies the desired post-restart sequence: strict backend version check, post-restart drift audit, and optional full production stack verification.
 - Verified the helper stays in dry-run mode by default, which keeps the current session compliant with the no-process-kill rule.
-- Bumped the repo version again to `2.1.49`.
+- Bumped the repo version again to `2.1.50`.
 
 ## Additional Follow-Up - 2026-04-06 (Version-Aware Backend Runtime Checks)
 - Upgraded `scripts/check-backend-host.sh` to support `EXPECTED_BACKEND_VERSION` plus `ALLOW_BACKEND_RUNTIME_DRIFT=1`, so backend checks can now explicitly enforce runtime version alignment or allow a documented mismatch during no-restart maintenance windows.

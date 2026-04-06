@@ -9,6 +9,12 @@ Run from your local machine:
 BACKEND_HOST=ws.bobsgame.com BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com ./scripts/collect-backend-diagnostics.sh
 ```
 
+Before any planned maintenance-window restart, capture a read-only readiness snapshot too:
+
+```bash
+BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.50 ./scripts/snapshot-backend-restart-readiness.sh
+```
+
 This will show:
 - systemd status
 - journal logs

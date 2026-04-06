@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.50] - 2026-04-06
+
+### Added
+- **Backend Restart Readiness Snapshot Helper:** added `scripts/snapshot-backend-restart-readiness.sh`, a read-only helper that captures backend drift, health, remote service state, journal tail, and public frontend asset references before a planned restart window.
+
+### Changed
+- Expanded backend recovery/deploy/post-deploy docs so planned restarts now begin with a captured baseline snapshot before any restart is considered.
+- Bumped project version to `2.1.50`.
+
+### Verified
+- Confirmed the readiness helper runs in read-only mode and captures the intended pre-maintenance state without restarting the backend service.
+
 ## [2.1.49] - 2026-04-06
 
 ### Added
@@ -9,7 +21,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Expanded backend docs/runbooks so maintenance restarts now have a tracked dry-run path instead of relying on ad hoc shell history.
-- Bumped project version to `2.1.49`.
+- Bumped project version to `2.1.50`.
 
 ### Verified
 - Confirmed the new helper remains dry-run by default and does not restart anything unless `EXECUTE_BACKEND_RESTART=1` is explicitly supplied.
