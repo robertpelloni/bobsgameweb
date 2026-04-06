@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.55] - 2026-04-06
+
+### Added
+- **Template-to-Slot Shortcuts:** `CustomGameEditor.ts` now lets creators save a built-in template directly into preset slots 1–3 from the template browser without overwriting the currently open draft first.
+
+### Changed
+- Built-in template browsing and saved-slot authoring now connect through direct save actions, making the template system feel more like one workflow instead of isolated panels.
+- Bumped project version to `2.1.55`.
+
+### Verified
+- `npm run build` passes successfully after the template-to-slot shortcut pass.
+
 ## [2.1.54] - 2026-04-06
 
 ### Added

@@ -546,7 +546,7 @@ export class CustomGameEditor {
 
     this.templateCatalogPanel?.addEventListener('click', (event) => {
       const target = event.target as HTMLElement | null;
-      const button = target?.closest('[data-template-apply], [data-template-filter]') as HTMLElement | null;
+      const button = target?.closest('[data-template-apply], [data-template-filter], [data-template-save-slot]') as HTMLElement | null;
       if (!button) return;
       const filter = button.getAttribute('data-template-filter') as 'all' | 'DROP' | 'STACK' | null;
       if (filter) {
@@ -554,7 +554,12 @@ export class CustomGameEditor {
         this.renderTemplateCatalog();
         return;
       }
-      const preset = button.getAttribute('data-template-apply') as PresetCatalogEntry['key'] | null;
+      const preset = (button.getAttribute('data-template-apply') || button.getAttribute('data-template-key')) as PresetCatalogEntry['key'] | null;
+      const saveSlot = button.getAttribute('data-template-save-slot');
+      if (preset && saveSlot) {
+        this.savePresetTemplateToSlot(preset, Number.parseInt(saveSlot, 10));
+        return;
+      }
       if (preset) this.applyPreset(preset);
     });
 
@@ -1915,7 +1920,12 @@ export class CustomGameEditor {
           <div class="template-catalog-description">${entry.description}</div>
           <div class="template-catalog-details">${entry.mode} • Grid ${entry.grid} • Gravity/Lock ${entry.gravityLock}</div>
           <div class="template-catalog-details">${entry.preview} • ${entry.chain}</div>
-          <div class="template-catalog-actions"><button data-template-apply="${entry.key}">Apply</button></div>
+          <div class="template-catalog-actions">
+            <button data-template-apply="${entry.key}">Apply</button>
+            <button data-template-save-slot="1" data-template-key="${entry.key}">Save 1</button>
+            <button data-template-save-slot="2" data-template-key="${entry.key}">Save 2</button>
+            <button data-template-save-slot="3" data-template-key="${entry.key}">Save 3</button>
+          </div>
         </div>
       `).join('');
       this.templateCatalogPanel.innerHTML = `<h3>Template Browser</h3><div class="template-catalog-filters">${filterButtons}</div><div class="template-catalog-grid">${cards}</div>`;
@@ -1955,166 +1965,187 @@ export class CustomGameEditor {
       this.presetSlotsPanel.innerHTML = `<h3>Saved Template Slots</h3>${rows}`;
   }
 
-  private applyPreset(preset: 'classic' | 'sprint' | 'cascade' | 'zen' | 'stack' | 'micro'): void {
-      this.applyFormValuesToGameType();
-
+  private applyPresetToGameType(target: GameType, preset: PresetCatalogEntry['key']): void {
       switch (preset) {
           case 'classic':
-              this.currentGameType.name = 'Classic Drop';
-              this.currentGameType.gameMode = GamePlayMode.DROP;
-              this.currentGameType.gridWidth = 10;
-              this.currentGameType.gridHeight = 20;
-              this.currentGameType.numberOfNextPiecesToShow = 3;
-              this.currentGameType.maxLockDelayTicks = 500;
-              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 100;
-              this.currentGameType.chainRule_AmountPerChain = 4;
-              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
-              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
-              this.currentGameType.chainRule_CheckRow = true;
-              this.currentGameType.chainRule_CheckColumn = false;
-              this.currentGameType.chainRule_CheckDiagonal = false;
-              this.currentGameType.chainRule_CheckRecursive = false;
-              this.currentGameType.nextPieceEnabled = true;
-              this.currentGameType.holdPieceEnabled = true;
-              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = true;
-              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
-              this.currentGameType.twoSpaceWallKickAllowed = true;
-              this.currentGameType.diagonalWallKickAllowed = true;
-              this.currentGameType.pieceClimbingAllowed = true;
-              this.currentGameType.flip180Allowed = true;
-              this.currentGameType.floorKickAllowed = true;
+              target.name = 'Classic Drop';
+              target.gameMode = GamePlayMode.DROP;
+              target.gridWidth = 10;
+              target.gridHeight = 20;
+              target.numberOfNextPiecesToShow = 3;
+              target.maxLockDelayTicks = 500;
+              target.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 100;
+              target.chainRule_AmountPerChain = 4;
+              target.moveDownAllLinesOverBlankSpacesAtOnce = false;
+              target.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              target.chainRule_CheckRow = true;
+              target.chainRule_CheckColumn = false;
+              target.chainRule_CheckDiagonal = false;
+              target.chainRule_CheckRecursive = false;
+              target.nextPieceEnabled = true;
+              target.holdPieceEnabled = true;
+              target.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = true;
+              target.hardDropPunchThroughToLowestValidGridPosition = false;
+              target.twoSpaceWallKickAllowed = true;
+              target.diagonalWallKickAllowed = true;
+              target.pieceClimbingAllowed = true;
+              target.flip180Allowed = true;
+              target.floorKickAllowed = true;
               break;
           case 'sprint':
-              this.currentGameType.name = 'Sprint Drop';
-              this.currentGameType.gameMode = GamePlayMode.DROP;
-              this.currentGameType.gridWidth = 10;
-              this.currentGameType.gridHeight = 20;
-              this.currentGameType.numberOfNextPiecesToShow = 5;
-              this.currentGameType.maxLockDelayTicks = 240;
-              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 40;
-              this.currentGameType.chainRule_AmountPerChain = 4;
-              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
-              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
-              this.currentGameType.chainRule_CheckRow = true;
-              this.currentGameType.chainRule_CheckColumn = false;
-              this.currentGameType.chainRule_CheckDiagonal = false;
-              this.currentGameType.chainRule_CheckRecursive = false;
-              this.currentGameType.nextPieceEnabled = true;
-              this.currentGameType.holdPieceEnabled = true;
-              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = true;
-              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
-              this.currentGameType.twoSpaceWallKickAllowed = true;
-              this.currentGameType.diagonalWallKickAllowed = true;
-              this.currentGameType.pieceClimbingAllowed = true;
-              this.currentGameType.flip180Allowed = true;
-              this.currentGameType.floorKickAllowed = true;
+              target.name = 'Sprint Drop';
+              target.gameMode = GamePlayMode.DROP;
+              target.gridWidth = 10;
+              target.gridHeight = 20;
+              target.numberOfNextPiecesToShow = 5;
+              target.maxLockDelayTicks = 240;
+              target.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 40;
+              target.chainRule_AmountPerChain = 4;
+              target.moveDownAllLinesOverBlankSpacesAtOnce = false;
+              target.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              target.chainRule_CheckRow = true;
+              target.chainRule_CheckColumn = false;
+              target.chainRule_CheckDiagonal = false;
+              target.chainRule_CheckRecursive = false;
+              target.nextPieceEnabled = true;
+              target.holdPieceEnabled = true;
+              target.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = true;
+              target.hardDropPunchThroughToLowestValidGridPosition = false;
+              target.twoSpaceWallKickAllowed = true;
+              target.diagonalWallKickAllowed = true;
+              target.pieceClimbingAllowed = true;
+              target.flip180Allowed = true;
+              target.floorKickAllowed = true;
               break;
           case 'cascade':
-              this.currentGameType.name = 'Cascade Puzzle';
-              this.currentGameType.gameMode = GamePlayMode.DROP;
-              this.currentGameType.gridWidth = 8;
-              this.currentGameType.gridHeight = 16;
-              this.currentGameType.numberOfNextPiecesToShow = 3;
-              this.currentGameType.maxLockDelayTicks = 450;
-              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 120;
-              this.currentGameType.chainRule_AmountPerChain = 3;
-              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = true;
-              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = true;
-              this.currentGameType.chainRule_CheckRow = true;
-              this.currentGameType.chainRule_CheckColumn = true;
-              this.currentGameType.chainRule_CheckDiagonal = true;
-              this.currentGameType.chainRule_CheckRecursive = true;
-              this.currentGameType.nextPieceEnabled = true;
-              this.currentGameType.holdPieceEnabled = false;
-              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = false;
-              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
-              this.currentGameType.twoSpaceWallKickAllowed = false;
-              this.currentGameType.diagonalWallKickAllowed = false;
-              this.currentGameType.pieceClimbingAllowed = false;
-              this.currentGameType.flip180Allowed = false;
-              this.currentGameType.floorKickAllowed = false;
+              target.name = 'Cascade Puzzle';
+              target.gameMode = GamePlayMode.DROP;
+              target.gridWidth = 8;
+              target.gridHeight = 16;
+              target.numberOfNextPiecesToShow = 3;
+              target.maxLockDelayTicks = 450;
+              target.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 120;
+              target.chainRule_AmountPerChain = 3;
+              target.moveDownAllLinesOverBlankSpacesAtOnce = true;
+              target.gravityRule_onlyMoveDownDisconnectedBlocks = true;
+              target.chainRule_CheckRow = true;
+              target.chainRule_CheckColumn = true;
+              target.chainRule_CheckDiagonal = true;
+              target.chainRule_CheckRecursive = true;
+              target.nextPieceEnabled = true;
+              target.holdPieceEnabled = false;
+              target.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = false;
+              target.hardDropPunchThroughToLowestValidGridPosition = false;
+              target.twoSpaceWallKickAllowed = false;
+              target.diagonalWallKickAllowed = false;
+              target.pieceClimbingAllowed = false;
+              target.flip180Allowed = false;
+              target.floorKickAllowed = false;
               break;
           case 'zen':
-              this.currentGameType.name = 'Zen Garden';
-              this.currentGameType.gameMode = GamePlayMode.DROP;
-              this.currentGameType.gridWidth = 10;
-              this.currentGameType.gridHeight = 18;
-              this.currentGameType.numberOfNextPiecesToShow = 5;
-              this.currentGameType.maxLockDelayTicks = 900;
-              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 220;
-              this.currentGameType.chainRule_AmountPerChain = 4;
-              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = true;
-              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
-              this.currentGameType.chainRule_CheckRow = true;
-              this.currentGameType.chainRule_CheckColumn = true;
-              this.currentGameType.chainRule_CheckDiagonal = false;
-              this.currentGameType.chainRule_CheckRecursive = true;
-              this.currentGameType.nextPieceEnabled = true;
-              this.currentGameType.holdPieceEnabled = true;
-              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = true;
-              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
-              this.currentGameType.twoSpaceWallKickAllowed = false;
-              this.currentGameType.diagonalWallKickAllowed = false;
-              this.currentGameType.pieceClimbingAllowed = false;
-              this.currentGameType.flip180Allowed = true;
-              this.currentGameType.floorKickAllowed = false;
+              target.name = 'Zen Garden';
+              target.gameMode = GamePlayMode.DROP;
+              target.gridWidth = 10;
+              target.gridHeight = 18;
+              target.numberOfNextPiecesToShow = 5;
+              target.maxLockDelayTicks = 900;
+              target.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 220;
+              target.chainRule_AmountPerChain = 4;
+              target.moveDownAllLinesOverBlankSpacesAtOnce = true;
+              target.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              target.chainRule_CheckRow = true;
+              target.chainRule_CheckColumn = true;
+              target.chainRule_CheckDiagonal = false;
+              target.chainRule_CheckRecursive = true;
+              target.nextPieceEnabled = true;
+              target.holdPieceEnabled = true;
+              target.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = true;
+              target.hardDropPunchThroughToLowestValidGridPosition = false;
+              target.twoSpaceWallKickAllowed = false;
+              target.diagonalWallKickAllowed = false;
+              target.pieceClimbingAllowed = false;
+              target.flip180Allowed = true;
+              target.floorKickAllowed = false;
               break;
           case 'stack':
-              this.currentGameType.name = 'Stack Arcade';
-              this.currentGameType.gameMode = GamePlayMode.STACK;
-              this.currentGameType.gridWidth = 6;
-              this.currentGameType.gridHeight = 12;
-              this.currentGameType.numberOfNextPiecesToShow = 3;
-              this.currentGameType.maxLockDelayTicks = 350;
-              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 90;
-              this.currentGameType.chainRule_AmountPerChain = 3;
-              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
-              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
-              this.currentGameType.chainRule_CheckRow = true;
-              this.currentGameType.chainRule_CheckColumn = true;
-              this.currentGameType.chainRule_CheckDiagonal = false;
-              this.currentGameType.chainRule_CheckRecursive = false;
-              this.currentGameType.nextPieceEnabled = true;
-              this.currentGameType.holdPieceEnabled = false;
-              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = false;
-              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
-              this.currentGameType.twoSpaceWallKickAllowed = true;
-              this.currentGameType.diagonalWallKickAllowed = false;
-              this.currentGameType.pieceClimbingAllowed = false;
-              this.currentGameType.flip180Allowed = false;
-              this.currentGameType.floorKickAllowed = false;
+              target.name = 'Stack Arcade';
+              target.gameMode = GamePlayMode.STACK;
+              target.gridWidth = 6;
+              target.gridHeight = 12;
+              target.numberOfNextPiecesToShow = 3;
+              target.maxLockDelayTicks = 350;
+              target.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 90;
+              target.chainRule_AmountPerChain = 3;
+              target.moveDownAllLinesOverBlankSpacesAtOnce = false;
+              target.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              target.chainRule_CheckRow = true;
+              target.chainRule_CheckColumn = true;
+              target.chainRule_CheckDiagonal = false;
+              target.chainRule_CheckRecursive = false;
+              target.nextPieceEnabled = true;
+              target.holdPieceEnabled = false;
+              target.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = false;
+              target.hardDropPunchThroughToLowestValidGridPosition = false;
+              target.twoSpaceWallKickAllowed = true;
+              target.diagonalWallKickAllowed = false;
+              target.pieceClimbingAllowed = false;
+              target.flip180Allowed = false;
+              target.floorKickAllowed = false;
               break;
           case 'micro':
-              this.currentGameType.name = 'Micro Stack';
-              this.currentGameType.gameMode = GamePlayMode.STACK;
-              this.currentGameType.gridWidth = 5;
-              this.currentGameType.gridHeight = 10;
-              this.currentGameType.numberOfNextPiecesToShow = 2;
-              this.currentGameType.maxLockDelayTicks = 220;
-              this.currentGameType.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 70;
-              this.currentGameType.chainRule_AmountPerChain = 3;
-              this.currentGameType.moveDownAllLinesOverBlankSpacesAtOnce = false;
-              this.currentGameType.gravityRule_onlyMoveDownDisconnectedBlocks = false;
-              this.currentGameType.chainRule_CheckRow = true;
-              this.currentGameType.chainRule_CheckColumn = true;
-              this.currentGameType.chainRule_CheckDiagonal = false;
-              this.currentGameType.chainRule_CheckRecursive = false;
-              this.currentGameType.nextPieceEnabled = true;
-              this.currentGameType.holdPieceEnabled = false;
-              this.currentGameType.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = false;
-              this.currentGameType.hardDropPunchThroughToLowestValidGridPosition = false;
-              this.currentGameType.twoSpaceWallKickAllowed = true;
-              this.currentGameType.diagonalWallKickAllowed = false;
-              this.currentGameType.pieceClimbingAllowed = false;
-              this.currentGameType.flip180Allowed = false;
-              this.currentGameType.floorKickAllowed = false;
+              target.name = 'Micro Stack';
+              target.gameMode = GamePlayMode.STACK;
+              target.gridWidth = 5;
+              target.gridHeight = 10;
+              target.numberOfNextPiecesToShow = 2;
+              target.maxLockDelayTicks = 220;
+              target.gravityRule_ticksToMoveDownBlocksOverBlankSpaces = 70;
+              target.chainRule_AmountPerChain = 3;
+              target.moveDownAllLinesOverBlankSpacesAtOnce = false;
+              target.gravityRule_onlyMoveDownDisconnectedBlocks = false;
+              target.chainRule_CheckRow = true;
+              target.chainRule_CheckColumn = true;
+              target.chainRule_CheckDiagonal = false;
+              target.chainRule_CheckRecursive = false;
+              target.nextPieceEnabled = true;
+              target.holdPieceEnabled = false;
+              target.currentPieceRule_getNewPiecesRandomlyOutOfBagWithOneOfEachPieceUntilEmpty = false;
+              target.hardDropPunchThroughToLowestValidGridPosition = false;
+              target.twoSpaceWallKickAllowed = true;
+              target.diagonalWallKickAllowed = false;
+              target.pieceClimbingAllowed = false;
+              target.flip180Allowed = false;
+              target.floorKickAllowed = false;
               break;
       }
+  }
 
+  private applyPreset(preset: PresetCatalogEntry['key']): void {
+      this.applyFormValuesToGameType();
+      this.applyPresetToGameType(this.currentGameType, preset);
       this.loadFromGameType();
       this.selectPiece(0);
       this.pushRecentAction(`Applied preset: ${this.currentGameType.name}`);
       ToastManager.showInfo(`Applied preset: ${this.currentGameType.name}`);
+  }
+
+  private savePresetTemplateToSlot(preset: PresetCatalogEntry['key'], slot: number): void {
+      this.applyFormValuesToGameType();
+      const cloned = GameType.fromJSON(JSON.stringify(this.currentGameType));
+      this.applyPresetToGameType(cloned, preset);
+      localStorage.setItem(this.getPresetSlotKey(slot), JSON.stringify(cloned));
+      const metadata: PresetSlotMetadata = {
+          slot,
+          gameName: cloned.name || `Slot ${slot}`,
+          mode: cloned.gameMode,
+          pieceCount: cloned.pieceTypes.length,
+          rotationCount: cloned.pieceTypes.reduce((sum, pt) => sum + pt.rotationSet.size(), 0),
+          timestamp: Date.now(),
+      };
+      localStorage.setItem(this.getPresetSlotMetaKey(slot), JSON.stringify(metadata));
+      this.renderPresetSlotStatus();
+      this.pushRecentAction(`Saved template ${cloned.name || preset} to preset slot ${slot}.`);
+      ToastManager.showInfo(`Saved template ${cloned.name || preset} to preset slot ${slot}.`);
   }
 
   private savePresetSlot(slot: number): void {
