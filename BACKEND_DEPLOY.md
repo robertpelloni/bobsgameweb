@@ -80,6 +80,18 @@ This compares:
 - remote backend files on disk
 - live running backend process version from `/healthz`
 
+For version-aware backend health checks, you can also use:
+
+```bash
+BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.48 ./scripts/check-backend-host.sh
+```
+
+If a no-restart maintenance window intentionally leaves runtime drift in place, use:
+
+```bash
+BACKEND_URL=https://YOUR-BACKEND-HOST EXPECTED_BACKEND_VERSION=2.1.48 ALLOW_BACKEND_RUNTIME_DRIFT=1 ./scripts/check-backend-host.sh
+```
+
 Expected:
 - `/` → 200 plain text
 - `/healthz` → 200 JSON with `ok: true`

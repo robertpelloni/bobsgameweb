@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.48] - 2026-04-06
+
+### Added
+- **Version-Aware Backend Host Checks:** `scripts/check-backend-host.sh` now supports `EXPECTED_BACKEND_VERSION` plus `ALLOW_BACKEND_RUNTIME_DRIFT=1`, so backend health checks can explicitly enforce or temporarily tolerate runtime-version mismatch during no-restart maintenance windows.
+
+### Changed
+- `scripts/verify-production-stack.sh` now passes through optional backend-version expectations, allowing full production verification to operate in either drift-strict or drift-aware mode.
+- Bumped project version to `2.1.48`.
+
+### Verified
+- Confirmed the current live backend reports `2.1.17` and causes a strict version-aware host check to fail as expected.
+- Confirmed the same live backend passes the version-aware host check with a warning when `ALLOW_BACKEND_RUNTIME_DRIFT=1` is provided.
+
 ## [2.1.47] - 2026-04-06
 
 ### Added

@@ -27,6 +27,16 @@ BACKEND_HOST=YOUR_SERVER_IP BACKEND_USER=root DOMAIN_NAME=ws.bobsgame.com INSTAL
 BACKEND_URL=https://ws.bobsgame.com ./scripts/check-backend-host.sh
 ```
 
+## Verify backend against an expected runtime version
+```bash
+BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.48 ./scripts/check-backend-host.sh
+```
+
+## Verify backend while temporarily allowing documented runtime drift
+```bash
+BACKEND_URL=https://ws.bobsgame.com EXPECTED_BACKEND_VERSION=2.1.48 ALLOW_BACKEND_RUNTIME_DRIFT=1 ./scripts/check-backend-host.sh
+```
+
 ## Audit backend drift
 ```bash
 BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com ./scripts/audit-backend-drift.sh
