@@ -6,3 +6,5 @@ export {
     GameEnum, DEFAULT_GAME_TYPES,
     type GameTypeDefinition,
 } from './PuzzleTypes';
+export { GameSequence } from './GameSequence';
+export { Room, RoomState, type RoomPlayer } from './Room';

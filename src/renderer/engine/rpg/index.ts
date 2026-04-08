@@ -1,12 +1,19 @@
 // RPG Engine Module — complete omni-engine RPG subsystem
 export { Player, type PlayerConfig } from './Player';
-export { Character, type CharacterConfig } from '../entity/Character';
+export { Character as RPGCharacter } from '../entity/Character';
 export { Item } from './Item';
 export { Wallet } from './Wallet';
 export { GameClock } from './Clock';
 export { Easing } from './Easing';
 export { FriendCharacter, type FriendCharacterConfig } from './FriendCharacter';
 export { FriendManager } from './FriendManager';
+export { BGClientEngine } from './BGClientEngine';
+
+// GUI system
+export * from './gui';
+
+// Action system
+export { ActionManager, type ActionCaptionType, type ActionContext } from './ActionManager';
 
 // Event system
 export {
