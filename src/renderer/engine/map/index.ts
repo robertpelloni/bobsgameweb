@@ -6,3 +6,5 @@ export { AutoTiler, type AutoTileMap } from './AutoTiler';
 export { AsepriteParser, type AsepriteHeader, type AsepriteFrame, type AsepriteCel, type AsepriteTag } from './AsepriteParser';
 export { MapData } from '../../../shared/MapData';
 export { GameMap } from './GameMap';
+export { MapManager, type MapData as MapManagerData } from './MapManager';
+export { EntityData, RenderOrder } from './EntityData';

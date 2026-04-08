@@ -4,5 +4,6 @@ export { SpriteAnimation, type SpriteAnimationFrame, type SpriteAnimationSequenc
 export { SpriteData, type SpriteAnimationSequenceData } from './SpriteData';
 export { SpriteManager } from './SpriteManager';
 export { BobSprite } from './BobSprite';
-export { Character, Direction } from './Character';
+export { Character, Direction, type CharacterConfig } from './Character';
 export { RandomCharacter, type CharacterAppearance } from './RandomCharacter';
+export { ScreenSprite } from './ScreenSprite';
