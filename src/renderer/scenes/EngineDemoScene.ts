@@ -7,7 +7,7 @@ import { SpriteComponent } from '../engine/ecs/components/SpriteComponent';
 import { BehaviorComponent } from '../engine/ecs/components/BehaviorComponent';
 import { EventSheetComponent } from '../engine/ecs/components/EventSheetComponent';
 import { VisualScriptSystem } from '../engine/ecs/systems/VisualScriptSystem';
-import { EightDirectionBehavior } from '../engine/ecs/behaviors/EightDirectionBehavior';
+
 import { PlatformerBehavior } from '../engine/ecs/behaviors/PlatformerBehavior';
 import { GraphicsComponent } from '../engine/ecs/components/GraphicsComponent';
 import { GraphicsSystem } from '../engine/ecs/systems/GraphicsSystem';
@@ -105,7 +105,6 @@ export class EngineDemoScene extends Scene {
         this.world.addComponent(entity1, sprite1);
 
         const behaviors1 = new BehaviorComponent();
-        behaviors1.behaviors.push(new EightDirectionBehavior(this.world));
         this.world.addComponent(entity1, behaviors1);
 
         // 2. Create a Platformer entity
