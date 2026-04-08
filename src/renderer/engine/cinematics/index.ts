@@ -1,3 +1,4 @@
-export { CinematicsManager, type RenderLayer } from './CinematicsManager';
-export { ScreenOverlay, type RGBA } from './ScreenOverlay';
+export { CinematicsManager } from './CinematicsManager';
+export { ScreenOverlay } from './ScreenOverlay';
 export { Letterbox } from './Letterbox';
+export { GlowTileBackground, GlowTile } from './GlowTileBackground';

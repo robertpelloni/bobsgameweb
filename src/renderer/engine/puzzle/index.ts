@@ -14,4 +14,5 @@ export { GameLogic } from './GameLogic';
 export { GameSequence } from './GameSequence';
 export { Room } from './Room';
 export { PuzzlePlayer } from './PuzzlePlayer';
+export { PuzzleRenderer, type PuzzleRendererConfig, type RenderableBlock } from './PuzzleRenderer';
 export * from './stats';
