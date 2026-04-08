@@ -8,6 +8,7 @@
  * The nD (mini-game console) is opened within this scene by pressing Enter.
  */
 import { Container, Graphics } from 'pixi.js';
+import type { State } from '../state/StateManager';
 import { ClientGameEngine } from '../engine/rpg/ClientGameEngine';
 import { ND, NDButton } from '../engine/nd/ND';
 import { BobsGame } from '../engine/puzzle/BobsGame';
@@ -22,7 +23,7 @@ export interface EngineSceneConfig {
     height: number;
 }
 
-export class EngineScene {
+export class EngineScene implements State {
     readonly name = 'engine';
     container: Container;
 
@@ -163,6 +164,13 @@ export class EngineScene {
     getBobsGame(): BobsGame { return this.bobsGame; }
     isNDOpen(): boolean { return this.ndOpen; }
     isInitialized(): boolean { return this.initialized; }
+
+    // State interface
+    async onEnter(): Promise<void> { this.controls.attach(window); }
+    async onExit(): Promise<void> { this.controls.detach(); }
+    onPause(): void { /* pause engine */ }
+    onResume(): void { /* resume engine */ }
+    onResize(width: number, height: number): void { this.resize(width, height); }
 
     destroy(): void {
         this.controls.detach();

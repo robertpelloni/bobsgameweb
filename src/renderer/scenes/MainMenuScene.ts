@@ -247,7 +247,7 @@ export class MainMenuScene extends Scene {
             fill: 0x445566,
             letterSpacing: 1,
         });
-        this.versionText = new Text({ text: 'v2.1.74', style: versionStyle });
+        this.versionText = new Text({ text: 'v2.1.75', style: versionStyle });
         this.versionText.anchor.set(1, 1);
         this.versionText.x = this.width - 10;
         this.versionText.y = this.height - 10;
@@ -275,6 +275,7 @@ export class MainMenuScene extends Scene {
             { label: 'Multiplayer', action: () => this.openLobby(), prefetch: () => { void import('./LobbyScene'); } },
             { label: 'Rankings', action: () => this.openRankings(), prefetch: () => { void import('./RankingsScene'); } },
             { label: 'nD Demo', action: () => this.openNDDemo(), prefetch: () => { void import('./NDDemoScene'); } },
+            { label: 'Play RPG', action: () => this.openEngineGame(), prefetch: () => { void import('./EngineScene'); } },
             { label: 'Engine Demo', action: () => this.openEngineDemo(), prefetch: () => { void import('./EngineDemoScene'); } },
             { label: 'High Scores', action: () => this.openHighScores(), prefetch: () => { void import('./HighScoresScene'); } },
             { label: 'Achievements', action: () => this.openAchievements(), prefetch: () => { void import('./AchievementsScene'); } },
@@ -537,6 +538,16 @@ export class MainMenuScene extends Scene {
             camera: this.camera ?? undefined,
         });
         SceneTransition.pushWithFade(this.app, demoScene);
+    }
+
+    private async openEngineGame(): Promise<void> {
+        const { EngineScene } = await import('./EngineScene');
+        const scene = new EngineScene({
+            width: this.app.screen.width,
+            height: this.app.screen.height,
+        });
+        await scene.create();
+        SceneTransition.pushWithFade(this.app, scene);
     }
 
     private async openNDDemo(): Promise<void> {
