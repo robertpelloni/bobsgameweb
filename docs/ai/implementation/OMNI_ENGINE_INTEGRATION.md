@@ -1,6 +1,6 @@
 # bob's game web — The Ultimate Omni-Engine
 
-## Version 2.1.72 — April 8, 2026
+## Version 2.1.73 — April 8, 2026
 
 ---
 
@@ -8,8 +8,8 @@
 
 | Component | URL | Version | Status |
 |---|---|---|---|
-| Frontend | https://bobsgame.com | 2.1.72 | ✅ Live |
-| Backend | https://ws.bobsgame.com | 2.1.72 | ✅ Live |
+| Frontend | https://bobsgame.com | 2.1.73 | ✅ Live |
+| Backend | https://ws.bobsgame.com | 2.1.73 | ✅ Live |
 | GitHub | robertpelloni/bobsgameweb | master | ✅ Pushed |
 
 ### Build Stats
@@ -42,6 +42,7 @@
 | v2.1.70 | EightDirectionBehavior, VisualScriptSystem, WheelItem, NDMenu, MapStateData, ManifestLoader — 182 modules |
 | v2.1.71 | ClientGameEngine (from 1125-line Java), BobsGame (from 692-line C++), FileUtils — 185 modules |
 | v2.1.72 | AudioUtils (Web Audio API), PeerConnection (WebRTC P2P) — 187 modules |
+| v2.1.73 | ND console container (630-line port), Easing additions — 187 modules |
 
 ---
 
@@ -73,6 +74,7 @@ src/renderer/engine/  (187 files)
 │   └── stats/ ────────── GameStats, Leaderboard, UserStats
 │
 ├── nd/ (12) ──────────── N-Dimensional Mini-Games
+│   ├── ND ────────────── Mini-game console container (zoom, easing, dual-screen)
 │   ├── MiniGameEngine ── Abstract base class
 │   ├── Ping ──────────── Pong game with AI
 │   ├── Ramio ─────────── Breakout game with bricks/bobas
@@ -100,7 +102,7 @@ src/renderer/engine/  (187 files)
 │   ├── ManifestLoader ── Asset manifest loading and verification
 │   └── FileUtils ─────── Browser file utilities (fetch, IndexedDB, download)
 │
-├── network/ (6) ──────── Networking
+├── network/ (7) ──────── Networking
 │   ├── NetworkManager (Socket.io), OKNet (auth/matchmaking)
 │   ├── ServerConnection (WebSocket, auto-reconnect, ping)
 │   ├── BobsGameRoom ──── Full room config
@@ -119,7 +121,7 @@ src/renderer/engine/  (187 files)
 │   ├── OKGameStadium ──── Stadium visualization
 │   └── TournamentManager ─ Bracket elimination, bye propagation
 │
-├── audio/ (4) ────────── Audio Engine
+├── audio/ (5) ────────── Audio Engine
 │   ├── AudioManager ──── Music channels, SFX pool, volume/fade
 │   ├── AudioUtils ────── Web Audio API utilities (channel pooling, buffer loading)
 │   ├── WaveData, OggDecoder
