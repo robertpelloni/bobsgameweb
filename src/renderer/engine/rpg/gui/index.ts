@@ -11,3 +11,4 @@ export { StatusPanel, type PlayerStatus } from './StatusPanel';
 export { FriendsPanel } from './FriendsPanel';
 export { SettingsPanel, type SettingOption } from './SettingsPanel';
 export { LogsPanel, type LogEntry } from './LogsPanel';
+export { GameItem, type GameItemData } from './GameItem';
