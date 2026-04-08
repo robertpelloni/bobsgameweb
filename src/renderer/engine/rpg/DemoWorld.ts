@@ -57,10 +57,19 @@ export class DemoWorld {
     playerDir = 0; // 0=down, 1=left, 2=right, 3=up
 
     // NPCs
-    private npcs: { x: number; y: number; color: number; name: string; dir: number }[] = [];
+    private npcs: { x: number; y: number; color: number; name: string; dir: number; dialogue: string[] }[] = [];
 
     // Clock
     private gameTime = 0;
+
+    // Dialogue state
+    private showDialogue = false;
+    private dialogueLines: string[] = [];
+    private dialogueIndex = 0;
+    private dialogueNPC = '';
+    private dialogueTimer = 0;
+    private dialogueCharIndex = 0;
+    private readonly DIALOGUE_SPEED = 30; // chars per second
 
     // Map data (simple 2D array)
     private tiles: number[][] = [];
@@ -182,12 +191,35 @@ export class DemoWorld {
 
     private placeNPCs(): void {
         this.npcs = [
-            { x: 6 * TILE_SIZE, y: 5 * TILE_SIZE, color: 0xff6644, name: 'Barista', dir: 0 },
-            { x: 13 * TILE_SIZE, y: 5 * TILE_SIZE, color: 0x44aaff, name: 'Shopkeep', dir: 0 },
-            { x: 15 * TILE_SIZE, y: 7 * TILE_SIZE, color: 0x44ff88, name: 'Fisherman', dir: 0 },
-            { x: 22 * TILE_SIZE, y: 5 * TILE_SIZE, color: 0xffaa44, name: 'Coach', dir: 0 },
-            { x: 15 * TILE_SIZE, y: 15 * TILE_SIZE, color: 0xff44aa, name: 'Villager', dir: 3 },
-            { x: 8 * TILE_SIZE, y: 18 * TILE_SIZE, color: 0xaa44ff, name: 'Gamer', dir: 2 },
+            { x: 6 * TILE_SIZE, y: 5 * TILE_SIZE, color: 0xff6644, name: 'Barista', dir: 0, dialogue: [
+                'Welcome to the Cafe!',
+                'We have the best coffee in town.',
+                'Have you tried the nD yet? Press ENTER to open it!',
+            ]},
+            { x: 13 * TILE_SIZE, y: 5 * TILE_SIZE, color: 0x44aaff, name: 'Shopkeep', dir: 0, dialogue: [
+                'Welcome to my shop!',
+                'I sell all kinds of items for your adventure.',
+                'The puzzle tournament starts soon at the Stadium!',
+            ]},
+            { x: 15 * TILE_SIZE, y: 7 * TILE_SIZE, color: 0x44ff88, name: 'Fisherman', dir: 0, dialogue: [
+                'I\'ve been fishing here all day...',
+                'The fish aren\'t biting, but the view is nice.',
+                'Did you know this river flows all the way to the ocean?',
+            ]},
+            { x: 22 * TILE_SIZE, y: 5 * TILE_SIZE, color: 0xffaa44, name: 'Coach', dir: 0, dialogue: [
+                'The Stadium is closed for renovations.',
+                'But you can still play on your nD!',
+                'Press ENTER to open it and start playing!',
+            ]},
+            { x: 15 * TILE_SIZE, y: 15 * TILE_SIZE, color: 0xff44aa, name: 'Villager', dir: 3, dialogue: [
+                'Nice day for a walk, isn\'t it?',
+                'I heard there\'s a new puzzle game type coming soon.',
+            ]},
+            { x: 8 * TILE_SIZE, y: 18 * TILE_SIZE, color: 0xaa44ff, name: 'Gamer', dir: 2, dialogue: [
+                'I\'m practicing my speedrun strats!',
+                'My best time on Master difficulty is 2:34.',
+                'You should try the online multiplayer — it\'s intense!',
+            ]},
         ];
     }
 
@@ -207,12 +239,52 @@ export class DemoWorld {
     update(dt: number): void {
         this.gameTime += dt;
 
+        // If dialogue is showing, only handle dialogue input
+        if (this.showDialogue) {
+            this.dialogueTimer += dt;
+
+            // Advance text
+            if (this.dialogueIndex < this.dialogueLines.length) {
+                const line = this.dialogueLines[this.dialogueIndex];
+                this.dialogueCharIndex = Math.min(line.length, Math.floor(this.dialogueTimer * this.DIALOGUE_SPEED));
+            }
+
+            // Space/Enter advances dialogue
+            if (this.keys[' '] || this.keys['Enter']) {
+                this.keys[' '] = false;
+                this.keys['Enter'] = false;
+
+                const line = this.dialogueLines[this.dialogueIndex];
+                if (this.dialogueCharIndex < line.length) {
+                    // Show full line immediately
+                    this.dialogueCharIndex = line.length;
+                } else {
+                    // Next line or close
+                    this.dialogueIndex++;
+                    this.dialogueTimer = 0;
+                    this.dialogueCharIndex = 0;
+                    if (this.dialogueIndex >= this.dialogueLines.length) {
+                        this.showDialogue = false;
+                    }
+                }
+            }
+            return;
+        }
+
         // Player movement
         let dx = 0, dy = 0;
         if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) { dy = -1; this.playerDir = 3; }
         if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) { dy = 1; this.playerDir = 0; }
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) { dx = -1; this.playerDir = 1; }
         if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) { dx = 1; this.playerDir = 2; }
+
+        // Space / E to interact with NPCs
+        if (this.keys[' '] || this.keys['e'] || this.keys['E']) {
+            this.keys[' '] = false;
+            this.keys['e'] = false;
+            this.keys['E'] = false;
+            this.tryInteractNPC();
+        }
 
         // Normalize diagonal
         if (dx !== 0 && dy !== 0) {
@@ -232,6 +304,28 @@ export class DemoWorld {
             if (tile !== Tile.WATER && tile !== Tile.TREE && tile !== Tile.BUILDING && tile !== Tile.ROOF && tile !== Tile.FENCE) {
                 this.playerX = Math.max(0, Math.min((MAP_W - 1) * TILE_SIZE, newX));
                 this.playerY = Math.max(0, Math.min((MAP_H - 1) * TILE_SIZE, newY));
+            }
+        }
+    }
+
+    // ============================================================
+    // NPC Interaction
+    // ============================================================
+
+    private tryInteractNPC(): void {
+        const interactDist = TILE_SIZE * 1.5;
+        for (const npc of this.npcs) {
+            const dx = this.playerX - npc.x;
+            const dy = this.playerY - npc.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < interactDist) {
+                this.showDialogue = true;
+                this.dialogueLines = npc.dialogue;
+                this.dialogueIndex = 0;
+                this.dialogueNPC = npc.name;
+                this.dialogueTimer = 0;
+                this.dialogueCharIndex = 0;
+                return;
             }
         }
     }
@@ -334,6 +428,11 @@ export class DemoWorld {
 
         // HUD
         this.renderHUD();
+
+        // Dialogue box
+        if (this.showDialogue) {
+            this.renderDialogueBox();
+        }
 
         return this.container;
     }
@@ -453,6 +552,92 @@ export class DemoWorld {
         hint.anchor.set(0.5);
         hint.position.set(this.width / 2, this.height - 14);
         this.hudContainer.addChild(hint);
+    }
+
+    // ============================================================
+    // Dialogue Box
+    // ============================================================
+
+    private renderDialogueBox(): void {
+        const boxW = this.width - 40;
+        const boxH = 120;
+        const boxX = 20;
+        const boxY = this.height - boxH - 40;
+
+        // Background
+        const bg = new Graphics();
+        bg.roundRect(boxX, boxY, boxW, boxH, 8);
+        bg.fill({ color: 0x0a0a2a, alpha: 0.95 });
+        bg.stroke({ color: 0x4466aa, width: 2 });
+        this.hudContainer.addChild(bg);
+
+        // NPC name
+        const nameStyle = new TextStyle({
+            fontFamily: 'Arial, sans-serif',
+            fontSize: 14,
+            fill: 0x44aaff,
+            fontWeight: 'bold',
+        });
+        const nameText = new Text({ text: this.dialogueNPC, style: nameStyle });
+        nameText.position.set(boxX + 16, boxY + 10);
+        this.hudContainer.addChild(nameText);
+
+        // Separator line
+        const sep = new Graphics();
+        sep.moveTo(boxX + 10, boxY + 30);
+        sep.lineTo(boxX + boxW - 10, boxY + 30);
+        sep.stroke({ color: 0x334466, width: 1 });
+        this.hudContainer.addChild(sep);
+
+        // Dialogue text (typewriter effect)
+        if (this.dialogueIndex < this.dialogueLines.length) {
+            const fullLine = this.dialogueLines[this.dialogueIndex];
+            const visibleText = fullLine.substring(0, this.dialogueCharIndex);
+
+            const textStyle = new TextStyle({
+                fontFamily: 'Arial, sans-serif',
+                fontSize: 14,
+                fill: 0xddddee,
+                wordWrap: true,
+                wordWrapWidth: boxW - 32,
+            });
+            const text = new Text({ text: visibleText, style: textStyle });
+            text.position.set(boxX + 16, boxY + 38);
+            this.hudContainer.addChild(text);
+
+            // Advance indicator (blinking triangle)
+            const allCharsShown = this.dialogueCharIndex >= fullLine.length;
+            if (allCharsShown) {
+                const blink = Math.sin(this.gameTime * 5) > 0;
+                if (blink) {
+                    const indicatorStyle = new TextStyle({
+                        fontFamily: 'Arial, sans-serif',
+                        fontSize: 16,
+                        fill: 0x4466aa,
+                    });
+                    const isLast = this.dialogueIndex >= this.dialogueLines.length - 1;
+                    const indicator = new Text({
+                        text: isLast ? '▼ END' : '▼',
+                        style: indicatorStyle,
+                    });
+                    indicator.position.set(boxX + boxW - 60, boxY + boxH - 25);
+                    this.hudContainer.addChild(indicator);
+                }
+            }
+        }
+
+        // Page indicator
+        const pageStyle = new TextStyle({
+            fontFamily: 'monospace',
+            fontSize: 10,
+            fill: 0x445566,
+        });
+        const page = new Text({
+            text: `${this.dialogueIndex + 1}/${this.dialogueLines.length}`,
+            style: pageStyle,
+        });
+        page.position.set(boxX + boxW - 40, boxY + 10);
+        this.hudContainer.addChild(page);
     }
 
     // ============================================================
