@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.57] - 2026-04-07
+
+### Fixed
+- **PixiJS v8 Color Crash:** Fixed a critical initialization crash in `MainMenuScene.ts` by migrating an array-based color gradient (`[0xffffff, 0x00ffff]`) to the explicit `FillGradient` API required by PixiJS v8.
+- **Audio CORS Blockers:** Reconfigured Hetzner NGINX to proxy `/z/` traffic to AWS S3 and updated `BIG_DATA_URL` in `Config.ts` to use relative paths (`/z/`) in production, eliminating WebAudio/HTML5 loading CORS policy blocks.
+
+### Changed
+- Bumped project version to `2.1.57`.
+
+### Verified
+- Built and deployed frontend to Hetzner.
+- Verified live frontend loads audio securely and the app no longer crashes on the main menu.
+
 ## [2.1.56] - 2026-04-06
 
 ### Added

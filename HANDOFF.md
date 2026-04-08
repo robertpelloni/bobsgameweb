@@ -136,6 +136,11 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 - Expanded block behavior reporting so field-wide consequences appear alongside the existing chain and reward hooks.
 - Bumped the repo version again to `2.1.41`.
 
+## Additional Follow-Up - 2026-04-07 (Runtime Crash & CORS Recovery)
+- **PixiJS v8 Color Crash:** Fixed a critical initialization crash in `MainMenuScene.ts` by migrating an array-based color gradient (`[0xffffff, 0x00ffff]`) to the explicit `FillGradient` API required by PixiJS v8.
+- **Audio CORS Blockers:** Reconfigured Hetzner NGINX to proxy `/z/` traffic to AWS S3 and updated `BIG_DATA_URL` in `Config.ts` to use relative paths (`/z/`) in production, eliminating WebAudio/HTML5 loading CORS policy blocks.
+- Bumped the repo version to `2.1.57`.
+
 ## Additional Follow-Up - 2026-04-06 (Unified Template Library)
 - Added a unified, filterable "Template Library" surface that combines built-in presets, user-saved slots, and import/share history into a single browsing experience.
 - Refactored internal rendering to reuse summary cards and action hooks across all template sources.
