@@ -252,6 +252,9 @@ export class BobMenu {
     setMaxVisible(n: number): void { this.maxVisible = n; }
     setFontSize(s: number): void { this.fontSize = s; }
     getCursorPosition(): number { return this.cursorPosition; }
+    getCurrentOption(): MenuOption | undefined { return this.options[this.cursorPosition]; }
+    getOptions(): MenuOption[] { return [...this.options]; }
+    getOptionAt(index: number): MenuOption | undefined { return this.options[index]; }
     setCursorPosition(pos: number): void { this.cursorPosition = pos; }
 
     getContainer(): Container { return this.container; }

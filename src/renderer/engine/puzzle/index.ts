@@ -17,4 +17,5 @@ export { PuzzlePlayer } from './PuzzlePlayer';
 export { PuzzleRenderer, type PuzzleRendererConfig, type RenderableBlock } from './PuzzleRenderer';
 export { FrameState } from './FrameState';
 export { OKGame, OKGameState, DifficultyType, DIFFICULTY_NAMES } from './OKGame';
+export { BobsGame, BobsGameMenuState } from './BobsGame';
 export * from './stats';
