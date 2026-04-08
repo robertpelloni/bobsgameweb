@@ -5,3 +5,4 @@ export { OKMath } from './OKMath';
 export { OKColor } from './OKColor';
 export { Cache, type CacheEntry } from './Cache';
 export { BobMenu, type MenuOption } from './BobMenu';
+export { GlobalSettings, DEFAULT_SETTINGS, type GlobalSettingsData } from './GlobalSettings';
