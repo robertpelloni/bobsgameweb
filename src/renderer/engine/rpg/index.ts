@@ -8,6 +8,7 @@ export { Easing } from './Easing';
 export { FriendCharacter, type FriendCharacterConfig } from './FriendCharacter';
 export { FriendManager } from './FriendManager';
 export { BGClientEngine } from './BGClientEngine';
+export { ClientGameEngine } from './ClientGameEngine';
 
 // GUI system
 export * from './gui';

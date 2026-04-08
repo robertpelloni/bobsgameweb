@@ -50,22 +50,22 @@ export const DIFFICULTY_NAMES: Record<DifficultyType, string> = {
 
 export class OKGame extends MiniGameEngine {
     private gameState: OKGameState = OKGameState.START_SCREEN;
-    private players: PuzzlePlayer[] = [];
-    private gameLogics: GameLogic[] = [];
-    private room: BobsGameRoom | null = null;
+    protected players: PuzzlePlayer[] = [];
+    protected gameLogics: GameLogic[] = [];
+    protected room: BobsGameRoom | null = null;
 
     // Menu state
     private menuCursorPosition = 0;
     private startScreenOptions = ['Play Single Player', 'Play Local Multiplayer', 'Play Online', 'Settings', 'Quit'];
     private difficultyOptions = Object.values(DIFFICULTY_NAMES);
-    private selectedDifficulty: DifficultyType = DifficultyType.NORMAL;
+    protected selectedDifficulty: DifficultyType = DifficultyType.NORMAL;
 
     // Game state
-    private countdown = 3;
-    private countdownTimer = 0;
+    protected countdown = 3;
+    protected countdownTimer = 0;
     private gameOverTimer = 0;
-    private isMultiplayerGame = false;
-    private isNetworkGame = false;
+    protected isMultiplayerGame = false;
+    protected isNetworkGame = false;
 
     // Stats
     private gamesPlayed = 0;
