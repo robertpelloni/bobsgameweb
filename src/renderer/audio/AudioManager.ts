@@ -2,7 +2,6 @@ import { EventEmitter } from 'eventemitter3';
 import { Howl, Howler } from 'howler';
 // @ts-ignore - chiptune3 lacks official types
 import { ChiptuneJsPlayer } from './tracker/chiptune3';
-import { BobNet } from '../puzzle/BobNet';
 
 export interface AudioEvents {
   'sound:play': (name: string) => void;
@@ -109,11 +108,9 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   load(name: string, src: string | string[], options?: { preload?: boolean }): any {
     let mainSrc = Array.isArray(src) ? src[0] : src;
     
-    // In production, prepend the S3 URL for relative paths
-    if ((import.meta as any).env.PROD && !mainSrc.startsWith('http') && !mainSrc.startsWith('blob:')) {
-        mainSrc = BobNet.releaseBigDataURL + (mainSrc.startsWith('/') ? mainSrc.substring(1) : mainSrc);
-        if (Array.isArray(src)) src = [mainSrc]; else src = mainSrc;
-    }
+    // Audio files are served as static assets from the same domain.
+    // Only rewrite paths for tracker files or external references.
+    // No CORS rewriting needed since files are local.
 
     if (this.isTrackerFile(mainSrc)) {
       this.trackerCache.set(name, mainSrc);

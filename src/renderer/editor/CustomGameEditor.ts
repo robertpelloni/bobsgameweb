@@ -57,6 +57,7 @@ export class CustomGameEditor {
   private nextPiecesInput!: HTMLInputElement;
   private summaryPanel!: HTMLDivElement;
   private unifiedTemplateLibraryPanel!: HTMLDivElement;
+  private librarySearchInput!: HTMLInputElement;
   private recentHistoryPanel!: HTMLDivElement;
   private recentActionsPanel!: HTMLDivElement;
   private presetSlotsPanel!: HTMLDivElement;
@@ -109,6 +110,7 @@ export class CustomGameEditor {
   private recentActions: RecentEditorActionEntry[] = [];
   private templateCatalogModeFilter: 'all' | 'DROP' | 'STACK' = 'all';
   private unifiedTemplateLibraryFilter: 'all' | 'built-in' | 'slot' | 'history' = 'all';
+  private librarySearchQuery: string = '';
 
   constructor(parentElementId: string) {
     const parent = document.getElementById(parentElementId);
@@ -257,6 +259,12 @@ export class CustomGameEditor {
         </div>
       </div>
       <div id="unified-template-library-panel" class="preset-slots-panel"></div>
+      
+      <div class="form-group" style="margin-top: 16px;">
+        <label>Template Library Search</label>
+        <input type="text" id="library-search" placeholder="Search templates by name...">
+      </div>
+
       <div id="template-catalog-panel" class="preset-slots-panel"></div>
       <div id="preset-slots-panel" class="preset-slots-panel"></div>
       <div id="recent-history" class="recent-history-panel"></div>
@@ -479,6 +487,7 @@ export class CustomGameEditor {
     this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
     this.summaryPanel = this.container.querySelector('#rules-summary') as HTMLDivElement;
     this.unifiedTemplateLibraryPanel = this.container.querySelector('#unified-template-library-panel') as HTMLDivElement;
+    this.librarySearchInput = this.container.querySelector('#library-search') as HTMLInputElement;
     this.templateCatalogPanel = this.container.querySelector('#template-catalog-panel') as HTMLDivElement;
     this.presetSlotsPanel = this.container.querySelector('#preset-slots-panel') as HTMLDivElement;
     this.recentHistoryPanel = this.container.querySelector('#recent-history') as HTMLDivElement;
@@ -555,6 +564,15 @@ export class CustomGameEditor {
     this.container.querySelector('#btn-preset-stack')?.addEventListener('click', () => this.applyPreset('stack'));
     this.container.querySelector('#btn-preset-micro')?.addEventListener('click', () => this.applyPreset('micro'));
 
+    this.presetSlotsPanel?.addEventListener('click', (event) => {
+      const target = (event.target as HTMLElement).closest('button[data-library-load-slot], button[data-library-slot-delete]') as HTMLButtonElement | null;
+      if (!target) return;
+      const loadSlot = target.getAttribute('data-library-load-slot');
+      const deleteSlot = target.getAttribute('data-library-slot-delete');
+      if (loadSlot) this.loadPresetSlot(Number.parseInt(loadSlot, 10));
+      else if (deleteSlot) this.deletePresetSlot(Number.parseInt(deleteSlot, 10));
+    });
+
     this.templateCatalogPanel?.addEventListener('click', (event) => {
       const target = event.target as HTMLElement | null;
       const button = target?.closest('[data-template-apply], [data-template-filter], [data-template-save-slot]') as HTMLElement | null;
@@ -576,7 +594,7 @@ export class CustomGameEditor {
 
     this.unifiedTemplateLibraryPanel?.addEventListener('click', (event) => {
       const target = event.target as HTMLElement | null;
-      const button = target?.closest('[data-library-filter], [data-library-preset], [data-library-save-slot], [data-library-load-slot], [data-library-history-load], [data-library-history-copy]') as HTMLElement | null;
+      const button = target?.closest('[data-library-filter], [data-library-preset], [data-library-save-slot], [data-library-load-slot], [data-library-history-load], [data-library-history-copy], [data-library-slot-delete], [data-library-history-delete]') as HTMLElement | null;
       if (!button) return;
       const filter = button.getAttribute('data-library-filter') as 'all' | 'built-in' | 'slot' | 'history' | null;
       if (filter) {
@@ -599,6 +617,11 @@ export class CustomGameEditor {
         this.loadPresetSlot(Number.parseInt(slot, 10));
         return;
       }
+      const slotDelete = button.getAttribute('data-library-slot-delete');
+      if (slotDelete) {
+        this.deletePresetSlot(Number.parseInt(slotDelete, 10));
+        return;
+      }
       const historyLoad = button.getAttribute('data-library-history-load');
       if (historyLoad) {
         this.loadRecentHistoryEntry(Number.parseInt(historyLoad, 10));
@@ -607,7 +630,17 @@ export class CustomGameEditor {
       const historyCopy = button.getAttribute('data-library-history-copy');
       if (historyCopy) {
         this.copyRecentHistoryEntry(Number.parseInt(historyCopy, 10));
+        return;
       }
+      const historyDelete = button.getAttribute('data-library-history-delete');
+      if (historyDelete) {
+        this.deleteRecentHistoryEntry(Number.parseInt(historyDelete, 10));
+      }
+    });
+
+    this.librarySearchInput?.addEventListener('input', () => {
+      this.librarySearchQuery = this.librarySearchInput.value.toLowerCase();
+      this.renderUnifiedTemplateLibrary();
     });
 
     this.recentHistoryPanel?.addEventListener('click', (event) => {
@@ -620,6 +653,8 @@ export class CustomGameEditor {
         this.loadRecentHistoryEntry(index);
       } else if (action === 'copy') {
         this.copyRecentHistoryEntry(index);
+      } else if (action === 'delete') {
+        this.deleteRecentHistoryEntry(index);
       }
     });
 
@@ -1962,8 +1997,10 @@ export class CustomGameEditor {
           { key: 'history', label: 'History' },
       ].map((filter) => `<button data-library-filter="${filter.key}"${this.unifiedTemplateLibraryFilter === filter.key ? ' style="background:#00ff88; color:#111;"' : ''}>${filter.label}</button>`).join('');
 
-      const builtInCards = this.unifiedTemplateLibraryFilter === 'all' || this.unifiedTemplateLibraryFilter === 'built-in'
-        ? this.getPresetCatalogEntries().map((entry) => `
+      const builtInCards = (this.unifiedTemplateLibraryFilter === 'all' || this.unifiedTemplateLibraryFilter === 'built-in')
+        ? this.getPresetCatalogEntries()
+            .filter(e => !this.librarySearchQuery || e.title.toLowerCase().includes(this.librarySearchQuery) || e.family.toLowerCase().includes(this.librarySearchQuery))
+            .map((entry) => `
           <div class="library-card">
             <div class="library-source">Built-In Template • ${entry.family}</div>
             <div class="library-title">${entry.title}</div>
@@ -1980,43 +2017,72 @@ export class CustomGameEditor {
         `).join('')
         : '';
 
-      const slotCards = this.unifiedTemplateLibraryFilter === 'all' || this.unifiedTemplateLibraryFilter === 'slot'
+      const slotCards = (this.unifiedTemplateLibraryFilter === 'all' || this.unifiedTemplateLibraryFilter === 'slot')
         ? [1, 2, 3].map((slot) => {
             const meta = this.getPresetSlotMetadata(slot);
-            if (!meta) {
-              return `<div class="library-card"><div class="library-source">Saved Slot</div><div class="library-title">Slot ${slot}</div><div class="library-details">Empty</div></div>`;
-            }
+            if (!meta) return '';
+            if (this.librarySearchQuery && !meta.gameName.toLowerCase().includes(this.librarySearchQuery)) return '';
             const when = meta.timestamp ? new Date(meta.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'saved earlier';
             return `
               <div class="library-card">
                 <div class="library-source">Saved Slot</div>
                 <div class="library-title">Slot ${slot}: ${this.escapeHistoryText(meta.gameName || `Slot ${slot}`)}</div>
                 <div class="library-details">${meta.mode} • ${meta.pieceCount} pieces • ${meta.rotationCount} rotations • ${when}</div>
-                <div class="library-actions"><button data-library-load-slot="${slot}">Load</button></div>
-              </div>
-            `;
-          }).join('')
-        : '';
-
-      const historyCards = this.unifiedTemplateLibraryFilter === 'all' || this.unifiedTemplateLibraryFilter === 'history'
-        ? this.getRecentHistory().map((entry, index) => {
-            const when = new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            return `
-              <div class="library-card">
-                <div class="library-source">Recent ${entry.source === 'share' ? 'Share' : 'Import'}</div>
-                <div class="library-title">${this.escapeHistoryText(entry.gameName || 'Unnamed Ruleset')}</div>
-                <div class="library-details">${entry.pieceCount} pieces • ${entry.rotationCount} rotations • ${when}</div>
                 <div class="library-actions">
-                  <button data-library-history-load="${index}">Load</button>
-                  <button data-library-history-copy="${index}">Copy Link</button>
+                  <button data-library-load-slot="${slot}">Load</button>
+                  <button data-library-slot-delete="${slot}" style="background:#440000; color:#ff8888; border-color:#660000;">Delete</button>
                 </div>
               </div>
             `;
           }).join('')
         : '';
 
-      const cards = `${builtInCards}${slotCards}${historyCards}` || `<div class="library-card"><div class="library-title">No templates in this view yet.</div></div>`;
+      const historyCards = (this.unifiedTemplateLibraryFilter === 'all' || this.unifiedTemplateLibraryFilter === 'history')
+        ? this.getRecentHistory()
+            .map((entry, index) => ({ entry, index }))
+            .filter(item => !this.librarySearchQuery || item.entry.gameName.toLowerCase().includes(this.librarySearchQuery))
+            .map((item) => {
+            const when = new Date(item.entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return `
+              <div class="library-card">
+                <div class="library-source">Recent ${item.entry.source === 'share' ? 'Share' : 'Import'}</div>
+                <div class="library-title">${this.escapeHistoryText(item.entry.gameName || 'Unnamed Ruleset')}</div>
+                <div class="library-details">${item.entry.pieceCount} pieces • ${item.entry.rotationCount} rotations • ${when}</div>
+                <div class="library-actions">
+                  <button data-library-history-load="${item.index}">Load</button>
+                  <button data-library-history-copy="${item.index}">Copy Link</button>
+                  <button data-library-history-delete="${item.index}" style="background:#440000; color:#ff8888; border-color:#660000;">Delete</button>
+                </div>
+              </div>
+            `;
+          }).join('')
+        : '';
+
+      const cards = `${builtInCards}${slotCards}${historyCards}` || `<div class="library-card"><div class="library-title">No templates found matching filters.</div></div>`;
       this.unifiedTemplateLibraryPanel.innerHTML = `<h3>Unified Template Library</h3><div class="library-filter-row">${filterButtons}</div><div class="library-grid">${cards}</div>`;
+  }
+
+  private deletePresetSlot(slot: number): void {
+      if (!confirm(`Delete saved template in slot ${slot}?`)) return;
+      localStorage.removeItem(this.getPresetSlotKey(slot));
+      localStorage.removeItem(this.getPresetSlotMetaKey(slot));
+      this.renderUnifiedTemplateLibrary();
+      this.renderPresetSlotStatus();
+      this.pushRecentAction(`Deleted preset slot ${slot}.`);
+      ToastManager.showInfo(`Deleted preset slot ${slot}.`);
+  }
+
+  private deleteRecentHistoryEntry(index: number): void {
+      const history = this.getRecentHistory();
+      const entry = history[index];
+      if (!entry) return;
+      if (!confirm(`Delete history entry: ${entry.gameName}?`)) return;
+      history.splice(index, 1);
+      this.saveRecentHistory(history);
+      this.renderUnifiedTemplateLibrary();
+      this.renderRecentHistory();
+      this.pushRecentAction(`Deleted history entry: ${entry.gameName}.`);
+      ToastManager.showInfo(`Deleted history entry.`);
   }
 
   private renderTemplateCatalog(): void {
@@ -2074,7 +2140,17 @@ export class CustomGameEditor {
               return `<div class="preset-slot-entry"><div class="preset-slot-meta"><div class="preset-slot-title">Slot ${slot}</div><div class="preset-slot-details">Empty</div></div></div>`;
           }
           const when = meta.timestamp ? new Date(meta.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'saved earlier';
-          return `<div class="preset-slot-entry"><div class="preset-slot-meta"><div class="preset-slot-title">Slot ${slot}: ${this.escapeHistoryText(meta.gameName || `Slot ${slot}`)}</div><div class="preset-slot-details">${meta.mode} • ${meta.pieceCount} pieces • ${meta.rotationCount} rotations • ${when}</div></div></div>`;
+          return `
+            <div class="preset-slot-entry">
+              <div class="preset-slot-meta">
+                <div class="preset-slot-title">Slot ${slot}: ${this.escapeHistoryText(meta.gameName || `Slot ${slot}`)}</div>
+                <div class="preset-slot-details">${meta.mode} • ${meta.pieceCount} pieces • ${meta.rotationCount} rotations • ${when}</div>
+              </div>
+              <div class="recent-history-actions">
+                <button data-library-load-slot="${slot}">Load</button>
+                <button data-library-slot-delete="${slot}" style="background:#440000; color:#ff8888; border-color:#660000;">Delete</button>
+              </div>
+            </div>`;
       }).join('');
       this.presetSlotsPanel.innerHTML = `<h3>Saved Template Slots</h3>${rows}`;
   }
@@ -2376,6 +2452,7 @@ export class CustomGameEditor {
               <div class="recent-history-actions">
                 <button data-history-action="load" data-history-index="${index}">Load</button>
                 <button data-history-action="copy" data-history-index="${index}">Copy Link</button>
+                <button data-history-action="delete" data-history-index="${index}" style="background:#440000; color:#ff8888; border-color:#660000;">Delete</button>
               </div>
             </div>
           `;

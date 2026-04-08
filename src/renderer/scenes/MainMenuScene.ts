@@ -1,4 +1,4 @@
-import { Container, Graphics, Text, TextStyle, FillGradient } from 'pixi.js';
+import { Container, Graphics, Text, TextStyle } from 'pixi.js';
 import { Scene, SceneConfig } from '../state/Scene';
 import { StateManager } from '../state/StateManager';
 import { InputManager } from '../input/InputManager';
@@ -205,15 +205,12 @@ export class MainMenuScene extends Scene {
     // ============================================================
 
     private createTitle(): void {
-        const gradient = new FillGradient(0, 0, 0, 72);
-        gradient.addColorStop(0, 0xffffff);
-        gradient.addColorStop(1, 0x00ffff);
-
+        // PixiJS v8 text gradient: use array of colors for vertical gradient
         const titleStyle = new TextStyle({
             fontFamily: 'Arial Black, Arial, sans-serif',
             fontSize: 72,
             fontWeight: 'bold',
-            fill: gradient,
+            fill: [0xffffff, 0x00ffff],
             stroke: { color: 0x003366, width: 6 },
             dropShadow: {
                 color: 0x000000,
@@ -250,7 +247,7 @@ export class MainMenuScene extends Scene {
             fill: 0x445566,
             letterSpacing: 1,
         });
-        this.versionText = new Text({ text: 'v2.1.57', style: versionStyle });
+        this.versionText = new Text({ text: 'v2.1.58', style: versionStyle });
         this.versionText.anchor.set(1, 1);
         this.versionText.x = this.width - 10;
         this.versionText.y = this.height - 10;
