@@ -300,6 +300,30 @@ export class GameLogic extends EventEmitter<GameLogicEvents> {
             this.currentPiece.yGrid--; this.grid.shakeHard();
         }
         this.grid.setPiece(this.currentPiece);
+
+        // Turn all touching blocks of from types into to type and fade out
+        for (const block of this.currentPiece.blocks) {
+            const rules = block.blockType.whenSetTurnAllTouchingBlocksOfFromTypesIntoToTypeAndFadeOut;
+            if (rules && rules.length > 0) {
+                const neighbors = this.grid.getConnectedBlocksUpDownLeftRight(block);
+                for (const neighbor of neighbors) {
+                    for (const rule of rules) {
+                        if (neighbor.blockType.uuid === rule.fromType_UUID) {
+                            const toType = this.currentGameType.getBlockTypeByUUID(rule.toType_UUID);
+                            if (toType) {
+                                neighbor.blockType = toType;
+                                neighbor.fadingOut = true;
+                                neighbor.disappearingAlpha = 1.0;
+                                if (!this.fadingOutBlocks.includes(neighbor)) {
+                                    this.fadingOutBlocks.push(neighbor);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         this.emit('pieceLocked', this.currentPiece);
         this.checkForChain();
         this.newRandomPiece();
