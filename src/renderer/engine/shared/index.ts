@@ -6,3 +6,4 @@ export { OKColor } from './OKColor';
 export { Cache, type CacheEntry } from './Cache';
 export { BobMenu, type MenuOption } from './BobMenu';
 export { GlobalSettings, DEFAULT_SETTINGS, type GlobalSettingsData } from './GlobalSettings';
+export { ManifestLoader, type ManifestEntry, type AssetManifest as ManifestAssetManifest } from './ManifestLoader';

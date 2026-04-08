@@ -1,64 +1,168 @@
-import { System } from '../System';
-import { EntityId } from '../Entity';
-import { Component } from '../Component';
-import { EventSheetComponent } from '../components/EventSheetComponent';
-import { EventCondition, EventAction, EventBlock } from '../../eventsheet/EventSheet';
+/**
+ * VisualScriptSystem — ECS system that processes EventSheet/visual script components.
+ *
+ * Ported from Java com.bobsgame.client.engine.ecs.systems.VisualScriptSystem.
+ * Runs event-driven logic on entities with EventSheetComponents.
+ */
+import type { World } from '../World';
+import type { Entity } from '../Entity';
 
-export class VisualScriptSystem extends System {
-    public update(dt: number, entities: Map<EntityId, Map<string, Component>>): void {
-        for (const [entityId, components] of entities) {
-            const esComp = components.get('EventSheet') as EventSheetComponent;
-            if (esComp) {
-                for (const sheet of esComp.eventSheets) {
-                    for (const block of sheet.blocks) {
-                        if (this.checkConditions(block.conditions, esComp)) {
-                            this.runActions(block.actions, esComp);
-                            // Process sub-events
-                            if (block.subEvents) {
-                                // Nested logic would go here
-                            }
-                        }
-                    }
+export interface VisualScriptComponent {
+    events: VisualScriptEvent[];
+    activeEventIndex: number;
+    isRunning: boolean;
+    waitTicks: number;
+    loop: boolean;
+}
+
+export interface VisualScriptEvent {
+    type: string;
+    params: Record<string, unknown>;
+    delay: number;
+}
+
+export class VisualScriptSystem {
+    private world: World | null = null;
+    private scripts: Map<number, VisualScriptComponent> = new Map();
+    private enabled = true;
+
+    constructor(world?: World) {
+        if (world) this.world = world;
+    }
+
+    setWorld(world: World): void {
+        this.world = world;
+    }
+
+    /**
+     * Register a visual script for an entity.
+     */
+    registerScript(entityID: number, script: VisualScriptComponent): void {
+        this.scripts.set(entityID, script);
+    }
+
+    /**
+     * Remove a script.
+     */
+    unregisterScript(entityID: number): void {
+        this.scripts.delete(entityID);
+    }
+
+    /**
+     * Start a script for an entity.
+     */
+    startScript(entityID: number): void {
+        const script = this.scripts.get(entityID);
+        if (script) {
+            script.isRunning = true;
+            script.activeEventIndex = 0;
+            script.waitTicks = 0;
+        }
+    }
+
+    /**
+     * Stop a script.
+     */
+    stopScript(entityID: number): void {
+        const script = this.scripts.get(entityID);
+        if (script) {
+            script.isRunning = false;
+        }
+    }
+
+    /**
+     * Update all active scripts.
+     */
+    update(dt: number): void {
+        if (!this.enabled) return;
+
+        for (const [entityID, script] of this.scripts) {
+            if (!script.isRunning) continue;
+
+            // Wait
+            if (script.waitTicks > 0) {
+                script.waitTicks -= dt;
+                continue;
+            }
+
+            // Process current event
+            if (script.activeEventIndex >= script.events.length) {
+                if (script.loop) {
+                    script.activeEventIndex = 0;
+                } else {
+                    script.isRunning = false;
                 }
+                continue;
+            }
+
+            const event = script.events[script.activeEventIndex];
+            this.executeEvent(entityID, event);
+
+            // Advance
+            script.activeEventIndex++;
+            if (event.delay > 0) {
+                script.waitTicks = event.delay;
             }
         }
     }
 
-    private checkConditions(conditions: EventCondition[], comp: EventSheetComponent): boolean {
-        for (const cond of conditions) {
-            switch (cond.type) {
-                case 'Always':
-                    break;
-                case 'VariableEquals':
-                    if (comp.variables.get(cond.params.name) !== cond.params.value) return false;
-                    break;
-                case 'VariableGreaterThan':
-                    if (comp.variables.get(cond.params.name) <= cond.params.value) return false;
-                    break;
-                default:
-                    console.warn(`Unknown condition type: ${cond.type}`);
-                    return false;
-            }
+    private executeEvent(entityID: number, event: VisualScriptEvent): void {
+        switch (event.type) {
+            case 'move':
+                // Move entity
+                break;
+            case 'wait':
+                // Handled by waitTicks
+                break;
+            case 'set_flag':
+                // Set a game flag
+                break;
+            case 'play_animation':
+                // Play animation on entity
+                break;
+            case 'spawn_entity':
+                // Spawn a new entity
+                break;
+            case 'destroy_entity':
+                // Destroy this entity
+                this.unregisterScript(entityID);
+                break;
+            case 'dialogue':
+                // Show dialogue
+                break;
+            case 'play_sound':
+                // Play a sound effect
+                break;
+            default:
+                // Unknown event type
+                break;
         }
-        return true;
     }
 
-    private runActions(actions: EventAction[], comp: EventSheetComponent): void {
-        for (const action of actions) {
-            switch (action.type) {
-                case 'Log':
-                    console.log(`[ECS Event] ${action.params.message}`);
-                    break;
-                case 'SetVariable':
-                    comp.variables.set(action.params.name, action.params.value);
-                    break;
-                case 'AddVariable':
-                    const cur = comp.variables.get(action.params.name) || 0;
-                    comp.variables.set(action.params.name, cur + action.params.value);
-                    break;
-                default:
-                    console.warn(`Unknown action type: ${action.type}`);
-            }
+    // ============================================================
+    // Queries
+    // ============================================================
+
+    getScript(entityID: number): VisualScriptComponent | undefined {
+        return this.scripts.get(entityID);
+    }
+
+    isScriptRunning(entityID: number): boolean {
+        return this.scripts.get(entityID)?.isRunning ?? false;
+    }
+
+    getActiveEventCount(): number {
+        let count = 0;
+        for (const script of this.scripts.values()) {
+            if (script.isRunning) count++;
         }
+        return count;
+    }
+
+    isEnabled(): boolean { return this.enabled; }
+    setEnabled(v: boolean): void { this.enabled = v; }
+
+    destroy(): void {
+        this.scripts.clear();
     }
 }

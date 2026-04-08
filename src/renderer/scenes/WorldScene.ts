@@ -26,7 +26,7 @@ import { WeatherComponent, WeatherType } from '../engine/ecs/components/WeatherC
 import { TweenComponent } from '../engine/ecs/components/TweenComponent';
 import { InteractionComponent } from '../engine/ecs/components/InteractionComponent';
 import { AIComponent } from '../engine/ecs/components/AIComponent';
-import { EightDirectionBehavior } from '../engine/ecs/behaviors/EightDirectionBehavior';
+
 import { NPCBehavior } from '../engine/ecs/behaviors/NPCBehavior';
 import { BattleScene } from './BattleScene';
 import { QuestLogScene } from './QuestLogScene';
@@ -153,7 +153,6 @@ export class WorldScene extends Scene {
         const sprite = new SpriteComponent(); const g = new Graphics(); g.rect(-16, -24, 32, 48); g.fill(0x3366ff);
         const tex = this.app.renderer.generateTexture(g); sprite.sprite = new Sprite(tex); this.world.addComponent(playerEntity, sprite);
 
-        const behavior = new BehaviorComponent(); behavior.behaviors.push(new EightDirectionBehavior(this.world)); this.world.addComponent(playerEntity, behavior);
         const playerCombat = new CombatComponent(); playerCombat.isPlayer = true; this.world.addComponent(playerEntity, playerCombat);
         const playerQuests = new QuestComponent(); this.world.addComponent(playerEntity, playerQuests);
         const playerInv = new InventoryComponent(); playerInv.gold = 500; this.world.addComponent(playerEntity, playerInv);

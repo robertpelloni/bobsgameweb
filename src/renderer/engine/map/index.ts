@@ -1,10 +1,11 @@
 export { AreaData, WarpArea } from './Area';
-export { DoorData, Door } from './Door';
-export { LightData, Light } from './Light';
+export { Door, DoorData } from './Door';
+export { Light, LightData } from './Light';
 export { MapState } from './MapState';
-export { AutoTiler, type AutoTileMap } from './AutoTiler';
-export { AsepriteParser, type AsepriteHeader, type AsepriteFrame, type AsepriteCel, type AsepriteTag } from './AsepriteParser';
-export { MapData } from '../../../shared/MapData';
+export { MapData } from './MapData';
 export { GameMap } from './GameMap';
-export { MapManager, type MapData as MapManagerData } from './MapManager';
+export { MapManager } from './MapManager';
 export { EntityData, RenderOrder } from './EntityData';
+export { AutoTiler, type AutoTileMap } from './AutoTiler';
+export { AsepriteParser, type AsepriteHeader, type AsepriteFrame, type AsepriteCel } from './AsepriteParser';
+export { MapStateData, type TileChange, type DoorState, type AreaState, type EntityMapState } from './MapStateData';
