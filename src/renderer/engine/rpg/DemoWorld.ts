@@ -74,6 +74,18 @@ export class DemoWorld {
     // Map data (simple 2D array)
     private tiles: number[][] = [];
 
+    // Day/night cycle
+    private dayNightPhase = 0; // 0-1 (0=dawn, 0.25=day, 0.5=dusk, 0.75=night)
+    private dayNightSpeed = 0.008; // Full cycle in ~125 seconds
+    private dayNightOverlay: Graphics | null = null;
+
+    // Minimap
+    private minimapSize = 120;
+    private minimapScale = this.minimapSize / (MAP_W * TILE_SIZE);
+
+    // Floating notifications
+    private notifications: { text: string; x: number; y: number; age: number; maxAge: number; color: number }[] = [];
+
     // Input state
     private keys: Record<string, boolean> = {};
 
@@ -306,6 +318,17 @@ export class DemoWorld {
                 this.playerY = Math.max(0, Math.min((MAP_H - 1) * TILE_SIZE, newY));
             }
         }
+
+        // Day/night cycle
+        this.dayNightPhase = (this.dayNightPhase + dt * this.dayNightSpeed) % 1.0;
+
+        // Update notifications
+        for (let i = this.notifications.length - 1; i >= 0; i--) {
+            this.notifications[i].age += dt;
+            if (this.notifications[i].age >= this.notifications[i].maxAge) {
+                this.notifications.splice(i, 1);
+            }
+        }
     }
 
     // ============================================================
@@ -325,6 +348,11 @@ export class DemoWorld {
                 this.dialogueNPC = npc.name;
                 this.dialogueTimer = 0;
                 this.dialogueCharIndex = 0;
+                this.notifications.push({
+                    text: `Talking to ${npc.name}...`,
+                    x: this.playerX, y: this.playerY - 40,
+                    age: 0, maxAge: 1.5, color: 0x44aaff,
+                });
                 return;
             }
         }
@@ -426,6 +454,9 @@ export class DemoWorld {
 
         this.container.addChild(this.entityContainer);
 
+        // Day/night overlay
+        this.renderDayNight();
+
         // HUD
         this.renderHUD();
 
@@ -433,6 +464,12 @@ export class DemoWorld {
         if (this.showDialogue) {
             this.renderDialogueBox();
         }
+
+        // Floating notifications
+        this.renderNotifications(camX, camY);
+
+        // Minimap
+        this.renderMinimap();
 
         return this.container;
     }
@@ -652,6 +689,137 @@ export class DemoWorld {
     private currentMapName = '';
 
     setMapName(name: string): void { this.currentMapName = name; }
+
+    // ============================================================
+    // Day/Night Cycle
+    // ============================================================
+
+    private renderDayNight(): void {
+        if (this.dayNightOverlay) {
+            this.dayNightOverlay.destroy();
+        }
+        this.dayNightOverlay = new Graphics();
+        this.dayNightOverlay.rect(0, 0, this.width, this.height);
+
+        // Phase: 0=dawn, 0.25=noon, 0.5=dusk, 0.75=midnight
+        let alpha = 0;
+        let color = 0x000033;
+
+        if (this.dayNightPhase < 0.2) {
+            // Dawn — warm orange fading to clear
+            const t = this.dayNightPhase / 0.2;
+            color = 0xff8844;
+            alpha = 0.15 * (1 - t);
+        } else if (this.dayNightPhase < 0.45) {
+            // Day — clear
+            alpha = 0;
+        } else if (this.dayNightPhase < 0.55) {
+            // Dusk — warm orange
+            const t = (this.dayNightPhase - 0.45) / 0.1;
+            color = 0xff6622;
+            alpha = 0.2 * t;
+        } else if (this.dayNightPhase < 0.8) {
+            // Night — dark blue
+            const t = (this.dayNightPhase - 0.55) / 0.25;
+            color = 0x000033;
+            alpha = 0.15 + 0.25 * t;
+        } else {
+            // Late night → dawn
+            const t = (this.dayNightPhase - 0.8) / 0.2;
+            color = 0x000044;
+            alpha = 0.4 * (1 - t);
+        }
+
+        if (alpha > 0.01) {
+            this.dayNightOverlay.fill({ color, alpha });
+            this.container.addChild(this.dayNightOverlay);
+        }
+    }
+
+    // ============================================================
+    // Floating Notifications
+    // ============================================================
+
+    private renderNotifications(camX: number, camY: number): void {
+        for (const notif of this.notifications) {
+            const progress = notif.age / notif.maxAge;
+            const alpha = 1 - progress;
+            const yOffset = progress * 30; // Float upward
+
+            const style = new TextStyle({
+                fontFamily: 'Arial, sans-serif',
+                fontSize: 12,
+                fill: notif.color,
+            });
+            const text = new Text({ text: notif.text, style });
+            text.alpha = alpha;
+            text.anchor.set(0.5);
+            text.position.set(notif.x - camX, notif.y - camY - yOffset);
+            this.container.addChild(text);
+        }
+    }
+
+    // ============================================================
+    // Minimap
+    // ============================================================
+
+    private renderMinimap(): void {
+        const padding = 8;
+        const mapX = this.width - this.minimapSize - padding;
+        const mapY = 42;
+        const tileW = this.minimapSize / MAP_W;
+        const tileH = this.minimapSize / MAP_H;
+
+        // Background
+        const bg = new Graphics();
+        bg.roundRect(mapX - 4, mapY - 4, this.minimapSize + 8, this.minimapSize + 8, 4);
+        bg.fill({ color: 0x000000, alpha: 0.7 });
+        bg.stroke({ color: 0x334466, width: 1 });
+        this.container.addChild(bg);
+
+        // Tiles (simplified — just colored rects)
+        const mmG = new Graphics();
+        for (let ty = 0; ty < MAP_H; ty++) {
+            for (let tx = 0; tx < MAP_W; tx++) {
+                const tile = this.tiles[ty][tx];
+                // Simplify tile colors for minimap
+                let c = tile;
+                if (tile === Tile.FLOWER) c = Tile.GRASS;
+                if (tile === Tile.DOOR) c = Tile.BUILDING;
+                if (tile === Tile.BRIDGE) c = Tile.PATH;
+                mmG.rect(mapX + tx * tileW, mapY + ty * tileH, tileW + 0.5, tileH + 0.5);
+                mmG.fill({ color: c });
+            }
+        }
+        this.container.addChild(mmG);
+
+        // Player dot (blinking)
+        const blink = Math.sin(this.gameTime * 4) > -0.3;
+        if (blink) {
+            const px = mapX + (this.playerX / TILE_SIZE) * tileW;
+            const py = mapY + (this.playerY / TILE_SIZE) * tileH;
+            const dot = new Graphics();
+            dot.circle(px, py, 3);
+            dot.fill({ color: 0xffffff });
+            this.container.addChild(dot);
+        }
+
+        // NPC dots
+        for (const npc of this.npcs) {
+            const nx = mapX + (npc.x / TILE_SIZE) * tileW;
+            const ny = mapY + (npc.y / TILE_SIZE) * tileH;
+            const npcDot = new Graphics();
+            npcDot.circle(nx, ny, 2);
+            npcDot.fill({ color: npc.color });
+            this.container.addChild(npcDot);
+        }
+
+        // Label
+        const labelStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 8, fill: 0x445566 });
+        const label = new Text({ text: 'MAP', style: labelStyle });
+        label.position.set(mapX, mapY - 12);
+        this.container.addChild(label);
+    }
 
     destroy(): void {
         this.container.destroy({ children: true });
