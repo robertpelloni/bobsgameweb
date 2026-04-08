@@ -17,6 +17,7 @@ import { BGClientEngine } from './BGClientEngine';
 import { GlobalSettings } from '../shared/GlobalSettings';
 import { GameSave, type SaveSlot } from './save/GameSave';
 import { NetworkGameSave } from './save/NetworkGameSave';
+import { DemoWorld } from './DemoWorld';
 import { Logger } from '../debug/Logger';
 
 const log = new Logger('ClientGameEngine');
@@ -49,6 +50,9 @@ export class ClientGameEngine extends BGClientEngine {
     private gameSaveCompleted = false;
     networkGameSave: NetworkGameSave;
 
+    // Demo world (visual RPG world until real map data is loaded)
+    private demoWorld: DemoWorld;
+
     // Render layer toggles (debug)
     hitLayerEnabled = true;
     underLayerEnabled = true;
@@ -78,6 +82,9 @@ export class ClientGameEngine extends BGClientEngine {
         this.mapContainer = new Container();
         this.guiContainer = new Container();
         this.overlayContainer = new Container();
+
+        // Initialize demo world
+        this.demoWorld = new DemoWorld({ width: 800, height: 600 });
     }
 
     // ============================================================
@@ -130,6 +137,9 @@ export class ClientGameEngine extends BGClientEngine {
         this.handleGameEngineOptionKeys();
         this.clock.update(dt);
         this.guiManager.update(dt);
+
+        // Update demo world
+        this.demoWorld.update(dt);
     }
 
     // ============================================================
@@ -139,19 +149,8 @@ export class ClientGameEngine extends BGClientEngine {
     render(): Container {
         const root = new Container();
 
-        // Map layers
-        this.mapContainer.removeChildren();
-
-        // GUI
-        this.guiContainer.removeChildren();
-        this.guiContainer.addChild(this.guiManager.getContainer());
-
-        // Overlays (cinematics, letterbox, etc.)
-        this.overlayContainer.removeChildren();
-
-        root.addChild(this.mapContainer);
-        root.addChild(this.guiContainer);
-        root.addChild(this.overlayContainer);
+        // Render the demo RPG world (map, player, NPCs, HUD)
+        root.addChild(this.demoWorld.render());
 
         return root;
     }

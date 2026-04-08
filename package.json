@@ -1,6 +1,6 @@
 {
   "name": "okgame",
-  "version": "2.1.75",
+  "version": "2.1.76",
   "description": "bob's game - puzzle game engine",
   "main": "dist/main/index.js",
   "type": "module",
