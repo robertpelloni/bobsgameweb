@@ -71,6 +71,17 @@ export class DemoWorld {
     private dialogueCharIndex = 0;
     private readonly DIALOGUE_SPEED = 30; // chars per second
 
+    // Building interiors
+    private insideBuilding: string | null = null;
+    private buildingTiles: number[][] = [];
+    private buildingW = 12;
+    private buildingH = 9;
+    private readonly BUILDING_DEFS: { doorTX: number; doorTY: number; name: string; interiorColor: number; items: string[] }[] = [
+        { doorTX: 5, doorTY: 3, name: 'Cafe', interiorColor: 0x3d2b1f, items: ['Coffee', 'Espresso', 'Cake'] },
+        { doorTX: 12, doorTY: 3, name: 'Shop', interiorColor: 0x2d3d2f, items: ['Potion', 'Key', 'Map'] },
+        { doorTX: 22, doorTY: 3, name: 'Stadium', interiorColor: 0x2d2d3d, items: ['Ticket', 'Trophy'] },
+    ];
+
     // Map data (simple 2D array)
     private tiles: number[][] = [];
 
@@ -288,19 +299,30 @@ export class DemoWorld {
             return;
         }
 
-        // Player movement
+        // Player movement (disabled inside buildings)
+        if (this.insideBuilding) return;
         let dx = 0, dy = 0;
         if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) { dy = -1; this.playerDir = 3; }
         if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) { dy = 1; this.playerDir = 0; }
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) { dx = -1; this.playerDir = 1; }
         if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) { dx = 1; this.playerDir = 2; }
 
-        // Space / E to interact with NPCs
+        // Space / E to interact
         if (this.keys[' '] || this.keys['e'] || this.keys['E']) {
             this.keys[' '] = false;
             this.keys['e'] = false;
             this.keys['E'] = false;
-            this.tryInteractNPC();
+
+            if (this.insideBuilding) {
+                // Exit building
+                this.insideBuilding = null;
+                this.notifications.push({ text: 'Left building', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.0, color: 0x88aaff });
+            } else {
+                // Try NPC interaction first, then building
+                if (!this.tryInteractNPC()) {
+                    this.tryEnterBuilding();
+                }
+            }
         }
 
         // Normalize diagonal
@@ -363,7 +385,8 @@ export class DemoWorld {
     // NPC Interaction
     // ============================================================
 
-    private tryInteractNPC(): void {
+    private tryInteractNPC(): boolean {
+        if (this.insideBuilding) return false;
         const interactDist = TILE_SIZE * 1.5;
         for (const npc of this.npcs) {
             const dx = this.playerX - npc.x;
@@ -381,8 +404,53 @@ export class DemoWorld {
                     x: this.playerX, y: this.playerY - 40,
                     age: 0, maxAge: 1.5, color: 0x44aaff,
                 });
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ============================================================
+    // Building Entry
+    // ============================================================
+
+    private tryEnterBuilding(): void {
+        const playerTileX = Math.floor(this.playerX / TILE_SIZE);
+        const playerTileY = Math.floor(this.playerY / TILE_SIZE);
+
+        for (const def of this.BUILDING_DEFS) {
+            if (playerTileX === def.doorTX && playerTileY === def.doorTY) {
+                this.insideBuilding = def.name;
+                this.notifications.push({
+                    text: `Entering ${def.name}...`,
+                    x: this.playerX, y: this.playerY - 30,
+                    age: 0, maxAge: 1.0, color: 0xffaa44,
+                });
+                // Generate interior
+                this.generateBuildingInterior(def);
                 return;
             }
+        }
+    }
+
+    private generateBuildingInterior(def: { name: string; interiorColor: number; items: string[] }): void {
+        this.buildingTiles = [];
+        for (let y = 0; y < this.buildingH; y++) {
+            this.buildingTiles[y] = [];
+            for (let x = 0; x < this.buildingW; x++) {
+                // Floor
+                this.buildingTiles[y][x] = def.interiorColor;
+                // Walls
+                if (y === 0 || y === this.buildingH - 1 || x === 0 || x === this.buildingW - 1) {
+                    this.buildingTiles[y][x] = 0x554433; // Wall color
+                }
+            }
+        }
+        // Door (bottom center)
+        this.buildingTiles[this.buildingH - 1][Math.floor(this.buildingW / 2)] = def.interiorColor;
+        // Counter/table in middle
+        for (let x = 3; x < this.buildingW - 3; x++) {
+            this.buildingTiles[4][x] = 0x665544;
         }
     }
 
@@ -392,6 +460,11 @@ export class DemoWorld {
 
     render(): Container {
         this.container.removeChildren();
+
+        // If inside a building, render interior instead of world map
+        if (this.insideBuilding) {
+            return this.renderBuildingInterior();
+        }
 
         // Camera offset (center on player)
         const camX = Math.max(0, Math.min(MAP_W * TILE_SIZE - this.width, this.playerX - this.width / 2));
@@ -501,6 +574,107 @@ export class DemoWorld {
 
         // Minimap
         this.renderMinimap();
+
+        return this.container;
+    }
+
+    // ============================================================
+    // Building Interior Rendering
+    // ============================================================
+
+    private renderBuildingInterior(): Container {
+        const def = this.BUILDING_DEFS.find(d => d.name === this.insideBuilding);
+        if (!def) { this.insideBuilding = null; return this.container; }
+
+        const tileSize = 48; // Larger tiles indoors
+        const offsetX = (this.width - this.buildingW * tileSize) / 2;
+        const offsetY = (this.height - this.buildingH * tileSize) / 2;
+
+        // Background (darken outside building)
+        const bg = new Graphics();
+        bg.rect(0, 0, this.width, this.height);
+        bg.fill({ color: 0x000000, alpha: 0.8 });
+        this.container.addChild(bg);
+
+        // Interior tiles
+        for (let ty = 0; ty < this.buildingH; ty++) {
+            for (let tx = 0; tx < this.buildingW; tx++) {
+                const tile = this.buildingTiles[ty][tx];
+                const g = new Graphics();
+                g.rect(0, 0, tileSize, tileSize);
+                g.fill({ color: tile });
+
+                // Wall detail
+                if (ty === 0 || ty === this.buildingH - 1 || tx === 0 || tx === this.buildingW - 1) {
+                    if (tile === 0x554433) {
+                        // Brick pattern
+                        g.setStrokeStyle({ color: 0x443322, width: 0.5 });
+                        g.moveTo(0, tileSize / 2);
+                        g.lineTo(tileSize, tileSize / 2);
+                        g.stroke();
+                    }
+                }
+
+                // Table items
+                if (tile === 0x665544 && tx >= 3 && tx < 3 + def.items.length) {
+                    const itemIdx = tx - 3;
+                    g.circle(tileSize / 2, tileSize / 2, 8);
+                    g.fill({ color: 0xffaa44 });
+
+                    const itemStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 8, fill: 0xffffff });
+                    const itemText = new Text({ text: def.items[itemIdx], style: itemStyle });
+                    itemText.anchor.set(0.5);
+                    itemText.position.set(tileSize / 2, tileSize / 2 + 14);
+                    g.addChild(itemText);
+                }
+
+                // Door indicator (bottom center)
+                if (ty === this.buildingH - 1 && tx === Math.floor(this.buildingW / 2)) {
+                    g.rect(tileSize * 0.2, tileSize * 0.3, tileSize * 0.6, tileSize * 0.7);
+                    g.fill({ color: 0x443311 });
+                    g.circle(tileSize * 0.65, tileSize * 0.65, 2);
+                    g.fill({ color: 0xccaa00 });
+                }
+
+                g.position.set(offsetX + tx * tileSize, offsetY + ty * tileSize);
+                this.container.addChild(g);
+            }
+        }
+
+        // Building name banner
+        const bannerBg = new Graphics();
+        bannerBg.roundRect(offsetX, offsetY - 30, this.buildingW * tileSize, 24, 4);
+        bannerBg.fill({ color: 0x1a1a2e, alpha: 0.9 });
+        bannerBg.stroke({ color: 0x4466aa, width: 1 });
+        this.container.addChild(bannerBg);
+
+        const nameStyle = new TextStyle({
+            fontFamily: 'Arial, sans-serif',
+            fontSize: 16,
+            fill: 0x44aaff,
+            fontWeight: 'bold',
+        });
+        const nameText = new Text({ text: def.name, style: nameStyle });
+        nameText.anchor.set(0.5);
+        nameText.position.set(this.width / 2, offsetY - 18);
+        this.container.addChild(nameText);
+
+        // Items on display
+        const itemsStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 12, fill: 0xaabbcc });
+        const itemsLabel = new Text({
+            text: `Items: ${def.items.join(' · ')}`,
+            style: itemsStyle,
+        });
+        itemsLabel.anchor.set(0.5);
+        itemsLabel.position.set(this.width / 2, offsetY + this.buildingH * tileSize + 20);
+        this.container.addChild(itemsLabel);
+
+        // Exit hint
+        const hintStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x556677 });
+        const hint = new Text({ text: 'Press SPACE to exit', style: hintStyle });
+        hint.anchor.set(0.5);
+        hint.position.set(this.width / 2, offsetY + this.buildingH * tileSize + 40);
+        this.container.addChild(hint);
 
         return this.container;
     }
