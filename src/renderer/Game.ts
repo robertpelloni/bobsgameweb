@@ -12,6 +12,7 @@ import { PuzzleScene, PuzzleSceneConfig } from './puzzle/PuzzleScene';
 import { GameMode } from './data/HighScoreManager';
 import { AchievementManager } from './data/AchievementManager';
 import { ToastManager } from './ui/ToastManager';
+import { DebugConsole } from './engine/debug/DebugConsole';
 
 export interface GameConfig {
     skipMenu?: boolean;
@@ -34,6 +35,7 @@ export class Game extends EventEmitter<GameEvents> {
     private crtFilter: Filter | null = null;
     private mainMenuScene: MainMenuScene | null = null;
     private playTimeAccumulator = 0;
+    private debugConsole: DebugConsole;
     
     constructor(app: Application, config: GameConfig = {}) {
         super();
@@ -54,6 +56,9 @@ export class Game extends EventEmitter<GameEvents> {
             minZoom: 0.5,
             maxZoom: 4.0,
         });
+
+        this.debugConsole = new DebugConsole(app.screen.width);
+        this.app.stage.addChild(this.debugConsole.getContainer());
     }
 
     private async loadAudioAssets(): Promise<void> {
@@ -229,12 +234,24 @@ export class Game extends EventEmitter<GameEvents> {
         StateManager.update(dt);
 
         this._camera.update(ticker.deltaMS);
+
+        // Debug console
+        this.debugConsole.update(ticker.deltaMS);
+        if ((InputManager as any).isKeyPressed('Backquote')) {
+            this.debugConsole.toggle();
+        }
+        if (this.debugConsole.isVisible()) {
+            this.debugConsole.updateStats({
+                scene: 'active',
+            });
+        }
     }
 
     resize(width: number, height: number): void {
         this.app.renderer.resize(width, height);
         this._camera.resize(width, height);
         StateManager.resize(width, height);
+        this.debugConsole.resize(width);
     }
 
     get width(): number {

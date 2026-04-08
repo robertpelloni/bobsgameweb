@@ -1,12 +1,12 @@
 import { NDGameEngine } from '../nd/NDGameEngine';
 import { StadiumScreen } from './StadiumScreen';
-import { Area } from '../map/Area';
+import { AreaData } from '../map/Area';
 
 export class OKGameStadium extends NDGameEngine {
   public stadiumScreen: StadiumScreen;
-  public area: Area;
+  public area: AreaData;
 
-  constructor(nd: any, stadiumScreen: StadiumScreen, area: Area) {
+  constructor(nd: any, stadiumScreen: StadiumScreen, area: AreaData) {
     super(nd);
     this.stadiumScreen = stadiumScreen;
     this.area = area;

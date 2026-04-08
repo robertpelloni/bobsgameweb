@@ -22,3 +22,6 @@ export {
     EventTrigger,
     EventManager,
 } from './event';
+
+// Save system
+export { GameSave, type SaveSlot } from './save';
