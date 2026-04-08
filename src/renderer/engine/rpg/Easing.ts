@@ -105,4 +105,26 @@ export class Easing {
             return c * (7.5625 * t3 * t3 + 0.984375) + b;
         }
     }
+
+    /**
+     * Ease out with parabolic bounce overshoot.
+     */
+    static easeOutParabolicBounce(t: number, b: number, c: number, d: number): number {
+        let t2 = t / d;
+        if (t2 > 1.0) t2 = 1.0;
+        // Overshoot at ~0.6 then settle
+        const overshoot = 1.0 + 0.15 * Math.sin(t2 * Math.PI);
+        const base = 1.0 - (1.0 - t2) * (1.0 - t2); // ease out quad
+        return b + c * base * overshoot;
+    }
+
+    /**
+     * Ease in with back slingshot (undershoot).
+     */
+    static easeInBackSlingshot(t: number, b: number, c: number, d: number): number {
+        let t2 = t / d;
+        if (t2 > 1.0) t2 = 1.0;
+        const s = 1.70158;
+        return c * t2 * t2 * ((s + 1) * t2 - s) + b;
+    }
 }
