@@ -24,12 +24,12 @@ export const SERVER_URL = envServerUrl || (isProd
  * The current application version string.
  * Should be kept in sync with VERSION.md and CHANGELOG.md.
  */
-export const APP_VERSION = '2.1.56';
+export const APP_VERSION = '2.1.57';
 
 /**
  * Base URL for large assets (sprites, maps, audio).
  * In production, fetched from S3 unless overridden.
  */
 export const BIG_DATA_URL = envBigDataUrl || (isProd
-    ? 'https://bobsgame.s3.amazonaws.com/z/'
+    ? '/z/'
     : '/');
