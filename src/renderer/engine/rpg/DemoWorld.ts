@@ -86,6 +86,11 @@ export class DemoWorld {
     // Floating notifications
     private notifications: { text: string; x: number; y: number; age: number; maxAge: number; color: number }[] = [];
 
+    // Footstep particles
+    private stepTimer = 0;
+    private readonly STEP_INTERVAL = 0.2;
+    private stepParticles: { x: number; y: number; age: number; maxAge: number }[] = [];
+
     // Input state
     private keys: Record<string, boolean> = {};
 
@@ -319,6 +324,21 @@ export class DemoWorld {
             }
         }
 
+        // Footstep particles when moving
+        if (dx !== 0 || dy !== 0) {
+            this.stepTimer += dt;
+            if (this.stepTimer >= this.STEP_INTERVAL) {
+                this.stepTimer = 0;
+                this.stepParticles.push({
+                    x: this.playerX + TILE_SIZE / 2 + (Math.random() - 0.5) * 6,
+                    y: this.playerY + TILE_SIZE - 2,
+                    age: 0, maxAge: 0.4,
+                });
+            }
+        } else {
+            this.stepTimer = this.STEP_INTERVAL; // Ready to emit on next step
+        }
+
         // Day/night cycle
         this.dayNightPhase = (this.dayNightPhase + dt * this.dayNightSpeed) % 1.0;
 
@@ -327,6 +347,14 @@ export class DemoWorld {
             this.notifications[i].age += dt;
             if (this.notifications[i].age >= this.notifications[i].maxAge) {
                 this.notifications.splice(i, 1);
+            }
+        }
+
+        // Update step particles
+        for (let i = this.stepParticles.length - 1; i >= 0; i--) {
+            this.stepParticles[i].age += dt;
+            if (this.stepParticles[i].age >= this.stepParticles[i].maxAge) {
+                this.stepParticles.splice(i, 1);
             }
         }
     }
@@ -467,6 +495,9 @@ export class DemoWorld {
 
         // Floating notifications
         this.renderNotifications(camX, camY);
+
+        // Footstep particles
+        this.renderStepParticles(camX, camY);
 
         // Minimap
         this.renderMinimap();
@@ -689,6 +720,22 @@ export class DemoWorld {
     private currentMapName = '';
 
     setMapName(name: string): void { this.currentMapName = name; }
+
+    // ============================================================
+    // Footstep Particles
+    // ============================================================
+
+    private renderStepParticles(camX: number, camY: number): void {
+        for (const p of this.stepParticles) {
+            const progress = p.age / p.maxAge;
+            const alpha = 0.6 * (1 - progress);
+            const expand = progress * 6;
+            const pg = new Graphics();
+            pg.circle(p.x - camX, p.y - camY, 2 + expand);
+            pg.fill({ color: 0xaa9977, alpha });
+            this.container.addChild(pg);
+        }
+    }
 
     // ============================================================
     // Day/Night Cycle
