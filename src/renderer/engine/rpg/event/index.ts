@@ -10,3 +10,4 @@ export {
     EventScriptCommand, EventScriptQualifier, EventType,
     Qualifiers, Commands, ALL_QUALIFIERS, ALL_COMMANDS,
 } from './EventScript';
+export { DialogueData, FlagData, SkillData, GameStringData } from './EventDataTypes';
