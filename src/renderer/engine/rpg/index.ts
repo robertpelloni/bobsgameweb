@@ -33,3 +33,4 @@ export {
 
 // Save system
 export { GameSave, type SaveSlot } from './save';
+export { DemoWorld, type DemoWorldConfig } from './DemoWorld';
