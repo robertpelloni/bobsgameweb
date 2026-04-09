@@ -176,6 +176,14 @@ export class DemoWorld {
     // Input state
     private keys: Record<string, boolean> = {};
 
+    // Pause menu
+    private isPaused = false;
+    private pauseCursorPos = 0;
+    private readonly pauseOptions = ['Resume', 'Inventory', 'Achievements', 'Save Game', 'Quit to Menu'];
+
+    // Celebration particles (level-up, achievement)
+    private celebrationParticles: { x: number; y: number; vx: number; vy: number; color: number; age: number; maxAge: number }[] = [];
+
     constructor(config: DemoWorldConfig) {
         this.width = config.width;
         this.height = config.height;
@@ -523,6 +531,7 @@ export class DemoWorld {
             this.playerHp = this.playerMaxHp;
             this.playerAttack += 3;
             this.playSound('levelup', 0.4);
+            this.spawnCelebration(this.width / 2, this.height / 2, 40);
             this.notifications.push({
                 text: `⬆️ Level ${this.playerLevel}! HP+10 ATK+3`,
                 x: this.playerX, y: this.playerY - 50,
@@ -537,6 +546,7 @@ export class DemoWorld {
         const ach = this.achievements.find(a => a.id === id);
         if (!ach || ach.unlocked) return;
         ach.unlocked = true;
+        this.spawnCelebration(this.width / 2, this.height / 2 - 30, 25);
         this.notifications.push({
             text: `🏆 ${ach.name}!`,
             x: this.playerX, y: this.playerY - 60,
@@ -685,6 +695,21 @@ export class DemoWorld {
                     }
                 }
             }
+            return;
+        }
+
+        // Escape key — pause menu
+        if (this.keys['Escape']) {
+            this.keys['Escape'] = false;
+            this.isPaused = !this.isPaused;
+            this.pauseCursorPos = 0;
+        }
+
+        // If paused, only handle pause menu input
+        if (this.isPaused) {
+            if (this.keys['ArrowUp'] || this.keys['w']) { this.keys['ArrowUp'] = false; this.keys['w'] = false; this.pauseCursorPos = Math.max(0, this.pauseCursorPos - 1); }
+            if (this.keys['ArrowDown'] || this.keys['s']) { this.keys['ArrowDown'] = false; this.keys['s'] = false; this.pauseCursorPos = Math.min(this.pauseOptions.length - 1, this.pauseCursorPos + 1); }
+            if (this.keys[' '] || this.keys['Enter']) { this.keys[' '] = false; this.keys['Enter'] = false; this.handlePauseOption(); }
             return;
         }
 
@@ -956,6 +981,44 @@ export class DemoWorld {
     }
 
     // ============================================================
+    // Pause Menu
+    // ============================================================
+
+    private handlePauseOption(): void {
+        const option = this.pauseOptions[this.pauseCursorPos];
+        switch (option) {
+            case 'Resume':
+                this.isPaused = false;
+                break;
+            case 'Inventory':
+                this.isPaused = false;
+                this.showInventory = true;
+                break;
+            case 'Achievements':
+                this.isPaused = false;
+                // Achievement display happens in HUD
+                this.notifications.push({
+                    text: `🏆 ${this.achievements.filter(a => a.unlocked).length}/${this.achievements.length} Achievements`,
+                    x: this.playerX, y: this.playerY - 30,
+                    age: 0, maxAge: 3.0, color: 0xffcc00,
+                });
+                break;
+            case 'Save Game':
+                this.isPaused = false;
+                this.quickSave();
+                break;
+            case 'Quit to Menu':
+                // Handled by EngineScene
+                break;
+        }
+    }
+
+    get paused(): boolean { return this.isPaused; }
+    get wantsQuit(): boolean {
+        return this.isPaused && this.pauseOptions[this.pauseCursorPos] === 'Quit to Menu';
+    }
+
+    // ============================================================
     // Building Entry
     // ============================================================
 
@@ -1099,7 +1162,7 @@ export class DemoWorld {
     private renderOnlineStatus(): void {
         // Small indicator in top-left corner (below HUD)
         const statusColor = this.isOnline ? 0x44ff44 : 0xff4444;
-        const statusText = this.isOnline ? `🟢 Online (${this.playerCount + 1})` : '🔴 Offline';
+        const statusText = this.isOnline ? `Online (${this.playerCount + 1})` : 'Offline';
 
         const dot = new Graphics();
         dot.circle(15, 50, 4);
@@ -1110,6 +1173,106 @@ export class DemoWorld {
         const text = new Text({ text: statusText, style });
         text.position.set(24, 44);
         this.container.addChild(text);
+    }
+
+    // ============================================================
+    // Pause Menu
+    // ============================================================
+
+    private renderPauseMenu(): void {
+        // Dark overlay
+        const overlay = new Graphics();
+        overlay.rect(0, 0, this.width, this.height);
+        overlay.fill({ color: 0x000000, alpha: 0.7 });
+        this.container.addChild(overlay);
+
+        // Menu panel
+        const panelW = 260;
+        const panelH = 40 + this.pauseOptions.length * 36 + 50;
+        const panelX = (this.width - panelW) / 2;
+        const panelY = (this.height - panelH) / 2;
+
+        const panel = new Graphics();
+        panel.roundRect(panelX, panelY, panelW, panelH, 12);
+        panel.fill({ color: 0x0a0a2a, alpha: 0.95 });
+        panel.stroke({ color: 0x4466aa, width: 2 });
+        this.container.addChild(panel);
+
+        // Title
+        const titleStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 20, fill: 0x44aaff, fontWeight: 'bold' });
+        const title = new Text({ text: 'PAUSED', style: titleStyle });
+        title.anchor.set(0.5);
+        title.position.set(this.width / 2, panelY + 25);
+        this.container.addChild(title);
+
+        // Separator
+        const sep = new Graphics();
+        sep.moveTo(panelX + 15, panelY + 45);
+        sep.lineTo(panelX + panelW - 15, panelY + 45);
+        sep.stroke({ color: 0x334466, width: 1 });
+        this.container.addChild(sep);
+
+        // Options
+        this.pauseOptions.forEach((opt, i) => {
+            const selected = i === this.pauseCursorPos;
+            const optStyle = new TextStyle({
+                fontFamily: 'Arial, sans-serif',
+                fontSize: 16,
+                fill: selected ? 0xffff88 : 0x8888aa,
+            });
+            const optText = new Text({ text: `${selected ? '\u25b8 ' : '  '}${opt}`, style: optStyle });
+            optText.anchor.set(0.5);
+            optText.position.set(this.width / 2, panelY + 60 + i * 36);
+            this.container.addChild(optText);
+        });
+
+        // Player stats at bottom
+        const statsStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0x556677 });
+        const stats = new Text({
+            text: `Lv${this.playerLevel} | HP ${this.playerHp}/${this.playerMaxHp} | XP ${this.playerXp}/${this.playerXpToNext} | Wins ${this.combatWins}`,
+            style: statsStyle,
+        });
+        stats.anchor.set(0.5);
+        stats.position.set(this.width / 2, panelY + panelH - 20);
+        this.container.addChild(stats);
+    }
+
+    // ============================================================
+    // Celebration Particles
+    // ============================================================
+
+    private renderCelebrationParticles(): void {
+        for (let i = this.celebrationParticles.length - 1; i >= 0; i--) {
+            const p = this.celebrationParticles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.15; // Gravity
+            p.age += 0.016;
+            if (p.age >= p.maxAge) {
+                this.celebrationParticles.splice(i, 1);
+                continue;
+            }
+            const alpha = 1 - p.age / p.maxAge;
+            const g = new Graphics();
+            g.circle(p.x, p.y, 3 - p.age);
+            g.fill({ color: p.color, alpha });
+            this.container.addChild(g);
+        }
+    }
+
+    private spawnCelebration(cx: number, cy: number, count = 30): void {
+        const colors = [0xff4444, 0x44ff44, 0x4444ff, 0xffff44, 0xff44ff, 0x44ffff];
+        for (let i = 0; i < count; i++) {
+            const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+            const speed = 2 + Math.random() * 4;
+            this.celebrationParticles.push({
+                x: cx, y: cy,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 3,
+                color: colors[i % colors.length],
+                age: 0, maxAge: 1.5 + Math.random(),
+            });
+        }
     }
 
     private renderCombat(): void {
@@ -1505,6 +1668,15 @@ export class DemoWorld {
 
         // Online indicator
         this.renderOnlineStatus();
+
+        // Pause menu overlay
+        if (this.isPaused) {
+            this.renderPauseMenu();
+            return this.container;
+        }
+
+        // Celebration particles
+        this.renderCelebrationParticles();
 
         // Inventory overlay
         if (this.showInventory) {
