@@ -138,7 +138,7 @@ export class HighScoresScene extends Scene {
             fontFamily: 'Arial Black, Arial, sans-serif',
             fontSize: 42,
             fontWeight: 'bold',
-            fill: [0xffd700, 0xffaa00],
+            fill: 0xffd700,
             stroke: { color: 0x442200, width: 4 },
             letterSpacing: 4,
         });
