@@ -125,6 +125,17 @@ export class DemoWorld {
     private inventory: { name: string; count: number; icon: number }[] = [];
     private showInventory = false;
 
+    // Shop system
+    private showShop = false;
+    private shopCursorPos = 0;
+    private readonly SHOP_ITEMS = [
+        { name: 'Health Potion', price: 10, icon: 0xff4444, effect: 'heal' },
+        { name: 'Attack Boost', price: 25, icon: 0xff8844, effect: 'attack' },
+        { name: 'Max HP Up', price: 30, icon: 0x44ff44, effect: 'maxhp' },
+        { name: 'Lucky Charm', price: 20, icon: 0xffcc00, effect: 'luck' },
+        { name: 'Speed Boots', price: 15, icon: 0x4488ff, effect: 'speed' },
+    ];
+
     // Encounter system
     private encounterTimer = 0;
     private encounterInterval = 20; // Average seconds between encounters
@@ -661,6 +672,60 @@ export class DemoWorld {
         }
     }
 
+    private generateBeachArea(): void {
+        // Beach — sand + water + palm trees
+        for (let y = 0; y < MAP_H; y++) {
+            for (let x = 0; x < MAP_W; x++) {
+                // Southern half is ocean
+                if (y >= MAP_H - 5) {
+                    this.tiles[y][x] = Tile.WATER;
+                } else if (y >= MAP_H - 8) {
+                    this.tiles[y][x] = Tile.SAND;
+                } else {
+                    this.tiles[y][x] = Tile.GRASS;
+                }
+            }
+        }
+
+        // Boardwalk (path along the beach)
+        for (let x = 2; x < MAP_W - 2; x++) {
+            this.tiles[MAP_H - 9][x] = Tile.PATH;
+        }
+
+        // Pier extending into water
+        for (let y = MAP_H - 8; y < MAP_H; y++) {
+            this.tiles[y][10] = Tile.BRIDGE;
+            this.tiles[y][11] = Tile.BRIDGE;
+        }
+
+        // Palm trees (trees on sand near beach)
+        const palmPositions = [
+            [MAP_H - 10, 3], [MAP_H - 10, 8], [MAP_H - 10, 16],
+            [MAP_H - 10, 22], [MAP_H - 10, 27],
+            [MAP_H - 11, 5], [MAP_H - 11, 20],
+        ];
+        for (const [py, px] of palmPositions) {
+            if (py >= 0 && py < MAP_H && px < MAP_W) {
+                this.tiles[py][px] = Tile.TREE;
+            }
+        }
+
+        // Beach hut
+        this.fillRect(18, 3, 5, 3, Tile.BUILDING);
+        this.fillRect(18, 2, 5, 1, Tile.ROOF);
+        this.tiles[5][20] = Tile.DOOR;
+
+        // Flowers (tropical)
+        for (let i = 0; i < 10; i++) {
+            const fx = Math.floor(Math.random() * MAP_W);
+            const fy = Math.floor(Math.random() * (MAP_H - 10));
+            if (this.tiles[fy][fx] === Tile.GRASS) this.tiles[fy][fx] = Tile.FLOWER;
+        }
+
+        // Treasure chest buried in sand
+        this.tiles[MAP_H - 8][25] = Tile.CHEST;
+    }
+
     private transitionToArea(areaID: 'town' | 'mountains' | 'beach'): void {
         this.currentAreaID = areaID;
         this.playerTrail = []; // Clear trail on area change
@@ -682,9 +747,7 @@ export class DemoWorld {
                 break;
             case 'beach':
                 this.currentMapName = 'South Beach';
-                // Reuse town map for now (placeholder)
-                this.generateMap();
-                this.placeChests();
+                this.generateBeachArea();
                 this.playerX = 15 * TILE_SIZE;
                 this.playerY = 1 * TILE_SIZE; // Enter from north
                 break;
@@ -808,6 +871,13 @@ export class DemoWorld {
             return;
         }
 
+        // Shop navigation (inside Shop building)
+        if (this.showShop) {
+            if (this.keys['ArrowUp'] || this.keys['w']) { this.keys['ArrowUp'] = false; this.keys['w'] = false; this.shopCursorPos = Math.max(0, this.shopCursorPos - 1); }
+            if (this.keys['ArrowDown'] || this.keys['s']) { this.keys['ArrowDown'] = false; this.keys['s'] = false; this.shopCursorPos = Math.min(this.SHOP_ITEMS.length, this.shopCursorPos + 1); }
+            return;
+        }
+
         // Player movement (disabled inside buildings)
         if (this.insideBuilding) return;
         let dx = 0, dy = 0;
@@ -823,9 +893,15 @@ export class DemoWorld {
             this.keys['E'] = false;
 
             if (this.insideBuilding) {
-                // Exit building
-                this.insideBuilding = null;
-                this.notifications.push({ text: 'Left building', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.0, color: 0x88aaff });
+                if (this.showShop) {
+                    this.buyShopItem();
+                } else if (this.insideBuilding === 'Shop' && !this.showShop) {
+                    this.showShop = true;
+                    this.shopCursorPos = 0;
+                } else {
+                    this.insideBuilding = null;
+                    this.notifications.push({ text: 'Left building', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.0, color: 0x88aaff });
+                }
             } else {
                 // Try NPC interaction first, then building
                 if (!this.tryInteractNPC()) {
@@ -893,15 +969,19 @@ export class DemoWorld {
         if (this.playerY <= 0 && dy < 0) {
             if (this.currentAreaID === 'town') {
                 this.transitionToArea('mountains');
+            } else if (this.currentAreaID === 'beach') {
+                this.transitionToArea('town');
             } else {
-                this.notifications.push({ text: '↑ Nothing beyond...', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
+                this.notifications.push({ text: '\u2191 Nothing beyond...', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
                 this.playerY = 1;
             }
         } else if (this.playerY >= (MAP_H - 1) * TILE_SIZE && dy > 0) {
             if (this.currentAreaID === 'mountains') {
                 this.transitionToArea('town');
+            } else if (this.currentAreaID === 'town') {
+                this.transitionToArea('beach');
             } else {
-                this.notifications.push({ text: 'South Beach ↓ (coming soon)', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
+                this.notifications.push({ text: 'Nothing beyond...', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
                 this.playerY = (MAP_H - 1) * TILE_SIZE - 1;
             }
         }
@@ -1899,12 +1979,158 @@ export class DemoWorld {
 
         // Exit hint
         const hintStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x556677 });
-        const hint = new Text({ text: 'Press SPACE to exit', style: hintStyle });
+        const hintText = this.insideBuilding === 'Shop' ? 'Press SPACE to browse shop' : 'Press SPACE to exit';
+        const hint = new Text({ text: hintText, style: hintStyle });
         hint.anchor.set(0.5);
         hint.position.set(this.width / 2, offsetY + this.buildingH * tileSize + 40);
         this.container.addChild(hint);
 
+        // Shop overlay (only inside Shop)
+        if (this.insideBuilding === 'Shop' && this.showShop) {
+            this.renderShopOverlay();
+        }
+
         return this.container;
+    }
+
+    // ============================================================
+    // Shop System
+    // ============================================================
+
+    private renderShopOverlay(): void {
+        const boxW = 320;
+        const boxH = 60 + (this.SHOP_ITEMS.length + 1) * 32; // +1 for Exit option
+        const boxX = (this.width - boxW) / 2;
+        const boxY = (this.height - boxH) / 2;
+
+        // Background
+        const bg = new Graphics();
+        bg.roundRect(boxX, boxY, boxW, boxH, 10);
+        bg.fill({ color: 0x0a1a0a, alpha: 0.95 });
+        bg.stroke({ color: 0x44aa44, width: 2 });
+        this.container.addChild(bg);
+
+        // Title
+        const titleStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 18, fill: 0x44ff44, fontWeight: 'bold' });
+        const title = new Text({ text: 'SHOP', style: titleStyle });
+        title.anchor.set(0.5);
+        title.position.set(this.width / 2, boxY + 20);
+        this.container.addChild(title);
+
+        // Gold display
+        const gold = this.inventory.find(i => i.name === 'Gold Coin');
+        const goldCount = gold?.count ?? 0;
+        const goldStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 12, fill: 0xffcc00 });
+        const goldText = new Text({ text: `Gold: ${goldCount}`, style: goldStyle });
+        goldText.position.set(boxX + boxW - 90, boxY + 10);
+        this.container.addChild(goldText);
+
+        // Separator
+        const sep = new Graphics();
+        sep.moveTo(boxX + 10, boxY + 38);
+        sep.lineTo(boxX + boxW - 10, boxY + 38);
+        sep.stroke({ color: 0x336633, width: 1 });
+        this.container.addChild(sep);
+
+        // Items
+        for (let i = 0; i < this.SHOP_ITEMS.length; i++) {
+            const item = this.SHOP_ITEMS[i];
+            const selected = i === this.shopCursorPos;
+            const canAfford = goldCount >= item.price;
+            const itemY = boxY + 46 + i * 32;
+
+            // Row background
+            const rowBg = new Graphics();
+            rowBg.rect(boxX + 8, itemY, boxW - 16, 28);
+            rowBg.fill({ color: selected ? 0x1a3a1a : 0x0a1a0a });
+            this.container.addChild(rowBg);
+
+            // Icon
+            const icon = new Graphics();
+            icon.roundRect(boxX + 14, itemY + 5, 16, 16, 3);
+            icon.fill({ color: item.icon });
+            this.container.addChild(icon);
+
+            // Name + price
+            const nameStyle = new TextStyle({
+                fontFamily: 'Arial, sans-serif',
+                fontSize: 13,
+                fill: canAfford ? 0xdddddd : 0x664444,
+            });
+            const nameText = new Text({
+                text: `${selected ? '\u25b8 ' : '  '}${item.name}  -  ${item.price}g`,
+                style: nameStyle,
+            });
+            nameText.position.set(boxX + 36, itemY + 6);
+            this.container.addChild(nameText);
+
+            // "BUY" indicator
+            if (selected && canAfford) {
+                const buyStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0x44ff44 });
+                const buyText = new Text({ text: '[SPACE]', style: buyStyle });
+                buyText.position.set(boxX + boxW - 70, itemY + 8);
+                this.container.addChild(buyText);
+            }
+        }
+
+        // Exit option
+        const exitIdx = this.SHOP_ITEMS.length;
+        const exitSelected = exitIdx === this.shopCursorPos;
+        const exitY = boxY + 46 + exitIdx * 32;
+        const exitStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 13, fill: exitSelected ? 0xffff88 : 0x888888 });
+        const exitText = new Text({ text: `${exitSelected ? '\u25b8 ' : '  '}Exit Shop`, style: exitStyle });
+        exitText.position.set(boxX + 36, exitY + 6);
+        this.container.addChild(exitText);
+    }
+
+    private buyShopItem(): void {
+        if (this.shopCursorPos >= this.SHOP_ITEMS.length) {
+            // Exit
+            this.showShop = false;
+            return;
+        }
+
+        const item = this.SHOP_ITEMS[this.shopCursorPos];
+        const gold = this.inventory.find(i => i.name === 'Gold Coin');
+        if (!gold || gold.count < item.price) {
+            this.notifications.push({ text: 'Not enough gold!', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0xff4444 });
+            this.playSound('hit', 0.2);
+            return;
+        }
+
+        // Purchase
+        gold.count -= item.price;
+
+        // Apply effect
+        switch (item.effect) {
+            case 'heal':
+                this.playerHp = Math.min(this.playerMaxHp, this.playerHp + 50);
+                break;
+            case 'attack':
+                this.playerAttack += 5;
+                break;
+            case 'maxhp':
+                this.playerMaxHp += 20;
+                this.playerHp = this.playerMaxHp;
+                break;
+            case 'luck':
+                this.encounterInterval *= 1.5; // Less frequent encounters
+                break;
+            case 'speed':
+                this.playerSpeed += 20;
+                break;
+        }
+
+        // Add to inventory
+        const existing = this.inventory.find(i => i.name === item.name);
+        if (existing) {
+            existing.count++;
+        } else {
+            this.inventory.push({ name: item.name, count: 1, icon: item.icon });
+        }
+
+        this.notifications.push({ text: `Bought ${item.name}!`, x: this.playerX, y: this.playerY - 30, age: 0, maxAge: 2.0, color: 0x44ff44 });
+        this.playSound('coin', 0.4);
     }
 
     private renderCharacter(x: number, y: number, color: number, dir: number, name: string): Container {
