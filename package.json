@@ -1,6 +1,6 @@
 {
   "name": "okgame",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "bob's game - puzzle game engine",
   "main": "dist/main/index.js",
   "type": "module",
@@ -23,7 +23,7 @@
   "license": "SEE LICENSE",
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
-    "@types/howler": "^2.2.32",
+    "@types/howler": "^2.2.42",
     "@types/node": "^20.10.0",
     "@types/pako": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
