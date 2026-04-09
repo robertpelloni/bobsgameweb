@@ -94,6 +94,17 @@ export class EngineScene implements State {
         } else {
             // nD is closed — update the main RPG engine
             this.clientEngine.update(dt);
+
+            // Check if DemoWorld wants to quit to menu
+            const world = this.clientEngine.getDemoWorld();
+            if (world && world.wantsQuit) {
+                log.info('Quit to menu requested');
+                this.controls.detach();
+                // Import StateManager to pop this scene
+                import('../state/StateManager').then(({ StateManager }) => {
+                    StateManager.pop();
+                });
+            }
         }
 
         // Clear just-pressed/released states for next frame
