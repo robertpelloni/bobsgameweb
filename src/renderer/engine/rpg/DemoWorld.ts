@@ -94,6 +94,10 @@ export class DemoWorld {
     private dayNightSpeed = 0.008; // Full cycle in ~125 seconds
     private dayNightOverlay: Graphics | null = null;
 
+    // Parallax background layers
+    private bgStars: { x: number; y: number; size: number; alpha: number }[] = [];
+    private bgClouds: { x: number; y: number; w: number; h: number; speed: number; alpha: number }[] = [];
+
     // Minimap
     private minimapSize = 120;
     private minimapScale = this.minimapSize / (MAP_W * TILE_SIZE);
@@ -244,6 +248,26 @@ export class DemoWorld {
 
         // Generate procedural SFX buffers
         this.initAudio();
+
+        // Generate parallax background elements
+        for (let i = 0; i < 60; i++) {
+            this.bgStars.push({
+                x: Math.random() * MAP_W * TILE_SIZE,
+                y: Math.random() * MAP_H * TILE_SIZE * 0.6,
+                size: 0.5 + Math.random() * 1.5,
+                alpha: 0.2 + Math.random() * 0.5,
+            });
+        }
+        for (let i = 0; i < 8; i++) {
+            this.bgClouds.push({
+                x: Math.random() * MAP_W * TILE_SIZE,
+                y: 30 + Math.random() * MAP_H * TILE_SIZE * 0.3,
+                w: 60 + Math.random() * 120,
+                h: 20 + Math.random() * 40,
+                speed: 5 + Math.random() * 15,
+                alpha: 0.05 + Math.random() * 0.1,
+            });
+        }
 
         // Try connecting to multiplayer server
         this.initNetwork();
@@ -1055,6 +1079,15 @@ export class DemoWorld {
         // Grass sway
         this.grassSwayTime += dt;
 
+        // Drift parallax clouds
+        for (const cloud of this.bgClouds) {
+            cloud.x += cloud.speed * dt;
+            if (cloud.x > MAP_W * TILE_SIZE + cloud.w) {
+                cloud.x = -cloud.w;
+                cloud.y = 30 + Math.random() * MAP_H * TILE_SIZE * 0.3;
+            }
+        }
+
         // Record player trail for minimap
         this.trailTimer += dt;
         if (this.trailTimer > 0.5) {
@@ -1720,6 +1753,9 @@ export class DemoWorld {
         const camX = Math.max(0, Math.min(MAP_W * TILE_SIZE - this.width, this.playerX - this.width / 2));
         const camY = Math.max(0, Math.min(MAP_H * TILE_SIZE - this.height, this.playerY - this.height / 2));
 
+        // Parallax background layers (scroll at 0.3x camera speed)
+        this.renderParallaxBackground(camX, camY);
+
         // Render map tiles
         this.mapContainer.removeChildren();
         const startTileX = Math.floor(camX / TILE_SIZE);
@@ -1935,6 +1971,53 @@ export class DemoWorld {
     // ============================================================
     // Building Interior Rendering
     // ============================================================
+
+    // ============================================================
+    // Parallax Background
+    // ============================================================
+
+    private renderParallaxBackground(camX: number, camY: number): void {
+        const parallaxFactor = 0.3; // Stars/clouds scroll at 30% of camera speed
+        const pxCamX = camX * parallaxFactor;
+        const pxCamY = camY * parallaxFactor;
+
+        // Stars (far layer, barely move)
+        const starG = new Graphics();
+        for (const star of this.bgStars) {
+            const sx = star.x - pxCamX * 0.5;
+            const sy = star.y - pxCamY * 0.5;
+            // Twinkle
+            const twinkle = Math.sin(this.gameTime * 2 + star.x * 0.1) * 0.2 + 0.8;
+            starG.circle(sx, sy, star.size);
+            starG.fill({ color: 0xffffff, alpha: star.alpha * twinkle });
+        }
+        this.container.addChild(starG);
+
+        // Clouds (mid layer, drift + parallax)
+        const cloudG = new Graphics();
+        for (const cloud of this.bgClouds) {
+            const cx = cloud.x - pxCamX;
+            const cy = cloud.y - pxCamY * 0.7;
+            cloudG.ellipse(cx, cy, cloud.w / 2, cloud.h / 2);
+            cloudG.fill({ color: 0xffffff, alpha: cloud.alpha });
+        }
+        this.container.addChild(cloudG);
+
+        // Distant mountain silhouette (far background, very slow parallax)
+        const mtG = new Graphics();
+        const mtOffset = -pxCamX * 0.15;
+        mtG.moveTo(mtOffset, this.height);
+        const mtSegments = 20;
+        const mtWidth = MAP_W * TILE_SIZE * 0.5;
+        for (let i = 0; i <= mtSegments; i++) {
+            const mx = mtOffset + (i / mtSegments) * mtWidth;
+            const my = this.height - 60 - Math.sin(i * 0.8 + 2) * 40 - Math.sin(i * 1.7) * 20;
+            mtG.lineTo(mx, my);
+        }
+        mtG.lineTo(mtOffset + mtWidth, this.height);
+        mtG.fill({ color: 0x1a2a3a, alpha: 0.3 });
+        this.container.addChild(mtG);
+    }
 
     private renderBuildingInterior(): Container {
         const def = this.BUILDING_DEFS.find(d => d.name === this.insideBuilding);
