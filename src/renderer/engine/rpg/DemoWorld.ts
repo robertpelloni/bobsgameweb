@@ -15,6 +15,7 @@ import {
     Container, Graphics, Text, TextStyle, Sprite, Texture,
 } from 'pixi.js';
 import { Logger } from '../debug/Logger';
+import { AudioUtils } from '../audio/AudioUtils';
 
 const log = new Logger('DemoWorld');
 
@@ -198,7 +199,44 @@ export class DemoWorld {
             { name: 'Wallet', count: 1, icon: 0x44aa44 },
             { name: 'Keys', count: 1, icon: 0xccaa00 },
         ];
+
+        // Generate procedural SFX buffers
+        this.initAudio();
+
         log.info('DemoWorld created');
+    }
+
+    // ============================================================
+    // Audio
+    // ============================================================
+
+    private audioInitialized = false;
+
+    private initAudio(): void {
+        try {
+            AudioUtils.init();
+            // Generate procedural SFX
+            const stepBuf = AudioUtils.generateTone(200, 0.05);
+            if (stepBuf) AudioUtils.storeBuffer('step', stepBuf);
+            const hitBuf = AudioUtils.generateTone(300, 0.1);
+            if (hitBuf) AudioUtils.storeBuffer('hit', hitBuf);
+            const coinBuf = AudioUtils.generateTone(800, 0.15);
+            if (coinBuf) AudioUtils.storeBuffer('coin', coinBuf);
+            const fishBuf = AudioUtils.generateTone(500, 0.2);
+            if (fishBuf) AudioUtils.storeBuffer('fish', fishBuf);
+            const chestBuf = AudioUtils.generateTone(600, 0.3);
+            if (chestBuf) AudioUtils.storeBuffer('chest', chestBuf);
+            const lvlBuf = AudioUtils.generateTone(1000, 0.4);
+            if (lvlBuf) AudioUtils.storeBuffer('levelup', lvlBuf);
+            this.audioInitialized = true;
+        } catch {
+            log.warn('Audio not available');
+        }
+    }
+
+    private playSound(name: string, volume = 0.3): void {
+        if (!this.audioInitialized) return;
+        AudioUtils.playSFX(name, volume);
     }
 
     // ============================================================
@@ -396,6 +434,7 @@ export class DemoWorld {
             this.playerMaxHp += 10;
             this.playerHp = this.playerMaxHp;
             this.playerAttack += 3;
+            this.playSound('levelup', 0.4);
             this.notifications.push({
                 text: `⬆️ Level ${this.playerLevel}! HP+10 ATK+3`,
                 x: this.playerX, y: this.playerY - 50,
@@ -460,6 +499,7 @@ export class DemoWorld {
                     x: this.playerX, y: this.playerY - 30,
                     age: 0, maxAge: 2.0, color: 0xffcc44,
                 });
+                this.playSound('chest', 0.4);
             }
         }
     }
@@ -871,6 +911,7 @@ export class DemoWorld {
         const dmg = Math.floor(this.playerAttack * (0.8 + Math.random() * 0.4));
         this.currentEnemy.hp -= dmg;
         this.combatLog.push(`You deal ${dmg} damage!`);
+        this.playSound('hit', 0.4);
 
         if (this.currentEnemy.hp <= 0) {
             this.combatLog.push(`${this.currentEnemy.name} defeated!`);
@@ -883,6 +924,7 @@ export class DemoWorld {
                 this.inventory.push({ name: 'Gold Coin', count: goldReward, icon: 0xffcc00 });
             }
             this.combatLog.push(`+${goldReward} Gold`);
+            this.playSound('coin', 0.3);
             // XP reward
             const xpReward = 10 + Math.floor(Math.random() * 20);
             this.playerXp += xpReward;
@@ -908,6 +950,7 @@ export class DemoWorld {
         const eDmg = Math.floor(this.currentEnemy.attack * (0.7 + Math.random() * 0.6));
         this.playerHp -= eDmg;
         this.combatLog.push(`${this.currentEnemy.name} deals ${eDmg} damage!`);
+        this.playSound('hit', 0.2);
 
         if (this.playerHp <= 0) {
             this.playerHp = 0;
@@ -1083,6 +1126,7 @@ export class DemoWorld {
                 // Fishing achievements
                 this.checkAchievement('first_fish', true);
                 this.checkAchievement('five_fish', this.fishCaught.length >= 5);
+                this.playSound('fish', 0.3);
             }
         }
 

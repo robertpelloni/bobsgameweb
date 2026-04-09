@@ -20,6 +20,11 @@ export class AudioUtils {
     private static channelInUse: boolean[] = [];
     private static loadedBuffers: Map<string, AudioBuffer> = new Map();
 
+    /** Store a pre-generated AudioBuffer */
+    static storeBuffer(name: string, buffer: AudioBuffer): void {
+        this.loadedBuffers.set(name, buffer);
+    }
+
     // ============================================================
     // Initialization
     // ============================================================
