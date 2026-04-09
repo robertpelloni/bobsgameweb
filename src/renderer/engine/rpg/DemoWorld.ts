@@ -793,6 +793,12 @@ export class DemoWorld {
             x: this.playerX, y: this.playerY - 30,
             age: 0, maxAge: 2.0, color: 0x88aaff,
         });
+
+        // Audio crossfade on area change
+        try {
+            AudioUtils.fadeSFX(0.1, 0.5);
+            setTimeout(() => AudioUtils.fadeSFX(0.3, 0.5), 600);
+        } catch { /* audio not available */ }
     }
 
     private fillRect(x: number, y: number, w: number, h: number, tile: number): void {

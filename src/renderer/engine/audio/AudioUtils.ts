@@ -188,6 +188,8 @@ export class AudioUtils {
         gain.connect(this.musicGain);
         source.start(0);
 
+        this.currentMusicSource = source;
+
         return source;
     }
 
@@ -251,6 +253,61 @@ export class AudioUtils {
      */
     static getCurrentTime(): number {
         return this.audioContext?.currentTime ?? 0;
+    }
+
+    /**
+     * Fade music volume to target over duration (seconds).
+     */
+    static fadeMusic(targetVolume: number, duration: number): void {
+        if (!this.musicGain || !this.audioContext) return;
+        const now = this.audioContext.currentTime;
+        this.musicGain.gain.setValueAtTime(this.musicGain.gain.value, now);
+        this.musicGain.gain.linearRampToValueAtTime(Math.max(0, Math.min(1, targetVolume)), now + duration);
+    }
+
+    /**
+     * Fade SFX volume to target over duration (seconds).
+     */
+    static fadeSFX(targetVolume: number, duration: number): void {
+        if (!this.sfxGain || !this.audioContext) return;
+        const now = this.audioContext.currentTime;
+        this.sfxGain.gain.setValueAtTime(this.sfxGain.gain.value, now);
+        this.sfxGain.gain.linearRampToValueAtTime(Math.max(0, Math.min(1, targetVolume)), now + duration);
+    }
+
+    /**
+     * Crossfade between two music tracks.
+     */
+    static crossfadeMusic(
+        newName: string,
+        volume = 1.0,
+        loop = true,
+        fadeOutDuration = 1.0,
+        fadeInDuration = 1.0,
+    ): AudioBufferSourceNode | null {
+        // Fade out current music
+        this.fadeMusic(0, fadeOutDuration);
+        // After fade out, start new music and fade in
+        setTimeout(() => {
+            this.stopMusic();
+            const source = this.playMusic(newName, 0, loop);
+            if (source) {
+                this.fadeMusic(volume, fadeInDuration);
+            }
+        }, fadeOutDuration * 1000);
+        return null; // Source not yet available
+    }
+
+    private static currentMusicSource: AudioBufferSourceNode | null = null;
+
+    /**
+     * Stop currently playing music.
+     */
+    static stopMusic(): void {
+        if (this.currentMusicSource) {
+            try { this.currentMusicSource.stop(); } catch { /* already stopped */ }
+            this.currentMusicSource = null;
+        }
     }
 
     /**
