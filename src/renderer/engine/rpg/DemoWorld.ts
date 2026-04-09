@@ -18,6 +18,7 @@ import { Logger } from '../debug/Logger';
 import { AudioUtils } from '../audio/AudioUtils';
 import { NetworkManager } from '../network/NetworkManager';
 import { ParticleEmitter, ParticlePresets } from '../graphics/ParticleSystem';
+import { CutsceneEngine } from '../cinematics/CutsceneEngine';
 
 const log = new Logger('DemoWorld');
 
@@ -250,6 +251,10 @@ export class DemoWorld {
     // Physics objects (cannonballs, etc.)
     private physicsObjects: { x: number; y: number; vx: number; vy: number; radius: number; color: number; age: number }[] = [];
 
+    // Cutscene
+    private cutsceneEngine: CutsceneEngine | null = null;
+    private introPlayed = false;
+
     constructor(config: DemoWorldConfig) {
         this.width = config.width;
         this.height = config.height;
@@ -309,6 +314,11 @@ export class DemoWorld {
 
         // Try connecting to multiplayer server
         this.initNetwork();
+
+        // Play intro cutscene (only first time)
+        if (!this.introPlayed && !localStorage.getItem('bobsgame_intro_played')) {
+            this.playIntroCutscene();
+        }
 
         log.info('DemoWorld created');
     }
@@ -548,6 +558,48 @@ export class DemoWorld {
             case 'defense': this.defense += amount; break;
             case 'speed': this.playerSpeed += amount; break;
         }
+    }
+
+    // ============================================================
+    // Intro Cutscene
+    // ============================================================
+
+    private playIntroCutscene(): void {
+        this.introPlayed = true;
+        localStorage.setItem('bobsgame_intro_played', '1');
+
+        this.cutsceneEngine = new CutsceneEngine(this.width, this.height);
+        this.cutsceneEngine.addCharacter({
+            id: 'player', name: 'Hero', color: 0x44aaff,
+            x: this.playerX, y: this.playerY, speed: 100, visible: true,
+        });
+        this.cutsceneEngine.addCharacter({
+            id: 'npc', name: 'Old Man', color: 0xffaa44,
+            x: this.playerX + 60, y: this.playerY - 40, speed: 80, visible: true,
+        });
+
+        this.cutsceneEngine.loadScript([
+            { type: 'fade', params: { alpha: 1, speed: 0.5 } },
+            { type: 'dialogue', params: { speaker: '???', text: '... ... ...', color: 0x888888 } },
+            { type: 'fade', params: { alpha: 0, speed: 0.5 } },
+            { type: 'dialogue', params: { speaker: 'Old Man', text: 'Hey! You finally woke up!', color: 0xffaa44 } },
+            { type: 'dialogue', params: { speaker: 'Old Man', text: 'Welcome to bob\'s game — the ultimate omni-engine!' } },
+            { type: 'dialogue', params: { speaker: 'Old Man', text: 'You can explore, fish, fight monsters, find treasure, and more.' } },
+            { type: 'dialogue', params: { speaker: 'Old Man', text: 'Talk to NPCs with SPACE, open inventory with I, check quests with Q.' } },
+            { type: 'dialogue', params: { speaker: 'Old Man', text: 'Press F near water to fish, and press T to throw things!' } },
+            { type: 'dialogue', params: { speaker: 'Old Man', text: 'Good luck out there, hero! The world awaits!' } },
+            { type: 'shake', params: { amount: 3, duration: 0.3 } },
+            { type: 'dialogue', params: { speaker: '', text: '* And so your adventure begins... *', color: 0xaaddff } },
+            { type: 'end', params: {} },
+        ]);
+
+        this.cutsceneEngine.setCallbacks({
+            onPlaySFX: (name: string) => this.playSound(name, 0.3),
+        });
+
+        this.cutsceneEngine.play(() => {
+            this.cutsceneEngine = null;
+        });
     }
 
     // ============================================================
@@ -993,6 +1045,12 @@ export class DemoWorld {
     update(dt: number): void {
         this.gameTime += dt;
 
+        // Cutscene takes priority over everything
+        if (this.cutsceneEngine?.active) {
+            this.cutsceneEngine.update(dt);
+            return;
+        }
+
         // If dialogue is showing, only handle dialogue input
         if (this.showDialogue) {
             this.dialogueTimer += dt;
@@ -1049,6 +1107,16 @@ export class DemoWorld {
                         }
                     }
                 }
+            }
+            return;
+        }
+
+        // Space advances cutscene
+        if (this.cutsceneEngine?.active) {
+            if (this.keys[' '] || this.keys['Enter']) {
+                this.keys[' '] = false;
+                this.keys['Enter'] = false;
+                this.cutsceneEngine.advance();
             }
             return;
         }
@@ -2284,6 +2352,13 @@ export class DemoWorld {
 
         // Screen effects (shake + flash) — rendered last on HUD
         this.renderScreenEffects();
+
+        // Cutscene overlay (on top of everything)
+        if (this.cutsceneEngine?.active) {
+            this.cutsceneEngine.update(0.016);
+            this.cutsceneEngine.render();
+            this.container.addChild(this.cutsceneEngine.container);
+        }
 
         return this.container;
     }
