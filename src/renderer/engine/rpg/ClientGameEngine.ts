@@ -239,4 +239,5 @@ export class ClientGameEngine extends BGClientEngine {
     getSettings(): GlobalSettings { return this.settings; }
     getCurrentMapName(): string { return this.currentMapName; }
     isInitialized(): boolean { return this.initialized; }
+    getDemoWorld(): DemoWorld { return this.demoWorld; }
 }

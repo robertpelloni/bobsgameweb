@@ -97,6 +97,8 @@ export class DemoWorld {
     // Minimap
     private minimapSize = 120;
     private minimapScale = this.minimapSize / (MAP_W * TILE_SIZE);
+    private playerTrail: { x: number; y: number }[] = [];
+    private trailTimer = 0;
 
     // Floating notifications
     private notifications: { text: string; x: number; y: number; age: number; maxAge: number; color: number }[] = [];
@@ -848,6 +850,14 @@ export class DemoWorld {
 
         // Grass sway
         this.grassSwayTime += dt;
+
+        // Record player trail for minimap
+        this.trailTimer += dt;
+        if (this.trailTimer > 0.5) {
+            this.trailTimer = 0;
+            this.playerTrail.push({ x: this.playerX, y: this.playerY });
+            if (this.playerTrail.length > 200) this.playerTrail.shift();
+        }
 
         // Auto-save
         this.autoSaveCheck(dt);
@@ -2327,6 +2337,20 @@ export class DemoWorld {
             }
         }
         this.container.addChild(mmG);
+
+        // Player trail (breadcrumb path)
+        if (this.playerTrail.length > 1) {
+            const trailG = new Graphics();
+            for (let i = 1; i < this.playerTrail.length; i++) {
+                const alpha = (i / this.playerTrail.length) * 0.4;
+                const t = this.playerTrail[i];
+                const tx2 = mapX + (t.x / TILE_SIZE) * tileW;
+                const ty2 = mapY + (t.y / TILE_SIZE) * tileH;
+                trailG.circle(tx2, ty2, 1);
+                trailG.fill({ color: 0x88aaff, alpha });
+            }
+            this.container.addChild(trailG);
+        }
 
         // Player dot (blinking)
         const blink = Math.sin(this.gameTime * 4) > -0.3;
