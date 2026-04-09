@@ -121,6 +121,27 @@ export class DemoWorld {
     private inventory: { name: string; count: number; icon: number }[] = [];
     private showInventory = false;
 
+    // Encounter system
+    private encounterTimer = 0;
+    private encounterInterval = 20; // Average seconds between encounters
+    private currentEnemy: { name: string; hp: number; maxHp: number; attack: number; icon: number } | null = null;
+    private playerHp = 100;
+    private playerMaxHp = 100;
+    private playerAttack = 15;
+    private showCombat = false;
+    private combatLog: string[] = [];
+    private combatTimer = 0;
+    private readonly ENEMY_TYPES = [
+        { name: 'Slime', hp: 30, attack: 5, icon: 0x44cc44 },
+        { name: 'Bat', hp: 20, attack: 8, icon: 0x8844aa },
+        { name: 'Goblin', hp: 45, attack: 10, icon: 0x44aa44 },
+        { name: 'Ghost', hp: 25, attack: 12, icon: 0xaaaacc },
+        { name: 'Mushroom', hp: 35, attack: 6, icon: 0xcc4444 },
+    ];
+
+    // Grass sway animation
+    private grassSwayTime = 0;
+
     // Input state
     private keys: Record<string, boolean> = {};
 
@@ -491,6 +512,31 @@ export class DemoWorld {
         // Fishing
         this.updateFishing(dt);
 
+        // Random encounters (only when walking on grass, not inside buildings)
+        if (!this.insideBuilding && dx !== 0 || dy !== 0) {
+            const ptx = Math.floor(this.playerX / TILE_SIZE);
+            const pty = Math.floor(this.playerY / TILE_SIZE);
+            if (ptx >= 0 && ptx < MAP_W && pty >= 0 && pty < MAP_H && this.tiles[pty][ptx] === Tile.GRASS) {
+                this.encounterTimer += dt;
+                if (this.encounterTimer > this.encounterInterval * (0.5 + Math.random())) {
+                    this.encounterTimer = 0;
+                    this.startEncounter();
+                }
+            }
+        }
+
+        // Combat auto-attack
+        if (this.showCombat && this.currentEnemy) {
+            this.combatTimer += dt;
+            if (this.combatTimer > 0.8) {
+                this.combatTimer = 0;
+                this.combatStep();
+            }
+        }
+
+        // Grass sway
+        this.grassSwayTime += dt;
+
         // Weather cycle
         this.weatherTimer += dt;
         if (this.weatherTimer >= this.weatherCycleDuration) {
@@ -636,6 +682,160 @@ export class DemoWorld {
     private fishingState: 'idle' | 'casting' | 'waiting' | 'caught' = 'idle';
     private fishingTimer = 0;
     private fishCaught: string[] = [];
+
+    // ============================================================
+    // Combat / Encounters
+    // ============================================================
+
+    private startEncounter(): void {
+        const template = this.ENEMY_TYPES[Math.floor(Math.random() * this.ENEMY_TYPES.length)];
+        this.currentEnemy = { ...template, maxHp: template.hp };
+        this.showCombat = true;
+        this.combatLog = [`A wild ${template.name} appeared!`];
+        this.combatTimer = 0;
+        this.notifications.push({
+            text: `Enemy: ${template.name}!`,
+            x: this.playerX, y: this.playerY - 40,
+            age: 0, maxAge: 1.5, color: 0xff4444,
+        });
+    }
+
+    private combatStep(): void {
+        if (!this.currentEnemy) return;
+
+        // Player attacks
+        const dmg = Math.floor(this.playerAttack * (0.8 + Math.random() * 0.4));
+        this.currentEnemy.hp -= dmg;
+        this.combatLog.push(`You deal ${dmg} damage!`);
+
+        if (this.currentEnemy.hp <= 0) {
+            this.combatLog.push(`${this.currentEnemy.name} defeated!`);
+            // Reward
+            const goldReward = 5 + Math.floor(Math.random() * 15);
+            const existingGold = this.inventory.find(i => i.name === 'Gold Coin');
+            if (existingGold) {
+                existingGold.count += goldReward;
+            } else {
+                this.inventory.push({ name: 'Gold Coin', count: goldReward, icon: 0xffcc00 });
+            }
+            this.combatLog.push(`+${goldReward} Gold`);
+            // Heal a bit
+            this.playerHp = Math.min(this.playerMaxHp, this.playerHp + 10);
+            // End combat after a moment
+            setTimeout(() => {
+                this.showCombat = false;
+                this.currentEnemy = null;
+                this.combatLog = [];
+            }, 1500);
+            return;
+        }
+
+        // Enemy attacks back
+        const eDmg = Math.floor(this.currentEnemy.attack * (0.7 + Math.random() * 0.6));
+        this.playerHp -= eDmg;
+        this.combatLog.push(`${this.currentEnemy.name} deals ${eDmg} damage!`);
+
+        if (this.playerHp <= 0) {
+            this.playerHp = 0;
+            this.combatLog.push('You fainted! Healing...');
+            setTimeout(() => {
+                this.playerHp = this.playerMaxHp;
+                this.showCombat = false;
+                this.currentEnemy = null;
+                this.combatLog = [];
+            }, 2000);
+        }
+    }
+
+    private renderCombat(): void {
+        if (!this.showCombat || !this.currentEnemy) return;
+
+        const boxW = 280;
+        const boxH = 200;
+        const boxX = (this.width - boxW) / 2;
+        const boxY = (this.height - boxH) / 2;
+
+        // Background
+        const bg = new Graphics();
+        bg.roundRect(boxX, boxY, boxW, boxH, 8);
+        bg.fill({ color: 0x1a0a0a, alpha: 0.95 });
+        bg.stroke({ color: 0xaa4444, width: 2 });
+        this.container.addChild(bg);
+
+        // Enemy info
+        const enemy = this.currentEnemy;
+        const titleStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 14, fill: 0xff6644, fontWeight: 'bold' });
+        const title = new Text({ text: `⚔️ ${enemy.name}`, style: titleStyle });
+        title.position.set(boxX + 12, boxY + 10);
+        this.container.addChild(title);
+
+        // Enemy HP bar
+        const hpBarW = boxW - 24;
+        const hpPct = enemy.hp / enemy.maxHp;
+        const hpBg = new Graphics();
+        hpBg.roundRect(boxX + 12, boxY + 32, hpBarW, 12, 3);
+        hpBg.fill({ color: 0x330000 });
+        this.container.addChild(hpBg);
+        const hpFill = new Graphics();
+        hpFill.roundRect(boxX + 12, boxY + 32, hpBarW * hpPct, 12, 3);
+        hpFill.fill({ color: hpPct > 0.5 ? 0x44cc44 : hpPct > 0.25 ? 0xcccc44 : 0xcc4444 });
+        this.container.addChild(hpFill);
+
+        const hpStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0xdddddd });
+        const hpText = new Text({ text: `HP: ${enemy.hp}/${enemy.maxHp}`, style: hpStyle });
+        hpText.position.set(boxX + 14, boxY + 34);
+        this.container.addChild(hpText);
+
+        // Enemy sprite (simple colored circle)
+        const enemyGfx = new Graphics();
+        enemyGfx.circle(boxX + boxW - 50, boxY + 45, 20);
+        enemyGfx.fill({ color: enemy.icon });
+        enemyGfx.circle(boxX + boxW - 50, boxY + 45, 14);
+        enemyGfx.fill({ color: 0x000000, alpha: 0.3 });
+        // Eyes
+        enemyGfx.circle(boxX + boxW - 55, boxY + 40, 3);
+        enemyGfx.fill({ color: 0xffffff });
+        enemyGfx.circle(boxX + boxW - 45, boxY + 40, 3);
+        enemyGfx.fill({ color: 0xffffff });
+        enemyGfx.circle(boxX + boxW - 55, boxY + 40, 1.5);
+        enemyGfx.fill({ color: 0x000000 });
+        enemyGfx.circle(boxX + boxW - 45, boxY + 40, 1.5);
+        enemyGfx.fill({ color: 0x000000 });
+        this.container.addChild(enemyGfx);
+
+        // Player HP
+        const playerHpPct = this.playerHp / this.playerMaxHp;
+        const pStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 12, fill: 0x44aaff });
+        const pText = new Text({ text: `You: ${this.playerHp}/${this.playerMaxHp} HP`, style: pStyle });
+        pText.position.set(boxX + 12, boxY + 55);
+        this.container.addChild(pText);
+
+        // Player HP bar
+        const phpBg = new Graphics();
+        phpBg.roundRect(boxX + 12, boxY + 74, hpBarW, 10, 3);
+        phpBg.fill({ color: 0x003300 });
+        this.container.addChild(phpBg);
+        const phpFill = new Graphics();
+        phpFill.roundRect(boxX + 12, boxY + 74, hpBarW * playerHpPct, 10, 3);
+        phpFill.fill({ color: playerHpPct > 0.5 ? 0x44cc44 : playerHpPct > 0.25 ? 0xcccc44 : 0xcc4444 });
+        this.container.addChild(phpFill);
+
+        // Combat log (last 4 lines)
+        const logStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0xccccaa });
+        const recentLog = this.combatLog.slice(-4);
+        for (let i = 0; i < recentLog.length; i++) {
+            const logText = new Text({ text: recentLog[i], style: logStyle });
+            logText.position.set(boxX + 12, boxY + 95 + i * 16);
+            this.container.addChild(logText);
+        }
+
+        // Separator
+        const sep = new Graphics();
+        sep.moveTo(boxX + 10, boxY + 90);
+        sep.lineTo(boxX + boxW - 10, boxY + 90);
+        sep.stroke({ color: 0x553333, width: 1 });
+        this.container.addChild(sep);
+    }
 
     private tryFish(): void {
         if (this.insideBuilding) return;
@@ -907,6 +1107,11 @@ export class DemoWorld {
             this.renderFishingIndicator();
         }
 
+        // Combat overlay
+        if (this.showCombat) {
+            this.renderCombat();
+        }
+
         // Inventory overlay
         if (this.showInventory) {
             this.renderInventory();
@@ -1125,6 +1330,24 @@ export class DemoWorld {
         });
         moneyText.position.set(this.width - 100, 10);
         this.hudContainer.addChild(moneyText);
+
+        // HP bar (small, below wallet)
+        const hpBarX = this.width - 100;
+        const hpBarY = 24;
+        const hpBarW = 80;
+        const hpPct = this.playerHp / this.playerMaxHp;
+        const hpBgG = new Graphics();
+        hpBgG.rect(hpBarX, hpBarY, hpBarW, 6);
+        hpBgG.fill({ color: 0x330000 });
+        this.hudContainer.addChild(hpBgG);
+        const hpFillG = new Graphics();
+        hpFillG.rect(hpBarX, hpBarY, hpBarW * hpPct, 6);
+        hpFillG.fill({ color: hpPct > 0.5 ? 0x44cc44 : hpPct > 0.25 ? 0xcccc44 : 0xcc4444 });
+        this.hudContainer.addChild(hpFillG);
+        const hpStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 8, fill: 0xdddddd });
+        const hpText = new Text({ text: `HP ${this.playerHp}/${this.playerMaxHp}`, style: hpStyle });
+        hpText.position.set(hpBarX, hpBarY - 1);
+        this.hudContainer.addChild(hpText);
 
         // Bottom hint bar
         const hintBg = new Graphics();
