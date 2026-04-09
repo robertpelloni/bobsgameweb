@@ -128,6 +128,17 @@ export class DemoWorld {
     // Shop system
     private showShop = false;
     private shopCursorPos = 0;
+
+    // Cafe system
+    private showCafe = false;
+    private cafeCursorPos = 0;
+    private readonly CAFE_ITEMS = [
+        { name: 'Coffee', price: 5, icon: 0x6b3a1f, effect: 'energy', desc: '+Speed 30s' },
+        { name: 'Espresso', price: 8, icon: 0x3d1f0a, effect: 'energy2', desc: '+Speed +ATK 30s' },
+        { name: 'Cake', price: 12, icon: 0xffccaa, effect: 'heal', desc: 'Full HP restore' },
+        { name: 'Tea', price: 3, icon: 0x44aa44, effect: 'calm', desc: '-50% encounters 60s' },
+    ];
+    private buffTimers: { name: string; remaining: number }[] = [];
     private readonly SHOP_ITEMS = [
         { name: 'Health Potion', price: 10, icon: 0xff4444, effect: 'heal' },
         { name: 'Attack Boost', price: 25, icon: 0xff8844, effect: 'attack' },
@@ -895,9 +906,14 @@ export class DemoWorld {
             if (this.insideBuilding) {
                 if (this.showShop) {
                     this.buyShopItem();
-                } else if (this.insideBuilding === 'Shop' && !this.showShop) {
+                } else if (this.showCafe) {
+                    this.buyCafeItem();
+                } else if (this.insideBuilding === 'Shop') {
                     this.showShop = true;
                     this.shopCursorPos = 0;
+                } else if (this.insideBuilding === 'Cafe') {
+                    this.showCafe = true;
+                    this.cafeCursorPos = 0;
                 } else {
                     this.insideBuilding = null;
                     this.notifications.push({ text: 'Left building', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.0, color: 0x88aaff });
@@ -1979,7 +1995,7 @@ export class DemoWorld {
 
         // Exit hint
         const hintStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x556677 });
-        const hintText = this.insideBuilding === 'Shop' ? 'Press SPACE to browse shop' : 'Press SPACE to exit';
+        const hintText = this.insideBuilding === 'Shop' ? 'Press SPACE to browse shop' : this.insideBuilding === 'Cafe' ? 'Press SPACE to order' : 'Press SPACE to exit';
         const hint = new Text({ text: hintText, style: hintStyle });
         hint.anchor.set(0.5);
         hint.position.set(this.width / 2, offsetY + this.buildingH * tileSize + 40);
