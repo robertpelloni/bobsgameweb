@@ -210,7 +210,7 @@ export class MainMenuScene extends Scene {
             fontFamily: 'Arial Black, Arial, sans-serif',
             fontSize: 72,
             fontWeight: 'bold',
-            fill: [0xffffff, 0x00ffff],
+            fill: 0xffffff,
             stroke: { color: 0x003366, width: 6 },
             dropShadow: {
                 color: 0x000000,
@@ -247,7 +247,7 @@ export class MainMenuScene extends Scene {
             fill: 0x445566,
             letterSpacing: 1,
         });
-        this.versionText = new Text({ text: 'v2.1.84', style: versionStyle });
+        this.versionText = new Text({ text: 'v2.1.85', style: versionStyle });
         this.versionText.anchor.set(1, 1);
         this.versionText.x = this.width - 10;
         this.versionText.y = this.height - 10;

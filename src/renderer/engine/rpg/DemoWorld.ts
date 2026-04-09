@@ -999,11 +999,6 @@ export class DemoWorld {
                     g.fill({ color: 0x442200 });
                     g.circle(TILE_SIZE * 0.6, TILE_SIZE * 0.55, 2);
                     g.fill({ color: 0xccaa00 }); // Door knob
-                } else if (tile === Tile.FLOWER) {
-                    g.circle(TILE_SIZE * 0.5, TILE_SIZE * 0.5, 4);
-                    g.fill({ color: 0xff44aa });
-                    g.circle(TILE_SIZE * 0.5, TILE_SIZE * 0.5, 2);
-                    g.fill({ color: 0xffff00 });
                 } else if (tile === Tile.BRIDGE) {
                     g.rect(0, 0, TILE_SIZE, TILE_SIZE);
                     g.fill({ color: 0x9b8355 });
@@ -1043,6 +1038,22 @@ export class DemoWorld {
                         g.circle(dx, dy, 1);
                         g.fill({ color: 0xc4a47a, alpha: 0.5 });
                     }
+                } else if (tile === Tile.GRASS) {
+                    // Grass blades that sway
+                    const sway = Math.sin(this.grassSwayTime * 2 + tx * 0.7 + ty * 0.5) * 2;
+                    for (let b = 0; b < 3; b++) {
+                        const bx = 6 + b * 10 + ((tx * 3 + ty * 7 + b) % 5);
+                        g.moveTo(bx, TILE_SIZE);
+                        g.lineTo(bx + sway, TILE_SIZE - 8 - (b % 2) * 3);
+                        g.stroke({ color: 0x3d7a2e, width: 1, alpha: 0.5 });
+                    }
+                } else if (tile === Tile.FLOWER) {
+                    // Flowers sway too
+                    const sway = Math.sin(this.grassSwayTime * 1.5 + tx + ty * 0.8) * 1.5;
+                    g.circle(TILE_SIZE * 0.5 + sway, TILE_SIZE * 0.5, 4);
+                    g.fill({ color: 0xff44aa });
+                    g.circle(TILE_SIZE * 0.5 + sway, TILE_SIZE * 0.5, 2);
+                    g.fill({ color: 0xffff00 });
                 }
 
                 g.position.set(tx * TILE_SIZE - camX, ty * TILE_SIZE - camY);
@@ -1663,6 +1674,18 @@ export class DemoWorld {
         if (alpha > 0.01) {
             this.dayNightOverlay.fill({ color, alpha });
             this.container.addChild(this.dayNightOverlay);
+
+            // Torch light glow around player at night
+            if (alpha > 0.15) {
+                const torchGlow = new Graphics();
+                const flicker = Math.sin(this.gameTime * 8) * 10 + Math.sin(this.gameTime * 13) * 5;
+                const radius = 80 + flicker;
+                torchGlow.circle(this.width / 2, this.height / 2, radius);
+                torchGlow.fill({ color: 0xffaa44, alpha: alpha * 0.3 });
+                torchGlow.circle(this.width / 2, this.height / 2, radius * 0.5);
+                torchGlow.fill({ color: 0xffcc66, alpha: alpha * 0.2 });
+                this.container.addChild(torchGlow);
+            }
         }
     }
 
