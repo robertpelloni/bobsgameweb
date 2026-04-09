@@ -63,19 +63,22 @@ export class NetworkManager {
         });
 
         // Set up event handlers
-        this.socket.on('room_list', (data: LobbyRoom[]) => {
+        this.socket.on('roomList', (data: LobbyRoom[]) => {
             this.rooms = data;
             this.emit('room_list', data);
         });
 
-        this.socket.on('room_joined', (data: { roomID: string }) => {
+        this.socket.on('joinedRoom', (data: { roomID: string }) => {
             this.currentRoomID = data.roomID;
             this.emit('room_joined', data);
         });
 
-        this.socket.on('room_left', () => {
-            this.currentRoomID = null;
-            this.emit('room_left', {});
+        this.socket.on('playerJoined', (data: unknown) => {
+            this.emit('player_joined', data);
+        });
+
+        this.socket.on('playerLeft', (data: unknown) => {
+            this.emit('player_left', data);
         });
 
         this.socket.on('game_state', (data: unknown) => {
@@ -121,7 +124,7 @@ export class NetworkManager {
     // ============================================================
 
     listRooms(): void {
-        this.socket?.emit('list_rooms');
+        this.socket?.emit('listRooms');
     }
 
     createRoom(name: string, options: {
@@ -130,7 +133,7 @@ export class NetworkManager {
         gameMode?: string;
         startLevel?: number;
     } = {}): void {
-        this.socket?.emit('create_room', {
+        this.socket?.emit('createRoom', {
             name,
             isPrivate: options.isPrivate ?? false,
             password: options.password ?? '',
@@ -140,16 +143,16 @@ export class NetworkManager {
     }
 
     joinRoom(roomID: string, password = '', spectator = false): void {
-        this.socket?.emit('join_room', { roomID, password, spectator });
+        this.socket?.emit('joinRoom', { id: roomID, password, spectator });
     }
 
     leaveRoom(): void {
-        this.socket?.emit('leave_room');
+        this.socket?.emit('leaveRoom');
         this.currentRoomID = null;
     }
 
     setReady(ready: boolean): void {
-        this.socket?.emit('set_ready', { ready });
+        this.socket?.emit('setReady', { ready });
     }
 
     // ============================================================
@@ -165,7 +168,7 @@ export class NetworkManager {
     }
 
     reportScore(mode: string, score: number, lines: number, time: number): void {
-        this.socket?.emit('report_score', { mode, score, lines, time });
+        this.socket?.emit('reportScore', { mode, score, lines, time });
     }
 
     // ============================================================

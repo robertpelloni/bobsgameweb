@@ -17,7 +17,7 @@ import path from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const SERVER_VERSION = "2.1.89";
+const SERVER_VERSION = "2.1.90";
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = parseInt(process.env.PORT || "6065", 10);
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
@@ -333,6 +333,46 @@ io.on("connection", (socket) => {
         const room = Array.from(socket.rooms).find(r => rooms.has(r));
         if (room) {
             socket.to(room).emit("opponentFrame", { id: socket.id, state });
+        }
+    });
+
+    // RPG world position broadcast
+    socket.on("game_frame", (data) => {
+        const room = Array.from(socket.rooms).find(r => rooms.has(r));
+        if (room) {
+            socket.to(room).emit("game_state", {
+                players: Array.from(players.entries()).map(([id, p]) => ({
+                    id,
+                    name: p.name || 'Player',
+                    x: p.rpgX ?? 0,
+                    y: p.rpgY ?? 0,
+                    color: p.color ?? 0x44aaff,
+                    dir: p.rpgDir ?? 0,
+                })),
+            });
+            // Store position
+            const p = players.get(socket.id);
+            if (p && data.state) {
+                try {
+                    const state = JSON.parse(data.state);
+                    p.rpgX = state.x;
+                    p.rpgY = state.y;
+                    p.rpgDir = state.dir;
+                } catch { /* ignore */ }
+            }
+        }
+    });
+
+    // Chat shorthand (maps to chatMessage)
+    socket.on("chat", (data) => {
+        const message = typeof data === 'string' ? data : data?.message;
+        if (!message) return;
+        const playerName = players.get(socket.id)?.name || 'Player';
+        const room = Array.from(socket.rooms).find(r => rooms.has(r));
+        if (room) {
+            io.to(room).emit("chat", { from: playerName, message });
+        } else {
+            io.emit("chat", { from: playerName, message });
         }
     });
 
