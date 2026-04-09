@@ -271,6 +271,99 @@ export class DemoWorld {
     }
 
     // ============================================================
+    // Save / Load
+    // ============================================================
+
+    private autoSaveTimer = 0;
+    private readonly AUTO_SAVE_INTERVAL = 30; // Auto-save every 30s
+
+    private quickSave(): void {
+        const saveData = {
+            playerX: this.playerX,
+            playerY: this.playerY,
+            playerDir: this.playerDir,
+            playerHp: this.playerHp,
+            playerMaxHp: this.playerMaxHp,
+            playerAttack: this.playerAttack,
+            inventory: this.inventory,
+            fishCaught: this.fishCaught,
+            openedChests: [...this.openedChests],
+            weatherType: this.weatherType,
+            dayNightPhase: this.dayNightPhase,
+            gameTime: this.gameTime,
+            timestamp: Date.now(),
+        };
+        localStorage.setItem('bobsgame_quicksave', JSON.stringify(saveData));
+        this.notifications.push({
+            text: '💾 Game Saved!',
+            x: this.playerX, y: this.playerY - 30,
+            age: 0, maxAge: 1.5, color: 0x44ff44,
+        });
+    }
+
+    private quickLoad(): void {
+        const raw = localStorage.getItem('bobsgame_quicksave');
+        if (!raw) {
+            this.notifications.push({
+                text: 'No save found!',
+                x: this.playerX, y: this.playerY - 30,
+                age: 0, maxAge: 1.5, color: 0xff4444,
+            });
+            return;
+        }
+        try {
+            const data = JSON.parse(raw);
+            this.playerX = data.playerX;
+            this.playerY = data.playerY;
+            this.playerDir = data.playerDir;
+            this.playerHp = data.playerHp;
+            this.playerMaxHp = data.playerMaxHp;
+            this.playerAttack = data.playerAttack;
+            this.inventory = data.inventory;
+            this.fishCaught = data.fishCaught;
+            this.openedChests = new Set(data.openedChests);
+            this.weatherType = data.weatherType;
+            this.dayNightPhase = data.dayNightPhase;
+            this.gameTime = data.gameTime;
+            this.notifications.push({
+                text: '📂 Game Loaded!',
+                x: this.playerX, y: this.playerY - 30,
+                age: 0, maxAge: 1.5, color: 0x44aaff,
+            });
+        } catch {
+            this.notifications.push({
+                text: 'Save data corrupted!',
+                x: this.playerX, y: this.playerY - 30,
+                age: 0, maxAge: 1.5, color: 0xff4444,
+            });
+        }
+    }
+
+    private autoSaveCheck(dt: number): void {
+        this.autoSaveTimer += dt;
+        if (this.autoSaveTimer >= this.AUTO_SAVE_INTERVAL) {
+            this.autoSaveTimer = 0;
+            // Silent auto-save
+            const saveData = {
+                playerX: this.playerX,
+                playerY: this.playerY,
+                playerDir: this.playerDir,
+                playerHp: this.playerHp,
+                playerMaxHp: this.playerMaxHp,
+                playerAttack: this.playerAttack,
+                inventory: this.inventory,
+                fishCaught: this.fishCaught,
+                openedChests: [...this.openedChests],
+                weatherType: this.weatherType,
+                dayNightPhase: this.dayNightPhase,
+                gameTime: this.gameTime,
+                timestamp: Date.now(),
+            };
+            localStorage.setItem('bobsgame_autosave', JSON.stringify(saveData));
+        }
+    }
+
+    // ============================================================
     // Treasure Chests
     // ============================================================
 
@@ -445,6 +538,17 @@ export class DemoWorld {
             this.showInventory = !this.showInventory;
         }
 
+        // F5 key — quick save
+        if (this.keys['F5']) {
+            this.keys['F5'] = false;
+            this.quickSave();
+        }
+        // F9 key — quick load
+        if (this.keys['F9']) {
+            this.keys['F9'] = false;
+            this.quickLoad();
+        }
+
         // F key — fish near water
         if (this.keys['f'] || this.keys['F']) {
             this.keys['f'] = false;
@@ -536,6 +640,9 @@ export class DemoWorld {
 
         // Grass sway
         this.grassSwayTime += dt;
+
+        // Auto-save
+        this.autoSaveCheck(dt);
 
         // Weather cycle
         this.weatherTimer += dt;
@@ -1368,7 +1475,7 @@ export class DemoWorld {
 
         const hintStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x666688 });
         const hint = new Text({
-            text: 'Arrows: Move  ·  Space/E: Interact  ·  I: Items  ·  F: Fish  ·  Enter: nD',
+            text: 'Arrows: Move · Space/E: Talk · I: Items · F: Fish · F5: Save · F9: Load · Enter: nD',
             style: hintStyle,
         });
         hint.anchor.set(0.5);
