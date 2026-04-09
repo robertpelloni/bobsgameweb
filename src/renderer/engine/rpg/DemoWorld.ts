@@ -74,6 +74,10 @@ export class DemoWorld {
     private dialogueTimer = 0;
     private dialogueCharIndex = 0;
     private readonly DIALOGUE_SPEED = 30; // chars per second
+    private dialogueChoices: string[] = [];
+    private dialogueChoiceIndex = 0;
+    private dialogueChoiceCallback: ((choice: number) => void) | null = null;
+    private dialogueWaitingChoice = false;
 
     // Building interiors
     private insideBuilding: string | null = null;
@@ -983,6 +987,30 @@ export class DemoWorld {
                 this.dialogueCharIndex = Math.min(line.length, Math.floor(this.dialogueTimer * this.DIALOGUE_SPEED));
             }
 
+            // Choice navigation
+            if (this.dialogueWaitingChoice && this.dialogueChoices.length > 0) {
+                if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) {
+                    this.keys['ArrowUp'] = false; this.keys['w'] = false; this.keys['W'] = false;
+                    this.dialogueChoiceIndex = Math.max(0, this.dialogueChoiceIndex - 1);
+                }
+                if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) {
+                    this.keys['ArrowDown'] = false; this.keys['s'] = false; this.keys['S'] = false;
+                    this.dialogueChoiceIndex = Math.min(this.dialogueChoices.length - 1, this.dialogueChoiceIndex + 1);
+                }
+                if (this.keys[' '] || this.keys['Enter']) {
+                    this.keys[' '] = false; this.keys['Enter'] = false;
+                    const choice = this.dialogueChoiceIndex;
+                    this.dialogueWaitingChoice = false;
+                    this.dialogueChoices = [];
+                    this.dialogueChoiceIndex = 0;
+                    if (this.dialogueChoiceCallback) {
+                        this.dialogueChoiceCallback(choice);
+                        this.dialogueChoiceCallback = null;
+                    }
+                }
+                return;
+            }
+
             // Space/Enter advances dialogue
             if (this.keys[' '] || this.keys['Enter']) {
                 this.keys[' '] = false;
@@ -998,7 +1026,11 @@ export class DemoWorld {
                     this.dialogueTimer = 0;
                     this.dialogueCharIndex = 0;
                     if (this.dialogueIndex >= this.dialogueLines.length) {
-                        this.showDialogue = false;
+                        if (this.dialogueChoices.length > 0) {
+                            this.dialogueWaitingChoice = true;
+                        } else {
+                            this.showDialogue = false;
+                        }
                     }
                 }
             }
@@ -1361,6 +1393,42 @@ export class DemoWorld {
                 this.dialogueNPC = npc.name;
                 this.dialogueTimer = 0;
                 this.dialogueCharIndex = 0;
+                this.dialogueChoices = [];
+                this.dialogueWaitingChoice = false;
+                this.dialogueChoiceCallback = null;
+
+                // Special NPC interactions with choices
+                if (npc.name === 'Barista') {
+                    this.dialogueChoices = ['Buy Coffee (5g)', 'Buy Espresso (8g)', 'Just chatting'];
+                    this.dialogueChoiceCallback = (choice: number) => {
+                        this.showDialogue = false;
+                        if (choice === 0) this.buyCafeItem(0);
+                        else if (choice === 1) this.buyCafeItem(1);
+                    };
+                } else if (npc.name === 'Shopkeep') {
+                    this.dialogueChoices = ['Open Shop', 'No thanks'];
+                    this.dialogueChoiceCallback = (choice: number) => {
+                        this.showDialogue = false;
+                        if (choice === 0) this.showShop = true;
+                    };
+                } else if (npc.name === 'Fisherman') {
+                    this.dialogueChoices = ['Tell me about fishing', 'Goodbye'];
+                    this.dialogueChoiceCallback = (choice: number) => {
+                        if (choice === 0) {
+                            this.dialogueLines = [
+                                'Go near water and press F to cast your line!',
+                                'Wait for a bite, then you will catch something.',
+                                'There are 6 different fish to discover. Good luck!'
+                            ];
+                            this.dialogueIndex = 0;
+                            this.dialogueTimer = 0;
+                            this.dialogueCharIndex = 0;
+                            this.dialogueChoices = [];
+                        } else {
+                            this.showDialogue = false;
+                        }
+                    };
+                }
                 this.notifications.push({
                     text: `Talking to ${npc.name}...`,
                     x: this.playerX, y: this.playerY - 40,
@@ -2507,13 +2575,14 @@ export class DemoWorld {
     // Cafe System
     // ============================================================
 
-    private buyCafeItem(): void {
-        if (this.cafeCursorPos >= this.CAFE_ITEMS.length) {
+    private buyCafeItem(itemIndex?: number): void {
+        const idx = itemIndex ?? this.cafeCursorPos;
+        if (idx >= this.CAFE_ITEMS.length) {
             this.showCafe = false;
             return;
         }
 
-        const item = this.CAFE_ITEMS[this.cafeCursorPos];
+        const item = this.CAFE_ITEMS[idx];
         const gold = this.inventory.find(i => i.name === 'Gold Coin');
         if (!gold || gold.count < item.price) {
             this.notifications.push({ text: 'Not enough gold!', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0xff4444 });
@@ -2808,6 +2877,32 @@ export class DemoWorld {
         });
         page.position.set(boxX + boxW - 40, boxY + 10);
         this.hudContainer.addChild(page);
+
+        // Dialogue choices
+        if (this.dialogueWaitingChoice && this.dialogueChoices.length > 0) {
+            const choiceY = boxY + boxH + 5;
+            const choiceBoxH = 10 + this.dialogueChoices.length * 24;
+            const choiceBg = new Graphics();
+            choiceBg.roundRect(boxX + 40, choiceY, boxW - 80, choiceBoxH, 6);
+            choiceBg.fill({ color: 0x0a0a3a, alpha: 0.95 });
+            choiceBg.stroke({ color: 0x6688cc, width: 1 });
+            this.hudContainer.addChild(choiceBg);
+
+            for (let i = 0; i < this.dialogueChoices.length; i++) {
+                const selected = i === this.dialogueChoiceIndex;
+                const cStyle = new TextStyle({
+                    fontFamily: 'Arial, sans-serif',
+                    fontSize: 13,
+                    fill: selected ? 0xffff88 : 0xaaaacc,
+                });
+                const cText = new Text({
+                    text: `${selected ? '\u25b8 ' : '  '}${this.dialogueChoices[i]}`,
+                    style: cStyle,
+                });
+                cText.position.set(boxX + 56, choiceY + 6 + i * 24);
+                this.hudContainer.addChild(cText);
+            }
+        }
     }
 
     // ============================================================
