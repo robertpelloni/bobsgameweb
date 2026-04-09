@@ -247,6 +247,9 @@ export class DemoWorld {
     private celebrationParticles: { x: number; y: number; vx: number; vy: number; color: number; age: number; maxAge: number }[] = [];
     private particleEmitters: ParticleEmitter[] = [];
 
+    // Physics objects (cannonballs, etc.)
+    private physicsObjects: { x: number; y: number; vx: number; vy: number; radius: number; color: number; age: number }[] = [];
+
     constructor(config: DemoWorldConfig) {
         this.width = config.width;
         this.height = config.height;
@@ -1131,6 +1134,25 @@ export class DemoWorld {
             this.questScrollOffset = 0;
         }
 
+        // T key — throw physics object in facing direction
+        if (this.keys['t'] || this.keys['T']) {
+            this.keys['t'] = false;
+            this.keys['T'] = false;
+            const dirX = [1, 0.707, 0, -0.707, -1, -0.707, 0, 0.707][this.playerDir];
+            const dirY = [0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707][this.playerDir];
+            this.physicsObjects.push({
+                x: this.playerX,
+                y: this.playerY,
+                vx: dirX * 250 + (Math.random() - 0.5) * 30,
+                vy: dirY * 250 - 100, // slight upward arc
+                radius: 4,
+                color: [0xff4444, 0x4444ff, 0x44ff44, 0xffff44, 0xff44ff][Math.floor(Math.random() * 5)],
+                age: 0,
+            });
+            this.triggerScreenShake(1, 0.05);
+            this.playSound('hit', 0.2);
+        }
+
         // F5 key — quick save
         if (this.keys['F5']) {
             this.keys['F5'] = false;
@@ -1387,6 +1409,19 @@ export class DemoWorld {
             this.stepParticles[i].age += dt;
             if (this.stepParticles[i].age >= this.stepParticles[i].maxAge) {
                 this.stepParticles.splice(i, 1);
+            }
+        }
+
+        // Update physics objects (simple projectile motion + gravity)
+        for (let i = this.physicsObjects.length - 1; i >= 0; i--) {
+            const obj = this.physicsObjects[i];
+            obj.vy += 300 * dt; // gravity
+            obj.x += obj.vx * dt;
+            obj.y += obj.vy * dt;
+            obj.age += dt;
+            // Remove when off-screen or old
+            if (obj.age > 3 || obj.y > MAP_H * TILE_SIZE + 100) {
+                this.physicsObjects.splice(i, 1);
             }
         }
     }
@@ -2862,7 +2897,7 @@ export class DemoWorld {
 
         const hintStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x666688 });
         const hint = new Text({
-            text: 'Arrows: Move · Space/E: Talk · I: Items · Q: Quests · F: Fish · F5/F9: Save · Enter: nD',
+            text: 'Arrows: Move · Space/E: Talk · I: Items · Q: Quests · T: Throw · F: Fish · F5/F9: Save',
             style: hintStyle,
         });
         hint.anchor.set(0.5);
@@ -3009,6 +3044,15 @@ export class DemoWorld {
             pg.circle(p.x - camX, p.y - camY, 2 + expand);
             pg.fill({ color: 0xaa9977, alpha });
             this.container.addChild(pg);
+        }
+
+        // Physics objects (cannonballs etc)
+        for (const obj of this.physicsObjects) {
+            const alpha = Math.max(0, 1 - obj.age * 0.3);
+            const og = new Graphics();
+            og.circle(obj.x - camX, obj.y - camY, obj.radius);
+            og.fill({ color: obj.color, alpha });
+            this.container.addChild(og);
         }
     }
 
