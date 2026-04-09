@@ -17,6 +17,7 @@ import {
 import { Logger } from '../debug/Logger';
 import { AudioUtils } from '../audio/AudioUtils';
 import { NetworkManager } from '../network/NetworkManager';
+import { ParticleEmitter, ParticlePresets } from '../graphics/ParticleSystem';
 
 const log = new Logger('DemoWorld');
 
@@ -237,6 +238,7 @@ export class DemoWorld {
 
     // Celebration particles (level-up, achievement)
     private celebrationParticles: { x: number; y: number; vx: number; vy: number; color: number; age: number; maxAge: number }[] = [];
+    private particleEmitters: ParticleEmitter[] = [];
 
     constructor(config: DemoWorldConfig) {
         this.width = config.width;
@@ -1714,11 +1716,12 @@ export class DemoWorld {
     // ============================================================
 
     private renderCelebrationParticles(): void {
+        // Legacy celebration particles
         for (let i = this.celebrationParticles.length - 1; i >= 0; i--) {
             const p = this.celebrationParticles[i];
             p.x += p.vx;
             p.y += p.vy;
-            p.vy += 0.15; // Gravity
+            p.vy += 0.15;
             p.age += 0.016;
             if (p.age >= p.maxAge) {
                 this.celebrationParticles.splice(i, 1);
@@ -1730,21 +1733,24 @@ export class DemoWorld {
             g.fill({ color: p.color, alpha });
             this.container.addChild(g);
         }
+
+        // New particle emitter system
+        for (const emitter of this.particleEmitters) {
+            emitter.update(0.016);
+            emitter.render();
+        }
     }
 
     private spawnCelebration(cx: number, cy: number, count = 30): void {
-        const colors = [0xff4444, 0x44ff44, 0x4444ff, 0xffff44, 0xff44ff, 0x44ffff];
-        for (let i = 0; i < count; i++) {
-            const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
-            const speed = 2 + Math.random() * 4;
-            this.celebrationParticles.push({
-                x: cx, y: cy,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed - 3,
-                color: colors[i % colors.length],
-                age: 0, maxAge: 1.5 + Math.random(),
-            });
-        }
+        const emitter = ParticlePresets.confetti(cx, cy, count);
+        this.particleEmitters.push(emitter);
+        this.container.addChild(emitter.container);
+        // Auto-remove after particles die
+        setTimeout(() => {
+            const idx = this.particleEmitters.indexOf(emitter);
+            if (idx >= 0) this.particleEmitters.splice(idx, 1);
+            emitter.destroy();
+        }, 3000);
     }
 
     private renderCombat(): void {
