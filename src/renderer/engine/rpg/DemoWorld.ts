@@ -889,6 +889,13 @@ export class DemoWorld {
             return;
         }
 
+        // Cafe navigation
+        if (this.showCafe) {
+            if (this.keys['ArrowUp'] || this.keys['w']) { this.keys['ArrowUp'] = false; this.keys['w'] = false; this.cafeCursorPos = Math.max(0, this.cafeCursorPos - 1); }
+            if (this.keys['ArrowDown'] || this.keys['s']) { this.keys['ArrowDown'] = false; this.keys['s'] = false; this.cafeCursorPos = Math.min(this.CAFE_ITEMS.length, this.cafeCursorPos + 1); }
+            return;
+        }
+
         // Player movement (disabled inside buildings)
         if (this.insideBuilding) return;
         let dx = 0, dy = 0;
@@ -1058,6 +1065,29 @@ export class DemoWorld {
 
         // Auto-save
         this.autoSaveCheck(dt);
+
+        // Tick buff timers
+        for (let i = this.buffTimers.length - 1; i >= 0; i--) {
+            this.buffTimers[i].remaining -= dt;
+            if (this.buffTimers[i].remaining <= 0) {
+                this.notifications.push({
+                    text: `${this.buffTimers[i].name} expired`,
+                    x: this.playerX, y: this.playerY - 20,
+                    age: 0, maxAge: 1.5, color: 0xaa6644,
+                });
+                // Reset buffs
+                if (this.buffTimers[i].name.includes('Speed') || this.buffTimers[i].name.includes('Espresso')) {
+                    this.playerSpeed = 120; // Reset to base
+                }
+                if (this.buffTimers[i].name.includes('Espresso')) {
+                    this.playerAttack = Math.max(15, this.playerAttack - 5);
+                }
+                if (this.buffTimers[i].name.includes('Calm')) {
+                    this.encounterInterval = 20; // Reset to base
+                }
+                this.buffTimers.splice(i, 1);
+            }
+        }
 
         // Broadcast position every ~0.5s
         this.positionBroadcastTimer += dt;
@@ -2006,6 +2036,11 @@ export class DemoWorld {
             this.renderShopOverlay();
         }
 
+        // Cafe overlay (only inside Cafe)
+        if (this.insideBuilding === 'Cafe' && this.showCafe) {
+            this.renderCafeOverlay();
+        }
+
         return this.container;
     }
 
@@ -2099,6 +2134,101 @@ export class DemoWorld {
         this.container.addChild(exitText);
     }
 
+    // ============================================================
+    // Cafe Overlay
+    // ============================================================
+
+    private renderCafeOverlay(): void {
+        const boxW = 300;
+        const boxH = 60 + (this.CAFE_ITEMS.length + 1) * 36;
+        const boxX = (this.width - boxW) / 2;
+        const boxY = (this.height - boxH) / 2;
+
+        const bg = new Graphics();
+        bg.roundRect(boxX, boxY, boxW, boxH, 10);
+        bg.fill({ color: 0x1a0f05, alpha: 0.95 });
+        bg.stroke({ color: 0xaa7744, width: 2 });
+        this.container.addChild(bg);
+
+        const titleStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 18, fill: 0xffcc88, fontWeight: 'bold' });
+        const title = new Text({ text: 'CAFE', style: titleStyle });
+        title.anchor.set(0.5);
+        title.position.set(this.width / 2, boxY + 20);
+        this.container.addChild(title);
+
+        const gold = this.inventory.find(i => i.name === 'Gold Coin');
+        const goldCount = gold?.count ?? 0;
+        const goldStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 12, fill: 0xffcc00 });
+        const goldText = new Text({ text: `Gold: ${goldCount}`, style: goldStyle });
+        goldText.position.set(boxX + boxW - 90, boxY + 10);
+        this.container.addChild(goldText);
+
+        const sep = new Graphics();
+        sep.moveTo(boxX + 10, boxY + 38);
+        sep.lineTo(boxX + boxW - 10, boxY + 38);
+        sep.stroke({ color: 0x664422, width: 1 });
+        this.container.addChild(sep);
+
+        for (let i = 0; i < this.CAFE_ITEMS.length; i++) {
+            const item = this.CAFE_ITEMS[i];
+            const selected = i === this.cafeCursorPos;
+            const canAfford = goldCount >= item.price;
+            const itemY = boxY + 46 + i * 36;
+
+            const rowBg = new Graphics();
+            rowBg.rect(boxX + 8, itemY, boxW - 16, 32);
+            rowBg.fill({ color: selected ? 0x2a1a0a : 0x1a0f05 });
+            this.container.addChild(rowBg);
+
+            const icon = new Graphics();
+            icon.roundRect(boxX + 14, itemY + 7, 16, 16, 3);
+            icon.fill({ color: item.icon });
+            this.container.addChild(icon);
+
+            const nameStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 12, fill: canAfford ? 0xddddcc : 0x664444 });
+            const nameText = new Text({
+                text: `${selected ? '\u25b8 ' : '  '}${item.name}  -  ${item.price}g`,
+                style: nameStyle,
+            });
+            nameText.position.set(boxX + 36, itemY + 4);
+            this.container.addChild(nameText);
+
+            // Description
+            const descStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 9, fill: 0x887766 });
+            const descText = new Text({ text: item.desc, style: descStyle });
+            descText.position.set(boxX + 38, itemY + 19);
+            this.container.addChild(descText);
+
+            if (selected && canAfford) {
+                const buyStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0x44ff44 });
+                const buyText = new Text({ text: '[SPACE]', style: buyStyle });
+                buyText.position.set(boxX + boxW - 70, itemY + 10);
+                this.container.addChild(buyText);
+            }
+        }
+
+        // Exit option
+        const exitIdx = this.CAFE_ITEMS.length;
+        const exitSelected = exitIdx === this.cafeCursorPos;
+        const exitY = boxY + 46 + exitIdx * 36;
+        const exitStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 13, fill: exitSelected ? 0xffff88 : 0x888866 });
+        const exitText = new Text({ text: `${exitSelected ? '\u25b8 ' : '  '}Exit Cafe`, style: exitStyle });
+        exitText.position.set(boxX + 36, exitY + 6);
+        this.container.addChild(exitText);
+
+        // Active buffs display
+        if (this.buffTimers.length > 0) {
+            const buffStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 9, fill: 0xaa8866 });
+            const buffText = new Text({
+                text: 'Active: ' + this.buffTimers.map(b => `${b.name} (${Math.ceil(b.remaining)}s)`).join(', '),
+                style: buffStyle,
+            });
+            buffText.anchor.set(0.5);
+            buffText.position.set(this.width / 2, boxY + boxH - 12);
+            this.container.addChild(buffText);
+        }
+    }
+
     private buyShopItem(): void {
         if (this.shopCursorPos >= this.SHOP_ITEMS.length) {
             // Exit
@@ -2147,6 +2277,56 @@ export class DemoWorld {
 
         this.notifications.push({ text: `Bought ${item.name}!`, x: this.playerX, y: this.playerY - 30, age: 0, maxAge: 2.0, color: 0x44ff44 });
         this.playSound('coin', 0.4);
+    }
+
+    // ============================================================
+    // Cafe System
+    // ============================================================
+
+    private buyCafeItem(): void {
+        if (this.cafeCursorPos >= this.CAFE_ITEMS.length) {
+            this.showCafe = false;
+            return;
+        }
+
+        const item = this.CAFE_ITEMS[this.cafeCursorPos];
+        const gold = this.inventory.find(i => i.name === 'Gold Coin');
+        if (!gold || gold.count < item.price) {
+            this.notifications.push({ text: 'Not enough gold!', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0xff4444 });
+            this.playSound('hit', 0.2);
+            return;
+        }
+
+        gold.count -= item.price;
+
+        switch (item.effect) {
+            case 'heal':
+                this.playerHp = this.playerMaxHp;
+                this.notifications.push({ text: 'Fully healed!', x: this.playerX, y: this.playerY - 30, age: 0, maxAge: 2.0, color: 0x44ff44 });
+                break;
+            case 'energy':
+                this.playerSpeed += 30;
+                this.buffTimers.push({ name: 'Coffee Speed', remaining: 30 });
+                this.notifications.push({ text: 'Speed boost! (30s)', x: this.playerX, y: this.playerY - 30, age: 0, maxAge: 2.0, color: 0xffaa44 });
+                break;
+            case 'energy2':
+                this.playerSpeed += 30;
+                this.playerAttack += 5;
+                this.buffTimers.push({ name: 'Espresso Power', remaining: 30 });
+                this.notifications.push({ text: 'Speed + ATK boost! (30s)', x: this.playerX, y: this.playerY - 30, age: 0, maxAge: 2.0, color: 0xff44ff });
+                break;
+            case 'calm':
+                this.encounterInterval *= 2;
+                this.buffTimers.push({ name: 'Calm Tea', remaining: 60 });
+                this.notifications.push({ text: 'Encounters reduced! (60s)', x: this.playerX, y: this.playerY - 30, age: 0, maxAge: 2.0, color: 0x44aa44 });
+                break;
+        }
+
+        const existing = this.inventory.find(i => i.name === item.name);
+        if (existing) existing.count++;
+        else this.inventory.push({ name: item.name, count: 1, icon: item.icon });
+
+        this.playSound('coin', 0.3);
     }
 
     private renderCharacter(x: number, y: number, color: number, dir: number, name: string): Container {
@@ -2292,6 +2472,17 @@ export class DemoWorld {
         const achText = new Text({ text: `🏆 ${unlocked}/${this.achievements.length}`, style: achStyle });
         achText.position.set(hpBarX, xpBarY2 + 6);
         this.hudContainer.addChild(achText);
+
+        // Active buff indicators
+        if (this.buffTimers.length > 0) {
+            const buffStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 8, fill: 0xffaa44 });
+            const buffText = new Text({
+                text: this.buffTimers.map(b => `${b.name.split(' ')[0]} ${Math.ceil(b.remaining)}s`).join(' | '),
+                style: buffStyle,
+            });
+            buffText.position.set(hpBarX, xpBarY2 + 16);
+            this.hudContainer.addChild(buffText);
+        }
 
         // Bottom hint bar
         const hintBg = new Graphics();
