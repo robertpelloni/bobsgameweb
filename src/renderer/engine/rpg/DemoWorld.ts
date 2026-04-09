@@ -30,6 +30,8 @@ enum Tile {
     DOOR = 0x553311,
     FENCE = 0x8b7355,
     BRIDGE = 0x9b8355,
+    CHEST = 0xb8860b,
+    SAND = 0xd2b48c,
 }
 
 const TILE_SIZE = 32;
@@ -137,6 +139,7 @@ export class DemoWorld {
         this.generateMap();
         this.setupInput();
         this.placeNPCs();
+        this.placeChests();
 
         // Store NPC original positions for wandering
         for (const npc of this.npcs) {
@@ -233,6 +236,61 @@ export class DemoWorld {
         for (let x = 2; x < MAP_W - 2; x++) {
             if (this.tiles[MAP_H - 3][x] === Tile.GRASS) {
                 this.tiles[MAP_H - 3][x] = Tile.FENCE;
+            }
+        }
+
+        // Sand patches near river
+        for (let x = 0; x < MAP_W; x++) {
+            if (this.tiles[7][x] === Tile.GRASS) this.tiles[7][x] = Tile.SAND;
+            if (this.tiles[10][x] === Tile.GRASS) this.tiles[10][x] = Tile.SAND;
+        }
+        // Extra sand clusters
+        this.fillRect(0, 6, 4, 1, Tile.SAND);
+        this.fillRect(26, 6, 4, 1, Tile.SAND);
+    }
+
+    // ============================================================
+    // Treasure Chests
+    // ============================================================
+
+    private openedChests = new Set<string>(); // 'x,y' keys
+    private chestItems = new Map<string, { name: string; icon: number }>([
+        ['3,18', { name: 'Gold Coin', icon: 0xffcc00 }],
+        ['26,5', { name: 'Health Potion', icon: 0xff4444 }],
+        ['8,14', { name: 'Old Map', icon: 0xb8860b }],
+        ['24,18', { name: 'Silver Ring', icon: 0xccccee }],
+        ['1,12', { name: 'Emerald', icon: 0x44cc44 }],
+    ]);
+
+    private placeChests(): void {
+        for (const [key] of this.chestItems) {
+            const [x, y] = key.split(',').map(Number);
+            if (y < MAP_H && x < MAP_W) {
+                this.tiles[y][x] = Tile.CHEST;
+            }
+        }
+    }
+
+    private tryOpenChest(): void {
+        const ptx = Math.floor(this.playerX / TILE_SIZE);
+        const pty = Math.floor(this.playerY / TILE_SIZE);
+        const key = `${ptx},${pty}`;
+
+        if (this.tiles[pty]?.[ptx] === Tile.CHEST && !this.openedChests.has(key)) {
+            this.openedChests.add(key);
+            const item = this.chestItems.get(key);
+            if (item) {
+                const existing = this.inventory.find(i => i.name === item.name);
+                if (existing) {
+                    existing.count++;
+                } else {
+                    this.inventory.push({ name: item.name, count: 1, icon: item.icon });
+                }
+                this.notifications.push({
+                    text: `Found: ${item.name}!`,
+                    x: this.playerX, y: this.playerY - 30,
+                    age: 0, maxAge: 2.0, color: 0xffcc44,
+                });
             }
         }
     }
@@ -391,6 +449,8 @@ export class DemoWorld {
             if (tile !== Tile.WATER && tile !== Tile.TREE && tile !== Tile.BUILDING && tile !== Tile.ROOF && tile !== Tile.FENCE) {
                 this.playerX = Math.max(0, Math.min((MAP_W - 1) * TILE_SIZE, newX));
                 this.playerY = Math.max(0, Math.min((MAP_H - 1) * TILE_SIZE, newY));
+                // Auto-open chest when stepping on it
+                if (tile === Tile.CHEST) this.tryOpenChest();
             }
         }
 
@@ -754,6 +814,35 @@ export class DemoWorld {
                     g.moveTo(0, TILE_SIZE * 0.75);
                     g.lineTo(TILE_SIZE, TILE_SIZE * 0.75);
                     g.stroke({ color: 0x7b6345, width: 1 });
+                } else if (tile === Tile.CHEST) {
+                    const key = `${tx},${ty}`;
+                    const opened = this.openedChests.has(key);
+                    // Chest base
+                    g.rect(TILE_SIZE * 0.15, TILE_SIZE * 0.35, TILE_SIZE * 0.7, TILE_SIZE * 0.45);
+                    g.fill({ color: opened ? 0x665533 : 0xb8860b });
+                    // Chest lid
+                    g.rect(TILE_SIZE * 0.1, TILE_SIZE * 0.2, TILE_SIZE * 0.8, TILE_SIZE * 0.2);
+                    g.fill({ color: opened ? 0x554422 : 0xd4a020 });
+                    // Lock/clasp
+                    g.rect(TILE_SIZE * 0.4, TILE_SIZE * 0.4, TILE_SIZE * 0.2, TILE_SIZE * 0.15);
+                    g.fill({ color: opened ? 0x666666 : 0xffcc00 });
+                    // Sparkle when unopened
+                    if (!opened) {
+                        const spark = Math.sin(this.gameTime * 3 + tx + ty) * 0.5 + 0.5;
+                        g.circle(TILE_SIZE * 0.5, TILE_SIZE * 0.15, 2 + spark);
+                        g.fill({ color: 0xffee44, alpha: 0.3 + spark * 0.5 });
+                    }
+                } else if (tile === Tile.SAND) {
+                    // Sand texture with dots
+                    g.rect(0, 0, TILE_SIZE, TILE_SIZE);
+                    g.fill({ color: Tile.SAND });
+                    const seed = tx * 7 + ty * 13;
+                    for (let d = 0; d < 4; d++) {
+                        const dx = ((seed + d * 37) % 24) + 4;
+                        const dy = ((seed + d * 53) % 24) + 4;
+                        g.circle(dx, dy, 1);
+                        g.fill({ color: 0xc4a47a, alpha: 0.5 });
+                    }
                 }
 
                 g.position.set(tx * TILE_SIZE - camX, ty * TILE_SIZE - camY);
@@ -1405,6 +1494,8 @@ export class DemoWorld {
                 if (tile === Tile.FLOWER) c = Tile.GRASS;
                 if (tile === Tile.DOOR) c = Tile.BUILDING;
                 if (tile === Tile.BRIDGE) c = Tile.PATH;
+                if (tile === Tile.CHEST) c = 0xffcc00;
+                if (tile === Tile.SAND) c = Tile.SAND;
                 mmG.rect(mapX + tx * tileW, mapY + ty * tileH, tileW + 0.5, tileH + 0.5);
                 mmG.fill({ color: c });
             }
