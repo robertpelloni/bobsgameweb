@@ -129,6 +129,28 @@ export class DemoWorld {
     private inventory: { name: string; count: number; icon: number }[] = [];
     private showInventory = false;
 
+    // Equipment system
+    private equipment: { slot: string; item: string | null; bonus: number; stat: string }[] = [
+        { slot: 'Weapon', item: null, bonus: 0, stat: 'attack' },
+        { slot: 'Armor', item: null, bonus: 0, stat: 'defense' },
+        { slot: 'Accessory', item: null, bonus: 0, stat: 'speed' },
+    ];
+    private defense = 0; // Reduces damage taken
+
+    // Quest system
+    private quests: { id: string; name: string; desc: string; goal: number; progress: number; reward: number; complete: boolean }[] = [
+        { id: 'catch_3_fish', name: 'Angler Apprentice', desc: 'Catch 3 fish', goal: 3, progress: 0, reward: 15, complete: false },
+        { id: 'win_5_battles', name: 'Battle Hardened', desc: 'Win 5 battles', goal: 5, progress: 0, reward: 20, complete: false },
+        { id: 'reach_level_3', name: 'Rising Star', desc: 'Reach level 3', goal: 3, progress: 0, reward: 25, complete: false },
+        { id: 'visit_all_areas', name: 'World Explorer', desc: 'Visit all 3 areas', goal: 3, progress: 0, reward: 30, complete: false },
+        { id: 'open_3_chests', name: 'Treasure Hunter', desc: 'Open 3 treasure chests', goal: 3, progress: 0, reward: 20, complete: false },
+        { id: 'earn_50_gold', name: 'Gold Hoarder', desc: 'Earn 50 gold total', goal: 50, progress: 0, reward: 25, complete: false },
+    ];
+    private totalGoldEarned = 0;
+    private visitedAreas = new Set<string>(['town']);
+    private showQuests = false;
+    private questScrollOffset = 0;
+
     // Shop system
     private showShop = false;
     private shopCursorPos = 0;
@@ -207,7 +229,7 @@ export class DemoWorld {
     // Pause menu
     private isPaused = false;
     private pauseCursorPos = 0;
-    private readonly pauseOptions = ['Resume', 'Inventory', 'Achievements', 'Save Game', 'Quit to Menu'];
+    private readonly pauseOptions = ['Resume', 'Inventory', 'Quests', 'Equipment', 'Achievements', 'Save Game', 'Quit to Menu'];
 
     // Celebration particles (level-up, achievement)
     private celebrationParticles: { x: number; y: number; vx: number; vy: number; color: number; age: number; maxAge: number }[] = [];
@@ -472,6 +494,47 @@ export class DemoWorld {
     }
 
     // ============================================================
+    // Equipment System
+    // ============================================================
+
+    private tryEquip(itemName: string): void {
+        const equipMap: Record<string, { slot: string; bonus: number; stat: string }> = {
+            'Attack Boost': { slot: 'Weapon', bonus: 5, stat: 'attack' },
+            'Lucky Charm': { slot: 'Accessory', bonus: 3, stat: 'speed' },
+            'Speed Boots': { slot: 'Accessory', bonus: 5, stat: 'speed' },
+        };
+        const eq = equipMap[itemName];
+        if (!eq) return;
+        const slot = this.equipment.find(e => e.slot === eq.slot);
+        if (!slot || slot.item === itemName) return;
+
+        // Remove old bonus
+        if (slot.item) {
+            this.applyEquipBonus(slot.stat, -slot.bonus);
+        }
+
+        // Equip new
+        slot.item = itemName;
+        slot.bonus = eq.bonus;
+        slot.stat = eq.stat;
+        this.applyEquipBonus(eq.stat, eq.bonus);
+
+        this.notifications.push({
+            text: `Equipped ${itemName} (${eq.stat} +${eq.bonus})`,
+            x: this.playerX, y: this.playerY - 30,
+            age: 0, maxAge: 2.0, color: 0x44aaff,
+        });
+    }
+
+    private applyEquipBonus(stat: string, amount: number): void {
+        switch (stat) {
+            case 'attack': this.playerAttack += amount; break;
+            case 'defense': this.defense += amount; break;
+            case 'speed': this.playerSpeed += amount; break;
+        }
+    }
+
+    // ============================================================
     // Save / Load
     // ============================================================
 
@@ -487,12 +550,22 @@ export class DemoWorld {
             playerHp: this.playerHp,
             playerMaxHp: this.playerMaxHp,
             playerAttack: this.playerAttack,
+            playerLevel: this.playerLevel,
+            playerXp: this.playerXp,
+            playerSpeed: this.playerSpeed,
+            defense: this.defense,
             inventory: this.inventory,
+            equipment: this.equipment,
+            quests: this.quests,
             fishCaught: this.fishCaught,
             openedChests: [...this.openedChests],
+            visitedAreas: [...this.visitedAreas],
+            totalGoldEarned: this.totalGoldEarned,
             weatherType: this.weatherType,
             dayNightPhase: this.dayNightPhase,
+            currentAreaID: this.currentAreaID,
             gameTime: this.gameTime,
+            combatWins: this.combatWins,
             timestamp: Date.now(),
         };
         localStorage.setItem('bobsgame_quicksave', JSON.stringify(saveData));
@@ -521,12 +594,22 @@ export class DemoWorld {
             this.playerHp = data.playerHp;
             this.playerMaxHp = data.playerMaxHp;
             this.playerAttack = data.playerAttack;
+            this.playerLevel = data.playerLevel ?? 1;
+            this.playerXp = data.playerXp ?? 0;
+            this.playerSpeed = data.playerSpeed ?? 120;
+            this.defense = data.defense ?? 0;
             this.inventory = data.inventory;
+            this.equipment = data.equipment ?? this.equipment;
+            this.quests = data.quests ?? this.quests;
             this.fishCaught = data.fishCaught;
             this.openedChests = new Set(data.openedChests);
+            this.visitedAreas = new Set(data.visitedAreas ?? ['town']);
+            this.totalGoldEarned = data.totalGoldEarned ?? 0;
             this.weatherType = data.weatherType;
             this.dayNightPhase = data.dayNightPhase;
             this.gameTime = data.gameTime;
+            this.currentAreaID = data.currentAreaID ?? 'town';
+            this.combatWins = data.combatWins ?? 0;
             this.notifications.push({
                 text: '📂 Game Loaded!',
                 x: this.playerX, y: this.playerY - 30,
@@ -586,6 +669,7 @@ export class DemoWorld {
                 age: 0, maxAge: 3.0, color: 0xffdd44,
             });
             this.checkAchievement('level_5', this.playerLevel >= 5);
+            this.updateQuestProgress('reach_level_3', this.playerLevel);
         }
     }
 
@@ -596,10 +680,31 @@ export class DemoWorld {
         ach.unlocked = true;
         this.spawnCelebration(this.width / 2, this.height / 2 - 30, 25);
         this.notifications.push({
-            text: `🏆 ${ach.name}!`,
+            text: `\u2b50 ${ach.name}!`,
             x: this.playerX, y: this.playerY - 60,
             age: 0, maxAge: 3.0, color: 0xffcc00,
         });
+    }
+
+    private updateQuestProgress(questId: string, currentProgress: number): void {
+        const quest = this.quests.find(q => q.id === questId);
+        if (!quest || quest.complete) return;
+        quest.progress = Math.min(quest.goal, currentProgress);
+        if (quest.progress >= quest.goal && !quest.complete) {
+            quest.complete = true;
+            // Award gold
+            const gold = this.inventory.find(i => i.name === 'Gold Coin');
+            if (gold) gold.count += quest.reward;
+            else this.inventory.push({ name: 'Gold Coin', count: quest.reward, icon: 0xffcc00 });
+            this.totalGoldEarned += quest.reward;
+            this.notifications.push({
+                text: `Quest: ${quest.name}! +${quest.reward}g`,
+                x: this.playerX, y: this.playerY - 50,
+                age: 0, maxAge: 3.0, color: 0xffcc00,
+            });
+            this.spawnCelebration(this.width / 2, this.height / 2 - 20, 20);
+            this.playSound('coin', 0.4);
+        }
     }
 
     // ============================================================
@@ -632,6 +737,7 @@ export class DemoWorld {
         if (this.tiles[pty]?.[ptx] === Tile.CHEST && !this.openedChests.has(key)) {
             this.openedChests.add(key);
             this.checkAchievement('treasure_hunter', this.openedChests.size >= 3);
+            this.updateQuestProgress('open_3_chests', this.openedChests.size);
             const item = this.chestItems.get(key);
             if (item) {
                 const existing = this.inventory.find(i => i.name === item.name);
@@ -763,6 +869,8 @@ export class DemoWorld {
 
     private transitionToArea(areaID: 'town' | 'mountains' | 'beach'): void {
         this.currentAreaID = areaID;
+        this.visitedAreas.add(areaID);
+        this.updateQuestProgress('visit_all_areas', this.visitedAreas.size);
         this.playerTrail = []; // Clear trail on area change
         this.openedChests = new Set(); // Reset chests per area
 
@@ -968,6 +1076,14 @@ export class DemoWorld {
             this.keys['i'] = false;
             this.keys['I'] = false;
             this.showInventory = !this.showInventory;
+        }
+
+        // Q key toggles quest log
+        if (this.keys['q'] || this.keys['Q']) {
+            this.keys['q'] = false;
+            this.keys['Q'] = false;
+            this.showQuests = !this.showQuests;
+            this.questScrollOffset = 0;
         }
 
         // F5 key — quick save
@@ -1270,6 +1386,14 @@ export class DemoWorld {
                 this.isPaused = false;
                 this.showInventory = true;
                 break;
+            case 'Quests':
+                this.isPaused = false;
+                this.showQuests = true;
+                break;
+            case 'Equipment':
+                this.isPaused = false;
+                this.showInventory = true;
+                break;
             case 'Achievements':
                 this.isPaused = false;
                 // Achievement display happens in HUD
@@ -1364,6 +1488,8 @@ export class DemoWorld {
                 this.inventory.push({ name: 'Gold Coin', count: goldReward, icon: 0xffcc00 });
             }
             this.combatLog.push(`+${goldReward} Gold`);
+            this.totalGoldEarned += goldReward;
+            this.updateQuestProgress('earn_50_gold', this.totalGoldEarned);
             this.playSound('coin', 0.3);
             // XP reward
             const xpReward = 10 + Math.floor(Math.random() * 20);
@@ -1372,6 +1498,7 @@ export class DemoWorld {
             this.checkLevelUp();
             // Track wins
             this.combatWins++;
+            this.updateQuestProgress('win_5_battles', this.combatWins);
             this.checkAchievement('first_battle', this.combatWins >= 1);
             this.checkAchievement('ten_battles', this.combatWins >= 10);
             this.checkAchievement('rich', (existingGold?.count ?? goldReward) >= 50);
@@ -1388,8 +1515,9 @@ export class DemoWorld {
 
         // Enemy attacks back
         const eDmg = Math.floor(this.currentEnemy.attack * (0.7 + Math.random() * 0.6));
-        this.playerHp -= eDmg;
-        this.combatLog.push(`${this.currentEnemy.name} deals ${eDmg} damage!`);
+        const actualDmg = Math.max(1, eDmg - this.defense);
+        this.playerHp -= actualDmg;
+        this.combatLog.push(`${this.currentEnemy.name} deals ${actualDmg} damage!`);
         this.playSound('hit', 0.2);
 
         if (this.playerHp <= 0) {
@@ -1505,7 +1633,7 @@ export class DemoWorld {
         // Player stats at bottom
         const statsStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0x556677 });
         const stats = new Text({
-            text: `Lv${this.playerLevel} | HP ${this.playerHp}/${this.playerMaxHp} | XP ${this.playerXp}/${this.playerXpToNext} | Wins ${this.combatWins}`,
+            text: `Lv${this.playerLevel} | HP ${this.playerHp}/${this.playerMaxHp} | ATK ${this.playerAttack} | DEF ${this.defense} | XP ${this.playerXp}/${this.playerXpToNext} | Wins ${this.combatWins}`,
             style: statsStyle,
         });
         stats.anchor.set(0.5);
@@ -1714,6 +1842,7 @@ export class DemoWorld {
                 this.checkAchievement('first_fish', true);
                 this.checkAchievement('five_fish', this.fishCaught.length >= 5);
                 this.playSound('fish', 0.3);
+                this.updateQuestProgress('catch_3_fish', this.fishCaught.length);
             }
         }
 
@@ -1960,6 +2089,11 @@ export class DemoWorld {
         // Inventory overlay
         if (this.showInventory) {
             this.renderInventory();
+        }
+
+        // Quest log overlay
+        if (this.showQuests) {
+            this.renderQuestLog();
         }
 
         // Floating notifications
@@ -2366,6 +2500,7 @@ export class DemoWorld {
 
         this.notifications.push({ text: `Bought ${item.name}!`, x: this.playerX, y: this.playerY - 30, age: 0, maxAge: 2.0, color: 0x44ff44 });
         this.playSound('coin', 0.4);
+        this.tryEquip(item.name);
     }
 
     // ============================================================
@@ -2581,7 +2716,7 @@ export class DemoWorld {
 
         const hintStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x666688 });
         const hint = new Text({
-            text: 'Arrows: Move · Space/E: Talk · I: Items · F: Fish · F5: Save · F9: Load · Enter: nD',
+            text: 'Arrows: Move · Space/E: Talk · I: Items · Q: Quests · F: Fish · F5/F9: Save · Enter: nD',
             style: hintStyle,
         });
         hint.anchor.set(0.5);
@@ -2709,6 +2844,94 @@ export class DemoWorld {
     // Fishing Indicator Rendering
     // ============================================================
 
+    // ============================================================
+    // Quest Log Rendering
+    // ============================================================
+
+    private renderQuestLog(): void {
+        const boxW = 360;
+        const boxH = 60 + this.quests.length * 52;
+        const boxX = (this.width - boxW) / 2;
+        const boxY = Math.max(10, (this.height - boxH) / 2);
+
+        const bg = new Graphics();
+        bg.roundRect(boxX, boxY, boxW, boxH, 10);
+        bg.fill({ color: 0x0a0a1a, alpha: 0.95 });
+        bg.stroke({ color: 0x886622, width: 2 });
+        this.container.addChild(bg);
+
+        const titleStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 18, fill: 0xffcc44, fontWeight: 'bold' });
+        const title = new Text({ text: 'QUEST LOG', style: titleStyle });
+        title.anchor.set(0.5);
+        title.position.set(this.width / 2, boxY + 20);
+        this.container.addChild(title);
+
+        const sep = new Graphics();
+        sep.moveTo(boxX + 10, boxY + 38);
+        sep.lineTo(boxX + boxW - 10, boxY + 38);
+        sep.stroke({ color: 0x554422, width: 1 });
+        this.container.addChild(sep);
+
+        for (let i = 0; i < this.quests.length; i++) {
+            const quest = this.quests[i];
+            const questY = boxY + 46 + i * 52;
+
+            // Quest name
+            const nameStyle = new TextStyle({
+                fontFamily: 'Arial, sans-serif',
+                fontSize: 13,
+                fill: quest.complete ? 0x446644 : 0xddcc88,
+            });
+            const name = new Text({
+                text: `${quest.complete ? '\u2713' : '\u25cb'} ${quest.name}`,
+                style: nameStyle,
+            });
+            name.position.set(boxX + 14, questY);
+            this.container.addChild(name);
+
+            // Description
+            const descStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0x887766 });
+            const desc = new Text({ text: quest.desc, style: descStyle });
+            desc.position.set(boxX + 30, questY + 16);
+            this.container.addChild(desc);
+
+            // Progress bar
+            const barW = boxW - 80;
+            const barY = questY + 32;
+            const pct = quest.goal > 0 ? Math.min(1, quest.progress / quest.goal) : 0;
+
+            const barBg = new Graphics();
+            barBg.roundRect(boxX + 14, barY, barW, 8, 3);
+            barBg.fill({ color: 0x1a1a2a });
+            this.container.addChild(barBg);
+
+            const barFill = new Graphics();
+            barFill.roundRect(boxX + 14, barY, barW * pct, 8, 3);
+            barFill.fill({ color: quest.complete ? 0x44aa44 : 0xaa8833 });
+            this.container.addChild(barFill);
+
+            const progStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 9, fill: 0xaabb99 });
+            const prog = new Text({ text: `${quest.progress}/${quest.goal}`, style: progStyle });
+            prog.position.set(boxX + 18 + barW, barY - 1);
+            this.container.addChild(prog);
+
+            // Reward
+            if (!quest.complete) {
+                const rewStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 9, fill: 0xffcc00 });
+                const rew = new Text({ text: `${quest.reward}g`, style: rewStyle });
+                rew.position.set(boxX + boxW - 40, questY + 2);
+                this.container.addChild(rew);
+            }
+        }
+
+        // Close hint
+        const hintStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0x445544 });
+        const hint = new Text({ text: 'Press Q to close', style: hintStyle });
+        hint.anchor.set(0.5);
+        hint.position.set(this.width / 2, boxY + boxH - 14);
+        this.container.addChild(hint);
+    }
+
     private renderFishingIndicator(): void {
         // Position above center of screen (player is always near center)
         const px = this.width / 2;
@@ -2780,8 +3003,11 @@ export class DemoWorld {
     // ============================================================
 
     private renderInventory(): void {
-        const boxW = 300;
-        const boxH = Math.max(200, 40 + this.inventory.length * 28);
+        const boxW = 340;
+        const itemsCount = this.inventory.length;
+        const equipCount = this.equipment.length;
+        const totalRows = Math.max(itemsCount, equipCount) + 3;
+        const boxH = Math.max(220, 50 + totalRows * 26);
         const boxX = (this.width - boxW) / 2;
         const boxY = (this.height - boxH) / 2;
 
@@ -2793,13 +3019,8 @@ export class DemoWorld {
         this.container.addChild(bg);
 
         // Title
-        const titleStyle = new TextStyle({
-            fontFamily: 'Arial, sans-serif',
-            fontSize: 16,
-            fill: 0x44aaff,
-            fontWeight: 'bold',
-        });
-        const title = new Text({ text: 'INVENTORY', style: titleStyle });
+        const titleStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 16, fill: 0x44aaff, fontWeight: 'bold' });
+        const title = new Text({ text: 'INVENTORY & EQUIPMENT', style: titleStyle });
         title.anchor.set(0.5);
         title.position.set(this.width / 2, boxY + 20);
         this.container.addChild(title);
@@ -2811,37 +3032,69 @@ export class DemoWorld {
         sep.stroke({ color: 0x334466, width: 1 });
         this.container.addChild(sep);
 
-        // Items
+        // Equipment section
+        const eqLabel = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x88aacc, fontWeight: 'bold' });
+        const eqText = new Text({ text: 'EQUIPMENT', style: eqLabel });
+        eqText.position.set(boxX + 14, boxY + 44);
+        this.container.addChild(eqText);
+
+        for (let i = 0; i < this.equipment.length; i++) {
+            const eq = this.equipment[i];
+            const itemY = boxY + 62 + i * 22;
+
+            const slotStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 11, fill: 0x667788 });
+            const slotText = new Text({ text: `${eq.slot}:`, style: slotStyle });
+            slotText.position.set(boxX + 16, itemY);
+            this.container.addChild(slotText);
+
+            if (eq.item) {
+                const valStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x44ff88 });
+                const valText = new Text({ text: `${eq.item} (${eq.stat} +${eq.bonus})`, style: valStyle });
+                valText.position.set(boxX + 80, itemY);
+                this.container.addChild(valText);
+            } else {
+                const emptyStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 11, fill: 0x333344 });
+                const emptyText = new Text({ text: '--- empty ---', style: emptyStyle });
+                emptyText.position.set(boxX + 80, itemY);
+                this.container.addChild(emptyText);
+            }
+        }
+
+        // Items separator
+        const itemSep = new Graphics();
+        itemSep.moveTo(boxX + 10, boxY + 64 + this.equipment.length * 22);
+        itemSep.lineTo(boxX + boxW - 10, boxY + 64 + this.equipment.length * 22);
+        itemSep.stroke({ color: 0x223344, width: 1 });
+        this.container.addChild(itemSep);
+
+        // Items section
+        const itemLabel = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x88aacc, fontWeight: 'bold' });
+        const itemLabelText = new Text({ text: 'ITEMS', style: itemLabel });
+        itemLabelText.position.set(boxX + 14, boxY + 68 + this.equipment.length * 22);
+        this.container.addChild(itemLabelText);
+
+        const itemStartY = boxY + 86 + this.equipment.length * 22;
         for (let i = 0; i < this.inventory.length; i++) {
             const item = this.inventory[i];
-            const itemY = boxY + 48 + i * 28;
+            const itemY = itemStartY + i * 24;
+            if (itemY > boxY + boxH - 30) break; // Scrollable limit
 
-            // Item icon (colored square)
             const icon = new Graphics();
-            icon.roundRect(boxX + 16, itemY, 18, 18, 3);
+            icon.roundRect(boxX + 16, itemY, 16, 16, 3);
             icon.fill({ color: item.icon });
             this.container.addChild(icon);
 
-            // Item name
-            const style = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 13, fill: 0xddddee });
-            const text = new Text({ text: `${item.name}  ×${item.count}`, style });
-            text.position.set(boxX + 42, itemY + 2);
+            const style = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 12, fill: 0xddddee });
+            const text = new Text({ text: `${item.name} x${item.count}`, style });
+            text.position.set(boxX + 38, itemY + 1);
             this.container.addChild(text);
-        }
-
-        if (this.inventory.length === 0) {
-            const emptyStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 12, fill: 0x556677 });
-            const empty = new Text({ text: 'No items', style: emptyStyle });
-            empty.anchor.set(0.5);
-            empty.position.set(this.width / 2, boxY + 70);
-            this.container.addChild(empty);
         }
 
         // Close hint
         const hintStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0x445566 });
-        const hint = new Text({ text: 'Press I to close', style: hintStyle });
+        const hint = new Text({ text: 'I: Close  |  Q: Quests', style: hintStyle });
         hint.anchor.set(0.5);
-        hint.position.set(this.width / 2, boxY + boxH - 18);
+        hint.position.set(this.width / 2, boxY + boxH - 14);
         this.container.addChild(hint);
     }
 
