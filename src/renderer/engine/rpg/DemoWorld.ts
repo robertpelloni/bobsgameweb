@@ -366,6 +366,13 @@ export class DemoWorld {
             this.showInventory = !this.showInventory;
         }
 
+        // F key — fish near water
+        if (this.keys['f'] || this.keys['F']) {
+            this.keys['f'] = false;
+            this.keys['F'] = false;
+            this.tryFish();
+        }
+
         // Normalize diagonal
         if (dx !== 0 && dy !== 0) {
             const len = Math.sqrt(dx * dx + dy * dy);
@@ -387,6 +394,22 @@ export class DemoWorld {
             }
         }
 
+        // Edge-of-map detection — area transition
+        if (this.playerX <= 0 && dx < 0) {
+            this.notifications.push({ text: '← West Field (coming soon)', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
+            this.playerX = 1;
+        } else if (this.playerX >= (MAP_W - 1) * TILE_SIZE && dx > 0) {
+            this.notifications.push({ text: 'East Forest → (coming soon)', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
+            this.playerX = (MAP_W - 1) * TILE_SIZE - 1;
+        }
+        if (this.playerY <= 0 && dy < 0) {
+            this.notifications.push({ text: '↑ North Mountains (coming soon)', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
+            this.playerY = 1;
+        } else if (this.playerY >= (MAP_H - 1) * TILE_SIZE && dy > 0) {
+            this.notifications.push({ text: 'South Beach ↓ (coming soon)', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
+            this.playerY = (MAP_H - 1) * TILE_SIZE - 1;
+        }
+
         // Footstep particles when moving
         if (dx !== 0 || dy !== 0) {
             this.stepTimer += dt;
@@ -404,6 +427,9 @@ export class DemoWorld {
 
         // Day/night cycle
         this.dayNightPhase = (this.dayNightPhase + dt * this.dayNightSpeed) % 1.0;
+
+        // Fishing
+        this.updateFishing(dt);
 
         // Weather cycle
         this.weatherTimer += dt;
@@ -543,6 +569,91 @@ export class DemoWorld {
         }
     }
 
+    // ============================================================
+    // Fishing
+    // ============================================================
+
+    private fishingState: 'idle' | 'casting' | 'waiting' | 'caught' = 'idle';
+    private fishingTimer = 0;
+    private fishCaught: string[] = [];
+
+    private tryFish(): void {
+        if (this.insideBuilding) return;
+        if (this.fishingState !== 'idle') {
+            this.fishingState = 'idle';
+            return;
+        }
+
+        // Check if near water
+        const ptx = Math.floor(this.playerX / TILE_SIZE);
+        const pty = Math.floor(this.playerY / TILE_SIZE);
+        let nearWater = false;
+        for (let dy = -1; dy <= 1; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
+                const tx = ptx + dx;
+                const ty = pty + dy;
+                if (tx >= 0 && tx < MAP_W && ty >= 0 && ty < MAP_H && this.tiles[ty][tx] === Tile.WATER) {
+                    nearWater = true;
+                }
+            }
+        }
+
+        if (nearWater) {
+            this.fishingState = 'casting';
+            this.fishingTimer = 0;
+            this.notifications.push({
+                text: 'Casting line...',
+                x: this.playerX, y: this.playerY - 30,
+                age: 0, maxAge: 1.0, color: 0x44aaff,
+            });
+        } else {
+            this.notifications.push({
+                text: 'No water nearby!',
+                x: this.playerX, y: this.playerY - 30,
+                age: 0, maxAge: 1.0, color: 0xff6644,
+            });
+        }
+    }
+
+    private updateFishing(dt: number): void {
+        if (this.fishingState === 'idle') return;
+
+        this.fishingTimer += dt;
+
+        if (this.fishingState === 'casting' && this.fishingTimer > 0.5) {
+            this.fishingState = 'waiting';
+            this.fishingTimer = 0;
+        }
+
+        if (this.fishingState === 'waiting') {
+            // Random catch after 1-4 seconds
+            const catchTime = 1 + Math.random() * 3;
+            if (this.fishingTimer > catchTime) {
+                this.fishingState = 'caught';
+                this.fishingTimer = 0;
+                const fishTypes = ['Trout', 'Bass', 'Salmon', 'Catfish', 'Gold Fish', 'Eel'];
+                const fish = fishTypes[Math.floor(Math.random() * fishTypes.length)];
+                this.fishCaught.push(fish);
+                // Add to inventory
+                const existing = this.inventory.find(i => i.name === fish);
+                if (existing) {
+                    existing.count++;
+                } else {
+                    this.inventory.push({ name: fish, count: 1, icon: 0x4488cc });
+                }
+                this.notifications.push({
+                    text: `Caught a ${fish}!`,
+                    x: this.playerX, y: this.playerY - 40,
+                    age: 0, maxAge: 2.0, color: 0x44ffaa,
+                });
+            }
+        }
+
+        if (this.fishingState === 'caught' && this.fishingTimer > 1.5) {
+            this.fishingState = 'idle';
+        }
+    }
+
     private generateBuildingInterior(def: { name: string; interiorColor: number; items: string[] }): void {
         this.buildingTiles = [];
         for (let y = 0; y < this.buildingH; y++) {
@@ -597,10 +708,25 @@ export class DemoWorld {
 
                 // Add detail for certain tiles
                 if (tile === Tile.WATER) {
-                    // Water shimmer
-                    const shimmer = Math.sin(this.gameTime * 2 + tx * 0.5 + ty * 0.3) * 0.15;
+                    // Flowing water — animated waves
+                    const flow = Math.sin(this.gameTime * 1.5 + tx * 0.8 + ty * 0.4) * 0.2;
                     g.rect(0, 0, TILE_SIZE, TILE_SIZE);
-                    g.fill({ color: 0x3366cc, alpha: 0.3 + shimmer });
+                    g.fill({ color: 0x3366cc, alpha: 0.25 + flow });
+                    // Wave lines
+                    const waveY1 = TILE_SIZE * 0.3 + Math.sin(this.gameTime * 2 + tx) * 3;
+                    const waveY2 = TILE_SIZE * 0.65 + Math.sin(this.gameTime * 2.5 + tx + 1) * 3;
+                    g.moveTo(0, waveY1);
+                    g.quadraticCurveTo(TILE_SIZE / 2, waveY1 + 4, TILE_SIZE, waveY1);
+                    g.stroke({ color: 0x5588dd, width: 1, alpha: 0.3 + flow });
+                    g.moveTo(0, waveY2);
+                    g.quadraticCurveTo(TILE_SIZE / 2, waveY2 - 3, TILE_SIZE, waveY2);
+                    g.stroke({ color: 0x5588dd, width: 1, alpha: 0.25 + flow });
+                    // Sparkle
+                    const sparkle = Math.sin(this.gameTime * 3 + tx * 2.1 + ty * 1.7);
+                    if (sparkle > 0.85) {
+                        g.circle(TILE_SIZE * 0.5, TILE_SIZE * 0.4, 1.5);
+                        g.fill({ color: 0xffffff, alpha: sparkle - 0.7 });
+                    }
                 } else if (tile === Tile.TREE) {
                     // Tree trunk
                     g.rect(TILE_SIZE * 0.3, TILE_SIZE * 0.6, TILE_SIZE * 0.4, TILE_SIZE * 0.4);
@@ -685,6 +811,11 @@ export class DemoWorld {
         // Dialogue box
         if (this.showDialogue) {
             this.renderDialogueBox();
+        }
+
+        // Fishing indicator
+        if (this.fishingState !== 'idle') {
+            this.renderFishingIndicator();
         }
 
         // Inventory overlay
@@ -914,7 +1045,7 @@ export class DemoWorld {
 
         const hintStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x666688 });
         const hint = new Text({
-            text: 'Arrows: Move  ·  Space/E: Interact  ·  I: Inventory  ·  Enter: nD  ·  Tab: Menu',
+            text: 'Arrows: Move  ·  Space/E: Interact  ·  I: Items  ·  F: Fish  ·  Enter: nD',
             style: hintStyle,
         });
         hint.anchor.set(0.5);
@@ -1034,6 +1165,42 @@ export class DemoWorld {
             pg.circle(p.x - camX, p.y - camY, 2 + expand);
             pg.fill({ color: 0xaa9977, alpha });
             this.container.addChild(pg);
+        }
+    }
+
+    // ============================================================
+    // Fishing Indicator Rendering
+    // ============================================================
+
+    private renderFishingIndicator(): void {
+        // Position above center of screen (player is always near center)
+        const px = this.width / 2;
+        const py = this.height / 2 - 60;
+
+        const bg = new Graphics();
+        bg.roundRect(px - 40, py, 80, 20, 4);
+        bg.fill({ color: 0x0a1a3a, alpha: 0.9 });
+        bg.stroke({ color: 0x4488cc, width: 1 });
+        this.container.addChild(bg);
+
+        const labels: Record<string, string> = { casting: 'Casting...', waiting: 'Waiting...', caught: '🐟 Got one!' };
+        const colors: Record<string, number> = { casting: 0x88bbdd, waiting: 0xaaaacc, caught: 0x44ffaa };
+        const state = this.fishingState;
+        const style = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: colors[state] || 0xffffff });
+        const txt = new Text({ text: labels[state] || '...', style });
+        txt.anchor.set(0.5);
+        txt.position.set(px, py + 10);
+        this.container.addChild(txt);
+
+        // Bobber animation when waiting
+        if (this.fishingState === 'waiting') {
+            const bob = Math.sin(this.gameTime * 4) * 3;
+            const bobberX = px + 25;
+            const bobberY = py + 22 + bob;
+            const bobber = new Graphics();
+            bobber.circle(bobberX, bobberY, 3);
+            bobber.fill({ color: 0xff4444 });
+            this.container.addChild(bobber);
         }
     }
 
