@@ -59,6 +59,13 @@ export class DemoWorld {
     playerX = 15 * TILE_SIZE;
     playerY = 10 * TILE_SIZE;
     playerSpeed = 120; // pixels per second
+
+    // Screen effects
+    private screenShakeAmount = 0;
+    private screenShakeDuration = 0;
+    private screenFlashColor = 0;
+    private screenFlashAlpha = 0;
+    private screenFlashDuration = 0;
     playerDir = 0; // 0=down, 1=left, 2=right, 3=up
 
     // NPCs
@@ -676,6 +683,8 @@ export class DemoWorld {
             });
             this.checkAchievement('level_5', this.playerLevel >= 5);
             this.updateQuestProgress('reach_level_3', this.playerLevel);
+            this.triggerScreenFlash(0x44ff44, 0.3);
+            this.triggerScreenShake(3, 0.2);
         }
     }
 
@@ -742,6 +751,8 @@ export class DemoWorld {
 
         if (this.tiles[pty]?.[ptx] === Tile.CHEST && !this.openedChests.has(key)) {
             this.openedChests.add(key);
+            this.triggerScreenFlash(0xffff00, 0.2);
+            this.triggerScreenShake(2, 0.15);
             this.checkAchievement('treasure_hunter', this.openedChests.size >= 3);
             this.updateQuestProgress('open_3_chests', this.openedChests.size);
             const item = this.chestItems.get(key);
@@ -1244,6 +1255,9 @@ export class DemoWorld {
             }
         }
 
+        // Screen effects
+        this.updateScreenEffects(dt);
+
         // Record player trail for minimap
         this.trailTimer += dt;
         if (this.trailTimer > 0.5) {
@@ -1544,6 +1558,7 @@ export class DemoWorld {
         // Player attacks
         const dmg = Math.floor(this.playerAttack * (0.8 + Math.random() * 0.4));
         this.currentEnemy.hp -= dmg;
+        this.triggerScreenShake(2, 0.1);
         this.combatLog.push(`You deal ${dmg} damage!`);
         this.playSound('hit', 0.4);
 
@@ -1587,6 +1602,8 @@ export class DemoWorld {
         const eDmg = Math.floor(this.currentEnemy.attack * (0.7 + Math.random() * 0.6));
         const actualDmg = Math.max(1, eDmg - this.defense);
         this.playerHp -= actualDmg;
+        this.triggerScreenShake(4, 0.2);
+        this.triggerScreenFlash(0xff0000, 0.15);
         this.combatLog.push(`${this.currentEnemy.name} deals ${actualDmg} damage!`);
         this.playSound('hit', 0.2);
 
@@ -1738,6 +1755,57 @@ export class DemoWorld {
         for (const emitter of this.particleEmitters) {
             emitter.update(0.016);
             emitter.render();
+        }
+    }
+
+    // ============================================================
+    // Screen Effects
+    // ============================================================
+
+    private triggerScreenShake(amount: number, duration: number): void {
+        this.screenShakeAmount = amount;
+        this.screenShakeDuration = duration;
+    }
+
+    private triggerScreenFlash(color: number, duration: number): void {
+        this.screenFlashColor = color;
+        this.screenFlashAlpha = 0.5;
+        this.screenFlashDuration = duration;
+    }
+
+    private updateScreenEffects(dt: number): void {
+        if (this.screenShakeDuration > 0) {
+            this.screenShakeDuration -= dt;
+            if (this.screenShakeDuration <= 0) {
+                this.screenShakeAmount = 0;
+                this.screenShakeDuration = 0;
+            }
+        }
+        if (this.screenFlashDuration > 0) {
+            this.screenFlashDuration -= dt;
+            this.screenFlashAlpha = Math.max(0, 0.5 * (this.screenFlashDuration / 0.3));
+            if (this.screenFlashDuration <= 0) {
+                this.screenFlashAlpha = 0;
+            }
+        }
+    }
+
+    private renderScreenEffects(): void {
+        // Screen shake offset
+        if (this.screenShakeAmount > 0 && this.screenShakeDuration > 0) {
+            const dx = (Math.random() - 0.5) * this.screenShakeAmount * 2;
+            const dy = (Math.random() - 0.5) * this.screenShakeAmount * 2;
+            this.container.position.set(dx, dy);
+        } else {
+            this.container.position.set(0, 0);
+        }
+
+        // Screen flash overlay
+        if (this.screenFlashAlpha > 0.01) {
+            const flash = new Graphics();
+            flash.rect(0, 0, this.width, this.height);
+            flash.fill({ color: this.screenFlashColor, alpha: this.screenFlashAlpha });
+            this.hudContainer.addChild(flash);
         }
     }
 
@@ -2178,6 +2246,9 @@ export class DemoWorld {
 
         // Minimap
         this.renderMinimap();
+
+        // Screen effects (shake + flash) — rendered last on HUD
+        this.renderScreenEffects();
 
         return this.container;
     }
