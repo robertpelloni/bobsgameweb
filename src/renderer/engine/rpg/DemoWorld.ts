@@ -102,6 +102,23 @@ export class DemoWorld {
     private readonly STEP_INTERVAL = 0.2;
     private stepParticles: { x: number; y: number; age: number; maxAge: number }[] = [];
 
+    // Weather system
+    private weatherType: 'clear' | 'rain' | 'snow' | 'storm' = 'clear';
+    private weatherParticles: { x: number; y: number; vx: number; vy: number; size: number; alpha: number }[] = [];
+    private weatherTimer = 0;
+    private weatherCycleDuration = 60; // seconds between weather changes
+    private lightningTimer = 0;
+    private lightningAlpha = 0;
+    private readonly MAX_WEATHER_PARTICLES = 200;
+
+    // NPC wandering
+    private npcWanderTimers: number[] = [];
+    private npcOriginalPositions: { x: number; y: number }[] = [];
+
+    // Player inventory
+    private inventory: { name: string; count: number; icon: number }[] = [];
+    private showInventory = false;
+
     // Input state
     private keys: Record<string, boolean> = {};
 
@@ -120,6 +137,23 @@ export class DemoWorld {
         this.generateMap();
         this.setupInput();
         this.placeNPCs();
+
+        // Store NPC original positions for wandering
+        for (const npc of this.npcs) {
+            this.npcOriginalPositions.push({ x: npc.x, y: npc.y });
+            this.npcWanderTimers.push(Math.random() * 5); // Stagger wander timing
+        }
+
+        // Start with random weather
+        this.weatherType = ['clear', 'rain', 'snow', 'storm'][Math.floor(Math.random() * 4)] as any;
+        this.weatherTimer = Math.random() * this.weatherCycleDuration;
+
+        // Starting inventory
+        this.inventory = [
+            { name: 'nD Console', count: 1, icon: 0x3366ff },
+            { name: 'Wallet', count: 1, icon: 0x44aa44 },
+            { name: 'Keys', count: 1, icon: 0xccaa00 },
+        ];
         log.info('DemoWorld created');
     }
 
@@ -325,6 +359,13 @@ export class DemoWorld {
             }
         }
 
+        // I key toggles inventory
+        if (this.keys['i'] || this.keys['I']) {
+            this.keys['i'] = false;
+            this.keys['I'] = false;
+            this.showInventory = !this.showInventory;
+        }
+
         // Normalize diagonal
         if (dx !== 0 && dy !== 0) {
             const len = Math.sqrt(dx * dx + dy * dy);
@@ -363,6 +404,75 @@ export class DemoWorld {
 
         // Day/night cycle
         this.dayNightPhase = (this.dayNightPhase + dt * this.dayNightSpeed) % 1.0;
+
+        // Weather cycle
+        this.weatherTimer += dt;
+        if (this.weatherTimer >= this.weatherCycleDuration) {
+            this.weatherTimer = 0;
+            const types: ('clear' | 'rain' | 'snow' | 'storm')[] = ['clear', 'rain', 'snow', 'storm'];
+            this.weatherType = types[Math.floor(Math.random() * types.length)];
+            this.weatherParticles = [];
+        }
+
+        // Spawn weather particles
+        if (this.weatherType !== 'clear') {
+            const spawnRate = this.weatherType === 'storm' ? 8 : this.weatherType === 'rain' ? 4 : 2;
+            for (let i = 0; i < spawnRate; i++) {
+                if (this.weatherParticles.length < this.MAX_WEATHER_PARTICLES) {
+                    const windX = this.weatherType === 'storm' ? (Math.random() - 0.3) * 200 : (Math.random() - 0.5) * 30;
+                    this.weatherParticles.push({
+                        x: Math.random() * this.width,
+                        y: -10,
+                        vx: windX,
+                        vy: this.weatherType === 'snow' ? 30 + Math.random() * 40 : 200 + Math.random() * 100,
+                        size: this.weatherType === 'snow' ? 2 + Math.random() * 3 : 1,
+                        alpha: 0.3 + Math.random() * 0.5,
+                    });
+                }
+            }
+        }
+
+        // Update weather particles
+        for (let i = this.weatherParticles.length - 1; i >= 0; i--) {
+            const p = this.weatherParticles[i];
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            if (p.y > this.height + 10 || p.x < -20 || p.x > this.width + 20) {
+                this.weatherParticles.splice(i, 1);
+            }
+        }
+
+        // Lightning (storm only)
+        if (this.weatherType === 'storm') {
+            this.lightningTimer += dt;
+            if (this.lightningTimer > 3 + Math.random() * 5) {
+                this.lightningTimer = 0;
+                this.lightningAlpha = 0.8;
+            }
+            if (this.lightningAlpha > 0) {
+                this.lightningAlpha -= dt * 4;
+            }
+        } else {
+            this.lightningAlpha = 0;
+        }
+
+        // NPC wandering
+        for (let i = 0; i < this.npcs.length; i++) {
+            this.npcWanderTimers[i] += dt;
+            if (this.npcWanderTimers[i] > 3 + Math.random() * 4) {
+                this.npcWanderTimers[i] = 0;
+                const npc = this.npcs[i];
+                const orig = this.npcOriginalPositions[i];
+                // Wander within 2 tiles of original position
+                const wanderRange = TILE_SIZE * 2;
+                const dx = (Math.random() - 0.5) * wanderRange;
+                const dy = (Math.random() - 0.5) * wanderRange;
+                npc.x = orig.x + dx;
+                npc.y = orig.y + dy;
+                // Face a random direction
+                npc.dir = Math.floor(Math.random() * 4);
+            }
+        }
 
         // Update notifications
         for (let i = this.notifications.length - 1; i >= 0; i--) {
@@ -558,12 +668,28 @@ export class DemoWorld {
         // Day/night overlay
         this.renderDayNight();
 
+        // Weather particles (rain/snow/storm)
+        this.renderWeather();
+
+        // Lightning flash
+        if (this.lightningAlpha > 0) {
+            const flash = new Graphics();
+            flash.rect(0, 0, this.width, this.height);
+            flash.fill({ color: 0xffffff, alpha: this.lightningAlpha });
+            this.container.addChild(flash);
+        }
+
         // HUD
         this.renderHUD();
 
         // Dialogue box
         if (this.showDialogue) {
             this.renderDialogueBox();
+        }
+
+        // Inventory overlay
+        if (this.showInventory) {
+            this.renderInventory();
         }
 
         // Floating notifications
@@ -788,7 +914,7 @@ export class DemoWorld {
 
         const hintStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 11, fill: 0x666688 });
         const hint = new Text({
-            text: 'Arrow Keys: Move  ·  Enter: Open nD  ·  Tab: Menu  ·  ~: Debug Console',
+            text: 'Arrows: Move  ·  Space/E: Interact  ·  I: Inventory  ·  Enter: nD  ·  Tab: Menu',
             style: hintStyle,
         });
         hint.anchor.set(0.5);
@@ -909,6 +1035,110 @@ export class DemoWorld {
             pg.fill({ color: 0xaa9977, alpha });
             this.container.addChild(pg);
         }
+    }
+
+    // ============================================================
+    // Weather Rendering
+    // ============================================================
+
+    private renderWeather(): void {
+        if (this.weatherType === 'clear' || this.weatherParticles.length === 0) return;
+
+        const isSnow = this.weatherType === 'snow';
+        const g = new Graphics();
+
+        for (const p of this.weatherParticles) {
+            if (isSnow) {
+                // Snow: white circles, slight wobble
+                const wobble = Math.sin(this.gameTime * 2 + p.x * 0.1) * 2;
+                g.circle(p.x + wobble, p.y, p.size);
+                g.fill({ color: 0xffffff, alpha: p.alpha });
+            } else {
+                // Rain/storm: streaks
+                const len = this.weatherType === 'storm' ? 12 : 8;
+                g.moveTo(p.x, p.y);
+                g.lineTo(p.x + p.vx * 0.02, p.y + len);
+                g.stroke({ color: 0x8899bb, width: 1, alpha: p.alpha });
+            }
+        }
+        this.container.addChild(g);
+
+        // Weather indicator in HUD area
+        const weatherNames: Record<string, string> = { clear: '', rain: '🌧️ Rain', snow: '❄️ Snow', storm: '⛈️ Storm' };
+        const indicatorStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0x556677 });
+        const indicator = new Text({ text: weatherNames[this.weatherType] || '', style: indicatorStyle });
+        indicator.position.set(this.width / 2 - 30, this.height - 50);
+        this.container.addChild(indicator);
+    }
+
+    // ============================================================
+    // Inventory Rendering
+    // ============================================================
+
+    private renderInventory(): void {
+        const boxW = 300;
+        const boxH = Math.max(200, 40 + this.inventory.length * 28);
+        const boxX = (this.width - boxW) / 2;
+        const boxY = (this.height - boxH) / 2;
+
+        // Background
+        const bg = new Graphics();
+        bg.roundRect(boxX, boxY, boxW, boxH, 8);
+        bg.fill({ color: 0x0a0a2a, alpha: 0.95 });
+        bg.stroke({ color: 0x4466aa, width: 2 });
+        this.container.addChild(bg);
+
+        // Title
+        const titleStyle = new TextStyle({
+            fontFamily: 'Arial, sans-serif',
+            fontSize: 16,
+            fill: 0x44aaff,
+            fontWeight: 'bold',
+        });
+        const title = new Text({ text: 'INVENTORY', style: titleStyle });
+        title.anchor.set(0.5);
+        title.position.set(this.width / 2, boxY + 20);
+        this.container.addChild(title);
+
+        // Separator
+        const sep = new Graphics();
+        sep.moveTo(boxX + 10, boxY + 38);
+        sep.lineTo(boxX + boxW - 10, boxY + 38);
+        sep.stroke({ color: 0x334466, width: 1 });
+        this.container.addChild(sep);
+
+        // Items
+        for (let i = 0; i < this.inventory.length; i++) {
+            const item = this.inventory[i];
+            const itemY = boxY + 48 + i * 28;
+
+            // Item icon (colored square)
+            const icon = new Graphics();
+            icon.roundRect(boxX + 16, itemY, 18, 18, 3);
+            icon.fill({ color: item.icon });
+            this.container.addChild(icon);
+
+            // Item name
+            const style = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 13, fill: 0xddddee });
+            const text = new Text({ text: `${item.name}  ×${item.count}`, style });
+            text.position.set(boxX + 42, itemY + 2);
+            this.container.addChild(text);
+        }
+
+        if (this.inventory.length === 0) {
+            const emptyStyle = new TextStyle({ fontFamily: 'Arial, sans-serif', fontSize: 12, fill: 0x556677 });
+            const empty = new Text({ text: 'No items', style: emptyStyle });
+            empty.anchor.set(0.5);
+            empty.position.set(this.width / 2, boxY + 70);
+            this.container.addChild(empty);
+        }
+
+        // Close hint
+        const hintStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0x445566 });
+        const hint = new Text({ text: 'Press I to close', style: hintStyle });
+        hint.anchor.set(0.5);
+        hint.position.set(this.width / 2, boxY + boxH - 18);
+        this.container.addChild(hint);
     }
 
     // ============================================================
