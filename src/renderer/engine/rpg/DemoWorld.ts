@@ -131,6 +131,26 @@ export class DemoWorld {
     private showCombat = false;
     private combatLog: string[] = [];
     private combatTimer = 0;
+    private combatWins = 0;
+
+    // Leveling system
+    private playerLevel = 1;
+    private playerXp = 0;
+    private playerXpToNext = 50; // XP needed for next level
+
+    // Achievements
+    private achievements: { id: string; name: string; desc: string; unlocked: boolean }[] = [
+        { id: 'first_fish', name: 'Gone Fishing', desc: 'Catch your first fish', unlocked: false },
+        { id: 'first_battle', name: 'Battle Initiate', desc: 'Win your first battle', unlocked: false },
+        { id: 'five_fish', name: 'Angler', desc: 'Catch 5 fish', unlocked: false },
+        { id: 'ten_battles', name: 'Warrior', desc: 'Win 10 battles', unlocked: false },
+        { id: 'level_5', name: 'Veteran', desc: 'Reach level 5', unlocked: false },
+        { id: 'explorer', name: 'Explorer', desc: 'Visit all 3 buildings', unlocked: false },
+        { id: 'treasure_hunter', name: 'Treasure Hunter', desc: 'Open 3 chests', unlocked: false },
+        { id: 'rich', name: 'Wealthy', desc: 'Have 50+ gold', unlocked: false },
+    ];
+    private visitedBuildings = new Set<string>();
+    private buildingsVisitedCount = 0;
     private readonly ENEMY_TYPES = [
         { name: 'Slime', hp: 30, attack: 5, icon: 0x44cc44 },
         { name: 'Bat', hp: 20, attack: 8, icon: 0x8844aa },
@@ -364,6 +384,40 @@ export class DemoWorld {
     }
 
     // ============================================================
+    // Level Up & Achievements
+    // ============================================================
+
+    private checkLevelUp(): void {
+        while (this.playerXp >= this.playerXpToNext) {
+            this.playerXp -= this.playerXpToNext;
+            this.playerLevel++;
+            this.playerXpToNext = Math.floor(this.playerXpToNext * 1.5);
+            // Stat increases
+            this.playerMaxHp += 10;
+            this.playerHp = this.playerMaxHp;
+            this.playerAttack += 3;
+            this.notifications.push({
+                text: `⬆️ Level ${this.playerLevel}! HP+10 ATK+3`,
+                x: this.playerX, y: this.playerY - 50,
+                age: 0, maxAge: 3.0, color: 0xffdd44,
+            });
+            this.checkAchievement('level_5', this.playerLevel >= 5);
+        }
+    }
+
+    private checkAchievement(id: string, condition: boolean): void {
+        if (!condition) return;
+        const ach = this.achievements.find(a => a.id === id);
+        if (!ach || ach.unlocked) return;
+        ach.unlocked = true;
+        this.notifications.push({
+            text: `🏆 ${ach.name}!`,
+            x: this.playerX, y: this.playerY - 60,
+            age: 0, maxAge: 3.0, color: 0xffcc00,
+        });
+    }
+
+    // ============================================================
     // Treasure Chests
     // ============================================================
 
@@ -392,6 +446,7 @@ export class DemoWorld {
 
         if (this.tiles[pty]?.[ptx] === Tile.CHEST && !this.openedChests.has(key)) {
             this.openedChests.add(key);
+            this.checkAchievement('treasure_hunter', this.openedChests.size >= 3);
             const item = this.chestItems.get(key);
             if (item) {
                 const existing = this.inventory.find(i => i.name === item.name);
@@ -770,6 +825,8 @@ export class DemoWorld {
         for (const def of this.BUILDING_DEFS) {
             if (playerTileX === def.doorTX && playerTileY === def.doorTY) {
                 this.insideBuilding = def.name;
+                this.visitedBuildings.add(def.name);
+                this.checkAchievement('explorer', this.visitedBuildings.size >= 3);
                 this.notifications.push({
                     text: `Entering ${def.name}...`,
                     x: this.playerX, y: this.playerY - 30,
@@ -826,6 +883,16 @@ export class DemoWorld {
                 this.inventory.push({ name: 'Gold Coin', count: goldReward, icon: 0xffcc00 });
             }
             this.combatLog.push(`+${goldReward} Gold`);
+            // XP reward
+            const xpReward = 10 + Math.floor(Math.random() * 20);
+            this.playerXp += xpReward;
+            this.combatLog.push(`+${xpReward} XP`);
+            this.checkLevelUp();
+            // Track wins
+            this.combatWins++;
+            this.checkAchievement('first_battle', this.combatWins >= 1);
+            this.checkAchievement('ten_battles', this.combatWins >= 10);
+            this.checkAchievement('rich', (existingGold?.count ?? goldReward) >= 50);
             // Heal a bit
             this.playerHp = Math.min(this.playerMaxHp, this.playerHp + 10);
             // End combat after a moment
@@ -1013,6 +1080,9 @@ export class DemoWorld {
                     x: this.playerX, y: this.playerY - 40,
                     age: 0, maxAge: 2.0, color: 0x44ffaa,
                 });
+                // Fishing achievements
+                this.checkAchievement('first_fish', true);
+                this.checkAchievement('five_fish', this.fishCaught.length >= 5);
             }
         }
 
@@ -1466,6 +1536,31 @@ export class DemoWorld {
         const hpText = new Text({ text: `HP ${this.playerHp}/${this.playerMaxHp}`, style: hpStyle });
         hpText.position.set(hpBarX, hpBarY - 1);
         this.hudContainer.addChild(hpText);
+
+        // Level display
+        const lvlStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: 0xffdd44, fontWeight: 'bold' });
+        const lvlText = new Text({ text: `Lv${this.playerLevel}`, style: lvlStyle });
+        lvlText.position.set(hpBarX, hpBarY + 8);
+        this.hudContainer.addChild(lvlText);
+
+        // XP bar
+        const xpBarY2 = hpBarY + 20;
+        const xpPct = this.playerXp / this.playerXpToNext;
+        const xpBg = new Graphics();
+        xpBg.rect(hpBarX, xpBarY2, hpBarW, 4);
+        xpBg.fill({ color: 0x222233 });
+        this.hudContainer.addChild(xpBg);
+        const xpFill = new Graphics();
+        xpFill.rect(hpBarX, xpBarY2, hpBarW * xpPct, 4);
+        xpFill.fill({ color: 0x4488ff });
+        this.hudContainer.addChild(xpFill);
+
+        // Achievements count
+        const unlocked = this.achievements.filter(a => a.unlocked).length;
+        const achStyle = new TextStyle({ fontFamily: 'monospace', fontSize: 8, fill: 0xaa8844 });
+        const achText = new Text({ text: `🏆 ${unlocked}/${this.achievements.length}`, style: achStyle });
+        achText.position.set(hpBarX, xpBarY2 + 6);
+        this.hudContainer.addChild(achText);
 
         // Bottom hint bar
         const hintBg = new Graphics();
