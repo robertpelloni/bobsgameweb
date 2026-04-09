@@ -72,3 +72,39 @@ Ported from `okgame/src/Engine/text/` + Java BitmapFont
 - Cleaned stale build artifacts from Hetzner (217 → 20 files)
 - Audio files now served as proper static assets (no CORS proxy needed)
 - Frontend and backend versions synced at v2.1.58
+
+---
+
+## v2.1.78–v2.1.87: The RPG World Update (30 deploys)
+
+### 🌍 Interactive RPG Town (DemoWorld)
+- 30×22 tile map with 12 tile types (grass, path, water, tree, building, roof, flower, door, fence, bridge, chest, sand)
+- Player character with 8-directional movement, collision detection, and footstep particles
+- 6 named NPCs with wandering AI and unique multi-line dialogue (typewriter effect)
+- 3 enterable buildings (Cafe, Shop, Stadium) with interiors, items on display, and exit functionality
+- Animated flowing river with Bézier wave lines and sparkle effects
+- 5 hidden treasure chests that auto-open on contact
+- Fishing system with 6 fish types, animated bobber, and inventory integration
+- Random combat encounters with 5 enemy types, auto-battle, HP bars, and gold/XP rewards
+- Weather system (rain/snow/storm) with particles and lightning flashes
+- Day/night cycle with torch light glow
+- Grass sway and flower animations
+- Player inventory, HP, leveling (XP + stat growth), and 8 achievements
+- Save/Load system (F5/F9) with auto-save every 30 seconds
+- Minimap with player/NPC/chest dots
+- Floating notifications and edge-of-map area transition previews
+
+### 🐛 Critical Fix: PixiJS Color Crash (v2.1.85)
+- Fixed `Unable to convert color 16777215,65535` crash on main menu
+- Root cause: PixiJS v8 TextStyle serializes color arrays as invalid values
+- Fixed in MainMenuScene and HighScoresScene
+
+### 🏗️ Engine Features
+- TitleIntroAnimation: Full animated title screen with particles, scanlines, glow
+- Cinematics barrel export updated
+- Building interiors: 12×9 grid with brick walls, tables, items, door indicator
+- Combat system: 5 enemy types, auto-battle tick, HP tracking, combat log UI
+- Fishing state machine: idle → casting → waiting → caught
+- Save/Load: localStorage-based with quicksave/quickload + auto-save
+- Achievement system: 8 achievements tracked across all game systems
+- Leveling: XP-based with scaling thresholds and stat bonuses
