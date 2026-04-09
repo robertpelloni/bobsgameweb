@@ -16,6 +16,7 @@ import {
 } from 'pixi.js';
 import { Logger } from '../debug/Logger';
 import { AudioUtils } from '../audio/AudioUtils';
+import { NetworkManager } from '../network/NetworkManager';
 
 const log = new Logger('DemoWorld');
 
@@ -152,6 +153,15 @@ export class DemoWorld {
     ];
     private visitedBuildings = new Set<string>();
     private buildingsVisitedCount = 0;
+
+    // Multiplayer presence
+    private networkManager: NetworkManager | null = null;
+    private otherPlayers: { id: string; name: string; x: number; y: number; color: number; dir: number }[] = [];
+    private chatMessages: { from: string; text: string; age: number }[] = [];
+    private showChat = false;
+    private chatInput = '';
+    private isOnline = false;
+    private playerCount = 0;
     private readonly ENEMY_TYPES = [
         { name: 'Slime', hp: 30, attack: 5, icon: 0x44cc44 },
         { name: 'Bat', hp: 20, attack: 8, icon: 0x8844aa },
@@ -203,6 +213,9 @@ export class DemoWorld {
         // Generate procedural SFX buffers
         this.initAudio();
 
+        // Try connecting to multiplayer server
+        this.initNetwork();
+
         log.info('DemoWorld created');
     }
 
@@ -237,6 +250,80 @@ export class DemoWorld {
     private playSound(name: string, volume = 0.3): void {
         if (!this.audioInitialized) return;
         AudioUtils.playSFX(name, volume);
+    }
+
+    // ============================================================
+    // Network / Multiplayer Presence
+    // ============================================================
+
+    private initNetwork(): void {
+        try {
+            this.networkManager = new NetworkManager();
+            const wsURL = window.location.hostname === 'localhost'
+                ? 'http://localhost:3001'
+                : 'https://ws.bobsgame.com';
+
+            this.networkManager.on('connected', () => {
+                this.isOnline = true;
+                log.info('Connected to multiplayer server');
+                this.notifications.push({
+                    text: '🟢 Online!',
+                    x: this.playerX, y: this.playerY - 20,
+                    age: 0, maxAge: 2.0, color: 0x44ff44,
+                });
+            });
+
+            this.networkManager.on('disconnected', () => {
+                this.isOnline = false;
+                this.otherPlayers = [];
+                log.info('Disconnected from multiplayer server');
+            });
+
+            this.networkManager.on('player_joined', (data: unknown) => {
+                const d = data as { name?: string };
+                this.notifications.push({
+                    text: `${d.name || 'Someone'} joined`,
+                    x: this.playerX, y: this.playerY - 20,
+                    age: 0, maxAge: 2.0, color: 0x44aaff,
+                });
+            });
+
+            this.networkManager.on('chat', (data: unknown) => {
+                const d = data as { from: string; message: string };
+                this.chatMessages.push({ from: d.from, text: d.message, age: 0 });
+                if (this.chatMessages.length > 50) this.chatMessages.shift();
+            });
+
+            this.networkManager.on('game_state', (data: unknown) => {
+                // Update other player positions
+                const d = data as { players?: { id: string; name: string; x: number; y: number; color: number; dir: number }[] };
+                if (d.players) {
+                    this.otherPlayers = d.players;
+                    this.playerCount = d.players.length;
+                }
+            });
+
+            this.networkManager.connect(wsURL);
+        } catch {
+            log.warn('Network not available — offline mode');
+        }
+    }
+
+    private broadcastPosition(): void {
+        if (!this.networkManager || !this.isOnline) return;
+        this.networkManager.sendFrame(JSON.stringify({
+            x: this.playerX,
+            y: this.playerY,
+            dir: this.playerDir,
+            level: this.playerLevel,
+            hp: this.playerHp,
+        }));
+    }
+
+    private sendChatMessage(text: string): void {
+        if (!this.networkManager || !this.isOnline) return;
+        this.networkManager.sendChat(text);
+        this.chatMessages.push({ from: 'You', text, age: 0 });
     }
 
     // ============================================================
@@ -333,6 +420,7 @@ export class DemoWorld {
     // ============================================================
 
     private autoSaveTimer = 0;
+    private positionBroadcastTimer = 0;
     private readonly AUTO_SAVE_INTERVAL = 30; // Auto-save every 30s
 
     private quickSave(): void {
@@ -739,6 +827,19 @@ export class DemoWorld {
         // Auto-save
         this.autoSaveCheck(dt);
 
+        // Broadcast position every ~0.5s
+        this.positionBroadcastTimer += dt;
+        if (this.positionBroadcastTimer >= 0.5) {
+            this.positionBroadcastTimer = 0;
+            this.broadcastPosition();
+        }
+
+        // Update chat message ages
+        for (let i = this.chatMessages.length - 1; i >= 0; i--) {
+            this.chatMessages[i].age += dt;
+            if (this.chatMessages[i].age > 10) this.chatMessages.splice(i, 1);
+        }
+
         // Weather cycle
         this.weatherTimer += dt;
         if (this.weatherTimer >= this.weatherCycleDuration) {
@@ -962,6 +1063,53 @@ export class DemoWorld {
                 this.combatLog = [];
             }, 2000);
         }
+    }
+
+    // ============================================================
+    // Chat & Online Status
+    // ============================================================
+
+    private renderChat(_camX: number, _camY: number): void {
+        if (this.chatMessages.length === 0) return;
+
+        // Show last 5 messages in bottom-left
+        const recent = this.chatMessages.slice(-5);
+        let yOffset = this.height - 80;
+        for (let i = recent.length - 1; i >= 0; i--) {
+            const msg = recent[i];
+            const alpha = Math.max(0, 1 - msg.age / 10);
+            if (alpha <= 0) continue;
+
+            const style = new TextStyle({
+                fontFamily: 'Arial, sans-serif',
+                fontSize: 12,
+                fill: msg.from === 'You' ? 0x44aaff : 0xaabbcc,
+            });
+            const text = new Text({
+                text: `${msg.from}: ${msg.text}`,
+                style,
+            });
+            text.alpha = alpha;
+            text.position.set(8, yOffset);
+            this.container.addChild(text);
+            yOffset -= 18;
+        }
+    }
+
+    private renderOnlineStatus(): void {
+        // Small indicator in top-left corner (below HUD)
+        const statusColor = this.isOnline ? 0x44ff44 : 0xff4444;
+        const statusText = this.isOnline ? `🟢 Online (${this.playerCount + 1})` : '🔴 Offline';
+
+        const dot = new Graphics();
+        dot.circle(15, 50, 4);
+        dot.fill({ color: statusColor });
+        this.container.addChild(dot);
+
+        const style = new TextStyle({ fontFamily: 'monospace', fontSize: 10, fill: statusColor });
+        const text = new Text({ text: statusText, style });
+        text.position.set(24, 44);
+        this.container.addChild(text);
     }
 
     private renderCombat(): void {
@@ -1304,6 +1452,14 @@ export class DemoWorld {
             render: () => this.renderPlayer(this.playerX - camX, this.playerY - camY),
         });
 
+        // Other players from network
+        for (const op of this.otherPlayers) {
+            entities.push({
+                y: op.y,
+                render: () => this.renderCharacter(op.x - camX, op.y - camY, op.color, op.dir, op.name),
+            });
+        }
+
         // Sort by Y and render
         entities.sort((a, b) => a.y - b.y);
         for (const ent of entities) {
@@ -1343,6 +1499,12 @@ export class DemoWorld {
         if (this.showCombat) {
             this.renderCombat();
         }
+
+        // Chat overlay
+        this.renderChat(camX, camY);
+
+        // Online indicator
+        this.renderOnlineStatus();
 
         // Inventory overlay
         if (this.showInventory) {
