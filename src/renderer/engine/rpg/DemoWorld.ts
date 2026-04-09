@@ -604,6 +604,99 @@ export class DemoWorld {
         }
     }
 
+    // ============================================================
+    // Area Transitions
+    // ============================================================
+
+    private generateMountainArea(): void {
+        // Fill with rocky terrain (reuse GRASS for base, trees for rocks)
+        for (let y = 0; y < MAP_H; y++) {
+            for (let x = 0; x < MAP_W; x++) {
+                this.tiles[y][x] = Tile.GRASS;
+            }
+        }
+
+        // Mountain paths (winding)
+        const pathPoints = [
+            [MAP_H - 1, 15], [MAP_H - 2, 15], [MAP_H - 3, 14],
+            [MAP_H - 4, 14], [MAP_H - 5, 13], [MAP_H - 6, 13],
+            [MAP_H - 7, 12], [MAP_H - 8, 12], [MAP_H - 9, 11],
+            [MAP_H - 10, 11], [MAP_H - 11, 10], [MAP_H - 12, 10],
+            [MAP_H - 13, 9], [MAP_H - 14, 9], [MAP_H - 15, 8],
+            [MAP_H - 16, 8], [MAP_H - 17, 7], [MAP_H - 18, 7],
+            [MAP_H - 19, 6], [MAP_H - 20, 6], [MAP_H - 21, 5],
+        ];
+        for (const [py, px] of pathPoints) {
+            if (py >= 0 && py < MAP_H && px >= 0 && px < MAP_W) {
+                this.tiles[py][px] = Tile.PATH;
+                // Widen path
+                if (px + 1 < MAP_W) this.tiles[py][px + 1] = Tile.PATH;
+            }
+        }
+
+        // Scattered rocks (trees = rocks in this area)
+        for (let i = 0; i < 40; i++) {
+            const rx = Math.floor(Math.random() * MAP_W);
+            const ry = Math.floor(Math.random() * MAP_H);
+            if (this.tiles[ry][rx] === Tile.GRASS) {
+                this.tiles[ry][rx] = Tile.TREE;
+            }
+        }
+
+        // Snow patches at top
+        for (let x = 0; x < MAP_W; x++) {
+            if (this.tiles[0][x] === Tile.GRASS) this.tiles[0][x] = Tile.SAND;
+            if (this.tiles[1][x] === Tile.GRASS) this.tiles[1][x] = Tile.SAND;
+            if (this.tiles[2][x] === Tile.GRASS && Math.random() > 0.5) this.tiles[2][x] = Tile.SAND;
+        }
+
+        // Treasure chest at the peak
+        this.tiles[4][6] = Tile.CHEST;
+
+        // Flowers
+        for (let i = 0; i < 8; i++) {
+            const fx = Math.floor(Math.random() * MAP_W);
+            const fy = Math.floor(Math.random() * MAP_H);
+            if (this.tiles[fy][fx] === Tile.GRASS) this.tiles[fy][fx] = Tile.FLOWER;
+        }
+    }
+
+    private transitionToArea(areaID: 'town' | 'mountains' | 'beach'): void {
+        this.currentAreaID = areaID;
+        this.playerTrail = []; // Clear trail on area change
+        this.openedChests = new Set(); // Reset chests per area
+
+        switch (areaID) {
+            case 'town':
+                this.currentMapName = 'TOWNYUU Downstairs';
+                this.generateMap();
+                this.placeChests();
+                this.playerX = 15 * TILE_SIZE;
+                this.playerY = 1 * TILE_SIZE; // Enter from north
+                break;
+            case 'mountains':
+                this.currentMapName = 'North Mountains';
+                this.generateMountainArea();
+                this.playerX = 15 * TILE_SIZE;
+                this.playerY = (MAP_H - 2) * TILE_SIZE; // Enter from south
+                break;
+            case 'beach':
+                this.currentMapName = 'South Beach';
+                // Reuse town map for now (placeholder)
+                this.generateMap();
+                this.placeChests();
+                this.playerX = 15 * TILE_SIZE;
+                this.playerY = 1 * TILE_SIZE; // Enter from north
+                break;
+        }
+
+        this.notifications.push({
+            text: `Entered: ${this.currentMapName}`,
+            x: this.playerX, y: this.playerY - 30,
+            age: 0, maxAge: 2.0, color: 0x88aaff,
+        });
+    }
+
     private fillRect(x: number, y: number, w: number, h: number, tile: number): void {
         for (let dy = 0; dy < h; dy++) {
             for (let dx = 0; dx < w; dx++) {
@@ -798,11 +891,19 @@ export class DemoWorld {
             this.playerX = (MAP_W - 1) * TILE_SIZE - 1;
         }
         if (this.playerY <= 0 && dy < 0) {
-            this.notifications.push({ text: '↑ North Mountains (coming soon)', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
-            this.playerY = 1;
+            if (this.currentAreaID === 'town') {
+                this.transitionToArea('mountains');
+            } else {
+                this.notifications.push({ text: '↑ Nothing beyond...', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
+                this.playerY = 1;
+            }
         } else if (this.playerY >= (MAP_H - 1) * TILE_SIZE && dy > 0) {
-            this.notifications.push({ text: 'South Beach ↓ (coming soon)', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
-            this.playerY = (MAP_H - 1) * TILE_SIZE - 1;
+            if (this.currentAreaID === 'mountains') {
+                this.transitionToArea('town');
+            } else {
+                this.notifications.push({ text: 'South Beach ↓ (coming soon)', x: this.playerX, y: this.playerY - 20, age: 0, maxAge: 1.5, color: 0x88aaff });
+                this.playerY = (MAP_H - 1) * TILE_SIZE - 1;
+            }
         }
 
         // Footstep particles when moving
@@ -2061,7 +2162,8 @@ export class DemoWorld {
     getPlayerY(): number { return this.playerY; }
     getMapName(): string { return this.currentMapName || 'TOWNYUU Downstairs'; }
 
-    private currentMapName = '';
+    private currentMapName = 'TOWNYUU Downstairs';
+    private currentAreaID: 'town' | 'mountains' | 'beach' = 'town';
 
     setMapName(name: string): void { this.currentMapName = name; }
 
