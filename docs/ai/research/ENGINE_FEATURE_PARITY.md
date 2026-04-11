@@ -1,4 +1,4 @@
-# bob's game — Ultimate Omni-Engine Feature Parity Analysis v2.1.94
+# bob's game — Ultimate Omni-Engine Feature Parity Analysis v2.2.4
 
 ## Target Engines Analyzed
 
@@ -13,17 +13,17 @@
 
 ## Feature Parity Scorecard
 
-### bob's game: 127/149 features (85.2%) — HIGHEST OF ALL ENGINES
+### bob's game: 138/149 features (92.6%) — HIGHEST OF ALL ENGINES
 
 | Engine | Features | vs bob's game |
 |---|---|---|
-| **bob's game** | **127/149 (85.2%)** | **100%** |
-| RPG Maker | 84/149 (56.4%) | 66% |
-| Construct | 74/149 (49.7%) | 58% |
-| GameMaker | 71/149 (47.7%) | 56% |
-| Defold | 70/149 (47.0%) | 55% |
-| Phaser | 62/149 (41.6%) | 49% |
-| LÖVE | 48/149 (32.2%) | 38% |
+| **bob's game** | **138/149 (92.6%)** | **100%** |
+| RPG Maker | 84/149 (56.4%) | 61% |
+| Construct | 74/149 (49.7%) | 54% |
+| GameMaker | 71/149 (47.7%) | 51% |
+| Defold | 70/149 (47.0%) | 51% |
+| Phaser | 62/149 (41.6%) | 45% |
+| LÖVE | 48/149 (32.2%) | 35% |
 
 ---
 
@@ -57,7 +57,7 @@
 | 9-Slice/9-Patch | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |
 | Screen Effects/Filters | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Screen Shake | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Parallax Scrolling | 🔜 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Parallax Scrolling | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Lighting (2D) | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
 | Dynamic Shadows | 🔜 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Color Blending/Tinting | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -119,7 +119,7 @@
 | 3D Audio | 🔜 | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
 | Procedural Audio Gen | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
 | OGG/WAV/MP3 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Audio Fading | 🔜 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Audio Fading | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Dynamic Music Layers | 🔜 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
 **bob's game: 7/9 (77.8%) — Fading and 3D audio are the only gaps. UNIQUE: procedural audio generation.**
@@ -133,7 +133,7 @@
 | Tile Collision | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |
 | AABB Collision | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Circle Collision | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Physics Engine (Box2D/Matter) | 🔜 | ✅ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| Physics Engine (Box2D/Matter) | ✅ | ✅ | ❌ | ✅ | ✅ | ❌ | ❌ |
 | Raycasting | 🔜 | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
 | Collision Layers | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |
 | Particle Collision | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
@@ -179,7 +179,7 @@
 | Switch/Flag System | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Variable/Skill System | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Inventory System | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Equipment System | 🔜 | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Equipment System | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Skill/Ability System | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Leveling/XP | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Class/Job System | 🔜 | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
@@ -191,7 +191,7 @@
 | Day/Night Cycle | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Save/Load | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ | ✅ |
 | Cloud Save | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Quest System | 🔜 | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Quest System | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Fishing | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Treasure Chests | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | Building Interiors | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
