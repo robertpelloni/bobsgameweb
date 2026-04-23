@@ -83,6 +83,15 @@ export const BlockTypes = {
         const bt = new BlockType("Normal");
         bt.useInNormalPieces = true;
         bt.chainMustContainAtLeastOneOfTheseBlockTypesToStartExploding = true;
+        bt.colors = [
+            new BobColor(0, 150, 255),    // Blue
+            new BobColor(255, 50, 50),     // Red
+            new BobColor(50, 220, 50),     // Green
+            new BobColor(255, 220, 0),     // Yellow
+            new BobColor(180, 50, 255),    // Purple
+            new BobColor(255, 140, 0),     // Orange
+            new BobColor(0, 220, 220),     // Cyan
+        ];
         return bt;
     })(),
 

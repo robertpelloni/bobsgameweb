@@ -227,7 +227,7 @@ export class Game extends EventEmitter<GameEvents> {
 
         // Update shaders
         if (this.crtFilter) {
-            (this.crtFilter.resources.uTime as any).value += dt;
+            if (this.crtFilter.resources?.uTime) (this.crtFilter.resources.uTime as any).value += dt;
         }
 
         InputManager.update();

@@ -158,7 +158,7 @@ export class GameType {
     }
 
     public getNormalBlockTypes(d: DifficultyType): BlockType[] {
-        return this.blockTypes.filter(bt => !bt.isSpecialType && !bt.isGarbageBlockType);
+        return this.blockTypes.filter(bt => !bt.isSpecialType() && !bt.isGarbageBlockType);
     }
 
     public getGarbageBlockTypes(d: DifficultyType): BlockType[] {
