@@ -38,16 +38,32 @@ export class World {
     }
 
     public saveState(): WorldState {
-        // Simple serialization for demo
+        // Safe serializer that skips PixiJS objects and circular refs
+        const safeStringify = (obj: any, seen = new WeakSet()): any => {
+            if (obj === null || typeof obj !== 'object') return obj;
+            if (seen.has(obj)) return '[Circular]';
+            seen.add(obj);
+            if (obj.constructor?.name && [
+                'Container','Graphics','Sprite','Text','Texture','Renderer',
+                'Application','Ticker','EventEmitter','DisplayObject','Canvas',
+                'WebGLRenderer','Shader','Filter','Geometry','Mesh','Particle'
+            ].includes(obj.constructor.name)) return '[' + obj.constructor.name + ']';
+            if (Array.isArray(obj)) return obj.map((v: any) => safeStringify(v, seen));
+            const result: any = {};
+            for (const key of Object.keys(obj)) {
+                try { result[key] = safeStringify(obj[key], seen); }
+                catch { result[key] = '[Error]'; }
+            }
+            return result;
+        };
         const entitiesObj: any = {};
         for (const [id, comps] of this.entities) {
             entitiesObj[id] = {};
             for (const [type, comp] of comps) {
-                // Serialize only data, not methods
-                entitiesObj[id][type] = JSON.parse(JSON.stringify(comp));
+                try { entitiesObj[id][type] = safeStringify(comp); }
+                catch { entitiesObj[id][type] = { typeName: (comp as any).typeName || 'unknown' }; }
             }
         }
-        
         return {
             tick: this.currentTick,
             entities: JSON.stringify(entitiesObj)
@@ -71,11 +87,11 @@ export class World {
             system.update(dt, this.entities);
         }
 
-        // Store history for rollback
-        this.history.push(this.saveState());
-        if (this.history.length > this.MAX_HISTORY) {
-            this.history.shift();
-        }
+        // Store history for rollback (disabled - loadState is stub, serialization too expensive per-frame)
+        // this.history.push(this.saveState());
+        // if (this.history.length > this.MAX_HISTORY) {
+        //     this.history.shift();
+        // }
     }
 
     public get tick(): number {
