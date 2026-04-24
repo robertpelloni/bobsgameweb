@@ -104,10 +104,17 @@ export class GameType {
     public chainRule_CheckColumn: boolean = true;
     public chainRule_CheckDiagonal: boolean = false;
     public chainRule_CheckRecursive: boolean = false;
+    public chainRule_CheckEntireLine: boolean = false;
+    public chainRule_CheckTouchingBreakerBlocksChain: boolean = false;
     public chainRule_CheckTouchSameColor: boolean = true;
     public chainRule_CheckTouchAnyColor: boolean = false;
 
     public playingFieldGarbageType: GarbageType = GarbageType.MATCH_BOTTOM_ROW;
+    public playingFieldGarbageSpawnRule: GarbageSpawnRule = GarbageSpawnRule.NONE;
+
+    public removingBlocksDelayTicksBetweenEachBlock: number = 0;
+    public lineClearDelayTicksAmountPerLine: number = 100;
+    public lineClearDelayTicksAmountPerBlock: number = 30;
 
     public hardDropPunchThroughToLowestValidGridPosition: boolean = false;
     public twoSpaceWallKickAllowed: boolean = true;
