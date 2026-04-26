@@ -42,7 +42,13 @@ type PresetCatalogEntry = {
   chain: string;
 };
 
+import { Container } from "pixi.js";
+import { Button } from "../ui/Button";
+import { Panel } from "../ui/Panel";
+
 export class CustomGameEditor {
+  public pixiContainer: Container = new Container();
+
   private container: HTMLElement;
   private currentGameType: GameType;
 
