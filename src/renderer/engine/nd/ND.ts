@@ -105,7 +105,7 @@ export class ND {
     // Game Management
     // ============================================================
 
-    setGame(game: MiniGameEngine): void {
+    setGame(game: any): void {
         this.currentGame = game;
         game.init();
         log.info(`nD game set: ${game.name}`);

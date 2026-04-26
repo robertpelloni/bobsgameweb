@@ -204,3 +204,10 @@ Focused on the web-port custom puzzle editor as part of a broader 3-port parity 
 3. Use `MAINTENANCE_WINDOW_RUNBOOK.md` as the operator source of truth for that restart window rather than ad hoc command history.
 4. If native becomes writable again, mirror the same recent-history workflow, center-all helper, action breadcrumbs, focused block controls, deeper block-rule editing, richer block color-set editing, block gameplay hooks, field-effect toggles, conversion-pair editing, and saved-template slot summaries there after the lock clears.
 5. Consider true undo/redo later if the editor state model becomes structured enough to support it safely.
+
+## Omni-Engine Roadmap Initialization (v2.2.5)
+- Handled massive documentation overhaul creating `ROADMAP.md`, `TODO.md`, `VISION.md`, `MEMORY.md`, and `IDEAS.md`.
+- Drafted explicit agent instruction files for all major LLMs to guide continuous development (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `GPT.md`, `copilot-instructions.md`).
+- Initiated adding 30+ tools as Git submodules for feature assimilation.
+- Added `SUBMODULES.md` with explicit game engine tracking (Defold, Love2D, Phaser, Construct, GameMaker, RPG Maker).
+- Re-verified Typescript types and build step to ensure 0 regressions.
