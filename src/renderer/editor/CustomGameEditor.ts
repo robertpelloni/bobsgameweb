@@ -42,7 +42,7 @@ type PresetCatalogEntry = {
   chain: string;
 };
 
-import { Container } from "pixi.js";
+import { Container, Text as PIXIText } from "pixi.js";
 import { Button } from "../ui/Button";
 import { Panel } from "../ui/Panel";
 
@@ -135,6 +135,11 @@ export class CustomGameEditor {
     saveBtn.on("click", () => this.savePresetSlot(1));
     saveBtn.setPosition(10, 10);
     actionPanel.addChild(saveBtn.container);
+
+
+    const infoLabel = new PIXIText({ text: "Porting UI to Native Pixi", style: { fill: 0xffffff, fontSize: 16 } });
+    infoLabel.position.set(10, 60);
+    actionPanel.addChild(infoLabel);
 
     const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
     loadBtn.on("click", () => this.loadPresetSlot(1));
@@ -2584,6 +2589,11 @@ export class CustomGameEditor {
     saveBtn.on("click", () => this.savePresetSlot(1));
     saveBtn.setPosition(10, 10);
     actionPanel.addChild(saveBtn.container);
+
+
+    const infoLabel = new PIXIText({ text: "Porting UI to Native Pixi", style: { fill: 0xffffff, fontSize: 16 } });
+    infoLabel.position.set(10, 60);
+    actionPanel.addChild(infoLabel);
 
     const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
     loadBtn.on("click", () => this.loadPresetSlot(1));
