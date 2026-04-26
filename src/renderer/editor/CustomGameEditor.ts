@@ -43,6 +43,7 @@ type PresetCatalogEntry = {
 };
 
 import { Container, Text as PIXIText } from "pixi.js";
+import { TextInput } from "../ui/TextInput";
 import { Button } from "../ui/Button";
 import { Panel } from "../ui/Panel";
 
@@ -54,6 +55,7 @@ export class CustomGameEditor {
 
   // UI Elements
   private nameInput!: HTMLInputElement;
+  private pixiNameInput!: TextInput;
   private modeSelect!: HTMLSelectElement;
   private gridWidthInput!: HTMLInputElement;
   private gridHeightInput!: HTMLInputElement;
@@ -128,6 +130,22 @@ export class CustomGameEditor {
     
     this.currentGameType = new GameType();
     
+
+    const namePanel = new Panel({ width: 350, height: 80, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
+    namePanel.setPosition(20, 380);
+    const nameLabel = new PIXIText({ text: "Game Name", style: { fill: 0xcccccc, fontSize: 16 } });
+    nameLabel.position.set(10, 10);
+    namePanel.addChild(nameLabel);
+    this.pixiNameInput = new TextInput("Enter Game Name", { width: 330, height: 30 });
+    this.pixiNameInput.setPosition(10, 35);
+    this.pixiNameInput.on("change", (val: string) => {
+      this.nameInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    namePanel.addChild(this.pixiNameInput.container);
+    this.pixiContainer.addChild(namePanel.container);
+
     const actionPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
     actionPanel.setPosition(20, 20);
 
@@ -1081,6 +1099,7 @@ export class CustomGameEditor {
 
   private loadFromGameType() {
     this.nameInput.value = this.currentGameType.name;
+    if (this.pixiNameInput) this.pixiNameInput.value = this.currentGameType.name;
     this.modeSelect.value = this.currentGameType.gameMode;
     this.gridWidthInput.value = this.currentGameType.gridWidth.toString();
     this.gridHeightInput.value = this.currentGameType.gridHeight.toString();
@@ -2635,6 +2654,22 @@ export class CustomGameEditor {
 
   private createNew() {
     this.currentGameType = new GameType();
+
+
+    const namePanel = new Panel({ width: 350, height: 80, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
+    namePanel.setPosition(20, 380);
+    const nameLabel = new PIXIText({ text: "Game Name", style: { fill: 0xcccccc, fontSize: 16 } });
+    nameLabel.position.set(10, 10);
+    namePanel.addChild(nameLabel);
+    this.pixiNameInput = new TextInput("Enter Game Name", { width: 330, height: 30 });
+    this.pixiNameInput.setPosition(10, 35);
+    this.pixiNameInput.on("change", (val: string) => {
+      this.nameInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    namePanel.addChild(this.pixiNameInput.container);
+    this.pixiContainer.addChild(namePanel.container);
 
     const actionPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
     actionPanel.setPosition(20, 20);
