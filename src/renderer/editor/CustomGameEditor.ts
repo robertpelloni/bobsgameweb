@@ -154,6 +154,24 @@ export class CustomGameEditor {
     aiPanel.addChild(txt2SpriteBtn.container);
 
     const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+
+    const palettePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x002222, backgroundAlpha: 0.9, borderColor: 0x00ffff });
+    palettePanel.setPosition(20, 260);
+
+    const paletteTitle = new PIXIText({ text: "Color Palette", style: { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" } });
+    paletteTitle.position.set(10, 10);
+    palettePanel.addChild(paletteTitle);
+
+    const addColorBtn = new Button("Add Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    addColorBtn.setPosition(10, 45);
+    palettePanel.addChild(addColorBtn.container);
+
+    const rmColorBtn = new Button("Remove Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    rmColorBtn.setPosition(170, 45);
+    palettePanel.addChild(rmColorBtn.container);
+
+    this.pixiContainer.addChild(palettePanel.container);
+
     txt2TileBtn.setPosition(170, 45);
     aiPanel.addChild(txt2TileBtn.container);
 
@@ -2626,6 +2644,24 @@ export class CustomGameEditor {
     aiPanel.addChild(txt2SpriteBtn.container);
 
     const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+
+    const palettePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x002222, backgroundAlpha: 0.9, borderColor: 0x00ffff });
+    palettePanel.setPosition(20, 260);
+
+    const paletteTitle = new PIXIText({ text: "Color Palette", style: { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" } });
+    paletteTitle.position.set(10, 10);
+    palettePanel.addChild(paletteTitle);
+
+    const addColorBtn = new Button("Add Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    addColorBtn.setPosition(10, 45);
+    palettePanel.addChild(addColorBtn.container);
+
+    const rmColorBtn = new Button("Remove Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    rmColorBtn.setPosition(170, 45);
+    palettePanel.addChild(rmColorBtn.container);
+
+    this.pixiContainer.addChild(palettePanel.container);
+
     txt2TileBtn.setPosition(170, 45);
     aiPanel.addChild(txt2TileBtn.container);
 
