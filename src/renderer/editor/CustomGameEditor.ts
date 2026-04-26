@@ -128,6 +128,21 @@ export class CustomGameEditor {
     
     this.currentGameType = new GameType();
     
+    const actionPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
+    actionPanel.setPosition(20, 20);
+
+    const saveBtn = new Button("Save to Slot 1", { width: 140, height: 30 });
+    saveBtn.on("click", () => this.savePresetSlot(1));
+    saveBtn.setPosition(10, 10);
+    actionPanel.addChild(saveBtn.container);
+
+    const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
+    loadBtn.on("click", () => this.loadPresetSlot(1));
+    loadBtn.setPosition(160, 10);
+    actionPanel.addChild(loadBtn.container);
+
+    this.pixiContainer.addChild(actionPanel.container);
+
     this.buildUI();
     this.loadFromGameType();
   }
@@ -2561,6 +2576,21 @@ export class CustomGameEditor {
 
   private createNew() {
     this.currentGameType = new GameType();
+
+    const actionPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
+    actionPanel.setPosition(20, 20);
+
+    const saveBtn = new Button("Save to Slot 1", { width: 140, height: 30 });
+    saveBtn.on("click", () => this.savePresetSlot(1));
+    saveBtn.setPosition(10, 10);
+    actionPanel.addChild(saveBtn.container);
+
+    const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
+    loadBtn.on("click", () => this.loadPresetSlot(1));
+    loadBtn.setPosition(160, 10);
+    actionPanel.addChild(loadBtn.container);
+
+    this.pixiContainer.addChild(actionPanel.container);
     this.loadFromGameType();
     this.selectPiece(0);
     this.updateSummary();
