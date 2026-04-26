@@ -5,7 +5,13 @@ import { AchievementManager } from '../data/AchievementManager';
 import { getAchievementIdentity } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
 
+import { Container, Text as PIXIText } from "pixi.js";
+import { Panel } from "../ui/Panel";
+import { Button } from "../ui/Button";
+
 export class WorldEditor {
+    public pixiContainer: Container = new Container();
+
     private container: HTMLElement;
     private db: RPGDatabase = new RPGDatabase();
 
@@ -24,6 +30,20 @@ export class WorldEditor {
         
         this.buildUI();
         this.loadFromServer();
+
+        const eventSheetPanel = new Panel({ width: 400, height: 200, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0xaa00aa });
+        eventSheetPanel.setPosition(420, 20);
+
+        const esTitle = new PIXIText({ text: "Visual Event Sheet", style: { fill: 0xee88ee, fontSize: 18, fontWeight: "bold" } });
+        esTitle.position.set(10, 10);
+        eventSheetPanel.addChild(esTitle);
+
+        const openSheetBtn = new Button("Open Event Builder", { width: 200, height: 30, backgroundColor: 0x440044 });
+        openSheetBtn.setPosition(10, 45);
+        eventSheetPanel.addChild(openSheetBtn.container);
+
+        this.pixiContainer.addChild(eventSheetPanel.container);
+
         this.loadAchievementSnapshot();
     }
 

@@ -21,6 +21,7 @@ export class WorldEditorScene extends Scene {
         document.body.appendChild(this.editorDiv);
 
         this.editor = new WorldEditor(this.editorDiv as any);
+        this.container.addChild(this.editor.pixiContainer);
     }
 
     protected onUpdate(dt: number): void {
