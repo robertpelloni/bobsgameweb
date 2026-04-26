@@ -172,6 +172,24 @@ export class CustomGameEditor {
 
     this.pixiContainer.addChild(palettePanel.container);
 
+    const timelinePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x222200, backgroundAlpha: 0.9, borderColor: 0xffff00 });
+    timelinePanel.setPosition(380, 260);
+
+    const timelineTitle = new PIXIText({ text: "Animation Timeline", style: { fill: 0xffff88, fontSize: 18, fontWeight: "bold" } });
+    timelineTitle.position.set(10, 10);
+    timelinePanel.addChild(timelineTitle);
+
+    const playBtn = new Button("Play", { width: 100, height: 30, backgroundColor: 0x444400 });
+    playBtn.setPosition(10, 45);
+    timelinePanel.addChild(playBtn.container);
+
+    const stopBtn = new Button("Stop", { width: 100, height: 30, backgroundColor: 0x444400 });
+    stopBtn.setPosition(120, 45);
+    timelinePanel.addChild(stopBtn.container);
+
+    this.pixiContainer.addChild(timelinePanel.container);
+
+
     txt2TileBtn.setPosition(170, 45);
     aiPanel.addChild(txt2TileBtn.container);
 
@@ -2661,6 +2679,24 @@ export class CustomGameEditor {
     palettePanel.addChild(rmColorBtn.container);
 
     this.pixiContainer.addChild(palettePanel.container);
+
+    const timelinePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x222200, backgroundAlpha: 0.9, borderColor: 0xffff00 });
+    timelinePanel.setPosition(380, 260);
+
+    const timelineTitle = new PIXIText({ text: "Animation Timeline", style: { fill: 0xffff88, fontSize: 18, fontWeight: "bold" } });
+    timelineTitle.position.set(10, 10);
+    timelinePanel.addChild(timelineTitle);
+
+    const playBtn = new Button("Play", { width: 100, height: 30, backgroundColor: 0x444400 });
+    playBtn.setPosition(10, 45);
+    timelinePanel.addChild(playBtn.container);
+
+    const stopBtn = new Button("Stop", { width: 100, height: 30, backgroundColor: 0x444400 });
+    stopBtn.setPosition(120, 45);
+    timelinePanel.addChild(stopBtn.container);
+
+    this.pixiContainer.addChild(timelinePanel.container);
+
 
     txt2TileBtn.setPosition(170, 45);
     aiPanel.addChild(txt2TileBtn.container);
