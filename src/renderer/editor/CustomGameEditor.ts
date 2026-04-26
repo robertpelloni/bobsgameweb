@@ -141,6 +141,24 @@ export class CustomGameEditor {
     infoLabel.position.set(10, 60);
     actionPanel.addChild(infoLabel);
 
+
+    const aiPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x220022, backgroundAlpha: 0.9, borderColor: 0xff00ff });
+    aiPanel.setPosition(20, 140);
+
+    const aiTitle = new PIXIText({ text: "Generative AI Tools", style: { fill: 0xff88ff, fontSize: 18, fontWeight: "bold" } });
+    aiTitle.position.set(10, 10);
+    aiPanel.addChild(aiTitle);
+
+    const txt2SpriteBtn = new Button("Text-to-Sprite", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2SpriteBtn.setPosition(10, 45);
+    aiPanel.addChild(txt2SpriteBtn.container);
+
+    const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2TileBtn.setPosition(170, 45);
+    aiPanel.addChild(txt2TileBtn.container);
+
+    this.pixiContainer.addChild(aiPanel.container);
+
     const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
     loadBtn.on("click", () => this.loadPresetSlot(1));
     loadBtn.setPosition(160, 10);
@@ -2594,6 +2612,24 @@ export class CustomGameEditor {
     const infoLabel = new PIXIText({ text: "Porting UI to Native Pixi", style: { fill: 0xffffff, fontSize: 16 } });
     infoLabel.position.set(10, 60);
     actionPanel.addChild(infoLabel);
+
+
+    const aiPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x220022, backgroundAlpha: 0.9, borderColor: 0xff00ff });
+    aiPanel.setPosition(20, 140);
+
+    const aiTitle = new PIXIText({ text: "Generative AI Tools", style: { fill: 0xff88ff, fontSize: 18, fontWeight: "bold" } });
+    aiTitle.position.set(10, 10);
+    aiPanel.addChild(aiTitle);
+
+    const txt2SpriteBtn = new Button("Text-to-Sprite", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2SpriteBtn.setPosition(10, 45);
+    aiPanel.addChild(txt2SpriteBtn.container);
+
+    const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2TileBtn.setPosition(170, 45);
+    aiPanel.addChild(txt2TileBtn.container);
+
+    this.pixiContainer.addChild(aiPanel.container);
 
     const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
     loadBtn.on("click", () => this.loadPresetSlot(1));
