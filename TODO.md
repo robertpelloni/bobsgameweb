@@ -6,3 +6,11 @@
 - [ ] Port bgeditor to C++ using qt6.
 - [ ] Document all submodules comprehensively.
 - [ ] Refactor C++ project (if applicable/present) to be clean with Ultimate++ toolkit.
+
+## `bgeditor` Omni-Engine Porting & Expansion
+- [ ] Read and assimilate the data structure and UI flow from `src/renderer/editor/CustomGameEditor.ts`.
+- [ ] Abstract the DOM-based UI generation in `CustomGameEditor.ts` into our custom `ui/` component framework (Label, Button, Panel) for true cross-platform parity without CSS/HTML dependencies.
+- [ ] Implement generative AI tool panels (Text-to-Sprite, Text-to-Tileset) directly within the editor layout.
+- [ ] Connect the visual "Event Sheet" editor directly to the `engine/rpg/event/` data structures.
+- [ ] Implement a full timeline view for cinematic and sprite animations (referencing Aseprite and Construct).
+- [ ] C++ Qt6 port: Scaffold the C++ project directory and link `bobui` for compiling the same data abstractions.

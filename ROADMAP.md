@@ -16,3 +16,34 @@
 - Web port of bgeditor.
 - Full generative AI tool integration for asset generation (sprites, 3D models).
 - Continuous deployment to Hetzner and auto-scaling.
+
+## Engine Parity Roadmap
+### Defold
+- [ ] Match instant hot-reloading pipeline for scripts and assets.
+- [ ] Implement component-based entity hierarchy mirroring Defold's collection system.
+- [ ] Port/implement GUI builder node hierarchy natively within `bgeditor`.
+
+### Love2D
+- [ ] Ensure scripting API surface is completely decoupled and transparent (Lua-like simplicity in TS).
+- [ ] Implement Box2D or identical physics abstraction module.
+- [ ] Create simple pixel-shader pipeline accessible directly from custom game editor.
+
+### Phaser
+- [ ] Replicate Phaser's Arcade Physics for platformer/top-down modes.
+- [ ] Ensure Scene Management can handle nested/parallel scenes with exact Phaser event hooks (`preupdate`, `postupdate`, etc.).
+- [ ] Build visual timeline/tween editor directly into `bgeditor`.
+
+### Construct
+- [ ] Implement "Event Sheets" (Visual Scripting) compiling down to our RPG Event format.
+- [ ] Behavior components (Platformer, 8-Direction, Bullet, Pathfinding) out of the box.
+- [ ] Instant preview via hidden iframe / web worker (like Construct 3).
+
+### GameMaker
+- [ ] Tightly coupled Image Editor <-> Room Editor workflow (click sprite -> edit -> auto-updates in room).
+- [ ] Advanced tiling (auto-tiling, animated tiles, isometric support) matching GM's Room Editor.
+- [ ] Dedicated Sequence (Animation/Timeline) editor.
+
+### RPG Maker
+- [ ] Comprehensive relational database editor (Items, Weapons, Armor, Enemies, Troops, States, Animations).
+- [ ] Map editor with 3-layer auto-tiling logic specifically mimicking RPG Maker XP/VX.
+- [ ] Battle screen layout customizer (Front-view, Side-view).
