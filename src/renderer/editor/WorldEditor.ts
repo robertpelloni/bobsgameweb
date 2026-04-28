@@ -6,6 +6,7 @@ import { getAchievementIdentity } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
 
 import { Container, Text as PIXIText } from "pixi.js";
+import { EventSheetEditor } from "./EventSheetEditor";
 import { Panel } from "../ui/Panel";
 import { Button } from "../ui/Button";
 
@@ -39,6 +40,15 @@ export class WorldEditor {
         eventSheetPanel.addChild(esTitle);
 
         const openSheetBtn = new Button("Open Event Builder", { width: 200, height: 30, backgroundColor: 0x440044 });
+
+        const sheetEditor = new EventSheetEditor();
+        sheetEditor.container.visible = false;
+        sheetEditor.container.position.set(50, 50);
+        this.pixiContainer.addChild(sheetEditor.container);
+
+        openSheetBtn.on("click", () => { sheetEditor.container.visible = true; });
+        sheetEditor.on("close", () => { sheetEditor.container.visible = false; });
+
         openSheetBtn.setPosition(10, 45);
         eventSheetPanel.addChild(openSheetBtn.container);
 
