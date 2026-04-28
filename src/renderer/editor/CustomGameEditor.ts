@@ -43,6 +43,7 @@ type PresetCatalogEntry = {
 };
 
 import { Container, Text as PIXIText } from "pixi.js";
+import { GenerativeAIManager } from "./GenerativeAIManager";
 import { TextInput } from "../ui/TextInput";
 import { Button } from "../ui/Button";
 import { Panel } from "../ui/Panel";
@@ -168,10 +169,12 @@ export class CustomGameEditor {
     aiPanel.addChild(aiTitle);
 
     const txt2SpriteBtn = new Button("Text-to-Sprite", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2SpriteBtn.on("click", () => GenerativeAIManager.generateSpriteFromText("blue hero character walking"));
     txt2SpriteBtn.setPosition(10, 45);
     aiPanel.addChild(txt2SpriteBtn.container);
 
     const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2TileBtn.on("click", () => GenerativeAIManager.generateTilesetFromText("16x16 dungeon stone floor"));
 
     const palettePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x002222, backgroundAlpha: 0.9, borderColor: 0x00ffff });
     palettePanel.setPosition(20, 260);
@@ -2693,10 +2696,12 @@ export class CustomGameEditor {
     aiPanel.addChild(aiTitle);
 
     const txt2SpriteBtn = new Button("Text-to-Sprite", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2SpriteBtn.on("click", () => GenerativeAIManager.generateSpriteFromText("blue hero character walking"));
     txt2SpriteBtn.setPosition(10, 45);
     aiPanel.addChild(txt2SpriteBtn.container);
 
     const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2TileBtn.on("click", () => GenerativeAIManager.generateTilesetFromText("16x16 dungeon stone floor"));
 
     const palettePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x002222, backgroundAlpha: 0.9, borderColor: 0x00ffff });
     palettePanel.setPosition(20, 260);
