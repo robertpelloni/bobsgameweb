@@ -280,6 +280,103 @@ export class CustomGameEditor {
 
     this.pixiContainer.addChild(actionPanel.container);
 
+
+    const libPanel = new Panel({ width: 710, height: 120, backgroundColor: 0x000000, backgroundAlpha: 0.9, borderColor: 0x555555 });
+    libPanel.setPosition(20, 500);
+
+    const libTitle = new PIXIText({ text: "Unified Template Library Search", style: { fill: 0xffffff, fontSize: 18, fontWeight: "bold" } });
+    libTitle.position.set(10, 10);
+    libPanel.addChild(libTitle);
+
+    const libSearch = new TextInput("Search templates...", { width: 330, height: 30 });
+    libSearch.setPosition(10, 45);
+    libSearch.on("change", (val: string) => {
+      this.librarySearchQuery = val.toLowerCase();
+      // this.renderUnifiedTemplateLibrary();
+    });
+    libPanel.addChild(libSearch.container);
+
+    const libAllBtn = new Button("All Sources", { width: 80, height: 30, backgroundColor: 0x333333 });
+    libAllBtn.setPosition(350, 45);
+    libPanel.addChild(libAllBtn.container);
+
+    const libBuiltInBtn = new Button("Built-In", { width: 80, height: 30, backgroundColor: 0x333333 });
+    libBuiltInBtn.setPosition(440, 45);
+    libPanel.addChild(libBuiltInBtn.container);
+
+    const libSlotsBtn = new Button("Slots", { width: 80, height: 30, backgroundColor: 0x333333 });
+    libSlotsBtn.setPosition(530, 45);
+    libPanel.addChild(libSlotsBtn.container);
+
+    const libHistoryBtn = new Button("History", { width: 80, height: 30, backgroundColor: 0x333333 });
+    libHistoryBtn.setPosition(620, 45);
+    libPanel.addChild(libHistoryBtn.container);
+
+    this.pixiContainer.addChild(libPanel.container);
+
+
+    const settingsPanel = new Panel({ width: 350, height: 350, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
+    settingsPanel.setPosition(20, 640);
+
+    const settingsTitle = new PIXIText({ text: "Game Settings", style: { fill: 0xffffff, fontSize: 18, fontWeight: "bold" } });
+    settingsTitle.position.set(10, 10);
+    settingsPanel.addChild(settingsTitle);
+
+    // We will use TextInput for now even for numbers and selects, simulating the fields.
+    // In a full PIXI UI system, we would create a Dropdown and NumberInput component.
+
+    const modeLabel = new PIXIText({ text: "Game Mode", style: { fill: 0xcccccc, fontSize: 14 } });
+    modeLabel.position.set(10, 45);
+    settingsPanel.addChild(modeLabel);
+    const modeInput = new TextInput("Drop/Stack/etc", { width: 330, height: 30 });
+    modeInput.setPosition(10, 65);
+    settingsPanel.addChild(modeInput.container);
+
+    const widthLabel = new PIXIText({ text: "Grid Width", style: { fill: 0xcccccc, fontSize: 14 } });
+    widthLabel.position.set(10, 105);
+    settingsPanel.addChild(widthLabel);
+    const widthInput = new TextInput("10", { width: 160, height: 30 });
+    widthInput.setPosition(10, 125);
+    settingsPanel.addChild(widthInput.container);
+
+    const heightLabel = new PIXIText({ text: "Grid Height", style: { fill: 0xcccccc, fontSize: 14 } });
+    heightLabel.position.set(180, 105);
+    settingsPanel.addChild(heightLabel);
+    const heightInput = new TextInput("20", { width: 160, height: 30 });
+    heightInput.setPosition(180, 125);
+    settingsPanel.addChild(heightInput.container);
+
+    const gravityLabel = new PIXIText({ text: "Gravity Base", style: { fill: 0xcccccc, fontSize: 14 } });
+    gravityLabel.position.set(10, 165);
+    settingsPanel.addChild(gravityLabel);
+    const gravityInput = new TextInput("1.0", { width: 160, height: 30 });
+    gravityInput.setPosition(10, 185);
+    settingsPanel.addChild(gravityInput.container);
+
+    const lockLabel = new PIXIText({ text: "Lock Delay", style: { fill: 0xcccccc, fontSize: 14 } });
+    lockLabel.position.set(180, 165);
+    settingsPanel.addChild(lockLabel);
+    const lockInput = new TextInput("30", { width: 160, height: 30 });
+    lockInput.setPosition(180, 185);
+    settingsPanel.addChild(lockInput.container);
+
+    const chainLabel = new PIXIText({ text: "Chain Clear Amount", style: { fill: 0xcccccc, fontSize: 14 } });
+    chainLabel.position.set(10, 225);
+    settingsPanel.addChild(chainLabel);
+    const chainInput = new TextInput("4", { width: 160, height: 30 });
+    chainInput.setPosition(10, 245);
+    settingsPanel.addChild(chainInput.container);
+
+    const nextLabel = new PIXIText({ text: "Next Pieces Count", style: { fill: 0xcccccc, fontSize: 14 } });
+    nextLabel.position.set(180, 225);
+    settingsPanel.addChild(nextLabel);
+    const nextInput = new TextInput("5", { width: 160, height: 30 });
+    nextInput.setPosition(180, 245);
+    settingsPanel.addChild(nextInput.container);
+
+    this.pixiContainer.addChild(settingsPanel.container);
+
+
     this.buildUI();
     this.loadFromGameType();
   }
@@ -288,6 +385,7 @@ export class CustomGameEditor {
     this.container.innerHTML = `
       <style>
         .custom-game-editor {
+          display: none;
           background: #1a1a1a;
           color: #eee;
           padding: 20px;
