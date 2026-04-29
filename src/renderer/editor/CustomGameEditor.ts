@@ -193,6 +193,46 @@ export class CustomGameEditor {
 
     this.pixiContainer.addChild(palettePanel.container);
 
+
+    const presetPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000022, backgroundAlpha: 0.9, borderColor: 0x0000ff });
+    presetPanel.setPosition(380, 20);
+
+    const presetTitle = new PIXIText({ text: "Preset Families", style: { fill: 0x8888ff, fontSize: 18, fontWeight: "bold" } });
+    presetTitle.position.set(10, 10);
+    presetPanel.addChild(presetTitle);
+
+    const preset1 = new Button("Classic Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset1.on("click", () => this.applyPreset("classic"));
+    preset1.setPosition(10, 45);
+    presetPanel.addChild(preset1.container);
+
+    const preset2 = new Button("Sprint Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset2.on("click", () => this.applyPreset("sprint"));
+    preset2.setPosition(120, 45);
+    presetPanel.addChild(preset2.container);
+
+    const preset3 = new Button("Cascade", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset3.on("click", () => this.applyPreset("cascade"));
+    preset3.setPosition(230, 45);
+    presetPanel.addChild(preset3.container);
+
+    const preset4 = new Button("Zen Garden", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset4.on("click", () => this.applyPreset("zen"));
+    preset4.setPosition(10, 80);
+    presetPanel.addChild(preset4.container);
+
+    const preset5 = new Button("Stack", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset5.on("click", () => this.applyPreset("stack"));
+    preset5.setPosition(120, 80);
+    presetPanel.addChild(preset5.container);
+
+    const preset6 = new Button("Micro", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset6.on("click", () => this.applyPreset("micro"));
+    preset6.setPosition(230, 80);
+    presetPanel.addChild(preset6.container);
+
+    this.pixiContainer.addChild(presetPanel.container);
+
     const timelinePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x222200, backgroundAlpha: 0.9, borderColor: 0xffff00 });
     timelinePanel.setPosition(380, 260);
 
@@ -2736,6 +2776,46 @@ export class CustomGameEditor {
     palettePanel.addChild(rmColorBtn.container);
 
     this.pixiContainer.addChild(palettePanel.container);
+
+
+    const presetPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000022, backgroundAlpha: 0.9, borderColor: 0x0000ff });
+    presetPanel.setPosition(380, 20);
+
+    const presetTitle = new PIXIText({ text: "Preset Families", style: { fill: 0x8888ff, fontSize: 18, fontWeight: "bold" } });
+    presetTitle.position.set(10, 10);
+    presetPanel.addChild(presetTitle);
+
+    const preset1 = new Button("Classic Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset1.on("click", () => this.applyPreset("classic"));
+    preset1.setPosition(10, 45);
+    presetPanel.addChild(preset1.container);
+
+    const preset2 = new Button("Sprint Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset2.on("click", () => this.applyPreset("sprint"));
+    preset2.setPosition(120, 45);
+    presetPanel.addChild(preset2.container);
+
+    const preset3 = new Button("Cascade", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset3.on("click", () => this.applyPreset("cascade"));
+    preset3.setPosition(230, 45);
+    presetPanel.addChild(preset3.container);
+
+    const preset4 = new Button("Zen Garden", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset4.on("click", () => this.applyPreset("zen"));
+    preset4.setPosition(10, 80);
+    presetPanel.addChild(preset4.container);
+
+    const preset5 = new Button("Stack", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset5.on("click", () => this.applyPreset("stack"));
+    preset5.setPosition(120, 80);
+    presetPanel.addChild(preset5.container);
+
+    const preset6 = new Button("Micro", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset6.on("click", () => this.applyPreset("micro"));
+    preset6.setPosition(230, 80);
+    presetPanel.addChild(preset6.container);
+
+    this.pixiContainer.addChild(presetPanel.container);
 
     const timelinePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x222200, backgroundAlpha: 0.9, borderColor: 0xffff00 });
     timelinePanel.setPosition(380, 260);
