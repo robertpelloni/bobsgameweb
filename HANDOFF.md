@@ -2,7 +2,7 @@
 
 ## Current State
 
-The agent successfully ported the Game Settings panel, the Game Mode selector, the Block Palette, the Pieces Editor, the Rotation Overview, and the Recent Actions/History panels from HTML DOM over to native PIXI UI components within `CustomGameEditor.ts`. The previous HTML blocks remain visually hidden using a targeted CSS injection (`.custom-game-editor { display: none; }`) to allow the underlying TS logic to still successfully select HTML elements using `querySelector` without throwing null reference exceptions during compilation. All type checking and building is perfectly green.
+The agent successfully ported the Settings, Game Mode selector, Block Palette, Pieces Editor, Rotation Overview, and Recent Actions/History panels from HTML DOM over to native PIXI UI components within `CustomGameEditor.ts`. The previous HTML blocks remain visually hidden using a targeted CSS injection (`.custom-game-editor { display: none; }`) to allow the underlying TS logic to still successfully select HTML elements using `querySelector` without throwing null reference exceptions during compilation. All type checking and building is perfectly green.
 
 ## Next Steps
 
