@@ -377,6 +377,46 @@ export class CustomGameEditor {
     this.pixiContainer.addChild(settingsPanel.container);
 
 
+    const blocksPanel = new Panel({ width: 350, height: 200, backgroundColor: 0x1a0000, backgroundAlpha: 0.9, borderColor: 0xff4444 });
+    blocksPanel.setPosition(380, 380);
+
+    const blocksTitle = new PIXIText({ text: "Block Palette", style: { fill: 0xffaaaa, fontSize: 18, fontWeight: "bold" } });
+    blocksTitle.position.set(10, 10);
+    blocksPanel.addChild(blocksTitle);
+
+    const addBlockBtn = new Button("Add Block", { width: 100, height: 30, backgroundColor: 0x880000 });
+    addBlockBtn.setPosition(10, 45);
+    blocksPanel.addChild(addBlockBtn.container);
+
+    const rmBlockBtn = new Button("Remove Block", { width: 120, height: 30, backgroundColor: 0x880000 });
+    rmBlockBtn.setPosition(120, 45);
+    blocksPanel.addChild(rmBlockBtn.container);
+
+    this.pixiContainer.addChild(blocksPanel.container);
+
+    const piecesPanel = new Panel({ width: 350, height: 300, backgroundColor: 0x001a00, backgroundAlpha: 0.9, borderColor: 0x44ff44 });
+    piecesPanel.setPosition(740, 20);
+
+    const piecesTitle = new PIXIText({ text: "Pieces Editor", style: { fill: 0xaaffaa, fontSize: 18, fontWeight: "bold" } });
+    piecesTitle.position.set(10, 10);
+    piecesPanel.addChild(piecesTitle);
+
+    const addPieceBtn = new Button("Add Piece", { width: 100, height: 30, backgroundColor: 0x008800 });
+    addPieceBtn.setPosition(10, 45);
+    piecesPanel.addChild(addPieceBtn.container);
+
+    const rmPieceBtn = new Button("Remove Piece", { width: 120, height: 30, backgroundColor: 0x008800 });
+    rmPieceBtn.setPosition(120, 45);
+    piecesPanel.addChild(rmPieceBtn.container);
+
+    const addRotationBtn = new Button("Add Rotation", { width: 120, height: 30, backgroundColor: 0x006600 });
+    addRotationBtn.setPosition(10, 85);
+    piecesPanel.addChild(addRotationBtn.container);
+
+    this.pixiContainer.addChild(piecesPanel.container);
+
+
+
     this.buildUI();
     this.loadFromGameType();
   }
