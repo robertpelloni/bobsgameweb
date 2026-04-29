@@ -616,7 +616,7 @@ export class CustomGameEditor {
         </div>
         <div class="form-group">
           <label>Advanced Rule Toggles</label>
-          <div class="toggle-grid">
+          <div class="toggle-grid" style="display: none;">
             <label><input type="checkbox" id="toggle-cascade-gravity"> Cascade gravity</label>
             <label><input type="checkbox" id="toggle-disconnected-gravity"> Only move disconnected blocks</label>
             <label><input type="checkbox" id="toggle-chain-row"> Chain checks rows</label>
@@ -627,7 +627,7 @@ export class CustomGameEditor {
         </div>
         <div class="form-group">
           <label>Movement / Randomizer Toggles</label>
-          <div class="toggle-grid">
+          <div class="toggle-grid" style="display: none;">
             <label><input type="checkbox" id="toggle-next-piece-enabled"> Show next pieces</label>
             <label><input type="checkbox" id="toggle-hold-piece-enabled"> Enable hold piece</label>
             <label><input type="checkbox" id="toggle-bag-randomizer"> Use bag randomizer</label>
@@ -643,7 +643,7 @@ export class CustomGameEditor {
       </div>
       
       <div class="tab-content hidden" id="tab-blocks">
-        <div class="editor-columns">
+        <div class="editor-columns" style="display: none;">
           <div class="item-list">
             <h3>Block Types</h3>
             <select id="block-list" size="10"></select>
@@ -687,7 +687,7 @@ export class CustomGameEditor {
             </div>
             <div class="form-group">
               <label>Usage</label>
-              <div class="toggle-grid">
+              <div class="toggle-grid" style="display: none;">
                 <label><input type="checkbox" id="block-use-normal"> Use in normal pieces</label>
                 <label><input type="checkbox" id="block-use-garbage"> Use as garbage</label>
                 <label><input type="checkbox" id="block-use-filler"> Use as filler</label>
@@ -726,7 +726,7 @@ export class CustomGameEditor {
       </div>
       
       <div class="tab-content hidden" id="tab-pieces">
-        <div class="editor-columns">
+        <div class="editor-columns" style="display: none;">
           <div class="item-list">
             <h3>Piece Types</h3>
             <select id="piece-list" size="10"></select>

@@ -2,13 +2,16 @@
 
 ## Current State
 
-The agent successfully ported the Settings, Game Mode selector, Block Palette, Pieces Editor, Rotation Overview, and Recent Actions/History panels from HTML DOM over to native PIXI UI components within `CustomGameEditor.ts`. The previous HTML blocks remain visually hidden using a targeted CSS injection (`.custom-game-editor { display: none; }`) to allow the underlying TS logic to still successfully select HTML elements using `querySelector` without throwing null reference exceptions during compilation. All type checking and building is perfectly green.
+The agent has successfully eradicated the final remaining legacy HTML forms/check boxes inside the `CustomGameEditor.ts` UI by migrating the "Advanced Rule Toggles", "Movement / Randomizer Toggles", and "Block Usage Checkboxes" into native PIXI components. The legacy DOM elements have been visually hidden (`display: none`) via CSS to preserve the current backend wiring and ensure that TypeScript compilation (`tsc --noEmit`) continues to pass with zero strict-null errors.
+
+The primary PIXI UI transformation for `CustomGameEditor` is largely complete, successfully shifting the tool from a messy HTML DOM overlay to an abstract, cross-platform PIXI rendering context.
 
 ## Next Steps
 
-1. Continue porting any remaining forms inside `CustomGameEditor.ts` (e.g., individual toggle checkboxes or text inputs that haven't been captured by the major panels). There are a few remaining checkboxes near the bottom of the HTML template.
-2. Wire the mock Generative AI buttons (`Text-to-Sprite`, `Text-to-Tileset`) up to an actual AI backend/inference service instead of using simulated delay endpoints.
+1. The generative AI buttons inside the Custom Game Editor (`Text-to-Sprite`, `Text-to-Tileset`) are currently wired up to mock setTimeout/delay endpoints inside `GenerativeAIManager.ts`. These need to be connected to actual inference APIs (or expanded upon).
+2. The PIXI generic inputs (`TextInput`, `Button`) currently simulate Dropdowns and Checkboxes. We need to implement proper PIXI `Dropdown` and `Checkbox` native components inside `src/renderer/ui/` and swap out the placeholder `TextInput` or `Button` components inside `CustomGameEditor.ts`.
 3. Advance the C++ Qt6 port inside `cpp_port/` by integrating Ultimate++ widgets to mirror the new PIXI layouts.
+4. Continue moving down the roadmap to integrate external submodules/editors.
 
 ## Important Note for Next Agent
-If you make bulk search/replace operations with sed or similar tools, be extremely careful in `CustomGameEditor.ts`! A previous iteration removed all `return;` statements via a blanket sed script, which caused hundreds of TypeScript strict null check compilation errors. The file is large and contains some duplication, so use targeted JS script replacement with `code.replace('string', ...)` which targets only the first occurrence, or carefully bounded diff patches.
+If you make bulk search/replace operations with sed or similar tools, be extremely careful in `CustomGameEditor.ts`! A previous iteration removed all `return;` statements via a blanket sed script, which caused hundreds of TypeScript strict null check compilation errors. Use targeted JS script replacement with `code.replace('string', ...)` which targets only the first occurrence.
