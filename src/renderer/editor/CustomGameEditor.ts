@@ -147,7 +147,7 @@ export class CustomGameEditor {
     namePanel.addChild(this.pixiNameInput.container);
     this.pixiContainer.addChild(namePanel.container);
 
-    const actionPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
+    const actionPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
     actionPanel.setPosition(20, 20);
 
     const saveBtn = new Button("Save to Slot 1", { width: 140, height: 30 });
@@ -157,7 +157,7 @@ export class CustomGameEditor {
 
 
     const infoLabel = new PIXIText({ text: "Porting UI to Native Pixi", style: { fill: 0xffffff, fontSize: 16 } });
-    infoLabel.position.set(10, 60);
+    infoLabel.position.set(10, 85);
     actionPanel.addChild(infoLabel);
 
 
@@ -215,6 +215,23 @@ export class CustomGameEditor {
     aiPanel.addChild(txt2TileBtn.container);
 
     this.pixiContainer.addChild(aiPanel.container);
+
+    const saveBtn2 = new Button("Save 2", { width: 70, height: 30 });
+    saveBtn2.on("click", () => this.savePresetSlot(2));
+    saveBtn2.setPosition(10, 45);
+    actionPanel.addChild(saveBtn2.container);
+    const loadBtn2 = new Button("Load 2", { width: 70, height: 30 });
+    loadBtn2.on("click", () => this.loadPresetSlot(2));
+    loadBtn2.setPosition(85, 45);
+    actionPanel.addChild(loadBtn2.container);
+    const saveBtn3 = new Button("Save 3", { width: 70, height: 30 });
+    saveBtn3.on("click", () => this.savePresetSlot(3));
+    saveBtn3.setPosition(160, 45);
+    actionPanel.addChild(saveBtn3.container);
+    const loadBtn3 = new Button("Load 3", { width: 70, height: 30 });
+    loadBtn3.on("click", () => this.loadPresetSlot(3));
+    loadBtn3.setPosition(235, 45);
+    actionPanel.addChild(loadBtn3.container);
 
     const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
     loadBtn.on("click", () => this.loadPresetSlot(1));
@@ -2674,7 +2691,7 @@ export class CustomGameEditor {
     namePanel.addChild(this.pixiNameInput.container);
     this.pixiContainer.addChild(namePanel.container);
 
-    const actionPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
+    const actionPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
     actionPanel.setPosition(20, 20);
 
     const saveBtn = new Button("Save to Slot 1", { width: 140, height: 30 });
@@ -2684,7 +2701,7 @@ export class CustomGameEditor {
 
 
     const infoLabel = new PIXIText({ text: "Porting UI to Native Pixi", style: { fill: 0xffffff, fontSize: 16 } });
-    infoLabel.position.set(10, 60);
+    infoLabel.position.set(10, 85);
     actionPanel.addChild(infoLabel);
 
 
@@ -2742,6 +2759,23 @@ export class CustomGameEditor {
     aiPanel.addChild(txt2TileBtn.container);
 
     this.pixiContainer.addChild(aiPanel.container);
+
+    const saveBtn2 = new Button("Save 2", { width: 70, height: 30 });
+    saveBtn2.on("click", () => this.savePresetSlot(2));
+    saveBtn2.setPosition(10, 45);
+    actionPanel.addChild(saveBtn2.container);
+    const loadBtn2 = new Button("Load 2", { width: 70, height: 30 });
+    loadBtn2.on("click", () => this.loadPresetSlot(2));
+    loadBtn2.setPosition(85, 45);
+    actionPanel.addChild(loadBtn2.container);
+    const saveBtn3 = new Button("Save 3", { width: 70, height: 30 });
+    saveBtn3.on("click", () => this.savePresetSlot(3));
+    saveBtn3.setPosition(160, 45);
+    actionPanel.addChild(saveBtn3.container);
+    const loadBtn3 = new Button("Load 3", { width: 70, height: 30 });
+    loadBtn3.on("click", () => this.loadPresetSlot(3));
+    loadBtn3.setPosition(235, 45);
+    actionPanel.addChild(loadBtn3.container);
 
     const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
     loadBtn.on("click", () => this.loadPresetSlot(1));
