@@ -1,7 +1,11 @@
-#include <iostream>
+#include <QApplication>
+#include "MainWindow.h"
 
-int main() {
-    std::cout << "bgeditor C++ Port Initialized" << std::endl;
-    // TODO: Initialize Qt6/bobui and the main editor window
-    return 0;
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+    MainWindow w;
+    w.show();
+
+    return app.exec();
 }
