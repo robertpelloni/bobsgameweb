@@ -2,26 +2,64 @@ import { ToastManager } from "../ui/ToastManager";
 
 export class GenerativeAIManager {
 
+    // Configurable endpoint for AI operations.
+    // In production, this would point to a local proxy or remote server to protect API keys.
+    private static AI_ENDPOINT = "http://localhost:8080/api/generate";
+
     public static async generateSpriteFromText(prompt: string): Promise<void> {
         console.log(`[GenAI] Starting Text-to-Sprite generation for prompt: "${prompt}"`);
         ToastManager.showInfo(`Initiating AI Sprite generation: ${prompt}`);
 
-        // TODO: Hook up to actual inference endpoint (e.g. OpenAI DALL-E, local Stable Diffusion, etc.)
-        // For now, simulate network latency
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+            // Attempt to hit the actual inference endpoint
+            const response = await fetch(`${this.AI_ENDPOINT}/sprite`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
+            });
 
-        ToastManager.showInfo("AI Sprite generation complete! (Mock)");
-        console.log(`[GenAI] Mock Sprite generation finished.`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            ToastManager.showInfo("AI Sprite generation complete!");
+            console.log(`[GenAI] Sprite generation finished:`, data);
+
+            // TODO: Process data.imageUrl or data.base64 into the sprite editor canvas
+        } catch (e) {
+            console.warn(`[GenAI] Failed to connect to AI backend (${(e as Error).message}). Falling back to mock delay.`);
+            ToastManager.showInfo(`AI Connection Failed. Simulating generation...`);
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            ToastManager.showInfo("AI Sprite generation complete! (Mock Fallback)");
+        }
     }
 
     public static async generateTilesetFromText(prompt: string): Promise<void> {
         console.log(`[GenAI] Starting Text-to-Tileset generation for prompt: "${prompt}"`);
         ToastManager.showInfo(`Initiating AI Tileset generation: ${prompt}`);
 
-        // TODO: Hook up to actual inference endpoint
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+            const response = await fetch(`${this.AI_ENDPOINT}/tileset`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
+            });
 
-        ToastManager.showInfo("AI Tileset generation complete! (Mock)");
-        console.log(`[GenAI] Mock Tileset generation finished.`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            ToastManager.showInfo("AI Tileset generation complete!");
+            console.log(`[GenAI] Tileset generation finished:`, data);
+
+            // TODO: Process data into the tilemap editor
+        } catch (e) {
+            console.warn(`[GenAI] Failed to connect to AI backend (${(e as Error).message}). Falling back to mock delay.`);
+            ToastManager.showInfo(`AI Connection Failed. Simulating generation...`);
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            ToastManager.showInfo("AI Tileset generation complete! (Mock Fallback)");
+        }
     }
 }
