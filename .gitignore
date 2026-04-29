@@ -60,3 +60,6 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+cpp_port/
+cpp_port/build/
+cpp_port/.qt/

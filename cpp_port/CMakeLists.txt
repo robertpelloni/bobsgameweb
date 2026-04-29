@@ -8,14 +8,12 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-# Find Qt6 Components
 find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
-
-# This is a scaffolding placeholder for the C++ port of bgeditor
-# It will eventually link with bobui (qt6) and Ultimate++
 
 add_executable(bgeditor
     src/main.cpp
+    src/MainWindow.cpp
+    src/MainWindow.h
 )
 
 target_link_libraries(bgeditor PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
