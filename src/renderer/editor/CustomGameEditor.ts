@@ -457,6 +457,56 @@ export class CustomGameEditor {
     this.pixiContainer.addChild(piecesPanel.container);
 
 
+    const blockEditorPanel = new Panel({ width: 350, height: 350, backgroundColor: 0x110000, backgroundAlpha: 0.9, borderColor: 0xaa2222 });
+    blockEditorPanel.setPosition(380, 600);
+
+    const blockEditorTitle = new PIXIText({ text: "Block Properties", style: { fill: 0xff8888, fontSize: 18, fontWeight: "bold" } });
+    blockEditorTitle.position.set(10, 10);
+    blockEditorPanel.addChild(blockEditorTitle);
+
+    const pixiBlockNameInput = new TextInput("Block Name", { width: 330, height: 30 });
+    pixiBlockNameInput.setPosition(10, 45);
+    pixiBlockNameInput.on("change", (val: string) => {
+      this.blockNameInput.value = val; this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockNameInput.container);
+
+    const pixiBlockColorInput = new TextInput("#RRGGBB", { width: 160, height: 30 });
+    pixiBlockColorInput.setPosition(10, 85);
+    pixiBlockColorInput.on("change", (val: string) => {
+      this.blockColorInput.value = val;
+      this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockColorInput.container);
+
+    const pixiBlockNormalCb = new Checkbox("Use in normal pieces");
+    pixiBlockNormalCb.setPosition(10, 125);
+    pixiBlockNormalCb.on("change", (val: boolean) => {
+      this.blockNormalCheckbox.checked = val;
+      this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockNormalCb.container);
+
+    const pixiBlockGarbageCb = new Checkbox("Use as garbage");
+    pixiBlockGarbageCb.setPosition(10, 155);
+    pixiBlockGarbageCb.on("change", (val: boolean) => {
+      this.blockGarbageCheckbox.checked = val;
+      this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockGarbageCb.container);
+
+    const pixiBlockFillerCb = new Checkbox("Use as filler");
+    pixiBlockFillerCb.setPosition(10, 185);
+    pixiBlockFillerCb.on("change", (val: boolean) => {
+      this.blockFillerCheckbox.checked = val;
+      this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockFillerCb.container);
+
+    this.pixiContainer.addChild(blockEditorPanel.container);
+
+
+
 
     this.buildUI();
     this.loadFromGameType();
@@ -693,7 +743,7 @@ export class CustomGameEditor {
               <button id="btn-remove-block">-</button>
             </div>
           </div>
-          <div id="block-details" class="item-details">
+          <div id="block-details" class="item-details" style="display: none;">
             <div class="form-group">
               <label>Block Name</label>
               <input type="text" id="block-name">
@@ -777,7 +827,7 @@ export class CustomGameEditor {
               <button id="btn-remove-piece">-</button>
             </div>
           </div>
-          <div id="piece-details" class="item-details">
+          <div id="piece-details" class="item-details" style="display: none;">
             <h4 id="piece-name-display">Select a piece</h4>
             <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap: wrap; align-items:center;">
                 <button id="btn-prev-rot"> < </button>
