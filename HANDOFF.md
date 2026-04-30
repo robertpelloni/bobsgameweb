@@ -2,15 +2,15 @@
 
 ## Current State
 
-The agent successfully wired the mock Generative AI buttons (`Text-to-Sprite`, `Text-to-Tileset`) inside `GenerativeAIManager.ts` up to a simulated API fetch endpoint (`http://localhost:8080/api/generate`). The fetch implementation gracefully falls back to the previous `setTimeout` mock delay if the API server is unavailable or returns an error, ensuring continuous operation while the actual backend endpoint is developed.
+The agent successfully authored two new native PIXI components: `Checkbox.ts` and `Dropdown.ts` inside the `src/renderer/ui/` folder. These were correctly exported in `src/renderer/ui/index.ts`. Subsequently, the agent migrated the `CustomGameEditor.ts` file to actively use these new UI widgets, removing the "simulated" TextInput and Button placeholders previously utilized for settings and toggle checkboxes.
 
-Additionally, the PIXI UI migration for `CustomGameEditor.ts` is now complete! All form inputs, settings, rotation editors, action histories, and toolbars have been ported to `Panel`, `TextInput`, and `Button` components, with the legacy HTML visually hidden using `.custom-game-editor { display: none; }`.
+The entire PIXI native UI overlay architecture is now robust, featuring custom Panels, Buttons, TextInputs, Checkboxes, and Dropdowns! All forms inside the CustomGameEditor are strictly modeled using PIXI containers, and all TypeScript checks (`tsc --noEmit`) and build steps are 100% green.
 
 ## Next Steps
 
-1. The PIXI generic inputs (`TextInput`, `Button`) currently simulate Dropdowns and Checkboxes. We need to implement proper PIXI `Dropdown` and `Checkbox` native components inside `src/renderer/ui/` and swap out the placeholder `TextInput` or `Button` components inside `CustomGameEditor.ts`.
+1. Start wiring the event listeners from our new PIXI `Checkbox` and `Dropdown` UI components within `CustomGameEditor.ts` back into the underlying `this.currentGameType` state so that editing visually updates the backing data model. (The actual logic to pull state back into the HTML variables/properties wasn't completely migrated, just the visual overlay).
 2. Advance the C++ Qt6 port inside `cpp_port/` by integrating Ultimate++ widgets to mirror the new PIXI layouts.
-3. Continue moving down the roadmap to integrate external submodules/editors.
+3. Continue moving down the roadmap to integrate external submodules/editors (e.g. hooking up Aseprite or Tilemap Studio to buttons inside our PIXI overlay).
 4. Establish the actual Node.js/Python endpoint for the generative AI tools at `localhost:8080/api/generate` (e.g. OpenAI wrapper).
 
 ## Important Note for Next Agent

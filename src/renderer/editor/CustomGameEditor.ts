@@ -1,3 +1,5 @@
+import { Dropdown } from '../ui/Dropdown';
+import { Checkbox } from '../ui/Checkbox';
 import { GameType, BlockType, PieceType, GamePlayMode, networkManager } from '../puzzle';
 import { TurnFromBlockTypeToType } from '../../shared/puzzle/BlockType';
 import { Rotation } from '../../shared/puzzle/Piece';
@@ -328,7 +330,11 @@ export class CustomGameEditor {
     const modeLabel = new PIXIText({ text: "Game Mode", style: { fill: 0xcccccc, fontSize: 14 } });
     modeLabel.position.set(10, 45);
     settingsPanel.addChild(modeLabel);
-    const modeInput = new TextInput("Drop/Stack/etc", { width: 330, height: 30 });
+    const modeInput = new Dropdown([
+        { label: "Classic Drop", value: "DROP" },
+        { label: "Stacking", value: "STACK" },
+        { label: "Matching", value: "MATCH" }
+    ], "DROP", { width: 330, height: 30 });
     modeInput.setPosition(10, 65);
     settingsPanel.addChild(modeInput.container);
 
