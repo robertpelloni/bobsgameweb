@@ -1,0 +1,928 @@
+import { Container, Graphics, Text, TextStyle } from "pixi.js";
+import { AudioManager } from "../audio/AudioManager";
+import type { GameMode } from "../data/HighScoreManager";
+import { InputManager } from "../input/InputManager";
+import type { PuzzleSceneConfig } from "../puzzle";
+import { GameType, GameTypes } from "../puzzle";
+import { BobNet } from "../puzzle/BobNet";
+import { PuzzleScene } from "../puzzle/PuzzleScene";
+import { Scene, type SceneConfig } from "../state/Scene";
+import { SceneTransition } from "../state/SceneTransition";
+import { Button, type ButtonStyle } from "../ui/Button";
+
+// ============================================================
+// Types
+// ============================================================
+
+export interface MainMenuSceneConfig extends SceneConfig {
+	onStartGame?: (gameType: GameType, gameMode: GameMode) => void;
+	onOptions?: () => void;
+}
+
+interface MenuItem {
+	label: string;
+	action: () => void | Promise<void>;
+	prefetch?: () => void;
+}
+
+// ============================================================
+// MainMenuScene
+// ============================================================
+
+export class MainMenuScene extends Scene {
+	private menuConfig: MainMenuSceneConfig;
+
+	private titleText!: Text;
+	private subtitleText!: Text;
+	private versionText!: Text;
+	private menuButtons: Button[] = [];
+	private modeButtons: Button[] = [];
+	private selectedIndex = 0;
+	private selectedCategoryIndex = 0;
+
+	private background!: Graphics;
+	private particles: Particle[] = [];
+	private particleContainer!: Container;
+
+	private titleBounce = 0;
+	private menuItems: MenuItem[] = [];
+
+	private readonly categories: GameMode[] = ["marathon", "sprint", "ultra"];
+	private readonly categoryLabels: Record<GameMode, string> = {
+		marathon: "MARATHON",
+		sprint: "SPRINT",
+		ultra: "ULTRA",
+	};
+
+	constructor(config: MainMenuSceneConfig) {
+		super(config);
+		this.menuConfig = config;
+	}
+
+	// ============================================================
+	// Lifecycle
+	// ============================================================
+
+	public create(): void {
+		this.createBackground();
+		this.createParticles();
+		this.createTitle();
+		this.createCategorySelector();
+		this.createMenu();
+		this.playMenuMusic();
+		this.scheduleScenePrefetch();
+	}
+
+	private createCategorySelector(): void {
+		const tabStyle: ButtonStyle = {
+			width: 120,
+			height: 36,
+			backgroundColor: 0x1a2a4a,
+			backgroundColorHover: 0x2a4a6a,
+			backgroundColorPressed: 0x0a1a3a,
+			borderColor: 0x4a6a8a,
+			borderWidth: 2,
+			textColor: 0xffffff,
+			fontSize: 14,
+			borderRadius: 18,
+		};
+
+		const startX = this.centerX - (this.categories.length * 130) / 2 + 65;
+		const y = this.height * 0.38;
+
+		for (let i = 0; i < this.categories.length; i++) {
+			const mode = this.categories[i];
+			const button = new Button(this.categoryLabels[mode], tabStyle);
+			button.setPosition(startX + i * 130, y);
+			button.onClick(() => {
+				this.selectCategory(i);
+				this.playMoveSound();
+			});
+
+			this.container.addChild(button.container);
+			this.modeButtons.push(button);
+		}
+
+		this.updateCategoryVisuals();
+	}
+
+	private selectCategory(index: number): void {
+		this.selectedCategoryIndex = index;
+		this.updateCategoryVisuals();
+	}
+
+	private updateCategoryVisuals(): void {
+		for (let i = 0; i < this.modeButtons.length; i++) {
+			const isSelected = i === this.selectedCategoryIndex;
+			this.modeButtons[i].selected = isSelected;
+			this.modeButtons[i].container.alpha = isSelected ? 1.0 : 0.6;
+		}
+	}
+
+	public onUpdate(dt: number): void {
+		this.updateParticles(dt);
+		this.updateTitleAnimation(dt);
+		this.handleInput();
+	}
+
+	public onResize(width: number, height: number): void {
+		this.drawBackground();
+		this.titleText.x = this.centerX;
+		this.titleText.y = height * 0.2;
+		this.subtitleText.x = this.centerX;
+		this.subtitleText.y = this.titleText.y + 60;
+		this.versionText.x = width - 10;
+		this.versionText.y = height - 10;
+
+		// Reposition menu buttons
+		const startY = height * 0.45;
+		const spacingY = 48;
+
+		for (let i = 0; i < this.menuButtons.length; i++) {
+			const col = i % 2;
+			const row = Math.floor(i / 2);
+			const x = this.centerX + (col === 0 ? -150 : 150);
+			const y = startY + row * spacingY;
+			this.menuButtons[i].setPosition(x, y);
+		}
+
+		// Reposition mode buttons
+		const modeStartX = this.centerX - (this.categories.length * 130) / 2 + 65;
+		const modeY = height * 0.38;
+		for (let i = 0; i < this.modeButtons.length; i++) {
+			this.modeButtons[i].setPosition(modeStartX + i * 130, modeY);
+		}
+	}
+
+	public async onExit(): Promise<void> {
+		this.particles = [];
+		await super.onExit();
+	}
+
+	// ============================================================
+	// Background & Effects
+	// ============================================================
+
+	private createBackground(): void {
+		this.background = new Graphics();
+		this.drawBackground();
+		this.container.addChild(this.background);
+	}
+
+	private drawBackground(): void {
+		this.background.clear();
+
+		const steps = 20;
+		for (let i = 0; i < steps; i++) {
+			const ratio = i / steps;
+			const color = this.lerpColor(0x0a0a1a, 0x1a1a3a, ratio);
+			this.background.rect(
+				0,
+				(this.height / steps) * i,
+				this.width,
+				this.height / steps + 1,
+			);
+			this.background.fill(color);
+		}
+	}
+
+	private createParticles(): void {
+		this.particleContainer = new Container();
+		this.container.addChild(this.particleContainer);
+
+		for (let i = 0; i < 50; i++) {
+			const particle = new Particle(this.width, this.height);
+			this.particleContainer.addChild(particle.graphics);
+			this.particles.push(particle);
+		}
+	}
+
+	private updateParticles(dt: number): void {
+		for (const particle of this.particles) {
+			particle.update(dt, this.height);
+		}
+	}
+
+	// ============================================================
+	// Title
+	// ============================================================
+
+	private createTitle(): void {
+		// PixiJS v8 text gradient: use array of colors for vertical gradient
+		const titleStyle = new TextStyle({
+			fontFamily: "Arial Black, Arial, sans-serif",
+			fontSize: 72,
+			fontWeight: "bold",
+			fill: 0xffffff,
+			stroke: { color: 0x003366, width: 6 },
+			dropShadow: {
+				color: 0x000000,
+				blur: 8,
+				angle: Math.PI / 4,
+				distance: 6,
+			},
+			letterSpacing: 4,
+		});
+
+		this.titleText = new Text({ text: "bob's game", style: titleStyle });
+		this.titleText.anchor.set(0.5);
+		this.titleText.x = this.centerX;
+		this.titleText.y = this.height * 0.2;
+		this.container.addChild(this.titleText);
+
+		const subtitleStyle = new TextStyle({
+			fontFamily: "Arial, sans-serif",
+			fontSize: 24,
+			fill: 0x88aacc,
+			letterSpacing: 8,
+		});
+
+		this.subtitleText = new Text({ text: "PUZZLE MODE", style: subtitleStyle });
+		this.subtitleText.anchor.set(0.5);
+		this.subtitleText.x = this.centerX;
+		this.subtitleText.y = this.titleText.y + 60;
+		this.container.addChild(this.subtitleText);
+
+		// Version display in the bottom-right corner
+		const versionStyle = new TextStyle({
+			fontFamily: "Arial, sans-serif",
+			fontSize: 14,
+			fill: 0x445566,
+			letterSpacing: 1,
+		});
+		this.versionText = new Text({ text: "v2.6.1", style: versionStyle });
+		this.versionText.anchor.set(1, 1);
+		this.versionText.x = this.width - 10;
+		this.versionText.y = this.height - 10;
+		this.container.addChild(this.versionText);
+	}
+
+	private updateTitleAnimation(dt: number): void {
+		this.titleBounce += dt * 2;
+		this.titleText.y = this.height * 0.2 + Math.sin(this.titleBounce) * 5;
+		this.titleText.scale.set(1 + Math.sin(this.titleBounce * 0.5) * 0.02);
+	}
+
+	// ============================================================
+	// Menu
+	// ============================================================
+
+	private createMenu(): void {
+		this.menuItems = [
+			{ label: "Classic", action: () => this.startGame(GameTypes.CLASSIC) },
+			{ label: "Modern", action: () => this.startGame(GameTypes.MODERN) },
+			{ label: "Play Custom Game", action: () => this.startCustomGame() },
+			{
+				label: "Custom Game Editor",
+				action: () => this.openCustomEditor(),
+				prefetch: () => {
+					void import("./CustomGameEditorScene");
+				},
+			},
+			{
+				label: "MMO World",
+				action: () => this.openWorld(),
+				prefetch: () => {
+					void import("./WorldScene");
+				},
+			},
+			{
+				label: "World Database Editor",
+				action: () => this.openWorldEditor(),
+				prefetch: () => {
+					void import("./WorldEditorScene");
+				},
+			},
+			{
+				label: "Sprite Editor",
+				action: () => this.openSpriteEditor(),
+				prefetch: () => {
+					void import("./SpriteEditorScene");
+				},
+			},
+			{
+				label: "Event Editor",
+				action: () => this.openEventEditor(),
+				prefetch: () => {
+					void import("./EventSheetEditorScene");
+				},
+			},
+			{
+				label: "Multiplayer",
+				action: () => this.openLobby(),
+				prefetch: () => {
+					void import("./LobbyScene");
+				},
+			},
+			{
+				label: "Go Online",
+				action: () => this.openLogin(),
+				prefetch: () => {
+					void import("./LoginScene");
+				},
+			},
+			{
+				label: "Party",
+				action: () => this.openParty(),
+				prefetch: () => {
+					void import("./PartyScene");
+				},
+			},
+			{
+				label: "Rankings",
+				action: () => this.openRankings(),
+				prefetch: () => {
+					void import("./RankingsScene");
+				},
+			},
+			{
+				label: "nD Demo",
+				action: () => this.openNDDemo(),
+				prefetch: () => {
+					void import("./NDDemoScene");
+				},
+			},
+			{
+				label: "Tournament",
+				action: () => this.openTournament(),
+				prefetch: () => {
+					void import("./TournamentScene");
+				},
+			},
+			{
+				label: "Play RPG",
+				action: () => this.openEngineGame(),
+				prefetch: () => {
+					void import("./EngineScene");
+				},
+			},
+			{
+				label: "Engine Demo",
+				action: () => this.openEngineDemo(),
+				prefetch: () => {
+					void import("./EngineDemoScene");
+				},
+			},
+			{
+				label: "High Scores",
+				action: () => this.openHighScores(),
+				prefetch: () => {
+					void import("./HighScoresScene");
+				},
+			},
+			{
+				label: "Achievements",
+				action: () => this.openAchievements(),
+				prefetch: () => {
+					void import("./AchievementsScene");
+				},
+			},
+			{
+				label: "Help",
+				action: () => this.openHelp(),
+				prefetch: () => {
+					void import("./HelpScene");
+				},
+			},
+			{
+				label: "Settings",
+				action: () => this.openSettings(),
+				prefetch: () => {
+					void import("./SettingsScene");
+				},
+			},
+			{
+				label: "Options",
+				action: () => this.openOptions(),
+				prefetch: () => {
+					void import("./OptionsScene");
+				},
+			},
+			{ label: "Watch Last Replay", action: () => this.playLastReplay() },
+			{ label: "Share Last Replay", action: () => this.shareLastReplay() },
+			{
+				label: "Game Sequence Editor",
+				action: () => this.openGameSequenceEditor(),
+				prefetch: () => {
+					void import("./GameSequenceEditorScene");
+				},
+			},
+		];
+
+		const buttonStyle: ButtonStyle = {
+			width: 240,
+			height: 40,
+			backgroundColor: 0x1a2a4a,
+			backgroundColorHover: 0x2a4a6a,
+			backgroundColorPressed: 0x0a1a3a,
+			borderColor: 0x4a6a8a,
+			borderWidth: 2,
+			textColor: 0xffffff,
+			fontSize: 16,
+			borderRadius: 8,
+		};
+
+		const startY = this.height * 0.45;
+		const spacingY = 48;
+
+		for (let i = 0; i < this.menuItems.length; i++) {
+			const item = this.menuItems[i];
+			const col = i % 2;
+			const row = Math.floor(i / 2);
+
+			const x = this.centerX + (col === 0 ? -150 : 150);
+			const y = startY + row * spacingY;
+
+			const button = new Button(item.label, buttonStyle);
+			button.setPosition(x, y);
+			button.onClick(() => {
+				this.playSelectSound();
+				item.action();
+			});
+
+			this.container.addChild(button.container);
+			this.menuButtons.push(button);
+		}
+
+		this.updateSelection();
+	}
+
+	private updateSelection(): void {
+		for (let i = 0; i < this.menuButtons.length; i++) {
+			this.menuButtons[i].selected = i === this.selectedIndex;
+		}
+		this.prefetchSelectionNeighborhood();
+	}
+
+	// ============================================================
+	// Input Handling
+	// ============================================================
+
+	private handleInput(): void {
+		if (InputManager.isUpPressed()) {
+			this.moveSelection(-2);
+		} else if (InputManager.isDownPressed()) {
+			this.moveSelection(2);
+		}
+
+		if (InputManager.isLeftPressed()) {
+			this.moveSelection(-1);
+		} else if (InputManager.isRightPressed()) {
+			this.moveSelection(1);
+		}
+
+		if (InputManager.isActionPressed() || InputManager.isStartPressed()) {
+			this.selectCurrentItem();
+		}
+	}
+
+	private moveSelection(delta: number): void {
+		const prevIndex = this.selectedIndex;
+		this.selectedIndex =
+			(this.selectedIndex + delta + this.menuItems.length) %
+			this.menuItems.length;
+
+		if (prevIndex !== this.selectedIndex) {
+			this.playMoveSound();
+			this.updateSelection();
+		}
+	}
+
+	private selectCurrentItem(): void {
+		this.playSelectSound();
+		this.menuItems[this.selectedIndex].action();
+	}
+
+	private scheduleScenePrefetch(): void {
+		const prefetch = () => {
+			void import("./OptionsScene");
+			void import("./AchievementsScene");
+			void import("./HighScoresScene");
+			void import("./RankingsScene");
+			void import("./LobbyScene");
+		};
+
+		const idleCallback = (window as any).requestIdleCallback as
+			| ((cb: () => void) => void)
+			| undefined;
+		if (idleCallback) {
+			idleCallback(() => prefetch());
+		} else {
+			window.setTimeout(prefetch, 1200);
+		}
+	}
+
+	private prefetchSelectionNeighborhood(): void {
+		const indices = [
+			this.selectedIndex - 1,
+			this.selectedIndex,
+			this.selectedIndex + 1,
+		].filter((index) => index >= 0 && index < this.menuItems.length);
+
+		for (const index of indices) {
+			this.menuItems[index].prefetch?.();
+		}
+	}
+
+	// ============================================================
+	// Actions
+	// ============================================================
+
+	private startCustomGame(): void {
+		const data = localStorage.getItem("custom-game-type");
+		let gameType = GameTypes.CLASSIC; // Fallback
+		if (data) {
+			try {
+				gameType = GameType.fromJSON(data);
+			} catch (e) {
+				console.error("Failed to load custom game type", e);
+			}
+		} else {
+			console.warn("No custom game saved, falling back to Classic.");
+		}
+
+		const gameMode = this.categories[this.selectedCategoryIndex];
+		const puzzleConfig: PuzzleSceneConfig = {
+			name: "puzzle",
+			app: this.app,
+			camera: this.camera ?? undefined,
+			gameType,
+			gameMode,
+			startLevel: 1,
+		};
+
+		const puzzleScene = new PuzzleScene(puzzleConfig);
+		SceneTransition.pushWithFade(this.app, puzzleScene);
+	}
+
+	private playLastReplay(): void {
+		let lastKey = null;
+		let lastTime = 0;
+		for (let i = 0; i < localStorage.length; i++) {
+			const key = localStorage.key(i);
+			if (key && key.startsWith("replay_")) {
+				const time = parseInt(key.split("_")[1]);
+				if (time > lastTime) {
+					lastTime = time;
+					lastKey = key;
+				}
+			}
+		}
+
+		if (!lastKey) {
+			alert("No replays found!");
+			return;
+		}
+
+		const data = localStorage.getItem(lastKey)!;
+		const puzzleConfig: PuzzleSceneConfig = {
+			name: "puzzle-replay",
+			app: this.app,
+			camera: this.camera ?? undefined,
+			replayData: data,
+		};
+		const puzzleScene = new PuzzleScene(puzzleConfig);
+		SceneTransition.pushWithFade(this.app, puzzleScene);
+	}
+
+	private shareLastReplay(): void {
+		let lastKey = null;
+		let lastTime = 0;
+		for (let i = 0; i < localStorage.length; i++) {
+			const key = localStorage.key(i);
+			if (key && key.startsWith("replay_")) {
+				const time = parseInt(key.split("_")[1]);
+				if (time > lastTime) {
+					lastTime = time;
+					lastKey = key;
+				}
+			}
+		}
+
+		if (!lastKey) {
+			alert("No replays found to share!");
+			return;
+		}
+
+		const data = localStorage.getItem(lastKey)!;
+		const jsonObj = JSON.parse(data);
+		const b64 = BobNet.toBase64GZippedGSON(jsonObj);
+		const url = `${window.location.origin}${window.location.pathname}#replay=${b64}`;
+		navigator.clipboard
+			.writeText(url)
+			.then(() => {
+				alert("Replay link copied to clipboard!");
+			})
+			.catch((err) => {
+				console.error("Failed to copy: ", err);
+				prompt("Copy this link manually:", url);
+			});
+	}
+
+	private startGame(gameType: GameType): void {
+		const gameMode = this.categories[this.selectedCategoryIndex];
+
+		if (this.menuConfig.onStartGame) {
+			this.menuConfig.onStartGame(gameType, gameMode);
+			return;
+		}
+
+		const puzzleConfig: PuzzleSceneConfig = {
+			name: "puzzle",
+			app: this.app,
+			camera: this.camera ?? undefined,
+			gameType,
+			gameMode,
+			startLevel: 1,
+		};
+
+		const puzzleScene = new PuzzleScene(puzzleConfig);
+		SceneTransition.pushWithFade(this.app, puzzleScene);
+	}
+
+	private async openOptions(): Promise<void> {
+		if (this.menuConfig.onOptions) {
+			this.menuConfig.onOptions();
+			return;
+		}
+		const { OptionsScene } = await import("./OptionsScene");
+		const optionsScene = new OptionsScene({
+			name: "options",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, optionsScene);
+	}
+
+	private async openLobby(): Promise<void> {
+		const { LobbyScene } = await import("./LobbyScene");
+		const lobbyScene = new LobbyScene({
+			name: "lobby",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, lobbyScene);
+	}
+
+	private async openLogin(): Promise<void> {
+		const { LoginScene } = await import("./LoginScene");
+		const loginScene = new LoginScene({
+			name: "login",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, loginScene);
+	}
+
+	private async openEngineDemo(): Promise<void> {
+		const { EngineDemoScene } = await import("./EngineDemoScene");
+		const demoScene = new EngineDemoScene({
+			name: "engine-demo",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, demoScene);
+	}
+
+	private async openTournament(): Promise<void> {
+		const { TournamentScene } = await import("./TournamentScene");
+		const tournamentScene = new TournamentScene({
+			name: "tournament",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, tournamentScene);
+	}
+
+	private async openHelp(): Promise<void> {
+		const { HelpScene } = await import("./HelpScene");
+		const helpScene = new HelpScene({
+			name: "help",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, helpScene);
+	}
+
+	private async openSpriteEditor(): Promise<void> {
+		const { SpriteEditorScene } = await import("./SpriteEditorScene");
+		const editorScene = new SpriteEditorScene({
+			name: "sprite-editor",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, editorScene);
+	}
+
+	private async openParty(): Promise<void> {
+		const { PartyScene } = await import("./PartyScene");
+		const partyScene = new PartyScene({
+			name: "party",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, partyScene);
+	}
+
+	private async openEventEditor(): Promise<void> {
+		const { EventSheetEditorScene } = await import("./EventSheetEditorScene");
+		const editorScene = new EventSheetEditorScene({
+			name: "event-editor",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, editorScene);
+	}
+
+	private async openEngineGame(): Promise<void> {
+		const { EngineScene } = await import("./EngineScene");
+		const scene = new EngineScene({
+			width: this.app.screen.width,
+			height: this.app.screen.height,
+		});
+		await scene.create();
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openNDDemo(): Promise<void> {
+		const { NDDemoScene } = await import("./NDDemoScene");
+		const demoScene = new NDDemoScene({
+			name: "nd-demo",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, demoScene);
+	}
+
+	private async openWorld(): Promise<void> {
+		const { WorldScene } = await import("./WorldScene");
+		const worldScene = new WorldScene({
+			name: "world",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, worldScene);
+	}
+
+	private async openCustomEditor(): Promise<void> {
+		const { CustomGameEditorScene } = await import("./CustomGameEditorScene");
+		const editorScene = new CustomGameEditorScene({
+			name: "custom-editor",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, editorScene);
+	}
+
+	private async openWorldEditor(): Promise<void> {
+		const { WorldEditorScene } = await import("./WorldEditorScene");
+		const editorScene = new WorldEditorScene({
+			name: "world-editor",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, editorScene);
+	}
+
+	private async openRankings(): Promise<void> {
+		const { RankingsScene } = await import("./RankingsScene");
+		const rankingsScene = new RankingsScene({
+			name: "rankings",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, rankingsScene);
+	}
+
+	private async openSettings(): Promise<void> {
+		const { SettingsScene } = await import("./SettingsScene");
+		const settingsScene = new SettingsScene({
+			name: "settings",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, settingsScene);
+	}
+
+	private async openHighScores(): Promise<void> {
+		const { HighScoresScene } = await import("./HighScoresScene");
+		const highScoresScene = new HighScoresScene({
+			name: "high-scores",
+			app: this.app,
+			camera: this.camera ?? undefined,
+			initialMode: this.categories[this.selectedCategoryIndex],
+		});
+		SceneTransition.pushWithFade(this.app, highScoresScene);
+	}
+
+	private async openAchievements(): Promise<void> {
+		const { AchievementsScene } = await import("./AchievementsScene");
+		const achievementsScene = new AchievementsScene({
+			name: "achievements",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, achievementsScene);
+	}
+
+	private async openGameSequenceEditor(): Promise<void> {
+		const { GameSequenceEditorScene } = await import(
+			"./GameSequenceEditorScene"
+		);
+		const seqEditorScene = new GameSequenceEditorScene({
+			name: "game-sequence-editor",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, seqEditorScene);
+	}
+
+	// ============================================================
+	// Audio
+	// ============================================================
+
+	private playMenuMusic(): void {
+		if (AudioManager.isLoaded("menu_music")) {
+			AudioManager.playMusic("menu_music", { volume: 0.5, fadeIn: 1000 });
+		}
+	}
+
+	private playMoveSound(): void {
+		if (AudioManager.isLoaded("menu_move")) {
+			AudioManager.playSound("menu_move", { volume: 0.5 });
+		}
+	}
+
+	private playSelectSound(): void {
+		if (AudioManager.isLoaded("menu_select")) {
+			AudioManager.playSound("menu_select", { volume: 0.7 });
+		}
+	}
+
+	// ============================================================
+	// Utilities
+	// ============================================================
+
+	private lerpColor(color1: number, color2: number, t: number): number {
+		const r1 = (color1 >> 16) & 0xff;
+		const g1 = (color1 >> 8) & 0xff;
+		const b1 = color1 & 0xff;
+
+		const r2 = (color2 >> 16) & 0xff;
+		const g2 = (color2 >> 8) & 0xff;
+		const b2 = color2 & 0xff;
+
+		const r = Math.round(r1 + (r2 - r1) * t);
+		const g = Math.round(g1 + (g2 - g1) * t);
+		const b = Math.round(b1 + (b2 - b1) * t);
+
+		return (r << 16) | (g << 8) | b;
+	}
+}
+
+// ============================================================
+// Particle Effect
+// ============================================================
+
+class Particle {
+	public graphics: Graphics;
+	private x: number;
+	private y: number;
+	private speed: number;
+	private size: number;
+	private alpha: number;
+	private screenWidth: number;
+
+	constructor(screenWidth: number, screenHeight: number) {
+		this.screenWidth = screenWidth;
+		this.x = Math.random() * screenWidth;
+		this.y = Math.random() * screenHeight;
+		this.speed = 20 + Math.random() * 40;
+		this.size = 2 + Math.random() * 4;
+		this.alpha = 0.2 + Math.random() * 0.4;
+
+		this.graphics = new Graphics();
+		this.draw();
+	}
+
+	private draw(): void {
+		this.graphics.clear();
+		this.graphics.circle(0, 0, this.size);
+		this.graphics.fill({ color: 0x4a8aff, alpha: this.alpha });
+		this.graphics.x = this.x;
+		this.graphics.y = this.y;
+	}
+
+	public update(dt: number, screenHeight: number): void {
+		this.y -= this.speed * dt;
+
+		if (this.y < -this.size) {
+			this.y = screenHeight + this.size;
+			this.x = Math.random() * this.screenWidth;
+		}
+
+		this.graphics.y = this.y;
+		this.graphics.x = this.x;
+		this.x += Math.sin(this.y * 0.01) * 0.5;
+	}
+}

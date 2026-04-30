@@ -1,0 +1,22 @@
+[Unit]
+Description=bobsgameweb Socket.io backend
+After=network.target
+
+[Service]
+Type=simple
+User=bobsgame
+Group=bobsgame
+WorkingDirectory=/opt/bobsgameweb/server
+EnvironmentFile=-/etc/bobsgameweb-server.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node /opt/bobsgameweb/server/index.js
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/bobsgameweb/server
+
+[Install]
+WantedBy=multi-user.target

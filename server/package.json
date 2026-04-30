@@ -1,0 +1,17 @@
+{
+  "name": "okgame-server",
+  "version": "2.1.57",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start:passenger": "node app.js",
+    "start:pm2": "pm2-runtime ecosystem.config.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "socket.io": "^4.7.2"
+  }
+}

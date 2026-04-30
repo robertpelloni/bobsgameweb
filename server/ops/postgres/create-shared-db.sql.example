@@ -1,0 +1,26 @@
+-- Example SQL for provisioning a shared PostgreSQL database on the Hetzner host.
+-- Replace placeholders before use.
+--
+-- Recommended structure:
+--   database: platform_shared
+--   schemas:  bg, fw
+--   roles:    bg_app, fw_app
+
+CREATE ROLE bg_app LOGIN PASSWORD 'CHANGE_ME_BG_PASSWORD';
+CREATE ROLE fw_app LOGIN PASSWORD 'CHANGE_ME_FW_PASSWORD';
+
+CREATE DATABASE platform_shared;
+
+\connect platform_shared
+
+CREATE SCHEMA IF NOT EXISTS bg AUTHORIZATION bg_app;
+CREATE SCHEMA IF NOT EXISTS fw AUTHORIZATION fw_app;
+
+GRANT CONNECT ON DATABASE platform_shared TO bg_app;
+GRANT CONNECT ON DATABASE platform_shared TO fw_app;
+
+GRANT USAGE, CREATE ON SCHEMA bg TO bg_app;
+GRANT USAGE, CREATE ON SCHEMA fw TO fw_app;
+
+ALTER ROLE bg_app IN DATABASE platform_shared SET search_path TO bg, public;
+ALTER ROLE fw_app IN DATABASE platform_shared SET search_path TO fw, public;
