@@ -2,7 +2,9 @@
 
 ## Current State
 - Engine: okgame (bob's game web) TS/Vite project.
-- Engine version: 2.2.5
+- Engine version: 2.2.6
+- Completed features (partial): PixiJS integration, Multiplayer sockets, Custom game editor (Grid size, gravity, piece rules).
+- Completed PIXI UI Migration for CustomGameEditor.
 - Completed features (partial): PixiJS integration, Multiplayer sockets, Custom game editor (Grid size, gravity, piece rules).
 - Recent updates: Bug fixes for PixiJS color crashing, audio CORS blocking, new engine modules (Cinematics System, RPG Event System).
 
