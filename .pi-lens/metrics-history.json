@@ -1,0 +1,536 @@
+{
+  "version": 1,
+  "files": {
+    "server\\index.js": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T23:11:38.457Z",
+        "mi": 10.9,
+        "cognitive": 388,
+        "nesting": 6,
+        "lines": 846,
+        "maxCyclomatic": 289,
+        "entropy": 6.66
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T18:39:41.504Z",
+          "mi": 16.3,
+          "cognitive": 346,
+          "nesting": 6,
+          "lines": 619,
+          "maxCyclomatic": 289,
+          "entropy": 6.56
+        },
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T23:11:38.457Z",
+          "mi": 10.9,
+          "cognitive": 388,
+          "nesting": 6,
+          "lines": 846,
+          "maxCyclomatic": 289,
+          "entropy": 6.66
+        }
+      ],
+      "trend": "regressing"
+    },
+    "src\\renderer\\scenes\\MainMenuScene.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T20:56:28.266Z",
+        "mi": 11.9,
+        "cognitive": 125,
+        "nesting": 5,
+        "lines": 668,
+        "maxCyclomatic": 29,
+        "entropy": 7.28
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T18:42:50.700Z",
+          "mi": 13.7,
+          "cognitive": 125,
+          "nesting": 5,
+          "lines": 582,
+          "maxCyclomatic": 29,
+          "entropy": 7.27
+        },
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T20:56:28.266Z",
+          "mi": 11.9,
+          "cognitive": 125,
+          "nesting": 5,
+          "lines": 668,
+          "maxCyclomatic": 29,
+          "entropy": 7.28
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\audio\\AudioManager.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T18:46:18.014Z",
+        "mi": 31.7,
+        "cognitive": 77,
+        "nesting": 5,
+        "lines": 197,
+        "maxCyclomatic": 15,
+        "entropy": 6.54
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T18:46:18.014Z",
+          "mi": 31.7,
+          "cognitive": 77,
+          "nesting": 5,
+          "lines": 197,
+          "maxCyclomatic": 15,
+          "entropy": 6.54
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\audio\\AudioManager.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T18:46:25.044Z",
+        "mi": 16.8,
+        "cognitive": 305,
+        "nesting": 5,
+        "lines": 509,
+        "maxCyclomatic": 26,
+        "entropy": 6.59
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T18:46:25.044Z",
+          "mi": 16.8,
+          "cognitive": 305,
+          "nesting": 5,
+          "lines": 509,
+          "maxCyclomatic": 26,
+          "entropy": 6.59
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\shared\\GlobalSettings.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T18:46:33.991Z",
+        "mi": 39.8,
+        "cognitive": 12,
+        "nesting": 4,
+        "lines": 143,
+        "maxCyclomatic": 2,
+        "entropy": 6.01
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T18:46:33.991Z",
+          "mi": 39.8,
+          "cognitive": 12,
+          "nesting": 4,
+          "lines": 143,
+          "maxCyclomatic": 2,
+          "entropy": 6.01
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\rpg\\ClientGameEngine.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T21:32:03.339Z",
+        "mi": 34,
+        "cognitive": 22,
+        "nesting": 3,
+        "lines": 227,
+        "maxCyclomatic": 15,
+        "entropy": 6.71
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T18:46:45.826Z",
+          "mi": 38.5,
+          "cognitive": 19,
+          "nesting": 3,
+          "lines": 154,
+          "maxCyclomatic": 13,
+          "entropy": 6.54
+        },
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T21:32:03.339Z",
+          "mi": 34,
+          "cognitive": 22,
+          "nesting": 3,
+          "lines": 227,
+          "maxCyclomatic": 15,
+          "entropy": 6.71
+        }
+      ],
+      "trend": "regressing"
+    },
+    "src\\renderer\\engine\\map\\MapManager.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T18:51:59.661Z",
+        "mi": 40.1,
+        "cognitive": 19,
+        "nesting": 4,
+        "lines": 122,
+        "maxCyclomatic": 10,
+        "entropy": 6.12
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T18:51:59.661Z",
+          "mi": 40.1,
+          "cognitive": 19,
+          "nesting": 4,
+          "lines": 122,
+          "maxCyclomatic": 10,
+          "entropy": 6.12
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\map\\index.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T18:59:29.403Z",
+        "mi": 61.5,
+        "cognitive": 0,
+        "nesting": 0,
+        "lines": 11,
+        "maxCyclomatic": 1,
+        "entropy": 3.84
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T18:59:29.403Z",
+          "mi": 61.5,
+          "cognitive": 0,
+          "nesting": 0,
+          "lines": 11,
+          "maxCyclomatic": 1,
+          "entropy": 3.84
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\scenes\\SettingsScene.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T19:28:40.966Z",
+        "mi": 35.2,
+        "cognitive": 4,
+        "nesting": 3,
+        "lines": 78,
+        "maxCyclomatic": 21,
+        "entropy": 5.83
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T19:28:40.966Z",
+          "mi": 35.2,
+          "cognitive": 4,
+          "nesting": 3,
+          "lines": 78,
+          "maxCyclomatic": 21,
+          "entropy": 5.83
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\Game.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T19:56:28.275Z",
+        "mi": 24.8,
+        "cognitive": 80,
+        "nesting": 7,
+        "lines": 234,
+        "maxCyclomatic": 11,
+        "entropy": 6.5
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T19:56:28.275Z",
+          "mi": 24.8,
+          "cognitive": 80,
+          "nesting": 7,
+          "lines": 234,
+          "maxCyclomatic": 11,
+          "entropy": 6.5
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\audio\\AudioUtils.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T19:58:43.421Z",
+        "mi": 32.4,
+        "cognitive": 121,
+        "nesting": 5,
+        "lines": 239,
+        "maxCyclomatic": 13,
+        "entropy": 6.36
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T19:58:43.421Z",
+          "mi": 32.4,
+          "cognitive": 121,
+          "nesting": 5,
+          "lines": 239,
+          "maxCyclomatic": 13,
+          "entropy": 6.36
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\rpg\\DemoWorld.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T19:58:50.268Z",
+        "mi": 0,
+        "cognitive": 1574,
+        "nesting": 12,
+        "lines": 2728,
+        "maxCyclomatic": 520,
+        "entropy": 7.57
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T19:58:50.268Z",
+          "mi": 0,
+          "cognitive": 1574,
+          "nesting": 12,
+          "lines": 2728,
+          "maxCyclomatic": 520,
+          "entropy": 7.57
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\scenes\\OptionsScene.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T19:59:34.248Z",
+        "mi": 19.7,
+        "cognitive": 84,
+        "nesting": 5,
+        "lines": 276,
+        "maxCyclomatic": 23,
+        "entropy": 6.87
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T19:59:34.248Z",
+          "mi": 19.7,
+          "cognitive": 84,
+          "nesting": 5,
+          "lines": 276,
+          "maxCyclomatic": 23,
+          "entropy": 6.87
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\graphics\\Camera.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T19:59:43.389Z",
+        "mi": 24.7,
+        "cognitive": 31,
+        "nesting": 4,
+        "lines": 203,
+        "maxCyclomatic": 62,
+        "entropy": 6.08
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T19:59:43.389Z",
+          "mi": 24.7,
+          "cognitive": 31,
+          "nesting": 4,
+          "lines": 203,
+          "maxCyclomatic": 62,
+          "entropy": 6.08
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\scenes\\EngineDemoScene.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T20:00:01.081Z",
+        "mi": 24.2,
+        "cognitive": 79,
+        "nesting": 4,
+        "lines": 276,
+        "maxCyclomatic": 39,
+        "entropy": 6.73
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T20:00:01.081Z",
+          "mi": 24.2,
+          "cognitive": 79,
+          "nesting": 4,
+          "lines": 276,
+          "maxCyclomatic": 39,
+          "entropy": 6.73
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\rpg\\event\\EventManager.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T20:28:39.584Z",
+        "mi": 35.8,
+        "cognitive": 87,
+        "nesting": 4,
+        "lines": 188,
+        "maxCyclomatic": 16,
+        "entropy": 6.41
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T20:28:39.584Z",
+          "mi": 35.8,
+          "cognitive": 87,
+          "nesting": 4,
+          "lines": 188,
+          "maxCyclomatic": 16,
+          "entropy": 6.41
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\scenes\\LobbyScene.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T20:28:51.362Z",
+        "mi": 14.7,
+        "cognitive": 95,
+        "nesting": 6,
+        "lines": 406,
+        "maxCyclomatic": 31,
+        "entropy": 7.31
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T20:28:51.362Z",
+          "mi": 14.7,
+          "cognitive": 95,
+          "nesting": 6,
+          "lines": 406,
+          "maxCyclomatic": 31,
+          "entropy": 7.31
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\scenes\\RankingsScene.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T20:29:26.608Z",
+        "mi": 32.6,
+        "cognitive": 16,
+        "nesting": 5,
+        "lines": 106,
+        "maxCyclomatic": 15,
+        "entropy": 6.23
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T20:29:26.608Z",
+          "mi": 32.6,
+          "cognitive": 16,
+          "nesting": 5,
+          "lines": 106,
+          "maxCyclomatic": 15,
+          "entropy": 6.23
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\scenes\\GameSequenceEditorScene.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T21:14:43.944Z",
+        "mi": 20.7,
+        "cognitive": 144,
+        "nesting": 5,
+        "lines": 416,
+        "maxCyclomatic": 38,
+        "entropy": 6.96
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T21:14:43.944Z",
+          "mi": 20.7,
+          "cognitive": 144,
+          "nesting": 5,
+          "lines": 416,
+          "maxCyclomatic": 38,
+          "entropy": 6.96
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\stadium\\TournamentManager.ts": {
+      "latest": {
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T22:51:08.105Z",
+        "mi": 34.9,
+        "cognitive": 95,
+        "nesting": 6,
+        "lines": 155,
+        "maxCyclomatic": 27,
+        "entropy": 6.1
+      },
+      "history": [
+        {
+          "commit": "48a3e5b2",
+          "timestamp": "2026-04-29T22:51:08.105Z",
+          "mi": 34.9,
+          "cognitive": 95,
+          "nesting": 6,
+          "lines": 155,
+          "maxCyclomatic": 27,
+          "entropy": 6.1
+        }
+      ],
+      "trend": "stable"
+    }
+  },
+  "capturedAt": "2026-04-29T23:11:51.864Z"
+}

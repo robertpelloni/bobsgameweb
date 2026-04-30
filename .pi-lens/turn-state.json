@@ -1,0 +1,17 @@
+{
+  "files": {
+    "src/renderer/engine/rpg/ClientGameEngine.ts": {
+      "modifiedRanges": [
+        {
+          "start": 138,
+          "end": 144
+        }
+      ],
+      "importsChanged": false,
+      "lastEdit": "2026-04-29T23:37:11.653Z"
+    }
+  },
+  "turnCycles": 0,
+  "maxCycles": 3,
+  "lastUpdated": "2026-04-29T23:37:11.656Z"
+}

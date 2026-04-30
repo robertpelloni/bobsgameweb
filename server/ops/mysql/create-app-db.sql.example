@@ -1,0 +1,19 @@
+-- Example SQL for provisioning a shared MySQL database on the Hetzner host.
+-- Replace placeholders before use.
+--
+-- Recommended structure:
+--   database: platform_shared
+--   prefixes: bg_, fw_
+--   users:    bg_app, fw_app
+--
+-- Note: MySQL separation here is primarily by table prefix discipline.
+
+CREATE DATABASE IF NOT EXISTS platform_shared CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE USER IF NOT EXISTS 'bg_app'@'localhost' IDENTIFIED BY 'CHANGE_ME_BG_PASSWORD';
+CREATE USER IF NOT EXISTS 'fw_app'@'localhost' IDENTIFIED BY 'CHANGE_ME_FW_PASSWORD';
+
+GRANT ALL PRIVILEGES ON platform_shared.* TO 'bg_app'@'localhost';
+GRANT ALL PRIVILEGES ON platform_shared.* TO 'fw_app'@'localhost';
+
+FLUSH PRIVILEGES;
