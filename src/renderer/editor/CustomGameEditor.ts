@@ -335,6 +335,11 @@ export class CustomGameEditor {
         { label: "Stacking", value: "STACK" },
         { label: "Matching", value: "MATCH" }
     ], "DROP", { width: 330, height: 30 });
+    modeInput.on("change", (val: string) => {
+      this.modeSelect.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
     modeInput.setPosition(10, 65);
     settingsPanel.addChild(modeInput.container);
 
@@ -342,6 +347,11 @@ export class CustomGameEditor {
     widthLabel.position.set(10, 105);
     settingsPanel.addChild(widthLabel);
     const widthInput = new TextInput("10", { width: 160, height: 30 });
+    widthInput.on("change", (val: string) => {
+      this.gridWidthInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
     widthInput.setPosition(10, 125);
     settingsPanel.addChild(widthInput.container);
 
@@ -349,6 +359,11 @@ export class CustomGameEditor {
     heightLabel.position.set(180, 105);
     settingsPanel.addChild(heightLabel);
     const heightInput = new TextInput("20", { width: 160, height: 30 });
+    heightInput.on("change", (val: string) => {
+      this.gridHeightInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
     heightInput.setPosition(180, 125);
     settingsPanel.addChild(heightInput.container);
 
@@ -356,6 +371,11 @@ export class CustomGameEditor {
     gravityLabel.position.set(10, 165);
     settingsPanel.addChild(gravityLabel);
     const gravityInput = new TextInput("1.0", { width: 160, height: 30 });
+    gravityInput.on("change", (val: string) => {
+      this.gravityInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
     gravityInput.setPosition(10, 185);
     settingsPanel.addChild(gravityInput.container);
 
@@ -363,6 +383,11 @@ export class CustomGameEditor {
     lockLabel.position.set(180, 165);
     settingsPanel.addChild(lockLabel);
     const lockInput = new TextInput("30", { width: 160, height: 30 });
+    lockInput.on("change", (val: string) => {
+      this.lockDelayInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
     lockInput.setPosition(180, 185);
     settingsPanel.addChild(lockInput.container);
 
@@ -370,6 +395,11 @@ export class CustomGameEditor {
     chainLabel.position.set(10, 225);
     settingsPanel.addChild(chainLabel);
     const chainInput = new TextInput("4", { width: 160, height: 30 });
+    chainInput.on("change", (val: string) => {
+      this.chainAmountInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
     chainInput.setPosition(10, 245);
     settingsPanel.addChild(chainInput.container);
 
@@ -377,6 +407,11 @@ export class CustomGameEditor {
     nextLabel.position.set(180, 225);
     settingsPanel.addChild(nextLabel);
     const nextInput = new TextInput("5", { width: 160, height: 30 });
+    nextInput.on("change", (val: string) => {
+      this.nextPiecesInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
     nextInput.setPosition(180, 245);
     settingsPanel.addChild(nextInput.container);
 
