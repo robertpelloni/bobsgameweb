@@ -2,14 +2,14 @@
 
 ## Current State
 
-The agent successfully wired the visual `EventSheetEditor.ts` panel (using PIXI.js) directly to the underlying RPG `EventScript` / `BobEvent` data structures located in `src/renderer/engine/rpg/event/`. The UI now dynamically renders standard condition and action blocks (e.g. `◆ If: FLAG_CHECK [New Flag, ON]`) mapped directly from the core game engine classes.
+The agent successfully refactored `GenerativeAIManager.ts` to perform actual `fetch()` network requests against a configurable `AI_ENDPOINT` (`http://localhost:8080/api/generate`), rather than purely simulating delay via `setTimeout`. It falls back to the mock behavior safely if the endpoint is unreachable.
 
-This successfully demonstrates the engine's capability to bridge a complex custom native UI overlay directly to underlying C++ ported game data architectures.
+Simultaneously, the agent scaffolded `server/ai_proxy.js` (and added it to `package.json` as `npm run server`), which acts as an Express.js router that securely holds keys and performs the real API calls (OpenAI, Stable Diffusion, etc.) outside of the client browser bundle.
 
 ## Next Steps
 
 1. Start stripping away the underlying hidden HTML DOM inputs entirely from `CustomGameEditor.ts`, replacing the bridge logic with direct updates to the `this.currentGameType` state. (Note: Ensure this is done carefully to avoid breaking the extensive TS codebase. Strict mode must be preserved).
-2. The generative AI buttons inside the Custom Game Editor (`Text-to-Sprite`, `Text-to-Tileset`) are currently hitting a simulated/local API at `http://localhost:8080/api/generate`. Implement the actual backend proxy or connect it to a real inference service.
+2. Wire the actual external provider (OpenAI / DALL-E) logic into `server/ai_proxy.js` to return real generated `base64` image buffers back to the engine instead of red/blue mock pixels.
 3. Advance the C++ Qt6 port inside `cpp_port/` by integrating Ultimate++ widgets to replace the standard Qt6 widgets, building out the underlying state-management structures corresponding to `CustomGameType`.
 4. Continue moving down the roadmap to integrate external submodules/editors (e.g. hooking up Aseprite or Tilemap Studio to buttons inside our PIXI overlay).
 
