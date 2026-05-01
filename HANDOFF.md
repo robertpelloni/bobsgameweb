@@ -2,13 +2,13 @@
 
 ## Current State
 
-The agent successfully executed the rigorous Git syncing protocol: fetched the latest from `main`, updated and initialized all submodules recursively, merged the `docs-update` feature branch cleanly into `main`, generated a detailed project memory summary via user instructions, and finally updated the global documentation suite (`ROADMAP.md`, `TODO.md`, `MEMORY.md`, `VISION.md`). The version string was bumped to `2.2.6` in both `package.json` and `VERSION.md`, alongside a comprehensive `CHANGELOG.md` update.
+The agent successfully advanced the C++ Qt6 port located in `cpp_port/` to mirror the new PIXI layouts of the `CustomGameEditor.ts`. The `MainWindow.cpp` now conceptually mocks the `CustomGameType` underlying state architecture and builds out identical `QGroupBox`, `QLineEdit`, `QComboBox`, `QCheckBox`, and `QPushButton` configurations representing the Unified Template Library, the Game Settings, Toggles, and Generative AI panels. The C++ project correctly links and builds cleanly using CMake.
 
 ## Next Steps
 
 1. Start stripping away the underlying hidden HTML DOM inputs entirely from `CustomGameEditor.ts`, replacing the bridge logic with direct updates to the `this.currentGameType` state. (Note: Ensure this is done carefully to avoid breaking the extensive TS codebase. Strict mode must be preserved).
-2. Establish the actual Node.js/Python endpoint for the generative AI tools at `localhost:8080/api/generate` (e.g. OpenAI wrapper) which currently has the hooks setup inside `server/ai_proxy.js`.
-3. Advance the C++ Qt6 port inside `cpp_port/` by integrating Ultimate++ widgets to mirror the new PIXI layouts.
+2. The generative AI buttons inside the Custom Game Editor (`Text-to-Sprite`, `Text-to-Tileset`) are currently hitting a simulated/local API at `http://localhost:8080/api/generate`. Implement the actual backend proxy or connect it to a real inference service.
+3. Advance the C++ Qt6 port inside `cpp_port/` by actually utilizing the `bobui` Ultimate++ widgets rather than the native QWidgets used currently.
 4. Continue moving down the roadmap to integrate external submodules/editors (e.g. hooking up Aseprite or Tilemap Studio to buttons inside our PIXI overlay).
 
 ## Important Note for Next Agent
