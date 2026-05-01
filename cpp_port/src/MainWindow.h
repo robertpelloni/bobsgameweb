@@ -2,9 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTabWidget>
 
-class MainWindow : public QMainWindow {
+class QTabWidget;
+
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
 public:
@@ -13,6 +15,7 @@ public:
 
 private:
     void setupUi();
+    void syncUIFromState(); // Ultimate++ concept mapping
 
     QTabWidget *tabWidget;
 };

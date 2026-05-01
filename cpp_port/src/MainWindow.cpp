@@ -15,13 +15,34 @@
 // We use QGroupBoxes to emulate the U++ "Ctrl" / Panel layout encapsulation
 // mirroring the exact UI we built in PIXI native canvas for Web/Electron.
 
+// Mock GameType Data Model for C++ Port
+class CustomGameType {
+public:
+    QString name = "Default Game";
+    int gridWidth = 10;
+    int gridHeight = 20;
+    float gravityBase = 1.0f;
+    int lockDelay = 30;
+    bool cascadeGravity = false;
+    bool moveDisconnected = false;
+};
+
+CustomGameType currentGame;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setupUi();
+    syncUIFromState();
 }
 
 MainWindow::~MainWindow() {}
+
+void MainWindow::syncUIFromState() {
+    // Conceptual data binding
+    // nameInput->setText(currentGame.name);
+    // widthInput->setText(QString::number(currentGame.gridWidth));
+}
 
 void MainWindow::setupUi() {
     this->setWindowTitle("bgeditor - Omni-Engine (C++ / Qt6 Port)");
@@ -42,7 +63,7 @@ void MainWindow::setupUi() {
     // Game Name Panel
     QGroupBox *nameGroup = new QGroupBox("Game Name");
     QVBoxLayout *nameLayout = new QVBoxLayout();
-    QLineEdit *nameInput = new QLineEdit("Enter Game Name");
+    QLineEdit *nameInput = new QLineEdit(currentGame.name);
     nameLayout->addWidget(nameInput);
     nameGroup->setLayout(nameLayout);
     leftCol->addWidget(nameGroup);
@@ -66,14 +87,14 @@ void MainWindow::setupUi() {
     settingsLayout->addWidget(modeCombo, 0, 1);
 
     settingsLayout->addWidget(new QLabel("Grid Width"), 1, 0);
-    settingsLayout->addWidget(new QLineEdit("10"), 1, 1);
+    settingsLayout->addWidget(new QLineEdit(QString::number(currentGame.gridWidth)), 1, 1);
     settingsLayout->addWidget(new QLabel("Grid Height"), 1, 2);
-    settingsLayout->addWidget(new QLineEdit("20"), 1, 3);
+    settingsLayout->addWidget(new QLineEdit(QString::number(currentGame.gridHeight)), 1, 3);
 
     settingsLayout->addWidget(new QLabel("Gravity Base"), 2, 0);
-    settingsLayout->addWidget(new QLineEdit("1.0"), 2, 1);
+    settingsLayout->addWidget(new QLineEdit(QString::number(currentGame.gravityBase)), 2, 1);
     settingsLayout->addWidget(new QLabel("Lock Delay"), 2, 2);
-    settingsLayout->addWidget(new QLineEdit("30"), 2, 3);
+    settingsLayout->addWidget(new QLineEdit(QString::number(currentGame.lockDelay)), 2, 3);
 
     settingsGroup->setLayout(settingsLayout);
     leftCol->addWidget(settingsGroup);
@@ -122,8 +143,14 @@ void MainWindow::setupUi() {
     // Game Toggles
     QGroupBox *toggleGroup = new QGroupBox("Game Mechanics Toggles");
     QGridLayout *toggleLayout = new QGridLayout();
-    toggleLayout->addWidget(new QCheckBox("Cascade Gravity"), 0, 0);
-    toggleLayout->addWidget(new QCheckBox("Move Disconnected"), 0, 1);
+    QCheckBox* cascadeCb = new QCheckBox("Cascade Gravity");
+    cascadeCb->setChecked(currentGame.cascadeGravity);
+    toggleLayout->addWidget(cascadeCb, 0, 0);
+
+    QCheckBox* disconnectCb = new QCheckBox("Move Disconnected");
+    disconnectCb->setChecked(currentGame.moveDisconnected);
+    toggleLayout->addWidget(disconnectCb, 0, 1);
+
     toggleLayout->addWidget(new QCheckBox("Chain Checks Rows"), 1, 0);
     toggleLayout->addWidget(new QCheckBox("Show Next Pieces"), 1, 1);
     toggleGroup->setLayout(toggleLayout);
