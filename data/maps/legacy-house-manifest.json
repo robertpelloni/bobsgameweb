@@ -28,5 +28,35 @@
     "id": 10,
     "name": "TOWNYUU Attic",
     "path": "/maps/map_10.json"
+  },
+  {
+    "id": 11,
+    "name": "TOWNYUU Downstairs Bathroom",
+    "path": "/maps/map_11.json"
+  },
+  {
+    "id": 12,
+    "name": "TOWNYUU Upstairs Yuu's Room",
+    "path": "/maps/map_12.json"
+  },
+  {
+    "id": 13,
+    "name": "TOWNYUU Upstairs Baby Room",
+    "path": "/maps/map_13.json"
+  },
+  {
+    "id": 14,
+    "name": "TOWNYUU Upstairs Brothers Room",
+    "path": "/maps/map_14.json"
+  },
+  {
+    "id": 15,
+    "name": "TOWNYUU Upstairs Bathroom",
+    "path": "/maps/map_15.json"
+  },
+  {
+    "id": 16,
+    "name": "TOWNYUU Backyard Tool Shed",
+    "path": "/maps/map_16.json"
   }
 ]

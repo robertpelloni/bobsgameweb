@@ -33,6 +33,12 @@ const TARGET_MAPS = [
   { outputId: 8, legacyName: 'TOWNYUUBasement', name: 'TOWNYUU Basement', floorTile: MapTile.STONE },
   { outputId: 9, legacyName: 'TOWNYUUGarage', name: 'TOWNYUU Garage', floorTile: MapTile.STONE },
   { outputId: 10, legacyName: 'TOWNYUUAttic', name: 'TOWNYUU Attic', floorTile: MapTile.FLOOR },
+  { outputId: 11, legacyName: 'TOWNYUUDownstairsBathroom', name: 'TOWNYUU Downstairs Bathroom', floorTile: MapTile.FLOOR },
+  { outputId: 12, legacyName: 'TOWNYUUUpstairsYuusRoom', name: "TOWNYUU Upstairs Yuu's Room", floorTile: MapTile.FLOOR },
+  { outputId: 13, legacyName: 'TOWNYUUUpstairsBabyRoom', name: 'TOWNYUU Upstairs Baby Room', floorTile: MapTile.FLOOR },
+  { outputId: 14, legacyName: 'TOWNYUUUpstairsBrothersRoom', name: 'TOWNYUU Upstairs Brothers Room', floorTile: MapTile.FLOOR },
+  { outputId: 15, legacyName: 'TOWNYUUUpstairsBathroom', name: 'TOWNYUU Upstairs Bathroom', floorTile: MapTile.FLOOR },
+  { outputId: 16, legacyName: 'TOWNYUUBackyardToolShed', name: 'TOWNYUU Backyard Tool Shed', floorTile: MapTile.FLOOR },
 ];
 
 const LEGACY_NAME_TO_DISPLAY_NAME = new Map(
@@ -48,6 +54,11 @@ const MANUAL_TRANSITION_REPAIRS = {
   TOWNYUUAttic: {
     warps: {
       toGarage: { destinationMapName: 'TOWNYUU Garage', destinationX: 8, destinationY: 14 },
+    },
+  },
+  TOWNYUUDownstairsBathroom: {
+    doors: {
+      Light0: { destinationMapName: 'TOWNYUU Downstairs', destinationX: 53, destinationY: 23 },
     },
   },
 };
@@ -179,6 +190,11 @@ function toTileCoord(pixelValue) {
   return Math.max(0, Math.floor(pixelValue / 8));
 }
 
+function toTileCoordAllowNegative(pixelValue) {
+  if (!Number.isFinite(pixelValue) || pixelValue < 0) return -1;
+  return Math.floor(pixelValue / 8);
+}
+
 function classifyWarpTile(areaRecord) {
   const combined = `${areaRecord.name} ${areaRecord.comment} ${areaRecord.destinationMapName}`.toLowerCase();
   if (combined.includes('attic') || combined.includes('upstairs') || combined.includes('stairs up')) {
@@ -232,8 +248,9 @@ function parseDoorRecords(section) {
       x: toTileCoord(Number(match[3])),
       y: toTileCoord(Number(match[4])),
       destinationMapName,
-      destinationX: toTileCoord(Number(match[5])),
-      destinationY: toTileCoord(Number(match[6])),
+      destinationDoorName: match[8],
+      destinationX: toTileCoordAllowNegative(Number(match[5])),
+      destinationY: toTileCoordAllowNegative(Number(match[6])),
     });
   }
 
@@ -259,12 +276,94 @@ function parseAreaWarpRecords(section) {
       height: Math.max(1, toTileCoord(Number(match[6]))),
       isWarpArea: true,
       destinationMapName,
-      destinationX: toTileCoord(Number(match[8])),
-      destinationY: toTileCoord(Number(match[9])),
+      destinationWarpAreaName: match[12],
+      destinationX: toTileCoordAllowNegative(Number(match[8])),
+      destinationY: toTileCoordAllowNegative(Number(match[9])),
     });
   }
 
   return records;
+}
+
+function findNearestWalkableTile(map, startX, startY) {
+  const width = map.width;
+  const height = map.height;
+  const visited = new Set();
+  const queue = [{ x: startX, y: startY }];
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    const key = `${current.x},${current.y}`;
+    if (visited.has(key)) continue;
+    visited.add(key);
+
+    if (
+      current.x >= 0 && current.x < width &&
+      current.y >= 0 && current.y < height &&
+      map.tiles[current.y]?.[current.x] !== MapTile.WALL
+    ) {
+      return { x: current.x, y: current.y };
+    }
+
+    for (const [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+      const nextX = current.x + dx;
+      const nextY = current.y + dy;
+      const nextKey = `${nextX},${nextY}`;
+      if (!visited.has(nextKey) && nextX >= 0 && nextX < width && nextY >= 0 && nextY < height) {
+        queue.push({ x: nextX, y: nextY });
+      }
+    }
+  }
+
+  return { x: Math.max(0, Math.min(width - 1, startX)), y: Math.max(0, Math.min(height - 1, startY)) };
+}
+
+function resolveTransitions(maps) {
+  const mapsByName = new Map(maps.map((map) => [map.name, map]));
+
+  for (const map of maps) {
+    for (const door of map.doors) {
+      const targetMap = mapsByName.get(door.destinationMapName);
+      if (!targetMap) continue;
+      if (door.destinationX >= 0 && door.destinationY >= 0) continue;
+
+      let fallback = null;
+      if (door.destinationDoorName) {
+        const targetDoor = targetMap.doors.find((candidate) => candidate.name === door.destinationDoorName);
+        if (targetDoor) {
+          fallback = findNearestWalkableTile(targetMap, targetDoor.x, targetDoor.y);
+        }
+      }
+
+      if (!fallback) {
+        fallback = findNearestWalkableTile(targetMap, targetMap.defaultSpawnX, targetMap.defaultSpawnY);
+      }
+
+      door.destinationX = fallback.x;
+      door.destinationY = fallback.y;
+    }
+
+    for (const warp of map.warps) {
+      const targetMap = mapsByName.get(warp.destinationMapName);
+      if (!targetMap) continue;
+      if (warp.destinationX >= 0 && warp.destinationY >= 0) continue;
+
+      let fallback = null;
+      if (warp.destinationWarpAreaName) {
+        const targetWarp = targetMap.warps.find((candidate) => candidate.name === warp.destinationWarpAreaName);
+        if (targetWarp) {
+          fallback = findNearestWalkableTile(targetMap, targetWarp.x, targetWarp.y);
+        }
+      }
+
+      if (!fallback) {
+        fallback = findNearestWalkableTile(targetMap, targetMap.defaultSpawnX, targetMap.defaultSpawnY);
+      }
+
+      warp.destinationX = fallback.x;
+      warp.destinationY = fallback.y;
+    }
+  }
 }
 
 function repairTransitions(legacyName, doors, warps) {
@@ -323,7 +422,6 @@ function convertMap(projectText, config) {
   const tiles = buildBaseTiles(width, height, hitLayer, config.floorTile);
   const doors = parseDoorRecords(section);
   const warps = parseAreaWarpRecords(section);
-  repairTransitions(config.legacyName, doors, warps);
   applyInteractiveMarkers(tiles, doors, warps);
 
   const defaultSpawn = findDefaultSpawn(tiles);
@@ -352,6 +450,17 @@ function convertMap(projectText, config) {
   };
 }
 
+function sanitizeOutputs(maps) {
+  for (const map of maps) {
+    for (const door of map.doors) {
+      delete door.destinationDoorName;
+    }
+    for (const warp of map.warps) {
+      delete warp.destinationWarpAreaName;
+    }
+  }
+}
+
 function writeOutputs(maps) {
   const manifest = [];
 
@@ -371,6 +480,11 @@ function main() {
   console.log('Converting legacy Yuu house maps from bobsgame_v8830.zip...');
   const projectText = extractProjectText();
   const maps = TARGET_MAPS.map((config) => convertMap(projectText, config));
+  resolveTransitions(maps);
+  for (const map of maps) {
+    repairTransitions(map.legacyName, map.doors, map.warps);
+  }
+  sanitizeOutputs(maps);
   writeOutputs(maps);
   console.log(`Converted ${maps.length} legacy maps.`);
 }

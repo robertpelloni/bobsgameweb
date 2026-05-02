@@ -2019,7 +2019,7 @@
       7,
       3,
       3,
-      3,
+      6,
       3,
       3,
       3,
@@ -2763,6 +2763,14 @@
     ]
   ],
   "doors": [
+    {
+      "name": "toBathroom",
+      "x": 25,
+      "y": 31,
+      "destinationMapName": "TOWNYUU Downstairs Bathroom",
+      "destinationX": 28,
+      "destinationY": 36
+    },
     {
       "name": "toBasement",
       "x": 2,

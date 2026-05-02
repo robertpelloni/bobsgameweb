@@ -289,6 +289,7 @@
       3,
       3,
       3,
+      6,
       3,
       3,
       3,
@@ -311,8 +312,7 @@
       3,
       3,
       3,
-      3,
-      3,
+      6,
       3,
       3,
       3,
@@ -683,6 +683,7 @@
       7,
       7,
       7,
+      6,
       7,
       7,
       7,
@@ -700,8 +701,7 @@
       7,
       7,
       7,
-      7,
-      7,
+      6,
       7,
       7,
       7,
@@ -1810,6 +1810,38 @@
       "destinationMapName": "TOWNYUU Upstairs Parents Room",
       "destinationX": 13,
       "destinationY": 14
+    },
+    {
+      "name": "toLittleBrothersRoom",
+      "x": 33,
+      "y": 10,
+      "destinationMapName": "TOWNYUU Upstairs Baby Room",
+      "destinationX": 36,
+      "destinationY": 14
+    },
+    {
+      "name": "toBathroom",
+      "x": 51,
+      "y": 10,
+      "destinationMapName": "TOWNYUU Upstairs Bathroom",
+      "destinationX": 54,
+      "destinationY": 14
+    },
+    {
+      "name": "toBrothersRoom",
+      "x": 23,
+      "y": 4,
+      "destinationMapName": "TOWNYUU Upstairs Brothers Room",
+      "destinationX": 26,
+      "destinationY": 9
+    },
+    {
+      "name": "toYuusRoom",
+      "x": 46,
+      "y": 4,
+      "destinationMapName": "TOWNYUU Upstairs Yuu's Room",
+      "destinationX": 49,
+      "destinationY": 9
     }
   ],
   "warps": [
