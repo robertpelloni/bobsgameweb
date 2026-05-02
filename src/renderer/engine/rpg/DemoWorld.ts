@@ -50,6 +50,28 @@ export interface DemoWorldConfig {
 	width: number;
 	height: number;
 	eventManager?: import("./event/EventManager").EventManager;
+	onMapTransitionRequest?: (mapName: string, spawnX: number, spawnY: number) => void;
+}
+
+interface LoadedMapDoor {
+	name: string;
+	x: number;
+	y: number;
+	destinationMapName: string;
+	destinationX: number;
+	destinationY: number;
+}
+
+interface LoadedMapWarp {
+	name: string;
+	comment?: string;
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+	destinationMapName: string;
+	destinationX: number;
+	destinationY: number;
 }
 
 export class DemoWorld {
@@ -69,6 +91,11 @@ export class DemoWorld {
 	private camTargetY = 0;
 	private readonly CAM_LERP = 0.08;
 	private eventManager: import("./event/EventManager").EventManager | null = null;
+	private onMapTransitionRequest: ((mapName: string, spawnX: number, spawnY: number) => void) | null = null;
+	private loadedMapDoors: LoadedMapDoor[] = [];
+	private loadedMapWarps: LoadedMapWarp[] = [];
+	private usingLoadedMapData = false;
+	private loadedMapTransitionCooldown = 0;
 	private lastTileX = -1;
 	private lastTileY = -1;
 	private mapEntered = false;
@@ -488,6 +515,7 @@ export class DemoWorld {
 		this.width = config.width;
 		this.height = config.height;
 		this.eventManager = config.eventManager ?? null;
+		this.onMapTransitionRequest = config.onMapTransitionRequest ?? null;
 
 		// Wire event manager → DemoWorld dialogue display
 		if (this.eventManager) {
@@ -1481,14 +1509,18 @@ export class DemoWorld {
 	 * Resizes the tile grid to match the map dimensions.
 	 */
 	loadFromMapData(mapData: {
+		name?: string;
 		width: number;
 		height: number;
 		tiles: number[][];
-	}): void {
+		defaultSpawnX?: number;
+		defaultSpawnY?: number;
+		doors?: Array<Record<string, unknown>>;
+		warps?: Array<Record<string, unknown>>;
+	}, options?: { spawnX?: number; spawnY?: number }): void {
 		const mapW = Math.min(mapData.width, 200); // Safety cap
 		const mapH = Math.min(mapData.height, 200);
 
-		// Rebuild tile grid from map data
 		this.tiles = [];
 		for (let y = 0; y < mapH; y++) {
 			this.tiles[y] = [];
@@ -1498,12 +1530,93 @@ export class DemoWorld {
 			}
 		}
 
-		// Update internal constants — since MAP_W/MAP_H are const,
-		// we store dynamic dimensions for camera/rendering bounds
 		(this as any)._mapW = mapW;
 		(this as any)._mapH = mapH;
+		this.usingLoadedMapData = true;
+		this.loadedMapDoors = (mapData.doors ?? []).map((door) => ({
+			name: String(door.name ?? door.id ?? 'door'),
+			x: Number(door.x ?? 0),
+			y: Number(door.y ?? 0),
+			destinationMapName: String(door.destinationMapName ?? ''),
+			destinationX: Number(door.destinationX ?? 0),
+			destinationY: Number(door.destinationY ?? 0),
+		})).filter((door) => door.destinationMapName.length > 0);
+		this.loadedMapWarps = (mapData.warps ?? []).map((warp) => ({
+			name: String(warp.name ?? warp.id ?? 'warp'),
+			comment: typeof warp.comment === 'string' ? warp.comment : undefined,
+			x: Number(warp.x ?? 0),
+			y: Number(warp.y ?? 0),
+			width: Math.max(1, Number(warp.width ?? 1)),
+			height: Math.max(1, Number(warp.height ?? 1)),
+			destinationMapName: String(warp.destinationMapName ?? ''),
+			destinationX: Number(warp.destinationX ?? 0),
+			destinationY: Number(warp.destinationY ?? 0),
+		})).filter((warp) => warp.destinationMapName.length > 0);
+		this.currentMapName = mapData.name ?? this.currentMapName;
+		this.mapEntered = false;
+		this.loadedMapTransitionCooldown = 0.35;
+		this.lastTileX = -1;
+		this.lastTileY = -1;
+		this.insideBuilding = null;
+		this.npcs = [];
+		this.npcOriginalPositions = [];
+		this.npcWanderTimers = [];
+		this.playerTrail = [];
 
-		log.info(`Loaded map data: ${mapW}x${mapH} tiles`);
+		const spawnX = options?.spawnX ?? mapData.defaultSpawnX;
+		const spawnY = options?.spawnY ?? mapData.defaultSpawnY;
+		if (Number.isFinite(spawnX) && Number.isFinite(spawnY)) {
+			this.playerX = Number(spawnX) * TILE_SIZE;
+			this.playerY = Number(spawnY) * TILE_SIZE;
+		}
+
+		log.info(`Loaded map data: ${this.currentMapName} (${mapW}x${mapH} tiles, doors=${this.loadedMapDoors.length}, warps=${this.loadedMapWarps.length})`);
+	}
+
+	private tryUseLoadedMapDoor(): boolean {
+		if (!this.usingLoadedMapData || !this.onMapTransitionRequest || this.loadedMapTransitionCooldown > 0) return false;
+
+		const playerTileX = Math.floor(this.playerX / TILE_SIZE);
+		const playerTileY = Math.floor(this.playerY / TILE_SIZE);
+		const door = this.loadedMapDoors.find((entry) => entry.x === playerTileX && entry.y === playerTileY);
+		if (!door) return false;
+
+		this.notifications.push({
+			text: `Entering ${door.destinationMapName}...`,
+			x: this.playerX,
+			y: this.playerY - 20,
+			age: 0,
+			maxAge: 1.0,
+			color: 0xffaa44,
+		});
+		this.loadedMapTransitionCooldown = 0.35;
+		this.onMapTransitionRequest(door.destinationMapName, door.destinationX, door.destinationY);
+		return true;
+	}
+
+	private checkLoadedMapWarpTransition(): void {
+		if (!this.usingLoadedMapData || !this.onMapTransitionRequest || this.loadedMapTransitionCooldown > 0) return;
+
+		const playerTileX = Math.floor(this.playerX / TILE_SIZE);
+		const playerTileY = Math.floor(this.playerY / TILE_SIZE);
+		const warp = this.loadedMapWarps.find((entry) => (
+			playerTileX >= entry.x &&
+			playerTileX < entry.x + entry.width &&
+			playerTileY >= entry.y &&
+			playerTileY < entry.y + entry.height
+		));
+		if (!warp) return;
+
+		this.notifications.push({
+			text: `Transition: ${warp.destinationMapName}`,
+			x: this.playerX,
+			y: this.playerY - 20,
+			age: 0,
+			maxAge: 1.0,
+			color: 0x88aaff,
+		});
+		this.loadedMapTransitionCooldown = 0.35;
+		this.onMapTransitionRequest(warp.destinationMapName, warp.destinationX, warp.destinationY);
 	}
 
 	/** Get the dynamic map width (may differ from const MAP_W after loadFromMapData) */
@@ -1614,6 +1727,9 @@ export class DemoWorld {
 
 	update(dt: number): void {
 		this.gameTime += dt;
+		if (this.loadedMapTransitionCooldown > 0) {
+			this.loadedMapTransitionCooldown = Math.max(0, this.loadedMapTransitionCooldown - dt);
+		}
 
 		// Weather cycling — changes based on game time
 		if (this.weatherRenderer && !this.insideBuilding) {
@@ -1901,8 +2017,8 @@ export class DemoWorld {
 					});
 				}
 			} else {
-				// Try NPC interaction first, then building
-				if (!this.tryInteractNPC()) {
+				// Try NPC interaction first, then legacy loaded-map doors, then fallback demo buildings
+				if (!this.tryInteractNPC() && !this.tryUseLoadedMapDoor()) {
 					this.tryEnterBuilding();
 				}
 			}
@@ -1969,13 +2085,15 @@ export class DemoWorld {
 			dy /= len;
 		}
 
+		const mapW = this.getMapWidth();
+		const mapH = this.getMapHeight();
 		const newX = this.playerX + dx * this.playerSpeed * dt;
 		const newY = this.playerY + dy * this.playerSpeed * dt;
 
 		// Collision check (can't walk on water, trees, buildings, fences)
 		const tileX = Math.floor(newX / TILE_SIZE);
 		const tileY = Math.floor(newY / TILE_SIZE);
-		if (tileX >= 0 && tileX < MAP_W && tileY >= 0 && tileY < MAP_H) {
+		if (tileX >= 0 && tileX < mapW && tileY >= 0 && tileY < mapH) {
 			const tile = this.tiles[tileY][tileX];
 			if (
 				tile !== Tile.WATER &&
@@ -1984,66 +2102,77 @@ export class DemoWorld {
 				tile !== Tile.ROOF &&
 				tile !== Tile.FENCE
 			) {
-				this.playerX = Math.max(0, Math.min((MAP_W - 1) * TILE_SIZE, newX));
-				this.playerY = Math.max(0, Math.min((MAP_H - 1) * TILE_SIZE, newY));
-				// Auto-open chest when stepping on it
+				this.playerX = Math.max(0, Math.min((mapW - 1) * TILE_SIZE, newX));
+				this.playerY = Math.max(0, Math.min((mapH - 1) * TILE_SIZE, newY));
 				if (tile === Tile.CHEST) this.tryOpenChest();
 			}
 		}
 
-		// Edge-of-map detection — area transition
-		if (this.playerX <= 0 && dx < 0) {
-			this.notifications.push({
-				text: "← West Field (coming soon)",
-				x: this.playerX,
-				y: this.playerY - 20,
-				age: 0,
-				maxAge: 1.5,
-				color: 0x88aaff,
-			});
-			this.playerX = 1;
-		} else if (this.playerX >= (MAP_W - 1) * TILE_SIZE && dx > 0) {
-			this.notifications.push({
-				text: "East Forest → (coming soon)",
-				x: this.playerX,
-				y: this.playerY - 20,
-				age: 0,
-				maxAge: 1.5,
-				color: 0x88aaff,
-			});
-			this.playerX = (MAP_W - 1) * TILE_SIZE - 1;
-		}
-		if (this.playerY <= 0 && dy < 0) {
-			if (this.currentAreaID === "town") {
-				this.transitionToArea("mountains");
-			} else if (this.currentAreaID === "beach") {
-				this.transitionToArea("town");
-			} else {
-				this.notifications.push({
-					text: "\u2191 Nothing beyond...",
-					x: this.playerX,
-					y: this.playerY - 20,
-					age: 0,
-					maxAge: 1.5,
-					color: 0x88aaff,
-				});
-				this.playerY = 1;
+		if (this.usingLoadedMapData) {
+			if (this.playerX <= 0 && dx < 0) this.playerX = 1;
+			if (this.playerX >= (mapW - 1) * TILE_SIZE && dx > 0) {
+				this.playerX = (mapW - 1) * TILE_SIZE - 1;
 			}
-		} else if (this.playerY >= (MAP_H - 1) * TILE_SIZE && dy > 0) {
-			if (this.currentAreaID === "mountains") {
-				this.transitionToArea("town");
-			} else if (this.currentAreaID === "town") {
-				this.transitionToArea("beach");
-			} else {
+			if (this.playerY <= 0 && dy < 0) this.playerY = 1;
+			if (this.playerY >= (mapH - 1) * TILE_SIZE && dy > 0) {
+				this.playerY = (mapH - 1) * TILE_SIZE - 1;
+			}
+			this.checkLoadedMapWarpTransition();
+		} else {
+			// Edge-of-map detection — area transition
+			if (this.playerX <= 0 && dx < 0) {
 				this.notifications.push({
-					text: "Nothing beyond...",
+					text: "← West Field (coming soon)",
 					x: this.playerX,
 					y: this.playerY - 20,
 					age: 0,
 					maxAge: 1.5,
 					color: 0x88aaff,
 				});
-				this.playerY = (MAP_H - 1) * TILE_SIZE - 1;
+				this.playerX = 1;
+			} else if (this.playerX >= (mapW - 1) * TILE_SIZE && dx > 0) {
+				this.notifications.push({
+					text: "East Forest → (coming soon)",
+					x: this.playerX,
+					y: this.playerY - 20,
+					age: 0,
+					maxAge: 1.5,
+					color: 0x88aaff,
+				});
+				this.playerX = (mapW - 1) * TILE_SIZE - 1;
+			}
+			if (this.playerY <= 0 && dy < 0) {
+				if (this.currentAreaID === "town") {
+					this.transitionToArea("mountains");
+				} else if (this.currentAreaID === "beach") {
+					this.transitionToArea("town");
+				} else {
+					this.notifications.push({
+						text: "\u2191 Nothing beyond...",
+						x: this.playerX,
+						y: this.playerY - 20,
+						age: 0,
+						maxAge: 1.5,
+						color: 0x88aaff,
+					});
+					this.playerY = 1;
+				}
+			} else if (this.playerY >= (mapH - 1) * TILE_SIZE && dy > 0) {
+				if (this.currentAreaID === "mountains") {
+					this.transitionToArea("town");
+				} else if (this.currentAreaID === "town") {
+					this.transitionToArea("beach");
+				} else {
+					this.notifications.push({
+						text: "Nothing beyond...",
+						x: this.playerX,
+						y: this.playerY - 20,
+						age: 0,
+						maxAge: 1.5,
+						color: 0x88aaff,
+					});
+					this.playerY = (mapH - 1) * TILE_SIZE - 1;
+				}
 			}
 		}
 
@@ -2073,11 +2202,13 @@ export class DemoWorld {
 		if ((!this.insideBuilding && dx !== 0) || dy !== 0) {
 			const ptx = Math.floor(this.playerX / TILE_SIZE);
 			const pty = Math.floor(this.playerY / TILE_SIZE);
+			const mapW = this.getMapWidth();
+			const mapH = this.getMapHeight();
 			if (
 				ptx >= 0 &&
-				ptx < MAP_W &&
+				ptx < mapW &&
 				pty >= 0 &&
-				pty < MAP_H &&
+				pty < mapH &&
 				this.tiles[pty][ptx] === Tile.GRASS
 			) {
 				this.encounterTimer += dt;
@@ -2972,15 +3103,17 @@ export class DemoWorld {
 		const ptx = Math.floor(this.playerX / TILE_SIZE);
 		const pty = Math.floor(this.playerY / TILE_SIZE);
 		let nearWater = false;
+		const mapW = this.getMapWidth();
+		const mapH = this.getMapHeight();
 		for (let dy = -1; dy <= 1; dy++) {
 			for (let dx = -1; dx <= 1; dx++) {
 				const tx = ptx + dx;
 				const ty = pty + dy;
 				if (
 					tx >= 0 &&
-					tx < MAP_W &&
+					tx < mapW &&
 					ty >= 0 &&
-					ty < MAP_H &&
+					ty < mapH &&
 					this.tiles[ty][tx] === Tile.WATER
 				) {
 					nearWater = true;
@@ -3108,14 +3241,17 @@ export class DemoWorld {
 			return this.renderBuildingInterior();
 		}
 
+		const mapW = this.getMapWidth();
+		const mapH = this.getMapHeight();
+
 		// Camera offset (smooth lerp toward player)
 		this.camTargetX = Math.max(
 			0,
-			Math.min(MAP_W * TILE_SIZE - this.width, this.playerX - this.width / 2),
+			Math.min(mapW * TILE_SIZE - this.width, this.playerX - this.width / 2),
 		);
 		this.camTargetY = Math.max(
 			0,
-			Math.min(MAP_H * TILE_SIZE - this.height, this.playerY - this.height / 2),
+			Math.min(mapH * TILE_SIZE - this.height, this.playerY - this.height / 2),
 		);
 		// Smooth camera interpolation
 		this.camX += (this.camTargetX - this.camX) * this.CAM_LERP;
@@ -3131,11 +3267,11 @@ export class DemoWorld {
 		const startTileX = Math.floor(camX / TILE_SIZE);
 		const startTileY = Math.floor(camY / TILE_SIZE);
 		const endTileX = Math.min(
-			MAP_W,
+			mapW,
 			startTileX + Math.ceil(this.width / TILE_SIZE) + 1,
 		);
 		const endTileY = Math.min(
-			MAP_H,
+			mapH,
 			startTileY + Math.ceil(this.height / TILE_SIZE) + 1,
 		);
 
@@ -3144,7 +3280,7 @@ export class DemoWorld {
 		const detailTiles: { tx: number; ty: number; tile: number }[] = [];
 		for (let ty = startTileY; ty < endTileY; ty++) {
 			for (let tx = startTileX; tx < endTileX; tx++) {
-				if (ty < 0 || tx < 0 || ty >= MAP_H || tx >= MAP_W) continue;
+				if (ty < 0 || tx < 0 || ty >= mapH || tx >= mapW) continue;
 				const tile = this.tiles[ty][tx];
 				this.tileBatcher?.addTile(tx, ty, tile);
 				// Collect tiles that need extra detail
@@ -4765,8 +4901,10 @@ export class DemoWorld {
 		const padding = 8;
 		const mapX = this.width - this.minimapSize - padding;
 		const mapY = 42;
-		const tileW = this.minimapSize / MAP_W;
-		const tileH = this.minimapSize / MAP_H;
+		const mapW = this.getMapWidth();
+		const mapH = this.getMapHeight();
+		const tileW = this.minimapSize / mapW;
+		const tileH = this.minimapSize / mapH;
 
 		// Background
 		const bg = new Graphics();
@@ -4783,8 +4921,8 @@ export class DemoWorld {
 
 		// Tiles (simplified — just colored rects)
 		const mmG = new Graphics();
-		for (let ty = 0; ty < MAP_H; ty++) {
-			for (let tx = 0; tx < MAP_W; tx++) {
+		for (let ty = 0; ty < mapH; ty++) {
+			for (let tx = 0; tx < mapW; tx++) {
 				const tile = this.tiles[ty][tx];
 				// Simplify tile colors for minimap
 				let c = tile;

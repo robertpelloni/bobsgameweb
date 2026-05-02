@@ -21,6 +21,8 @@ export interface MapData {
     warps: WarpArea[];
     lights: LightData[];
     isOutside: boolean;
+    defaultSpawnX?: number;
+    defaultSpawnY?: number;
 }
 
 export class MapManager {

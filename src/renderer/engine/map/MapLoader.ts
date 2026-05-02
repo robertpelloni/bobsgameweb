@@ -219,6 +219,8 @@ export class MapLoader {
 				warps: data.warps ?? [],
 				lights: data.lights ?? [],
 				isOutside: data.isOutside ?? true,
+				defaultSpawnX: data.defaultSpawnX,
+				defaultSpawnY: data.defaultSpawnY,
 			};
 		} catch (e) {
 			log.warn(`Failed to parse map JSON: ${e}`);

@@ -110,7 +110,14 @@ export class ClientGameEngine extends BGClientEngine {
 		log.info("Registered default game events");
 
 		// Initialize demo world
-		this.demoWorld = new DemoWorld({ width: 800, height: 600, eventManager: this.eventManager });
+		this.demoWorld = new DemoWorld({
+			width: 800,
+			height: 600,
+			eventManager: this.eventManager,
+			onMapTransitionRequest: (mapName: string, spawnX: number, spawnY: number) => {
+				this.requestMapChange(mapName, spawnX, spawnY);
+			},
+		});
 	}
 
 	// ============================================================
@@ -132,16 +139,19 @@ export class ClientGameEngine extends BGClientEngine {
 		this.syncAudioSettings();
 
 		// Generate built-in maps so the world always has something to show.
-		// In production, maps would also be loaded from the server.
+		// Legacy converted house maps are loaded afterward and override matching names.
 		const builtinCount = this.mapLoader.generateBuiltinMaps();
 		log.info(`Registered ${builtinCount} built-in maps`);
 
-		// Load the town map into DemoWorld so the rendered tiles come from MapManager data
-		const townMap = this.mapManager.getMapByName("TOWNYUU Downstairs");
-		if (townMap) {
-			this.demoWorld.loadFromMapData(townMap);
-			log.info("Loaded town map into DemoWorld");
+		const legacyAssetCount = await this.loadLegacyHouseMaps();
+		if (legacyAssetCount > 0) {
+			log.info(`Registered ${legacyAssetCount} converted legacy house maps from static assets`);
 		}
+
+		const startingMap = this.mapManager.getMapByName("TOWNYUU Downstairs") as any;
+		const startX = Number(startingMap?.defaultSpawnX ?? 20);
+		const startY = Number(startingMap?.defaultSpawnY ?? 20);
+		this.changeMap("TOWNYUU Downstairs", startX, startY, false);
 
 		// Try loading maps from the server (non-blocking)
 		this.loadServerMaps().catch((e) =>
@@ -179,6 +189,15 @@ export class ClientGameEngine extends BGClientEngine {
 			await this.mapLoader.loadFromServer(id);
 		}
 		log.info(`Server maps loaded: ${this.mapLoader.getLoadedCount()} total`);
+	}
+
+	private async loadLegacyHouseMaps(): Promise<number> {
+		try {
+			return await this.mapLoader.loadFromManifest("/maps/legacy-house-manifest.json");
+		} catch (e) {
+			log.warn(`Legacy house asset load skipped: ${e}`);
+			return 0;
+		}
 	}
 
 	private applyLocalSave(save: SaveSlot): void {
@@ -238,6 +257,14 @@ export class ClientGameEngine extends BGClientEngine {
 		this.currentMapName = roomName;
 		this.player.x = x;
 		this.player.y = y;
+
+		const targetMap = this.mapManager.getMapByName(roomName);
+		if (targetMap) {
+			this.mapManager.changeMap(roomName, x, y);
+			this.demoWorld.loadFromMapData(targetMap as any, { spawnX: x, spawnY: y });
+		} else {
+			log.warn(`Map not registered in MapManager: ${roomName}`);
+		}
 
 		if (updateSave) {
 			this.saveCurrentMapState(roomName, x, y);

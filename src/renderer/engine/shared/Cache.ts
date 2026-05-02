@@ -18,7 +18,7 @@ export class Cache {
     private dbName = 'bobsgame-cache';
     private storeName = 'assets';
     private db: IDBDatabase | null = null;
-    private version = '3.0.2';
+    private version = '3.0.3';
     private ready = false;
 
     // Stats
