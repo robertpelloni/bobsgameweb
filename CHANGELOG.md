@@ -1,12 +1,36 @@
 # bob's game web — Changelog
 
+## v3.0.4 — 2026-05-02
+
+### Added
+
+- Expanded the legacy Yuu-house conversion set to 12 maps, including Downstairs Bathroom, Yuu's Room, Baby Room, Brothers Room, Upstairs Bathroom, and Backyard Tool Shed
+- Added current implementation notes in `docs/ai/implementation/LEGACY_MAP_LOADING_V3_0_4.md`
+
+### Changed
+
+- `scripts/convert_maps.js` now resolves more legacy door/warp destinations and outputs a larger connected interior cluster
+- The runtime-loaded Yuu-house graph now includes the additional upstairs rooms plus the downstairs bathroom
+- Synced release/version metadata to `3.0.4`
+
+### Verified
+
+- `node scripts/convert_maps.js`
+- `npx vite build`
+- frontend deploy to Hetzner `/srv/www/bobsgame.com`
+- backend sync/restart and full `scripts/verify-production-stack.sh`
+
+### Known Validation Gap
+
+- `npm run typecheck` still reports pre-existing repository-wide TypeScript errors unrelated to this legacy-map expansion work
+
 ## v3.0.3 — 2026-05-02
 
 ### Added
 
 - Completed legacy Yuu-house conversion pipeline in `scripts/convert_maps.js` using `_Project.txt` plus archive hit-layer data from `bobsgame_v8830.zip`
 - Added `data/maps/legacy-house-manifest.json` for static loading of converted interior maps
-- Added current implementation notes in `docs/ai/implementation/LEGACY_MAP_LOADING_V3_0_3.md`
+- Added the first-pass legacy map loading implementation notes (now superseded by `docs/ai/implementation/LEGACY_MAP_LOADING_V3_0_4.md`)
 
 ### Changed
 
