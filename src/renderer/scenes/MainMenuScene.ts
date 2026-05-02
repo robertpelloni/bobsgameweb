@@ -250,7 +250,7 @@ export class MainMenuScene extends Scene {
 			fill: 0x445566,
 			letterSpacing: 1,
 		});
-		this.versionText = new Text({ text: "v2.6.1", style: versionStyle });
+		this.versionText = new Text({ text: "v3.0.0", style: versionStyle });
 		this.versionText.anchor.set(1, 1);
 		this.versionText.x = this.width - 10;
 		this.versionText.y = this.height - 10;
@@ -298,6 +298,13 @@ export class MainMenuScene extends Scene {
 				action: () => this.openSpriteEditor(),
 				prefetch: () => {
 					void import("./SpriteEditorScene");
+				},
+			},
+			{
+				label: "Crafting",
+				action: () => this.openCrafting(),
+				prefetch: () => {
+					void import("./CraftingScene");
 				},
 			},
 			{
@@ -375,6 +382,69 @@ export class MainMenuScene extends Scene {
 				action: () => this.openAchievements(),
 				prefetch: () => {
 					void import("./AchievementsScene");
+				},
+			},
+			{
+				label: "Save / Load",
+				action: () => this.openSaveSlots(),
+				prefetch: () => {
+					void import("./SaveSlotScene");
+				},
+			},
+			{
+				label: "Bestiary",
+				action: () => this.openBestiary(),
+				prefetch: () => {
+					void import("./BestiaryScene");
+				},
+			},
+			{
+				label: "Journal",
+				action: () => this.openJournal(),
+				prefetch: () => {
+					void import("./JournalScene");
+				},
+			},
+			{
+				label: "World Map",
+				action: () => this.openWorldMap(),
+				prefetch: () => {
+					void import("./WorldMapScene");
+				},
+			},
+			{
+				label: "Fishing",
+				action: () => this.openFishing(),
+				prefetch: () => {
+					void import("./FishingScene");
+				},
+			},
+			{
+				label: "Arena",
+				action: () => this.openArena(),
+				prefetch: () => {
+					void import("./ArenaScene");
+				},
+			},
+			{
+				label: "Leaderboard",
+				action: () => this.openLeaderboard(),
+				prefetch: () => {
+					void import("./LeaderboardScene");
+				},
+			},
+			{
+				label: "Tutorial",
+				action: () => this.openTutorial(),
+				prefetch: () => {
+					void import("./TutorialScene");
+				},
+			},
+			{
+				label: "Boss Rush",
+				action: () => this.openBossRush(),
+				prefetch: () => {
+					void import("./BossRushScene");
 				},
 			},
 			{
@@ -732,6 +802,107 @@ export class MainMenuScene extends Scene {
 			camera: this.camera ?? undefined,
 		});
 		SceneTransition.pushWithFade(this.app, editorScene);
+	}
+
+	private async openCrafting(): Promise<void> {
+		const { CraftingScene } = await import("./CraftingScene");
+		const craftingScene = new CraftingScene({
+			name: "crafting",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, craftingScene);
+	}
+
+	private async openSaveSlots(): Promise<void> {
+		const { SaveSlotScene } = await import("./SaveSlotScene");
+		const saveScene = new SaveSlotScene({
+			name: "save-slots",
+			app: this.app,
+			camera: this.camera ?? undefined,
+			mode: "save",
+		});
+		SceneTransition.pushWithFade(this.app, saveScene);
+	}
+
+	private async openBestiary(): Promise<void> {
+		const { BestiaryScene } = await import("./BestiaryScene");
+		const scene = new BestiaryScene({
+			name: "bestiary",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openJournal(): Promise<void> {
+		const { JournalScene } = await import("./JournalScene");
+		const scene = new JournalScene({
+			name: "journal",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openWorldMap(): Promise<void> {
+		const { WorldMapScene } = await import("./WorldMapScene");
+		const scene = new WorldMapScene({
+			name: "world-map",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openFishing(): Promise<void> {
+		const { FishingScene } = await import("./FishingScene");
+		const scene = new FishingScene({
+			name: "fishing",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openArena(): Promise<void> {
+		const { ArenaScene } = await import("./ArenaScene");
+		const scene = new ArenaScene({
+			name: "arena",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openLeaderboard(): Promise<void> {
+		const { LeaderboardScene } = await import("./LeaderboardScene");
+		const scene = new LeaderboardScene({
+			name: "leaderboard",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openTutorial(): Promise<void> {
+		const { TutorialScene } = await import("./TutorialScene");
+		const scene = new TutorialScene({
+			name: "tutorial",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openBossRush(): Promise<void> {
+		const { BossRushScene } = await import("./BossRushScene");
+		const scene = new BossRushScene({
+			name: "boss-rush",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
 	}
 
 	private async openEngineGame(): Promise<void> {

@@ -161,10 +161,12 @@ class InputManagerClass extends EventEmitter<InputEvents> {
 
   // Keyboard
   isKeyHeld(key: string | Key): boolean {
+    if (key === undefined) return false;
     return this.keysHeld.has(key.toLowerCase()) || this.keysHeld.has(key);
   }
 
   isKeyPressed(key: string | Key): boolean {
+    if (key === undefined) return false;
     const pressed = this.keysPressed.has(key.toLowerCase()) || this.keysPressed.has(key);
     if (pressed) {
       this.keysPressed.delete(key.toLowerCase());

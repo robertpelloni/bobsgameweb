@@ -56,7 +56,7 @@ export class SplashScene extends Scene {
 		const titleStyle = new TextStyle({
 			fontFamily: "Arial Black, Arial, sans-serif",
 			fontSize: 48,
-			fill: [0xffcc00, 0xff8800],
+			fill: 0xffcc00,
 			fontWeight: "bold",
 			letterSpacing: 3,
 			dropShadow: {

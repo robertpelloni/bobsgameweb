@@ -20,7 +20,7 @@ export class WorldEditorScene extends Scene {
         this.editorDiv.style.zIndex = '1000';
         document.body.appendChild(this.editorDiv);
 
-        this.editor = new WorldEditor(this.editorDiv as any);
+        this.editor = new WorldEditor(this.editorDiv);
     }
 
     protected onUpdate(dt: number): void {

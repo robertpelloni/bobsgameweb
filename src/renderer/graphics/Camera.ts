@@ -205,6 +205,7 @@ export class Camera {
   }
 
   private updateContainer(): void {
+    if (!this.container) return;
     this.container.scale.set(this._zoom);
     this.container.position.set(
       -this._x * this._zoom + this.shakeX,
