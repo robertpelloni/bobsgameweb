@@ -7,14 +7,14 @@ set -euo pipefail
 #   FRONTEND_HOST=5.161.250.43 FRONTEND_USER=root ./scripts/deploy-frontend-hetzner.sh
 #
 # Optional:
-#   FRONTEND_REMOTE_PATH=/var/www/bobsgame.com/current
+#   FRONTEND_REMOTE_PATH=/srv/www/bobsgame.com
 #   FRONTEND_BUILD=1          # default 0, set to 1 to rebuild locally first
 #   BACKEND_URL=https://ws.bobsgame.com
 #   DEPLOY_PASSWORD=...       # uses sshpass if available
 
 FRONTEND_HOST="${FRONTEND_HOST:-}"
 FRONTEND_USER="${FRONTEND_USER:-root}"
-FRONTEND_REMOTE_PATH="${FRONTEND_REMOTE_PATH:-/var/www/bobsgame.com/current}"
+FRONTEND_REMOTE_PATH="${FRONTEND_REMOTE_PATH:-/srv/www/bobsgame.com}"
 FRONTEND_BUILD="${FRONTEND_BUILD:-0}"
 BACKEND_URL="${BACKEND_URL:-https://ws.bobsgame.com}"
 DEPLOY_PASSWORD_VALUE="${DEPLOY_PASSWORD:-}"

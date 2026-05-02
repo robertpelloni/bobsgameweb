@@ -1,6 +1,6 @@
 # Deployment Guide: bobsgame.com
 
-The current live public frontend for `bobsgame.com` is served from the Hetzner nginx host at `/var/www/bobsgame.com/current`.
+The current live public frontend for `bobsgame.com` is served from the Hetzner nginx host at `/srv/www/bobsgame.com`.
 DreamHost notes below remain useful historical fallback guidance, but the primary live deployment path is now the tracked Hetzner upload + verification workflow.
 
 ## Hetzner Frontend Deploy (Current Live Path)
