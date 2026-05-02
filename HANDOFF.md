@@ -1,128 +1,131 @@
-# Handoff — 2026-05-02 — Version 3.0.2
+# Handoff — 2026-05-02 — Version 3.0.3
 
 ## Agent
 GPT
 
 ## Session Summary
-Performed a full documentation/code reconciliation pass after the v3.0.1 production recovery work, then promoted the project to **v3.0.2** to keep the deployed frontend/backend/version metadata consistent with the actual live state.
+Completed the first functional legacy interior-map loading pass for the Yuu house map cluster and deployed it to production as **v3.0.3**.
 
-## What Was Analyzed
-- Workspace-level instructions:
-  - `../docs/UNIVERSAL_LLM_INSTRUCTIONS.md`
-  - `../VISION.md`
-  - `../MEMORY.md`
-  - `../ROADMAP.md`
-  - `../TODO.md`
-  - `../HANDOFF.md`
-- Project deployment/ops docs:
-  - `DEPLOY.md`
-  - `BACKEND_DEPLOY.md`
-  - `HETZNER_SETUP.md`
-  - `HARDENING_CHECKLIST.md`
-  - `HETZNER_UNIFIED_STACK_STATUS.md`
-  - `POST_DEPLOY_CHECKLIST.md`
-  - `WS_BACKEND_SETUP.md`
-- AI DevKit docs:
-  - `docs/ai/implementation/OMNI_ENGINE_INTEGRATION.md`
-  - `docs/ai/research/ENGINE_FEATURE_PARITY.md`
+This session did not just regenerate archived JSON files. It finished the missing runtime wiring so the converted legacy house maps are now part of the live web client map flow.
 
-## Key Findings
-1. **Production host was correct and healthy**
-   - Frontend host: `5.161.250.43`
-   - Frontend path: `/srv/www/bobsgame.com`
-   - Backend host: `https://ws.bobsgame.com`
-   - Backend service: `bobsgameweb-server`
+## Docs / Instructions Reviewed
+- `../docs/UNIVERSAL_LLM_INSTRUCTIONS.md`
+- `../VISION.md`
+- `../MEMORY.md`
+- `../ROADMAP.md`
+- `../TODO.md`
+- `../HANDOFF.md`
+- `DEPLOY.md`
+- `BACKEND_DEPLOY.md`
+- `HETZNER_SETUP.md`
+- `HARDENING_CHECKLIST.md`
+- `HETZNER_UNIFIED_STACK_STATUS.md`
+- `POST_DEPLOY_CHECKLIST.md`
+- `docs/ai/implementation/OMNI_ENGINE_INTEGRATION.md`
+- `docs/ai/implementation/PRODUCTION_STABILIZATION_V3_0_2.md`
+- `docs/ai/research/ENGINE_FEATURE_PARITY.md`
 
-2. **Tracked frontend deploy path was wrong**
-   - Checked-in docs/scripts still pointed at `/var/www/bobsgame.com/current`
-   - Live nginx config actually serves `bobsgame.com` from `/srv/www/bobsgame.com`
-   - This explained why earlier uploads succeeded over SSH but the public site continued serving older assets
+## What Changed
 
-3. **Version drift existed across tracked files**
-   - Root app version files were partly at `3.0.1`
-   - Frontend display/runtime files still reported `3.0.0`
-   - Backend metadata still reported `3.0.0` / `2.1.57`
-   - `HANDOFF.md` and `CHANGELOG.md` were still centered on `v2.2.x`
+### 1. Legacy conversion pipeline rebuilt
+`scripts/convert_maps.js` was rewritten to use real legacy metadata from:
+- `bobsgame_v8830.zip`
+- `_Project.txt`
+- `Map_*_11.bin` hit-layer data
 
-4. **Legacy map recovery work from the prior release was valid**
-   - `data/maps/map_5.json` through `map_10.json` exist and regenerate cleanly via `scripts/convert_maps.js`
-   - `MapDataRegistry` still only hard-registers procedural `townyuu`, `dark_forest`, `beach`, and `dragon_lair`
-   - The restored interior maps are deployed assets but are not yet explicitly wired into `WorldScene.ts`
+The old script had several problems:
+- wrong binary endianness
+- wrong map dimensions
+- one-layer placeholder conversion
+- grass-only output for maps that should have indoor structure
 
-## Code / Metadata Changes Made
-### Version sync to `3.0.2`
-Updated:
-- `VERSION.md`
-- `package.json`
-- `package-lock.json`
-- `src/shared/Config.ts`
-- `src/renderer/scenes/MainMenuScene.ts`
-- `server/index.js`
-- `server/package.json`
-- `server/package-lock.json`
+The new script now:
+- reads the archive correctly
+- uses the real legacy dimensions
+- parses door/warp connectivity from `_Project.txt`
+- emits usable modern JSON map files
+- emits `data/maps/legacy-house-manifest.json`
 
-### Additional metadata alignment
-Updated:
-- `src/renderer/data/AchievementManager.ts`
-- `src/shared/puzzle/Replay.ts`
-- `src/renderer/engine/shared/Cache.ts`
-- backend achievement snapshot fallback version in `server/index.js`
+### 2. Converted maps now contain functional layout/connectivity data
+Updated live outputs:
+- `data/maps/map_5.json` → `TOWNYUU Downstairs`
+- `data/maps/map_6.json` → `TOWNYUU Upstairs`
+- `data/maps/map_7.json` → `TOWNYUU Upstairs Parents Room`
+- `data/maps/map_8.json` → `TOWNYUU Basement`
+- `data/maps/map_9.json` → `TOWNYUU Garage`
+- `data/maps/map_10.json` → `TOWNYUU Attic`
+- `data/maps/legacy-house-manifest.json`
 
-### Frontend display fix
-- `MainMenuScene` no longer hardcodes `v3.0.0`
-- It now renders `v${APP_VERSION}`
+These maps now have:
+- real width/height
+- numeric tile matrices
+- default spawn points
+- door transitions
+- warp transitions
 
-## Documentation Changes Made
-- Added `docs/ai/implementation/PRODUCTION_STABILIZATION_V3_0_2.md`
-- Updated `CHANGELOG.md` with a new `v3.0.2` entry
-- Replaced this `HANDOFF.md` with a current production-state handoff
-- Added a current-status note to `docs/ai/implementation/OMNI_ENGINE_INTEGRATION.md`
+### 3. Runtime loading added
+`ClientGameEngine.ts` now loads the converted legacy-house manifest from static assets and starts from the converted `TOWNYUU Downstairs` map.
 
-## Verification Performed
-### Local
-- `npx vite build`
-- `npm run typecheck` was also run and still reports pre-existing repository-wide TypeScript errors outside the scope of the version/doc reconciliation work
+### 4. Runtime traversal added
+`DemoWorld.ts` was updated to support:
+- dynamic loaded-map dimensions
+- loaded-map door interactions
+- loaded-map warp transitions
+- map transition callback wiring back into `ClientGameEngine`
+- arrival cooldowns to avoid instant warp bounce loops
 
-### Remote / Production
-- `BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com ./scripts/audit-backend-drift.sh`
-- `BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com ./scripts/verify-production-stack.sh`
+### 5. Map metadata support extended
+`MapManager.ts` / `MapLoader.ts` were updated so optional default spawn coordinates can flow through the runtime map objects.
 
-## Deployment Actions
+### 6. Version bump and deployment
+Version updated to **3.0.3** across runtime/package metadata and deployed.
+
+## Production Deployment Performed
 ### Frontend
-- Rebuilt and deployed static frontend to Hetzner host `5.161.250.43`
+- Built with `npx vite build`
+- Deployed to the real nginx-served frontend path:
+  - `/srv/www/bobsgame.com`
 
 ### Backend
-- Synced backend files to Hetzner
-- Restored `bobsgame:bobsgame` ownership on `/opt/bobsgameweb/server` so the service can write `profiles.json` again
-- Restarted `bobsgameweb-server` in a controlled way after version sync so `/healthz` reports the current release
+- Synced backend files to:
+  - `/opt/bobsgameweb/server`
+- Restored permissions:
+  - `chown -R bobsgame:bobsgame /opt/bobsgameweb/server`
+- Restarted:
+  - `bobsgameweb-server`
 
-## Current Live Status
-- `https://bobsgame.com` — live and serving `assets/main-D2meO1LQ.js`
-- `https://ws.bobsgame.com/healthz` — healthy and reporting `3.0.2`
-- Backend profile persistence recovered (`/opt/bobsgameweb/server/profiles.json` is being created successfully again)
+## Live Verification Completed
+- `https://bobsgame.com` serves the new frontend build
+- `https://ws.bobsgame.com/healthz` returns `3.0.3`
+- `https://bobsgame.com/maps/legacy-house-manifest.json` is live
+- `https://bobsgame.com/maps/map_5.json` is live and shows converted 62×43 data
+- full `verify-production-stack.sh` run passed after deployment
+- backend drift audit is aligned post-restart
 
-## Remaining High-Value Next Steps
-1. **Wire restored legacy interior maps into runtime traversal**
-   - Add explicit world/door/warp integration for maps `5–10`
-   - Confirm player can enter the restored Yuu house interiors from the live world flow
+## Current Converted Traversal Cluster
+The currently wired playable legacy interior cluster is:
+- Downstairs ↔ Upstairs
+- Downstairs ↔ Basement
+- Downstairs ↔ Garage
+- Upstairs ↔ Parents Room
+- Garage ↔ Attic
 
-2. **Recover more legacy data from `bobsgame_v8830.zip`**
-   - Expand beyond maps `5–10`
-   - Begin sprite extraction/translation pipeline if missing character/entity art is still blocking richer world restoration
+Transitions that point to still-unconverted rooms or exterior maps were intentionally excluded from the generated live connectivity so the player does not hit dead transitions.
 
-3. **Continue production/runtime cleanup**
-   - Audit any remaining stale version markers outside historical docs
-   - Optionally refactor build/deploy docs/scripts so the preferred `npx vite build` path is reflected consistently
+## Important Remaining Gaps
+1. **Not all referenced Yuu-house rooms are converted yet**
+   - Upstairs still references additional rooms in legacy metadata that are not yet part of the live converted cluster.
 
-4. **Resume feature roadmap work**
-   - P2P / WebRTC multiplayer follow-through in puzzle/network flows
-   - Quest registry/content expansion
-   - WorldScene integration of restored content
+2. **Visual fidelity is functional, not final**
+   - The current conversion is layout/collision/connectivity oriented.
+   - It is not yet a full multi-layer visual reconstruction of the original art.
 
-## Notes for the Next Agent
-- The previously attempted host `5.161.68.232` is stale for the live frontend path; use `5.161.250.43`
-- Use the drift/verification scripts before and after backend changes:
-  - `scripts/audit-backend-drift.sh`
-  - `scripts/check-backend-host.sh`
-  - `scripts/verify-production-stack.sh`
-- Do not assume restored map JSON files are reachable in-game just because they exist under `data/maps/`; runtime wiring is still the next substantive gameplay task
+3. **Repo-wide TypeScript still has pre-existing errors**
+   - `npm run typecheck` remains red for unrelated longstanding issues.
+   - `npx vite build` continues to succeed.
+
+## Highest-Value Next Steps
+1. Convert and wire the remaining connected upstairs rooms so the whole Yuu-house interior chain is navigable.
+2. Upgrade the legacy conversion from hit-layer functional layouts to richer multi-layer visual reconstruction.
+3. Recover and place legacy entities / interactables / furniture semantics where useful.
+4. Continue broader archive recovery for additional interior/exterior maps once the Yuu-house cluster is fully complete.

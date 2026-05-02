@@ -2,117 +2,377 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
-const ZIP_PATH = "C:\\Users\\hyper\\workspace\\bg\\bobsgameonlinejava\\bobsgame_v8830.zip";
-const MAPS_DIR = "data/maps";
-const TEMP_DIR = "temp_extraction";
+const ZIP_PATH = 'C:\\Users\\hyper\\workspace\\bg\\bobsgameonlinejava\\bobsgame_v8830.zip';
+const MAPS_DIR = path.resolve('data/maps');
+const MANIFEST_PATH = path.join(MAPS_DIR, 'legacy-house-manifest.json');
 
-const TILE_LEGEND = {
-    0: ' ', // Empty
-    1: 'G', // Grass
-    2: 'D', // Dirt
-    3: 'S', // Sand
-    4: 'W', // Water
-    5: 'F', // woodFloor
-    6: 'X', // stoneWall
-    7: 'B', // brickWall
-    8: 'R', // carpetRed
-    9: 'L', // carpetBlue
-    10: 'C', // concrete
-    11: 'A', // asphalt
-    12: 'H', // shingleRoof
-    13: 'V', // window
-    14: 'O', // door
+const MapTile = {
+  EMPTY: 0,
+  GRASS: 1,
+  PATH: 2,
+  WALL: 3,
+  WATER: 4,
+  TREE: 5,
+  DOOR: 6,
+  FLOOR: 7,
+  ROOF: 8,
+  SAND: 9,
+  FLOWER: 10,
+  BRIDGE: 11,
+  STONE: 12,
+  CHEST: 13,
+  SIGN: 14,
+  STAIRS_DOWN: 15,
+  STAIRS_UP: 16,
 };
 
-const MAP_CONFIGS = [
-    { id: 5, name: "TOWNYUUDownstairs", prefix: "Map_TOWNYUUDownstairs", width: 27, height: 28 },
-    { id: 6, name: "TOWNYUUUpstairs", prefix: "Map_TOWNYUUUpstairs", width: 27, height: 28 },
-    { id: 7, name: "TOWNYUUUpstairsParentsRoom", prefix: "Map_TOWNYUUUpstairsParentsRoom", width: 23, height: 23 },
-    { id: 8, name: "TOWNYUUBasement", prefix: "Map_TOWNYUUBasement", width: 62, height: 37 },
-    { id: 9, name: "TOWNYUUGarage", prefix: "Map_TOWNYUUGarage", width: 27, height: 30 },
-    { id: 10, name: "TOWNYUUAttic", prefix: "Map_TOWNYUUAttic", width: 27, height: 30 },
+const TARGET_MAPS = [
+  { outputId: 5, legacyName: 'TOWNYUUDownstairs', name: 'TOWNYUU Downstairs', floorTile: MapTile.FLOOR },
+  { outputId: 6, legacyName: 'TOWNYUUUpstairs', name: 'TOWNYUU Upstairs', floorTile: MapTile.FLOOR },
+  { outputId: 7, legacyName: 'TOWNYUUUpstairsParentsRoom', name: 'TOWNYUU Upstairs Parents Room', floorTile: MapTile.FLOOR },
+  { outputId: 8, legacyName: 'TOWNYUUBasement', name: 'TOWNYUU Basement', floorTile: MapTile.STONE },
+  { outputId: 9, legacyName: 'TOWNYUUGarage', name: 'TOWNYUU Garage', floorTile: MapTile.STONE },
+  { outputId: 10, legacyName: 'TOWNYUUAttic', name: 'TOWNYUU Attic', floorTile: MapTile.FLOOR },
 ];
 
-if (!fs.existsSync(TEMP_DIR)) fs.mkdirSync(TEMP_DIR, { recursive: true });
-if (!fs.existsSync(MAPS_DIR)) fs.mkdirSync(MAPS_DIR, { recursive: true });
+const LEGACY_NAME_TO_DISPLAY_NAME = new Map(
+  TARGET_MAPS.map((map) => [map.legacyName, map.name]),
+);
 
-function extractFile(filename) {
-    const target = path.join(TEMP_DIR, filename);
-    if (fs.existsSync(target)) return target;
-    try {
-        // Using powershell Expand-Archive might be better if unzip isn't available, 
-        // but the previous log suggested bash commands. 
-        // We'll try to use a more robust extraction if possible.
-        // For now, sticking to the user's hinted command.
-        execSync(`unzip -p "${ZIP_PATH}" "${filename}" > "${target}"`, { stdio: 'ignore' });
-        return target;
-    } catch (e) {
-        console.error(`Failed to extract ${filename}: ${e.message}`);
-        return null;
-    }
+const MANUAL_TRANSITION_REPAIRS = {
+  TOWNYUUGarage: {
+    warps: {
+      toAttic: { destinationMapName: 'TOWNYUU Attic', destinationX: 8, destinationY: 16 },
+    },
+  },
+  TOWNYUUAttic: {
+    warps: {
+      toGarage: { destinationMapName: 'TOWNYUU Garage', destinationX: 8, destinationY: 14 },
+    },
+  },
+};
+
+if (!fs.existsSync(MAPS_DIR)) {
+  fs.mkdirSync(MAPS_DIR, { recursive: true });
 }
 
-function convertMap(config) {
-    console.log(`Converting Map ${config.id}: ${config.name}...`);
-    
-    // Use layer 0 as the ground layer
-    const binPath = extractFile(`${config.prefix}_0.bin`);
-    if (!binPath || !fs.existsSync(binPath)) {
-        console.error(`  Error: Layer 0 binary not found for ${config.name}`);
-        return;
-    }
+function unzipEntry(entryName) {
+  try {
+    return execSync(`unzip -p "${ZIP_PATH}" "${entryName}"`, {
+      encoding: 'buffer',
+      maxBuffer: 64 * 1024 * 1024,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+  } catch (error) {
+    throw new Error(`Failed to extract ${entryName} from archive: ${error.message}`);
+  }
+}
 
-    const buffer = fs.readFileSync(binPath);
-    const tiles = [];
-    
-    for (let y = 0; y < config.height; y++) {
-        let row = "";
-        for (let x = 0; x < config.width; x++) {
-            const index = (y * config.width + x) * 4;
-            if (index + 3 >= buffer.length) {
-                row += " ";
-                continue;
-            }
-            // Binary format is 32-bit little endian
-            const tileIdx = buffer.readUInt32LE(index);
-            row += TILE_LEGEND[tileIdx] || (tileIdx === 0 ? " " : "G"); // Default to grass if unknown
+function extractProjectText() {
+  return unzipEntry('_Project.txt').toString('utf8');
+}
+
+function escapeRegex(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function readTickField(record, key) {
+  const fieldMatch = record.match(new RegExp(`${escapeRegex(key)}:\`([^\`]*)\``));
+  return fieldMatch ? fieldMatch[1] : '';
+}
+
+function readNumberField(record, key, fallback = 0) {
+  const raw = readTickField(record, key);
+  if (raw === '') return fallback;
+  const value = Number(raw);
+  return Number.isFinite(value) ? value : fallback;
+}
+
+function extractMapSection(projectText, legacyName) {
+  const marker = `:${legacyName}:name:\`${legacyName}\``;
+  const markerIndex = projectText.indexOf(marker);
+  if (markerIndex === -1) {
+    throw new Error(`Could not find map section for ${legacyName} in _Project.txt`);
+  }
+
+  const sectionStart = projectText.lastIndexOf('MAP:', markerIndex);
+  if (sectionStart === -1) {
+    throw new Error(`Could not determine MAP: section start for ${legacyName}`);
+  }
+
+  let nextMapIndex = projectText.indexOf('\r\nMAP:', markerIndex);
+  if (nextMapIndex === -1) nextMapIndex = projectText.indexOf('\nMAP:', markerIndex);
+  if (nextMapIndex === -1) nextMapIndex = projectText.length;
+
+  return projectText.slice(sectionStart, nextMapIndex);
+}
+
+function extractBraceBlock(text, marker) {
+  const markerIndex = text.indexOf(marker);
+  if (markerIndex === -1) return '';
+
+  let index = markerIndex + marker.length;
+  let depth = 1;
+  const start = index;
+
+  while (index < text.length && depth > 0) {
+    const ch = text[index];
+    if (ch === '{') depth++;
+    if (ch === '}') depth--;
+    index++;
+  }
+
+  if (depth !== 0) {
+    throw new Error(`Unbalanced block while parsing marker ${marker}`);
+  }
+
+  return text.slice(start, index - 1);
+}
+
+function splitTopLevelRecords(block) {
+  const records = [];
+  let start = 0;
+  let depth = 0;
+
+  for (let i = 0; i < block.length; i++) {
+    const ch = block[i];
+    if (ch === '{') depth++;
+    if (ch === '}') depth--;
+
+    if (ch === ',' && depth === 0) {
+      const record = block.slice(start, i).trim();
+      if (record.length > 0) records.push(record);
+      start = i + 1;
+    }
+  }
+
+  const trailing = block.slice(start).trim();
+  if (trailing.length > 0) records.push(trailing);
+  return records;
+}
+
+function readLayerBuffer(legacyName, layer) {
+  return unzipEntry(`Map_${legacyName}_${layer}.bin`);
+}
+
+function readLayerInts(legacyName, layer, width, height) {
+  const buffer = readLayerBuffer(legacyName, layer);
+  const expectedLength = width * height * 4;
+  if (buffer.length < expectedLength) {
+    throw new Error(
+      `Layer ${layer} for ${legacyName} is too short. Expected ${expectedLength} bytes, got ${buffer.length}`,
+    );
+  }
+
+  const ints = [];
+  for (let i = 0; i < width * height; i++) {
+    ints.push(buffer.readUInt32BE(i * 4));
+  }
+  return ints;
+}
+
+function normalizeLegacyDestinationName(legacyName) {
+  return LEGACY_NAME_TO_DISPLAY_NAME.get(legacyName) ?? null;
+}
+
+function toTileCoord(pixelValue) {
+  return Math.max(0, Math.floor(pixelValue / 8));
+}
+
+function classifyWarpTile(areaRecord) {
+  const combined = `${areaRecord.name} ${areaRecord.comment} ${areaRecord.destinationMapName}`.toLowerCase();
+  if (combined.includes('attic') || combined.includes('upstairs') || combined.includes('stairs up')) {
+    return MapTile.STAIRS_UP;
+  }
+  if (combined.includes('basement') || combined.includes('downstairs') || combined.includes('stairs down')) {
+    return MapTile.STAIRS_DOWN;
+  }
+  return MapTile.PATH;
+}
+
+function buildBaseTiles(width, height, hitLayer, floorTile) {
+  const tiles = [];
+  for (let y = 0; y < height; y++) {
+    tiles[y] = [];
+    for (let x = 0; x < width; x++) {
+      const hit = hitLayer[y * width + x] ?? 1;
+      tiles[y][x] = hit === 0 ? floorTile : MapTile.WALL;
+    }
+  }
+  return tiles;
+}
+
+function findDefaultSpawn(tiles) {
+  const height = tiles.length;
+  const width = tiles[0]?.length ?? 0;
+  const centerX = Math.floor(width / 2);
+
+  for (let y = height - 2; y >= 1; y--) {
+    for (let offset = 0; offset < width; offset++) {
+      const left = centerX - offset;
+      const right = centerX + offset;
+      if (left >= 1 && tiles[y][left] !== MapTile.WALL) return { x: left, y };
+      if (right < width - 1 && tiles[y][right] !== MapTile.WALL) return { x: right, y };
+    }
+  }
+
+  return { x: 1, y: 1 };
+}
+
+function parseDoorRecords(section) {
+  const doorBlock = extractBraceBlock(section, 'doorDataList:{');
+  const records = [];
+  const doorRegex = /name:`([^`]*)`,id:`(\d+)`,spriteName:`[^`]*`,spawnXPixels1X:`([\d.]+)`,spawnYPixels1X:`([\d.]+)`[\s\S]*?arrivalXPixels1X:`(-?\d+)`,arrivalYPixels1X:`(-?\d+)`[\s\S]*?destinationMapName:`([^`]*)`,destinationDoorName:`([^`]*)`/g;
+
+  for (const match of doorBlock.matchAll(doorRegex)) {
+    const destinationMapName = normalizeLegacyDestinationName(match[7]);
+    if (!destinationMapName) continue;
+    records.push({
+      name: match[1],
+      x: toTileCoord(Number(match[3])),
+      y: toTileCoord(Number(match[4])),
+      destinationMapName,
+      destinationX: toTileCoord(Number(match[5])),
+      destinationY: toTileCoord(Number(match[6])),
+    });
+  }
+
+  return records;
+}
+
+function parseAreaWarpRecords(section) {
+  const stateBlock = extractBraceBlock(section, 'stateDataList:{');
+  const areaBlock = extractBraceBlock(stateBlock, 'areaDataList:{');
+  const records = [];
+  const areaRegex = /name:`([^`]*)`,id:`(\d+)`,mapXPixels1X:`(-?\d+)`,mapYPixels1X:`(-?\d+)`,widthPixels1X:`(\d+)`,heightPixels1X:`(\d+)`[\s\S]*?comment:`([^`]*)`[\s\S]*?arrivalXPixels1X:`(-?\d+)`,arrivalYPixels1X:`(-?\d+)`,isWarpArea:`(true|false)`,destinationMapName:`([^`]*)`,destinationWarpAreaName:`([^`]*)`/g;
+
+  for (const match of areaBlock.matchAll(areaRegex)) {
+    if (match[10] !== 'true') continue;
+    const destinationMapName = normalizeLegacyDestinationName(match[11]);
+    if (!destinationMapName) continue;
+    records.push({
+      name: match[1],
+      comment: match[7],
+      x: toTileCoord(Number(match[3])),
+      y: toTileCoord(Number(match[4])),
+      width: Math.max(1, toTileCoord(Number(match[5]))),
+      height: Math.max(1, toTileCoord(Number(match[6]))),
+      isWarpArea: true,
+      destinationMapName,
+      destinationX: toTileCoord(Number(match[8])),
+      destinationY: toTileCoord(Number(match[9])),
+    });
+  }
+
+  return records;
+}
+
+function repairTransitions(legacyName, doors, warps) {
+  const repair = MANUAL_TRANSITION_REPAIRS[legacyName];
+  if (!repair) return;
+
+  if (repair.doors) {
+    for (const door of doors) {
+      const override = repair.doors[door.name];
+      if (!override) continue;
+      Object.assign(door, override);
+    }
+  }
+
+  if (repair.warps) {
+    for (const warp of warps) {
+      const override = repair.warps[warp.name];
+      if (!override) continue;
+      Object.assign(warp, override);
+    }
+  }
+}
+
+function applyInteractiveMarkers(tiles, doors, warps) {
+  for (const door of doors) {
+    if (tiles[door.y]?.[door.x] !== undefined) {
+      tiles[door.y][door.x] = MapTile.DOOR;
+    }
+  }
+
+  for (const warp of warps) {
+    const markerTile = classifyWarpTile(warp);
+    for (let dy = 0; dy < warp.height; dy++) {
+      for (let dx = 0; dx < warp.width; dx++) {
+        const tx = warp.x + dx;
+        const ty = warp.y + dy;
+        if (tiles[ty]?.[tx] !== undefined && tiles[ty][tx] !== MapTile.WALL) {
+          tiles[ty][tx] = markerTile;
         }
-        tiles.push(row);
+      }
     }
-
-    const mapJson = {
-        id: config.id,
-        name: config.name,
-        width: config.width,
-        height: config.height,
-        tileSize: 8,
-        tiles: tiles,
-        legend: {
-            " ": "empty",
-            "G": "grass",
-            "D": "dirt",
-            "S": "sand",
-            "W": "water",
-            "F": "woodFloor",
-            "X": "stoneWall",
-            "B": "brickWall",
-            "R": "carpetRed",
-            "L": "carpetBlue",
-            "C": "concrete",
-            "A": "asphalt",
-            "H": "shingleRoof",
-            "V": "window",
-            "O": "door"
-        },
-        entities: [],
-        events: []
-    };
-
-    const outputPath = path.join(MAPS_DIR, `map_${config.id}.json`);
-    fs.writeFileSync(outputPath, JSON.stringify(mapJson, null, 2));
-    console.log(`  Saved to ${outputPath}`);
+  }
 }
 
-MAP_CONFIGS.forEach(convertMap);
+function convertMap(projectText, config) {
+  const section = extractMapSection(projectText, config.legacyName);
+  const width = readNumberField(section, 'widthTiles1X');
+  const height = readNumberField(section, 'heightTiles1X');
+  const isOutside = readTickField(section, 'isOutside') === 'true';
 
-console.log("Conversion complete.");
+  if (!width || !height) {
+    throw new Error(`Missing width/height for ${config.legacyName}`);
+  }
+
+  const hitLayer = readLayerInts(config.legacyName, 11, width, height);
+  const tiles = buildBaseTiles(width, height, hitLayer, config.floorTile);
+  const doors = parseDoorRecords(section);
+  const warps = parseAreaWarpRecords(section);
+  repairTransitions(config.legacyName, doors, warps);
+  applyInteractiveMarkers(tiles, doors, warps);
+
+  const defaultSpawn = findDefaultSpawn(tiles);
+
+  return {
+    id: config.outputId,
+    legacyName: config.legacyName,
+    name: config.name,
+    width,
+    height,
+    tileWidth: 32,
+    tileHeight: 32,
+    defaultSpawnX: defaultSpawn.x,
+    defaultSpawnY: defaultSpawn.y,
+    tiles,
+    doors,
+    warps,
+    lights: [],
+    isOutside,
+    source: {
+      archive: path.basename(ZIP_PATH),
+      hitLayer: 11,
+      conversion: 'legacy-house-layout-v2',
+      derivedFrom: '_Project.txt + Map_*_11.bin',
+    },
+  };
+}
+
+function writeOutputs(maps) {
+  const manifest = [];
+
+  for (const map of maps) {
+    const fileName = `map_${map.id}.json`;
+    const outputPath = path.join(MAPS_DIR, fileName);
+    fs.writeFileSync(outputPath, JSON.stringify(map, null, 2) + '\n');
+    manifest.push({ id: map.id, name: map.name, path: `/maps/${fileName}` });
+    console.log(`Saved ${map.name} -> ${outputPath}`);
+  }
+
+  fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2) + '\n');
+  console.log(`Saved manifest -> ${MANIFEST_PATH}`);
+}
+
+function main() {
+  console.log('Converting legacy Yuu house maps from bobsgame_v8830.zip...');
+  const projectText = extractProjectText();
+  const maps = TARGET_MAPS.map((config) => convertMap(projectText, config));
+  writeOutputs(maps);
+  console.log(`Converted ${maps.length} legacy maps.`);
+}
+
+main();

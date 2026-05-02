@@ -1,5 +1,29 @@
 # bob's game web — Changelog
 
+## v3.0.3 — 2026-05-02
+
+### Added
+
+- Completed legacy Yuu-house conversion pipeline in `scripts/convert_maps.js` using `_Project.txt` plus archive hit-layer data from `bobsgame_v8830.zip`
+- Added `data/maps/legacy-house-manifest.json` for static loading of converted interior maps
+- Added current implementation notes in `docs/ai/implementation/LEGACY_MAP_LOADING_V3_0_3.md`
+
+### Changed
+
+- Converted maps `5–10` now use the real legacy dimensions and connectivity metadata instead of placeholder grass-only layouts
+- `ClientGameEngine` now loads converted legacy house maps from static assets and starts in the converted `TOWNYUU Downstairs` map
+- `DemoWorld` now supports loaded-map doors, warp transitions, dynamic map dimensions, and static-map traversal between the converted Yuu house interiors
+- Synced release/version metadata to `3.0.3`
+
+### Verified
+
+- `node scripts/convert_maps.js`
+- `npx vite build`
+
+### Known Validation Gap
+
+- `npm run typecheck` still reports pre-existing repository-wide TypeScript errors unrelated to the legacy-map loading work
+
 ## v3.0.2 — 2026-05-02
 
 ### Changed
