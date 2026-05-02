@@ -1,11 +1,13 @@
 /**
  * Simple Express proxy server to handle Generative AI requests.
- * In a real production environment, this securely holds API keys (OpenAI, Stable Diffusion, etc.)
+ * Securely holds API keys (OpenAI, Stable Diffusion, etc.)
  * and forwards requests from the frontend client.
  */
 
 const express = require('express');
 const cors = require('cors');
+const OpenAI = require('openai');
+
 const app = express();
 
 app.use(cors());
@@ -13,15 +15,51 @@ app.use(express.json());
 
 const PORT = 8080;
 
+// Initialize OpenAI. It expects process.env.OPENAI_API_KEY to be set.
+// If it's not set, it will fallback to mock behavior.
+let openai = null;
+try {
+    if (process.env.OPENAI_API_KEY) {
+        openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+        console.log("[AI Proxy] OpenAI initialized with API Key.");
+    } else {
+        console.warn("[AI Proxy] Warning: OPENAI_API_KEY not found. Using mock fallback mode.");
+    }
+} catch (e) {
+    console.error("[AI Proxy] Failed to initialize OpenAI:", e);
+}
+
 app.post('/api/generate/sprite', async (req, res) => {
     const { prompt } = req.body;
     console.log(`[AI Proxy] Received Text-to-Sprite request: "${prompt}"`);
 
-    // Simulate generation time
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    if (openai) {
+        try {
+            // Using DALL-E 3 to generate a pixel art sprite sheet conceptually
+            const response = await openai.images.generate({
+                model: "dall-e-3",
+                prompt: "Create a pixel art sprite sheet on a transparent background for a 2D video game. " + prompt,
+                n: 1,
+                size: "1024x1024",
+                response_format: "b64_json"
+            });
 
-    // In production, this calls OpenAI DALL-E 3 or Stable Diffusion:
-    // const aiResponse = await fetch('https://api.openai.com/v1/images/generations', { ... });
+            res.json({
+                success: true,
+                type: 'sprite',
+                prompt: prompt,
+                message: 'Successfully generated via OpenAI.',
+                imageUrl: `data:image/png;base64,${response.data[0].b64_json}`
+            });
+            return;
+        } catch (e) {
+            console.error("[AI Proxy] OpenAI API error:", e);
+            // Fallthrough to mock
+        }
+    }
+
+    // Simulate generation time for mock
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
     res.json({
         success: true,
@@ -36,7 +74,31 @@ app.post('/api/generate/tileset', async (req, res) => {
     const { prompt } = req.body;
     console.log(`[AI Proxy] Received Text-to-Tileset request: "${prompt}"`);
 
-    // Simulate generation time
+    if (openai) {
+        try {
+            const response = await openai.images.generate({
+                model: "dall-e-3",
+                prompt: "Create a seamless 2D pixel art tilemap grid for a video game environment. " + prompt,
+                n: 1,
+                size: "1024x1024",
+                response_format: "b64_json"
+            });
+
+            res.json({
+                success: true,
+                type: 'tileset',
+                prompt: prompt,
+                message: 'Successfully generated via OpenAI.',
+                imageUrl: `data:image/png;base64,${response.data[0].b64_json}`
+            });
+            return;
+        } catch (e) {
+            console.error("[AI Proxy] OpenAI API error:", e);
+            // Fallthrough to mock
+        }
+    }
+
+    // Simulate generation time for mock
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     res.json({
