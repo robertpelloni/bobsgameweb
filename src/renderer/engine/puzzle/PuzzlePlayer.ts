@@ -217,7 +217,11 @@ export class PuzzlePlayer {
     // ============================================================
 
     isNetworkPlayer(): boolean {
-        return false; // TODO: network game support
+        // Network game support implementation
+        if (this.gameSequence instanceof NetworkGameSequence) {
+            return this.gameSequence.isNetworkGame();
+        }
+        return false;
     }
 
     getID(): string {

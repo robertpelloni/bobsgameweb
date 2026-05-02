@@ -1,3 +1,10 @@
 export { Button, type ButtonEvents, type ButtonStyle } from './Button';
 export { Panel, type PanelStyle } from './Panel';
 export { Label, type LabelStyle } from './Label';
+export { ComboCounter } from './ComboCounter';
+export { MenuGamepadNavigator, type MenuItem } from './MenuGamepadNavigator';
+export { Tooltip } from './Tooltip';
+export { ToastManager } from './ToastManager';
+export { TouchControls } from './TouchControls';
+export { AchievementPopup } from './AchievementPopup';
+export { OnlineNotificationManager } from './OnlineNotificationManager';

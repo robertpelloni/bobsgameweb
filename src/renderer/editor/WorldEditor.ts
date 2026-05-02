@@ -9,13 +9,21 @@ export class WorldEditor {
     private container: HTMLElement;
     private db: RPGDatabase = new RPGDatabase();
 
-    constructor(parentElementId: string) {
-        const parent = document.getElementById(parentElementId);
-        if (!parent) throw new Error(`Element with id ${parentElementId} not found`);
+    constructor(parent: HTMLElement | string) {
+        let parentElement: HTMLElement | null;
+        if (typeof parent === 'string') {
+            parentElement = document.getElementById(parent);
+        } else {
+            parentElement = parent;
+        }
+
+        if (!parentElement) {
+            throw new Error(`Parent element not found: ${parent}`);
+        }
         
         this.container = document.createElement('div');
         this.container.className = 'world-editor';
-        parent.appendChild(this.container);
+        parentElement.appendChild(this.container);
 
         if (!networkManager.connected) {
             networkManager.connect(SERVER_URL);

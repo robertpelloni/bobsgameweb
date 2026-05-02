@@ -1,0 +1,50 @@
+{
+	"id": "dragon_lair",
+	"name": "Dragon's Lair",
+	"width": 30,
+	"height": 20,
+	"tileSize": 8,
+	"tiles": [
+		"RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+		"RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+		"RRRRRLLLLLLLLLLLLLLLLLLLRRRRRR",
+		"RRRRRLLLLLLLLLLLLLLLLLLLRRRRRR",
+		"RRRRRLLLLLLLLLLLLLLLLLLLRRRRRR",
+		"RRRRRLLLLLLLLPPPPPLLLLLLRRRRRR",
+		"RRRRRLLLLLPPPPPPPPPPLLLLRRRRRR",
+		"RRRRRLLLLPPPPPPPPPPPLLLLRRRRRR",
+		"RRRRRLLLPPPPPPPPPPPPLLLRRRRRRR",
+		"RRRRRLLPPPPPPPPPPPPLLLRRRRRRRR",
+		"RRRRRLLPPPPPPPPPPPPLLLRRRRRRRR",
+		"RRRRRLLLPPPPPPPPPPPLLLRRRRRRRR",
+		"RRRRRLLLLPPPPPPPPPPLLLLRRRRRRR",
+		"RRRRRLLLLLPPPPPPPPLLLLLRRRRRRR",
+		"RRRRRLLLLLLPPPPPLLLLLLLRRRRRRR",
+		"RRRRRLLLLLLLLLLLLLLLLLLLRRRRRR",
+		"RRRRRLLLLLLLLLLLLLLLLLLLRRRRRR",
+		"RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+		"RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+		"RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
+	],
+	"legend": {
+		"R": "rock",
+		"L": "lava",
+		"P": "path"
+	},
+	"encounterRate": 0.3,
+	"enemies": [
+		{ "name": "Fire Elemental", "hp": 40, "attack": 12, "defense": 5, "xp": 35, "gold": 20 },
+		{ "name": "Lava Golem", "hp": 60, "attack": 15, "defense": 8, "xp": 50, "gold": 30 },
+		{ "name": "Dragon Whelp", "hp": 50, "attack": 18, "defense": 6, "xp": 45, "gold": 25 },
+		{ "name": "Ancient Dragon", "hp": 200, "attack": 30, "defense": 15, "xp": 200, "gold": 500 }
+	],
+	"entities": [
+		{ "id": "dragon_boss", "type": "boss", "x": 15, "y": 5, "name": "Ancient Dragon", "enemy": "Ancient Dragon" },
+		{ "id": "exit", "type": "warp", "x": 0, "y": 10, "destination": "dark_forest", "destX": 24, "destY": 24 },
+		{ "id": "treasure", "type": "chest", "x": 15, "y": 7, "loot": ["dragon_crown", "legend_blade", "5000_gold"] }
+	],
+	"events": [
+		{ "trigger": "ENTER_AREA", "command": "SHOW_MESSAGE", "params": { "text": "The heat is overwhelming. The dragon awaits." } },
+		{ "trigger": "TOUCH", "target": "dragon_boss", "command": "START_BATTLE", "params": { "enemy": "Ancient Dragon" }, "once": true }
+	]
+}

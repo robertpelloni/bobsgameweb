@@ -326,7 +326,7 @@ export class PuzzleRenderer {
   public shake(amount: number): void { this.currentShake = Math.max(this.currentShake, amount); }
 
   private drawBlock(g: Graphics, px: number, py: number, size: number, block: Block): void {
-    const color = block.getColor() || Color.gray; const hexColor = color.toInt();
+    const color = block.getColor() || Color.gray; const hexColor = color.toHex();
     const inset = 2, innerSize = size - inset * 2;
     let alpha = 1; if (block.fadingOut) alpha = block.disappearingAlpha;
     if (block.flashingToBeRemoved) alpha = 0.5 + Math.sin(Date.now() * 0.01) * 0.5;
@@ -339,7 +339,7 @@ export class PuzzleRenderer {
       const px = (gridX + block.xInPiece) * cellSize, py = (gridY + block.yInPiece) * cellSize;
       const color = block.getColor() || Color.gray;
       const inset = 2, innerSize = cellSize - inset * 2;
-      g.rect(px + inset, py + inset, innerSize, innerSize); g.fill(color.toInt());
+      g.rect(px + inset, py + inset, innerSize, innerSize); g.fill(color.toHex());
     }
   }
 
@@ -351,7 +351,7 @@ export class PuzzleRenderer {
       const px = offsetX + block.xInPiece * previewCellSize, py = offsetY + block.yInPiece * previewCellSize;
       const color = block.getColor() || Color.gray;
       const inset = 2, innerSize = previewCellSize - inset * 2;
-      g.rect(px + inset, py + inset, innerSize, innerSize); g.fill(color.toInt());
+      g.rect(px + inset, py + inset, innerSize, innerSize); g.fill(color.toHex());
     }
   }
 

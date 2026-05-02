@@ -296,7 +296,7 @@ export class SpriteEditorScene extends Scene {
 		}
 
 		// Drawing
-		if (InputManager.isActionPressed() || InputManager.isKeyHeld(" ")) {
+		if (InputManager.isActionPressed() || InputManager.isKeyHeld(Key.Space)) {
 			if (!this.isDrawing) {
 				this.isDrawing = true;
 				if (this.tool === "fill") {

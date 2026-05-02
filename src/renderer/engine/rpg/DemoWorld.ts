@@ -21,6 +21,7 @@ import {
 } from "../graphics/ParticleSystem";
 import { NetworkManager } from "../network/NetworkManager";
 import { TileBatcher } from "../core/TileBatcher";
+import { WeatherRenderer, type WeatherType } from "../graphics/WeatherRenderer";
 import { EventTrigger } from "./event/BobEvent";
 
 const log = new Logger("DemoWorld");
@@ -55,6 +56,8 @@ export class DemoWorld {
 	private container: Container;
 	private mapContainer: Container;
 	private tileBatcher: TileBatcher | null = null;
+	private weatherRenderer: WeatherRenderer | null = null;
+	private currentWeather: WeatherType = "clear";
 	private entityContainer: Container;
 	private hudContainer: Container;
 	private touchControls: import("../../ui/TouchControls").TouchControls | null = null;
@@ -503,6 +506,7 @@ export class DemoWorld {
 		this.container = new Container();
 		this.mapContainer = new Container();
 		this.tileBatcher = new TileBatcher(TILE_SIZE);
+		this.weatherRenderer = new WeatherRenderer(this.container, this.width, this.height);
 		this.entityContainer = new Container();
 		this.hudContainer = new Container();
 
@@ -1611,6 +1615,26 @@ export class DemoWorld {
 	update(dt: number): void {
 		this.gameTime += dt;
 
+		// Weather cycling — changes based on game time
+		if (this.weatherRenderer && !this.insideBuilding) {
+			const hour = Math.floor((this.gameTime / 4) % 24);
+			let targetWeather: WeatherType = "clear";
+			if (hour >= 6 && hour < 10) targetWeather = "fog";
+			else if (hour >= 14 && hour < 17) targetWeather = "rain";
+			else if (hour >= 22 || hour < 4) targetWeather = "snow";
+
+			if (targetWeather !== this.currentWeather) {
+				this.currentWeather = targetWeather;
+				this.weatherRenderer.setWeather(targetWeather, 0.6);
+			}
+			this.weatherRenderer.update(dt);
+		} else if (this.weatherRenderer) {
+			if (this.currentWeather !== "clear") {
+				this.currentWeather = "clear";
+				this.weatherRenderer.setWeather("clear");
+			}
+		}
+
 		// Fire OnMapEnter event once on first update
 		if (!this.mapEntered && this.eventManager) {
 			this.mapEntered = true;
@@ -1722,6 +1746,30 @@ export class DemoWorld {
 			this.keys["Escape"] = false;
 			this.isPaused = !this.isPaused;
 			this.pauseCursorPos = 0;
+		}
+
+		// Quick-access scene keys (only when not paused/dialogue/cutscene)
+		if (!this.isPaused && !this.showDialogue && !this.showCutscene) {
+			if (this.keys["i"] || this.keys["I"]) {
+				this.keys["i"] = false;
+				this.keys["I"] = false;
+				this.openScene("InventoryScene");
+			}
+			if (this.keys["q"] || this.keys["Q"]) {
+				this.keys["q"] = false;
+				this.keys["Q"] = false;
+				this.openScene("QuestLogScene");
+			}
+			if (this.keys["k"] || this.keys["K"]) {
+				this.keys["k"] = false;
+				this.keys["K"] = false;
+				this.openScene("SkillTreeScene");
+			}
+			if (this.keys["p"] || this.keys["P"]) {
+				this.keys["p"] = false;
+				this.keys["P"] = false;
+				this.openScene("PartyScene");
+			}
 		}
 
 		// If paused, only handle pause menu input
@@ -4804,5 +4852,28 @@ export class DemoWorld {
 
 	destroy(): void {
 		this.container.destroy({ children: true });
+	}
+
+	/**
+	 * Open a scene by name (dynamic import).
+	 * Used for quick-access keys like I (Inventory), Q (Quests), etc.
+	 */
+	private openScene(sceneName: string): void {
+		const app = (this as any).app;
+		if (!app) return;
+
+		import("../../state/StateManager").then(({ StateManager }) => {
+			import("../../scenes/" + sceneName).then((mod) => {
+				const SceneClass = Object.values(mod)[0] as any;
+				if (!SceneClass) return;
+				const scene = new SceneClass({
+					name: sceneName.replace("Scene", "").toLowerCase(),
+					app,
+				});
+				StateManager.push(scene);
+			}).catch(() => {
+				log.warn(`Failed to open scene: ${sceneName}`);
+			});
+		});
 	}
 }

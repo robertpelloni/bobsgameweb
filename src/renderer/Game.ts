@@ -5,6 +5,7 @@ import { AudioManager } from "./audio/AudioManager";
 import { AchievementManager } from "./data/AchievementManager";
 import { GameMode } from "./data/HighScoreManager";
 import { DebugConsole } from "./engine/debug/DebugConsole";
+import { PerformanceMonitor } from "./engine/debug/PerformanceMonitor";
 import { Camera } from "./graphics/Camera";
 import { PostProcessing } from "./graphics/Filters";
 import { InputManager } from "./input/InputManager";
@@ -37,6 +38,7 @@ export class Game extends EventEmitter<GameEvents> {
 	private mainMenuScene: MainMenuScene | null = null;
 	private playTimeAccumulator = 0;
 	private debugConsole: DebugConsole;
+	private perfMonitor: PerformanceMonitor | null = null;
 
 	constructor(app: Application, config: GameConfig = {}) {
 		super();
@@ -59,7 +61,11 @@ export class Game extends EventEmitter<GameEvents> {
 		});
 
 		this.debugConsole = new DebugConsole(app.screen.width);
-		this.app.stage.addChild(this.debugConsole.getContainer());
+		this.perfMonitor = new PerformanceMonitor(app, app.stage);
+		const consoleContainer = this.debugConsole.getContainer();
+		if (consoleContainer) {
+			this.app.stage.addChild(consoleContainer);
+		}
 	}
 
 	private async loadAudioAssets(): Promise<void> {
@@ -296,6 +302,12 @@ export class Game extends EventEmitter<GameEvents> {
 				scene: "active",
 			});
 		}
+
+		// Performance monitor (F3 toggle)
+		if ((InputManager as any).isKeyPressed("F3")) {
+			this.perfMonitor?.toggle();
+		}
+		this.perfMonitor?.update(ticker.deltaMS / 60);
 	}
 
 	resize(width: number, height: number): void {

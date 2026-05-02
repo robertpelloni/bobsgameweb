@@ -17,7 +17,15 @@ export class BobColor {
     }
 
     public toInt(): number {
-        return (this.a << 24) | (this.r << 16) | (this.g << 8) | this.b;
+        return ((this.r << 16) | (this.g << 8) | this.b) >>> 0;
+    }
+
+    public toHex(): number {
+        return ((this.r << 16) | (this.g << 8) | this.b) >>> 0;
+    }
+
+    public toIntWithAlpha(): number {
+        return ((this.a << 24) | (this.r << 16) | (this.g << 8) | this.b) >>> 0;
     }
 
     public rf(): number { return this.r / 255.0; }

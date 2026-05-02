@@ -12,3 +12,5 @@ export {
 } from './EventScript';
 export { DialogueData, FlagData, SkillData, GameStringData } from './EventDataTypes';
 export { DefaultEvents } from './DefaultEvents';
+
+export { BranchingDialogueSystem, SHOPKEEPER_DIALOGUE, MAYOR_DIALOGUE, MYSTERY_NPC_DIALOGUE } from './BranchingDialogue';
