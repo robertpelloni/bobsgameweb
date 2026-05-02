@@ -9,6 +9,7 @@ import { PuzzleScene } from "../puzzle/PuzzleScene";
 import { Scene, type SceneConfig } from "../state/Scene";
 import { SceneTransition } from "../state/SceneTransition";
 import { Button, type ButtonStyle } from "../ui/Button";
+import { APP_VERSION } from "../../shared/Config";
 
 // ============================================================
 // Types
@@ -250,7 +251,7 @@ export class MainMenuScene extends Scene {
 			fill: 0x445566,
 			letterSpacing: 1,
 		});
-		this.versionText = new Text({ text: "v3.0.0", style: versionStyle });
+		this.versionText = new Text({ text: `v${APP_VERSION}`, style: versionStyle });
 		this.versionText.anchor.set(1, 1);
 		this.versionText.x = this.width - 10;
 		this.versionText.y = this.height - 10;

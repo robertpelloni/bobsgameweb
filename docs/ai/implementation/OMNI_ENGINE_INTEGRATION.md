@@ -1,5 +1,7 @@
 # bob's game web — The Ultimate Omni-Engine
 
+> Historical integration snapshot. For the current production stabilization state, see `docs/ai/implementation/PRODUCTION_STABILIZATION_V3_0_2.md`.
+
 ## Version 2.1.73 — April 8, 2026
 
 ---

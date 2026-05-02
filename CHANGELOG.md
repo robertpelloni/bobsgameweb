@@ -1,5 +1,31 @@
 # bob's game web — Changelog
 
+## v3.0.2 — 2026-05-02
+
+### Changed
+
+- Synced the live version string across `VERSION.md`, root `package.json`, root `package-lock.json`, `src/shared/Config.ts`, `src/renderer/scenes/MainMenuScene.ts`, `server/index.js`, `server/package.json`, and `server/package-lock.json`
+- Main menu version text now uses `APP_VERSION` instead of a stale hard-coded string
+- Updated replay export, achievement snapshot export, backend achievement snapshot defaults, and IndexedDB cache version metadata to `3.0.2`
+- Corrected the tracked Hetzner frontend deploy path from `/var/www/bobsgame.com/current` to the nginx-served path `/srv/www/bobsgame.com`
+- Corrected tracked nginx frontend configs to use `/srv/www/bobsgame.com`
+- Fixed backend write permissions by restoring `bobsgame:bobsgame` ownership on `/opt/bobsgameweb/server`
+
+### Documentation
+
+- Added current production stabilization notes under `docs/ai/implementation/PRODUCTION_STABILIZATION_V3_0_2.md`
+- Refreshed `HANDOFF.md` to reflect the Hetzner production stack, the restored legacy maps, and the current follow-up tasks
+
+### Verified
+
+- `npx vite build`
+- `BACKEND_HOST=5.161.250.43 BACKEND_URL=https://ws.bobsgame.com ./scripts/audit-backend-drift.sh`
+- `BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com ./scripts/verify-production-stack.sh`
+
+### Known Validation Gap
+
+- `npm run typecheck` still reports pre-existing repository-wide TypeScript errors unrelated to the version-sync work in this release
+
 ## v2.2.7 — 2026-04-29
 
 ### Added

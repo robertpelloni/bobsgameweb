@@ -17,7 +17,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const SERVER_VERSION = "3.0.0";
+const SERVER_VERSION = "3.0.2";
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = parseInt(process.env.PORT || "6065", 10);
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
@@ -809,7 +809,7 @@ io.on("connection", (socket) => {
 						.toLowerCase();
 		const storageKey = profileId || safeName;
 		const snapshot = data?.snapshot || {
-			version: "2.1.57",
+			version: "3.0.2",
 			stats: {},
 			unlockedIds: [],
 		};
