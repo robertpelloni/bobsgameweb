@@ -1,3 +1,8 @@
+## [2.2.9]
+- Synchronized Submodules across omni-engine integration tree.
+- Decoupled CustomGameEditor HTML layout rendering while preserving TS detached stubs.
+- Re-verified cross-compilation pipeline across web/Qt6 builds.
+
 # bob's game web — v2.1.58 Changelog
 
 ## Critical Bug Fixes
