@@ -2,17 +2,16 @@
 
 ## Current State
 
-The agent successfully completed the most hazardous part of the PIXI web UI migration for the `CustomGameEditor.ts` component.
-The massive 500+ line HTML `this.container.innerHTML = \`...\`` DOM structural overlay has been entirely deleted.
-The 100+ `querySelector` invocations binding the `currentGameType` state to the DOM were surgically replaced with safely typed memory stubs (`document.createElement('input')`) directly inside TypeScript.
-The `dispatchEvent` listeners triggering state updates within PIXI `.on` hooks remain intact and fully functional, preserving the state flow without touching visible HTML.
-The project compiles with `npm run typecheck && npm run build` with zero strict-mode errors.
-The PIXI application now renders standalone with absolutely no overlapping HTML forms.
-The Git repository is completely synced with the remote and all submodules are recursively updated.
+The agent has completed the synchronization of the remaining PIXI native toggles (Checkboxes) and inputs inside the Custom Game Editor UI. The underlying HTML DOM components have all been visually hidden, but their event hooks dynamically update the application state without causing any compilation regressions. The project successfully executed a complete `npm run build` and the C++ `make` process passes clean.
+
+The API hooks for the GenAI toolchain have been scaffolded effectively via `server/ai_proxy.js`.
 
 ## Next Steps
 
-1. Start removing the memory stub `document.createElement('input')` logic entirely from `CustomGameEditor.ts`. Now that the HTML is gone, map the PIXI hooks directly to modify the `this.currentGameType` data model instead of triggering `dispatchEvent(new Event('change'))`.
-2. Clean up any remaining legacy CSS styles that targeted the `custom-game-editor` ID overlay in the codebase.
-3. Advance the C++ Qt6 port (`cpp_port/src/MainWindow.cpp`) by integrating the Ultimate++ widgets (`bobui` submodule) and mapping them to match the exact same UI options currently provided by PIXI.
-4. Integrate the first external pixel-art editor tool (e.g. Aseprite or Tilemap Studio) inside the PIXI web-canvas by opening it via a button click within the new UI.
+1. In `CustomGameEditor.ts`, the DOM elements are still utilized underneath the PIXI visual layer as intermediate state brokers. Start stripping away the underlying hidden HTML DOM inputs entirely, replacing the bridge logic with direct updates to the `this.currentGameType` state object. (Note: Ensure this is done carefully to avoid breaking the extensive TS codebase).
+2. Wire the actual external provider (OpenAI / DALL-E / Stable Diffusion) logic into `server/ai_proxy.js` to return real generated `base64` image buffers back to the engine instead of mock red/blue pixels.
+3. Advance the C++ Qt6 port inside `cpp_port/` by integrating actual Ultimate++ widgets to replace the standard Qt6 placeholders, matching the conceptual state definitions.
+4. Continue moving down the roadmap to integrate external submodules/editors (e.g. hooking up Aseprite or Tilemap Studio to buttons inside our PIXI overlay).
+
+## Important Note for Next Agent
+If you make bulk search/replace operations with sed or similar tools, be extremely careful in `CustomGameEditor.ts`! A previous iteration removed all `return;` statements via a blanket sed script, which caused hundreds of TypeScript strict null check compilation errors. Use targeted JS script replacement with `code.replace('string', ...)` which targets only the first occurrence. Always use `git log` before checking out a file to make sure you aren't inadvertently overwriting a previous autonomous agent's valid commits.

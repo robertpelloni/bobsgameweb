@@ -513,64 +513,413 @@ export class CustomGameEditor {
   }
 
   private buildUI() {
-    this.container.innerHTML = '';
+    this.container.innerHTML = `
+      <style>
+        .custom-game-editor {
+          display: none;
+          background: #1a1a1a;
+          color: #eee;
+          padding: 20px;
+          border-radius: 8px;
+          font-family: sans-serif;
+          width: 600px;
+          box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .editor-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px; }
+        .tab-btn { background: #333; border: none; color: #888; padding: 5px 15px; cursor: pointer; border-radius: 4px; }
+        .tab-btn.active { background: #00ff00; color: #000; font-weight: bold; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #aaa; }
+        .form-row { display: flex; gap: 20px; }
+        input, select { background: #222; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 4px; width: 100%; }
+        .hidden { display: none; }
+        .editor-columns { display: flex; gap: 20px; }
+        .item-list { flex: 1; }
+        .item-details { flex: 1; background: #222; padding: 10px; border-radius: 4px; }
+        .summary-panel { margin-top: 16px; background: #151515; border: 1px solid #333; border-radius: 6px; padding: 12px; }
+        .summary-panel h3 { margin: 0 0 8px 0; color: #7cff7c; }
+        .summary-panel ul { margin: 0; padding-left: 18px; color: #bbb; }
+        .summary-panel li { margin-bottom: 4px; }
+        .summary-highlight { color: #fff; }
+        .toggle-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; margin-top: 8px; }
+        .toggle-grid label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #ccc; }
+        .toggle-grid input[type="checkbox"] { width: auto; }
+        .rotation-overview { margin-top: 12px; }
+        .rotation-overview h5 { margin: 0 0 8px 0; color: #9ed0ff; }
+        .rotation-overview-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .rotation-card { background: #181818; border: 1px solid #3a3a3a; border-radius: 6px; padding: 8px; min-width: 72px; cursor: pointer; }
+        .rotation-card.active { border-color: #00ff88; box-shadow: 0 0 0 1px rgba(0,255,136,0.2); }
+        .rotation-card.duplicate { border-color: #d4a017; }
+        .rotation-card-title { font-size: 11px; color: #ccc; margin-bottom: 6px; }
+        .rotation-card-count { font-size: 10px; color: #8d8d8d; margin-top: 6px; }
+        .rotation-mini-grid { display: grid; grid-template-columns: repeat(4, 10px); gap: 1px; }
+        .rotation-mini-cell { width: 10px; height: 10px; background: #0f0f0f; border: 1px solid #252525; }
+        .rotation-mini-cell.filled { background: #00ff88; border-color: #00cc6e; }
+        .recent-history-panel, .recent-actions-panel, .preset-slots-panel { margin-top: 16px; background: #151515; border: 1px solid #333; border-radius: 6px; padding: 12px; }
+        .block-palette-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+        .preset-slot-entry { display:flex; justify-content:space-between; align-items:center; gap:10px; background:#1b1b1b; border:1px solid #2f2f2f; border-radius:6px; padding:8px; margin-top:8px; }
+        .preset-slot-meta { display:flex; flex-direction:column; gap:4px; }
+        .preset-slot-title { color:#fff; font-size:13px; }
+        .preset-slot-details { color:#9a9a9a; font-size:11px; }
+        .preset-family-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; }
+        .preset-family-card { background:#151515; border:1px solid #333; border-radius:6px; padding:10px; }
+        .preset-family-title { color:#fff; font-size:13px; margin-bottom:4px; }
+        .preset-family-description { color:#9a9a9a; font-size:11px; margin-bottom:8px; }
+        .preset-family-buttons { display:flex; flex-wrap:wrap; gap:8px; }
+        .template-catalog-filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+        .template-catalog-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; }
+        .template-catalog-card { background:#1b1b1b; border:1px solid #2f2f2f; border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:6px; }
+        .template-catalog-title { color:#fff; font-size:13px; }
+        .template-catalog-family { color:#7cff7c; font-size:11px; }
+        .template-catalog-description, .template-catalog-details { color:#9a9a9a; font-size:11px; }
+        .template-catalog-actions { display:flex; gap:8px; margin-top:4px; flex-wrap:wrap; }
+        .library-filter-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+        .library-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; }
+        .library-card { background:#1b1b1b; border:1px solid #2f2f2f; border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:6px; }
+        .library-source { color:#7cff7c; font-size:11px; }
+        .library-title { color:#fff; font-size:13px; }
+        .library-details { color:#9a9a9a; font-size:11px; }
+        .library-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+        .block-palette-list { display:flex; gap:6px; flex-wrap:wrap; }
+        .block-palette-swatch { width:24px; height:24px; border-radius:6px; border:2px solid #444; cursor:pointer; padding:0; }
+        .block-palette-swatch.active { border-color:#fff; box-shadow:0 0 0 1px #00ff88; }
+        .recent-history-panel h3, .recent-actions-panel h3 { margin: 0 0 8px 0; color: #9ed0ff; }
+        .recent-history-empty, .recent-actions-empty { color: #888; font-size: 13px; }
+        .recent-history-entry, .recent-action-entry { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #1b1b1b; border: 1px solid #2f2f2f; border-radius: 6px; padding: 8px; margin-top: 8px; }
+        .recent-history-meta, .recent-action-meta { display: flex; flex-direction: column; gap: 4px; }
+        .recent-history-title, .recent-action-title { color: #fff; font-size: 13px; }
+        .recent-history-details, .recent-action-details { color: #9a9a9a; font-size: 11px; }
+        .recent-history-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        button { cursor: pointer; }
+      </style>
 
-    this.nameInput = document.createElement("input");
-    this.modeSelect = document.createElement("select");
-    this.gridWidthInput = document.createElement("input");
-    this.gridHeightInput = document.createElement("input");
-    this.gravityInput = document.createElement("input");
-    this.lockDelayInput = document.createElement("input");
-    this.chainAmountInput = document.createElement("input");
-    this.nextPiecesInput = document.createElement("input");
-    this.summaryPanel = document.createElement("div");
-    this.unifiedTemplateLibraryPanel = document.createElement("div");
-    this.librarySearchInput = document.createElement("input");
-    this.templateCatalogPanel = document.createElement("div");
-    this.presetSlotsPanel = document.createElement("div");
-    this.recentHistoryPanel = document.createElement("div");
-    this.recentActionsPanel = document.createElement("div");
-    this.cascadeGravityCheckbox = document.createElement("input");
-    this.disconnectedGravityCheckbox = document.createElement("input");
-    this.chainRowCheckbox = document.createElement("input");
-    this.chainColumnCheckbox = document.createElement("input");
-    this.chainDiagonalCheckbox = document.createElement("input");
-    this.recursiveChainCheckbox = document.createElement("input");
-    this.nextPieceEnabledCheckbox = document.createElement("input");
-    this.holdPieceEnabledCheckbox = document.createElement("input");
-    this.bagRandomizerCheckbox = document.createElement("input");
-    this.hardDropPunchCheckbox = document.createElement("input");
-    this.twoSpaceWallKickCheckbox = document.createElement("input");
-    this.diagonalWallKickCheckbox = document.createElement("input");
-    this.pieceClimbingCheckbox = document.createElement("input");
-    this.flip180Checkbox = document.createElement("input");
-    this.floorKickCheckbox = document.createElement("input");
-    this.blockList = document.createElement("select");
-    this.pieceList = document.createElement("select");
-    this.blockNameInput = document.createElement("input");
-    this.blockColorInput = document.createElement("input");
-    this.blockSpecialColorInput = document.createElement("input");
-    this.blockSpecialChanceInput = document.createElement("input");
-    this.blockSpecialFrequencyInput = document.createElement("input");
-    this.blockPaletteList = document.createElement("div");
-    this.blockNormalCheckbox = document.createElement("input");
-    this.blockGarbageCheckbox = document.createElement("input");
-    this.blockFillerCheckbox = document.createElement("input");
-    this.blockFlashingCheckbox = document.createElement("input");
-    this.blockMatchAnyColorCheckbox = document.createElement("input");
-    this.blockCounterCheckbox = document.createElement("input");
-    this.blockClearEveryOtherLineCheckbox = document.createElement("input");
-    this.blockIgnoreChainConnectionsCheckbox = document.createElement("input");
-    this.blockIgnoreMovingDownCheckbox = document.createElement("input");
-    this.blockRequireChainPresenceCheckbox = document.createElement("input");
-    this.blockAddToExplodingChainCheckbox = document.createElement("input");
-    this.blockRemoveColorFieldCheckbox = document.createElement("input");
-    this.blockDiamondColorFieldCheckbox = document.createElement("input");
-    this.blockRewardLabel = document.createElement("div");
-    this.blockConversionFromSelect = document.createElement("select");
-    this.blockConversionToSelect = document.createElement("select");
-    this.blockConversionList = document.createElement("div");
-    this.pieceBlockOverrideSelect = document.createElement("select");
+      <div class="editor-header">
+        <h2>Custom Game Editor</h2>
+        <div>
+            <button id="btn-new">New</button>
+            <button id="btn-load">Load</button>
+            <button id="btn-import">Import</button>
+            <button id="btn-save" style="background:#004400; color:#fff; border:none; padding:5px 15px; border-radius:4px;">Save</button>
+            <button id="btn-share" style="background:#004488; color:#fff; border:none; padding:5px 15px; border-radius:4px; margin-left: 10px;">Share</button>
+            <button id="btn-test" style="background:#cc6600; color:#fff; border:none; padding:5px 15px; border-radius:4px; margin-left: 10px;">Test Game</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Quick Preset Slots</label>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <button id="btn-save-slot-1">Save Slot 1</button>
+          <button id="btn-load-slot-1">Load Slot 1</button>
+          <button id="btn-save-slot-2">Save Slot 2</button>
+          <button id="btn-load-slot-2">Load Slot 2</button>
+          <button id="btn-save-slot-3">Save Slot 3</button>
+          <button id="btn-load-slot-3">Load Slot 3</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Preset Families</label>
+        <div class="preset-family-grid">
+          <div class="preset-family-card">
+            <div class="preset-family-title">Competitive Drop</div>
+            <div class="preset-family-description">Fast preview-friendly drop presets for familiar versus play and sprint tuning.</div>
+            <div class="preset-family-buttons">
+              <button id="btn-preset-classic">Classic Drop</button>
+              <button id="btn-preset-sprint">Sprint Drop</button>
+            </div>
+          </div>
+          <div class="preset-family-card">
+            <div class="preset-family-title">Puzzle Chainers</div>
+            <div class="preset-family-description">Chain-heavy presets tuned for cascade play, calmer experiments, and board-clearing setups.</div>
+            <div class="preset-family-buttons">
+              <button id="btn-preset-cascade">Cascade Puzzle</button>
+              <button id="btn-preset-zen">Zen Garden</button>
+            </div>
+          </div>
+          <div class="preset-family-card">
+            <div class="preset-family-title">Arcade Stackers</div>
+            <div class="preset-family-description">Compact stack presets for quick arcade rounds and tiny-grid challenge layouts.</div>
+            <div class="preset-family-buttons">
+              <button id="btn-preset-stack">Stack Arcade</button>
+              <button id="btn-preset-micro">Micro Stack</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="unified-template-library-panel" class="preset-slots-panel"></div>
+
+      <div class="form-group" style="margin-top: 16px;">
+        <label>Template Library Search</label>
+        <input type="text" id="library-search" placeholder="Search templates by name...">
+      </div>
+
+      <div id="template-catalog-panel" class="preset-slots-panel"></div>
+      <div id="preset-slots-panel" class="preset-slots-panel"></div>
+      <div id="recent-history" class="recent-history-panel"></div>
+      <div id="recent-actions" class="recent-actions-panel"></div>
+
+      <div class="editor-tabs">
+        <button class="tab-btn active" data-tab="settings">Settings</button>
+        <button class="tab-btn" data-tab="blocks">Blocks</button>
+        <button class="tab-btn" data-tab="pieces">Pieces</button>
+      </div>
+
+      <div class="tab-content" id="tab-settings">
+        <div class="form-group">
+          <label>Game Name</label>
+          <input type="text" id="game-name">
+        </div>
+        <div class="form-group">
+          <label>Mode</label>
+          <select id="game-mode">
+            <option value="DROP">Drop</option>
+            <option value="STACK">Stack</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Grid Width</label>
+            <input type="number" id="grid-width" min="4" max="20">
+          </div>
+          <div class="form-group">
+            <label>Grid Height</label>
+            <input type="number" id="grid-height" min="10" max="40">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Gravity (Ticks)</label>
+            <input type="number" id="gravity" min="0">
+          </div>
+          <div class="form-group">
+            <label>Lock Delay (Ticks)</label>
+            <input type="number" id="lock-delay" min="0">
+          </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Chain Amount</label>
+                <input type="number" id="chain-amount" min="2" max="10">
+            </div>
+            <div class="form-group">
+                <label>Next Pieces</label>
+                <input type="number" id="next-pieces" min="0" max="6">
+            </div>
+        </div>
+        <div class="form-group">
+          <label>Advanced Rule Toggles</label>
+          <div class="toggle-grid" style="display: none;">
+            <label><input type="checkbox" id="toggle-cascade-gravity"> Cascade gravity</label>
+            <label><input type="checkbox" id="toggle-disconnected-gravity"> Only move disconnected blocks</label>
+            <label><input type="checkbox" id="toggle-chain-row"> Chain checks rows</label>
+            <label><input type="checkbox" id="toggle-chain-column"> Chain checks columns</label>
+            <label><input type="checkbox" id="toggle-chain-diagonal"> Chain checks diagonals</label>
+            <label><input type="checkbox" id="toggle-chain-recursive"> Recursive chain search</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Movement / Randomizer Toggles</label>
+          <div class="toggle-grid" style="display: none;">
+            <label><input type="checkbox" id="toggle-next-piece-enabled"> Show next pieces</label>
+            <label><input type="checkbox" id="toggle-hold-piece-enabled"> Enable hold piece</label>
+            <label><input type="checkbox" id="toggle-bag-randomizer"> Use bag randomizer</label>
+            <label><input type="checkbox" id="toggle-hard-drop-punch"> Hard drop punch-through</label>
+            <label><input type="checkbox" id="toggle-two-space-kick"> Two-space wall kick</label>
+            <label><input type="checkbox" id="toggle-diagonal-kick"> Diagonal wall kick</label>
+            <label><input type="checkbox" id="toggle-piece-climbing"> Piece climbing</label>
+            <label><input type="checkbox" id="toggle-flip180"> Allow 180 flip</label>
+            <label><input type="checkbox" id="toggle-floor-kick"> Allow floor kick</label>
+          </div>
+        </div>
+        <div id="rules-summary" class="summary-panel"></div>
+      </div>
+
+      <div class="tab-content hidden" id="tab-blocks">
+        <div class="editor-columns" style="display: none;">
+          <div class="item-list">
+            <h3>Block Types</h3>
+            <select id="block-list" size="10"></select>
+            <div class="list-actions">
+              <button id="btn-add-block">+</button>
+              <button id="btn-remove-block">-</button>
+            </div>
+          </div>
+          <div id="block-details" class="item-details" style="display: none;">
+            <div class="form-group">
+              <label>Block Name</label>
+              <input type="text" id="block-name">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Primary Color</label>
+                <input type="color" id="block-color" value="#808080">
+              </div>
+              <div class="form-group">
+                <label>Special Color</label>
+                <input type="color" id="block-special-color" value="#ff00ff">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Special Chance (1 in N)</label>
+                <input type="number" id="block-special-chance" min="0" value="0">
+              </div>
+              <div class="form-group">
+                <label>Special Frequency</label>
+                <input type="number" id="block-special-frequency" min="0" value="0">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Color Palette</label>
+              <div class="block-palette-row">
+                <div id="block-color-palette" class="block-palette-list"></div>
+                <button id="btn-add-block-color">Add Color</button>
+                <button id="btn-remove-block-color">Remove Color</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Usage</label>
+              <div class="toggle-grid" style="display: none;">
+                <label><input type="checkbox" id="block-use-normal"> Use in normal pieces</label>
+                <label><input type="checkbox" id="block-use-garbage"> Use as garbage</label>
+                <label><input type="checkbox" id="block-use-filler"> Use as filler</label>
+                <label><input type="checkbox" id="block-flashing"> Flashing special</label>
+                <label><input type="checkbox" id="block-match-any-color"> Match any color</label>
+                <label><input type="checkbox" id="block-counter-type"> Counter type</label>
+                <label><input type="checkbox" id="block-clear-every-other-line"> Clear every other line</label>
+                <label><input type="checkbox" id="block-ignore-chain-connections"> Ignore chain connections</label>
+                <label><input type="checkbox" id="block-ignore-moving-down"> Ignore moving down</label>
+                <label><input type="checkbox" id="block-require-chain-presence"> Required in chain</label>
+                <label><input type="checkbox" id="block-add-to-exploding-chain"> Add to exploding chain</label>
+                <label><input type="checkbox" id="block-remove-color-field"> Remove same-color field blocks</label>
+                <label><input type="checkbox" id="block-diamond-color-field"> Diamond-color field swap</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Clear Reward Hook</label>
+              <div id="block-reward-label" style="font-size:12px; color:#aaa; margin-bottom:8px;">No reward piece assigned.</div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <button id="btn-block-reward-selected-piece">Use Selected Piece</button>
+                <button id="btn-block-reward-clear">Clear Reward</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Conversion Chain Hooks</label>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
+                <select id="block-conversion-from"></select>
+                <select id="block-conversion-to"></select>
+                <button id="btn-block-add-conversion">Add Pair</button>
+                <button id="btn-block-clear-conversions">Clear Pairs</button>
+              </div>
+              <div id="block-conversion-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content hidden" id="tab-pieces">
+        <div class="editor-columns" style="display: none;">
+          <div class="item-list">
+            <h3>Piece Types</h3>
+            <select id="piece-list" size="10"></select>
+            <div class="list-actions">
+              <button id="btn-add-piece">+</button>
+              <button id="btn-duplicate-piece">Duplicate</button>
+              <button id="btn-remove-piece">-</button>
+            </div>
+          </div>
+          <div id="piece-details" class="item-details" style="display: none;">
+            <h4 id="piece-name-display">Select a piece</h4>
+            <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap: wrap; align-items:center;">
+                <button id="btn-prev-rot"> < </button>
+                <span id="rot-label">Rotation: 0</span>
+                <button id="btn-next-rot"> > </button>
+                <button id="btn-add-rot">+ ROT</button>
+                <button id="btn-duplicate-rot">Duplicate ROT</button>
+                <button id="btn-normalize-rot">Normalize ROT</button>
+                <button id="btn-center-rot">Center ROT</button>
+                <button id="btn-center-all-rot">Center All</button>
+                <button id="btn-normalize-all-rot">Normalize All</button>
+                <button id="btn-remove-dup-rot">Clear Duplicates</button>
+                <button id="btn-remove-empty-rot">Clear Empty</button>
+                <button id="btn-remove-rot">- ROT</button>
+            </div>
+            <div id="piece-shape-editor" style="display:grid; grid-template-columns: repeat(4, 30px); gap: 2px; margin-top:10px;">
+                <!-- 4x4 grid -->
+            </div>
+            <p style="font-size:12px; color:#888; margin-top:10px;">Click grid to toggle blocks</p>
+            <div class="form-group" style="margin-top:12px;">
+              <label>Primary Block Override</label>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <select id="piece-block-override"></select>
+                <button id="btn-apply-piece-block">Apply Block</button>
+                <button id="btn-clear-piece-block">Clear Block</button>
+              </div>
+            </div>
+            <div class="rotation-overview">
+              <h5>Rotation Overview</h5>
+              <div id="rotation-overview-list" class="rotation-overview-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    this.nameInput = this.container.querySelector('#game-name') as HTMLInputElement;
+    this.modeSelect = this.container.querySelector('#game-mode') as HTMLSelectElement;
+    this.gridWidthInput = this.container.querySelector('#grid-width') as HTMLInputElement;
+    this.gridHeightInput = this.container.querySelector('#grid-height') as HTMLInputElement;
+    this.gravityInput = this.container.querySelector('#gravity') as HTMLInputElement;
+    this.lockDelayInput = this.container.querySelector('#lock-delay') as HTMLInputElement;
+    this.chainAmountInput = this.container.querySelector('#chain-amount') as HTMLInputElement;
+    this.nextPiecesInput = this.container.querySelector('#next-pieces') as HTMLInputElement;
+    this.summaryPanel = this.container.querySelector('#rules-summary') as HTMLDivElement;
+    this.unifiedTemplateLibraryPanel = this.container.querySelector('#unified-template-library-panel') as HTMLDivElement;
+    this.librarySearchInput = this.container.querySelector('#library-search') as HTMLInputElement;
+    this.templateCatalogPanel = this.container.querySelector('#template-catalog-panel') as HTMLDivElement;
+    this.presetSlotsPanel = this.container.querySelector('#preset-slots-panel') as HTMLDivElement;
+    this.recentHistoryPanel = this.container.querySelector('#recent-history') as HTMLDivElement;
+    this.recentActionsPanel = this.container.querySelector('#recent-actions') as HTMLDivElement;
+    this.cascadeGravityCheckbox = this.container.querySelector('#toggle-cascade-gravity') as HTMLInputElement;
+    this.disconnectedGravityCheckbox = this.container.querySelector('#toggle-disconnected-gravity') as HTMLInputElement;
+    this.chainRowCheckbox = this.container.querySelector('#toggle-chain-row') as HTMLInputElement;
+    this.chainColumnCheckbox = this.container.querySelector('#toggle-chain-column') as HTMLInputElement;
+    this.chainDiagonalCheckbox = this.container.querySelector('#toggle-chain-diagonal') as HTMLInputElement;
+    this.recursiveChainCheckbox = this.container.querySelector('#toggle-chain-recursive') as HTMLInputElement;
+    this.nextPieceEnabledCheckbox = this.container.querySelector('#toggle-next-piece-enabled') as HTMLInputElement;
+    this.holdPieceEnabledCheckbox = this.container.querySelector('#toggle-hold-piece-enabled') as HTMLInputElement;
+    this.bagRandomizerCheckbox = this.container.querySelector('#toggle-bag-randomizer') as HTMLInputElement;
+    this.hardDropPunchCheckbox = this.container.querySelector('#toggle-hard-drop-punch') as HTMLInputElement;
+    this.twoSpaceWallKickCheckbox = this.container.querySelector('#toggle-two-space-kick') as HTMLInputElement;
+    this.diagonalWallKickCheckbox = this.container.querySelector('#toggle-diagonal-kick') as HTMLInputElement;
+    this.pieceClimbingCheckbox = this.container.querySelector('#toggle-piece-climbing') as HTMLInputElement;
+    this.flip180Checkbox = this.container.querySelector('#toggle-flip180') as HTMLInputElement;
+    this.floorKickCheckbox = this.container.querySelector('#toggle-floor-kick') as HTMLInputElement;
+    this.blockList = this.container.querySelector('#block-list') as HTMLSelectElement;
+    this.pieceList = this.container.querySelector('#piece-list') as HTMLSelectElement;
+    this.blockNameInput = this.container.querySelector('#block-name') as HTMLInputElement;
+    this.blockColorInput = this.container.querySelector('#block-color') as HTMLInputElement;
+    this.blockSpecialColorInput = this.container.querySelector('#block-special-color') as HTMLInputElement;
+    this.blockSpecialChanceInput = this.container.querySelector('#block-special-chance') as HTMLInputElement;
+    this.blockSpecialFrequencyInput = this.container.querySelector('#block-special-frequency') as HTMLInputElement;
+    this.blockPaletteList = this.container.querySelector('#block-color-palette') as HTMLDivElement;
+    this.blockNormalCheckbox = this.container.querySelector('#block-use-normal') as HTMLInputElement;
+    this.blockGarbageCheckbox = this.container.querySelector('#block-use-garbage') as HTMLInputElement;
+    this.blockFillerCheckbox = this.container.querySelector('#block-use-filler') as HTMLInputElement;
+    this.blockFlashingCheckbox = this.container.querySelector('#block-flashing') as HTMLInputElement;
+    this.blockMatchAnyColorCheckbox = this.container.querySelector('#block-match-any-color') as HTMLInputElement;
+    this.blockCounterCheckbox = this.container.querySelector('#block-counter-type') as HTMLInputElement;
+    this.blockClearEveryOtherLineCheckbox = this.container.querySelector('#block-clear-every-other-line') as HTMLInputElement;
+    this.blockIgnoreChainConnectionsCheckbox = this.container.querySelector('#block-ignore-chain-connections') as HTMLInputElement;
+    this.blockIgnoreMovingDownCheckbox = this.container.querySelector('#block-ignore-moving-down') as HTMLInputElement;
+    this.blockRequireChainPresenceCheckbox = this.container.querySelector('#block-require-chain-presence') as HTMLInputElement;
+    this.blockAddToExplodingChainCheckbox = this.container.querySelector('#block-add-to-exploding-chain') as HTMLInputElement;
+    this.blockRemoveColorFieldCheckbox = this.container.querySelector('#block-remove-color-field') as HTMLInputElement;
+    this.blockDiamondColorFieldCheckbox = this.container.querySelector('#block-diamond-color-field') as HTMLInputElement;
+    this.blockRewardLabel = this.container.querySelector('#block-reward-label') as HTMLDivElement;
+    this.blockConversionFromSelect = this.container.querySelector('#block-conversion-from') as HTMLSelectElement;
+    this.blockConversionToSelect = this.container.querySelector('#block-conversion-to') as HTMLSelectElement;
+    this.blockConversionList = this.container.querySelector('#block-conversion-list') as HTMLDivElement;
+    this.pieceBlockOverrideSelect = this.container.querySelector('#piece-block-override') as HTMLSelectElement;
 
     this.setupEventListeners();
   }
@@ -583,24 +932,24 @@ export class CustomGameEditor {
       });
     });
 
-    document.createElement("div").addEventListener('click', () => this.save());
-    document.createElement("div").addEventListener('click', () => this.shareGame());
-    document.createElement("div").addEventListener('click', () => this.testGame());
-    document.createElement("div").addEventListener('click', () => this.load());
-    document.createElement("div").addEventListener('click', () => this.importSharedGame());
-    document.createElement("div").addEventListener('click', () => this.createNew());
-    document.createElement("div").addEventListener('click', () => this.savePresetSlot(1));
-    document.createElement("div").addEventListener('click', () => this.loadPresetSlot(1));
-    document.createElement("div").addEventListener('click', () => this.savePresetSlot(2));
-    document.createElement("div").addEventListener('click', () => this.loadPresetSlot(2));
-    document.createElement("div").addEventListener('click', () => this.savePresetSlot(3));
-    document.createElement("div").addEventListener('click', () => this.loadPresetSlot(3));
-    document.createElement("div").addEventListener('click', () => this.applyPreset('classic'));
-    document.createElement("div").addEventListener('click', () => this.applyPreset('sprint'));
-    document.createElement("div").addEventListener('click', () => this.applyPreset('cascade'));
-    document.createElement("div").addEventListener('click', () => this.applyPreset('zen'));
-    document.createElement("div").addEventListener('click', () => this.applyPreset('stack'));
-    document.createElement("div").addEventListener('click', () => this.applyPreset('micro'));
+    this.container.querySelector('#btn-save')?.addEventListener('click', () => this.save());
+    this.container.querySelector('#btn-share')?.addEventListener('click', () => this.shareGame());
+    this.container.querySelector('#btn-test')?.addEventListener('click', () => this.testGame());
+    this.container.querySelector('#btn-load')?.addEventListener('click', () => this.load());
+    this.container.querySelector('#btn-import')?.addEventListener('click', () => this.importSharedGame());
+    this.container.querySelector('#btn-new')?.addEventListener('click', () => this.createNew());
+    this.container.querySelector('#btn-save-slot-1')?.addEventListener('click', () => this.savePresetSlot(1));
+    this.container.querySelector('#btn-load-slot-1')?.addEventListener('click', () => this.loadPresetSlot(1));
+    this.container.querySelector('#btn-save-slot-2')?.addEventListener('click', () => this.savePresetSlot(2));
+    this.container.querySelector('#btn-load-slot-2')?.addEventListener('click', () => this.loadPresetSlot(2));
+    this.container.querySelector('#btn-save-slot-3')?.addEventListener('click', () => this.savePresetSlot(3));
+    this.container.querySelector('#btn-load-slot-3')?.addEventListener('click', () => this.loadPresetSlot(3));
+    this.container.querySelector('#btn-preset-classic')?.addEventListener('click', () => this.applyPreset('classic'));
+    this.container.querySelector('#btn-preset-sprint')?.addEventListener('click', () => this.applyPreset('sprint'));
+    this.container.querySelector('#btn-preset-cascade')?.addEventListener('click', () => this.applyPreset('cascade'));
+    this.container.querySelector('#btn-preset-zen')?.addEventListener('click', () => this.applyPreset('zen'));
+    this.container.querySelector('#btn-preset-stack')?.addEventListener('click', () => this.applyPreset('stack'));
+    this.container.querySelector('#btn-preset-micro')?.addEventListener('click', () => this.applyPreset('micro'));
 
     this.presetSlotsPanel?.addEventListener('click', (event) => {
       const target = (event.target as HTMLElement).closest('button[data-library-load-slot], button[data-library-slot-delete]') as HTMLButtonElement | null;
@@ -725,7 +1074,7 @@ export class CustomGameEditor {
       input.addEventListener('change', () => this.updateSummary());
     });
     
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-add-block')?.addEventListener('click', () => {
         const bt = new BlockType();
         bt.name = `Block ${this.currentGameType.blockTypes.length + 1}`;
         bt.colors = [new BobColor(128, 128, 128)];
@@ -737,7 +1086,7 @@ export class CustomGameEditor {
         this.pushRecentAction(`Added block: ${bt.name}`);
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-remove-block')?.addEventListener('click', () => {
         this.removeSelectedBlock();
     });
 
@@ -795,7 +1144,7 @@ export class CustomGameEditor {
       this.updateBlockDetails();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-add-block-color')?.addEventListener('click', () => {
       const block = this.getSelectedBlock();
       if (!block) {
         ToastManager.showInfo('Select a block first.');
@@ -809,7 +1158,7 @@ export class CustomGameEditor {
       this.pushRecentAction(`Added palette color to ${block.name || 'selected block'}.`);
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-remove-block-color')?.addEventListener('click', () => {
       const block = this.getSelectedBlock();
       if (!block) {
         ToastManager.showInfo('Select a block first.');
@@ -863,19 +1212,19 @@ export class CustomGameEditor {
       });
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-block-reward-selected-piece')?.addEventListener('click', () => {
       this.assignSelectedPieceAsBlockReward();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-block-reward-clear')?.addEventListener('click', () => {
       this.clearSelectedBlockReward();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-block-add-conversion')?.addEventListener('click', () => {
       this.addSelectedBlockConversionPair();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-block-clear-conversions')?.addEventListener('click', () => {
       this.clearSelectedBlockConversionPairs();
     });
 
@@ -887,15 +1236,15 @@ export class CustomGameEditor {
       this.removeSelectedBlockConversionPair(index);
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-apply-piece-block')?.addEventListener('click', () => {
         this.applySelectedBlockToPiece();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-clear-piece-block')?.addEventListener('click', () => {
         this.clearSelectedPieceBlockOverride();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-add-piece')?.addEventListener('click', () => {
         const pt = new PieceType();
         pt.name = `Piece ${this.currentGameType.pieceTypes.length + 1}`;
         this.currentGameType.pieceTypes.push(pt);
@@ -904,27 +1253,27 @@ export class CustomGameEditor {
         this.pushRecentAction(`Added piece: ${pt.name}`);
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-duplicate-piece')?.addEventListener('click', () => {
         this.duplicateSelectedPiece();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-remove-piece')?.addEventListener('click', () => {
         this.removeSelectedPiece();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-next-rot')?.addEventListener('click', () => {
         this.currentEditingRotation++;
         this.renderPieceShapeEditor();
         this.updateSummary();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-prev-rot')?.addEventListener('click', () => {
         this.currentEditingRotation = Math.max(0, this.currentEditingRotation - 1);
         this.renderPieceShapeEditor();
         this.updateSummary();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-add-rot')?.addEventListener('click', () => {
         const ptIndex = this.pieceList.selectedIndex;
         if (ptIndex === -1) return;
         const pt = this.currentGameType.pieceTypes[ptIndex];
@@ -935,35 +1284,35 @@ export class CustomGameEditor {
         this.pushRecentAction(`Added rotation ${this.currentEditingRotation} to ${pt.name || 'selected piece'}.`);
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-duplicate-rot')?.addEventListener('click', () => {
         this.duplicateSelectedRotation();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-normalize-rot')?.addEventListener('click', () => {
         this.normalizeCurrentRotation();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-center-rot')?.addEventListener('click', () => {
         this.centerCurrentRotation();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-center-all-rot')?.addEventListener('click', () => {
         this.centerAllRotations();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-normalize-all-rot')?.addEventListener('click', () => {
         this.normalizeAllRotations();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-remove-dup-rot')?.addEventListener('click', () => {
         this.removeDuplicateRotations();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-remove-empty-rot')?.addEventListener('click', () => {
         this.removeEmptyRotations();
     });
 
-    document.createElement("div").addEventListener('click', () => {
+    this.container.querySelector('#btn-remove-rot')?.addEventListener('click', () => {
         this.removeSelectedRotation();
     });
 
@@ -983,15 +1332,15 @@ export class CustomGameEditor {
       }
       
       const pt = this.currentGameType.pieceTypes[ptIndex];
-      const grid = document.createElement("div") as any;
-      const pieceNameDisplay = document.createElement("div") as any;
+      const grid = this.container.querySelector('#piece-shape-editor')!;
+      const pieceNameDisplay = this.container.querySelector('#piece-name-display');
       if (pieceNameDisplay) {
           pieceNameDisplay.textContent = pt.name || `Piece ${ptIndex + 1}`;
       }
       grid.innerHTML = '';
       const maxRot = pt.rotationSet.size();
       if (maxRot <= 0) {
-          document.createElement("div").textContent = 'Rotation: none';
+          this.container.querySelector('#rot-label')!.textContent = 'Rotation: none';
           grid.innerHTML = '<div style="grid-column: span 4; color:#888;">Add a rotation to start editing this piece.</div>';
           this.renderRotationOverview();
           this.updateSummary();
@@ -999,7 +1348,7 @@ export class CustomGameEditor {
       }
       this.currentEditingRotation = ((this.currentEditingRotation % maxRot) + maxRot) % maxRot;
       
-      document.createElement("div").textContent = `Rotation: ${this.currentEditingRotation}`;
+      this.container.querySelector('#rot-label')!.textContent = `Rotation: ${this.currentEditingRotation}`;
       
       const rotation = pt.rotationSet.get(this.currentEditingRotation);
       this.renderRotationOverview();
@@ -1409,11 +1758,11 @@ export class CustomGameEditor {
     if (this.currentGameType.pieceTypes.length === 0) {
       this.pieceList.selectedIndex = -1;
       this.currentEditingRotation = 0;
-      const pieceNameDisplay = document.createElement("div") as any;
+      const pieceNameDisplay = this.container.querySelector('#piece-name-display');
       if (pieceNameDisplay) pieceNameDisplay.textContent = 'Select a piece';
-      const grid = document.createElement("div") as any;
+      const grid = this.container.querySelector('#piece-shape-editor');
       if (grid) grid.innerHTML = '<div style="grid-column: span 4; color:#888;">Add a piece to start editing.</div>';
-      const rotLabel = document.createElement("div") as any;
+      const rotLabel = this.container.querySelector('#rot-label');
       if (rotLabel) rotLabel.textContent = 'Rotation: none';
       this.updateSummary();
       return;
@@ -1816,7 +2165,7 @@ export class CustomGameEditor {
   }
 
   private renderRotationOverview(): void {
-    const list = document.createElement("div") as any;
+    const list = this.container.querySelector('#rotation-overview-list');
     if (!list) return;
 
     list.innerHTML = '';
