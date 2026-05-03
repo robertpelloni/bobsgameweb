@@ -91,3 +91,6 @@
 [submodule "submodules/PyxleOS"]
 	path = submodules/PyxleOS
 	url = https://github.com/Dakkra/PyxleOS
+[submodule "submodules/bobui"]
+	path = submodules/bobui
+	url = https://github.com/robertpelloni/bobui.git
