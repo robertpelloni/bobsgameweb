@@ -1,3 +1,6 @@
+## [2.2.12]
+- Implemented global top-level IPC event listener for invoking native submodule desktop binaries or falling back to iframes.
+
 ## [2.2.11]
 - Introduced External Pixel Tools panel in CustomGameEditor UI.
 - Scaffolded launch hooks for Aseprite and Tilemap Studio integrations via Event dispatches.

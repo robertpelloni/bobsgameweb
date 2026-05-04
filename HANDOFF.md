@@ -2,13 +2,11 @@
 
 ## Current State
 
-The agent successfully introduced the "External Tools" UI panel inside the PIXI `CustomGameEditor.ts`.
-Buttons for launching Aseprite and Tilemap Studio were constructed natively using PIXI Components, and wired to dispatch standard DOM `CustomEvent` structures (`"launch-external-tool"`).
-This serves as the foundation for the "omni-engine" vision. Because Aseprite does not natively compile to WASM straight out of the box (relying heavily on Skia via desktop), the actual invocation of these tools currently fires a bridged event meant to be caught by an Electron container, Qt wrapper, or a localized iframe wrapper built later.
-The project builds completely cleanly on both Web and C++.
+The agent successfully implemented the top-level generic IPC event listener inside `src/renderer/index.ts`. This listener securely intercepts `launch-external-tool` CustomEvents emitted anywhere from the PIXI rendering pipeline. It checks the deployment context (`isElectron`) to dynamically decide whether to trigger native OS-level IPC hooks (for tools like desktop Aseprite) or render generic fallback iframes for browser builds.
+The Custom Game Editor successfully triggers these hooks now using standalone PIXI UI buttons.
 
 ## Next Steps
 
-1. Build an event listener in the top-level application root (e.g. `main.ts` or the Electron/Qt6 host wrapper) that catches the `"launch-external-tool"` event and executes the binary locally via Node `child_process` or displays a compiled WASM frame if available.
+1. In the Web context, when a user attempts to launch "aseprite", build the actual Iframe overlay that opens a simulated or compiled WASM version of the editor inside the browser.
 2. The `bobui` CMake configuration still requires an intricate build process repair. The next agent should focus deeply on fixing the `cmake/BobQSubmodules.cmake` bridging logic so `bgeditor` can actually compile the `#include <BobQUltimatePPHost.h>` directives natively into Qt.
-3. Continue migrating remaining UI flows (like the Main Menu or Lobby) over to pure PIXI structures.
+3. Continue migrating remaining legacy DOM UI flows (like the Main Menu or Lobby) over to pure PIXI structures.
