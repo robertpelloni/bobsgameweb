@@ -258,6 +258,33 @@ export class CustomGameEditor {
 
     this.pixiContainer.addChild(aiPanel.container);
 
+    const externalToolsPanel = new Panel();
+    externalToolsPanel.setPosition(10, 480);
+    const extToolsLabel = new PIXIText("External Pixel Tools", { fill: 0xffffff, fontSize: 16, fontWeight: "bold" });
+    extToolsLabel.position.set(10, 10);
+    externalToolsPanel.addChild(extToolsLabel);
+
+    const asepriteBtn = new Button("Launch Aseprite", { width: 140, height: 30 });
+    asepriteBtn.setPosition(10, 40);
+    asepriteBtn.on("click", () => {
+        console.log("[CustomGameEditor] Requesting Aseprite launch...");
+        // In a native Electron environment, this event would be caught by IPC to launch the desktop binary.
+        // In a web environment, we would ideally iframe a WASM port here.
+        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "aseprite" } }));
+    });
+    externalToolsPanel.addChild(asepriteBtn.container);
+
+    const tilemapBtn = new Button("Launch Tilemap Studio", { width: 160, height: 30 });
+    tilemapBtn.setPosition(160, 40);
+    tilemapBtn.on("click", () => {
+        console.log("[CustomGameEditor] Requesting Tilemap Studio launch...");
+        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "tilemap-studio" } }));
+    });
+    externalToolsPanel.addChild(tilemapBtn.container);
+
+    this.pixiContainer.addChild(externalToolsPanel.container);
+
+
     const saveBtn2 = new Button("Save 2", { width: 70, height: 30 });
     saveBtn2.on("click", () => this.savePresetSlot(2));
     saveBtn2.setPosition(10, 45);
