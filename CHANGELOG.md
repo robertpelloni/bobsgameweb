@@ -1,3 +1,7 @@
+## [2.2.11]
+- Introduced External Pixel Tools panel in CustomGameEditor UI.
+- Scaffolded launch hooks for Aseprite and Tilemap Studio integrations via Event dispatches.
+
 ## [2.2.9]
 - Synchronized Submodules across omni-engine integration tree.
 - Decoupled CustomGameEditor HTML layout rendering while preserving TS detached stubs.
