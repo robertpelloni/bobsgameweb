@@ -1,3 +1,6 @@
+## [2.2.13]
+- Scaffolded `tools_build.sh` WASM compilation hook for submodule engines.
+
 ## [2.2.12]
 - Implemented global top-level IPC event listener for invoking native submodule desktop binaries or falling back to iframes.
 

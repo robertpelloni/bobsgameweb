@@ -1,6 +1,6 @@
 {
   "name": "okgame",
-  "version": "2.2.12",
+  "version": "2.2.13",
   "description": "bob's game - puzzle game engine",
   "main": "dist/main/index.js",
   "type": "module",
@@ -12,7 +12,8 @@
     "build:electron": "npm run build && electron-builder",
     "preview": "vite preview",
     "lint": "eslint src --ext .ts,.tsx",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:tools": "./tools_build.sh"
   },
   "keywords": [
     "game",
