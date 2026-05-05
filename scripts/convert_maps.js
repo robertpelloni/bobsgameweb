@@ -39,6 +39,11 @@ const TARGET_MAPS = [
   { outputId: 14, legacyName: 'TOWNYUUUpstairsBrothersRoom', name: 'TOWNYUU Upstairs Brothers Room', floorTile: MapTile.FLOOR },
   { outputId: 15, legacyName: 'TOWNYUUUpstairsBathroom', name: 'TOWNYUU Upstairs Bathroom', floorTile: MapTile.FLOOR },
   { outputId: 16, legacyName: 'TOWNYUUBackyardToolShed', name: 'TOWNYUU Backyard Tool Shed', floorTile: MapTile.FLOOR },
+  { outputId: 17, legacyName: 'TOWNOutsideNeighborhood', name: 'TOWN Outside Neighborhood', floorTile: MapTile.GRASS },
+  { outputId: 18, legacyName: 'TOWNTown', name: 'TOWN Town', floorTile: MapTile.PATH },
+  { outputId: 19, legacyName: 'TOWNOutsideForest', name: 'TOWN Outside Forest', floorTile: MapTile.GRASS },
+  { outputId: 20, legacyName: 'INTROTown', name: 'INTRO Town', floorTile: MapTile.GRASS },
+  { outputId: 21, legacyName: 'SCHOOLPlayground', name: 'SCHOOL Playground', floorTile: MapTile.SAND },
 ];
 
 const LEGACY_NAME_TO_DISPLAY_NAME = new Map(
@@ -46,6 +51,17 @@ const LEGACY_NAME_TO_DISPLAY_NAME = new Map(
 );
 
 const MANUAL_TRANSITION_REPAIRS = {
+  TOWNYUUDownstairs: {
+    doors: {
+      toFrontYard: { destinationMapName: 'TOWN Outside Neighborhood', destinationX: 126, destinationY: 31 },
+    },
+  },
+  TOWNOutsideNeighborhood: {
+    doors: {
+      toYuusHouse: { destinationMapName: 'TOWNYUU Downstairs', destinationX: 28, destinationY: 31 },
+      toYuusHouseBack: { destinationMapName: 'TOWNYUU Downstairs', destinationX: 53, destinationY: 23 },
+    },
+  },
   TOWNYUUGarage: {
     warps: {
       toAttic: { destinationMapName: 'TOWNYUU Attic', destinationX: 8, destinationY: 16 },

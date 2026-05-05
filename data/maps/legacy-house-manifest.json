@@ -58,5 +58,30 @@
     "id": 16,
     "name": "TOWNYUU Backyard Tool Shed",
     "path": "/maps/map_16.json"
+  },
+  {
+    "id": 17,
+    "name": "TOWN Outside Neighborhood",
+    "path": "/maps/map_17.json"
+  },
+  {
+    "id": 18,
+    "name": "TOWN Town",
+    "path": "/maps/map_18.json"
+  },
+  {
+    "id": 19,
+    "name": "TOWN Outside Forest",
+    "path": "/maps/map_19.json"
+  },
+  {
+    "id": 20,
+    "name": "INTRO Town",
+    "path": "/maps/map_20.json"
+  },
+  {
+    "id": 21,
+    "name": "SCHOOL Playground",
+    "path": "/maps/map_21.json"
   }
 ]

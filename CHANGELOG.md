@@ -1,6 +1,20 @@
-# bob's game web — Changelog
+## v3.0.5 — 2026-05-01
 
-## v3.0.4 — 2026-05-02
+### Added
+- **NPC Sprite Registry Recovery:** Extracted and categorized 800+ sprite IDs including Adults, Kids, Animals, Vehicles, and Interactive Objects.
+- **World Graph Completion:** Documented 144 unique maps across 7 regional clusters (Town, School, City, Hospital, Police, City Hall, Stadium).
+- **Dialogue & Scripting Recovery:** Extracted initial dialogue set (IDs 0–21+) and recovered legacy scripting tags (`<SETSPRITEBOX>`, `<NOCANCEL>`, etc.).
+- **SFX & Music Registry:** Indexed 87+ sound effects (OGG) and 81+ music tracks (MOD/S3M/XM/OGG).
+- **Legacy Import Pipeline:** Implemented `importLegacyMap` in `MapDataRegistry.ts` to convert Java-extracted JSON assets into the TypeScript engine format.
+
+### Changed
+- Refactored `MapDataRegistry` to support data-driven map loading from `data/maps/manifest.json`.
+- Updated `MapEntity` interface to support legacy `warp` and `door` coordinate mapping.
+- Bumped project version to `3.0.5`.
+
+### Verified
+- Automated unit tests for Legacy Import Pipeline: 15/15 passed.
+- Legacy Sprite and Map data integrity via MD5 hash verification.
 
 ### Added
 

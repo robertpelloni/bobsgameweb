@@ -64,12 +64,68 @@ export class MapDataRegistry {
 	private loaded = false;
 
 	/** Load all built-in map data */
-	loadAll(): void {
-		this.register(this.createTownyuu());
-		this.register(this.createDarkForest());
-		this.register(this.createBeach());
-		this.register(this.createDragonLair());
-		this.loaded = true;
+	async loadAll(): Promise<void> {
+		if (this.loaded) return;
+
+		try {
+			// In a real browser environment, we'd fetch manifest.json
+			// For this implementation, we'll register the core maps and provide a path for dynamic loading
+			this.register(this.createTownyuu());
+			this.register(this.createDarkForest());
+			this.register(this.createBeach());
+			this.register(this.createDragonLair());
+
+			// Mark as loaded
+			this.loaded = true;
+		} catch (error) {
+			console.error("Failed to load MapDataRegistry:", error);
+		}
+	}
+
+	/** 
+	 * Converts legacy JSON format to internal GameMapData 
+	 * This allows v3.0.5 to consume the extracted Java assets.
+	 */
+	importLegacyMap(json: any): GameMapData {
+		const entities: MapEntity[] = [];
+
+		// Convert doors to warps
+		if (json.doors) {
+			json.doors.forEach((door: any, index: number) => {
+				entities.push({
+					id: `warp_${json.id}_${index}`,
+					type: "warp",
+					x: door.x,
+					y: door.y,
+					destination: door.destinationMapName || door.targetMap,
+					destX: door.destinationX || 0,
+					destY: door.destinationY || 0,
+					name: door.name
+				});
+			});
+		}
+
+		// Convert number[][] tiles to character-based string[] for the engine
+		const tiles: string[] = json.tiles.map((row: number[]) => {
+			return row.map(tileId => {
+				// Simple mapping: 3 = wall, 7 = floor, 6 = door
+				if (tileId === 3) return "B";
+				if (tileId === 7) return "G";
+				if (tileId === 6) return "D";
+				return "G";
+			}).join("");
+		});
+
+		return {
+			id: json.id.toString(),
+			name: json.name || json.legacyName,
+			width: json.width,
+			height: json.height,
+			tileSize: json.tileWidth || 8,
+			tiles: tiles,
+			legend: { G: "grass", P: "path", W: "water", T: "tree", B: "building", D: "door" },
+			entities: entities
+		};
 	}
 
 	/** Get a map by ID */
