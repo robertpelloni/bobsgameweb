@@ -148,7 +148,7 @@ const httpServer = createServer((req, res) => {
 		const payload = {
 			ok: true,
 			service: "bobsgameweb-socket-server",
-			version: SERVER_VERSION,
+			version: "3.0.5",
 			time: Date.now(),
 		};
 		res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
@@ -307,7 +307,7 @@ const httpServer = createServer((req, res) => {
 		const stats = {
 			ok: true,
 			service: "bobsgameweb-socket-server",
-			version: SERVER_VERSION,
+			version: "3.0.5",
 			uptime: Math.floor(process.uptime()),
 			memory: {
 				rss: Math.floor(process.memoryUsage().rss / 1048576),
@@ -809,7 +809,7 @@ io.on("connection", (socket) => {
 						.toLowerCase();
 		const storageKey = profileId || safeName;
 		const snapshot = data?.snapshot || {
-			version: "3.0.4",
+			version: "3.0.5",
 			stats: {},
 			unlockedIds: [],
 		};

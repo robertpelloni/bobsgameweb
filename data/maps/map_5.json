@@ -295,7 +295,7 @@
       3,
       3,
       3,
-      3,
+      6,
       3,
       3,
       3,
@@ -2324,7 +2324,7 @@
       7,
       7,
       7,
-      7,
+      6,
       7,
       7,
       7,
@@ -2786,6 +2786,22 @@
       "destinationMapName": "TOWNYUU Garage",
       "destinationX": 2,
       "destinationY": 11
+    },
+    {
+      "name": "toBackyard",
+      "x": 29,
+      "y": 4,
+      "destinationMapName": "TOWN Outside Neighborhood",
+      "destinationX": 32,
+      "destinationY": 9
+    },
+    {
+      "name": "toFrontYard",
+      "x": 10,
+      "y": 36,
+      "destinationMapName": "TOWN Outside Neighborhood",
+      "destinationX": 126,
+      "destinationY": 31
     }
   ],
   "warps": [
