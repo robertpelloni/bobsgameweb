@@ -2,13 +2,14 @@ import { Container, Graphics, Text, TextStyle } from 'pixi.js';
 import { Scene, SceneConfig } from '../state/Scene';
 import { SceneTransition } from '../state/SceneTransition';
 import { getOrCreateAchievementProfileId, getPlayerDisplayName, setPlayerDisplayName } from '../data/AchievementIdentity';
+import { TextInput } from '../ui/TextInput';
 
 export class SettingsScene extends Scene {
     private titleText!: Text;
     private nameInputContainer!: Container;
     private nameText!: Text;
     private backButton!: Container;
-    private inputElement!: HTMLInputElement;
+    private pixiInput!: TextInput;
 
     constructor(config: SceneConfig) {
         super(config);
@@ -37,16 +38,10 @@ export class SettingsScene extends Scene {
         profileText.position.set(this.app.screen.width / 2 - 150, 185);
         this.container.addChild(profileText);
 
-        this.inputElement = document.createElement('input');
-        this.inputElement.type = 'text';
-        this.inputElement.value = currentName;
-        this.inputElement.style.position = 'absolute';
-        this.inputElement.style.left = '50%';
-        this.inputElement.style.top = '200px';
-        this.inputElement.style.transform = 'translateX(-50%)';
-        this.inputElement.style.fontSize = '24px';
-        this.inputElement.style.padding = '5px';
-        document.body.appendChild(this.inputElement);
+        this.pixiInput = new TextInput("Enter Name", { width: 300, height: 40 });
+        this.pixiInput.setPosition(this.app.screen.width / 2 - 150, 200);
+        this.pixiInput.value = currentName;
+        this.container.addChild(this.pixiInput.container);
 
         const saveButton = this.createStyledButton('Save Name', 200, 50);
         saveButton.position.set(this.app.screen.width / 2 - 100, 250);
@@ -56,14 +51,13 @@ export class SettingsScene extends Scene {
         this.backButton = this.createStyledButton('Back', 200, 50);
         this.backButton.position.set(this.app.screen.width / 2 - 100, 350);
         this.backButton.on('pointerdown', () => {
-            this.inputElement.remove();
             SceneTransition.popWithFade(this.app);
         });
         this.container.addChild(this.backButton);
     }
 
     private saveName(): void {
-        const newName = setPlayerDisplayName(this.inputElement.value);
+        const newName = setPlayerDisplayName(this.pixiInput.value);
         this.nameText.text = `Current Name: ${newName}`;
     }
 
@@ -87,8 +81,6 @@ export class SettingsScene extends Scene {
     public onUpdate(delta: number): void {}
 
     protected async destroy(): Promise<void> {
-        if (this.inputElement && this.inputElement.parentElement) {
-            this.inputElement.remove();
-        }
+        // Handled by Pixi
     }
 }
