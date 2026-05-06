@@ -1,3 +1,6 @@
+## [2.2.14]
+- Created mock WASM submodule payloads in `public/tools/` to allow the Iframe launcher to render successfully while awaiting Emscripten build pipelines.
+
 ## [2.2.13]
 - Scaffolded `tools_build.sh` WASM compilation hook for submodule engines.
 
