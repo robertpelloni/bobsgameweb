@@ -1,3 +1,7 @@
+## [2.2.15]
+- Completely decoupled SettingsScene from HTML DOM, relying solely on PIXI TextInput wrappers.
+- Decoupled WorldScene developer console from raw HTML input forms.
+
 ## [2.2.14]
 - Created mock WASM submodule payloads in `public/tools/` to allow the Iframe launcher to render successfully while awaiting Emscripten build pipelines.
 
