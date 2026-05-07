@@ -1,3 +1,6 @@
+## [2.2.16]
+- Fully decoupled CreateRoom popup inside LobbyScene into native PIXI components, replacing legacy HTML DOM strings.
+
 ## [2.2.15]
 - Completely decoupled SettingsScene from HTML DOM, relying solely on PIXI TextInput wrappers.
 - Decoupled WorldScene developer console from raw HTML input forms.
