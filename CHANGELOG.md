@@ -1,3 +1,6 @@
+## [2.2.18]
+- Implemented core Behavior Components (Platformer, 8-Direction) targeting Construct parity on the roadmap.
+
 ## [2.2.17]
 - Addressed architectural roadblocks in completely replacing the `LobbyScene` chat HTML structure with PIXI components due to heavily coupled networking logic.
 
