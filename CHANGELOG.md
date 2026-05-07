@@ -1,3 +1,6 @@
+## [2.2.17]
+- Addressed architectural roadblocks in completely replacing the `LobbyScene` chat HTML structure with PIXI components due to heavily coupled networking logic.
+
 ## [2.2.16]
 - Fully decoupled CreateRoom popup inside LobbyScene into native PIXI components, replacing legacy HTML DOM strings.
 

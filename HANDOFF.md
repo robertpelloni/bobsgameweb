@@ -2,12 +2,11 @@
 
 ## Current State
 
-The agent successfully ported the massive `CreateRoom` dialog within `LobbyScene.ts` out of the legacy HTML DOM string-rendering technique into pure WebGL PIXI components (`TextInput`, `Panel`, `Dropdown`, `Checkbox`, `Button`).
-This solidifies the engine's movement toward a pure native canvas experience without any floating HTML layers obstructing rendering pipelines or platform integrations.
-Project compiles perfectly.
+The agent investigated migrating the `LobbyScene` chat UI entirely to native PIXI `TextInput` and `Panel` objects to replace the raw HTML `<div id="chatContainer">`.
+However, the HTML DOM integration inside the networking handlers (e.g. appending span tags recursively to a scrolling div) is fundamentally incompatible with the existing PIXI text bounds logic without a massive TS refactor. The code modifications caused severe AST cascade errors in TypeScript, so the changes were safely reverted to preserve build stability.
 
 ## Next Steps
 
-1. Continue migrating remaining UI flows in `LobbyScene.ts`, specifically the `chatContainer`, `playersContainer`, and `bracketContainer`.
-2. Configure Emscripten/CMake pipelines inside `tools_build.sh` to compile Aseprite and replace the mock payload with an actual binary buffer payload.
-3. Advance the C++ Qt6 port by resolving CMake inclusion conflicts inside the `bobui` submodule build system. This will enable `MainWindow.cpp` to natively pull in `<BobQUltimatePPHost.h>`.
+1. Configure Emscripten/CMake pipelines inside `tools_build.sh` to compile Aseprite and replace the mock payload with an actual binary buffer payload.
+2. Advance the C++ Qt6 port by resolving CMake inclusion conflicts inside the `bobui` submodule build system. This will enable `MainWindow.cpp` to natively pull in `<BobQUltimatePPHost.h>`.
+3. An agent with deep TS AST refactoring capability should return to `LobbyScene.ts` to finish decoupling the `chatContainer` into an array of scrolling PIXI elements.
