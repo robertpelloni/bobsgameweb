@@ -37,7 +37,7 @@
 
 ### Construct
 - [ ] Implement "Event Sheets" (Visual Scripting) compiling down to our RPG Event format.
-- [ ] Behavior components (Platformer, 8-Direction, Bullet, Pathfinding) out of the box.
+- [x] Behavior components (Platformer, 8-Direction, Bullet, Pathfinding) out of the box.
 - [ ] Instant preview via hidden iframe / web worker (like Construct 3).
 
 ### GameMaker
