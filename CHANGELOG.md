@@ -1,4 +1,4 @@
-## v3.0.5 — 2026-05-01
+## v3.0.6 — 2026-05-01
 
 ### Added
 - **NPC Sprite Registry Recovery:** Extracted and categorized 800+ sprite IDs including Adults, Kids, Animals, Vehicles, and Interactive Objects.
@@ -10,7 +10,8 @@
 ### Changed
 - Refactored `MapDataRegistry` to support data-driven map loading from `data/maps/manifest.json`.
 - Updated `MapEntity` interface to support legacy `warp` and `door` coordinate mapping.
-- Bumped project version to `3.0.5`.
+- Bumped project version to `3.0.6`.
+- Implemented the "Blah System" in `DemoWorld.ts` by using the `AudioManager` to play random pitched sounds while dialogue text is typed.
 
 ### Verified
 - Automated unit tests for Legacy Import Pipeline: 15/15 passed.
