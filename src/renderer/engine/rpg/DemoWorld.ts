@@ -23,6 +23,7 @@ import { NetworkManager } from "../network/NetworkManager";
 import { TileBatcher } from "../core/TileBatcher";
 import { WeatherRenderer, type WeatherType } from "../graphics/WeatherRenderer";
 import { EventTrigger } from "./event/BobEvent";
+import { AudioManager } from "../../audio/AudioManager";
 
 const log = new Logger("DemoWorld");
 
@@ -1783,10 +1784,20 @@ export class DemoWorld {
 			// Advance text
 			if (this.dialogueIndex < this.dialogueLines.length) {
 				const line = this.dialogueLines[this.dialogueIndex];
+				const prevIndex = this.dialogueCharIndex;
 				this.dialogueCharIndex = Math.min(
 					line.length,
 					Math.floor(this.dialogueTimer * this.DIALOGUE_SPEED),
 				);
+
+				// Play 'blah' sound when new characters appear
+				if (this.dialogueCharIndex > prevIndex) {
+					if (AudioManager.isLoaded("piece_move")) {
+						// Randomize pitch slightly to simulate the 14 different "blah" sounds
+						// Note: We use the 'pitch' option which AudioManager supports
+						AudioManager.playSound("piece_move", { volume: 0.1, pitch: 0.8 + Math.random() * 0.4 });
+					}
+				}
 			}
 
 			// Choice navigation

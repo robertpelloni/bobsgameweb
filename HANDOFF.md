@@ -40,12 +40,12 @@ Documented the connectivity and specs for 7 regional clusters:
 - Generated `data/maps/manifest.json` for all extracted map assets.
 
 ## Crucial Technical Insight
-- **The "Blah" System:** NPC dialogues use a sequence of "blah" sounds (IDs 1-14) to simulate speech. This needs to be hooked into the `TypedTextWriter`.
+- **The "Blah" System:** Implemented! `DemoWorld.ts` now triggers pitched `piece_move` sounds via `AudioManager` when characters speak.
 - **8-Directional Movement:** Yuu's sprite metadata (ID 794/796) confirms 8-directional support (64 frames), whereas standard NPCs are 4-directional (32 frames).
 - **Tracker Support:** The engine currently lacks native playback for the 40+ Tracker files (.mod/.s3m). These either need a WASM tracker library or pre-conversion to OGG.
+- **Legacy Map Dialogue Parsing:** Note that current java-extracted JSON maps (e.g. `map_10.json`) do not seem to include an `entities` or `dialogue` field in their exported structure yet. This needs to be exported from Java before `importLegacyMap` can ingest it.
 
 ## Highest-Value Next Steps
-1. **Dialogue Integration:** Link the recovered `DIALOGUE` text strings to the `MapEntity` dialogue fields.
-2. **Audio Implementation:** Hook the SFX library (IDs 0-87) into the `AudioManager` for interactive events (doors, footsteps).
-3. **8-Directional Animation:** Update the renderer to support the 64-frame Yuu animations confirmed in the registry.
-4. **Collision Parity:** Use the extracted `hitBoxFromTop` values (24px for kids, 30px for adults) to fix depth-sorting and collision bugs in the modern engine.
+1. **Audio Implementation:** Hook the SFX library (IDs 0-87) into the `AudioManager` for interactive events (doors, footsteps).
+2. **8-Directional Animation:** Update the renderer to support the 64-frame Yuu animations confirmed in the registry.
+3. **Collision Parity:** Use the extracted `hitBoxFromTop` values (24px for kids, 30px for adults) to fix depth-sorting and collision bugs in the modern engine.
