@@ -114,14 +114,15 @@ this.container.addChild(this.entitySpriteContainer);
     }
     // Set layer-specific alpha for visual quality
     this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7;
-    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.35;
-    this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 0.7;
-    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.3;
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.3;
+    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.5;
+    this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
+    this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 0.8;
+    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.4;
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.4;
     // Light mask tiles are orange markers → tint to black for AO overlay
     this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.35;
     // Map lights (tiles) alpha
-    this.layers[MapData.MAP_LIGHT_LAYER].alpha = 0.8;
+    this.layers[MapData.MAP_LIGHT_LAYER].alpha = 1.0;
   // Above-layer tiles stay in their own layer containers (z=7, z=8)
   // so they render ON TOP of entities in entitySpriteContainer (z=6.5)
 
@@ -310,8 +311,12 @@ this.container.addChild(this.entitySpriteContainer);
           sprite.blendMode = 'add';
         }
 
-				layer.addChild(sprite);
+        // Multiply blending for shadows
+        if (l === MapData.MAP_OBJECT_SHADOW_LAYER || l === MapData.MAP_GROUND_SHADOW_LAYER || l === MapData.MAP_SPRITE_SHADOW_LAYER) {
+          sprite.blendMode = 'multiply';
         }
+
+        layer.addChild(sprite);        }
       }
     }
 

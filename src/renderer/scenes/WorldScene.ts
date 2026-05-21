@@ -1711,15 +1711,6 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
         }
         break;
       }
-      case 'pos': {
-        if (this.playerTransform) {
-          const tx = Math.floor(this.playerTransform.x / WorldScene.TILE_PX);
-          const ty = Math.floor(this.playerTransform.y / WorldScene.TILE_PX);
-          this.showDialogue([`Position: (${this.playerTransform.x.toFixed(1)}, ${this.playerTransform.y.toFixed(1)}) px`,
-            `Tile: (${tx}, ${ty})`, `Map: ${this.currentMapName}`, `Map size: ${this.map?.data.widthTiles1X}x${this.map?.data.heightTiles1X}`]);
-        }
-        break;
-      }
       case 'save':
         this.saveCharacterToCloud();
         break;
@@ -1822,8 +1813,8 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
         dx *= inv;
         dy *= inv;
       }
-      const newX = this.playerTransform.x + dx * PLAYER_SPEED * SPRINT_MULT * dt;
-      const newY = this.playerTransform.y + dy * PLAYER_SPEED * SPRINT_MULT * dt;
+      const newX = this.playerTransform.x + dx * PLAYER_SPEED * SPRINT_MULT * (dt / 1000);
+      const newY = this.playerTransform.y + dy * PLAYER_SPEED * SPRINT_MULT * (dt / 1000);
       // Hit-collision check using the map's hitBounds layer
       const PW = 8;  // player half-width (collision box)
       const PH = 8;  // player collision height (feet only)
@@ -1874,9 +1865,6 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
         this.playerTransform.y = Math.max(0, Math.min(maxPy, this.playerTransform.y));
       }
       // Sync sprite position
-      const playerSpriteComp = this.world.getComponent(
-        (this.world as any).playerEntityId, "Sprite"
-      ) as SpriteComponent | undefined;
       if (playerSpriteComp?.sprite) {
         playerSpriteComp.sprite.x = this.playerTransform.x;
         playerSpriteComp.sprite.y = this.playerTransform.y;
@@ -1910,7 +1898,8 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
    const pty = Math.floor(this.playerTransform.y / WorldScene.TILE_PX);
    const aboveTile = this.map.data.getTileIndex(MapData.MAP_ABOVE_LAYER, ptx, pty);
    const aboveDetailTile = this.map.data.getTileIndex(MapData.MAP_ABOVE_DETAIL_LAYER, ptx, pty);
-   const underRoof = aboveTile !== 0 || aboveDetailTile !== 0;
+   // Only trigger if it's NOT a wall tile (839)
+   const underRoof = (aboveTile !== 0 && aboveTile !== 839) || (aboveDetailTile !== 0 && aboveDetailTile !== 839);
    const targetAlpha = underRoof ? 0.3 : 1.0;
    const aboveLayer = this.map.layers[MapData.MAP_ABOVE_LAYER];
    const aboveDetailLayer = this.map.layers[MapData.MAP_ABOVE_DETAIL_LAYER];
