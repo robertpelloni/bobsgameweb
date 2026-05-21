@@ -1,25 +1,3 @@
 {
-  "items": [
-    {
-      "type": "TODO",
-      "message": "network game support",
-      "file": "src\\renderer\\engine\\puzzle\\PuzzlePlayer.ts",
-      "line": 220,
-      "column": 25
-    },
-    {
-      "type": "TODO",
-      "message": "implement XML serialization and GZip",
-      "file": "src\\shared\\puzzle\\GameSequence.ts",
-      "line": 54,
-      "column": 11
-    },
-    {
-      "type": "TODO",
-      "message": "implement XML deserialization and GZip",
-      "file": "src\\shared\\puzzle\\GameSequence.ts",
-      "line": 59,
-      "column": 11
-    }
-  ]
+  "items": []
 }

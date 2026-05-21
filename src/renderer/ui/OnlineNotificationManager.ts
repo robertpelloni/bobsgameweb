@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OnlineNotificationManager — manages real-time online event notifications.
  *

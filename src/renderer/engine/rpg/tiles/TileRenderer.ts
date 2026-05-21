@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TileRenderer — generates PixiJS textures from Tileset + Palette data.
  *

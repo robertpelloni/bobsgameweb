@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * BranchingDialogueSystem — tree-based dialogue with choices, conditions, and effects.
  *

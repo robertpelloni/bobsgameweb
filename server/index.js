@@ -17,7 +17,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const SERVER_VERSION = "3.0.4";
+const SERVER_VERSION = "3.0.7";
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = parseInt(process.env.PORT || "6065", 10);
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
@@ -148,7 +148,7 @@ const httpServer = createServer((req, res) => {
 		const payload = {
 			ok: true,
 			service: "bobsgameweb-socket-server",
-			version: "3.0.5",
+			version: SERVER_VERSION,
 			time: Date.now(),
 		};
 		res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
@@ -307,7 +307,7 @@ const httpServer = createServer((req, res) => {
 		const stats = {
 			ok: true,
 			service: "bobsgameweb-socket-server",
-			version: "3.0.5",
+			version: SERVER_VERSION,
 			uptime: Math.floor(process.uptime()),
 			memory: {
 				rss: Math.floor(process.memoryUsage().rss / 1048576),
@@ -809,7 +809,7 @@ io.on("connection", (socket) => {
 						.toLowerCase();
 		const storageKey = profileId || safeName;
 		const snapshot = data?.snapshot || {
-			version: "3.0.5",
+			version: SERVER_VERSION,
 			stats: {},
 			unlockedIds: [],
 		};

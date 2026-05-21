@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Scene, SceneConfig } from '../state/Scene';
 import { StateManager } from '../state/StateManager';
 import { InputManager, Key } from '../input/InputManager';

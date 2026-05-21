@@ -161,8 +161,27 @@ export class Game extends EventEmitter<GameEvents> {
 					console.error("[Game] Deep link error:", e);
 					this.showMainMenu();
 				}
-			} else {
+			} else if (hash === "#world") {
+				console.log("[Game] Deep link: loading WorldScene directly");
+				const { WorldScene } = await import("./scenes/WorldScene");
+				const worldScene = new WorldScene({
+					name: "world",
+					app: this.app,
+					camera: this._camera,
+				});
+				await await StateManager.push(worldScene);
+			} else if (hash === "#menu") {
 				this.showMainMenu();
+			} else {
+				// Default: go directly to WorldScene (bob's game)
+				console.log("[Game] Default: loading WorldScene");
+				const { WorldScene } = await import("./scenes/WorldScene");
+				const worldScene = new WorldScene({
+					name: "world",
+					app: this.app,
+					camera: this._camera,
+				});
+				StateManager.push(worldScene);
 			}
 		}
 

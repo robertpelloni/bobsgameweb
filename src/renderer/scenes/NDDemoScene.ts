@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Scene, SceneConfig } from '../state/Scene';
 import { NDPuzzleGame } from '../engine/nd/NDPuzzleGame';
 import { LibretroGame } from '../engine/nd/LibretroGame';

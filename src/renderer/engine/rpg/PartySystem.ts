@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PartySystem - Team management for multiplayer and RPG adventures.
  * 

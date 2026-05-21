@@ -1,0 +1,4406 @@
+{
+  "TOWNYUUDownstairs": [
+    {
+      "name": "TOWNYUUDownstairs.toBasement",
+      "destMap": "TOWNYUUDownstairsBathroom",
+      "destDoor": "toDownstairs",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 28,
+      "arrivalY": 36,
+      "spawnPx": 16.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorDownDarkBrownGoldKnob"
+    },
+    {
+      "name": "TOWNYUUDownstairs.toGarage",
+      "destMap": "TOWNYUUBasement",
+      "destDoor": "toKitchen",
+      "x": 1,
+      "y": 5,
+      "arrivalX": 5,
+      "arrivalY": 13,
+      "spawnPx": 8.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    },
+    {
+      "name": "TOWNYUUDownstairs.toBackyard",
+      "destMap": "TOWNYUUGarage",
+      "destDoor": "toKitchen",
+      "x": 29,
+      "y": 4,
+      "arrivalX": 2,
+      "arrivalY": 11,
+      "spawnPx": 232.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpWhiteWindowKitchenSilverKnob"
+    },
+    {
+      "name": "TOWNYUUDownstairs.toFrontYard",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toYuusHouseBack",
+      "x": 10,
+      "y": 36,
+      "arrivalX": 32,
+      "arrivalY": 9,
+      "spawnPx": 80.0,
+      "spawnPy": 288.0,
+      "sprite": "DoorDownWhiteFrontDoor"
+    }
+  ],
+  "TOWNYUUUpstairs": [
+    {
+      "name": "TOWNYUUUpstairs.toLittleBrothersRoom",
+      "destMap": "TOWNYUUUpstairsParentsRoom",
+      "destDoor": "toHallway",
+      "x": 33,
+      "y": 10,
+      "arrivalX": 13,
+      "arrivalY": 14,
+      "spawnPx": 264.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorDownBrownGoldKnob"
+    },
+    {
+      "name": "TOWNYUUUpstairs.toBathroom",
+      "destMap": "TOWNYUUUpstairsBabyRoom",
+      "destDoor": "toHallway",
+      "x": 51,
+      "y": 10,
+      "arrivalX": 36,
+      "arrivalY": 14,
+      "spawnPx": 408.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorDownGraySilverKnob"
+    },
+    {
+      "name": "TOWNYUUUpstairs.toBrothersRoom",
+      "destMap": "TOWNYUUUpstairsBathroom",
+      "destDoor": "toHallway",
+      "x": 23,
+      "y": 4,
+      "arrivalX": 54,
+      "arrivalY": 14,
+      "spawnPx": 184.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    },
+    {
+      "name": "TOWNYUUUpstairs.toYuusRoom",
+      "destMap": "TOWNYUUUpstairsBrothersRoom",
+      "destDoor": "toHallway",
+      "x": 46,
+      "y": 4,
+      "arrivalX": 26,
+      "arrivalY": 9,
+      "spawnPx": 368.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    }
+  ],
+  "INTRODownstairs": [
+    {
+      "name": "INTRODownstairs.toBasement",
+      "destMap": "INTROGarage",
+      "destDoor": "toKitchen",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 2,
+      "arrivalY": 11,
+      "spawnPx": 16.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorDownDarkBrownGoldKnob"
+    },
+    {
+      "name": "INTRODownstairs.toBackyard",
+      "destMap": "INTROBasement",
+      "destDoor": "toKitchen",
+      "x": 29,
+      "y": 4,
+      "arrivalX": 5,
+      "arrivalY": 13,
+      "spawnPx": 232.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpWhiteWindowKitchenSilverKnob"
+    },
+    {
+      "name": "INTRODownstairs.toBathroom",
+      "destMap": "INTROTown",
+      "destDoor": "toYuusHouse",
+      "x": 26,
+      "y": 31,
+      "arrivalX": 32,
+      "arrivalY": 9,
+      "spawnPx": 208.0,
+      "spawnPy": 248.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    }
+  ],
+  "INTROUpstairs": [
+    {
+      "name": "INTROUpstairs.toLittleBrothersRoom",
+      "destMap": "INTROUpstairsParentsRoom",
+      "destDoor": "toHallway",
+      "x": 33,
+      "y": 10,
+      "arrivalX": 13,
+      "arrivalY": 14,
+      "spawnPx": 264.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorDownBrownGoldKnob"
+    },
+    {
+      "name": "INTROUpstairs.toBathroom",
+      "destMap": "INTROUpstairsBabyRoom",
+      "destDoor": "toHallway",
+      "x": 51,
+      "y": 10,
+      "arrivalX": 36,
+      "arrivalY": 14,
+      "spawnPx": 408.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorDownGraySilverKnob"
+    },
+    {
+      "name": "INTROUpstairs.toBrothersRoom",
+      "destMap": "INTROUpstairsBathroom",
+      "destDoor": "toHallway",
+      "x": 23,
+      "y": 4,
+      "arrivalX": 54,
+      "arrivalY": 14,
+      "spawnPx": 184.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    },
+    {
+      "name": "INTROUpstairs.toYuusRoom",
+      "destMap": "INTROUpstairsBrothersRoom",
+      "destDoor": "toHallway",
+      "x": 46,
+      "y": 4,
+      "arrivalX": 26,
+      "arrivalY": 9,
+      "spawnPx": 368.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    }
+  ],
+  "GENERIC1Downstairs": [
+    {
+      "name": "GENERIC1Downstairs.toGarage",
+      "destMap": "GENERIC1Downstairs",
+      "destDoor": "toBackyard",
+      "x": 1,
+      "y": 5,
+      "arrivalX": 12,
+      "arrivalY": 9,
+      "spawnPx": 8.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    },
+    {
+      "name": "GENERIC1Downstairs.toBathroom",
+      "destMap": "GENERIC1Garage",
+      "destDoor": "toKitchen",
+      "x": 11,
+      "y": 31,
+      "arrivalX": 2,
+      "arrivalY": 11,
+      "spawnPx": 88.0,
+      "spawnPy": 248.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    },
+    {
+      "name": "GENERIC1Downstairs.toBasement",
+      "destMap": "GENERIC1DownstairsBathroom",
+      "destDoor": "toKitchen",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 14,
+      "arrivalY": 36,
+      "spawnPx": 16.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorDownDarkBrownGoldKnob"
+    },
+    {
+      "name": "GENERIC1Downstairs.toFrontyard",
+      "destMap": "GENERIC1Basement",
+      "destDoor": "toKitchen",
+      "x": 25,
+      "y": 36,
+      "arrivalX": 5,
+      "arrivalY": 13,
+      "spawnPx": 200.0,
+      "spawnPy": 288.0,
+      "sprite": "DoorDownWhiteFrontDoor"
+    }
+  ],
+  "GENERIC1Upstairs": [
+    {
+      "name": "GENERIC1Upstairs.toBathroom",
+      "destMap": "GENERIC1UpstairsMasterBedroom",
+      "destDoor": "toHallway",
+      "x": 51,
+      "y": 10,
+      "arrivalX": 17,
+      "arrivalY": 14,
+      "spawnPx": 408.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorDownGraySilverKnob"
+    },
+    {
+      "name": "GENERIC1Upstairs.toBedroom1",
+      "destMap": "GENERIC1UpstairsBathroom",
+      "destDoor": "toHallway",
+      "x": 46,
+      "y": 4,
+      "arrivalX": 54,
+      "arrivalY": 14,
+      "spawnPx": 368.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    },
+    {
+      "name": "GENERIC1Upstairs.toBedroom2",
+      "destMap": "GENERIC1UpstairsBedroom1",
+      "destDoor": "toHallway",
+      "x": 7,
+      "y": 4,
+      "arrivalX": 49,
+      "arrivalY": 9,
+      "spawnPx": 56.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpWhiteSilverKnob"
+    }
+  ],
+  "TOWNGENERIC2Downstairs": [
+    {
+      "name": "TOWNGENERIC2Downstairs.toBackyard",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "toBasement",
+      "x": 23,
+      "y": 4,
+      "arrivalX": 33,
+      "arrivalY": 12,
+      "spawnPx": 184.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpWhiteWindowKitchenSilverKnob"
+    },
+    {
+      "name": "TOWNGENERIC2Downstairs.toGarage",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "toBackyard",
+      "x": 1,
+      "y": 5,
+      "arrivalX": 26,
+      "arrivalY": 9,
+      "spawnPx": 8.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    },
+    {
+      "name": "TOWNGENERIC2Downstairs.toBathroom",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "toGarage",
+      "x": 10,
+      "y": 27,
+      "arrivalX": 2,
+      "arrivalY": 11,
+      "spawnPx": 80.0,
+      "spawnPy": 216.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    },
+    {
+      "name": "TOWNGENERIC2Downstairs.toFrontyard",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "toBathroom",
+      "x": 25,
+      "y": 36,
+      "arrivalX": 11,
+      "arrivalY": 33,
+      "spawnPx": 200.0,
+      "spawnPy": 288.0,
+      "sprite": "DoorDownWhiteFrontDoor"
+    }
+  ],
+  "TOWNGENERIC3Downstairs": [
+    {
+      "name": "TOWNGENERIC3Downstairs.toBasement",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "toBathroom",
+      "x": 54,
+      "y": 9,
+      "arrivalX": 47,
+      "arrivalY": 36,
+      "spawnPx": 432.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorDownDarkBrownGoldKnob"
+    },
+    {
+      "name": "TOWNGENERIC3Downstairs.toBackyard",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "toBasement",
+      "x": 47,
+      "y": 4,
+      "arrivalX": 57,
+      "arrivalY": 13,
+      "spawnPx": 376.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpWhiteWindowKitchenSilverKnob"
+    },
+    {
+      "name": "TOWNGENERIC3Downstairs.toGarage",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "toBackyard",
+      "x": 56,
+      "y": 5,
+      "arrivalX": 50,
+      "arrivalY": 9,
+      "spawnPx": 448.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorRightBrownGoldKnob"
+    },
+    {
+      "name": "TOWNGENERIC3Downstairs.toFrontyard",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "toGarage",
+      "x": 30,
+      "y": 36,
+      "arrivalX": 59,
+      "arrivalY": 11,
+      "spawnPx": 240.0,
+      "spawnPy": 288.0,
+      "sprite": "DoorDownWhiteFrontDoor"
+    }
+  ],
+  "TOWNFRIENDDownstairs": [
+    {
+      "name": "TOWNFRIENDDownstairs.toBasement",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toFriendsHouseBack",
+      "x": 54,
+      "y": 9,
+      "arrivalX": 49,
+      "arrivalY": 9,
+      "spawnPx": 432.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorDownDarkBrownGoldKnob"
+    },
+    {
+      "name": "TOWNFRIENDDownstairs.toBathroom",
+      "destMap": "TOWNFRIENDBasement",
+      "destDoor": "toDownstairs",
+      "x": 44,
+      "y": 31,
+      "arrivalX": 57,
+      "arrivalY": 13,
+      "spawnPx": 352.0,
+      "spawnPy": 248.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    },
+    {
+      "name": "TOWNFRIENDDownstairs.toGarage",
+      "destMap": "TOWNFRIENDDownstairsBathroom",
+      "destDoor": "toDownstairs",
+      "x": 56,
+      "y": 5,
+      "arrivalX": 47,
+      "arrivalY": 36,
+      "spawnPx": 448.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorRightBrownGoldKnob"
+    },
+    {
+      "name": "TOWNFRIENDDownstairs.toFrontyard",
+      "destMap": "TOWNFRIENDGarage",
+      "destDoor": "toDownstairs",
+      "x": 30,
+      "y": 36,
+      "arrivalX": 59,
+      "arrivalY": 11,
+      "spawnPx": 240.0,
+      "spawnPy": 288.0,
+      "sprite": "DoorDownWhiteFrontDoor"
+    }
+  ],
+  "TOWNFRIENDUpstairs": [
+    {
+      "name": "TOWNFRIENDUpstairs.toFriendsSistersRoom",
+      "destMap": "TOWNFRIENDUpstairsFriendsRoom",
+      "destDoor": "toHallway",
+      "x": 5,
+      "y": 4,
+      "arrivalX": 39,
+      "arrivalY": 9,
+      "spawnPx": 40.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    },
+    {
+      "name": "TOWNFRIENDUpstairs.toFriendsParentsRoom",
+      "destMap": "TOWNFRIENDUpstairsSistersRoom",
+      "destDoor": "toHallway",
+      "x": 29,
+      "y": 10,
+      "arrivalX": 8,
+      "arrivalY": 9,
+      "spawnPx": 232.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorDownBrownGoldKnob"
+    },
+    {
+      "name": "TOWNFRIENDUpstairs.toBathroom",
+      "destMap": "TOWNFRIENDUpstairsParentsRoom",
+      "destDoor": "toHallway",
+      "x": 6,
+      "y": 10,
+      "arrivalX": 32,
+      "arrivalY": 14,
+      "spawnPx": 48.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorDownGraySilverKnob"
+    }
+  ],
+  "TOWNCRAZYDownstairs": [
+    {
+      "name": "TOWNCRAZYDownstairs.toBathroom",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toCrazyHouse",
+      "x": 9,
+      "y": 28,
+      "arrivalX": 37,
+      "arrivalY": 35,
+      "spawnPx": 72.0,
+      "spawnPy": 224.0,
+      "sprite": "DoorUpWhiteSilverKnob"
+    },
+    {
+      "name": "TOWNCRAZYDownstairs.toBackyard",
+      "destMap": "TOWNCRAZYDownstairsBathroom",
+      "destDoor": "toDownstairs",
+      "x": 21,
+      "y": 4,
+      "arrivalX": 12,
+      "arrivalY": 33,
+      "spawnPx": 168.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpWhiteKitchenWindowCatDoorSilverKnob"
+    },
+    {
+      "name": "TOWNCRAZYDownstairs.toBasement",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toCrazyHouseBack",
+      "x": 17,
+      "y": 8,
+      "arrivalX": 24,
+      "arrivalY": 9,
+      "spawnPx": 136.0,
+      "spawnPy": 64.0,
+      "sprite": "DoorDownDarkGraySilverKnob"
+    },
+    {
+      "name": "TOWNCRAZYDownstairs.toGarage",
+      "destMap": "TOWNCRAZYBasement",
+      "destDoor": "toDownstairs",
+      "x": 1,
+      "y": 20,
+      "arrivalX": 20,
+      "arrivalY": 12,
+      "spawnPx": 8.0,
+      "spawnPy": 160.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "TOWNCRAZYUpstairs": [
+    {
+      "name": "TOWNCRAZYUpstairs.toBathroom",
+      "destMap": "TOWNCRAZYUpstairsBedroom",
+      "destDoor": "toHallway",
+      "x": 6,
+      "y": 10,
+      "arrivalX": 13,
+      "arrivalY": 9,
+      "spawnPx": 48.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorDownWhiteSilverKnob"
+    },
+    {
+      "name": "TOWNCRAZYUpstairs.toTortureDungeon",
+      "destMap": "TOWNCRAZYUpstairsBathroom",
+      "destDoor": "toHallway",
+      "x": 19,
+      "y": 4,
+      "arrivalX": 9,
+      "arrivalY": 14,
+      "spawnPx": 152.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorRightBrownGoldKnob"
+    }
+  ],
+  "TOWNMANSIONDownstairs": [
+    {
+      "name": "TOWNMANSIONDownstairs.toDiningRoom",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "toFrontyard",
+      "x": 5,
+      "y": 4,
+      "arrivalX": 47,
+      "arrivalY": 33,
+      "spawnPx": 40.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpDoubleTallBrownGoldKnob"
+    },
+    {
+      "name": "TOWNMANSIONDownstairs.toKitchen",
+      "destMap": "TOWNMANSIONDownstairsKitchen",
+      "destDoor": "toEntranceLeft",
+      "x": 85,
+      "y": 4,
+      "arrivalX": 9,
+      "arrivalY": 10,
+      "spawnPx": 680.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpDoubleTallBrownGoldKnob"
+    },
+    {
+      "name": "TOWNMANSIONDownstairs.toGarage",
+      "destMap": "TOWNMANSIONDownstairsKitchen",
+      "destDoor": "toEntranceRight",
+      "x": 1,
+      "y": 7,
+      "arrivalX": 89,
+      "arrivalY": 10,
+      "spawnPx": 8.0,
+      "spawnPy": 56.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "TOWNMANSIONDownstairsKitchen": [
+    {
+      "name": "TOWNMANSIONDownstairsKitchen.toEntranceRight",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "toDiningRoom",
+      "x": 85,
+      "y": 20,
+      "arrivalX": 9,
+      "arrivalY": 25,
+      "spawnPx": 680.0,
+      "spawnPy": 160.0,
+      "sprite": "DoorDownDoubleTallBrownGoldKnobs"
+    }
+  ],
+  "SCHOOLMainOffice": [
+    {
+      "name": "SCHOOLMainOffice.toPrincipalOffice",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toSecretaryOffice",
+      "x": 1,
+      "y": 8,
+      "arrivalX": 17,
+      "arrivalY": 25,
+      "spawnPx": 8.0,
+      "spawnPy": 64.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "SCHOOLClinic": [
+    {
+      "name": "SCHOOLClinic.toBathroom",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toClinic",
+      "x": 3,
+      "y": 14,
+      "arrivalX": 31,
+      "arrivalY": 25,
+      "spawnPx": 24.0,
+      "spawnPy": 112.0,
+      "sprite": "DoorUpWhiteBathroomSilverKnob"
+    }
+  ],
+  "SCHOOLCustodian": [
+    {
+      "name": "SCHOOLCustodian.toRoof",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "toCustodianOffice",
+      "x": 11,
+      "y": 1,
+      "arrivalX": 6,
+      "arrivalY": 42,
+      "spawnPx": 88.0,
+      "spawnPy": 8.0,
+      "sprite": "DoorDownGraySilverKnob"
+    }
+  ],
+  "SCHOOLGirlsBathroom": [
+    {
+      "name": "SCHOOLGirlsBathroom.DoorSchoolBathroomDoor",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "toGirlsBathroom",
+      "x": 10,
+      "y": 22,
+      "arrivalX": 11,
+      "arrivalY": 37,
+      "spawnPx": 80.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorSchoolBathroomDoor"
+    },
+    {
+      "name": "SCHOOLGirlsBathroom.DoorSchoolBathroomDoor0",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "DoorSchoolBathroomDoor",
+      "x": 10,
+      "y": 18,
+      "arrivalX": 11,
+      "arrivalY": 28,
+      "spawnPx": 80.0,
+      "spawnPy": 144.0,
+      "sprite": "DoorSchoolBathroomDoor"
+    },
+    {
+      "name": "SCHOOLGirlsBathroom.DoorSchoolBathroomDoor1",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "DoorSchoolBathroomDoor0",
+      "x": 10,
+      "y": 14,
+      "arrivalX": 11,
+      "arrivalY": 24,
+      "spawnPx": 80.0,
+      "spawnPy": 112.0,
+      "sprite": "DoorSchoolBathroomDoor"
+    },
+    {
+      "name": "SCHOOLGirlsBathroom.DoorSchoolBathroomDoor2",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "DoorSchoolBathroomDoor1",
+      "x": 10,
+      "y": 10,
+      "arrivalX": 11,
+      "arrivalY": 20,
+      "spawnPx": 80.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorSchoolBathroomDoor"
+    },
+    {
+      "name": "SCHOOLGirlsBathroom.DoorSchoolBathroomDoor3",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "DoorSchoolBathroomDoor2",
+      "x": 10,
+      "y": 6,
+      "arrivalX": 11,
+      "arrivalY": 16,
+      "spawnPx": 80.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorSchoolBathroomDoor"
+    }
+  ],
+  "SCHOOLBoysBathroom": [
+    {
+      "name": "SCHOOLBoysBathroom.DoorSchoolBathroomDoor",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "toBoysBathroom",
+      "x": 10,
+      "y": 18,
+      "arrivalX": 11,
+      "arrivalY": 37,
+      "spawnPx": 80.0,
+      "spawnPy": 144.0,
+      "sprite": "DoorSchoolBathroomDoor"
+    },
+    {
+      "name": "SCHOOLBoysBathroom.DoorSchoolBathroomDoor0",
+      "destMap": "SCHOOLBoysBathroom",
+      "destDoor": "DoorSchoolBathroomDoor",
+      "x": 10,
+      "y": 14,
+      "arrivalX": 11,
+      "arrivalY": 24,
+      "spawnPx": 80.0,
+      "spawnPy": 112.0,
+      "sprite": "DoorSchoolBathroomDoor"
+    },
+    {
+      "name": "SCHOOLBoysBathroom.DoorSchoolBathroomDoor1",
+      "destMap": "SCHOOLBoysBathroom",
+      "destDoor": "DoorSchoolBathroomDoor0",
+      "x": 10,
+      "y": 10,
+      "arrivalX": 11,
+      "arrivalY": 20,
+      "spawnPx": 80.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorSchoolBathroomDoor"
+    },
+    {
+      "name": "SCHOOLBoysBathroom.DoorSchoolBathroomDoor2",
+      "destMap": "SCHOOLBoysBathroom",
+      "destDoor": "DoorSchoolBathroomDoor1",
+      "x": 10,
+      "y": 6,
+      "arrivalX": 11,
+      "arrivalY": 16,
+      "spawnPx": 80.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorSchoolBathroomDoor"
+    }
+  ],
+  "SCHOOLEntranceHallway": [
+    {
+      "name": "SCHOOLEntranceHallway.toPlaygroundRight",
+      "destMap": "SCHOOLPlayground",
+      "destDoor": "toEntranceHallwayLeft",
+      "x": 105,
+      "y": 34,
+      "arrivalX": 10,
+      "arrivalY": 39,
+      "spawnPx": 840.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorDownDoubleExitDoor"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toOutsideLeft",
+      "destMap": "SCHOOLPlayground",
+      "destDoor": "toEntranceHallwayRight",
+      "x": 141,
+      "y": 42,
+      "arrivalX": 109,
+      "arrivalY": 39,
+      "spawnPx": 1128.0,
+      "spawnPy": 336.0,
+      "sprite": "DoorDownDoubleExitDoor"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toOutsideMiddle",
+      "destMap": "TOWNTown",
+      "destDoor": "toEntranceHallwayLeft",
+      "x": 150,
+      "y": 42,
+      "arrivalX": 145,
+      "arrivalY": 47,
+      "spawnPx": 1200.0,
+      "spawnPy": 336.0,
+      "sprite": "DoorDownDoubleExitDoor"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toOutsideRight",
+      "destMap": "TOWNTown",
+      "destDoor": "toEntranceHallwayMiddle",
+      "x": 159,
+      "y": 42,
+      "arrivalX": 154,
+      "arrivalY": 47,
+      "spawnPx": 1272.0,
+      "spawnPy": 336.0,
+      "sprite": "DoorDownDoubleExitDoor"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toGymHallwayLeft",
+      "destMap": "TOWNTown",
+      "destDoor": "toEntranceHallwayRight",
+      "x": 6,
+      "y": 6,
+      "arrivalX": 163,
+      "arrivalY": 47,
+      "spawnPx": 48.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toGymHallwayMiddle",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "toEntranceHallwayLeft",
+      "x": 99,
+      "y": 6,
+      "arrivalX": 10,
+      "arrivalY": 11,
+      "spawnPx": 792.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toGymCafeteria",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "toEntranceHallwayMiddle",
+      "x": 192,
+      "y": 6,
+      "arrivalX": 103,
+      "arrivalY": 11,
+      "spawnPx": 1536.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toTeachersLounge",
+      "destMap": "SCHOOLGymCafeteria",
+      "destDoor": "toEntranceHallway",
+      "x": 29,
+      "y": 22,
+      "arrivalX": 196,
+      "arrivalY": 11,
+      "spawnPx": 232.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorUpDoubleGraySecurityWindowSilverKnobs"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toSecretaryOffice",
+      "destMap": "SCHOOLTeachersLounge",
+      "destDoor": "toHallway",
+      "x": 150,
+      "y": 22,
+      "arrivalX": 33,
+      "arrivalY": 27,
+      "spawnPx": 1200.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorUpDoubleGraySecurityWindowSilverKnobs"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toClinic",
+      "destMap": "SCHOOLMainOffice",
+      "destDoor": "toHallway",
+      "x": 84,
+      "y": 22,
+      "arrivalX": 154,
+      "arrivalY": 27,
+      "spawnPx": 672.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorUpWhiteSecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLEntranceHallway.toDetention",
+      "destMap": "SCHOOLClinic",
+      "destDoor": "toHallway",
+      "x": 173,
+      "y": 22,
+      "arrivalX": 87,
+      "arrivalY": 27,
+      "spawnPx": 1384.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorUpWhiteSecurityWindowSilverKnob"
+    }
+  ],
+  "SCHOOLGymHallway": [
+    {
+      "name": "SCHOOLGymHallway.toEntranceHallwayMiddle",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toGymHallwayLeft",
+      "x": 99,
+      "y": 47,
+      "arrivalX": 10,
+      "arrivalY": 51,
+      "spawnPx": 792.0,
+      "spawnPy": 376.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    },
+    {
+      "name": "SCHOOLGymHallway.toClassHallwayLeft",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toGymHallwayMiddle",
+      "x": 6,
+      "y": 6,
+      "arrivalX": 103,
+      "arrivalY": 51,
+      "spawnPx": 48.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "SCHOOLGymHallway.toMusicRoom",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "toGymHallwayLeft",
+      "x": 37,
+      "y": 34,
+      "arrivalX": 10,
+      "arrivalY": 11,
+      "spawnPx": 296.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpWhiteSecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLGymHallway.toArtRoom",
+      "destMap": "SCHOOLMusicRoom",
+      "destDoor": "toHallway",
+      "x": 77,
+      "y": 34,
+      "arrivalX": 40,
+      "arrivalY": 39,
+      "spawnPx": 616.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpWhiteSecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLGymHallway.toComputerLab",
+      "destMap": "SCHOOLArtRoom",
+      "destDoor": "toHallway",
+      "x": 117,
+      "y": 34,
+      "arrivalX": 80,
+      "arrivalY": 39,
+      "spawnPx": 936.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpWhiteSecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLGymHallway.toKitchen",
+      "destMap": "SCHOOLComputerLab",
+      "destDoor": "toHallway",
+      "x": 145,
+      "y": 34,
+      "arrivalX": 120,
+      "arrivalY": 39,
+      "spawnPx": 1160.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpWhiteSecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLGymHallway.toGymCafeteria",
+      "destMap": "SCHOOLKitchen",
+      "destDoor": "toHallway",
+      "x": 156,
+      "y": 36,
+      "arrivalX": 148,
+      "arrivalY": 39,
+      "spawnPx": 1248.0,
+      "spawnPy": 288.0,
+      "sprite": "DoorRightDoubleBlackSecurity"
+    }
+  ],
+  "SCHOOLClassHallway": [
+    {
+      "name": "SCHOOLClassHallway.toBackHallwayRight",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "toClassHallwayLeft",
+      "x": 192,
+      "y": 6,
+      "arrivalX": 10,
+      "arrivalY": 11,
+      "spawnPx": 1536.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "SCHOOLClassHallway.toGymCafeteria",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "toClassHallwayRight",
+      "x": 192,
+      "y": 47,
+      "arrivalX": 196,
+      "arrivalY": 11,
+      "spawnPx": 1536.0,
+      "spawnPy": 376.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    },
+    {
+      "name": "SCHOOLClassHallway.toGymHallwayLeft",
+      "destMap": "SCHOOLGymCafeteria",
+      "destDoor": "toClassHallway",
+      "x": 6,
+      "y": 47,
+      "arrivalX": 196,
+      "arrivalY": 51,
+      "spawnPx": 48.0,
+      "spawnPy": 376.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    },
+    {
+      "name": "SCHOOLClassHallway.toClassroom6",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "toClassHallwayLeft",
+      "x": 165,
+      "y": 34,
+      "arrivalX": 10,
+      "arrivalY": 51,
+      "spawnPx": 1320.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpGraySecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLClassHallway.toClassroom5",
+      "destMap": "SCHOOLClassroom6",
+      "destDoor": "toHallway",
+      "x": 125,
+      "y": 34,
+      "arrivalX": 168,
+      "arrivalY": 39,
+      "spawnPx": 1000.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpGraySecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLClassHallway.toClassroom4",
+      "destMap": "SCHOOLClassroom5",
+      "destDoor": "toHallway",
+      "x": 85,
+      "y": 34,
+      "arrivalX": 128,
+      "arrivalY": 39,
+      "spawnPx": 680.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpGraySecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLClassHallway.toLibrary",
+      "destMap": "SCHOOLClassroom4",
+      "destDoor": "toHallway",
+      "x": 36,
+      "y": 34,
+      "arrivalX": 88,
+      "arrivalY": 39,
+      "spawnPx": 288.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleWhiteSecurityWindowSilverKnobs"
+    }
+  ],
+  "SCHOOLBackHallway": [
+    {
+      "name": "SCHOOLBackHallway.toClassHallwayRight",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "toBackHallwayLeft",
+      "x": 192,
+      "y": 47,
+      "arrivalX": 10,
+      "arrivalY": 51,
+      "spawnPx": 1536.0,
+      "spawnPy": 376.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    },
+    {
+      "name": "SCHOOLBackHallway.toPlaygroundLeft",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "toBackHallwayRight",
+      "x": 102,
+      "y": 7,
+      "arrivalX": 196,
+      "arrivalY": 51,
+      "spawnPx": 816.0,
+      "spawnPy": 56.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "SCHOOLBackHallway.toPlaygroundRight",
+      "destMap": "SCHOOLPlayground",
+      "destDoor": "toBackHallwayLeft",
+      "x": 114,
+      "y": 7,
+      "arrivalX": 106,
+      "arrivalY": 12,
+      "spawnPx": 912.0,
+      "spawnPy": 56.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "SCHOOLBackHallway.toCustodianOffice",
+      "destMap": "SCHOOLPlayground",
+      "destDoor": "toBackHallwayRight",
+      "x": 3,
+      "y": 34,
+      "arrivalX": 118,
+      "arrivalY": 12,
+      "spawnPx": 24.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpBrownSecurityWindowGoldKnob"
+    },
+    {
+      "name": "SCHOOLBackHallway.toClassroom3",
+      "destMap": "SCHOOLCustodian",
+      "destDoor": "toHallway",
+      "x": 35,
+      "y": 34,
+      "arrivalX": 6,
+      "arrivalY": 39,
+      "spawnPx": 280.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpGraySecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLBackHallway.toClassroom2",
+      "destMap": "SCHOOLClassroom3",
+      "destDoor": "toHallway",
+      "x": 75,
+      "y": 34,
+      "arrivalX": 38,
+      "arrivalY": 39,
+      "spawnPx": 600.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpGraySecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLBackHallway.toClassroom1",
+      "destMap": "SCHOOLClassroom2",
+      "destDoor": "toHallway",
+      "x": 146,
+      "y": 34,
+      "arrivalX": 78,
+      "arrivalY": 39,
+      "spawnPx": 1168.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpGraySecurityWindowSilverKnob"
+    },
+    {
+      "name": "SCHOOLBackHallway.toGirlsBathroom",
+      "destMap": "SCHOOLClassroom1",
+      "destDoor": "toHallway",
+      "x": 175,
+      "y": 34,
+      "arrivalX": 149,
+      "arrivalY": 39,
+      "spawnPx": 1400.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpWhiteGirlsBathroomSilverKnob"
+    },
+    {
+      "name": "SCHOOLBackHallway.toBoysBathroom",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "toHallway",
+      "x": 194,
+      "y": 34,
+      "arrivalX": 178,
+      "arrivalY": 39,
+      "spawnPx": 1552.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpWhiteBoysBathroomSilverKnob"
+    }
+  ],
+  "SCHOOLGymCafeteria": [
+    {
+      "name": "SCHOOLGymCafeteria.toEntranceHallway",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "toGymCafeteria",
+      "x": 44,
+      "y": 46,
+      "arrivalX": 48,
+      "arrivalY": 11,
+      "spawnPx": 352.0,
+      "spawnPy": 368.0,
+      "sprite": "DoorDownDoubleExitDoor"
+    },
+    {
+      "name": "SCHOOLGymCafeteria.toGymHallway",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toGymCafeteria",
+      "x": 1,
+      "y": 33,
+      "arrivalX": 48,
+      "arrivalY": 51,
+      "spawnPx": 8.0,
+      "spawnPy": 264.0,
+      "sprite": "DoorLeftDoubleBlackSecurityDoor"
+    }
+  ],
+  "SCHOOLGymGym": [
+    {
+      "name": "SCHOOLGymGym.toClassHallway",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toGymCafeteria",
+      "x": 44,
+      "y": 6,
+      "arrivalX": 48,
+      "arrivalY": 51,
+      "spawnPx": 352.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "SCHOOLGymGym.toGymHallway",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "toGymCafeteria",
+      "x": 1,
+      "y": 34,
+      "arrivalX": 48,
+      "arrivalY": 11,
+      "spawnPx": 8.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorLeftDoubleBlackSecurityDoor"
+    }
+  ],
+  "TOWNBookstore": [
+    {
+      "name": "TOWNBookstore.toBathroom",
+      "destMap": "TOWNTown",
+      "destDoor": "toBookStore",
+      "x": 9,
+      "y": 4,
+      "arrivalX": 7,
+      "arrivalY": 49,
+      "spawnPx": 72.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorRightBrownGoldKnob"
+    }
+  ],
+  "TOWNVideoRent": [
+    {
+      "name": "TOWNVideoRent.toAdultVideoRoom",
+      "destMap": "TOWNTown",
+      "destDoor": "toVideoStore",
+      "x": 31,
+      "y": 13,
+      "arrivalX": 11,
+      "arrivalY": 35,
+      "spawnPx": 248.0,
+      "spawnPy": 104.0,
+      "sprite": "DoorUpAdultsOnly"
+    }
+  ],
+  "TOWNElectronicsStore": [
+    {
+      "name": "TOWNElectronicsStore.toBackRoom",
+      "destMap": "TOWNTown",
+      "destDoor": "toElectronicsStore",
+      "x": 17,
+      "y": 5,
+      "arrivalX": 7,
+      "arrivalY": 50,
+      "spawnPx": 136.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    }
+  ],
+  "TOWNBeautySalon": [
+    {
+      "name": "TOWNBeautySalon.toTanningRoom",
+      "destMap": "TOWNTown",
+      "destDoor": "toBeautySalon",
+      "x": 6,
+      "y": 5,
+      "arrivalX": 31,
+      "arrivalY": 39,
+      "spawnPx": 48.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGrayOpenSignSilverKnob"
+    }
+  ],
+  "TOWNGroceryStore": [
+    {
+      "name": "TOWNGroceryStore.toTownRight",
+      "destMap": "TOWNTown",
+      "destDoor": "toGroceryStoreLeft",
+      "x": 71,
+      "y": 83,
+      "arrivalX": 14,
+      "arrivalY": 87,
+      "spawnPx": 568.0,
+      "spawnPy": 664.0,
+      "sprite": "DoorDownDoubleSlidingGlassDoors"
+    },
+    {
+      "name": "TOWNGroceryStore.toGroceryBackRoom",
+      "destMap": "TOWNTown",
+      "destDoor": "toGroceryStoreRight",
+      "x": 38,
+      "y": 5,
+      "arrivalX": 76,
+      "arrivalY": 87,
+      "spawnPx": 304.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDoubleWhiteWindowPushDoors"
+    }
+  ],
+  "TOWNDepartmentStore": [
+    {
+      "name": "TOWNDepartmentStore.toTownMiddleLeft",
+      "destMap": "TOWNTown",
+      "destDoor": "toDepartmentStore1",
+      "x": 47,
+      "y": 73,
+      "arrivalX": 40,
+      "arrivalY": 77,
+      "spawnPx": 376.0,
+      "spawnPy": 584.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    },
+    {
+      "name": "TOWNDepartmentStore.toTownMiddleRight",
+      "destMap": "TOWNTown",
+      "destDoor": "toDepartmentStore2",
+      "x": 58,
+      "y": 73,
+      "arrivalX": 51,
+      "arrivalY": 77,
+      "spawnPx": 464.0,
+      "spawnPy": 584.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    },
+    {
+      "name": "TOWNDepartmentStore.toTownRight",
+      "destMap": "TOWNTown",
+      "destDoor": "toDepartmentStore3",
+      "x": 69,
+      "y": 73,
+      "arrivalX": 62,
+      "arrivalY": 77,
+      "spawnPx": 552.0,
+      "spawnPy": 584.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    }
+  ],
+  "TOWNDoctorsOfficeEntrance": [
+    {
+      "name": "TOWNDoctorsOfficeEntrance.toReception",
+      "destMap": "TOWNTown",
+      "destDoor": "toClinic",
+      "x": 3,
+      "y": 6,
+      "arrivalX": 6,
+      "arrivalY": 27,
+      "spawnPx": 24.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    }
+  ],
+  "TOWNDoctorsOfficeBackHall": [
+    {
+      "name": "TOWNDoctorsOfficeBackHall.toDoctorsOffice",
+      "destMap": "TOWNDoctorsOfficeEntrance",
+      "destDoor": "toReception",
+      "x": 4,
+      "y": 6,
+      "arrivalX": 6,
+      "arrivalY": 27,
+      "spawnPx": 32.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpGraySilverKnob"
+    }
+  ],
+  "TOWNGameStore": [
+    {
+      "name": "TOWNGameStore.toGameStoreBackRoom",
+      "destMap": "TOWNTown",
+      "destDoor": "toGameStore",
+      "x": 4,
+      "y": 5,
+      "arrivalX": 23,
+      "arrivalY": 41,
+      "spawnPx": 32.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpBlackGlassHandle"
+    }
+  ],
+  "TOWNMovieTheatreLobby": [
+    {
+      "name": "TOWNMovieTheatreLobby.toTownLeft",
+      "destMap": "TOWNTown",
+      "destDoor": "toTheaterMiddle",
+      "x": 13,
+      "y": 28,
+      "arrivalX": 25,
+      "arrivalY": 32,
+      "spawnPx": 104.0,
+      "spawnPy": 224.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "TOWNMovieTheatreLobby.toTownRight",
+      "destMap": "TOWNTown",
+      "destDoor": "toTheaterLeft",
+      "x": 29,
+      "y": 28,
+      "arrivalX": 17,
+      "arrivalY": 32,
+      "spawnPx": 232.0,
+      "spawnPy": 224.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "TOWNMovieTheatreLobby.toTheaterLeft",
+      "destMap": "TOWNTown",
+      "destDoor": "toTheaterRight",
+      "x": 3,
+      "y": 5,
+      "arrivalX": 33,
+      "arrivalY": 32,
+      "spawnPx": 24.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "TOWNMovieTheatreLobby.toTheaterRight",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "toLobbyLeft",
+      "x": 39,
+      "y": 5,
+      "arrivalX": 7,
+      "arrivalY": 10,
+      "spawnPx": 312.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    }
+  ],
+  "TOWNMovieTheatreMainHall": [
+    {
+      "name": "TOWNMovieTheatreMainHall.toLobbyRight",
+      "destMap": "TOWNMovieTheatreLobby",
+      "destDoor": "toTheaterLeft",
+      "x": 84,
+      "y": 44,
+      "arrivalX": 52,
+      "arrivalY": 48,
+      "spawnPx": 672.0,
+      "spawnPy": 352.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    },
+    {
+      "name": "TOWNMovieTheatreMainHall.toTheaterBufferUpLeft",
+      "destMap": "TOWNMovieTheatreLobby",
+      "destDoor": "toTheaterRight",
+      "x": 3,
+      "y": 6,
+      "arrivalX": 88,
+      "arrivalY": 48,
+      "spawnPx": 24.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpDoubleTallGrayMovieTheaterDoors"
+    },
+    {
+      "name": "TOWNMovieTheatreMainHall.toTheaterBufferUpRight",
+      "destMap": "TOWNMovieTheaterBufferLeft",
+      "destDoor": "toTheaterHallway",
+      "x": 132,
+      "y": 6,
+      "arrivalX": 6,
+      "arrivalY": 12,
+      "spawnPx": 1056.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpDoubleTallGrayMovieTheaterDoors"
+    },
+    {
+      "name": "TOWNMovieTheatreMainHall.toTheaterBufferDownLeft",
+      "destMap": "TOWNMovieTheaterBufferRight",
+      "destDoor": "toTheaterHallway",
+      "x": 3,
+      "y": 29,
+      "arrivalX": 135,
+      "arrivalY": 12,
+      "spawnPx": 24.0,
+      "spawnPy": 232.0,
+      "sprite": "DoorDownDoubleTallGrayMovieTheaterDoors"
+    },
+    {
+      "name": "TOWNMovieTheatreMainHall.toTheaterBufferDownRight",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "toTheaterBufferDownLeft",
+      "x": 132,
+      "y": 29,
+      "arrivalX": 6,
+      "arrivalY": 34,
+      "spawnPx": 1056.0,
+      "spawnPy": 232.0,
+      "sprite": "DoorDownDoubleTallGrayMovieTheaterDoors"
+    },
+    {
+      "name": "TOWNMovieTheatreMainHall.toWomensBathroom",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "toTheaterBufferDownRight",
+      "x": 92,
+      "y": 10,
+      "arrivalX": 135,
+      "arrivalY": 34,
+      "spawnPx": 736.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorUpDarkGrayWomensBathroomPushDoor"
+    },
+    {
+      "name": "TOWNMovieTheatreMainHall.toMensBathroom",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "toTheaterHallway",
+      "x": 45,
+      "y": 10,
+      "arrivalX": 94,
+      "arrivalY": 15,
+      "spawnPx": 360.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorUpDarkGrayMensBathroomPushDoor"
+    },
+    {
+      "name": "TOWNMovieTheatreMainHall.toPhotoBooth",
+      "destMap": "TOWNMovieTheatreMensBathroom",
+      "destDoor": "toTheaterHallway",
+      "x": 102,
+      "y": 13,
+      "arrivalX": 48,
+      "arrivalY": 15,
+      "spawnPx": 816.0,
+      "spawnPy": 104.0,
+      "sprite": "DoorUpRedCurtainPhotoBooth"
+    }
+  ],
+  "TOWNMovieTheatreMensBathroom": [
+    {
+      "name": "TOWNMovieTheatreMensBathroom.DoorBathroomStall",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "toMensBathroom",
+      "x": 7,
+      "y": 9,
+      "arrivalX": 38,
+      "arrivalY": 18,
+      "spawnPx": 56.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "TOWNMovieTheatreMensBathroom.DoorBathroomStall0",
+      "destMap": "TOWNMovieTheatreMensBathroom",
+      "destDoor": "DoorBathroomStall",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 8,
+      "arrivalY": 12,
+      "spawnPx": 16.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "TOWNMovieTheatreMensBathroom.DoorBathroomStall1",
+      "destMap": "TOWNMovieTheatreMensBathroom",
+      "destDoor": "DoorBathroomStall0",
+      "x": 12,
+      "y": 9,
+      "arrivalX": 3,
+      "arrivalY": 12,
+      "spawnPx": 96.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    }
+  ],
+  "TOWNMovieTheatreWomensBathroom": [
+    {
+      "name": "TOWNMovieTheatreWomensBathroom.DoorBathroomStall",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "toWomensBathroom",
+      "x": 24,
+      "y": 9,
+      "arrivalX": 6,
+      "arrivalY": 18,
+      "spawnPx": 192.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "TOWNMovieTheatreWomensBathroom.DoorBathroomStall0",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "DoorBathroomStall",
+      "x": 34,
+      "y": 9,
+      "arrivalX": 25,
+      "arrivalY": 13,
+      "spawnPx": 272.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "TOWNMovieTheatreWomensBathroom.DoorBathroomStall1",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "DoorBathroomStall0",
+      "x": 39,
+      "y": 9,
+      "arrivalX": 35,
+      "arrivalY": 13,
+      "spawnPx": 312.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "TOWNMovieTheatreWomensBathroom.DoorBathroomStall2",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "DoorBathroomStall1",
+      "x": 29,
+      "y": 9,
+      "arrivalX": 40,
+      "arrivalY": 13,
+      "spawnPx": 232.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "TOWNMovieTheatreWomensBathroom.DoorBathroomStall3",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "DoorBathroomStall2",
+      "x": 19,
+      "y": 9,
+      "arrivalX": 30,
+      "arrivalY": 13,
+      "spawnPx": 152.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    }
+  ],
+  "TOWNMovieTheaterBufferLeft": [
+    {
+      "name": "TOWNMovieTheaterBufferLeft.toTheaterLeft",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "toTheaterBufferUpLeft",
+      "x": 10,
+      "y": 6,
+      "arrivalX": 5,
+      "arrivalY": 38,
+      "spawnPx": 80.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorLeftRightTallDoubleGrayMovieTheater"
+    },
+    {
+      "name": "TOWNMovieTheaterBufferLeft.toTheaterRight",
+      "destMap": "TOWNMovieTheatreInsideLeft",
+      "destDoor": "toTheaterBufferLeft",
+      "x": 57,
+      "y": 6,
+      "arrivalX": 9,
+      "arrivalY": 15,
+      "spawnPx": 456.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorLeftRightTallDoubleGrayMovieTheater"
+    }
+  ],
+  "TOWNMovieTheaterBufferRight": [
+    {
+      "name": "TOWNMovieTheaterBufferRight.toTheaterLeft",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "toTheaterBufferUpRight",
+      "x": 10,
+      "y": 6,
+      "arrivalX": 62,
+      "arrivalY": 37,
+      "spawnPx": 80.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorLeftRightTallDoubleGrayMovieTheater"
+    },
+    {
+      "name": "TOWNMovieTheaterBufferRight.toTheaterRight",
+      "destMap": "TOWNMovieTheatreInsideRight",
+      "destDoor": "toTheaterBufferLeft",
+      "x": 57,
+      "y": 6,
+      "arrivalX": 9,
+      "arrivalY": 15,
+      "spawnPx": 456.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorLeftRightTallDoubleGrayMovieTheater"
+    }
+  ],
+  "TOWNMovieTheatreInsideLeft": [
+    {
+      "name": "TOWNMovieTheatreInsideLeft.toTheaterBufferLeft",
+      "destMap": "TOWNMovieTheaterBufferLeft",
+      "destDoor": "toTheaterRight",
+      "x": 1,
+      "y": 55,
+      "arrivalX": 47,
+      "arrivalY": 64,
+      "spawnPx": 8.0,
+      "spawnPy": 440.0,
+      "sprite": "DoorLeftRightTallDoubleGrayMovieTheater"
+    }
+  ],
+  "TOWNMovieTheatreInsideRight": [
+    {
+      "name": "TOWNMovieTheatreInsideRight.toTheaterBufferLeft",
+      "destMap": "TOWNMovieTheaterBufferRight",
+      "destDoor": "toTheaterRight",
+      "x": 1,
+      "y": 55,
+      "arrivalX": 47,
+      "arrivalY": 64,
+      "spawnPx": 8.0,
+      "spawnPy": 440.0,
+      "sprite": "DoorLeftRightTallDoubleGrayMovieTheater"
+    }
+  ],
+  "TOWNMovieTheatreInsideWithCrowdSprites": [
+    {
+      "name": "TOWNMovieTheatreInsideWithCrowdSprites.toTheaterBufferLeft",
+      "destMap": "TOWNMovieTheatreInsideWithCrowdSprites",
+      "destDoor": "toTheaterBufferRight",
+      "x": 1,
+      "y": 55,
+      "arrivalX": 47,
+      "arrivalY": 64,
+      "spawnPx": 8.0,
+      "spawnPy": 440.0,
+      "sprite": "DoorLeftRightTallDoubleGrayMovieTheater"
+    }
+  ],
+  "CITYPartyStore": [
+    {
+      "name": "CITYPartyStore.toBathroom",
+      "destMap": "CITYCity",
+      "destDoor": "toPartyStore",
+      "x": 13,
+      "y": 5,
+      "arrivalX": 33,
+      "arrivalY": 40,
+      "spawnPx": 104.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpWhiteUnisexBathroomDeadbolt"
+    }
+  ],
+  "CITYOfficeEntrance": [
+    {
+      "name": "CITYOfficeEntrance.toElevator",
+      "destMap": "CITYOfficeEntrance",
+      "destDoor": "toCity",
+      "x": 7,
+      "y": 15,
+      "arrivalX": 32,
+      "arrivalY": 41,
+      "spawnPx": 56.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleMetalElevatorDoors"
+    }
+  ],
+  "CITYOfficeBossFloor": [
+    {
+      "name": "CITYOfficeBossFloor.DoorLeftRightTallDoubleGrayMovieTheater",
+      "destMap": "CITYOfficeElevator",
+      "destDoor": "toOffice",
+      "x": 33,
+      "y": 30,
+      "arrivalX": 9,
+      "arrivalY": 20,
+      "spawnPx": 264.0,
+      "spawnPy": 240.0,
+      "sprite": "DoorLeftRightTallDoubleGrayMovieTheater"
+    }
+  ],
+  "CITYBobsAptInside": [
+    {
+      "name": "CITYBobsAptInside.toBathroom",
+      "destMap": "CITYCity",
+      "destDoor": "toBobsApartment",
+      "x": 16,
+      "y": 16,
+      "arrivalX": 19,
+      "arrivalY": 32,
+      "spawnPx": 128.0,
+      "spawnPy": 128.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "CITYBobsAptInsideTrashed": [
+    {
+      "name": "CITYBobsAptInsideTrashed.toBathroom",
+      "destMap": "CITYBobsAptInsideTrashed",
+      "destDoor": "toCity",
+      "x": 16,
+      "y": 16,
+      "arrivalX": 19,
+      "arrivalY": 32,
+      "spawnPx": 128.0,
+      "spawnPy": 128.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "CITYNeighborAptInside": [
+    {
+      "name": "CITYNeighborAptInside.toBathroom",
+      "destMap": "CITYCity",
+      "destDoor": "toNeighborsApartment",
+      "x": 16,
+      "y": 16,
+      "arrivalX": 19,
+      "arrivalY": 32,
+      "spawnPx": 128.0,
+      "spawnPy": 128.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "CITYBankEntrance": [
+    {
+      "name": "CITYBankEntrance.toElevator",
+      "destMap": "CITYCity",
+      "destDoor": "toBank",
+      "x": 62,
+      "y": 15,
+      "arrivalX": 37,
+      "arrivalY": 40,
+      "spawnPx": 496.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleMetalElevatorDoors"
+    }
+  ],
+  "CITYFancyRestaurantKitchen": [
+    {
+      "name": "CITYFancyRestaurantKitchen.toFreezer",
+      "destMap": "CITYFancyRestaurant",
+      "destDoor": "toKitchen",
+      "x": 3,
+      "y": 5,
+      "arrivalX": 22,
+      "arrivalY": 30,
+      "spawnPx": 24.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpMetalFreezerDoor"
+    }
+  ],
+  "CITYFashionStore": [
+    {
+      "name": "CITYFashionStore.toDressingRoomLeft",
+      "destMap": "CITYCity",
+      "destDoor": "toFashionStore",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 17,
+      "arrivalY": 52,
+      "spawnPx": 40.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpWhiteCurtainDressingRoomDoor"
+    },
+    {
+      "name": "CITYFashionStore.toDressingRoomRight",
+      "destMap": "CITYFashionStoreDressingRoom",
+      "destDoor": "toStoreLeft",
+      "x": 17,
+      "y": 5,
+      "arrivalX": 7,
+      "arrivalY": 10,
+      "spawnPx": 136.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpWhiteCurtainDressingRoomDoor"
+    }
+  ],
+  "CITYElevatedLifeplaceElevator": [
+    {
+      "name": "CITYElevatedLifeplaceElevator.toCity",
+      "destMap": "CITYElevatedLifeplaceHallway",
+      "destDoor": "toElevator",
+      "x": 4,
+      "y": 17,
+      "arrivalX": 5,
+      "arrivalY": 9,
+      "spawnPx": 32.0,
+      "spawnPy": 136.0,
+      "sprite": "DoorDownDoubleThinMetalElevatorDoors"
+    }
+  ],
+  "CITYElevatedLifeplaceHallway": [
+    {
+      "name": "CITYElevatedLifeplaceHallway.toApartment",
+      "destMap": "CITYElevatedLifeplaceElevator",
+      "destDoor": "toApartmentHallway",
+      "x": 6,
+      "y": 7,
+      "arrivalX": 5,
+      "arrivalY": 30,
+      "spawnPx": 48.0,
+      "spawnPy": 56.0,
+      "sprite": "DoorRightBrownGoldKnob"
+    }
+  ],
+  "CITYElevatedLifeplaceApartment": [
+    {
+      "name": "CITYElevatedLifeplaceApartment.toBedroom",
+      "destMap": "CITYElevatedLifeplaceHallway",
+      "destDoor": "toApartment",
+      "x": 16,
+      "y": 5,
+      "arrivalX": 2,
+      "arrivalY": 14,
+      "spawnPx": 128.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorRightBrownGoldKnob"
+    },
+    {
+      "name": "CITYElevatedLifeplaceApartment.toBathroom",
+      "destMap": "CITYElevatedLifeplaceBedroom",
+      "destDoor": "toApartment",
+      "x": 16,
+      "y": 17,
+      "arrivalX": 19,
+      "arrivalY": 12,
+      "spawnPx": 128.0,
+      "spawnPy": 136.0,
+      "sprite": "DoorRightBrownGoldKnob"
+    }
+  ],
+  "CITYElevatedLifeplaceBathroom": [
+    {
+      "name": "CITYElevatedLifeplaceBathroom.toBedroom",
+      "destMap": "CITYElevatedLifeplaceApartment",
+      "destDoor": "toBathroom",
+      "x": 2,
+      "y": 5,
+      "arrivalX": 2,
+      "arrivalY": 12,
+      "spawnPx": 16.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    }
+  ],
+  "CITYElevatedLifeplaceBedroom": [
+    {
+      "name": "CITYElevatedLifeplaceBedroom.toBathroom",
+      "destMap": "CITYElevatedLifeplaceApartment",
+      "destDoor": "toBedroom",
+      "x": 2,
+      "y": 18,
+      "arrivalX": 2,
+      "arrivalY": 13,
+      "spawnPx": 16.0,
+      "spawnPy": 144.0,
+      "sprite": "DoorDownBrownGoldKnob"
+    }
+  ],
+  "CITYTheCafeEntrance": [
+    {
+      "name": "CITYTheCafeEntrance.toCafe",
+      "destMap": "CITYCity",
+      "destDoor": "toCafe",
+      "x": 5,
+      "y": 4,
+      "arrivalX": 9,
+      "arrivalY": 16,
+      "spawnPx": 40.0,
+      "spawnPy": 32.0,
+      "sprite": "DoorUpDoubleGlass"
+    }
+  ],
+  "CITYTheCafe": [
+    {
+      "name": "CITYTheCafe.toBathroom",
+      "destMap": "CITYTheCafeEntrance",
+      "destDoor": "toCafe",
+      "x": 3,
+      "y": 5,
+      "arrivalX": 9,
+      "arrivalY": 36,
+      "spawnPx": 24.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDarkGrayUnisexBathroomSilverKnob"
+    },
+    {
+      "name": "CITYTheCafe.toDressingRoomLeft",
+      "destMap": "CITYTheCafeBathroom",
+      "destDoor": "toCafe",
+      "x": 10,
+      "y": 10,
+      "arrivalX": 6,
+      "arrivalY": 10,
+      "spawnPx": 80.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorUpDarkGraySilverKnob"
+    },
+    {
+      "name": "CITYTheCafe.toDressingRoomRight",
+      "destMap": "CITYTheCafeDressingRoom",
+      "destDoor": "toCafeLeft",
+      "x": 23,
+      "y": 3,
+      "arrivalX": 13,
+      "arrivalY": 15,
+      "spawnPx": 184.0,
+      "spawnPy": 24.0,
+      "sprite": "DoorUpDarkGraySilverKnob"
+    }
+  ],
+  "CITYTheCafeDressingRoom": [
+    {
+      "name": "CITYTheCafeDressingRoom.toCafeLeft",
+      "destMap": "CITYTheCafe",
+      "destDoor": "toDressingRoomRight",
+      "x": 2,
+      "y": 19,
+      "arrivalX": 18,
+      "arrivalY": 18,
+      "spawnPx": 16.0,
+      "spawnPy": 152.0,
+      "sprite": "DoorDownDarkGraySilverKnob"
+    }
+  ],
+  "CITYHospitalEntrance": [
+    {
+      "name": "CITYHospitalEntrance.toCityMiddle",
+      "destMap": "CITYCity",
+      "destDoor": "toHospital1",
+      "x": 24,
+      "y": 36,
+      "arrivalX": 18,
+      "arrivalY": 40,
+      "spawnPx": 192.0,
+      "spawnPy": 288.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYHospitalEntrance.toCityRight",
+      "destMap": "CITYCity",
+      "destDoor": "toHospital2",
+      "x": 34,
+      "y": 36,
+      "arrivalX": 28,
+      "arrivalY": 40,
+      "spawnPx": 272.0,
+      "spawnPy": 288.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYHospitalEntrance.toBathroom",
+      "destMap": "CITYCity",
+      "destDoor": "toHospital3",
+      "x": 42,
+      "y": 14,
+      "arrivalX": 38,
+      "arrivalY": 40,
+      "spawnPx": 336.0,
+      "spawnPy": 112.0,
+      "sprite": "DoorUpGrayUnisexBathroomSilverKnob"
+    },
+    {
+      "name": "CITYHospitalEntrance.toElevatorLeft",
+      "destMap": "CITYHospitalEntranceBathroom",
+      "destDoor": "toEntrance",
+      "x": 56,
+      "y": 15,
+      "arrivalX": 45,
+      "arrivalY": 19,
+      "spawnPx": 448.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    },
+    {
+      "name": "CITYHospitalEntrance.toElevatorRight",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "toHospitalLeft",
+      "x": 71,
+      "y": 15,
+      "arrivalX": 58,
+      "arrivalY": 20,
+      "spawnPx": 568.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    }
+  ],
+  "CITYHospitalEntranceBathroom": [
+    {
+      "name": "CITYHospitalEntranceBathroom.DoorBathroomStall",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "toBathroom",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 15,
+      "arrivalY": 19,
+      "spawnPx": 16.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    }
+  ],
+  "CITYHospitalWaitingOutPatient": [
+    {
+      "name": "CITYHospitalWaitingOutPatient.toElevatorRight",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "toHospitalLeft",
+      "x": 71,
+      "y": 29,
+      "arrivalX": 58,
+      "arrivalY": 34,
+      "spawnPx": 568.0,
+      "spawnPy": 232.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    },
+    {
+      "name": "CITYHospitalWaitingOutPatient.toMensBathroom",
+      "destMap": "CITYHospitalElevator2",
+      "destDoor": "toHospitalRight",
+      "x": 27,
+      "y": 30,
+      "arrivalX": 73,
+      "arrivalY": 34,
+      "spawnPx": 216.0,
+      "spawnPy": 240.0,
+      "sprite": "DoorUpGrayMensBathroomSilverKnob"
+    },
+    {
+      "name": "CITYHospitalWaitingOutPatient.toWomensBathroom",
+      "destMap": "CITYHospitalOutPatientMensBathroom",
+      "destDoor": "toWaitingRoom",
+      "x": 43,
+      "y": 30,
+      "arrivalX": 30,
+      "arrivalY": 35,
+      "spawnPx": 344.0,
+      "spawnPy": 240.0,
+      "sprite": "DoorUpGrayWomensBathroomSilverKnob"
+    },
+    {
+      "name": "CITYHospitalWaitingOutPatient.toRoom1",
+      "destMap": "CITYHospitalOutPatientWomensBathroom",
+      "destDoor": "toWaitingRoom",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 46,
+      "arrivalY": 35,
+      "spawnPx": 40.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGrayWindowHospitalRoom"
+    },
+    {
+      "name": "CITYHospitalWaitingOutPatient.toRoom2",
+      "destMap": "CITYHospitalPatientRoom",
+      "destDoor": "toWaitingRoom1",
+      "x": 26,
+      "y": 5,
+      "arrivalX": 8,
+      "arrivalY": 10,
+      "spawnPx": 208.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGrayWindowHospitalRoom"
+    },
+    {
+      "name": "CITYHospitalWaitingOutPatient.toRoom3",
+      "destMap": "CITYHospitalPatientRoom2",
+      "destDoor": "toWaitingRoom2",
+      "x": 47,
+      "y": 5,
+      "arrivalX": 29,
+      "arrivalY": 10,
+      "spawnPx": 376.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGrayWindowHospitalRoom"
+    },
+    {
+      "name": "CITYHospitalWaitingOutPatient.toOperatingRoom",
+      "destMap": "CITYHospitalPatientRoom3",
+      "destDoor": "toWaitingRoom3",
+      "x": 68,
+      "y": 5,
+      "arrivalX": 50,
+      "arrivalY": 10,
+      "spawnPx": 544.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDoubleWhiteWindowPushDoorOperatingRoom"
+    }
+  ],
+  "CITYHospitalOutPatientMensBathroom": [
+    {
+      "name": "CITYHospitalOutPatientMensBathroom.DoorBathroomStall",
+      "destMap": "CITYHospitalWaitingOutPatient",
+      "destDoor": "toMensBathroom",
+      "x": 9,
+      "y": 9,
+      "arrivalX": 5,
+      "arrivalY": 19,
+      "spawnPx": 72.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    }
+  ],
+  "CITYHospitalOutPatientWomensBathroom": [
+    {
+      "name": "CITYHospitalOutPatientWomensBathroom.DoorBathroomStall",
+      "destMap": "CITYHospitalWaitingOutPatient",
+      "destDoor": "toWomensBathroom",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 9,
+      "arrivalY": 19,
+      "spawnPx": 16.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    }
+  ],
+  "CITYHospitalPsychiatricWard": [
+    {
+      "name": "CITYHospitalPsychiatricWard.toElevatorLeft",
+      "destMap": "CITYHospitalElevator2",
+      "destDoor": "toHospitalRight",
+      "x": 56,
+      "y": 15,
+      "arrivalX": 73,
+      "arrivalY": 20,
+      "spawnPx": 448.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    },
+    {
+      "name": "CITYHospitalPsychiatricWard.toPaddedRoom1",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "toHospitalLeft",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 58,
+      "arrivalY": 20,
+      "spawnPx": 40.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGraySquareWindowSilverKnob"
+    },
+    {
+      "name": "CITYHospitalPsychiatricWard.toPaddedRoom2",
+      "destMap": "CITYHospitalSoftRoom",
+      "destDoor": "toRelaxation1",
+      "x": 19,
+      "y": 5,
+      "arrivalX": 8,
+      "arrivalY": 10,
+      "spawnPx": 152.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGraySquareWindowSilverKnob"
+    },
+    {
+      "name": "CITYHospitalPsychiatricWard.toPaddedRoom3",
+      "destMap": "CITYHospitalSoftRoom2",
+      "destDoor": "toRelaxation2",
+      "x": 33,
+      "y": 5,
+      "arrivalX": 22,
+      "arrivalY": 10,
+      "spawnPx": 264.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGraySquareWindowSilverKnob"
+    },
+    {
+      "name": "CITYHospitalPsychiatricWard.DoorLeftDoubleBlackSecurityDoor",
+      "destMap": "CITYHospitalSoftRoom3",
+      "destDoor": "toRelaxation3",
+      "x": 43,
+      "y": 19,
+      "arrivalX": 36,
+      "arrivalY": 10,
+      "spawnPx": 344.0,
+      "spawnPy": 152.0,
+      "sprite": "DoorLeftDoubleBlackSecurityDoor"
+    }
+  ],
+  "CITYHospitalMaternityWard": [
+    {
+      "name": "CITYHospitalMaternityWard.toElevatorRight",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "toHospitalLeft",
+      "x": 71,
+      "y": 15,
+      "arrivalX": 58,
+      "arrivalY": 20,
+      "spawnPx": 568.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    },
+    {
+      "name": "CITYHospitalMaternityWard.toInfirmary",
+      "destMap": "CITYHospitalElevator2",
+      "destDoor": "toHospitalRight",
+      "x": 3,
+      "y": 32,
+      "arrivalX": 73,
+      "arrivalY": 20,
+      "spawnPx": 24.0,
+      "spawnPy": 256.0,
+      "sprite": "DoorUpDarkGraySilverKnob"
+    }
+  ],
+  "CITYHospitalEmergencyEntrance": [
+    {
+      "name": "CITYHospitalEmergencyEntrance.toCity",
+      "destMap": "CITYHospitalEmergencyEntrance",
+      "destDoor": "toEmergencyRoom",
+      "x": 81,
+      "y": 33,
+      "arrivalX": 8,
+      "arrivalY": 37,
+      "spawnPx": 648.0,
+      "spawnPy": 264.0,
+      "sprite": "DoorLeftRightTallDoubleGrayMovieTheater"
+    }
+  ],
+  "CITYHospitalMorgue": [
+    {
+      "name": "CITYHospitalMorgue.toElevatorRight",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "toHospitalLeft",
+      "x": 71,
+      "y": 15,
+      "arrivalX": 58,
+      "arrivalY": 20,
+      "spawnPx": 568.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    }
+  ],
+  "CITYHospitalSecretLab": [
+    {
+      "name": "CITYHospitalSecretLab.toElevatorRight",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "toHospitalLeft",
+      "x": 71,
+      "y": 15,
+      "arrivalX": 58,
+      "arrivalY": 20,
+      "spawnPx": 568.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    }
+  ],
+  "CITYPoliceStationLobby": [
+    {
+      "name": "CITYPoliceStationLobby.toCity",
+      "destMap": "CITYPoliceStationStairWellToHoldCell",
+      "destDoor": "toEntrance",
+      "x": 16,
+      "y": 16,
+      "arrivalX": 27,
+      "arrivalY": 11,
+      "spawnPx": 128.0,
+      "spawnPy": 128.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYPoliceStationLobby.toOffice",
+      "destMap": "CITYCity",
+      "destDoor": "toPoliceDepartment",
+      "x": 2,
+      "y": 6,
+      "arrivalX": 20,
+      "arrivalY": 20,
+      "spawnPx": 16.0,
+      "spawnPy": 48.0,
+      "sprite": "DoorUpDarkGrayDeadbolt"
+    }
+  ],
+  "CITYPoliceStationOffice": [
+    {
+      "name": "CITYPoliceStationOffice.toLobby",
+      "destMap": "CITYPoliceStationOffice2WayMirror",
+      "destDoor": "toOffice",
+      "x": 2,
+      "y": 41,
+      "arrivalX": 5,
+      "arrivalY": 10,
+      "spawnPx": 16.0,
+      "spawnPy": 328.0,
+      "sprite": "DoorDownDarkGrayDeadBolt"
+    }
+  ],
+  "CITYPoliceStationOffice2WayMirror": [
+    {
+      "name": "CITYPoliceStationOffice2WayMirror.toEvidence",
+      "destMap": "CITYPoliceStationOffice",
+      "destDoor": "toObservation",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 5,
+      "arrivalY": 25,
+      "spawnPx": 16.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    }
+  ],
+  "CITYPoliceStationStairWellToHoldCell": [
+    {
+      "name": "CITYPoliceStationStairWellToHoldCell.toHoldingCells",
+      "destMap": "CITYPoliceStationInterrogationRoom",
+      "destDoor": "toPrisonerHallway",
+      "x": 1,
+      "y": 18,
+      "arrivalX": 10,
+      "arrivalY": 10,
+      "spawnPx": 8.0,
+      "spawnPy": 144.0,
+      "sprite": "DoorUpDarkGrayDeadbolt"
+    },
+    {
+      "name": "CITYPoliceStationStairWellToHoldCell.toEntrance",
+      "destMap": "CITYPoliceStationHoldingCells",
+      "destDoor": "toPrisonerHallway",
+      "x": 7,
+      "y": 41,
+      "arrivalX": 4,
+      "arrivalY": 23,
+      "spawnPx": 56.0,
+      "spawnPy": 328.0,
+      "sprite": "DoorDownDarkGraySquareWindowSIlverKnob"
+    }
+  ],
+  "CITYPoliceStationHoldingCells": [
+    {
+      "name": "CITYPoliceStationHoldingCells.toVisitation",
+      "destMap": "CITYPoliceStationStairWellToHoldCell",
+      "destDoor": "toHoldingCells",
+      "x": 24,
+      "y": 5,
+      "arrivalX": 21,
+      "arrivalY": 24,
+      "spawnPx": 192.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpMetalBars"
+    },
+    {
+      "name": "CITYPoliceStationHoldingCells.DoorUpMetalBars",
+      "destMap": "CITYPoliceStationPrisonVisitingRoom",
+      "destDoor": "toHoldingCell",
+      "x": 9,
+      "y": 12,
+      "arrivalX": 27,
+      "arrivalY": 10,
+      "spawnPx": 72.0,
+      "spawnPy": 96.0,
+      "sprite": "DoorUpMetalBars"
+    }
+  ],
+  "CITYPoliceStationPrisonVisitingRoom": [
+    {
+      "name": "CITYPoliceStationPrisonVisitingRoom.toPrisonerSide",
+      "destMap": "CITYPoliceStationHoldingCells",
+      "destDoor": "toVisitation",
+      "x": 25,
+      "y": 17,
+      "arrivalX": 27,
+      "arrivalY": 29,
+      "spawnPx": 200.0,
+      "spawnPy": 136.0,
+      "sprite": "DoorUpMetalBars"
+    },
+    {
+      "name": "CITYPoliceStationPrisonVisitingRoom.toPrison",
+      "destMap": "CITYPoliceStationPrisonVisitingRoom",
+      "destDoor": "toPrisonerSide",
+      "x": 24,
+      "y": 5,
+      "arrivalX": 28,
+      "arrivalY": 20,
+      "spawnPx": 192.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpMetalBars"
+    }
+  ],
+  "CITYPoliceStationPrisonCellBlockHallway": [
+    {
+      "name": "CITYPoliceStationPrisonCellBlockHallway.toPrisonShower",
+      "destMap": "CITYPoliceStationPrisonVisitingRoom",
+      "destDoor": "toPrison",
+      "x": 24,
+      "y": 5,
+      "arrivalX": 27,
+      "arrivalY": 85,
+      "spawnPx": 192.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpMetalBars"
+    }
+  ],
+  "CITYFireDepartmentQuarters": [
+    {
+      "name": "CITYFireDepartmentQuarters.toBedroom",
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destDoor": "toRecRoom",
+      "x": 22,
+      "y": 25,
+      "arrivalX": 27,
+      "arrivalY": 10,
+      "spawnPx": 176.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownBrownGoldKnob"
+    },
+    {
+      "name": "CITYFireDepartmentQuarters.toBathroom",
+      "destMap": "CITYFireDepartmentBedroom",
+      "destDoor": "toRecRoom",
+      "x": 29,
+      "y": 25,
+      "arrivalX": 25,
+      "arrivalY": 29,
+      "spawnPx": 232.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownGraySilverKnob"
+    }
+  ],
+  "CITYFireDepartmentBedroom": [
+    {
+      "name": "CITYFireDepartmentBedroom.toBathroom",
+      "destMap": "CITYFireDepartmentQuarters",
+      "destDoor": "toBedroom",
+      "x": 24,
+      "y": 22,
+      "arrivalX": 25,
+      "arrivalY": 10,
+      "spawnPx": 192.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorRightBrownGoldKnob"
+    }
+  ],
+  "CITYFireDepartmentBathroom": [
+    {
+      "name": "CITYFireDepartmentBathroom.toBedroom",
+      "destMap": "CITYFireDepartmentQuarters",
+      "destDoor": "toBathroom",
+      "x": 1,
+      "y": 22,
+      "arrivalX": 5,
+      "arrivalY": 10,
+      "spawnPx": 8.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    },
+    {
+      "name": "CITYFireDepartmentBathroom.DoorBathroomStall",
+      "destMap": "CITYFireDepartmentBedroom",
+      "destDoor": "toBathroom",
+      "x": 10,
+      "y": 9,
+      "arrivalX": 2,
+      "arrivalY": 29,
+      "spawnPx": 80.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYFireDepartmentBathroom.DoorBathroomStall0",
+      "destMap": "CITYFireDepartmentBathroom",
+      "destDoor": "DoorBathroomStall",
+      "x": 15,
+      "y": 9,
+      "arrivalX": 11,
+      "arrivalY": 13,
+      "spawnPx": 120.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    }
+  ],
+  "CITYCityHallEntrance": [
+    {
+      "name": "CITYCityHallEntrance.toCityRight",
+      "destMap": "CITYCity",
+      "destDoor": "toCityHall1",
+      "x": 29,
+      "y": 40,
+      "arrivalX": 25,
+      "arrivalY": 44,
+      "spawnPx": 232.0,
+      "spawnPy": 320.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYCityHallEntrance.toElevator",
+      "destMap": "CITYCity",
+      "destDoor": "toCityHall2",
+      "x": 82,
+      "y": 17,
+      "arrivalX": 33,
+      "arrivalY": 44,
+      "spawnPx": 656.0,
+      "spawnPy": 136.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    }
+  ],
+  "CITYMuseumLobby": [
+    {
+      "name": "CITYMuseumLobby.toCityRight",
+      "destMap": "CITYCity",
+      "destDoor": "toMuseum1",
+      "x": 14,
+      "y": 18,
+      "arrivalX": 10,
+      "arrivalY": 22,
+      "spawnPx": 112.0,
+      "spawnPy": 144.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYMuseumLobby.toGiftShop",
+      "destMap": "CITYCity",
+      "destDoor": "toMuseum2",
+      "x": 1,
+      "y": 10,
+      "arrivalX": 18,
+      "arrivalY": 22,
+      "spawnPx": 8.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorLeftDoubleBrownGoldKnobs"
+    }
+  ],
+  "CITYMuseumGiftShop": [
+    {
+      "name": "CITYMuseumGiftShop.toLobby",
+      "destMap": "CITYMuseumExhibit",
+      "destDoor": "toGiftShop",
+      "x": 24,
+      "y": 10,
+      "arrivalX": 7,
+      "arrivalY": 10,
+      "spawnPx": 192.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorRightDoubleBrownGoldKnobs"
+    }
+  ],
+  "CITYHotelEntrance": [
+    {
+      "name": "CITYHotelEntrance.toCityRight",
+      "destMap": "CITYHotelEntrance",
+      "destDoor": "toCityLeft",
+      "x": 76,
+      "y": 54,
+      "arrivalX": 72,
+      "arrivalY": 58,
+      "spawnPx": 608.0,
+      "spawnPy": 432.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYHotelEntrance.toElevatorLeft",
+      "destMap": "CITYHotelEntrance",
+      "destDoor": "toCityRight",
+      "x": 6,
+      "y": 15,
+      "arrivalX": 80,
+      "arrivalY": 58,
+      "spawnPx": 48.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    },
+    {
+      "name": "CITYHotelEntrance.toElevatorRight",
+      "destMap": "CITYHotelElevator",
+      "destDoor": "toHotelLeft",
+      "x": 22,
+      "y": 15,
+      "arrivalX": 8,
+      "arrivalY": 20,
+      "spawnPx": 176.0,
+      "spawnPy": 120.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    },
+    {
+      "name": "CITYHotelEntrance.toPool",
+      "destMap": "CITYHotelElevator2",
+      "destDoor": "toHotelRight",
+      "x": 41,
+      "y": 16,
+      "arrivalX": 24,
+      "arrivalY": 20,
+      "spawnPx": 328.0,
+      "spawnPy": 128.0,
+      "sprite": "DoorUpDoubleGlassWithSecurityLock"
+    }
+  ],
+  "CITYHotelPool": [
+    {
+      "name": "CITYHotelPool.toSauna",
+      "destMap": "CITYHotelEntrance",
+      "destDoor": "toPool",
+      "x": 45,
+      "y": 16,
+      "arrivalX": 14,
+      "arrivalY": 54,
+      "spawnPx": 360.0,
+      "spawnPy": 128.0,
+      "sprite": "DoorUpSteamyGlassSauna"
+    }
+  ],
+  "CITYHotelHallway": [
+    {
+      "name": "CITYHotelHallway.toElevatorRight",
+      "destMap": "CITYHotelElevator",
+      "destDoor": "toHotelLeft",
+      "x": 22,
+      "y": 33,
+      "arrivalX": 8,
+      "arrivalY": 38,
+      "spawnPx": 176.0,
+      "spawnPy": 264.0,
+      "sprite": "DoorUpDoubleLightMetalElevatorDoors"
+    },
+    {
+      "name": "CITYHotelHallway.toRoom4",
+      "destMap": "CITYHotelElevator2",
+      "destDoor": "toHotelRight",
+      "x": 8,
+      "y": 46,
+      "arrivalX": 24,
+      "arrivalY": 38,
+      "spawnPx": 64.0,
+      "spawnPy": 368.0,
+      "sprite": "DoorDownDarkGrayDeadBoltPeepHole"
+    },
+    {
+      "name": "CITYHotelHallway.toRoom5",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "toRoom4",
+      "x": 39,
+      "y": 46,
+      "arrivalX": 11,
+      "arrivalY": 50,
+      "spawnPx": 312.0,
+      "spawnPy": 368.0,
+      "sprite": "DoorDownDarkGrayDeadBoltPeepHole"
+    },
+    {
+      "name": "CITYHotelHallway.toRoom6",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "toRoom5",
+      "x": 70,
+      "y": 46,
+      "arrivalX": 42,
+      "arrivalY": 50,
+      "spawnPx": 560.0,
+      "spawnPy": 368.0,
+      "sprite": "DoorDownDarkGrayDeadBoltPeepHole"
+    },
+    {
+      "name": "CITYHotelHallway.toRoom1",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "toRoom6",
+      "x": 22,
+      "y": 5,
+      "arrivalX": 73,
+      "arrivalY": 50,
+      "spawnPx": 176.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDarkGraySecurityLockPeepHole"
+    },
+    {
+      "name": "CITYHotelHallway.toRoom2",
+      "destMap": "CITYHotelRoom",
+      "destDoor": "toHallwayRoom1",
+      "x": 53,
+      "y": 5,
+      "arrivalX": 25,
+      "arrivalY": 10,
+      "spawnPx": 424.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDarkGraySecurityLockPeepHole"
+    },
+    {
+      "name": "CITYHotelHallway.toRoom3",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "toRoom2",
+      "x": 84,
+      "y": 5,
+      "arrivalX": 56,
+      "arrivalY": 10,
+      "spawnPx": 672.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDarkGraySecurityLockPeepHole"
+    },
+    {
+      "name": "CITYHotelHallway.toLinenCloset",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "toRoom3",
+      "x": 82,
+      "y": 33,
+      "arrivalX": 87,
+      "arrivalY": 10,
+      "spawnPx": 656.0,
+      "spawnPy": 264.0,
+      "sprite": "DoorUpBrownGoldKnobDeadbolt"
+    }
+  ],
+  "CITYHotelRoom": [
+    {
+      "name": "CITYHotelRoom.toBathroom",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "toRoom1",
+      "x": 15,
+      "y": 31,
+      "arrivalX": 24,
+      "arrivalY": 38,
+      "spawnPx": 120.0,
+      "spawnPy": 248.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "CITYStadiumLobby": [
+    {
+      "name": "CITYStadiumLobby.toCityLeft2",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityLeft1",
+      "x": 19,
+      "y": 25,
+      "arrivalX": 12,
+      "arrivalY": 29,
+      "spawnPx": 152.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityLeft3",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityLeft2",
+      "x": 30,
+      "y": 25,
+      "arrivalX": 23,
+      "arrivalY": 29,
+      "spawnPx": 240.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityLeft4",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityLeft3",
+      "x": 41,
+      "y": 25,
+      "arrivalX": 34,
+      "arrivalY": 29,
+      "spawnPx": 328.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityMiddle1",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityLeft4",
+      "x": 79,
+      "y": 25,
+      "arrivalX": 45,
+      "arrivalY": 29,
+      "spawnPx": 632.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityMiddle2",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityMiddle1",
+      "x": 90,
+      "y": 25,
+      "arrivalX": 83,
+      "arrivalY": 29,
+      "spawnPx": 720.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityMiddle3",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityMiddle2",
+      "x": 101,
+      "y": 25,
+      "arrivalX": 94,
+      "arrivalY": 29,
+      "spawnPx": 808.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityMiddle4",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityMiddle3",
+      "x": 112,
+      "y": 25,
+      "arrivalX": 105,
+      "arrivalY": 29,
+      "spawnPx": 896.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityRight1",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityMiddle4",
+      "x": 151,
+      "y": 25,
+      "arrivalX": 116,
+      "arrivalY": 29,
+      "spawnPx": 1208.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityRight2",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityRight1",
+      "x": 162,
+      "y": 25,
+      "arrivalX": 155,
+      "arrivalY": 29,
+      "spawnPx": 1296.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityRight3",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityRight2",
+      "x": 173,
+      "y": 25,
+      "arrivalX": 166,
+      "arrivalY": 29,
+      "spawnPx": 1384.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toCityRight4",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityRight3",
+      "x": 184,
+      "y": 25,
+      "arrivalX": 177,
+      "arrivalY": 29,
+      "spawnPx": 1472.0,
+      "spawnPy": 200.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYStadiumLobby.toMensBathroomLeft",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toCityRight4",
+      "x": 16,
+      "y": 11,
+      "arrivalX": 188,
+      "arrivalY": 29,
+      "spawnPx": 128.0,
+      "spawnPy": 88.0,
+      "sprite": "DoorUpDarkGrayMensBathroomPushDoor"
+    },
+    {
+      "name": "CITYStadiumLobby.toMensBathroomRight",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "toLobbyLeft",
+      "x": 87,
+      "y": 11,
+      "arrivalX": 19,
+      "arrivalY": 16,
+      "spawnPx": 696.0,
+      "spawnPy": 88.0,
+      "sprite": "DoorUpDarkGrayMensBathroomPushDoor"
+    },
+    {
+      "name": "CITYStadiumLobby.toWomensBathroomLeft",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "toLobbyRight",
+      "x": 111,
+      "y": 11,
+      "arrivalX": 90,
+      "arrivalY": 16,
+      "spawnPx": 888.0,
+      "spawnPy": 88.0,
+      "sprite": "DoorUpDarkGrayWomensBathroomPushDoor"
+    },
+    {
+      "name": "CITYStadiumLobby.toWomensBathroomRight",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "toLobbyLeft",
+      "x": 182,
+      "y": 11,
+      "arrivalX": 112,
+      "arrivalY": 16,
+      "spawnPx": 1456.0,
+      "spawnPy": 88.0,
+      "sprite": "DoorUpDarkGrayWomensBathroomPushDoor"
+    }
+  ],
+  "CITYStadiumBathroomLeftMens": [
+    {
+      "name": "CITYStadiumBathroomLeftMens.toLobbyRight",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toMensBathroomLeft",
+      "x": 73,
+      "y": 17,
+      "arrivalX": 5,
+      "arrivalY": 21,
+      "spawnPx": 584.0,
+      "spawnPy": 136.0,
+      "sprite": "DoorDownDarkGrayMensBathroomPushDoor"
+    },
+    {
+      "name": "CITYStadiumBathroomLeftMens.DoorBathroomStall",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toMensBathroomRight",
+      "x": 31,
+      "y": 9,
+      "arrivalX": 76,
+      "arrivalY": 21,
+      "spawnPx": 248.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomLeftMens.DoorBathroomStall0",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "DoorBathroomStall",
+      "x": 36,
+      "y": 9,
+      "arrivalX": 33,
+      "arrivalY": 13,
+      "spawnPx": 288.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomLeftMens.DoorBathroomStall1",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "DoorBathroomStall0",
+      "x": 41,
+      "y": 9,
+      "arrivalX": 38,
+      "arrivalY": 13,
+      "spawnPx": 328.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomLeftMens.DoorBathroomStall2",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "DoorBathroomStall1",
+      "x": 46,
+      "y": 9,
+      "arrivalX": 43,
+      "arrivalY": 13,
+      "spawnPx": 368.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomLeftMens.DoorBathroomStall3",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "DoorBathroomStall2",
+      "x": 51,
+      "y": 9,
+      "arrivalX": 48,
+      "arrivalY": 13,
+      "spawnPx": 408.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomLeftMens.DoorBathroomStall4",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "DoorBathroomStall3",
+      "x": 56,
+      "y": 9,
+      "arrivalX": 53,
+      "arrivalY": 13,
+      "spawnPx": 448.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    }
+  ],
+  "CITYStadiumBathroomRightWomens": [
+    {
+      "name": "CITYStadiumBathroomRightWomens.toLobbyRight",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toWomensBathroomLeft",
+      "x": 74,
+      "y": 17,
+      "arrivalX": 4,
+      "arrivalY": 21,
+      "spawnPx": 592.0,
+      "spawnPy": 136.0,
+      "sprite": "DoorDownDarkGrayWomensBathroomPushDoor"
+    },
+    {
+      "name": "CITYStadiumBathroomRightWomens.DoorBathroomStall",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "toWomensBathroomRight",
+      "x": 3,
+      "y": 9,
+      "arrivalX": 75,
+      "arrivalY": 21,
+      "spawnPx": 24.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomRightWomens.DoorBathroomStall0",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "DoorBathroomStall",
+      "x": 8,
+      "y": 9,
+      "arrivalX": 4,
+      "arrivalY": 13,
+      "spawnPx": 64.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomRightWomens.DoorBathroomStall1",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "DoorBathroomStall0",
+      "x": 13,
+      "y": 9,
+      "arrivalX": 9,
+      "arrivalY": 13,
+      "spawnPx": 104.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomRightWomens.DoorBathroomStall2",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "DoorBathroomStall1",
+      "x": 18,
+      "y": 9,
+      "arrivalX": 14,
+      "arrivalY": 13,
+      "spawnPx": 144.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomRightWomens.DoorBathroomStall3",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "DoorBathroomStall2",
+      "x": 23,
+      "y": 9,
+      "arrivalX": 19,
+      "arrivalY": 13,
+      "spawnPx": 184.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomRightWomens.DoorBathroomStall4",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "DoorBathroomStall3",
+      "x": 28,
+      "y": 9,
+      "arrivalX": 24,
+      "arrivalY": 13,
+      "spawnPx": 224.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomRightWomens.DoorBathroomStall5",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "DoorBathroomStall4",
+      "x": 33,
+      "y": 9,
+      "arrivalX": 29,
+      "arrivalY": 13,
+      "spawnPx": 264.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomRightWomens.DoorBathroomStall6",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "DoorBathroomStall5",
+      "x": 38,
+      "y": 9,
+      "arrivalX": 34,
+      "arrivalY": 13,
+      "spawnPx": 304.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    },
+    {
+      "name": "CITYStadiumBathroomRightWomens.DoorBathroomStall7",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "DoorBathroomStall6",
+      "x": 43,
+      "y": 9,
+      "arrivalX": 39,
+      "arrivalY": 13,
+      "spawnPx": 344.0,
+      "spawnPy": 72.0,
+      "sprite": "DoorBathroomStall"
+    }
+  ],
+  "CITYStadiumLeftHallway": [
+    {
+      "name": "CITYStadiumLeftHallway.toStadiumBackStageLeft",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "toBackstageHallwayLeft",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 8,
+      "arrivalY": 185,
+      "spawnPx": 40.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGraySilverKnob"
+    }
+  ],
+  "CITYStadiumRightHallway": [
+    {
+      "name": "CITYStadiumRightHallway.toStadiumRight",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "toBackstageHallwayRight",
+      "x": 5,
+      "y": 181,
+      "arrivalX": 8,
+      "arrivalY": 10,
+      "spawnPx": 40.0,
+      "spawnPy": 1448.0,
+      "sprite": "DoorDownGraySilverKnob"
+    }
+  ],
+  "CITYStadiumMain": [
+    {
+      "name": "CITYStadiumMain.toBackstageHallwayLeft",
+      "destMap": "CITYStadiumRightHallway",
+      "destDoor": "toStadiumRight",
+      "x": 5,
+      "y": 210,
+      "arrivalX": 281,
+      "arrivalY": 215,
+      "spawnPx": 40.0,
+      "spawnPy": 1680.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    }
+  ],
+  "CITYStadiumMainOldCrowd": [
+    {
+      "name": "CITYStadiumMainOldCrowd.toBackstageHallwayLeft",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "toBackstageHallwayRight",
+      "x": 5,
+      "y": 197,
+      "arrivalX": 195,
+      "arrivalY": 202,
+      "spawnPx": 40.0,
+      "spawnPy": 1576.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    }
+  ],
+  "CITYStadiumBackstage": [
+    {
+      "name": "CITYStadiumBackstage.toBackstageHallwayRight",
+      "destMap": "CITYStadiumLeftHallway",
+      "destDoor": "toStadiumBackStageLeft",
+      "x": 192,
+      "y": 18,
+      "arrivalX": 8,
+      "arrivalY": 22,
+      "spawnPx": 1536.0,
+      "spawnPy": 144.0,
+      "sprite": "DoorDownGraySilverKnob"
+    },
+    {
+      "name": "CITYStadiumBackstage.toDressingRoom1",
+      "destMap": "CITYStadiumRightHallway",
+      "destDoor": "toStadiumBackstageRight",
+      "x": 10,
+      "y": 5,
+      "arrivalX": 195,
+      "arrivalY": 22,
+      "spawnPx": 80.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDarkGraySilverKnob"
+    },
+    {
+      "name": "CITYStadiumBackstage.toDressingRoom2",
+      "destMap": "CITYStadiumDressingRoom",
+      "destDoor": "toHallway1",
+      "x": 45,
+      "y": 5,
+      "arrivalX": 13,
+      "arrivalY": 10,
+      "spawnPx": 360.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDarkGraySilverKnob"
+    },
+    {
+      "name": "CITYStadiumBackstage.toProductionRoom",
+      "destMap": "CITYStadiumDressingRoom2",
+      "destDoor": "toHallway2",
+      "x": 185,
+      "y": 5,
+      "arrivalX": 48,
+      "arrivalY": 10,
+      "spawnPx": 1480.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGraySilverKnob"
+    },
+    {
+      "name": "CITYStadiumBackstage.toStarRoom",
+      "destMap": "CITYStadiumProducerRoom",
+      "destDoor": "toHallway",
+      "x": 151,
+      "y": 5,
+      "arrivalX": 188,
+      "arrivalY": 10,
+      "spawnPx": 1208.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpDarkGrayStarDoorSilverKnob"
+    }
+  ],
+  "CITYStadiumDressingRoom": [
+    {
+      "name": "CITYStadiumDressingRoom.toBathroom",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "toDressingRoom1",
+      "x": 2,
+      "y": 5,
+      "arrivalX": 5,
+      "arrivalY": 15,
+      "spawnPx": 16.0,
+      "spawnPy": 40.0,
+      "sprite": "DoorUpGraySilverKnob"
+    }
+  ],
+  "CITYStadiumDressingRoom2": [
+    {
+      "name": "CITYStadiumDressingRoom2.toHallway2",
+      "destMap": "CITYStadiumDressingRoom2Bathroom",
+      "destDoor": "toDressingRoom",
+      "x": 2,
+      "y": 11,
+      "arrivalX": 5,
+      "arrivalY": 10,
+      "spawnPx": 16.0,
+      "spawnPy": 88.0,
+      "sprite": "DoorDownDarkGraySilverKnob"
+    }
+  ],
+  "CITYStadiumStarDressingRoom": [
+    {
+      "name": "CITYStadiumStarDressingRoom.toHallway",
+      "destMap": "CITYStadiumDressingRoom3Bathroom",
+      "destDoor": "toStarDressingRoom",
+      "x": 2,
+      "y": 11,
+      "arrivalX": 5,
+      "arrivalY": 10,
+      "spawnPx": 16.0,
+      "spawnPy": 88.0,
+      "sprite": "DoorDownDarkGraySilverKnob"
+    }
+  ],
+  "CITYCasinoEntrance": [
+    {
+      "name": "CITYCasinoEntrance.toCity2",
+      "destMap": "CITYCity",
+      "destDoor": "toCasino1",
+      "x": 40,
+      "y": 43,
+      "arrivalX": 36,
+      "arrivalY": 47,
+      "spawnPx": 320.0,
+      "spawnPy": 344.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYCasinoEntrance.toCity3",
+      "destMap": "CITYCity",
+      "destDoor": "toCasino2",
+      "x": 48,
+      "y": 43,
+      "arrivalX": 44,
+      "arrivalY": 47,
+      "spawnPx": 384.0,
+      "spawnPy": 344.0,
+      "sprite": "DoorDownDoubleGlass"
+    },
+    {
+      "name": "CITYCasinoEntrance.toCity4",
+      "destMap": "CITYCity",
+      "destDoor": "toCasino3",
+      "x": 56,
+      "y": 43,
+      "arrivalX": 52,
+      "arrivalY": 47,
+      "spawnPx": 448.0,
+      "spawnPy": 344.0,
+      "sprite": "DoorDownDoubleGlass"
+    }
+  ],
+  "CITYHourlyMotel": [
+    {
+      "name": "CITYHourlyMotel.toRoom1",
+      "destMap": "CITYCity",
+      "destDoor": "toMotel",
+      "x": 23,
+      "y": 39,
+      "arrivalX": 22,
+      "arrivalY": 64,
+      "spawnPx": 184.0,
+      "spawnPy": 312.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    },
+    {
+      "name": "CITYHourlyMotel.toRoom2",
+      "destMap": "CITYHourlyMotelRoom",
+      "destDoor": "toHotel1",
+      "x": 23,
+      "y": 17,
+      "arrivalX": 24,
+      "arrivalY": 46,
+      "spawnPx": 184.0,
+      "spawnPy": 136.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "CITYHourlyMotelRoom": [
+    {
+      "name": "CITYHourlyMotelRoom.toBathroom",
+      "destMap": "CITYHourlyMotel",
+      "destDoor": "toRoom1",
+      "x": 15,
+      "y": 21,
+      "arrivalX": 22,
+      "arrivalY": 24,
+      "spawnPx": 120.0,
+      "spawnPy": 168.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "CITYHourlyMotelRoom2": [
+    {
+      "name": "CITYHourlyMotelRoom2.toBathroom",
+      "destMap": "CITYHourlyMotel",
+      "destDoor": "toRoom2",
+      "x": 15,
+      "y": 21,
+      "arrivalX": 22,
+      "arrivalY": 24,
+      "spawnPx": 120.0,
+      "spawnPy": 168.0,
+      "sprite": "DoorLeftBrownGoldKnob"
+    }
+  ],
+  "INTROTown": [
+    {
+      "name": "INTROTown.toYuusHouse",
+      "destMap": "INTROTown",
+      "destDoor": "toShed",
+      "x": 241,
+      "y": 79,
+      "arrivalX": 267,
+      "arrivalY": 58,
+      "spawnPx": 1928.0,
+      "spawnPy": 632.0,
+      "sprite": "DoorDownWhiteFrontDoorGlassWindowSilverKnob"
+    },
+    {
+      "name": "INTROTown.toCrazyHouse",
+      "destMap": "INTRODownstairs",
+      "destDoor": "toBackyard",
+      "x": 155,
+      "y": 79,
+      "arrivalX": 244,
+      "arrivalY": 83,
+      "spawnPx": 1240.0,
+      "spawnPy": 632.0,
+      "sprite": "DoorDownWhiteSquareWindowCatDoorSilverKnob"
+    },
+    {
+      "name": "INTROTown.toFriendsHouse",
+      "destMap": "INTROTown",
+      "destDoor": "toCrazyHouse",
+      "x": 53,
+      "y": 79,
+      "arrivalX": 158,
+      "arrivalY": 83,
+      "spawnPx": 424.0,
+      "spawnPy": 632.0,
+      "sprite": "DoorDownWhiteFrontDoorGlassWindowSilverKnob"
+    }
+  ],
+  "SCHOOLPlayground": [
+    {
+      "name": "SCHOOLPlayground.toEntranceHallwayRight",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toPlaygroundLeft",
+      "x": 183,
+      "y": 222,
+      "arrivalX": 88,
+      "arrivalY": 227,
+      "spawnPx": 1464.0,
+      "spawnPy": 1776.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "SCHOOLPlayground.toBackHallwayLeft",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toPlaygroundRight",
+      "x": 180,
+      "y": 66,
+      "arrivalX": 187,
+      "arrivalY": 227,
+      "spawnPx": 1440.0,
+      "spawnPy": 528.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    },
+    {
+      "name": "SCHOOLPlayground.toBackHallwayRight",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "toPlaygroundLeft",
+      "x": 192,
+      "y": 66,
+      "arrivalX": 184,
+      "arrivalY": 70,
+      "spawnPx": 1536.0,
+      "spawnPy": 528.0,
+      "sprite": "DoorDownDoubleBlackSecurityWindows"
+    }
+  ],
+  "TOWNTown": [
+    {
+      "name": "TOWNTown.toEntranceHallwayMiddle",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toOutsideLeft",
+      "x": 238,
+      "y": 236,
+      "arrivalX": 233,
+      "arrivalY": 241,
+      "spawnPx": 1904.0,
+      "spawnPy": 1888.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "TOWNTown.toEntranceHallwayRight",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toOutsideMiddle",
+      "x": 247,
+      "y": 236,
+      "arrivalX": 242,
+      "arrivalY": 241,
+      "spawnPx": 1976.0,
+      "spawnPy": 1888.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "TOWNTown.toClinic",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "toOutsideRight",
+      "x": 399,
+      "y": 260,
+      "arrivalX": 251,
+      "arrivalY": 241,
+      "spawnPx": 3192.0,
+      "spawnPy": 2080.0,
+      "sprite": "DoorUpGlass"
+    },
+    {
+      "name": "TOWNTown.toChurch",
+      "destMap": "TOWNDoctorsOfficeEntrance",
+      "destDoor": "toTown",
+      "x": 493,
+      "y": 252,
+      "arrivalX": 402,
+      "arrivalY": 265,
+      "spawnPx": 3944.0,
+      "spawnPy": 2016.0,
+      "sprite": "DoorUpDoubleTallBrownGoldKnob"
+    },
+    {
+      "name": "TOWNTown.toTacoBurger",
+      "destMap": "TOWNChurch",
+      "destDoor": "toTown",
+      "x": 573,
+      "y": 253,
+      "arrivalX": 497,
+      "arrivalY": 258,
+      "spawnPx": 4584.0,
+      "spawnPy": 2024.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "TOWNTown.toGasStation",
+      "destMap": "TOWNTacoBurger",
+      "destDoor": "toTown",
+      "x": 708,
+      "y": 187,
+      "arrivalX": 577,
+      "arrivalY": 258,
+      "spawnPx": 5664.0,
+      "spawnPy": 1496.0,
+      "sprite": "DoorUpDoubleGlassWithOpenSigns"
+    },
+    {
+      "name": "TOWNTown.toCoffeeShop",
+      "destMap": "TOWNGasStation",
+      "destDoor": "toTown",
+      "x": 782,
+      "y": 224,
+      "arrivalX": 713,
+      "arrivalY": 192,
+      "spawnPx": 6256.0,
+      "spawnPy": 1792.0,
+      "sprite": "DoorUpGlassOpenSign"
+    },
+    {
+      "name": "TOWNTown.toBookStore",
+      "destMap": "TOWNCoffeeShop",
+      "destDoor": "toTown",
+      "x": 795,
+      "y": 225,
+      "arrivalX": 785,
+      "arrivalY": 229,
+      "spawnPx": 6360.0,
+      "spawnPy": 1800.0,
+      "sprite": "DoorUpDoubleGlassOpenSignRight"
+    },
+    {
+      "name": "TOWNTown.toPizzaStore",
+      "destMap": "TOWNBookstore",
+      "destDoor": "toTown",
+      "x": 847,
+      "y": 224,
+      "arrivalX": 800,
+      "arrivalY": 230,
+      "spawnPx": 6776.0,
+      "spawnPy": 1792.0,
+      "sprite": "DoorUpGlassOpenSign"
+    },
+    {
+      "name": "TOWNTown.toBeautySalon",
+      "destMap": "TOWNPizzaPlace",
+      "destDoor": "toTown",
+      "x": 889,
+      "y": 225,
+      "arrivalX": 850,
+      "arrivalY": 229,
+      "spawnPx": 7112.0,
+      "spawnPy": 1800.0,
+      "sprite": "DoorUpDoubleGlassSingleWindow"
+    },
+    {
+      "name": "TOWNTown.toPetStore",
+      "destMap": "TOWNBeautySalon",
+      "destDoor": "toTown",
+      "x": 924,
+      "y": 224,
+      "arrivalX": 894,
+      "arrivalY": 230,
+      "spawnPx": 7392.0,
+      "spawnPy": 1792.0,
+      "sprite": "DoorUpGlass"
+    },
+    {
+      "name": "TOWNTown.toDepartmentStore1",
+      "destMap": "TOWNPets4Less",
+      "destDoor": "toTown",
+      "x": 969,
+      "y": 190,
+      "arrivalX": 927,
+      "arrivalY": 229,
+      "spawnPx": 7752.0,
+      "spawnPy": 1520.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "TOWNTown.toDepartmentStore2",
+      "destMap": "TOWNDepartmentStore",
+      "destDoor": "toTownLeft",
+      "x": 980,
+      "y": 190,
+      "arrivalX": 973,
+      "arrivalY": 195,
+      "spawnPx": 7840.0,
+      "spawnPy": 1520.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "TOWNTown.toDepartmentStore3",
+      "destMap": "TOWNDepartmentStore",
+      "destDoor": "toTownMiddleLeft",
+      "x": 991,
+      "y": 190,
+      "arrivalX": 984,
+      "arrivalY": 195,
+      "spawnPx": 7928.0,
+      "spawnPy": 1520.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "TOWNTown.toDepartmentStore4",
+      "destMap": "TOWNDepartmentStore",
+      "destDoor": "toTownMiddleRight",
+      "x": 1002,
+      "y": 190,
+      "arrivalX": 995,
+      "arrivalY": 195,
+      "spawnPx": 8016.0,
+      "spawnPy": 1520.0,
+      "sprite": "DoorUpDoubleBlackSecurityWindowDoor"
+    },
+    {
+      "name": "TOWNTown.toGroceryStoreLeft",
+      "destMap": "TOWNDepartmentStore",
+      "destDoor": "toTownRight",
+      "x": 1053,
+      "y": 190,
+      "arrivalX": 1006,
+      "arrivalY": 195,
+      "spawnPx": 8424.0,
+      "spawnPy": 1520.0,
+      "sprite": "DoorUpDoubleGlassSlidingDoorOutSign"
+    },
+    {
+      "name": "TOWNTown.toGroceryStoreRight",
+      "destMap": "TOWNGroceryStore",
+      "destDoor": "toTownLeft",
+      "x": 1115,
+      "y": 190,
+      "arrivalX": 1058,
+      "arrivalY": 195,
+      "spawnPx": 8920.0,
+      "spawnPy": 1520.0,
+      "sprite": "DoorUpDoubleGlassSlidingDoorInSign"
+    },
+    {
+      "name": "TOWNTown.toElectronicsStore",
+      "destMap": "TOWNGroceryStore",
+      "destDoor": "toTownRight",
+      "x": 1157,
+      "y": 223,
+      "arrivalX": 1120,
+      "arrivalY": 195,
+      "spawnPx": 9256.0,
+      "spawnPy": 1784.0,
+      "sprite": "DoorUpDoubleGlassOpenSignRight"
+    },
+    {
+      "name": "TOWNTown.toVideoStore",
+      "destMap": "TOWNElectronicsStore",
+      "destDoor": "toTown",
+      "x": 1194,
+      "y": 225,
+      "arrivalX": 1162,
+      "arrivalY": 228,
+      "spawnPx": 9552.0,
+      "spawnPy": 1800.0,
+      "sprite": "DoorUpGlass"
+    },
+    {
+      "name": "TOWNTown.toGameStore",
+      "destMap": "TOWNVideoRent",
+      "destDoor": "toTown",
+      "x": 1243,
+      "y": 225,
+      "arrivalX": 1197,
+      "arrivalY": 230,
+      "spawnPx": 9944.0,
+      "spawnPy": 1800.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "TOWNTown.toArcade",
+      "destMap": "TOWNGameStore",
+      "destDoor": "toTown",
+      "x": 1275,
+      "y": 224,
+      "arrivalX": 1247,
+      "arrivalY": 230,
+      "spawnPx": 10200.0,
+      "spawnPy": 1792.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "TOWNTown.toRecordStore",
+      "destMap": "TOWNArcade",
+      "destDoor": "toTown",
+      "x": 1368,
+      "y": 224,
+      "arrivalX": 1279,
+      "arrivalY": 229,
+      "spawnPx": 10944.0,
+      "spawnPy": 1792.0,
+      "sprite": "DoorUpGlass"
+    },
+    {
+      "name": "TOWNTown.toTheaterLeft",
+      "destMap": "TOWNRecordStore",
+      "destDoor": "toTown",
+      "x": 1459,
+      "y": 189,
+      "arrivalX": 1371,
+      "arrivalY": 229,
+      "spawnPx": 11672.0,
+      "spawnPy": 1512.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "TOWNTown.toTheaterMiddle",
+      "destMap": "TOWNMovieTheatreLobby",
+      "destDoor": "toTownLeft",
+      "x": 1467,
+      "y": 189,
+      "arrivalX": 1463,
+      "arrivalY": 194,
+      "spawnPx": 11736.0,
+      "spawnPy": 1512.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "TOWNTown.toTheaterRight",
+      "destMap": "TOWNMovieTheatreLobby",
+      "destDoor": "toTownMiddle",
+      "x": 1475,
+      "y": 189,
+      "arrivalX": 1471,
+      "arrivalY": 194,
+      "spawnPx": 11800.0,
+      "spawnPy": 1512.0,
+      "sprite": "DoorUpDoubleGlass"
+    }
+  ],
+  "TOWNOutsideNeighborhood": [
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse1",
+      "destMap": "TOWNYUUDownstairs",
+      "destDoor": "toFrontYard",
+      "x": 115,
+      "y": 123,
+      "arrivalX": 506,
+      "arrivalY": 128,
+      "spawnPx": 920.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse2",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse1",
+      "x": 243,
+      "y": 123,
+      "arrivalX": 118,
+      "arrivalY": 128,
+      "spawnPx": 1944.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toFriendsHouse",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse2",
+      "x": 318,
+      "y": 123,
+      "arrivalX": 246,
+      "arrivalY": 128,
+      "spawnPx": 2544.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse6",
+      "destMap": "TOWNFRIENDDownstairs",
+      "destDoor": "toFrontyard",
+      "x": 614,
+      "y": 123,
+      "arrivalX": 321,
+      "arrivalY": 128,
+      "spawnPx": 4912.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse7",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse6",
+      "x": 713,
+      "y": 123,
+      "arrivalX": 617,
+      "arrivalY": 128,
+      "spawnPx": 5704.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse8",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse7",
+      "x": 828,
+      "y": 123,
+      "arrivalX": 716,
+      "arrivalY": 128,
+      "spawnPx": 6624.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse9",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse8",
+      "x": 925,
+      "y": 123,
+      "arrivalX": 831,
+      "arrivalY": 128,
+      "spawnPx": 7400.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse10",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse9",
+      "x": 1031,
+      "y": 123,
+      "arrivalX": 928,
+      "arrivalY": 128,
+      "spawnPx": 8248.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse11",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse10",
+      "x": 1130,
+      "y": 123,
+      "arrivalX": 1034,
+      "arrivalY": 128,
+      "spawnPx": 9040.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse12",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse11",
+      "x": 1252,
+      "y": 123,
+      "arrivalX": 1133,
+      "arrivalY": 128,
+      "spawnPx": 10016.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse13",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse12",
+      "x": 1349,
+      "y": 123,
+      "arrivalX": 1255,
+      "arrivalY": 128,
+      "spawnPx": 10792.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouse14",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse13",
+      "x": 1455,
+      "y": 123,
+      "arrivalX": 1352,
+      "arrivalY": 128,
+      "spawnPx": 11640.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpWhiteFrontDoor"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toFriendsHouseBack",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "toHouse14",
+      "x": 334,
+      "y": 82,
+      "arrivalX": 1458,
+      "arrivalY": 128,
+      "spawnPx": 2672.0,
+      "spawnPy": 656.0,
+      "sprite": "DoorDownWhiteFrontDoorGlassWindowSilverKnob"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toCrazyHouseBack",
+      "destMap": "TOWNFRIENDDownstairs",
+      "destDoor": "toBackyard",
+      "x": 436,
+      "y": 82,
+      "arrivalX": 338,
+      "arrivalY": 86,
+      "spawnPx": 3488.0,
+      "spawnPy": 656.0,
+      "sprite": "DoorDownWhiteSquareWindowCatDoorSilverKnob"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toYuusHouseBack",
+      "destMap": "TOWNCRAZYDownstairs",
+      "destDoor": "toBackyard",
+      "x": 522,
+      "y": 82,
+      "arrivalX": 440,
+      "arrivalY": 86,
+      "spawnPx": 4176.0,
+      "spawnPy": 656.0,
+      "sprite": "DoorDownWhiteFrontDoorGlassWindowSilverKnob"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toHouseShed",
+      "destMap": "TOWNYUUDownstairs",
+      "destDoor": "toBackyard",
+      "x": 545,
+      "y": 56,
+      "arrivalX": 526,
+      "arrivalY": 86,
+      "spawnPx": 4360.0,
+      "spawnPy": 448.0,
+      "sprite": "DoorUpDoubleTallWoodenShedDoors"
+    },
+    {
+      "name": "TOWNOutsideNeighborhood.toCrazyHouse",
+      "destMap": "TOWNYUUBackyardToolShed",
+      "destDoor": "toBackyard",
+      "x": 444,
+      "y": 123,
+      "arrivalX": 548,
+      "arrivalY": 61,
+      "spawnPx": 3552.0,
+      "spawnPy": 984.0,
+      "sprite": "DoorUpBrownGoldKnob"
+    }
+  ],
+  "CITYCity": [
+    {
+      "name": "CITYCity.toPawnShop",
+      "destMap": "CITYHourlyMotel",
+      "destDoor": "toCity",
+      "x": 131,
+      "y": 34,
+      "arrivalX": 109,
+      "arrivalY": 39,
+      "spawnPx": 1048.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toCasino1",
+      "destMap": "CITYPawnShop",
+      "destDoor": "toCity",
+      "x": 185,
+      "y": 34,
+      "arrivalX": 135,
+      "arrivalY": 39,
+      "spawnPx": 1480.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toCasino2",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "toCity1",
+      "x": 193,
+      "y": 34,
+      "arrivalX": 189,
+      "arrivalY": 39,
+      "spawnPx": 1544.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toCasino3",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "toCity2",
+      "x": 201,
+      "y": 34,
+      "arrivalX": 197,
+      "arrivalY": 39,
+      "spawnPx": 1608.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toCasino4",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "toCity3",
+      "x": 209,
+      "y": 34,
+      "arrivalX": 205,
+      "arrivalY": 39,
+      "spawnPx": 1672.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toCafe",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "toCity4",
+      "x": 258,
+      "y": 34,
+      "arrivalX": 213,
+      "arrivalY": 39,
+      "spawnPx": 2064.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlassOpenSignRight"
+    },
+    {
+      "name": "CITYCity.toPoolHall",
+      "destMap": "CITYTheCafeEntrance",
+      "destDoor": "toCity",
+      "x": 388,
+      "y": 34,
+      "arrivalX": 263,
+      "arrivalY": 39,
+      "spawnPx": 3104.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleBlackGlassSingleWindowRedNeonOpenSign"
+    },
+    {
+      "name": "CITYCity.toLaundromat",
+      "destMap": "CITYPoolHall",
+      "destDoor": "toCity",
+      "x": 436,
+      "y": 34,
+      "arrivalX": 393,
+      "arrivalY": 39,
+      "spawnPx": 3488.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlassSingleWindowNeonOpenSignLeftHoursRight"
+    },
+    {
+      "name": "CITYCity.toApartment4",
+      "destMap": "CITYLaundromat",
+      "destDoor": "toCity",
+      "x": 474,
+      "y": 10,
+      "arrivalX": 441,
+      "arrivalY": 39,
+      "spawnPx": 3792.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    },
+    {
+      "name": "CITYCity.toNeighborsApartment",
+      "destMap": "CITYCity",
+      "destDoor": "toApartment4",
+      "x": 499,
+      "y": 10,
+      "arrivalX": 477,
+      "arrivalY": 15,
+      "spawnPx": 3992.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    },
+    {
+      "name": "CITYCity.toBobsApartment",
+      "destMap": "CITYNeighborAptInside",
+      "destDoor": "toCity",
+      "x": 524,
+      "y": 10,
+      "arrivalX": 502,
+      "arrivalY": 15,
+      "spawnPx": 4192.0,
+      "spawnPy": 80.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    },
+    {
+      "name": "CITYCity.toApartment1",
+      "destMap": "CITYBobsAptInside",
+      "destDoor": "toCity",
+      "x": 474,
+      "y": 22,
+      "arrivalX": 527,
+      "arrivalY": 15,
+      "spawnPx": 3792.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    },
+    {
+      "name": "CITYCity.toApartment2",
+      "destMap": "CITYCity",
+      "destDoor": "toApartment1",
+      "x": 499,
+      "y": 22,
+      "arrivalX": 477,
+      "arrivalY": 27,
+      "spawnPx": 3992.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    },
+    {
+      "name": "CITYCity.toApartment3",
+      "destMap": "CITYCity",
+      "destDoor": "toApartment2",
+      "x": 524,
+      "y": 22,
+      "arrivalX": 502,
+      "arrivalY": 27,
+      "spawnPx": 4192.0,
+      "spawnPy": 176.0,
+      "sprite": "DoorUpGrayDeadBolt"
+    },
+    {
+      "name": "CITYCity.toApartmentOffice",
+      "destMap": "CITYCity",
+      "destDoor": "toApartment3",
+      "x": 494,
+      "y": 34,
+      "arrivalX": 527,
+      "arrivalY": 27,
+      "spawnPx": 3952.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toDeli",
+      "destMap": "CITYAptMainOffice",
+      "destDoor": "toCity",
+      "x": 555,
+      "y": 34,
+      "arrivalX": 498,
+      "arrivalY": 39,
+      "spawnPx": 4440.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toPartyStore",
+      "destMap": "CITYDeli",
+      "destDoor": "toCity",
+      "x": 599,
+      "y": 34,
+      "arrivalX": 559,
+      "arrivalY": 39,
+      "spawnPx": 4792.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlassNeonOpenSigns"
+    },
+    {
+      "name": "CITYCity.toCityHall1",
+      "destMap": "CITYPartyStore",
+      "destDoor": "toCity",
+      "x": 698,
+      "y": 34,
+      "arrivalX": 604,
+      "arrivalY": 39,
+      "spawnPx": 5584.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toCityHall2",
+      "destMap": "CITYCityHallEntrance",
+      "destDoor": "toCityLeft",
+      "x": 706,
+      "y": 34,
+      "arrivalX": 702,
+      "arrivalY": 39,
+      "spawnPx": 5648.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toMuseum1",
+      "destMap": "CITYCityHallEntrance",
+      "destDoor": "toCityRight",
+      "x": 806,
+      "y": 33,
+      "arrivalX": 710,
+      "arrivalY": 39,
+      "spawnPx": 6448.0,
+      "spawnPy": 264.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toMuseum2",
+      "destMap": "CITYMuseumLobby",
+      "destDoor": "toCityLeft",
+      "x": 814,
+      "y": 33,
+      "arrivalX": 810,
+      "arrivalY": 38,
+      "spawnPx": 6512.0,
+      "spawnPy": 264.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toHospital1",
+      "destMap": "CITYMuseumLobby",
+      "destDoor": "toCityRight",
+      "x": 879,
+      "y": 34,
+      "arrivalX": 818,
+      "arrivalY": 38,
+      "spawnPx": 7032.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toHospital2",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "toCityLeft",
+      "x": 889,
+      "y": 34,
+      "arrivalX": 883,
+      "arrivalY": 39,
+      "spawnPx": 7112.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toHospital3",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "toCityMiddle",
+      "x": 899,
+      "y": 34,
+      "arrivalX": 893,
+      "arrivalY": 39,
+      "spawnPx": 7192.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toPoliceDepartment",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "toCityRight",
+      "x": 987,
+      "y": 34,
+      "arrivalX": 903,
+      "arrivalY": 39,
+      "spawnPx": 7896.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toFireDepartment",
+      "destMap": "CITYPoliceStationLobby",
+      "destDoor": "toCity",
+      "x": 1039,
+      "y": 34,
+      "arrivalX": 991,
+      "arrivalY": 39,
+      "spawnPx": 8312.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toBank",
+      "destMap": "CITYFireDepartmentGarage",
+      "destDoor": "toCity",
+      "x": 1090,
+      "y": 28,
+      "arrivalX": 1043,
+      "arrivalY": 39,
+      "spawnPx": 8720.0,
+      "spawnPy": 224.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toFashionStore",
+      "destMap": "CITYBankEntrance",
+      "destDoor": "toCity",
+      "x": 1206,
+      "y": 33,
+      "arrivalX": 1094,
+      "arrivalY": 33,
+      "spawnPx": 9648.0,
+      "spawnPy": 264.0,
+      "sprite": "DoorUpDoubleGlassSingleWindow"
+    },
+    {
+      "name": "CITYCity.toFancyApartmentElevator",
+      "destMap": "CITYFashionStore",
+      "destDoor": "toCity",
+      "x": 1240,
+      "y": 33,
+      "arrivalX": 1211,
+      "arrivalY": 38,
+      "spawnPx": 9920.0,
+      "spawnPy": 264.0,
+      "sprite": "DoorUpDoubleThinMetalElevatorDoors"
+    },
+    {
+      "name": "CITYCity.toFancyApartmentOffice",
+      "destMap": "CITYElevatedLifeplaceElevator",
+      "destDoor": "toCity",
+      "x": 1273,
+      "y": 34,
+      "arrivalX": 1241,
+      "arrivalY": 38,
+      "spawnPx": 10184.0,
+      "spawnPy": 272.0,
+      "sprite": "DoorUpDoubleGlass"
+    },
+    {
+      "name": "CITYCity.toRestaurant",
+      "destMap": "CITYElevatedLifeplace",
+      "destDoor": "toCity",
+      "x": 1148,
+      "y": 33,
+      "arrivalX": 1277,
+      "arrivalY": 39,
+      "spawnPx": 9184.0,
+      "spawnPy": 264.0,
+      "sprite": "DoorUpDoubleGlass"
+    }
+  ],
+  "ALPHABobElevator": [
+    {
+      "name": "ALPHABobElevator.fakeElevatorDoor",
+      "destMap": "ALPHABobElevator",
+      "destDoor": "toBobApartment",
+      "x": 4,
+      "y": 13,
+      "arrivalX": 5,
+      "arrivalY": 9,
+      "spawnPx": 32.0,
+      "spawnPy": 104.0,
+      "sprite": "DoorDownDoubleThinMetalElevatorDoorsNotChopped"
+    }
+  ]
+}

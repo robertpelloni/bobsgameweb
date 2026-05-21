@@ -17,21 +17,21 @@ export enum RenderOrder {
 export class MapData extends AssetData {
     public static readonly MAP_GROUND_LAYER = 0;
     public static readonly MAP_GROUND_DETAIL_LAYER = 1;
-    public static readonly MAP_SHADER_LAYER = 2;
-    public static readonly MAP_GROUND_SHADOW_LAYER = 3;
-    public static readonly MAP_OBJECT_LAYER = 4;
-    public static readonly MAP_OBJECT_DETAIL_LAYER = 5;
-    public static readonly MAP_OBJECT_SHADOW_LAYER = 6;
-    public static readonly MAP_ABOVE_LAYER = 7;
-    public static readonly MAP_ABOVE_DETAIL_LAYER = 8;
-    public static readonly MAP_SPRITE_SHADOW_LAYER = 9;
-    public static readonly MAP_CAMERA_BOUNDS_LAYER = 10;
-    public static readonly MAP_HIT_LAYER = 11;
-    public static readonly MAP_ENTITY_LAYER = 12;
+    public static readonly MAP_GROUND_SHADOW_LAYER = 2;
+    public static readonly MAP_OBJECT_LAYER = 3;
+    public static readonly MAP_OBJECT_DETAIL_LAYER = 4;
+    public static readonly MAP_OBJECT_SHADOW_LAYER = 5;
+    public static readonly MAP_ABOVE_LAYER = 6;
+    public static readonly MAP_ABOVE_DETAIL_LAYER = 7;
+    public static readonly MAP_SPRITE_SHADOW_LAYER = 8;
+    public static readonly MAP_HIT_LAYER = 9;
+    public static readonly MAP_LIGHT_MASK_LAYER = 10;
+    public static readonly MAP_CAMERA_BOUNDS_LAYER = 11;
+    public static readonly MAP_ENTITY_LAYER = 12; // extra2
     public static readonly MAP_LIGHT_LAYER = 13;
     public static readonly MAP_AREA_LAYER = 14;
-    public static readonly MAP_LIGHT_MASK_LAYER = 15;
-    public static readonly MAP_DOOR_LAYER = 16;
+    public static readonly MAP_DOOR_LAYER = 15;
+    public static readonly MAP_SHADER_LAYER = 16;
 
     public static readonly layers = 17;
 
@@ -40,6 +40,8 @@ export class MapData extends AssetData {
     public heightTiles1X: number = 30;
     public maxRandoms: number = 10;
     public isOutside: boolean = false;
+	public defaultSpawnX: number = -1;
+	public defaultSpawnY: number = -1;
     public preload: boolean = false;
 
     public groundLayerMD5: string | null = null;

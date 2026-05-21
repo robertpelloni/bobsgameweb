@@ -37,7 +37,12 @@ export class World {
         this.systems.push(system);
     }
 
-    public saveState(): WorldState {
+    
+ public removeEntity(entityId: EntityId): void {
+ this.entities.delete(entityId);
+ }
+
+ public saveState(): WorldState {
         // Safe serializer that skips PixiJS objects and circular refs
         const safeStringify = (obj: any, seen = new WeakSet()): any => {
             if (obj === null || typeof obj !== 'object') return obj;

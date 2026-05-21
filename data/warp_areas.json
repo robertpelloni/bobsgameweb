@@ -1,0 +1,1326 @@
+{
+  "TOWNYUUDownstairs": [
+    {
+      "name": "toUpstairs",
+      "id": 0,
+      "x": 16,
+      "y": 168,
+      "w": 48,
+      "h": 16,
+      "destMap": "TOWNYUUUpstairs",
+      "destArea": "toDownstairs",
+      "arrivalX": 32,
+      "arrivalY": 184
+    }
+  ],
+  "TOWNYUUUpstairs": [
+    {
+      "name": "toDownstairs",
+      "id": 17,
+      "x": 16,
+      "y": 200,
+      "w": 48,
+      "h": 16,
+      "destMap": "TOWNYUUDownstairs",
+      "destArea": "toUpstairs",
+      "arrivalX": 32,
+      "arrivalY": 192
+    }
+  ],
+  "TOWNYUUGarage": [
+    {
+      "name": "toAttic",
+      "id": 49,
+      "x": 32,
+      "y": 96,
+      "w": 24,
+      "h": 16,
+      "destMap": "TOWNYUUGarage",
+      "destArea": "toAttic",
+      "arrivalX": 48,
+      "arrivalY": 120
+    }
+  ],
+  "TOWNYUUAttic": [
+    {
+      "name": "toGarage",
+      "id": 52,
+      "x": 32,
+      "y": 104,
+      "w": 24,
+      "h": 24,
+      "destMap": "TOWNYUUAttic",
+      "destArea": "toGarage",
+      "arrivalX": 40,
+      "arrivalY": 88
+    }
+  ],
+  "INTRODownstairs": [
+    {
+      "name": "toUpstairs",
+      "id": 55,
+      "x": 16,
+      "y": 168,
+      "w": 48,
+      "h": 16,
+      "destMap": "INTRODownstairs",
+      "destArea": "toUpstairs",
+      "arrivalX": 32,
+      "arrivalY": 184
+    }
+  ],
+  "INTROUpstairs": [
+    {
+      "name": "toDownstairs",
+      "id": 60,
+      "x": 16,
+      "y": 200,
+      "w": 48,
+      "h": 16,
+      "destMap": "INTROUpstairs",
+      "destArea": "toDownstairs",
+      "arrivalX": 32,
+      "arrivalY": 192
+    }
+  ],
+  "INTROGarage": [
+    {
+      "name": "toAttic",
+      "id": 75,
+      "x": 32,
+      "y": 96,
+      "w": 24,
+      "h": 16,
+      "destMap": "INTROGarage",
+      "destArea": "toAttic",
+      "arrivalX": 48,
+      "arrivalY": 120
+    }
+  ],
+  "INTROAttic": [
+    {
+      "name": "toGarage",
+      "id": 79,
+      "x": 32,
+      "y": 104,
+      "w": 24,
+      "h": 24,
+      "destMap": "INTROAttic",
+      "destArea": "toGarage",
+      "arrivalX": 40,
+      "arrivalY": 88
+    }
+  ],
+  "GENERIC1Downstairs": [
+    {
+      "name": "toUpstairs",
+      "id": 80,
+      "x": 16,
+      "y": 168,
+      "w": 48,
+      "h": 16,
+      "destMap": "GENERIC1Downstairs",
+      "destArea": "toUpstairs",
+      "arrivalX": 32,
+      "arrivalY": 184
+    }
+  ],
+  "GENERIC1Upstairs": [
+    {
+      "name": "toDownstairs",
+      "id": 83,
+      "x": 16,
+      "y": 200,
+      "w": 48,
+      "h": 16,
+      "destMap": "GENERIC1Upstairs",
+      "destArea": "toDownstairs",
+      "arrivalX": 32,
+      "arrivalY": 192
+    }
+  ],
+  "GENERIC1Garage": [
+    {
+      "name": "toAttic",
+      "id": 105,
+      "x": 32,
+      "y": 96,
+      "w": 24,
+      "h": 16,
+      "destMap": "GENERIC1Garage",
+      "destArea": "toAttic",
+      "arrivalX": 48,
+      "arrivalY": 120
+    }
+  ],
+  "GENERIC1Attic": [
+    {
+      "name": "toGarage",
+      "id": 108,
+      "x": 32,
+      "y": 104,
+      "w": 24,
+      "h": 24,
+      "destMap": "GENERIC1Attic",
+      "destArea": "toGarage",
+      "arrivalX": 40,
+      "arrivalY": 88
+    }
+  ],
+  "TOWNGENERIC2Downstairs": [
+    {
+      "name": "toUpstairs",
+      "id": 109,
+      "x": 240,
+      "y": 160,
+      "w": 48,
+      "h": 16,
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destArea": "toUpstairs",
+      "arrivalX": 264,
+      "arrivalY": 176
+    }
+  ],
+  "TOWNGENERIC3Downstairs": [
+    {
+      "name": "toUpstairs",
+      "id": 112,
+      "x": 432,
+      "y": 168,
+      "w": 48,
+      "h": 16,
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destArea": "toUpstairs",
+      "arrivalX": 456,
+      "arrivalY": 184
+    }
+  ],
+  "TOWNFRIENDDownstairs": [
+    {
+      "name": "toUpstairs",
+      "id": 113,
+      "x": 432,
+      "y": 168,
+      "w": 48,
+      "h": 16,
+      "destMap": "TOWNFRIENDDownstairs",
+      "destArea": "toUpstairs",
+      "arrivalX": 456,
+      "arrivalY": 184
+    }
+  ],
+  "TOWNFRIENDUpstairs": [
+    {
+      "name": "toDownstairs",
+      "id": 124,
+      "x": 432,
+      "y": 240,
+      "w": 48,
+      "h": 16,
+      "destMap": "TOWNFRIENDUpstairs",
+      "destArea": "toDownstairs",
+      "arrivalX": 456,
+      "arrivalY": 232
+    }
+  ],
+  "TOWNCRAZYDownstairs": [
+    {
+      "name": "toUpstairs",
+      "id": 174,
+      "x": 136,
+      "y": 160,
+      "w": 48,
+      "h": 16,
+      "destMap": "TOWNCRAZYDownstairs",
+      "destArea": "toUpstairs",
+      "arrivalX": 152,
+      "arrivalY": 176
+    }
+  ],
+  "TOWNCRAZYUpstairs": [
+    {
+      "name": "toDownstairs",
+      "id": 182,
+      "x": 136,
+      "y": 160,
+      "w": 48,
+      "h": 16,
+      "destMap": "TOWNCRAZYUpstairs",
+      "destArea": "toDownstairs",
+      "arrivalX": 152,
+      "arrivalY": 152
+    }
+  ],
+  "TOWNMANSIONDownstairs": [
+    {
+      "name": "toUpstairsLeft",
+      "id": 205,
+      "x": 264,
+      "y": 8,
+      "w": 64,
+      "h": 16,
+      "destMap": "TOWNMANSIONDownstairs",
+      "destArea": "toUpstairsLeft",
+      "arrivalX": 288,
+      "arrivalY": 24
+    },
+    {
+      "name": "toUpstairsCenter",
+      "id": 206,
+      "x": 344,
+      "y": 8,
+      "w": 80,
+      "h": 16,
+      "destMap": "TOWNMANSIONDownstairs",
+      "destArea": "toUpstairsCenter",
+      "arrivalX": 376,
+      "arrivalY": 24
+    },
+    {
+      "name": "toUpstairsRight",
+      "id": 207,
+      "x": 440,
+      "y": 8,
+      "w": 64,
+      "h": 16,
+      "destMap": "TOWNMANSIONDownstairs",
+      "destArea": "toUpstairsRight",
+      "arrivalX": 464,
+      "arrivalY": 24
+    }
+  ],
+  "TOWNMANSIONUpstairsVideoGameRoom": [
+    {
+      "name": "toDownstairsLeft",
+      "id": 224,
+      "x": 264,
+      "y": 336,
+      "w": 64,
+      "h": 16,
+      "destMap": "TOWNMANSIONUpstairsVideoGameRoom",
+      "destArea": "toDownstairsLeft",
+      "arrivalX": 288,
+      "arrivalY": 328
+    },
+    {
+      "name": "toDownstairsMiddle",
+      "id": 225,
+      "x": 344,
+      "y": 336,
+      "w": 80,
+      "h": 16,
+      "destMap": "TOWNMANSIONUpstairsVideoGameRoom",
+      "destArea": "toDownstairsMiddle",
+      "arrivalX": 376,
+      "arrivalY": 328
+    },
+    {
+      "name": "toDownstairsRight",
+      "id": 226,
+      "x": 440,
+      "y": 336,
+      "w": 64,
+      "h": 16,
+      "destMap": "TOWNMANSIONUpstairsVideoGameRoom",
+      "destArea": "toDownstairsRight",
+      "arrivalX": 464,
+      "arrivalY": 328
+    }
+  ],
+  "CITYGroovyClubEntrance": [
+    {
+      "name": "toOutside",
+      "id": 1567,
+      "x": 80,
+      "y": 184,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYGroovyClubEntrance",
+      "destArea": "toOutside",
+      "arrivalX": 96,
+      "arrivalY": 176
+    },
+    {
+      "name": "toDanceFloor",
+      "id": 1568,
+      "x": 376,
+      "y": 72,
+      "w": 32,
+      "h": 16,
+      "destMap": "CITYGroovyClubEntrance",
+      "destArea": "toDanceFloor",
+      "arrivalX": 384,
+      "arrivalY": 88
+    }
+  ],
+  "CITYGroovyClub": [
+    {
+      "name": "toLobby",
+      "id": 1592,
+      "x": 376,
+      "y": 584,
+      "w": 32,
+      "h": 16,
+      "destMap": "CITYGroovyClub",
+      "destArea": "toLobby",
+      "arrivalX": 384,
+      "arrivalY": 576
+    }
+  ],
+  "CITYFancyRestaurantEntrance": [
+    {
+      "name": "toRestaurant",
+      "id": 1746,
+      "x": 96,
+      "y": 80,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYFancyRestaurantEntrance",
+      "destArea": "toRestaurant",
+      "arrivalX": 112,
+      "arrivalY": 96
+    }
+  ],
+  "CITYFancyRestaurant": [
+    {
+      "name": "toLobby",
+      "id": 1753,
+      "x": 96,
+      "y": 520,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYFancyRestaurant",
+      "destArea": "toLobby",
+      "arrivalX": 112,
+      "arrivalY": 512
+    }
+  ],
+  "CITYFireDepartmentGarage": [
+    {
+      "name": "toUpstairs",
+      "id": 2264,
+      "x": 328,
+      "y": 8,
+      "w": 40,
+      "h": 16,
+      "destMap": "CITYFireDepartmentGarage",
+      "destArea": "toUpstairs",
+      "arrivalX": 344,
+      "arrivalY": 24
+    },
+    {
+      "name": "toPoleLeft",
+      "id": 2265,
+      "x": 40,
+      "y": 0,
+      "w": 8,
+      "h": 8,
+      "destMap": "CITYFireDepartmentGarage",
+      "destArea": "toPoleLeft",
+      "arrivalX": 40,
+      "arrivalY": 8
+    },
+    {
+      "name": "toPoleMiddle",
+      "id": 2266,
+      "x": 88,
+      "y": 0,
+      "w": 8,
+      "h": 8,
+      "destMap": "CITYFireDepartmentGarage",
+      "destArea": "toPoleMiddle",
+      "arrivalX": 88,
+      "arrivalY": 8
+    },
+    {
+      "name": "toPoleRight",
+      "id": 2267,
+      "x": 136,
+      "y": 0,
+      "w": 8,
+      "h": 8,
+      "destMap": "CITYFireDepartmentGarage",
+      "destArea": "toPoleRight",
+      "arrivalX": 136,
+      "arrivalY": 8
+    }
+  ],
+  "CITYFireDepartmentUpstairs": [
+    {
+      "name": "toDownstairs",
+      "id": 2278,
+      "x": 328,
+      "y": 160,
+      "w": 40,
+      "h": 16,
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destArea": "toDownstairs",
+      "arrivalX": 344,
+      "arrivalY": 152
+    },
+    {
+      "name": "toPoleLeft",
+      "id": 2279,
+      "x": 24,
+      "y": 128,
+      "w": 40,
+      "h": 32,
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destArea": "toPoleLeft",
+      "arrivalX": 40,
+      "arrivalY": 120
+    },
+    {
+      "name": "toPoleMiddle",
+      "id": 2280,
+      "x": 72,
+      "y": 128,
+      "w": 40,
+      "h": 32,
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destArea": "toPoleMiddle",
+      "arrivalX": 88,
+      "arrivalY": 120
+    },
+    {
+      "name": "toPoleRight",
+      "id": 2281,
+      "x": 120,
+      "y": 128,
+      "w": 40,
+      "h": 32,
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destArea": "toPoleRight",
+      "arrivalX": 136,
+      "arrivalY": 120
+    }
+  ],
+  "CITYMuseumLobby": [
+    {
+      "name": "toMuseum",
+      "id": 2384,
+      "x": 328,
+      "y": 80,
+      "w": 64,
+      "h": 16,
+      "destMap": "CITYMuseumLobby",
+      "destArea": "toMuseum",
+      "arrivalX": 352,
+      "arrivalY": 96
+    }
+  ],
+  "CITYMuseumExhibit": [
+    {
+      "name": "toLobby",
+      "id": 2395,
+      "x": 536,
+      "y": 432,
+      "w": 64,
+      "h": 16,
+      "destMap": "CITYMuseumExhibit",
+      "destArea": "toLobby",
+      "arrivalX": 560,
+      "arrivalY": 424
+    }
+  ],
+  "CITYStadiumLobby": [
+    {
+      "name": "toUpperFloorRightStairwellLeft",
+      "id": 2469,
+      "x": 1504,
+      "y": 8,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumLobby",
+      "destArea": "toUpperFloorRightStairwellLeft",
+      "arrivalX": 1520,
+      "arrivalY": 24
+    },
+    {
+      "name": "toUpperFloorRightStairwellRight",
+      "id": 2470,
+      "x": 1560,
+      "y": 8,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumLobby",
+      "destArea": "toUpperFloorRightStairwellRight",
+      "arrivalX": 1576,
+      "arrivalY": 24
+    },
+    {
+      "name": "toUpperFloorMiddleStairwellRight",
+      "id": 2471,
+      "x": 816,
+      "y": 8,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumLobby",
+      "destArea": "toUpperFloorMiddleStairwellRight",
+      "arrivalX": 840,
+      "arrivalY": 24
+    },
+    {
+      "name": "toUpperFloorMiddleStairwellLeft",
+      "id": 2472,
+      "x": 752,
+      "y": 8,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumLobby",
+      "destArea": "toUpperFloorMiddleStairwellLeft",
+      "arrivalX": 776,
+      "arrivalY": 24
+    },
+    {
+      "name": "toUpperFloorLeftStairwellRight",
+      "id": 2473,
+      "x": 72,
+      "y": 8,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumLobby",
+      "destArea": "toUpperFloorLeftStairwellRight",
+      "arrivalX": 88,
+      "arrivalY": 24
+    },
+    {
+      "name": "toUpperFloorLeftStairwellLeft",
+      "id": 2474,
+      "x": 16,
+      "y": 8,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumLobby",
+      "destArea": "toUpperFloorLeftStairwellLeft",
+      "arrivalX": 32,
+      "arrivalY": 24
+    }
+  ],
+  "CITYStadiumMain": [
+    {
+      "name": "toBehindStadiumLeft",
+      "id": 5107,
+      "x": 144,
+      "y": 264,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMain",
+      "destArea": "toBehindStadiumLeft",
+      "arrivalX": 160,
+      "arrivalY": 280
+    },
+    {
+      "name": "toBehindStadiumRight",
+      "id": 5108,
+      "x": 2120,
+      "y": 264,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMain",
+      "destArea": "toBehindStadiumRight",
+      "arrivalX": 2136,
+      "arrivalY": 280
+    },
+    {
+      "name": "toLobbyLeftStairwellLeft",
+      "id": 5109,
+      "x": 16,
+      "y": 1944,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMain",
+      "destArea": "toLobbyLeftStairwellLeft",
+      "arrivalX": 32,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyLeftStairwellRight",
+      "id": 5110,
+      "x": 72,
+      "y": 1944,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMain",
+      "destArea": "toLobbyLeftStairwellRight",
+      "arrivalX": 88,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyMiddleStairwellLeft",
+      "id": 5111,
+      "x": 1096,
+      "y": 1944,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumMain",
+      "destArea": "toLobbyMiddleStairwellLeft",
+      "arrivalX": 1120,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyMiddleStairwellRight",
+      "id": 5112,
+      "x": 1160,
+      "y": 1944,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumMain",
+      "destArea": "toLobbyMiddleStairwellRight",
+      "arrivalX": 1184,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyRightStairwellLeft",
+      "id": 5113,
+      "x": 2192,
+      "y": 1944,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMain",
+      "destArea": "toLobbyRightStairwellLeft",
+      "arrivalX": 2208,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyRightStairwellRight",
+      "id": 5114,
+      "x": 2248,
+      "y": 1944,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMain",
+      "destArea": "toLobbyRightStairwellRight",
+      "arrivalX": 2264,
+      "arrivalY": 1936
+    }
+  ],
+  "CITYStadiumMainIntro": [
+    {
+      "name": "toBehindStadiumLeft",
+      "id": 4858,
+      "x": 144,
+      "y": 160,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainIntro",
+      "destArea": "toBehindStadiumLeft",
+      "arrivalX": 160,
+      "arrivalY": 176
+    },
+    {
+      "name": "toBehindStadiumRight",
+      "id": 4859,
+      "x": 1432,
+      "y": 160,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainIntro",
+      "destArea": "toBehindStadiumRight",
+      "arrivalX": 1448,
+      "arrivalY": 176
+    },
+    {
+      "name": "toLobbyLeftStairwellLeft",
+      "id": 4860,
+      "x": 16,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainIntro",
+      "destArea": "toLobbyLeftStairwellLeft",
+      "arrivalX": 32,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyLeftStairwellRight",
+      "id": 4861,
+      "x": 72,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainIntro",
+      "destArea": "toLobbyLeftStairwellRight",
+      "arrivalX": 88,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyMiddleStairwellLeft",
+      "id": 4862,
+      "x": 752,
+      "y": 1768,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumMainIntro",
+      "destArea": "toLobbyMiddleStairwellLeft",
+      "arrivalX": 776,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyMiddleStairwellRight",
+      "id": 4863,
+      "x": 816,
+      "y": 1768,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumMainIntro",
+      "destArea": "toLobbyMiddleStairwellRight",
+      "arrivalX": 840,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyRightStairwellLeft",
+      "id": 4864,
+      "x": 1504,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainIntro",
+      "destArea": "toLobbyRightStairwellLeft",
+      "arrivalX": 1520,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyRightStairwellRight",
+      "id": 4865,
+      "x": 1560,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainIntro",
+      "destArea": "toLobbyRightStairwellRight",
+      "arrivalX": 1576,
+      "arrivalY": 1760
+    }
+  ],
+  "CITYStadiumIntroOld": [
+    {
+      "name": "toBehindStadiumLeft",
+      "id": 5201,
+      "x": 144,
+      "y": 160,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumIntroOld",
+      "destArea": "toBehindStadiumLeft",
+      "arrivalX": 160,
+      "arrivalY": 176
+    },
+    {
+      "name": "toBehindStadiumRight",
+      "id": 5202,
+      "x": 1432,
+      "y": 160,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumIntroOld",
+      "destArea": "toBehindStadiumRight",
+      "arrivalX": 1448,
+      "arrivalY": 176
+    },
+    {
+      "name": "toLobbyLeftStairwellLeft",
+      "id": 5203,
+      "x": 16,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumIntroOld",
+      "destArea": "toLobbyLeftStairwellLeft",
+      "arrivalX": 32,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyLeftStairwellRight",
+      "id": 5204,
+      "x": 72,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumIntroOld",
+      "destArea": "toLobbyLeftStairwellRight",
+      "arrivalX": 88,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyMiddleStairwellLeft",
+      "id": 5205,
+      "x": 752,
+      "y": 1768,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumIntroOld",
+      "destArea": "toLobbyMiddleStairwellLeft",
+      "arrivalX": 776,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyMiddleStairwellRight",
+      "id": 5206,
+      "x": 816,
+      "y": 1768,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumIntroOld",
+      "destArea": "toLobbyMiddleStairwellRight",
+      "arrivalX": 840,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyRightStairwellLeft",
+      "id": 5207,
+      "x": 1504,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumIntroOld",
+      "destArea": "toLobbyRightStairwellLeft",
+      "arrivalX": 1520,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyRightStairwellRight",
+      "id": 5208,
+      "x": 1560,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumIntroOld",
+      "destArea": "toLobbyRightStairwellRight",
+      "arrivalX": 1576,
+      "arrivalY": 1760
+    }
+  ],
+  "CITYStadiumMainOldCrowd": [
+    {
+      "name": "toBehindStadiumLeft",
+      "id": 4331,
+      "x": 144,
+      "y": 160,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destArea": "toBehindStadiumLeft",
+      "arrivalX": 160,
+      "arrivalY": 176
+    },
+    {
+      "name": "toBehindStadiumRight",
+      "id": 4332,
+      "x": 1432,
+      "y": 160,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destArea": "toBehindStadiumRight",
+      "arrivalX": 1448,
+      "arrivalY": 176
+    },
+    {
+      "name": "toLobbyLeftStairwellLeft",
+      "id": 4333,
+      "x": 16,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destArea": "toLobbyLeftStairwellLeft",
+      "arrivalX": 32,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyLeftStairwellRight",
+      "id": 4334,
+      "x": 72,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destArea": "toLobbyLeftStairwellRight",
+      "arrivalX": 88,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyMiddleStairwellLeft",
+      "id": 4335,
+      "x": 752,
+      "y": 1768,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destArea": "toLobbyMiddleStairwellLeft",
+      "arrivalX": 776,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyMiddleStairwellRight",
+      "id": 4336,
+      "x": 816,
+      "y": 1768,
+      "w": 56,
+      "h": 16,
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destArea": "toLobbyMiddleStairwellRight",
+      "arrivalX": 840,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyRightStairwellLeft",
+      "id": 4337,
+      "x": 1504,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destArea": "toLobbyRightStairwellLeft",
+      "arrivalX": 1520,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toLobbyRightStairwellRight",
+      "id": 4338,
+      "x": 1560,
+      "y": 1768,
+      "w": 48,
+      "h": 16,
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destArea": "toLobbyRightStairwellRight",
+      "arrivalX": 1576,
+      "arrivalY": 1760
+    }
+  ],
+  "CITYStadiumBackstage": [
+    {
+      "name": "toStadiumRight",
+      "id": 4340,
+      "x": 1432,
+      "y": 176,
+      "w": 48,
+      "h": 8,
+      "destMap": "CITYStadiumBackstage",
+      "destArea": "toStadiumRight",
+      "arrivalX": 1448,
+      "arrivalY": 168
+    },
+    {
+      "name": "toStadiumLeft",
+      "id": 4341,
+      "x": 144,
+      "y": 176,
+      "w": 48,
+      "h": 8,
+      "destMap": "CITYStadiumBackstage",
+      "destArea": "toStadiumLeft",
+      "arrivalX": 160,
+      "arrivalY": 168
+    }
+  ],
+  "CITYCasinoEntrance": [
+    {
+      "name": "toCasino",
+      "id": 4370,
+      "x": 368,
+      "y": 80,
+      "w": 48,
+      "h": 8,
+      "destMap": "CITYCasinoEntrance",
+      "destArea": "toCasino",
+      "arrivalX": 384,
+      "arrivalY": 88
+    }
+  ],
+  "CITYCasinoMain": [
+    {
+      "name": "toLobby",
+      "id": 4395,
+      "x": 368,
+      "y": 640,
+      "w": 48,
+      "h": 8,
+      "destMap": "CITYCasinoMain",
+      "destArea": "toLobby",
+      "arrivalX": 384,
+      "arrivalY": 632
+    }
+  ],
+  "TOWNTown": [
+    {
+      "name": "toNeighborhoodRight",
+      "id": 4492,
+      "x": 12040,
+      "y": 2824,
+      "w": 384,
+      "h": 8,
+      "destMap": "TOWNTown",
+      "destArea": "toNeighborhoodRight",
+      "arrivalX": 12232,
+      "arrivalY": 2816
+    },
+    {
+      "name": "toNeighborhoodLeft",
+      "id": 4493,
+      "x": 168,
+      "y": 2824,
+      "w": 448,
+      "h": 8,
+      "destMap": "TOWNTown",
+      "destArea": "toNeighborhoodLeft",
+      "arrivalX": 392,
+      "arrivalY": 2816
+    },
+    {
+      "name": "toNeighborhoodForestPath",
+      "id": 4494,
+      "x": 2096,
+      "y": 2824,
+      "w": 136,
+      "h": 8,
+      "destMap": "TOWNTown",
+      "destArea": "toNeighborhoodForestPath",
+      "arrivalX": 2152,
+      "arrivalY": 2816
+    }
+  ],
+  "TOWNOutsideNeighborhood": [
+    {
+      "name": "toTownForestPath",
+      "id": 4659,
+      "x": 2064,
+      "y": 8,
+      "w": 160,
+      "h": 8,
+      "destMap": "TOWNOutsideNeighborhood",
+      "destArea": "toTownForestPath",
+      "arrivalX": 2136,
+      "arrivalY": 16
+    },
+    {
+      "name": "toTownLeft",
+      "id": 4660,
+      "x": 168,
+      "y": 8,
+      "w": 448,
+      "h": 8,
+      "destMap": "TOWNOutsideNeighborhood",
+      "destArea": "toTownLeft",
+      "arrivalX": 400,
+      "arrivalY": 16
+    },
+    {
+      "name": "toForest",
+      "id": 4661,
+      "x": 360,
+      "y": 1768,
+      "w": 128,
+      "h": 8,
+      "destMap": "TOWNOutsideNeighborhood",
+      "destArea": "toForest",
+      "arrivalX": 424,
+      "arrivalY": 1760
+    },
+    {
+      "name": "toTownRight",
+      "id": 4662,
+      "x": 12040,
+      "y": 8,
+      "w": 384,
+      "h": 8,
+      "destMap": "TOWNOutsideNeighborhood",
+      "destArea": "toTownRight",
+      "arrivalX": 12240,
+      "arrivalY": 16
+    }
+  ],
+  "TOWNOutsideForest": [
+    {
+      "name": "toNeighborhood",
+      "id": 4731,
+      "x": 360,
+      "y": 8,
+      "w": 136,
+      "h": 8,
+      "destMap": "TOWNOutsideForest",
+      "destArea": "toNeighborhood",
+      "arrivalX": 424,
+      "arrivalY": 16
+    },
+    {
+      "name": "toClubhouse",
+      "id": 4732,
+      "x": 12568,
+      "y": 528,
+      "w": 32,
+      "h": 8,
+      "destMap": "TOWNOutsideForest",
+      "destArea": "toClubhouse",
+      "arrivalX": 12584,
+      "arrivalY": 536
+    }
+  ],
+  "TOWNClubHouse": [
+    {
+      "name": "toForest",
+      "id": 4736,
+      "x": 80,
+      "y": 168,
+      "w": 32,
+      "h": 8,
+      "destMap": "TOWNClubHouse",
+      "destArea": "toForest",
+      "arrivalX": 88,
+      "arrivalY": 160
+    }
+  ],
+  "CITYCity": [
+    {
+      "name": "toClub",
+      "id": 4740,
+      "x": 2576,
+      "y": 280,
+      "w": 48,
+      "h": 8,
+      "destMap": "CITYCity",
+      "destArea": "toClub",
+      "arrivalX": 2592,
+      "arrivalY": 288
+    }
+  ],
+  "ALPHAStadiumMain": [
+    {
+      "name": "toBehindStadiumLeft",
+      "id": 5003,
+      "x": 144,
+      "y": 264,
+      "w": 48,
+      "h": 16,
+      "destMap": "ALPHAStadiumMain",
+      "destArea": "toBehindStadiumLeft",
+      "arrivalX": 152,
+      "arrivalY": 296
+    },
+    {
+      "name": "toBehindStadiumRight",
+      "id": 5004,
+      "x": 2120,
+      "y": 264,
+      "w": 48,
+      "h": 16,
+      "destMap": "ALPHAStadiumMain",
+      "destArea": "toBehindStadiumRight",
+      "arrivalX": 2136,
+      "arrivalY": 280
+    },
+    {
+      "name": "toLobbyLeftStairwellLeft",
+      "id": 5005,
+      "x": 16,
+      "y": 1944,
+      "w": 48,
+      "h": 16,
+      "destMap": "ALPHAStadiumMain",
+      "destArea": "toLobbyLeftStairwellLeft",
+      "arrivalX": 32,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyLeftStairwellRight",
+      "id": 5006,
+      "x": 72,
+      "y": 1944,
+      "w": 48,
+      "h": 16,
+      "destMap": "ALPHAStadiumMain",
+      "destArea": "toLobbyLeftStairwellRight",
+      "arrivalX": 88,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyMiddleStairwellLeft",
+      "id": 5007,
+      "x": 1096,
+      "y": 1944,
+      "w": 56,
+      "h": 16,
+      "destMap": "ALPHAStadiumMain",
+      "destArea": "toLobbyMiddleStairwellLeft",
+      "arrivalX": 1120,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyMiddleStairwellRight",
+      "id": 5008,
+      "x": 1160,
+      "y": 1944,
+      "w": 56,
+      "h": 16,
+      "destMap": "ALPHAStadiumMain",
+      "destArea": "toLobbyMiddleStairwellRight",
+      "arrivalX": 1184,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyRightStairwellLeft",
+      "id": 5009,
+      "x": 2192,
+      "y": 1944,
+      "w": 48,
+      "h": 16,
+      "destMap": "ALPHAStadiumMain",
+      "destArea": "toLobbyRightStairwellLeft",
+      "arrivalX": 2208,
+      "arrivalY": 1936
+    },
+    {
+      "name": "toLobbyRightStairwellRight",
+      "id": 5010,
+      "x": 2248,
+      "y": 1944,
+      "w": 48,
+      "h": 16,
+      "destMap": "ALPHAStadiumMain",
+      "destArea": "toLobbyRightStairwellRight",
+      "arrivalX": 2264,
+      "arrivalY": 1936
+    }
+  ],
+  "ALPHABobElevator": [
+    {
+      "name": "toStadium",
+      "id": 5098,
+      "x": 32,
+      "y": 168,
+      "w": 32,
+      "h": 8,
+      "destMap": "ALPHAStadiumMain",
+      "destArea": "toBehindStadiumLeft",
+      "arrivalX": 48,
+      "arrivalY": 136
+    }
+  ],
+  "ALPHAStadiumBackstage": [
+    {
+      "name": "toStadiumRight",
+      "id": 5105,
+      "x": 1432,
+      "y": 176,
+      "w": 48,
+      "h": 8,
+      "destMap": "ALPHAStadiumBackstage",
+      "destArea": "toStadiumRight",
+      "arrivalX": 1448,
+      "arrivalY": 168
+    },
+    {
+      "name": "toStadiumLeft",
+      "id": 5106,
+      "x": 144,
+      "y": 176,
+      "w": 48,
+      "h": 8,
+      "destMap": "ALPHAStadiumBackstage",
+      "destArea": "toStadiumLeft",
+      "arrivalX": 160,
+      "arrivalY": 168
+    }
+  ]
+}

@@ -1,0 +1,3527 @@
+{
+  "version": "3.0.8",
+  "dialogues": {
+    "0": {
+      "id": 0,
+      "name": "",
+      "caption": "Look At Video",
+      "text": "Responsibility - A Guide To Giving Up Your Dreams And Holding Yourself Back In Order To Behave Properly Enough To Impress Those In Power"
+    },
+    "1": {
+      "id": 1,
+      "name": "",
+      "caption": "Look In Urinal",
+      "text": "There is a dollar in the urinal. Pick it up?"
+    },
+    "3": {
+      "id": 3,
+      "name": "",
+      "caption": "Turn Off Electricity?",
+      "text": "It says \"Danger! High Voltage! Risk Of Death!\" all over it.<.><NEWLINE>Sounds like fun!"
+    },
+    "4": {
+      "id": 4,
+      "name": "",
+      "caption": "Talk To Principal",
+      "text": "Look, kid.<.><NEWLINE>I just don't like you, ok?<NEWLINE>I worked hard and got this job, because it put me in a position of power. My decisions will change your entire fate.<NEWLINE>I can decide on a whim whether you end up homeless in a gutter, or a Wall Street millionaire investment banker.<NEWLINE>Up to me!<.>And guess what? I just decided that I don't like your face.<NEWLINE>Oops! Too bad. You lose.<NEWLINE>So now, no matter what you do, no matter how hard you try, well, you're never going to get anywhere. Mark my words.<.>You think that's not fair? You think it's not fair? Tell that to Johnny Parkins, back in '83.<NEWLINE>Johnny thought it was really funny to steal my girl. Hilarious.<NEWLINE>And you know what? You kind of look a little bit like Johnny.<NEWLINE>So that's it, kid."
+    },
+    "5": {
+      "id": 5,
+      "name": "",
+      "caption": "Talk To Secretary",
+      "text": "Hello."
+    },
+    "6": {
+      "id": 6,
+      "name": "",
+      "caption": "Talk To The Baby",
+      "text": "Hello baby! You're certainly in for a surprise!<NEWLINE>First of all, I'm going to let you know straight away that you were a complete accident.<NEWLINE>You might think \"not me!\" but that's simply the case for 99% of humans!<NEWLINE>You see, nobody actually wants children. Sometimes they are overcome by hormones and delusionally proclaim that they do!<NEWLINE>This is just another intinctual emotion, not something people actually want, but something their body is controlling them to say and do.<NEWLINE>Our parents, like every other paired couple with offspring on this planet, just couldn't control their biological addictions, and were overcome in a humiliating moment of lost control, compulsively slamming engorged appendages into random orifices and spraying biohazardous material all over each other.<NEWLINE>As ashamed as they were, they couldn't help but to continue repeating this revolting process endlessly, occasionally deluding themselves into believing it is something they are doing of their own volition.<NEWLINE>You are their living mark of shame! Look at the cute baby! Look at the humiliating submission into animal instinct! Look at the loss of integrity and conviction!<NEWLINE>Yay! You destroyed our dreams! We're so happy! This is everything we ever wanted! Life is so great now!<NEWLINE>The best part is, that while you were a complete accident, now you'll be forced into a system against your will where you will be tortured for the next 3 decades without a say in the matter. <NEWLINE>You won't ever get anything you want, you'll never get any time off, you'll never escape, and you'll be a complete slave until you fall victim to this delusional process yourself and create yet another hapless victim together with an unsuspecting partner, just as compulsive and pathetic as yourself.<NEWLINE>Life is wonderful, because if we didn't keep telling ourselves that, we might all sink into a suicidal depression, and that, fortunately, has been outlawed. <NEWLINE>Sleep tight! Mommy and Daddy love you very much!"
+    },
+    "7": {
+      "id": 7,
+      "name": "",
+      "caption": "Talk To Brother",
+      "text": "Hey Bro. Have you seen one of my boxes in here? The one with the lotion in it? Yeah. Dude, that's disgusting. Get it out of here and keep it in your room. GET OUT!!!"
+    },
+    "8": {
+      "id": 8,
+      "name": "",
+      "caption": "Use The Toilet",
+      "text": "Man, toilets are weird. Why can't we come up with something better than this?"
+    },
+    "9": {
+      "id": 9,
+      "name": "",
+      "caption": "Look At The TV",
+      "text": "It's playing the Suburban Housewives Talk Show, a show designed to shape the opinions of bored suburban housewives. Some wealthy, sociopathic looking women wearing heavy makeup are sitting around a table telling the audience what they should think about various topics."
+    },
+    "10": {
+      "id": 10,
+      "name": "",
+      "caption": "Look At The TV",
+      "text": "It's playing the Home Improvement Shopping Channel. A rough, macho looking alpha male with a gruff voice is describing how to endlessly add value to your household, while avoiding interaction with your family on the weekends. This is designed to satiate the human male instinct to preen their nest and demonstrate dominance towards the family units nearby. Oh, look. It's a pile of bricks! Manly bricks!"
+    },
+    "11": {
+      "id": 11,
+      "name": "",
+      "caption": "Look In The Fridge",
+      "text": "The fridge is stuffed to the brim, but there's nothing to eat! Literally, it is stuffed with plastic containers filled with moldy leftovers of questionable edibility."
+    },
+    "12": {
+      "id": 12,
+      "name": "",
+      "caption": "Look At The Alarm Clock",
+      "text": "It's an alarm clock.  Some people believe the atomic bomb was a bad invention, and others believe the invention of gunpowder was the worst.  The truth is, the simple alarm clock is definitively the utmost devastating invention ever devised by mankind, forcing billions of humans to become slaves to a single blinking LED, taking away any control they may have had over their vital biological needs.  It's like a toilet that slams shut halfway through, that everyone has somehow enthusiastically accepted into their lives.  Inventions like these could only have been created by the most evil of madman."
+    },
+    "13": {
+      "id": 13,
+      "name": "",
+      "caption": "Use Old Computer",
+      "text": "The cursor was spinning when I got here.  It doesn't look like it's going to stop anytime soon."
+    },
+    "14": {
+      "id": 14,
+      "name": "",
+      "caption": "Talk To Librarian",
+      "text": "Hey.  Uh, so what is this place?  It's a library!  You mean, like, iTunes?  No, it's a place where you can borrow books.  Isn't that illegal?"
+    },
+    "15": {
+      "id": 15,
+      "name": "",
+      "caption": "Talk To Secretary",
+      "text": "Hi"
+    },
+    "16": {
+      "id": 16,
+      "name": "",
+      "caption": "Talk To Boss",
+      "text": "Hi"
+    },
+    "17": {
+      "id": 17,
+      "name": "",
+      "caption": "",
+      "text": "<NOCANCEL><0>?<.><1>It's time.<.><0>...<.>"
+    },
+    "18": {
+      "id": 18,
+      "name": "",
+      "caption": "",
+      "text": "<NOCANCEL><SETSPRITEBOX0TOENTITY:bob>...and now we commence The First Interdimensional \"bob's game\" Championship!<.>Our first challenger is \"Yuu,\" an unknown newcomer with incredible beginner's luck- that somehow made it here against all odds, clearly by some kind of mistake.<.>Get ready!  Let's see what Yuu can do!"
+    },
+    "19": {
+      "id": 19,
+      "name": "",
+      "caption": "",
+      "text": "<NOCANCEL><SETSPRITEBOX0TOENTITY:bob>That was close!  It looked like Yuu was winning!<NEWLINE>Don't worry, it's not the only chance- the nD is only the beginning!<.>The World's First!  The Global Debut!  \"bob's game\" has finally begun!<NEWLINE>I've packed it in with the nD!  (And they all said it couldn't be done!)<.>The greatest game that ever was, and I'll give it away for free!<NEWLINE>Now everyone can play \"bob's game\" each on their own nD!<.>The universal handheld!  The ultimate gaming machine!<NEWLINE>I'll put it into all your hands, how nice!  How kind of me!<.>Images and words and sounds, played back on a glowing screen.<NEWLINE>Loading programs into your brain, how more harmless could it be?<.>But they don't know...  it's MIND CONTROL!  Yes, this is modern sorcery!<NEWLINE>I've packed it full of hypnotic spells, subconscious iconography!<.>Flashing colors, spinning lights, pulsing logos mesmerize.<NEWLINE>Achievement unlocked- your brain is washed, and now I own your mind!<.>Oh, they've all been quite well studied, the techniques and imagery.<NEWLINE>The more obvious the \"PSI points\" are, the stronger the \"wizardry!\"<.>The \"consumers\" as we call them, they're completely blind, they'll never see!<NEWLINE>We bind a \"halo\" right onto their heads and tell them it's their \"destiny!\"<.>It's all hiding in plain sight, and so they won't suspect a thing.<NEWLINE>Simple images and words, they don't know the power that they bring!<.>We make them chant \"I'll catch them all!\" and tell them they're the best.<NEWLINE>A thousand hours later, they're so proud they passed our test!<.>And still!  They think they have free will, and Yuu surely thinks the same-<NEWLINE>While his subroutines control his every move, like a character in a game!<.>They don't realize it at all, but they're hypnotically enslaved!<NEWLINE>We bound their hands as children and then we programmed their brains!<.>It's deliberate indoctrination in our elaborate pyramid scheme.<NEWLINE>The lights, the stage, the dreams, the whole Game Industry!<.>We're con men!  We're crooks!  We're criminally insane!<NEWLINE>We're evil psychic psychopaths, and we've trapped you in our maze!<.>Surely someone someday will expose us puppet-master fiends!<NEWLINE>Fortunately, we control the media, the websites, and all the magazines!<.>The greatest trick in history!  We convinced them PSYCHIC POWER doesn't exist!<NEWLINE>Oh, and that pyramid on the dollar bill?  It's completely meaningless!<.>...<.>Calm down, relax!  Sit!  Don't take things so seriously, it's just a funny joke!<NEWLINE>Of course, I'm only kidding, ha ha!  Forget everything I spoke!<.>This is the end of \"bob's game\" - the beginning of nDworld!<NEWLINE>Don't worry, the mysteries will all eventually be uncurled.<.>\"bob's game\" cannot be stopped!  nDworld never ends!<NEWLINE>Sign up now and Yuu can play \"bob's game\" with all your friends!"
+    },
+    "20": {
+      "id": 20,
+      "name": "",
+      "caption": "",
+      "text": "<SETSPRITEBOX0TOENTITY:cia>Everything is prepared to specification.<.>Uh, did you just wake up?"
+    },
+    "21": {
+      "id": 21,
+      "name": "",
+      "caption": "",
+      "text": "<SETSPRITEBOX0TOENTITY:cia>P-p-p-pardon me, but, uh...<NEWLINE>Sir, when's the last time you took a shower?"
+    }
+  },
+  "areaEvents": {
+    "TOWNYUUDownstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 16,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNYUUUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 16,
+        "y": 200,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNYUUUpstairsYuusRoom": [
+      {
+        "areaName": "alarmClock",
+        "x": 216,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.12)}}",
+        "dialogueIds": [
+          12
+        ],
+        "hasWarp": false
+      }
+    ],
+    "TOWNYUUUpstairsBabyRoom": [
+      {
+        "areaName": "inBed",
+        "x": 120,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNYUUUpstairsBrothersRoom": [
+      {
+        "areaName": "inBed",
+        "x": 32,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNYUUUpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 80,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNYUUUpstairsParentsRoom": [
+      {
+        "areaName": "tv",
+        "x": 112,
+        "y": 88,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNYUUBasement": [
+      {
+        "areaName": "bottomOfStairs",
+        "x": 32,
+        "y": 264,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.3)}}",
+        "dialogueIds": [
+          3
+        ],
+        "hasWarp": false
+      }
+    ],
+    "TOWNYUUGarage": [
+      {
+        "areaName": "toAttic",
+        "x": 32,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNYUUAttic": [
+      {
+        "areaName": "toGarage",
+        "x": 32,
+        "y": 104,
+        "w": 24,
+        "h": 24,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNYUUDownstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "INTRODownstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 16,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "INTROUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 16,
+        "y": 200,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "INTROUpstairsBabyRoom": [
+      {
+        "areaName": "nextToCrib",
+        "x": 88,
+        "y": 80,
+        "w": 16,
+        "h": 32,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.6)}}",
+        "dialogueIds": [
+          6
+        ],
+        "hasWarp": false
+      }
+    ],
+    "INTROUpstairsBrothersRoom": [
+      {
+        "areaName": "nextToBed",
+        "x": 176,
+        "y": 96,
+        "w": 16,
+        "h": 32,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.7)}}",
+        "dialogueIds": [
+          7
+        ],
+        "hasWarp": false
+      }
+    ],
+    "INTROUpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 80,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.8)}}",
+        "dialogueIds": [
+          8
+        ],
+        "hasWarp": false
+      }
+    ],
+    "INTROBasement": [
+      {
+        "areaName": "bottomOfStairs",
+        "x": 32,
+        "y": 264,
+        "w": 24,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "INTROGarage": [
+      {
+        "areaName": "toAttic",
+        "x": 32,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "INTRODownstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "INTROAttic": [
+      {
+        "areaName": "toGarage",
+        "x": 32,
+        "y": 104,
+        "w": 24,
+        "h": 24,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "GENERIC1Downstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 16,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "GENERIC1Upstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 16,
+        "y": 200,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "GENERIC1UpstairsBedroom1": [
+      {
+        "areaName": "inBed",
+        "x": 200,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "GENERIC1UpstairsBedroom2": [
+      {
+        "areaName": "inBed",
+        "x": 128,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "GENERIC1UpstairsMasterBedroom": [
+      {
+        "areaName": "toilet",
+        "x": 56,
+        "y": 72,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "GENERIC1UpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 80,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "GENERIC1Basement": [
+      {
+        "areaName": "bottomOfStairs",
+        "x": 32,
+        "y": 264,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "GENERIC1Garage": [
+      {
+        "areaName": "toAttic",
+        "x": 32,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "GENERIC1DownstairsBathroom": [
+      {
+        "areaName": "sink",
+        "x": 56,
+        "y": 88,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "GENERIC1Attic": [
+      {
+        "areaName": "toGarage",
+        "x": 32,
+        "y": 104,
+        "w": 24,
+        "h": 24,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNGENERIC2Downstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 240,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNGENERIC3Downstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 432,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNFRIENDDownstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 432,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNFRIENDUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 432,
+        "y": 240,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNFRIENDUpstairsFriendsRoom": [
+      {
+        "areaName": "inBed",
+        "x": 80,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNFRIENDUpstairsSistersRoom": [
+      {
+        "areaName": "atDesk",
+        "x": 128,
+        "y": 136,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNFRIENDUpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 120,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNFRIENDUpstairsParentsRoom": [
+      {
+        "areaName": "toilet",
+        "x": 56,
+        "y": 72,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNFRIENDBasement": [
+      {
+        "areaName": "dryer",
+        "x": 376,
+        "y": 160,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNFRIENDGarage": [
+      {
+        "areaName": "tools",
+        "x": 56,
+        "y": 88,
+        "w": 32,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNFRIENDDownstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "JAPANBedroom": [
+      {
+        "areaName": "inBed",
+        "x": 32,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNCRAZYDownstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 136,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNCRAZYUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 136,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNCRAZYUpstairsBedroom": [
+      {
+        "areaName": "inBed",
+        "x": 112,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNCRAZYUpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 80,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNCRAZYDownstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 40,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNCRAZYBasement": [
+      {
+        "areaName": "bottomOfStairs",
+        "x": 152,
+        "y": 248,
+        "w": 32,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNCRAZYGarage": [
+      {
+        "areaName": "shelfWithFertilizer",
+        "x": 112,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNCRAZYUpstairsHidden": [
+      {
+        "areaName": "behindGateDoor",
+        "x": 80,
+        "y": 176,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNMANSIONDownstairs": [
+      {
+        "areaName": "toUpstairsLeft",
+        "x": 264,
+        "y": 8,
+        "w": 64,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNMANSIONDownstairsKitchen": [
+      {
+        "areaName": "tableUpperLeft",
+        "x": 216,
+        "y": 120,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNMANSIONUpstairsVideoGameRoom": [
+      {
+        "areaName": "toDownstairsLeft",
+        "x": 264,
+        "y": 336,
+        "w": 64,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "SCHOOLMainOffice": [
+      {
+        "areaName": "sittingAtDesk",
+        "x": 136,
+        "y": 128,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.5)}}",
+        "dialogueIds": [
+          5
+        ],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLPrincipalsOffice": [
+      {
+        "areaName": "chairFaceLeft",
+        "x": 128,
+        "y": 152,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLDetention": [
+      {
+        "areaName": "teacherChair",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLClinic": [
+      {
+        "areaName": "nurseSittingInChair",
+        "x": 224,
+        "y": 128,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLClinicBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 56,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLTeachersLounge": [
+      {
+        "areaName": "chairBottomLeft",
+        "x": 72,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLMusicRoom": [
+      {
+        "areaName": "teacherSittingInChair",
+        "x": 40,
+        "y": 120,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLArtRoom": [
+      {
+        "areaName": "teacherSittingAtDesk",
+        "x": 280,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLComputerLab": [
+      {
+        "areaName": "teacherSittingAtDesk",
+        "x": 152,
+        "y": 128,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLKitchen": [
+      {
+        "areaName": "sink",
+        "x": 40,
+        "y": 240,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLLibrary": [
+      {
+        "areaName": "behindCounter1",
+        "x": 272,
+        "y": 224,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.13)}}",
+        "dialogueIds": [
+          13
+        ],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLCustodian": [
+      {
+        "areaName": "sittingAtDesk",
+        "x": 40,
+        "y": 248,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLGirlsBathroom": [
+      {
+        "areaName": "inStall",
+        "x": 128,
+        "y": 216,
+        "w": 8,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLBoysBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 128,
+        "y": 120,
+        "w": 8,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLEntranceHallway": [
+      {
+        "areaName": "fireAlarm",
+        "x": 1448,
+        "y": 232,
+        "w": 8,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLGymHallway": [
+      {
+        "areaName": "drinkingFountain",
+        "x": 1128,
+        "y": 336,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLClassHallway": [
+      {
+        "areaName": "lockers1",
+        "x": 32,
+        "y": 112,
+        "w": 16,
+        "h": 232,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLBackHallway": [
+      {
+        "areaName": "drinkingFountain1",
+        "x": 1512,
+        "y": 336,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLClassroom1": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLClassroom2": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLClassroom3": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLClassroom4": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLClassroom5": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLClassroom6": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "SCHOOLGymCafeteria": [
+      {
+        "areaName": "lunchTableSeat1",
+        "x": 144,
+        "y": 248,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNCoffeeShop": [
+      {
+        "areaName": "microphone",
+        "x": 120,
+        "y": 120,
+        "w": 8,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNPizzaPlace": [
+      {
+        "areaName": "cooler",
+        "x": 248,
+        "y": 128,
+        "w": 16,
+        "h": 104,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNBookstore": [
+      {
+        "areaName": "payPhone1",
+        "x": 40,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNBookstoreBathroom": [
+      {
+        "areaName": "handDryer",
+        "x": 40,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNVideoRent": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 144,
+        "y": 264,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNVideoRentAdultRoom": [
+      {
+        "areaName": "leftShelf1",
+        "x": 24,
+        "y": 120,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.0)}}",
+        "dialogueIds": [
+          0
+        ],
+        "hasWarp": false
+      }
+    ],
+    "TOWNRecordStore": [
+      {
+        "areaName": "waitingInLineStart",
+        "x": 88,
+        "y": 272,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNPets4Less": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 208,
+        "y": 304,
+        "w": 8,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNElectronicsStore": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 216,
+        "y": 296,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNElectronicsStoreBackRoom": [
+      {
+        "areaName": "leftOfTable",
+        "x": 72,
+        "y": 136,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNBeautySalon": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 224,
+        "y": 216,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNArcade": [
+      {
+        "areaName": "changeMachine",
+        "x": 72,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNGroceryStore": [
+      {
+        "areaName": "vegetableRack1",
+        "x": 680,
+        "y": 624,
+        "w": 128,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNGasStation": [
+      {
+        "areaName": "customerRegister",
+        "x": 112,
+        "y": 200,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNDepartmentStore": [
+      {
+        "areaName": "behindRegister1",
+        "x": 608,
+        "y": 472,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNTacoBurger": [
+      {
+        "areaName": "trash1",
+        "x": 248,
+        "y": 296,
+        "w": 16,
+        "h": 56,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNChurch": [
+      {
+        "areaName": "pew6",
+        "x": 64,
+        "y": 224,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNDoctorsOfficeEntrance": [
+      {
+        "areaName": "window1",
+        "x": 128,
+        "y": 88,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNDoctorsOfficeBackHall": [
+      {
+        "areaName": "counter1",
+        "x": 136,
+        "y": 200,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNDoctorsOfficeBackRoom": [
+      {
+        "areaName": "doctorStool",
+        "x": 128,
+        "y": 152,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNGameStore": [
+      {
+        "areaName": "securityLock",
+        "x": 72,
+        "y": 80,
+        "w": 8,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNMovieTheatreLobby": [
+      {
+        "areaName": "behindCounterRegister1",
+        "x": 144,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNMovieTheatreMainHall": [
+      {
+        "areaName": "behindCounterRegister1",
+        "x": 472,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNMovieTheatrePhotoBooth": [
+      {
+        "areaName": "photoBoothStool",
+        "x": 32,
+        "y": 64,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNMovieTheatreMensBathroom": [
+      {
+        "areaName": "sink1",
+        "x": 264,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNMovieTheatreWomensBathroom": [
+      {
+        "areaName": "sink1",
+        "x": 32,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNMovieTheatreInsideLeft": [
+      {
+        "areaName": "seat",
+        "x": 72,
+        "y": 280,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNMovieTheatreInsideRight": [
+      {
+        "areaName": "seat",
+        "x": 72,
+        "y": 280,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPartyStore": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 392,
+        "y": 232,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPartyStoreBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 24,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYGroovyClubEntrance": [
+      {
+        "areaName": "toOutside",
+        "x": 80,
+        "y": 184,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYGroovyClub": [
+      {
+        "areaName": "toLobby",
+        "x": 376,
+        "y": 584,
+        "w": 32,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYOfficeEntrance": [
+      {
+        "areaName": "chair1",
+        "x": 144,
+        "y": 240,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYOfficeElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYOfficeWorkroom": [
+      {
+        "areaName": "elevatorButton",
+        "x": 104,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYOfficeBreakRoom": [
+      {
+        "areaName": "elevatorButton",
+        "x": 104,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYOfficeBossFloor": [
+      {
+        "areaName": "elevatorButton",
+        "x": 104,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.15)}}",
+        "dialogueIds": [
+          15
+        ],
+        "hasWarp": false
+      }
+    ],
+    "CITYBobsAptInside": [
+      {
+        "areaName": "coffeeMaker",
+        "x": 72,
+        "y": 240,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYBobsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYBobsAptInsideTrashed": [
+      {
+        "areaName": "coffeeMaker0",
+        "x": 72,
+        "y": 240,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYNeighborAptInside": [
+      {
+        "areaName": "microwave",
+        "x": 72,
+        "y": 240,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYNeighborsAptBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYAptMainOffice": [
+      {
+        "areaName": "chair1",
+        "x": 344,
+        "y": 200,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYBankEntrance": [
+      {
+        "areaName": "lineStart",
+        "x": 232,
+        "y": 272,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYBankElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYBankOwnerOffice": [
+      {
+        "areaName": "elevatorButton",
+        "x": 544,
+        "y": 168,
+        "w": 8,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYFancyRestaurantEntrance": [
+      {
+        "areaName": "toRestaurant",
+        "x": 96,
+        "y": 80,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYFancyRestaurant": [
+      {
+        "areaName": "toLobby",
+        "x": 96,
+        "y": 520,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYFancyRestaurantKitchen": [
+      {
+        "areaName": "fridge",
+        "x": 96,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYFashionStore": [
+      {
+        "areaName": "shirtsTable1",
+        "x": 40,
+        "y": 376,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYFashionStoreDressingRoom": [
+      {
+        "areaName": "mirror",
+        "x": 40,
+        "y": 80,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYFashionStoreDressingRoom2": [
+      {
+        "areaName": "mirror",
+        "x": 40,
+        "y": 80,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYElevatedLifeplace": [
+      {
+        "areaName": "couch1",
+        "x": 288,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYElevatedLifeplaceElevator": [
+      {
+        "areaName": "elevatorButtonToOutside",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYElevatedLifeplaceApartment": [
+      {
+        "areaName": "couch",
+        "x": 72,
+        "y": 192,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYElevatedLifeplaceBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 104,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYElevatedLifeplaceBedroom": [
+      {
+        "areaName": "inBed",
+        "x": 104,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYDeli": [
+      {
+        "areaName": "breadTable",
+        "x": 208,
+        "y": 248,
+        "w": 16,
+        "h": 40,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYTheCafeEntrance": [
+      {
+        "areaName": "payPhone",
+        "x": 24,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYTheCafe": [
+      {
+        "areaName": "booth1",
+        "x": 24,
+        "y": 200,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYTheCafeBathroom": [
+      {
+        "areaName": "urinal",
+        "x": 48,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){doDialogueWithCaption(DIALOGUE.1)}}",
+        "dialogueIds": [
+          1
+        ],
+        "hasWarp": false
+      }
+    ],
+    "CITYTheCafeDressingRoom": [
+      {
+        "areaName": "chair1",
+        "x": 32,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoolHall": [
+      {
+        "areaName": "jukebox",
+        "x": 200,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYLaundromat": [
+      {
+        "areaName": "vendingMachine",
+        "x": 192,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalEntrance": [
+      {
+        "areaName": "behindCounterRegister2",
+        "x": 192,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalEntranceBathroom": [
+      {
+        "areaName": "handDryer",
+        "x": 64,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalElevator2": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalWaitingOutPatient": [
+      {
+        "areaName": "magazineRack",
+        "x": 520,
+        "y": 288,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalOutPatientMensBathroom": [
+      {
+        "areaName": "sink",
+        "x": 24,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalOutPatientWomensBathroom": [
+      {
+        "areaName": "sink",
+        "x": 80,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalPatientRoom": [
+      {
+        "areaName": "chair1",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalPatientRoom2": [
+      {
+        "areaName": "chair1",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalPatientRoom3": [
+      {
+        "areaName": "chair1",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalOperatingRoom": [
+      {
+        "areaName": "operatingTable",
+        "x": 128,
+        "y": 200,
+        "w": 8,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalPsychiatricWard": [
+      {
+        "areaName": "elevatorButton2",
+        "x": 616,
+        "y": 168,
+        "w": 8,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalSoftRoom": [
+      {
+        "areaName": "inBed",
+        "x": 80,
+        "y": 112,
+        "w": 8,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalSoftRoom2": [
+      {
+        "areaName": "nextToBed",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalSoftRoom3": [
+      {
+        "areaName": "inBed",
+        "x": 80,
+        "y": 112,
+        "w": 8,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalMaternityWard": [
+      {
+        "areaName": "elevatorButton1",
+        "x": 496,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalMaternityWardInfirmary": [
+      {
+        "areaName": "baby1",
+        "x": 96,
+        "y": 104,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalEmergencyEntrance": [
+      {
+        "areaName": "aquarium",
+        "x": 480,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHospitalMorgue": [
+      {
+        "areaName": "elevatorButton1",
+        "x": 496,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationLobby": [
+      {
+        "areaName": "counter2",
+        "x": 112,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationOffice": [
+      {
+        "areaName": "stoolBehindCounter",
+        "x": 104,
+        "y": 344,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationInterrogationRoom": [
+      {
+        "areaName": "nextToTable",
+        "x": 80,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationOffice2WayMirror": [
+      {
+        "areaName": "chair",
+        "x": 152,
+        "y": 144,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationEvidenceRoom": [
+      {
+        "areaName": "powder",
+        "x": 176,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationHoldingCells": [
+      {
+        "areaName": "behindCounter",
+        "x": 216,
+        "y": 160,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationPrisonVisitingRoom": [
+      {
+        "areaName": "visitorSideOfDoor",
+        "x": 216,
+        "y": 176,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationPrisonCellBlockHallway": [
+      {
+        "areaName": "outsideCell1",
+        "x": 48,
+        "y": 632,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationPrisonShowers": [
+      {
+        "areaName": "guardArea",
+        "x": 216,
+        "y": 32,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPoliceStationPrisonCell": [
+      {
+        "areaName": "outsideBars",
+        "x": 48,
+        "y": 56,
+        "w": 16,
+        "h": 16,
+        "eventText": "",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYFireDepartmentGarage": [
+      {
+        "areaName": "toUpstairs",
+        "x": 328,
+        "y": 8,
+        "w": 40,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYFireDepartmentUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 328,
+        "y": 160,
+        "w": 40,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYFireDepartmentQuarters": [
+      {
+        "areaName": "chair4",
+        "x": 88,
+        "y": 184,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYFireDepartmentBathroom": [
+      {
+        "areaName": "sink1",
+        "x": 32,
+        "y": 128,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYCityHallEntrance": [
+      {
+        "areaName": "securityGuardStool",
+        "x": 608,
+        "y": 304,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYCityHallElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYCityHallOffices": [
+      {
+        "areaName": "elevatorButton",
+        "x": 704,
+        "y": 184,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYCityHallMeetingRoom": [
+      {
+        "areaName": "elevatorButton",
+        "x": 704,
+        "y": 184,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYCityHallMayorOffice": [
+      {
+        "areaName": "elevatorButton",
+        "x": 704,
+        "y": 184,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYMuseumLobby": [
+      {
+        "areaName": "toMuseum",
+        "x": 328,
+        "y": 80,
+        "w": 64,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYMuseumExhibit": [
+      {
+        "areaName": "toLobby",
+        "x": 536,
+        "y": 432,
+        "w": 64,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYMuseumGiftShop": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 120,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHotelEntrance": [
+      {
+        "areaName": "pamphletRack",
+        "x": 368,
+        "y": 328,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHotelPool": [
+      {
+        "areaName": "saunaRules",
+        "x": 408,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHotelSauna": [
+      {
+        "areaName": "bench1",
+        "x": 32,
+        "y": 128,
+        "w": 8,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHotelElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHotelElevator2": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHotelHallway": [
+      {
+        "areaName": "elevatorButton1",
+        "x": 96,
+        "y": 312,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHotelRoom": [
+      {
+        "areaName": "miniBar",
+        "x": 208,
+        "y": 224,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHotelRoomBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHotelLinenCloset": [
+      {
+        "areaName": "supplyShelf",
+        "x": 88,
+        "y": 128,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumLobby": [
+      {
+        "areaName": "toUpperFloorRightStairwellLeft",
+        "x": 1504,
+        "y": 8,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYStadiumBathroomLeftMens": [
+      {
+        "areaName": "handDryer1",
+        "x": 32,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumBathroomRightWomens": [
+      {
+        "areaName": "handDryer1",
+        "x": 552,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumLeftHallway": [
+      {
+        "areaName": "vendingMachine1",
+        "x": 40,
+        "y": 1064,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumRightHallway": [
+      {
+        "areaName": "vendingMachine1",
+        "x": 72,
+        "y": 1240,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumMain": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 264,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYStadiumMainIntro": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYStadiumIntroOld": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYStadiumMainOldCrowd": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYStadiumBackstage": [
+      {
+        "areaName": "toStadiumRight",
+        "x": 1432,
+        "y": 176,
+        "w": 48,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYStadiumProducerRoom": [
+      {
+        "areaName": "bigTV",
+        "x": 104,
+        "y": 104,
+        "w": 24,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumDressingRoom": [
+      {
+        "areaName": "chair",
+        "x": 160,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumDressingRoomBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 24,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumDressingRoom2": [
+      {
+        "areaName": "chair",
+        "x": 160,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumDressingRoom2Bathroom": [
+      {
+        "areaName": "sink",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumStarDressingRoom": [
+      {
+        "areaName": "chair",
+        "x": 160,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYStadiumDressingRoom3Bathroom": [
+      {
+        "areaName": "sink",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYPawnShop": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 128,
+        "y": 120,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYCasinoEntrance": [
+      {
+        "areaName": "toCasino",
+        "x": 368,
+        "y": 80,
+        "w": 48,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYCasinoMain": [
+      {
+        "areaName": "toLobby",
+        "x": 368,
+        "y": 640,
+        "w": 48,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYCasinoBackroom": [
+      {
+        "areaName": "chair",
+        "x": 80,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHourlyMotel": [
+      {
+        "areaName": "behindCounterStool",
+        "x": 64,
+        "y": 472,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHourlyMotelRoom": [
+      {
+        "areaName": "vibratingBed",
+        "x": 168,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHourlyMotelRoomBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHourlyMotelRoom2": [
+      {
+        "areaName": "vibratingBed",
+        "x": 168,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "CITYHourlyMotelRoom2Bathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "INTROTown": [
+      {
+        "areaName": "friendsBackYardBenchLeft",
+        "x": 192,
+        "y": 568,
+        "w": 24,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNTown": [
+      {
+        "areaName": "toNeighborhoodRight",
+        "x": 12040,
+        "y": 2824,
+        "w": 384,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNOutsideNeighborhood": [
+      {
+        "areaName": "toTownForestPath",
+        "x": 2064,
+        "y": 8,
+        "w": 160,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNOutsideForest": [
+      {
+        "areaName": "toNeighborhood",
+        "x": 360,
+        "y": 8,
+        "w": 136,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "TOWNYUUBackyardToolShed": [
+      {
+        "areaName": "rake",
+        "x": 40,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventText": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "TOWNClubHouse": [
+      {
+        "areaName": "toForest",
+        "x": 80,
+        "y": 168,
+        "w": 32,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYCity": [
+      {
+        "areaName": "toClub",
+        "x": 2576,
+        "y": 280,
+        "w": 48,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "ALPHAStadiumMain": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 264,
+        "w": 48,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "CITYBobsBathroomCopy": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventText": "{if(isPlayerTouchingThisEntity() == TRUE){playSound(SOUND.84),blockForTicks(INT.2000)}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "ALPHABobsApartment": [
+      {
+        "areaName": "futon",
+        "x": 248,
+        "y": 112,
+        "w": 8,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){if(isFlagSet(FLAG.2) == FALSE){},if(isFlagSet(FLAG.2) == TRUE){if(isFlagSet(FLAG.1) == TRUE){},if(isFlagSet(FLAG.1) == FALSE){setPlayerControlsEnabled(BOOL.false),setCameraZoom(FLOAT.3.0),playerSetToArea(AREA.5103),playerDoAnimationByNameLoop(GAMESTRING.3|INT.500|BOOL.false|INT.500|BOOL.false),fadeColorFromCurrentAlphaToAlpha(INT.3000|INT.0|INT.0|INT.0|FLOAT.0.8),blockForTicks(INT.3000),blockUntilLoopingMusicDoneWithLoopAndReplaceWith(MUSIC.76|MUSIC.77),blockForTicks(INT.1000),clearOverlay(),playSound(SOUND.0|FLOAT.1.0|FLOAT.0.2|INT.1),playerStopAnimating(),playerSetFaceMovementDirection(GAMESTRING.2),setLightOnOff(LIGHT.5403|BOOL.true),setAreaActionIcon(AREA.6948|BOOL.true),setFlag(FLAG.1|BOOL.true),setPlayerControlsEnabled(BOOL.true)}}}}",
+        "dialogueIds": [],
+        "hasWarp": false
+      }
+    ],
+    "ALPHABobElevator": [
+      {
+        "areaName": "toStadium",
+        "x": 32,
+        "y": 168,
+        "w": 32,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp()}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ],
+    "ALPHAStadiumBackstage": [
+      {
+        "areaName": "toStadiumRight",
+        "x": 1432,
+        "y": 176,
+        "w": 48,
+        "h": 8,
+        "eventText": "{if(isPlayerTouchingThisArea() == TRUE){enterThisWarp}}",
+        "dialogueIds": [],
+        "hasWarp": true
+      }
+    ]
+  },
+  "npcDialogueMap": {
+    "gameBobZero": {
+      "name": "gameBobZero",
+      "dialogues": []
+    },
+    "schoolClock": {
+      "name": "schoolClock",
+      "dialogues": []
+    },
+    "schoolTV": {
+      "name": "schoolTV",
+      "dialogues": []
+    },
+    "schoolChairFaceDown": {
+      "name": "schoolChairFaceDown",
+      "dialogues": []
+    },
+    "roundBlackGarbageCanOnWheels": {
+      "name": "roundBlackGarbageCanOnWheels",
+      "dialogues": []
+    },
+    "schoolBathroomStallWall": {
+      "name": "schoolBathroomStallWall",
+      "dialogues": []
+    },
+    "microphoneStand": {
+      "name": "microphoneStand",
+      "dialogues": []
+    },
+    "roundedBackBlackChairFaceUp": {
+      "name": "roundedBackBlackChairFaceUp",
+      "dialogues": []
+    },
+    "smallWoodenBenchHorizontal": {
+      "name": "smallWoodenBenchHorizontal",
+      "dialogues": []
+    },
+    "videoStoreTV": {
+      "name": "videoStoreTV",
+      "dialogues": []
+    },
+    "recordStoreTV": {
+      "name": "recordStoreTV",
+      "dialogues": []
+    },
+    "fishTank": {
+      "name": "fishTank",
+      "dialogues": []
+    },
+    "smallTV": {
+      "name": "smallTV",
+      "dialogues": []
+    },
+    "blackRoundStool": {
+      "name": "blackRoundStool",
+      "dialogues": []
+    },
+    "richnerdguy": {
+      "name": "richnerdguy",
+      "dialogues": []
+    },
+    "ghost": {
+      "name": "ghost",
+      "dialogues": []
+    },
+    "crippled": {
+      "name": "crippled",
+      "dialogues": []
+    },
+    "diseased": {
+      "name": "diseased",
+      "dialogues": []
+    },
+    "securityguard": {
+      "name": "securityguard",
+      "dialogues": []
+    },
+    "jailCellbars": {
+      "name": "jailCellbars",
+      "dialogues": []
+    },
+    "prisonShower": {
+      "name": "prisonShower",
+      "dialogues": []
+    },
+    "filingCabinetSingle": {
+      "name": "filingCabinetSingle",
+      "dialogues": []
+    },
+    "stadiumRopeBarrier": {
+      "name": "stadiumRopeBarrier",
+      "dialogues": []
+    },
+    "bighead": {
+      "name": "bighead",
+      "dialogues": []
+    },
+    "bobDesk": {
+      "name": "bobDesk",
+      "dialogues": []
+    }
+  },
+  "entityPlacements": {
+    "TOWNYUUDownstairs": [
+      {
+        "name": "atari",
+        "spriteName": "gameBobZero",
+        "x": 400.0,
+        "y": 264.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLMainOffice": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 56.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLPrincipalsOffice": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 96.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLDetention": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 56.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLClinic": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 48.0,
+        "y": 88.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLTeachersLounge": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 224.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLMusicRoom": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 144.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLArtRoom": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 152.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLComputerLab": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 112.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLKitchen": [
+      {
+        "name": "schoolTV",
+        "spriteName": "schoolTV",
+        "x": 88.0,
+        "y": 8.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLLibrary": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 192.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLCustodian": [
+      {
+        "name": "schoolChairFaceDown",
+        "spriteName": "schoolChairFaceDown",
+        "x": 40.0,
+        "y": 232.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLGirlsBathroom": [
+      {
+        "name": "roundBlackGarbageCanOnWheels",
+        "spriteName": "roundBlackGarbageCanOnWheels",
+        "x": 128.0,
+        "y": 232.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLBoysBathroom": [
+      {
+        "name": "schoolBathroomStallWall",
+        "spriteName": "schoolBathroomStallWall",
+        "x": 96.0,
+        "y": 168.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLEntranceHallway": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 456.0,
+        "y": 168.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLGymHallway": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 216.0,
+        "y": 264.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLClassHallway": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 520.0,
+        "y": 264.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLBackHallway": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 456.0,
+        "y": 264.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLClassroom1": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 272.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLClassroom2": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 272.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLClassroom3": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 272.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLClassroom4": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 272.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLClassroom5": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 272.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLClassroom6": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 272.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLGymCafeteria": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 368.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "SCHOOLGymGym": [
+      {
+        "name": "schoolClock",
+        "spriteName": "schoolClock",
+        "x": 368.0,
+        "y": 24.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "TOWNCoffeeShop": [
+      {
+        "name": "microphoneStand",
+        "spriteName": "microphoneStand",
+        "x": 120.0,
+        "y": 112.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "TOWNPizzaPlace": [
+      {
+        "name": "roundedBackBlackChairFaceUp",
+        "spriteName": "roundedBackBlackChairFaceUp",
+        "x": 128.0,
+        "y": 160.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "TOWNBookstore": [
+      {
+        "name": "smallWoodenBenchHorizontal",
+        "spriteName": "smallWoodenBenchHorizontal",
+        "x": 168.0,
+        "y": 184.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "TOWNVideoRent": [
+      {
+        "name": "videoStoreTV",
+        "spriteName": "videoStoreTV",
+        "x": 16.0,
+        "y": 8.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "TOWNRecordStore": [
+      {
+        "name": "recordStoreTV",
+        "spriteName": "recordStoreTV",
+        "x": 112.0,
+        "y": 8.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "TOWNPets4Less": [
+      {
+        "name": "fishTank",
+        "spriteName": "fishTank",
+        "x": 24.0,
+        "y": 56.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "TOWNElectronicsStore": [
+      {
+        "name": "smallTV",
+        "spriteName": "smallTV",
+        "x": 152.0,
+        "y": 376.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "TOWNBeautySalon": [
+      {
+        "name": "blackRoundStool",
+        "spriteName": "blackRoundStool",
+        "x": 184.0,
+        "y": 96.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYGroovyClubEntrance": [
+      {
+        "name": "richnerdguy",
+        "spriteName": "richnerdguy",
+        "x": 65.0,
+        "y": 60.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYOfficeBreakRoom": [
+      {
+        "name": "blackRoundStool",
+        "spriteName": "blackRoundStool",
+        "x": 288.0,
+        "y": 224.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYFancyRestaurantKitchenFreezer": [
+      {
+        "name": "ghost",
+        "spriteName": "ghost",
+        "x": 216.0,
+        "y": 40.0,
+        "isNPC": true,
+        "script": "{if(isPlayerWalkingIntoThisDoor() == TRUE){enterThisDoor}}"
+      }
+    ],
+    "CITYHospitalEntrance": [
+      {
+        "name": "crippled",
+        "spriteName": "crippled",
+        "x": 352.0,
+        "y": 240.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYHospitalWaitingOutPatient": [
+      {
+        "name": "fishTank",
+        "spriteName": "fishTank",
+        "x": 392.0,
+        "y": 256.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYHospitalMorgue": [
+      {
+        "name": "diseased",
+        "spriteName": "diseased",
+        "x": 280.0,
+        "y": 232.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYHospitalSecretLab": [
+      {
+        "name": "diseased",
+        "spriteName": "diseased",
+        "x": 280.0,
+        "y": 232.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYPoliceStationPrisonVisitingRoom": [
+      {
+        "name": "securityguard",
+        "spriteName": "securityguard",
+        "x": 56.0,
+        "y": 48.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYPoliceStationPrisonCellBlockHallway": [
+      {
+        "name": "jailCellbars",
+        "spriteName": "jailCellbars",
+        "x": 104.0,
+        "y": 576.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYPoliceStationPrisonShowers": [
+      {
+        "name": "prisonShower",
+        "spriteName": "prisonShower",
+        "x": 40.0,
+        "y": 72.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYFireDepartmentGarage": [
+      {
+        "name": "filingCabinetSingle",
+        "spriteName": "filingCabinetSingle",
+        "x": 352.0,
+        "y": 200.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYStadiumMain": [
+      {
+        "name": "stadiumRopeBarrier",
+        "spriteName": "stadiumRopeBarrier",
+        "x": 176.0,
+        "y": 1696.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYStadiumMainIntro": [
+      {
+        "name": "stadiumRopeBarrier",
+        "spriteName": "stadiumRopeBarrier",
+        "x": 176.0,
+        "y": 1592.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYStadiumIntroOld": [
+      {
+        "name": "bighead",
+        "spriteName": "bighead",
+        "x": 728.0,
+        "y": 40.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "CITYStadiumMainOldCrowd": [
+      {
+        "name": "bighead",
+        "spriteName": "bighead",
+        "x": 728.0,
+        "y": 40.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "ALPHAStadiumMain": [
+      {
+        "name": "stadiumRopeBarrier",
+        "spriteName": "stadiumRopeBarrier",
+        "x": 176.0,
+        "y": 1696.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ],
+    "ALPHABobsApartment": [
+      {
+        "name": "bobDesk",
+        "spriteName": "bobDesk",
+        "x": 104.0,
+        "y": 64.0,
+        "isNPC": true,
+        "script": ""
+      }
+    ]
+  }
+}

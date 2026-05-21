@@ -358,12 +358,12 @@
     },
     "src\\renderer\\graphics\\Camera.ts": {
       "latest": {
-        "commit": "48a3e5b2",
-        "timestamp": "2026-04-29T19:59:43.389Z",
-        "mi": 24.7,
-        "cognitive": 31,
+        "commit": "af0c82e",
+        "timestamp": "2026-05-12T19:47:10.823Z",
+        "mi": 24.5,
+        "cognitive": 34,
         "nesting": 4,
-        "lines": 203,
+        "lines": 204,
         "maxCyclomatic": 62,
         "entropy": 6.08
       },
@@ -375,6 +375,16 @@
           "cognitive": 31,
           "nesting": 4,
           "lines": 203,
+          "maxCyclomatic": 62,
+          "entropy": 6.08
+        },
+        {
+          "commit": "af0c82e",
+          "timestamp": "2026-05-12T19:47:10.823Z",
+          "mi": 24.5,
+          "cognitive": 34,
+          "nesting": 4,
+          "lines": 204,
           "maxCyclomatic": 62,
           "entropy": 6.08
         }
@@ -530,7 +540,107 @@
         }
       ],
       "trend": "stable"
+    },
+    "src\\renderer\\scenes\\WorldScene.ts": {
+      "latest": {
+        "commit": "af0c82e",
+        "timestamp": "2026-05-12T17:06:11.488Z",
+        "mi": 0,
+        "cognitive": 1340,
+        "nesting": 12,
+        "lines": 1839,
+        "maxCyclomatic": 302,
+        "entropy": 7.91
+      },
+      "history": [
+        {
+          "commit": "af0c82e",
+          "timestamp": "2026-05-12T17:06:11.488Z",
+          "mi": 0,
+          "cognitive": 1340,
+          "nesting": 12,
+          "lines": 1839,
+          "maxCyclomatic": 302,
+          "entropy": 7.91
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\map\\NPCDialogue.ts": {
+      "latest": {
+        "commit": "af0c82e",
+        "timestamp": "2026-05-12T17:45:12.649Z",
+        "mi": 24.9,
+        "cognitive": 71,
+        "nesting": 5,
+        "lines": 198,
+        "maxCyclomatic": 23,
+        "entropy": 7.17
+      },
+      "history": [
+        {
+          "commit": "af0c82e",
+          "timestamp": "2026-05-12T17:45:12.649Z",
+          "mi": 24.9,
+          "cognitive": 71,
+          "nesting": 5,
+          "lines": 198,
+          "maxCyclomatic": 23,
+          "entropy": 7.17
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\ecs\\systems\\RenderSystem.ts": {
+      "latest": {
+        "commit": "af0c82e",
+        "timestamp": "2026-05-12T19:32:25.717Z",
+        "mi": 54.6,
+        "cognitive": 14,
+        "nesting": 5,
+        "lines": 33,
+        "maxCyclomatic": 11,
+        "entropy": 5.47
+      },
+      "history": [
+        {
+          "commit": "af0c82e",
+          "timestamp": "2026-05-12T19:32:25.717Z",
+          "mi": 54.6,
+          "cognitive": 14,
+          "nesting": 5,
+          "lines": 33,
+          "maxCyclomatic": 11,
+          "entropy": 5.47
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\shared\\MapData.ts": {
+      "latest": {
+        "commit": "af0c82e",
+        "timestamp": "2026-05-12T19:38:30.923Z",
+        "mi": 25,
+        "cognitive": 96,
+        "nesting": 5,
+        "lines": 170,
+        "maxCyclomatic": 26,
+        "entropy": 6.01
+      },
+      "history": [
+        {
+          "commit": "af0c82e",
+          "timestamp": "2026-05-12T19:38:30.923Z",
+          "mi": 25,
+          "cognitive": 96,
+          "nesting": 5,
+          "lines": 170,
+          "maxCyclomatic": 26,
+          "entropy": 6.01
+        }
+      ],
+      "trend": "stable"
     }
   },
-  "capturedAt": "2026-04-29T23:11:51.864Z"
+  "capturedAt": "2026-05-12T19:47:15.838Z"
 }

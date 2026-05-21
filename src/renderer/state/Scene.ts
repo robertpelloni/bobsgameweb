@@ -60,8 +60,7 @@ export abstract class Scene<T extends SceneConfig = SceneConfig> implements Stat
   }
 
   onResize(width: number, height: number): void {
-    this.width = width;
-    this.height = height;
+    // width/height are getters from app.screen, no need to set them
     this.container.label = this.name;
   }
 

@@ -1,0 +1,6944 @@
+{
+  "TOWNYUUDownstairs": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNYUUUpstairs",
+      "destDoor": "",
+      "x": 45,
+      "y": 40,
+      "arrivalX": 50,
+      "arrivalY": 27
+    },
+    {
+      "name": "door_17",
+      "destMap": "TOWNYUUDownstairsBathroom",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 3,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_18",
+      "destMap": "TOWNYUUBasement",
+      "destDoor": "",
+      "x": 1,
+      "y": 5,
+      "arrivalX": 5,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_19",
+      "destMap": "TOWNYUUGarage",
+      "destDoor": "",
+      "x": 29,
+      "y": 4,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_20",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 10,
+      "y": 36,
+      "arrivalX": 32,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_21",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 55,
+      "y": 25,
+      "arrivalX": 1078,
+      "arrivalY": 52
+    }
+  ],
+  "TOWNYUUUpstairs": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNYUUDownstairs",
+      "destDoor": "",
+      "x": 50,
+      "y": 26,
+      "arrivalX": 45,
+      "arrivalY": 41
+    },
+    {
+      "name": "door_4",
+      "destMap": "TOWNYUUUpstairsParentsRoom",
+      "destDoor": "",
+      "x": 33,
+      "y": 10,
+      "arrivalX": 13,
+      "arrivalY": 14
+    },
+    {
+      "name": "door_5",
+      "destMap": "TOWNYUUUpstairsBabyRoom",
+      "destDoor": "",
+      "x": 51,
+      "y": 10,
+      "arrivalX": 4,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_6",
+      "destMap": "TOWNYUUUpstairsBathroom",
+      "destDoor": "",
+      "x": 23,
+      "y": 4,
+      "arrivalX": 6,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_7",
+      "destMap": "TOWNYUUUpstairsBrothersRoom",
+      "destDoor": "",
+      "x": 46,
+      "y": 4,
+      "arrivalX": 26,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_8",
+      "destMap": "TOWNYUUUpstairsYuusRoom",
+      "destDoor": "",
+      "x": 30,
+      "y": 9,
+      "arrivalX": 2,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNYUUUpstairsYuusRoom": [
+    {
+      "name": "door_6",
+      "destMap": "TOWNYUUUpstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 30,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNYUUUpstairsBabyRoom": [
+    {
+      "name": "door_3",
+      "destMap": "TOWNYUUUpstairs",
+      "destDoor": "",
+      "x": 7,
+      "y": 19,
+      "arrivalX": 14,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNYUUUpstairsBrothersRoom": [
+    {
+      "name": "door_4",
+      "destMap": "TOWNYUUUpstairs",
+      "destDoor": "",
+      "x": 12,
+      "y": 9,
+      "arrivalX": 26,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNYUUUpstairsBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "TOWNYUUUpstairs",
+      "destDoor": "",
+      "x": 7,
+      "y": 9,
+      "arrivalX": 20,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNYUUUpstairsParentsRoom": [
+    {
+      "name": "door_3",
+      "destMap": "TOWNYUUUpstairs",
+      "destDoor": "",
+      "x": 11,
+      "y": 9,
+      "arrivalX": 8,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNYUUBasement": [
+    {
+      "name": "door_10",
+      "destMap": "TOWNYUUDownstairs",
+      "destDoor": "",
+      "x": 41,
+      "y": 18,
+      "arrivalX": 45,
+      "arrivalY": 40
+    }
+  ],
+  "TOWNYUUGarage": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNYUUGarage",
+      "destDoor": "",
+      "x": 5,
+      "y": 9,
+      "arrivalX": 5,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_3",
+      "destMap": "TOWNYUUDownstairs",
+      "destDoor": "",
+      "x": 16,
+      "y": 9,
+      "arrivalX": 51,
+      "arrivalY": 40
+    },
+    {
+      "name": "warp_toAttic",
+      "destMap": "TOWNYUUAttic",
+      "destDoor": "",
+      "x": 4,
+      "y": 12,
+      "arrivalX": 13,
+      "arrivalY": 15
+    }
+  ],
+  "TOWNYUUAttic": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNYUUAttic",
+      "destDoor": "",
+      "x": 24,
+      "y": 11,
+      "arrivalX": 24,
+      "arrivalY": 12
+    },
+    {
+      "name": "warp_toGarage",
+      "destMap": "TOWNYUUGarage",
+      "destDoor": "",
+      "x": 4,
+      "y": 13,
+      "arrivalX": 8,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNYUUDownstairsBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "TOWNYUUDownstairs",
+      "destDoor": "",
+      "x": 4,
+      "y": 9,
+      "arrivalX": 51,
+      "arrivalY": 41
+    }
+  ],
+  "INTRODownstairs": [
+    {
+      "name": "door_0",
+      "destMap": "INTRODownstairs",
+      "destDoor": "",
+      "x": 36,
+      "y": 9,
+      "arrivalX": 37,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_5",
+      "destMap": "INTROGarage",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_6",
+      "destMap": "INTROBasement",
+      "destDoor": "",
+      "x": 29,
+      "y": 4,
+      "arrivalX": 5,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_7",
+      "destMap": "INTROTown",
+      "destDoor": "",
+      "x": 26,
+      "y": 31,
+      "arrivalX": 32,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_8",
+      "destMap": "INTRODownstairsBathroom",
+      "destDoor": "",
+      "x": 40,
+      "y": 13,
+      "arrivalX": 4,
+      "arrivalY": 10
+    },
+    {
+      "name": "warp_toUpstairs",
+      "destMap": "INTROUpstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 21,
+      "arrivalX": 29,
+      "arrivalY": 16
+    }
+  ],
+  "INTROUpstairs": [
+    {
+      "name": "door_0",
+      "destMap": "INTROUpstairs",
+      "destDoor": "",
+      "x": 44,
+      "y": 9
+    },
+    {
+      "name": "door_3",
+      "destMap": "INTROUpstairsParentsRoom",
+      "destDoor": "",
+      "x": 33,
+      "y": 10,
+      "arrivalX": 13,
+      "arrivalY": 14
+    },
+    {
+      "name": "door_4",
+      "destMap": "INTROUpstairsBabyRoom",
+      "destDoor": "",
+      "x": 51,
+      "y": 10,
+      "arrivalX": 4,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_5",
+      "destMap": "INTROUpstairsBathroom",
+      "destDoor": "",
+      "x": 23,
+      "y": 4,
+      "arrivalX": 6,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_6",
+      "destMap": "INTROUpstairsBrothersRoom",
+      "destDoor": "",
+      "x": 46,
+      "y": 4,
+      "arrivalX": 26,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_7",
+      "destMap": "INTROUpstairsYuusRoom",
+      "destDoor": "",
+      "x": 46,
+      "y": 9,
+      "arrivalX": 8,
+      "arrivalY": 10
+    },
+    {
+      "name": "warp_toDownstairs",
+      "destMap": "INTRODownstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 25,
+      "arrivalX": 30,
+      "arrivalY": 20
+    }
+  ],
+  "INTROUpstairsYuusRoom": [
+    {
+      "name": "door_0",
+      "destMap": "INTROUpstairs",
+      "destDoor": "",
+      "x": 8,
+      "y": 9,
+      "arrivalX": 46,
+      "arrivalY": 10
+    }
+  ],
+  "INTROUpstairsBabyRoom": [
+    {
+      "name": "door_1",
+      "destMap": "INTROUpstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 16,
+      "arrivalY": 10
+    }
+  ],
+  "INTROUpstairsBrothersRoom": [
+    {
+      "name": "door_2",
+      "destMap": "INTROUpstairs",
+      "destDoor": "",
+      "x": 17,
+      "y": 9,
+      "arrivalX": 42,
+      "arrivalY": 10
+    }
+  ],
+  "INTROUpstairsBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "INTROUpstairs",
+      "destDoor": "",
+      "x": 3,
+      "y": 6,
+      "arrivalX": 19,
+      "arrivalY": 10
+    }
+  ],
+  "INTROUpstairsParentsRoom": [
+    {
+      "name": "door_0",
+      "destMap": "INTROUpstairs",
+      "destDoor": "",
+      "x": 5,
+      "y": 12,
+      "arrivalX": 12,
+      "arrivalY": 10
+    }
+  ],
+  "INTROBasement": [
+    {
+      "name": "door_7",
+      "destMap": "INTRODownstairs",
+      "destDoor": "",
+      "x": 22,
+      "y": 18,
+      "arrivalX": 40,
+      "arrivalY": 12
+    }
+  ],
+  "INTROGarage": [
+    {
+      "name": "door_0",
+      "destMap": "INTROGarage",
+      "destDoor": "",
+      "x": 24,
+      "y": 23,
+      "arrivalX": 24,
+      "arrivalY": 24
+    },
+    {
+      "name": "door_2",
+      "destMap": "INTRODownstairs",
+      "destDoor": "",
+      "x": 24,
+      "y": 24,
+      "arrivalX": 38,
+      "arrivalY": 9
+    },
+    {
+      "name": "warp_toAttic",
+      "destMap": "INTROAttic",
+      "destDoor": "",
+      "x": 4,
+      "y": 12,
+      "arrivalX": 8,
+      "arrivalY": 10
+    }
+  ],
+  "INTRODownstairsBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "INTRODownstairs",
+      "destDoor": "",
+      "x": 4,
+      "y": 9,
+      "arrivalX": 40,
+      "arrivalY": 14
+    }
+  ],
+  "INTROAttic": [
+    {
+      "name": "door_0",
+      "destMap": "INTROAttic",
+      "destDoor": "",
+      "x": 2,
+      "y": 14,
+      "arrivalX": 2,
+      "arrivalY": 15
+    },
+    {
+      "name": "warp_toGarage",
+      "destMap": "INTROGarage",
+      "destDoor": "",
+      "x": 4,
+      "y": 13,
+      "arrivalX": 15,
+      "arrivalY": 12
+    }
+  ],
+  "GENERIC1Downstairs": [
+    {
+      "name": "door_0",
+      "destMap": "GENERIC1Downstairs",
+      "destDoor": "",
+      "x": 1,
+      "y": 5,
+      "arrivalX": 12,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_7",
+      "destMap": "GENERIC1Downstairs",
+      "destDoor": "",
+      "x": 26,
+      "y": 6
+    },
+    {
+      "name": "door_8",
+      "destMap": "GENERIC1Garage",
+      "destDoor": "",
+      "x": 11,
+      "y": 31,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_9",
+      "destMap": "GENERIC1DownstairsBathroom",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 1,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_10",
+      "destMap": "GENERIC1Basement",
+      "destDoor": "",
+      "x": 25,
+      "y": 36,
+      "arrivalX": 5,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_11",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 57,
+      "y": 30
+    },
+    {
+      "name": "warp_toUpstairs",
+      "destMap": "GENERIC1Upstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 21,
+      "arrivalX": 29,
+      "arrivalY": 16
+    }
+  ],
+  "GENERIC1Upstairs": [
+    {
+      "name": "door_0",
+      "destMap": "GENERIC1Upstairs",
+      "destDoor": "",
+      "x": 18,
+      "y": 8
+    },
+    {
+      "name": "door_1",
+      "destMap": "GENERIC1UpstairsMasterBedroom",
+      "destDoor": "",
+      "x": 51,
+      "y": 10,
+      "arrivalX": 17,
+      "arrivalY": 14
+    },
+    {
+      "name": "door_2",
+      "destMap": "GENERIC1UpstairsBathroom",
+      "destDoor": "",
+      "x": 46,
+      "y": 4,
+      "arrivalX": 6,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_3",
+      "destMap": "GENERIC1UpstairsBedroom1",
+      "destDoor": "",
+      "x": 7,
+      "y": 4,
+      "arrivalX": 6,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_4",
+      "destMap": "GENERIC1UpstairsBedroom2",
+      "destDoor": "",
+      "x": 23,
+      "y": 9,
+      "arrivalX": 12,
+      "arrivalY": 8
+    },
+    {
+      "name": "warp_toDownstairs",
+      "destMap": "GENERIC1Downstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 25,
+      "arrivalX": 35,
+      "arrivalY": 18
+    }
+  ],
+  "GENERIC1UpstairsBedroom1": [
+    {
+      "name": "door_4",
+      "destMap": "GENERIC1Upstairs",
+      "destDoor": "",
+      "x": 28,
+      "y": 8,
+      "arrivalX": 17,
+      "arrivalY": 10
+    }
+  ],
+  "GENERIC1UpstairsBedroom2": [
+    {
+      "name": "door_3",
+      "destMap": "GENERIC1Upstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 23,
+      "arrivalY": 10
+    }
+  ],
+  "GENERIC1UpstairsMasterBedroom": [
+    {
+      "name": "door_5",
+      "destMap": "GENERIC1Upstairs",
+      "destDoor": "",
+      "x": 28,
+      "y": 19,
+      "arrivalX": 22,
+      "arrivalY": 8
+    }
+  ],
+  "GENERIC1UpstairsBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "GENERIC1Upstairs",
+      "destDoor": "",
+      "x": 3,
+      "y": 6,
+      "arrivalX": 5,
+      "arrivalY": 10
+    }
+  ],
+  "GENERIC1Basement": [
+    {
+      "name": "door_7",
+      "destMap": "GENERIC1Downstairs",
+      "destDoor": "",
+      "x": 22,
+      "y": 18,
+      "arrivalX": 55,
+      "arrivalY": 30
+    }
+  ],
+  "GENERIC1Garage": [
+    {
+      "name": "door_0",
+      "destMap": "GENERIC1Garage",
+      "destDoor": "",
+      "x": 5,
+      "y": 7
+    },
+    {
+      "name": "door_1",
+      "destMap": "GENERIC1Downstairs",
+      "destDoor": "",
+      "x": 7,
+      "y": 8,
+      "arrivalX": 58,
+      "arrivalY": 8
+    },
+    {
+      "name": "warp_toAttic",
+      "destMap": "GENERIC1Attic",
+      "destDoor": "",
+      "x": 4,
+      "y": 12,
+      "arrivalX": 8,
+      "arrivalY": 10
+    }
+  ],
+  "GENERIC1DownstairsBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "GENERIC1Downstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 58,
+      "arrivalY": 29
+    }
+  ],
+  "GENERIC1Attic": [
+    {
+      "name": "door_0",
+      "destMap": "GENERIC1Attic",
+      "destDoor": "",
+      "x": 2,
+      "y": 14,
+      "arrivalX": 2,
+      "arrivalY": 15
+    },
+    {
+      "name": "warp_toGarage",
+      "destMap": "GENERIC1Garage",
+      "destDoor": "",
+      "x": 4,
+      "y": 13,
+      "arrivalX": 8,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNGENERIC2Downstairs": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "",
+      "x": 25,
+      "y": 36,
+      "arrivalX": 11,
+      "arrivalY": 33
+    },
+    {
+      "name": "door_3",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "",
+      "x": 59,
+      "y": 18,
+      "arrivalX": 59,
+      "arrivalY": 18
+    },
+    {
+      "name": "door_4",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "",
+      "x": 59,
+      "y": 19,
+      "arrivalX": 59,
+      "arrivalY": 18
+    },
+    {
+      "name": "door_5",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "",
+      "x": 59,
+      "y": 20,
+      "arrivalX": 59,
+      "arrivalY": 18
+    },
+    {
+      "name": "door_6",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "",
+      "x": 59,
+      "y": 21,
+      "arrivalX": 59,
+      "arrivalY": 18
+    },
+    {
+      "name": "door_7",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "",
+      "x": 59,
+      "y": 22,
+      "arrivalX": 59,
+      "arrivalY": 18
+    }
+  ],
+  "TOWNGENERIC3Downstairs": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "",
+      "x": 30,
+      "y": 36,
+      "arrivalX": 59,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_1",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "",
+      "x": 24,
+      "y": 8
+    },
+    {
+      "name": "door_2",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "",
+      "x": 4,
+      "y": 9
+    },
+    {
+      "name": "door_3",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "",
+      "x": 58,
+      "y": 9
+    },
+    {
+      "name": "door_4",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 27
+    },
+    {
+      "name": "door_5",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "",
+      "x": 4,
+      "y": 27
+    }
+  ],
+  "TOWNFRIENDDownstairs": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNFRIENDDownstairs",
+      "destDoor": "",
+      "x": 22,
+      "y": 9,
+      "arrivalX": 22,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_11",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 54,
+      "y": 9,
+      "arrivalX": 49,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_12",
+      "destMap": "TOWNFRIENDBasement",
+      "destDoor": "",
+      "x": 44,
+      "y": 31,
+      "arrivalX": 57,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_13",
+      "destMap": "TOWNFRIENDDownstairsBathroom",
+      "destDoor": "",
+      "x": 56,
+      "y": 5,
+      "arrivalX": 5,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_14",
+      "destMap": "TOWNFRIENDGarage",
+      "destDoor": "",
+      "x": 30,
+      "y": 36,
+      "arrivalX": 7,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_15",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 58,
+      "y": 9,
+      "arrivalX": 657,
+      "arrivalY": 54
+    },
+    {
+      "name": "warp_toUpstairs",
+      "destMap": "TOWNFRIENDUpstairs",
+      "destDoor": "",
+      "x": 54,
+      "y": 21,
+      "arrivalX": 31,
+      "arrivalY": 16
+    }
+  ],
+  "TOWNFRIENDUpstairs": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNFRIENDUpstairs",
+      "destDoor": "",
+      "x": 20,
+      "y": 8
+    },
+    {
+      "name": "door_3",
+      "destMap": "TOWNFRIENDUpstairsFriendsRoom",
+      "destDoor": "",
+      "x": 5,
+      "y": 4,
+      "arrivalX": 4,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_4",
+      "destMap": "TOWNFRIENDUpstairsSistersRoom",
+      "destDoor": "",
+      "x": 29,
+      "y": 10,
+      "arrivalX": 8,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_5",
+      "destMap": "TOWNFRIENDUpstairsParentsRoom",
+      "destDoor": "",
+      "x": 6,
+      "y": 10,
+      "arrivalX": 32,
+      "arrivalY": 14
+    },
+    {
+      "name": "door_6",
+      "destMap": "TOWNFRIENDUpstairsBathroom",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 3,
+      "arrivalY": 6
+    },
+    {
+      "name": "warp_toDownstairs",
+      "destMap": "TOWNFRIENDDownstairs",
+      "destDoor": "",
+      "x": 54,
+      "y": 30,
+      "arrivalX": 29,
+      "arrivalY": 19
+    }
+  ],
+  "TOWNFRIENDUpstairsFriendsRoom": [
+    {
+      "name": "door_7",
+      "destMap": "TOWNFRIENDUpstairs",
+      "destDoor": "",
+      "x": 15,
+      "y": 20,
+      "arrivalX": 22,
+      "arrivalY": 8
+    }
+  ],
+  "TOWNFRIENDUpstairsSistersRoom": [
+    {
+      "name": "door_6",
+      "destMap": "TOWNFRIENDUpstairs",
+      "destDoor": "",
+      "x": 4,
+      "y": 9,
+      "arrivalX": 43,
+      "arrivalY": 8
+    }
+  ],
+  "TOWNFRIENDUpstairsBathroom": [
+    {
+      "name": "door_3",
+      "destMap": "TOWNFRIENDUpstairs",
+      "destDoor": "",
+      "x": 3,
+      "y": 6,
+      "arrivalX": 2,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNFRIENDUpstairsParentsRoom": [
+    {
+      "name": "door_6",
+      "destMap": "TOWNFRIENDUpstairs",
+      "destDoor": "",
+      "x": 9,
+      "y": 9,
+      "arrivalX": 47,
+      "arrivalY": 8
+    }
+  ],
+  "TOWNFRIENDBasement": [
+    {
+      "name": "door_16",
+      "destMap": "TOWNFRIENDDownstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 18,
+      "arrivalX": 7,
+      "arrivalY": 23
+    }
+  ],
+  "TOWNFRIENDGarage": [
+    {
+      "name": "door_2",
+      "destMap": "TOWNFRIENDDownstairs",
+      "destDoor": "",
+      "x": 17,
+      "y": 9,
+      "arrivalX": 25,
+      "arrivalY": 40
+    }
+  ],
+  "TOWNFRIENDDownstairsBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "TOWNFRIENDDownstairs",
+      "destDoor": "",
+      "x": 10,
+      "y": 9,
+      "arrivalX": 25,
+      "arrivalY": 41
+    }
+  ],
+  "JAPANBedroom": [
+    {
+      "name": "door_5",
+      "destMap": "JAPANBedroom",
+      "destDoor": "",
+      "x": 2,
+      "y": 8,
+      "arrivalX": 2,
+      "arrivalY": 9
+    }
+  ],
+  "JAPANHouse": [
+    {
+      "name": "door_0",
+      "destMap": "JAPANHouse",
+      "destDoor": "",
+      "x": 2,
+      "y": 8,
+      "arrivalX": 2,
+      "arrivalY": 9
+    }
+  ],
+  "TOWNCRAZYDownstairs": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNCRAZYDownstairs",
+      "destDoor": "",
+      "x": 41,
+      "y": 8
+    },
+    {
+      "name": "door_8",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 17,
+      "y": 8,
+      "arrivalX": 24,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_9",
+      "destMap": "TOWNCRAZYDownstairsBathroom",
+      "destDoor": "",
+      "x": 21,
+      "y": 4,
+      "arrivalX": 1,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_10",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 21,
+      "y": 9,
+      "arrivalX": 509,
+      "arrivalY": 87
+    },
+    {
+      "name": "door_11",
+      "destMap": "TOWNCRAZYBasement",
+      "destDoor": "",
+      "x": 1,
+      "y": 20,
+      "arrivalX": 20,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_12",
+      "destMap": "TOWNCRAZYGarage",
+      "destDoor": "",
+      "x": 30,
+      "y": 9,
+      "arrivalX": 7,
+      "arrivalY": 7
+    },
+    {
+      "name": "warp_toUpstairs",
+      "destMap": "TOWNCRAZYUpstairs",
+      "destDoor": "",
+      "x": 17,
+      "y": 20,
+      "arrivalX": 9,
+      "arrivalY": 8
+    }
+  ],
+  "TOWNCRAZYUpstairs": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNCRAZYUpstairs",
+      "destDoor": "",
+      "x": 5,
+      "y": 9,
+      "arrivalX": 5,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_3",
+      "destMap": "TOWNCRAZYUpstairsBedroom",
+      "destDoor": "",
+      "x": 6,
+      "y": 10,
+      "arrivalX": 13,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_4",
+      "destMap": "TOWNCRAZYUpstairsBathroom",
+      "destDoor": "",
+      "x": 19,
+      "y": 4,
+      "arrivalX": 9,
+      "arrivalY": 14
+    },
+    {
+      "name": "door_5",
+      "destMap": "TOWNCRAZYUpstairsHidden",
+      "destDoor": "",
+      "x": 5,
+      "y": 15,
+      "arrivalX": 11,
+      "arrivalY": 20
+    },
+    {
+      "name": "warp_toDownstairs",
+      "destMap": "TOWNCRAZYDownstairs",
+      "destDoor": "",
+      "x": 17,
+      "y": 20,
+      "arrivalX": 23,
+      "arrivalY": 19
+    }
+  ],
+  "TOWNCRAZYUpstairsBedroom": [
+    {
+      "name": "door_2",
+      "destMap": "TOWNCRAZYUpstairs",
+      "destDoor": "",
+      "x": 7,
+      "y": 9,
+      "arrivalX": 22,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNCRAZYUpstairsBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "TOWNCRAZYUpstairs",
+      "destDoor": "",
+      "x": 3,
+      "y": 9,
+      "arrivalX": 23,
+      "arrivalY": 11
+    }
+  ],
+  "TOWNCRAZYDownstairsBathroom": [
+    {
+      "name": "door_1",
+      "destMap": "TOWNCRAZYDownstairs",
+      "destDoor": "",
+      "x": 7,
+      "y": 9,
+      "arrivalX": 40,
+      "arrivalY": 32
+    }
+  ],
+  "TOWNCRAZYBasement": [
+    {
+      "name": "door_9",
+      "destMap": "TOWNCRAZYDownstairs",
+      "destDoor": "",
+      "x": 35,
+      "y": 19,
+      "arrivalX": 26,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNCRAZYGarage": [
+    {
+      "name": "door_1",
+      "destMap": "TOWNCRAZYDownstairs",
+      "destDoor": "",
+      "x": 7,
+      "y": 7,
+      "arrivalX": 30,
+      "arrivalY": 10
+    }
+  ],
+  "TOWNCRAZYUpstairsHidden": [
+    {
+      "name": "door_5",
+      "destMap": "TOWNCRAZYUpstairs",
+      "destDoor": "",
+      "x": 11,
+      "y": 19,
+      "arrivalX": 5,
+      "arrivalY": 14
+    }
+  ],
+  "TOWNMANSIONDownstairs": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "",
+      "x": 5,
+      "y": 4,
+      "arrivalX": 47,
+      "arrivalY": 33
+    },
+    {
+      "name": "door_1",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "",
+      "x": 72,
+      "y": 27,
+      "arrivalX": 72,
+      "arrivalY": 25
+    },
+    {
+      "name": "door_2",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "",
+      "x": 5,
+      "y": 29,
+      "arrivalX": 72,
+      "arrivalY": 25
+    },
+    {
+      "name": "door_6",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "",
+      "x": 82,
+      "y": 29,
+      "arrivalX": 72,
+      "arrivalY": 25
+    },
+    {
+      "name": "door_7",
+      "destMap": "TOWNMANSIONDownstairsKitchen",
+      "destDoor": "",
+      "x": 1,
+      "y": 7,
+      "arrivalX": 89,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_8",
+      "destMap": "TOWNMANSIONDownstairsKitchen",
+      "destDoor": "",
+      "x": 40,
+      "y": 1,
+      "arrivalX": 79,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_9",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "",
+      "x": 43,
+      "y": 1,
+      "arrivalX": 72,
+      "arrivalY": 25
+    },
+    {
+      "name": "warp_toUpstairsLeft",
+      "destMap": "TOWNMANSIONUpstairsVideoGameRoom",
+      "destDoor": "",
+      "x": 33,
+      "y": 1,
+      "arrivalX": 52,
+      "arrivalY": 20
+    }
+  ],
+  "TOWNMANSIONDownstairsKitchen": [
+    {
+      "name": "door_13",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "",
+      "x": 85,
+      "y": 20,
+      "arrivalX": 9,
+      "arrivalY": 25
+    },
+    {
+      "name": "door_14",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "",
+      "x": 65,
+      "y": 10,
+      "arrivalX": 33,
+      "arrivalY": 2
+    }
+  ],
+  "TOWNMANSIONUpstairsVideoGameRoom": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNMANSIONUpstairsVideoGameRoom",
+      "destDoor": "",
+      "x": 55,
+      "y": 10,
+      "arrivalX": 55,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_1",
+      "destMap": "TOWNMANSIONUpstairsVideoGameRoom",
+      "destDoor": "",
+      "x": 72,
+      "y": 10,
+      "arrivalX": 55,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_2",
+      "destMap": "TOWNMANSIONUpstairsVideoGameRoom",
+      "destDoor": "",
+      "x": 45,
+      "y": 11,
+      "arrivalX": 55,
+      "arrivalY": 11
+    },
+    {
+      "name": "warp_toDownstairsLeft",
+      "destMap": "TOWNMANSIONDownstairs",
+      "destDoor": "",
+      "x": 33,
+      "y": 42,
+      "arrivalX": 53,
+      "arrivalY": 15
+    }
+  ],
+  "SCHOOLMainOffice": [
+    {
+      "name": "door_4",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 1,
+      "y": 8,
+      "arrivalX": 17,
+      "arrivalY": 25
+    },
+    {
+      "name": "door_5",
+      "destMap": "SCHOOLPrincipalsOffice",
+      "destDoor": "",
+      "x": 11,
+      "y": 11,
+      "arrivalX": 10,
+      "arrivalY": 11
+    }
+  ],
+  "SCHOOLPrincipalsOffice": [
+    {
+      "name": "door_3",
+      "destMap": "SCHOOLMainOffice",
+      "destDoor": "",
+      "x": 11,
+      "y": 11,
+      "arrivalX": 11,
+      "arrivalY": 12
+    }
+  ],
+  "SCHOOLDetention": [
+    {
+      "name": "door_5",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 20,
+      "y": 18,
+      "arrivalX": 168,
+      "arrivalY": 30
+    }
+  ],
+  "SCHOOLClinic": [
+    {
+      "name": "door_3",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 3,
+      "y": 14,
+      "arrivalX": 31,
+      "arrivalY": 25
+    },
+    {
+      "name": "door_4",
+      "destMap": "SCHOOLClinicBathroom",
+      "destDoor": "",
+      "x": 19,
+      "y": 11,
+      "arrivalX": 9,
+      "arrivalY": 12
+    }
+  ],
+  "SCHOOLClinicBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "SCHOOLClinic",
+      "destDoor": "",
+      "x": 9,
+      "y": 11,
+      "arrivalX": 19,
+      "arrivalY": 12
+    }
+  ],
+  "SCHOOLTeachersLounge": [
+    {
+      "name": "door_10",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 27,
+      "y": 11,
+      "arrivalX": 121,
+      "arrivalY": 28
+    }
+  ],
+  "SCHOOLMusicRoom": [
+    {
+      "name": "door_19",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "",
+      "x": 8,
+      "y": 40,
+      "arrivalX": 5,
+      "arrivalY": 12
+    }
+  ],
+  "SCHOOLArtRoom": [
+    {
+      "name": "door_19",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "",
+      "x": 40,
+      "y": 39,
+      "arrivalX": 16,
+      "arrivalY": 12
+    }
+  ],
+  "SCHOOLComputerLab": [
+    {
+      "name": "door_21",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "",
+      "x": 5,
+      "y": 13,
+      "arrivalX": 2,
+      "arrivalY": 40
+    }
+  ],
+  "SCHOOLKitchen": [
+    {
+      "name": "door_6",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "",
+      "x": 11,
+      "y": 5,
+      "arrivalX": 34,
+      "arrivalY": 40
+    }
+  ],
+  "SCHOOLLibrary": [
+    {
+      "name": "door_40",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "",
+      "x": 27,
+      "y": 11,
+      "arrivalX": 34,
+      "arrivalY": 40
+    }
+  ],
+  "SCHOOLCustodian": [
+    {
+      "name": "door_3",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 11,
+      "y": 1,
+      "arrivalX": 6,
+      "arrivalY": 42
+    },
+    {
+      "name": "door_4",
+      "destMap": "SCHOOLCustodian",
+      "destDoor": "",
+      "x": 7,
+      "y": 17,
+      "arrivalX": 7,
+      "arrivalY": 18
+    }
+  ],
+  "SCHOOLGirlsBathroom": [
+    {
+      "name": "door_9",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 10,
+      "y": 22,
+      "arrivalX": 11,
+      "arrivalY": 37
+    },
+    {
+      "name": "door_10",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "",
+      "x": 10,
+      "y": 6,
+      "arrivalX": 11,
+      "arrivalY": 16
+    },
+    {
+      "name": "door_11",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "",
+      "x": 18,
+      "y": 39,
+      "arrivalX": 18,
+      "arrivalY": 34
+    },
+    {
+      "name": "door_12",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "",
+      "x": 5,
+      "y": 11,
+      "arrivalX": 18,
+      "arrivalY": 34
+    },
+    {
+      "name": "door_13",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "",
+      "x": 17,
+      "y": 11,
+      "arrivalX": 18,
+      "arrivalY": 34
+    },
+    {
+      "name": "door_14",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "",
+      "x": 19,
+      "y": 31,
+      "arrivalX": 18,
+      "arrivalY": 34
+    }
+  ],
+  "SCHOOLBoysBathroom": [
+    {
+      "name": "door_10",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 10,
+      "y": 18,
+      "arrivalX": 11,
+      "arrivalY": 37
+    },
+    {
+      "name": "door_11",
+      "destMap": "SCHOOLBoysBathroom",
+      "destDoor": "",
+      "x": 10,
+      "y": 6,
+      "arrivalX": 11,
+      "arrivalY": 16
+    },
+    {
+      "name": "door_12",
+      "destMap": "SCHOOLBoysBathroom",
+      "destDoor": "",
+      "x": 18,
+      "y": 39,
+      "arrivalX": 17,
+      "arrivalY": 39
+    },
+    {
+      "name": "door_13",
+      "destMap": "SCHOOLBoysBathroom",
+      "destDoor": "",
+      "x": 18,
+      "y": 40,
+      "arrivalX": 17,
+      "arrivalY": 39
+    },
+    {
+      "name": "door_14",
+      "destMap": "SCHOOLBoysBathroom",
+      "destDoor": "",
+      "x": 17,
+      "y": 40,
+      "arrivalX": 17,
+      "arrivalY": 39
+    }
+  ],
+  "SCHOOLEntranceHallway": [
+    {
+      "name": "door_13",
+      "destMap": "SCHOOLPlayground",
+      "destDoor": "",
+      "x": 141,
+      "y": 42,
+      "arrivalX": 109,
+      "arrivalY": 39
+    },
+    {
+      "name": "door_14",
+      "destMap": "SCHOOLPlayground",
+      "destDoor": "",
+      "x": 168,
+      "y": 29,
+      "arrivalX": 183,
+      "arrivalY": 37
+    },
+    {
+      "name": "door_15",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 6,
+      "y": 6,
+      "arrivalX": 163,
+      "arrivalY": 47
+    },
+    {
+      "name": "door_16",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 144,
+      "y": 23,
+      "arrivalX": 1404,
+      "arrivalY": 169
+    },
+    {
+      "name": "door_17",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 121,
+      "y": 24,
+      "arrivalX": 1404,
+      "arrivalY": 169
+    },
+    {
+      "name": "door_18",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "",
+      "x": 192,
+      "y": 6,
+      "arrivalX": 103,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_19",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "",
+      "x": 123,
+      "y": 24,
+      "arrivalX": 140,
+      "arrivalY": 42
+    },
+    {
+      "name": "door_20",
+      "destMap": "SCHOOLGymCafeteria",
+      "destDoor": "",
+      "x": 29,
+      "y": 22,
+      "arrivalX": 24,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_21",
+      "destMap": "SCHOOLTeachersLounge",
+      "destDoor": "",
+      "x": 150,
+      "y": 22,
+      "arrivalX": 33,
+      "arrivalY": 27
+    },
+    {
+      "name": "door_22",
+      "destMap": "SCHOOLMainOffice",
+      "destDoor": "",
+      "x": 84,
+      "y": 22,
+      "arrivalX": 19,
+      "arrivalY": 3
+    },
+    {
+      "name": "door_23",
+      "destMap": "SCHOOLClinic",
+      "destDoor": "",
+      "x": 173,
+      "y": 22,
+      "arrivalX": 10,
+      "arrivalY": 3
+    },
+    {
+      "name": "door_24",
+      "destMap": "SCHOOLDetention",
+      "destDoor": "",
+      "x": 168,
+      "y": 29,
+      "arrivalX": 20,
+      "arrivalY": 19
+    }
+  ],
+  "SCHOOLGymHallway": [
+    {
+      "name": "door_12",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 6,
+      "y": 6,
+      "arrivalX": 12,
+      "arrivalY": 6
+    },
+    {
+      "name": "door_13",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 203,
+      "y": 49,
+      "arrivalX": 122,
+      "arrivalY": 24
+    },
+    {
+      "name": "door_14",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "",
+      "x": 37,
+      "y": 34,
+      "arrivalX": 10,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_15",
+      "destMap": "SCHOOLMusicRoom",
+      "destDoor": "",
+      "x": 77,
+      "y": 34,
+      "arrivalX": 40,
+      "arrivalY": 39
+    },
+    {
+      "name": "door_16",
+      "destMap": "SCHOOLArtRoom",
+      "destDoor": "",
+      "x": 117,
+      "y": 34,
+      "arrivalX": 10,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_17",
+      "destMap": "SCHOOLComputerLab",
+      "destDoor": "",
+      "x": 145,
+      "y": 34,
+      "arrivalX": 15,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_18",
+      "destMap": "SCHOOLKitchen",
+      "destDoor": "",
+      "x": 156,
+      "y": 36,
+      "arrivalX": 18,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_19",
+      "destMap": "SCHOOLGymCafeteria",
+      "destDoor": "",
+      "x": 45,
+      "y": 39,
+      "arrivalX": 30,
+      "arrivalY": 19
+    }
+  ],
+  "SCHOOLClassHallway": [
+    {
+      "name": "door_17",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 192,
+      "y": 47,
+      "arrivalX": 196,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_18",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 145,
+      "y": 42,
+      "arrivalX": 173,
+      "arrivalY": 40
+    },
+    {
+      "name": "door_19",
+      "destMap": "SCHOOLGymCafeteria",
+      "destDoor": "",
+      "x": 6,
+      "y": 47,
+      "arrivalX": 24,
+      "arrivalY": 6
+    },
+    {
+      "name": "door_20",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "",
+      "x": 165,
+      "y": 34,
+      "arrivalX": 10,
+      "arrivalY": 51
+    },
+    {
+      "name": "door_21",
+      "destMap": "SCHOOLClassroom6",
+      "destDoor": "",
+      "x": 125,
+      "y": 34,
+      "arrivalX": 21,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_22",
+      "destMap": "SCHOOLClassroom5",
+      "destDoor": "",
+      "x": 85,
+      "y": 34,
+      "arrivalX": 16,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_23",
+      "destMap": "SCHOOLClassroom4",
+      "destDoor": "",
+      "x": 36,
+      "y": 34,
+      "arrivalX": 11,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_24",
+      "destMap": "SCHOOLLibrary",
+      "destDoor": "",
+      "x": 34,
+      "y": 39,
+      "arrivalX": 27,
+      "arrivalY": 12
+    }
+  ],
+  "SCHOOLBackHallway": [
+    {
+      "name": "door_15",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "",
+      "x": 102,
+      "y": 7,
+      "arrivalX": 196,
+      "arrivalY": 51
+    },
+    {
+      "name": "door_16",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "",
+      "x": 192,
+      "y": 39,
+      "arrivalX": 62,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_17",
+      "destMap": "SCHOOLPlayground",
+      "destDoor": "",
+      "x": 3,
+      "y": 34,
+      "arrivalX": 118,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_18",
+      "destMap": "SCHOOLPlayground",
+      "destDoor": "",
+      "x": 205,
+      "y": 41,
+      "arrivalX": 145,
+      "arrivalY": 42
+    },
+    {
+      "name": "door_19",
+      "destMap": "SCHOOLCustodian",
+      "destDoor": "",
+      "x": 35,
+      "y": 34,
+      "arrivalX": 6,
+      "arrivalY": 39
+    },
+    {
+      "name": "door_20",
+      "destMap": "SCHOOLClassroom3",
+      "destDoor": "",
+      "x": 75,
+      "y": 34,
+      "arrivalX": 38,
+      "arrivalY": 39
+    },
+    {
+      "name": "door_21",
+      "destMap": "SCHOOLClassroom2",
+      "destDoor": "",
+      "x": 146,
+      "y": 34,
+      "arrivalX": 9,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_22",
+      "destMap": "SCHOOLClassroom1",
+      "destDoor": "",
+      "x": 175,
+      "y": 34,
+      "arrivalX": 18,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_23",
+      "destMap": "SCHOOLGirlsBathroom",
+      "destDoor": "",
+      "x": 194,
+      "y": 34,
+      "arrivalX": 20,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_24",
+      "destMap": "SCHOOLBoysBathroom",
+      "destDoor": "",
+      "x": 173,
+      "y": 39,
+      "arrivalX": 17,
+      "arrivalY": 40
+    }
+  ],
+  "SCHOOLClassroom1": [
+    {
+      "name": "door_24",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 38,
+      "y": 21,
+      "arrivalX": 164,
+      "arrivalY": 43
+    }
+  ],
+  "SCHOOLClassroom2": [
+    {
+      "name": "door_24",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 38,
+      "y": 21,
+      "arrivalX": 60,
+      "arrivalY": 43
+    }
+  ],
+  "SCHOOLClassroom3": [
+    {
+      "name": "door_24",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 38,
+      "y": 21,
+      "arrivalX": 55,
+      "arrivalY": 43
+    }
+  ],
+  "SCHOOLClassroom4": [
+    {
+      "name": "door_24",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "",
+      "x": 38,
+      "y": 21,
+      "arrivalX": 202,
+      "arrivalY": 12
+    }
+  ],
+  "SCHOOLClassroom5": [
+    {
+      "name": "door_24",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "",
+      "x": 38,
+      "y": 21,
+      "arrivalX": 191,
+      "arrivalY": 12
+    }
+  ],
+  "SCHOOLClassroom6": [
+    {
+      "name": "door_24",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "",
+      "x": 38,
+      "y": 21,
+      "arrivalX": 16,
+      "arrivalY": 12
+    }
+  ],
+  "SCHOOLGymCafeteria": [
+    {
+      "name": "door_33",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "",
+      "x": 44,
+      "y": 46,
+      "arrivalX": 48,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_34",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 1,
+      "y": 33,
+      "arrivalX": 6,
+      "arrivalY": 6
+    },
+    {
+      "name": "door_35",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "",
+      "x": 30,
+      "y": 18,
+      "arrivalX": 45,
+      "arrivalY": 40
+    }
+  ],
+  "SCHOOLGymGym": [
+    {
+      "name": "door_0",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 44,
+      "y": 6,
+      "arrivalX": 6,
+      "arrivalY": 6
+    },
+    {
+      "name": "door_1",
+      "destMap": "SCHOOLClassHallway",
+      "destDoor": "",
+      "x": 1,
+      "y": 34,
+      "arrivalX": 48,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_2",
+      "destMap": "SCHOOLGymHallway",
+      "destDoor": "",
+      "x": 10,
+      "y": 48
+    }
+  ],
+  "TOWNCoffeeShop": [
+    {
+      "name": "door_46",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 2,
+      "y": 8,
+      "arrivalX": 1136,
+      "arrivalY": 171
+    }
+  ],
+  "TOWNPizzaPlace": [
+    {
+      "name": "door_29",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 1136,
+      "arrivalY": 172
+    }
+  ],
+  "TOWNBookstore": [
+    {
+      "name": "door_17",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 9,
+      "y": 4,
+      "arrivalX": 7,
+      "arrivalY": 49
+    },
+    {
+      "name": "door_18",
+      "destMap": "TOWNBookstoreBathroom",
+      "destDoor": "",
+      "x": 18,
+      "y": 49,
+      "arrivalX": 1,
+      "arrivalY": 11
+    }
+  ],
+  "TOWNBookstoreBathroom": [
+    {
+      "name": "door_3",
+      "destMap": "TOWNBookstore",
+      "destDoor": "",
+      "x": 1,
+      "y": 10,
+      "arrivalX": 18,
+      "arrivalY": 50
+    }
+  ],
+  "TOWNVideoRent": [
+    {
+      "name": "door_20",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 31,
+      "y": 13,
+      "arrivalX": 11,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_21",
+      "destMap": "TOWNVideoRentAdultRoom",
+      "destDoor": "",
+      "x": 3,
+      "y": 36,
+      "arrivalX": 9,
+      "arrivalY": 6
+    }
+  ],
+  "TOWNVideoRentAdultRoom": [
+    {
+      "name": "door_1",
+      "destMap": "TOWNVideoRent",
+      "destDoor": "",
+      "x": 9,
+      "y": 6,
+      "arrivalX": 3,
+      "arrivalY": 35
+    }
+  ],
+  "TOWNRecordStore": [
+    {
+      "name": "door_18",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 24,
+      "y": 10,
+      "arrivalX": 1511,
+      "arrivalY": 173
+    }
+  ],
+  "TOWNPets4Less": [
+    {
+      "name": "door_58",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 8,
+      "y": 10,
+      "arrivalX": 1469,
+      "arrivalY": 172
+    }
+  ],
+  "TOWNElectronicsStore": [
+    {
+      "name": "door_39",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 17,
+      "y": 5,
+      "arrivalX": 7,
+      "arrivalY": 50
+    },
+    {
+      "name": "door_40",
+      "destMap": "TOWNElectronicsStoreBackRoom",
+      "destDoor": "",
+      "x": 4,
+      "y": 9,
+      "arrivalX": 17,
+      "arrivalY": 4
+    }
+  ],
+  "TOWNElectronicsStoreBackRoom": [
+    {
+      "name": "door_3",
+      "destMap": "TOWNElectronicsStore",
+      "destDoor": "",
+      "x": 17,
+      "y": 4,
+      "arrivalX": 4,
+      "arrivalY": 9
+    }
+  ],
+  "TOWNBeautySalon": [
+    {
+      "name": "door_20",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 6,
+      "y": 5,
+      "arrivalX": 31,
+      "arrivalY": 39
+    },
+    {
+      "name": "door_21",
+      "destMap": "TOWNBeautySalonTanningRoom",
+      "destDoor": "",
+      "x": 18,
+      "y": 39,
+      "arrivalX": 14,
+      "arrivalY": 14
+    }
+  ],
+  "TOWNBeautySalonTanningRoom": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNBeautySalon",
+      "destDoor": "",
+      "x": 14,
+      "y": 13,
+      "arrivalX": 18,
+      "arrivalY": 40
+    }
+  ],
+  "TOWNArcade": [
+    {
+      "name": "door_31",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 1469,
+      "arrivalY": 173
+    }
+  ],
+  "TOWNGroceryStore": [
+    {
+      "name": "door_79",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 38,
+      "y": 5,
+      "arrivalX": 76,
+      "arrivalY": 87
+    },
+    {
+      "name": "door_80",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 67,
+      "y": 11,
+      "arrivalX": 1407,
+      "arrivalY": 173
+    },
+    {
+      "name": "door_81",
+      "destMap": "TOWNGroceryStore",
+      "destDoor": "",
+      "x": 67,
+      "y": 12,
+      "arrivalX": 67,
+      "arrivalY": 13
+    }
+  ],
+  "TOWNGasStation": [
+    {
+      "name": "door_29",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 2,
+      "y": 37,
+      "arrivalX": 1048,
+      "arrivalY": 171
+    }
+  ],
+  "TOWNDepartmentStore": [
+    {
+      "name": "door_87",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 69,
+      "y": 73,
+      "arrivalX": 62,
+      "arrivalY": 77
+    },
+    {
+      "name": "door_88",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 97,
+      "y": 10,
+      "arrivalX": 1523,
+      "arrivalY": 172
+    },
+    {
+      "name": "door_89",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 103,
+      "y": 10,
+      "arrivalX": 1523,
+      "arrivalY": 172
+    },
+    {
+      "name": "door_90",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 109,
+      "y": 10,
+      "arrivalX": 1523,
+      "arrivalY": 172
+    }
+  ],
+  "TOWNTacoBurger": [
+    {
+      "name": "door_43",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 4,
+      "y": 1,
+      "arrivalX": 1508,
+      "arrivalY": 170
+    }
+  ],
+  "TOWNChurch": [
+    {
+      "name": "door_52",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 20,
+      "y": 21,
+      "arrivalX": 1454,
+      "arrivalY": 170
+    }
+  ],
+  "TOWNDoctorsOfficeEntrance": [
+    {
+      "name": "door_21",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 3,
+      "y": 6,
+      "arrivalX": 6,
+      "arrivalY": 27
+    },
+    {
+      "name": "door_22",
+      "destMap": "TOWNDoctorsOfficeBackHall",
+      "destDoor": "",
+      "x": 24,
+      "y": 4,
+      "arrivalX": 31,
+      "arrivalY": 13
+    }
+  ],
+  "TOWNDoctorsOfficeBackHall": [
+    {
+      "name": "door_4",
+      "destMap": "TOWNDoctorsOfficeEntrance",
+      "destDoor": "",
+      "x": 4,
+      "y": 6,
+      "arrivalX": 6,
+      "arrivalY": 27
+    },
+    {
+      "name": "door_5",
+      "destMap": "TOWNDoctorsOfficeBackRoom",
+      "destDoor": "",
+      "x": 31,
+      "y": 13,
+      "arrivalX": 4,
+      "arrivalY": 12
+    }
+  ],
+  "TOWNDoctorsOfficeBackRoom": [
+    {
+      "name": "door_3",
+      "destMap": "TOWNDoctorsOfficeBackHall",
+      "destDoor": "",
+      "x": 4,
+      "y": 11,
+      "arrivalX": 30,
+      "arrivalY": 13
+    }
+  ],
+  "TOWNGameStore": [
+    {
+      "name": "door_28",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 4,
+      "y": 5,
+      "arrivalX": 23,
+      "arrivalY": 41
+    },
+    {
+      "name": "door_29",
+      "destMap": "TOWNGameStore",
+      "destDoor": "",
+      "x": 15,
+      "y": 19,
+      "arrivalX": 15,
+      "arrivalY": 20
+    }
+  ],
+  "TOWNMovieTheatreLobby": [
+    {
+      "name": "door_21",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 3,
+      "y": 5,
+      "arrivalX": 33,
+      "arrivalY": 32
+    },
+    {
+      "name": "door_22",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 37,
+      "y": 11,
+      "arrivalX": 1519,
+      "arrivalY": 173
+    },
+    {
+      "name": "door_23",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 14,
+      "y": 13,
+      "arrivalX": 1519,
+      "arrivalY": 173
+    },
+    {
+      "name": "door_24",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "",
+      "x": 39,
+      "y": 5,
+      "arrivalX": 7,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_25",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "",
+      "x": 3,
+      "y": 26,
+      "arrivalX": 55,
+      "arrivalY": 12
+    }
+  ],
+  "TOWNMovieTheatreMainHall": [
+    {
+      "name": "door_54",
+      "destMap": "TOWNMovieTheatreLobby",
+      "destDoor": "",
+      "x": 3,
+      "y": 6,
+      "arrivalX": 11,
+      "arrivalY": 6
+    },
+    {
+      "name": "door_55",
+      "destMap": "TOWNMovieTheatreLobby",
+      "destDoor": "",
+      "x": 87,
+      "y": 12,
+      "arrivalX": 38,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_56",
+      "destMap": "TOWNMovieTheaterBufferLeft",
+      "destDoor": "",
+      "x": 132,
+      "y": 6,
+      "arrivalX": 6,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_57",
+      "destMap": "TOWNMovieTheaterBufferRight",
+      "destDoor": "",
+      "x": 3,
+      "y": 29,
+      "arrivalX": 16,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_58",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "",
+      "x": 92,
+      "y": 10,
+      "arrivalX": 135,
+      "arrivalY": 34
+    },
+    {
+      "name": "door_59",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "",
+      "x": 100,
+      "y": 29,
+      "arrivalX": 14,
+      "arrivalY": 30
+    },
+    {
+      "name": "door_60",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "",
+      "x": 45,
+      "y": 10,
+      "arrivalX": 11,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_61",
+      "destMap": "TOWNMovieTheatreMensBathroom",
+      "destDoor": "",
+      "x": 102,
+      "y": 13,
+      "arrivalX": 6,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_62",
+      "destMap": "TOWNMovieTheatrePhotoBooth",
+      "destDoor": "",
+      "x": 49,
+      "y": 34,
+      "arrivalX": 2,
+      "arrivalY": 8
+    }
+  ],
+  "TOWNMovieTheatrePhotoBooth": [
+    {
+      "name": "door_1",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "",
+      "x": 2,
+      "y": 7,
+      "arrivalX": 50,
+      "arrivalY": 34
+    }
+  ],
+  "TOWNMovieTheatreMensBathroom": [
+    {
+      "name": "door_10",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "",
+      "x": 7,
+      "y": 9,
+      "arrivalX": 38,
+      "arrivalY": 18
+    },
+    {
+      "name": "door_11",
+      "destMap": "TOWNMovieTheatreMensBathroom",
+      "destDoor": "",
+      "x": 12,
+      "y": 9,
+      "arrivalX": 3,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_12",
+      "destMap": "TOWNMovieTheatreMensBathroom",
+      "destDoor": "",
+      "x": 7,
+      "y": 10,
+      "arrivalX": 5,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_13",
+      "destMap": "TOWNMovieTheatreMensBathroom",
+      "destDoor": "",
+      "x": 10,
+      "y": 10,
+      "arrivalX": 5,
+      "arrivalY": 11
+    }
+  ],
+  "TOWNMovieTheatreWomensBathroom": [
+    {
+      "name": "door_9",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "",
+      "x": 24,
+      "y": 9,
+      "arrivalX": 6,
+      "arrivalY": 18
+    },
+    {
+      "name": "door_10",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "",
+      "x": 19,
+      "y": 9,
+      "arrivalX": 30,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_11",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "",
+      "x": 19,
+      "y": 11,
+      "arrivalX": 2,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_12",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "",
+      "x": 22,
+      "y": 11,
+      "arrivalX": 2,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_13",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "",
+      "x": 24,
+      "y": 11,
+      "arrivalX": 2,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_14",
+      "destMap": "TOWNMovieTheatreWomensBathroom",
+      "destDoor": "",
+      "x": 27,
+      "y": 11,
+      "arrivalX": 2,
+      "arrivalY": 12
+    }
+  ],
+  "TOWNMovieTheaterBufferLeft": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "",
+      "x": 10,
+      "y": 6,
+      "arrivalX": 5,
+      "arrivalY": 38
+    },
+    {
+      "name": "door_1",
+      "destMap": "TOWNMovieTheatreInsideLeft",
+      "destDoor": "",
+      "x": 57,
+      "y": 6,
+      "arrivalX": 9,
+      "arrivalY": 15
+    },
+    {
+      "name": "door_2",
+      "destMap": "TOWNMovieTheatreInsideLeft",
+      "destDoor": "",
+      "x": 57,
+      "y": 12,
+      "arrivalX": 5,
+      "arrivalY": 26
+    }
+  ],
+  "TOWNMovieTheaterBufferRight": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNMovieTheatreMainHall",
+      "destDoor": "",
+      "x": 10,
+      "y": 6,
+      "arrivalX": 62,
+      "arrivalY": 37
+    },
+    {
+      "name": "door_1",
+      "destMap": "TOWNMovieTheatreInsideRight",
+      "destDoor": "",
+      "x": 57,
+      "y": 6,
+      "arrivalX": 9,
+      "arrivalY": 15
+    },
+    {
+      "name": "door_2",
+      "destMap": "TOWNMovieTheatreInsideRight",
+      "destDoor": "",
+      "x": 57,
+      "y": 12,
+      "arrivalX": 5,
+      "arrivalY": 26
+    }
+  ],
+  "TOWNMovieTheatreInsideLeft": [
+    {
+      "name": "door_97",
+      "destMap": "TOWNMovieTheaterBufferLeft",
+      "destDoor": "",
+      "x": 1,
+      "y": 55,
+      "arrivalX": 5,
+      "arrivalY": 8
+    },
+    {
+      "name": "door_98",
+      "destMap": "TOWNMovieTheaterBufferLeft",
+      "destDoor": "",
+      "x": 44,
+      "y": 26,
+      "arrivalX": 10,
+      "arrivalY": 13
+    }
+  ],
+  "TOWNMovieTheatreInsideRight": [
+    {
+      "name": "door_97",
+      "destMap": "TOWNMovieTheaterBufferRight",
+      "destDoor": "",
+      "x": 1,
+      "y": 55,
+      "arrivalX": 5,
+      "arrivalY": 8
+    },
+    {
+      "name": "door_98",
+      "destMap": "TOWNMovieTheaterBufferRight",
+      "destDoor": "",
+      "x": 44,
+      "y": 26,
+      "arrivalX": 10,
+      "arrivalY": 13
+    }
+  ],
+  "TOWNMovieTheatreInsideWithCrowdSprites": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNMovieTheatreInsideWithCrowdSprites",
+      "destDoor": "",
+      "x": 1,
+      "y": 55,
+      "arrivalX": 47,
+      "arrivalY": 64
+    },
+    {
+      "name": "door_1",
+      "destMap": "TOWNMovieTheatreInsideWithCrowdSprites",
+      "destDoor": "",
+      "x": 38,
+      "y": 33,
+      "arrivalX": 11,
+      "arrivalY": 32
+    }
+  ],
+  "CITYPartyStore": [
+    {
+      "name": "door_20",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 13,
+      "y": 5,
+      "arrivalX": 33,
+      "arrivalY": 40
+    },
+    {
+      "name": "door_21",
+      "destMap": "CITYPartyStoreBathroom",
+      "destDoor": "",
+      "x": 54,
+      "y": 37,
+      "arrivalX": 2,
+      "arrivalY": 11
+    }
+  ],
+  "CITYPartyStoreBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYPartyStore",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 54,
+      "arrivalY": 38
+    }
+  ],
+  "CITYGroovyClubEntrance": [
+    {
+      "name": "door_0",
+      "destMap": "CITYGroovyClubEntrance",
+      "destDoor": "",
+      "x": 3,
+      "y": 13,
+      "arrivalX": 4,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYGroovyClubEntrance",
+      "destDoor": "",
+      "x": 4,
+      "y": 14,
+      "arrivalX": 4,
+      "arrivalY": 13
+    },
+    {
+      "name": "warp_toOutside",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 10,
+      "y": 23,
+      "arrivalX": 661,
+      "arrivalY": 36
+    },
+    {
+      "name": "warp_toGroovyClub",
+      "destMap": "CITYGroovyClub",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 11,
+      "arrivalY": 50
+    }
+  ],
+  "CITYGroovyClub": [
+    {
+      "name": "door_0",
+      "destMap": "CITYGroovyClub",
+      "destDoor": "",
+      "x": 44,
+      "y": 74,
+      "arrivalX": 44,
+      "arrivalY": 73
+    },
+    {
+      "name": "warp_toLobby",
+      "destMap": "CITYGroovyClubEntrance",
+      "destDoor": "",
+      "x": 47,
+      "y": 73,
+      "arrivalX": 24,
+      "arrivalY": 9
+    }
+  ],
+  "CITYOfficeEntrance": [
+    {
+      "name": "door_18",
+      "destMap": "CITYOfficeEntrance",
+      "destDoor": "",
+      "x": 7,
+      "y": 15,
+      "arrivalX": 32,
+      "arrivalY": 41
+    },
+    {
+      "name": "door_19",
+      "destMap": "CITYOfficeElevator",
+      "destDoor": "",
+      "x": 18,
+      "y": 11,
+      "arrivalX": 2,
+      "arrivalY": 11
+    }
+  ],
+  "CITYOfficeElevator": [
+    {
+      "name": "door_1",
+      "destMap": "CITYOfficeEntrance",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 18,
+      "arrivalY": 12
+    }
+  ],
+  "CITYOfficeWorkroom": [
+    {
+      "name": "door_10",
+      "destMap": "CITYOfficeElevator",
+      "destDoor": "",
+      "x": 51,
+      "y": 10
+    }
+  ],
+  "CITYOfficeBreakRoom": [
+    {
+      "name": "door_20",
+      "destMap": "CITYOfficeElevator",
+      "destDoor": "",
+      "x": 39,
+      "y": 10
+    }
+  ],
+  "CITYOfficeBossFloor": [
+    {
+      "name": "door_11",
+      "destMap": "CITYOfficeElevator",
+      "destDoor": "",
+      "x": 33,
+      "y": 30,
+      "arrivalX": 1,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_12",
+      "destMap": "CITYOfficeBossFloor",
+      "destDoor": "",
+      "x": 18,
+      "y": 10,
+      "arrivalX": 18,
+      "arrivalY": 11
+    }
+  ],
+  "CITYBobsAptInside": [
+    {
+      "name": "door_3",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 16,
+      "y": 16,
+      "arrivalX": 19,
+      "arrivalY": 32
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYBobsBathroom",
+      "destDoor": "",
+      "x": 7,
+      "y": 9,
+      "arrivalX": 7,
+      "arrivalY": 10
+    }
+  ],
+  "CITYBobsBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYBobsAptInside",
+      "destDoor": "",
+      "x": 7,
+      "y": 9,
+      "arrivalX": 7,
+      "arrivalY": 9
+    }
+  ],
+  "CITYBobsAptInsideTrashed": [
+    {
+      "name": "door_3",
+      "destMap": "CITYBobsAptInsideTrashed",
+      "destDoor": "",
+      "x": 16,
+      "y": 16,
+      "arrivalX": 19,
+      "arrivalY": 32
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYBobsAptInsideTrashed",
+      "destDoor": "",
+      "x": 13,
+      "y": 9,
+      "arrivalX": 24,
+      "arrivalY": 10
+    }
+  ],
+  "CITYNeighborAptInside": [
+    {
+      "name": "door_4",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 16,
+      "y": 16,
+      "arrivalX": 19,
+      "arrivalY": 32
+    },
+    {
+      "name": "door_5",
+      "destMap": "CITYNeighborsAptBathroom",
+      "destDoor": "",
+      "x": 6,
+      "y": 12,
+      "arrivalX": 7,
+      "arrivalY": 10
+    }
+  ],
+  "CITYNeighborsAptBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYNeighborAptInside",
+      "destDoor": "",
+      "x": 7,
+      "y": 9,
+      "arrivalX": 6,
+      "arrivalY": 13
+    }
+  ],
+  "CITYAptMainOffice": [
+    {
+      "name": "door_4",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 13,
+      "y": 9,
+      "arrivalX": 1023,
+      "arrivalY": 9
+    }
+  ],
+  "CITYBankEntrance": [
+    {
+      "name": "door_41",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 62,
+      "y": 15,
+      "arrivalX": 37,
+      "arrivalY": 40
+    },
+    {
+      "name": "door_42",
+      "destMap": "CITYBankElevator",
+      "destDoor": "",
+      "x": 56,
+      "y": 11,
+      "arrivalX": 2,
+      "arrivalY": 11
+    }
+  ],
+  "CITYBankElevator": [
+    {
+      "name": "door_1",
+      "destMap": "CITYBankEntrance",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 56,
+      "arrivalY": 12
+    }
+  ],
+  "CITYBankOwnerOffice": [
+    {
+      "name": "door_11",
+      "destMap": "CITYBankElevator",
+      "destDoor": "",
+      "x": 2,
+      "y": 40
+    }
+  ],
+  "CITYFancyRestaurantEntrance": [
+    {
+      "name": "door_0",
+      "destMap": "CITYFancyRestaurantEntrance",
+      "destDoor": "",
+      "x": 19,
+      "y": 10,
+      "arrivalX": 19,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_10",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 22,
+      "y": 10,
+      "arrivalX": 330,
+      "arrivalY": 11
+    }
+  ],
+  "CITYFancyRestaurant": [
+    {
+      "name": "door_0",
+      "destMap": "CITYFancyRestaurant",
+      "destDoor": "",
+      "x": 28,
+      "y": 17,
+      "arrivalX": 28,
+      "arrivalY": 18
+    },
+    {
+      "name": "door_44",
+      "destMap": "CITYFancyRestaurantKitchen",
+      "destDoor": "",
+      "x": 55,
+      "y": 17,
+      "arrivalX": 19,
+      "arrivalY": 9
+    },
+    {
+      "name": "warp_toLobby",
+      "destMap": "CITYFancyRestaurantEntrance",
+      "destDoor": "",
+      "x": 12,
+      "y": 65,
+      "arrivalX": 20,
+      "arrivalY": 11
+    }
+  ],
+  "CITYFancyRestaurantKitchen": [
+    {
+      "name": "door_9",
+      "destMap": "CITYFancyRestaurant",
+      "destDoor": "",
+      "x": 3,
+      "y": 5,
+      "arrivalX": 22,
+      "arrivalY": 30
+    },
+    {
+      "name": "door_10",
+      "destMap": "CITYFancyRestaurantKitchenFreezer",
+      "destDoor": "",
+      "x": 6,
+      "y": 24,
+      "arrivalX": 16,
+      "arrivalY": 11
+    }
+  ],
+  "CITYFancyRestaurantKitchenFreezer": [
+    {
+      "name": "door_0",
+      "destMap": "CITYFancyRestaurantKitchen",
+      "destDoor": "",
+      "x": 16,
+      "y": 10,
+      "arrivalX": 6,
+      "arrivalY": 25
+    }
+  ],
+  "CITYFashionStore": [
+    {
+      "name": "door_30",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 17,
+      "arrivalY": 52
+    },
+    {
+      "name": "door_31",
+      "destMap": "CITYFashionStoreDressingRoom",
+      "destDoor": "",
+      "x": 17,
+      "y": 5,
+      "arrivalX": 7,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_32",
+      "destMap": "CITYFashionStoreDressingRoom2",
+      "destDoor": "",
+      "x": 4,
+      "y": 51,
+      "arrivalX": 3,
+      "arrivalY": 11
+    }
+  ],
+  "CITYFashionStoreDressingRoom": [
+    {
+      "name": "door_1",
+      "destMap": "CITYFashionStore",
+      "destDoor": "",
+      "x": 3,
+      "y": 10,
+      "arrivalX": 4,
+      "arrivalY": 51
+    }
+  ],
+  "CITYFashionStoreDressingRoom2": [
+    {
+      "name": "door_1",
+      "destMap": "CITYFashionStore",
+      "destDoor": "",
+      "x": 3,
+      "y": 10,
+      "arrivalX": 5,
+      "arrivalY": 51
+    }
+  ],
+  "CITYElevatedLifeplace": [
+    {
+      "name": "door_7",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 14,
+      "y": 10,
+      "arrivalX": 326,
+      "arrivalY": 11
+    }
+  ],
+  "CITYElevatedLifeplaceElevator": [
+    {
+      "name": "door_2",
+      "destMap": "CITYElevatedLifeplaceHallway",
+      "destDoor": "",
+      "x": 4,
+      "y": 17,
+      "arrivalX": 5,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 4,
+      "y": 9,
+      "arrivalX": 318,
+      "arrivalY": 11
+    }
+  ],
+  "CITYElevatedLifeplaceHallway": [
+    {
+      "name": "door_0",
+      "destMap": "CITYElevatedLifeplaceElevator",
+      "destDoor": "",
+      "x": 6,
+      "y": 7,
+      "arrivalX": 0,
+      "arrivalY": 3
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYElevatedLifeplaceApartment",
+      "destDoor": "",
+      "x": 5,
+      "y": 10,
+      "arrivalX": 6,
+      "arrivalY": 6
+    }
+  ],
+  "CITYElevatedLifeplaceApartment": [
+    {
+      "name": "door_11",
+      "destMap": "CITYElevatedLifeplaceHallway",
+      "destDoor": "",
+      "x": 16,
+      "y": 5,
+      "arrivalX": 2,
+      "arrivalY": 14
+    },
+    {
+      "name": "door_12",
+      "destMap": "CITYElevatedLifeplaceBedroom",
+      "destDoor": "",
+      "x": 16,
+      "y": 17,
+      "arrivalX": 19,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_13",
+      "destMap": "CITYElevatedLifeplaceBathroom",
+      "destDoor": "",
+      "x": 31,
+      "y": 26,
+      "arrivalX": 16,
+      "arrivalY": 10
+    }
+  ],
+  "CITYElevatedLifeplaceBathroom": [
+    {
+      "name": "door_1",
+      "destMap": "CITYElevatedLifeplaceApartment",
+      "destDoor": "",
+      "x": 2,
+      "y": 5,
+      "arrivalX": 2,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYElevatedLifeplaceBedroom",
+      "destDoor": "",
+      "x": 1,
+      "y": 10,
+      "arrivalX": 7,
+      "arrivalY": 12
+    }
+  ],
+  "CITYElevatedLifeplaceBedroom": [
+    {
+      "name": "door_3",
+      "destMap": "CITYElevatedLifeplaceApartment",
+      "destDoor": "",
+      "x": 2,
+      "y": 18,
+      "arrivalX": 2,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYElevatedLifeplaceBathroom",
+      "destDoor": "",
+      "x": 7,
+      "y": 11,
+      "arrivalX": 1,
+      "arrivalY": 11
+    }
+  ],
+  "CITYDeli": [
+    {
+      "name": "door_18",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 12,
+      "y": 40,
+      "arrivalX": 1197,
+      "arrivalY": 9
+    }
+  ],
+  "CITYTheCafeEntrance": [
+    {
+      "name": "door_1",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 5,
+      "y": 4,
+      "arrivalX": 9,
+      "arrivalY": 16
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYTheCafe",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 18,
+      "arrivalY": 4
+    }
+  ],
+  "CITYTheCafe": [
+    {
+      "name": "door_38",
+      "destMap": "CITYTheCafeEntrance",
+      "destDoor": "",
+      "x": 3,
+      "y": 5,
+      "arrivalX": 1,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_39",
+      "destMap": "CITYTheCafeBathroom",
+      "destDoor": "",
+      "x": 10,
+      "y": 10,
+      "arrivalX": 6,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_40",
+      "destMap": "CITYTheCafeDressingRoom",
+      "destDoor": "",
+      "x": 23,
+      "y": 3,
+      "arrivalX": 13,
+      "arrivalY": 15
+    },
+    {
+      "name": "door_41",
+      "destMap": "CITYTheCafeDressingRoom",
+      "destDoor": "",
+      "x": 21,
+      "y": 4,
+      "arrivalX": 2,
+      "arrivalY": 13
+    }
+  ],
+  "CITYTheCafeBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYTheCafe",
+      "destDoor": "",
+      "x": 5,
+      "y": 10,
+      "arrivalX": 19,
+      "arrivalY": 4
+    }
+  ],
+  "CITYTheCafeDressingRoom": [
+    {
+      "name": "door_3",
+      "destMap": "CITYTheCafe",
+      "destDoor": "",
+      "x": 2,
+      "y": 19,
+      "arrivalX": 18,
+      "arrivalY": 18
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYTheCafe",
+      "destDoor": "",
+      "x": 25,
+      "y": 12,
+      "arrivalX": 20,
+      "arrivalY": 4
+    }
+  ],
+  "CITYPoolHall": [
+    {
+      "name": "door_33",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 12,
+      "y": 10,
+      "arrivalX": 1023,
+      "arrivalY": 8
+    }
+  ],
+  "CITYLaundromat": [
+    {
+      "name": "door_19",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 15,
+      "y": 10,
+      "arrivalX": 92,
+      "arrivalY": 9
+    }
+  ],
+  "CITYHospitalEntrance": [
+    {
+      "name": "door_33",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 42,
+      "y": 14,
+      "arrivalX": 38,
+      "arrivalY": 40
+    },
+    {
+      "name": "door_34",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 14,
+      "y": 10,
+      "arrivalX": 778,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_35",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 17,
+      "y": 10,
+      "arrivalX": 778,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_36",
+      "destMap": "CITYHospitalEntranceBathroom",
+      "destDoor": "",
+      "x": 56,
+      "y": 15,
+      "arrivalX": 5,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_37",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "",
+      "x": 71,
+      "y": 15,
+      "arrivalX": 7,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_38",
+      "destMap": "CITYHospitalElevator2",
+      "destDoor": "",
+      "x": 17,
+      "y": 11,
+      "arrivalX": 2,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHospitalEntranceBathroom": [
+    {
+      "name": "door_4",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 15,
+      "arrivalY": 19
+    },
+    {
+      "name": "door_5",
+      "destMap": "CITYHospitalEntranceBathroom",
+      "destDoor": "",
+      "x": 5,
+      "y": 11,
+      "arrivalX": 5,
+      "arrivalY": 12
+    }
+  ],
+  "CITYHospitalElevator": [
+    {
+      "name": "door_1",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 14,
+      "arrivalY": 12
+    }
+  ],
+  "CITYHospitalElevator2": [
+    {
+      "name": "door_1",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 17,
+      "arrivalY": 12
+    }
+  ],
+  "CITYHospitalWaitingOutPatient": [
+    {
+      "name": "door_23",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "",
+      "x": 71,
+      "y": 29,
+      "arrivalX": 7,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_24",
+      "destMap": "CITYHospitalElevator2",
+      "destDoor": "",
+      "x": 27,
+      "y": 30,
+      "arrivalX": 9,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_25",
+      "destMap": "CITYHospitalOutPatientMensBathroom",
+      "destDoor": "",
+      "x": 43,
+      "y": 30,
+      "arrivalX": 3,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_26",
+      "destMap": "CITYHospitalOutPatientWomensBathroom",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 5,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_27",
+      "destMap": "CITYHospitalPatientRoom",
+      "destDoor": "",
+      "x": 26,
+      "y": 5,
+      "arrivalX": 8,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_28",
+      "destMap": "CITYHospitalPatientRoom2",
+      "destDoor": "",
+      "x": 47,
+      "y": 5,
+      "arrivalX": 3,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_29",
+      "destMap": "CITYHospitalPatientRoom3",
+      "destDoor": "",
+      "x": 68,
+      "y": 5,
+      "arrivalX": 6,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_30",
+      "destMap": "CITYHospitalOperatingRoom",
+      "destDoor": "",
+      "x": 57,
+      "y": 48,
+      "arrivalX": 7,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHospitalOutPatientMensBathroom": [
+    {
+      "name": "door_3",
+      "destMap": "CITYHospitalWaitingOutPatient",
+      "destDoor": "",
+      "x": 9,
+      "y": 9,
+      "arrivalX": 5,
+      "arrivalY": 19
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYHospitalOutPatientMensBathroom",
+      "destDoor": "",
+      "x": 12,
+      "y": 11,
+      "arrivalX": 12,
+      "arrivalY": 12
+    }
+  ],
+  "CITYHospitalOutPatientWomensBathroom": [
+    {
+      "name": "door_3",
+      "destMap": "CITYHospitalWaitingOutPatient",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 9,
+      "arrivalY": 19
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYHospitalOutPatientWomensBathroom",
+      "destDoor": "",
+      "x": 5,
+      "y": 11,
+      "arrivalX": 5,
+      "arrivalY": 12
+    }
+  ],
+  "CITYHospitalPatientRoom": [
+    {
+      "name": "door_3",
+      "destMap": "CITYHospitalWaitingOutPatient",
+      "destDoor": "",
+      "x": 5,
+      "y": 10,
+      "arrivalX": 57,
+      "arrivalY": 46
+    }
+  ],
+  "CITYHospitalPatientRoom2": [
+    {
+      "name": "door_3",
+      "destMap": "CITYHospitalWaitingOutPatient",
+      "destDoor": "",
+      "x": 5,
+      "y": 10,
+      "arrivalX": 57,
+      "arrivalY": 47
+    }
+  ],
+  "CITYHospitalPatientRoom3": [
+    {
+      "name": "door_3",
+      "destMap": "CITYHospitalWaitingOutPatient",
+      "destDoor": "",
+      "x": 5,
+      "y": 10,
+      "arrivalX": 57,
+      "arrivalY": 48
+    }
+  ],
+  "CITYHospitalOperatingRoom": [
+    {
+      "name": "door_4",
+      "destMap": "CITYHospitalWaitingOutPatient",
+      "destDoor": "",
+      "x": 7,
+      "y": 10,
+      "arrivalX": 57,
+      "arrivalY": 49
+    }
+  ],
+  "CITYHospitalPsychiatricWard": [
+    {
+      "name": "door_27",
+      "destMap": "CITYHospitalElevator2",
+      "destDoor": "",
+      "x": 56,
+      "y": 15,
+      "arrivalX": 9,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_28",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 7,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_29",
+      "destMap": "CITYHospitalSoftRoom",
+      "destDoor": "",
+      "x": 19,
+      "y": 5,
+      "arrivalX": 8,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_30",
+      "destMap": "CITYHospitalSoftRoom2",
+      "destDoor": "",
+      "x": 33,
+      "y": 5,
+      "arrivalX": 2,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_31",
+      "destMap": "CITYHospitalSoftRoom3",
+      "destDoor": "",
+      "x": 43,
+      "y": 19,
+      "arrivalX": 4,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_32",
+      "destMap": "CITYHospitalPsychiatricWard",
+      "destDoor": "",
+      "x": 80,
+      "y": 22,
+      "arrivalX": 80,
+      "arrivalY": 23
+    }
+  ],
+  "CITYHospitalSoftRoom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYHospitalPsychiatricWard",
+      "destDoor": "",
+      "x": 2,
+      "y": 11,
+      "arrivalX": 18,
+      "arrivalY": 22
+    }
+  ],
+  "CITYHospitalSoftRoom2": [
+    {
+      "name": "door_2",
+      "destMap": "CITYHospitalPsychiatricWard",
+      "destDoor": "",
+      "x": 2,
+      "y": 11,
+      "arrivalX": 80,
+      "arrivalY": 22
+    }
+  ],
+  "CITYHospitalSoftRoom3": [
+    {
+      "name": "door_2",
+      "destMap": "CITYHospitalPsychiatricWard",
+      "destDoor": "",
+      "x": 2,
+      "y": 11,
+      "arrivalX": 18,
+      "arrivalY": 23
+    }
+  ],
+  "CITYHospitalMaternityWard": [
+    {
+      "name": "door_17",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "",
+      "x": 71,
+      "y": 15,
+      "arrivalX": 7,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_18",
+      "destMap": "CITYHospitalElevator2",
+      "destDoor": "",
+      "x": 3,
+      "y": 32,
+      "arrivalX": 9,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_19",
+      "destMap": "CITYHospitalMaternityWardInfirmary",
+      "destDoor": "",
+      "x": 56,
+      "y": 20,
+      "arrivalX": 18,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHospitalMaternityWardInfirmary": [
+    {
+      "name": "door_19",
+      "destMap": "CITYHospitalMaternityWard",
+      "destDoor": "",
+      "x": 18,
+      "y": 10,
+      "arrivalX": 56,
+      "arrivalY": 21
+    }
+  ],
+  "CITYHospitalEmergencyEntrance": [
+    {
+      "name": "door_30",
+      "destMap": "CITYHospitalEmergencyEntrance",
+      "destDoor": "",
+      "x": 81,
+      "y": 33,
+      "arrivalX": 8,
+      "arrivalY": 37
+    },
+    {
+      "name": "door_31",
+      "destMap": "CITYHospitalEmergencyEntrance",
+      "destDoor": "",
+      "x": 80,
+      "y": 11,
+      "arrivalX": 80,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHospitalMorgue": [
+    {
+      "name": "door_9",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "",
+      "x": 71,
+      "y": 15,
+      "arrivalX": 7,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_10",
+      "destMap": "CITYHospitalElevator2",
+      "destDoor": "",
+      "x": 57,
+      "y": 20
+    }
+  ],
+  "CITYHospitalSecretLab": [
+    {
+      "name": "door_0",
+      "destMap": "CITYHospitalElevator",
+      "destDoor": "",
+      "x": 71,
+      "y": 15,
+      "arrivalX": 7,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYHospitalElevator2",
+      "destDoor": "",
+      "x": 57,
+      "y": 20
+    }
+  ],
+  "CITYPoliceStationLobby": [
+    {
+      "name": "door_10",
+      "destMap": "CITYPoliceStationStairWellToHoldCell",
+      "destDoor": "",
+      "x": 16,
+      "y": 16,
+      "arrivalX": 3,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_11",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 2,
+      "y": 6,
+      "arrivalX": 20,
+      "arrivalY": 20
+    },
+    {
+      "name": "door_12",
+      "destMap": "CITYPoliceStationOffice",
+      "destDoor": "",
+      "x": 8,
+      "y": 10,
+      "arrivalX": 22,
+      "arrivalY": 18
+    }
+  ],
+  "CITYPoliceStationOffice": [
+    {
+      "name": "door_11",
+      "destMap": "CITYPoliceStationOffice2WayMirror",
+      "destDoor": "",
+      "x": 2,
+      "y": 41,
+      "arrivalX": 5,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_12",
+      "destMap": "CITYPoliceStationLobby",
+      "destDoor": "",
+      "x": 22,
+      "y": 17,
+      "arrivalX": 8,
+      "arrivalY": 9
+    }
+  ],
+  "CITYPoliceStationInterrogationRoom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYPoliceStationStairWellToHoldCell",
+      "destDoor": "",
+      "x": 2,
+      "y": 9,
+      "arrivalX": 7,
+      "arrivalY": 11
+    }
+  ],
+  "CITYPoliceStationOffice2WayMirror": [
+    {
+      "name": "door_5",
+      "destMap": "CITYPoliceStationOffice",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 5,
+      "arrivalY": 25
+    },
+    {
+      "name": "door_6",
+      "destMap": "CITYPoliceStationEvidenceRoom",
+      "destDoor": "",
+      "x": 10,
+      "y": 10,
+      "arrivalX": 20,
+      "arrivalY": 11
+    }
+  ],
+  "CITYPoliceStationEvidenceRoom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYPoliceStationOffice2WayMirror",
+      "destDoor": "",
+      "x": 20,
+      "y": 10,
+      "arrivalX": 10,
+      "arrivalY": 11
+    }
+  ],
+  "CITYPoliceStationStairWellToHoldCell": [
+    {
+      "name": "door_0",
+      "destMap": "CITYPoliceStationInterrogationRoom",
+      "destDoor": "",
+      "x": 1,
+      "y": 18,
+      "arrivalX": 10,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYPoliceStationHoldingCells",
+      "destDoor": "",
+      "x": 7,
+      "y": 41,
+      "arrivalX": 4,
+      "arrivalY": 23
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYPoliceStationLobby",
+      "destDoor": "",
+      "x": 2,
+      "y": 23,
+      "arrivalX": 8,
+      "arrivalY": 5
+    }
+  ],
+  "CITYPoliceStationHoldingCells": [
+    {
+      "name": "door_12",
+      "destMap": "CITYPoliceStationStairWellToHoldCell",
+      "destDoor": "",
+      "x": 24,
+      "y": 5,
+      "arrivalX": 2,
+      "arrivalY": 3
+    },
+    {
+      "name": "door_13",
+      "destMap": "CITYPoliceStationPrisonVisitingRoom",
+      "destDoor": "",
+      "x": 9,
+      "y": 12,
+      "arrivalX": 27,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_14",
+      "destMap": "CITYPoliceStationHoldingCells",
+      "destDoor": "",
+      "x": 16,
+      "y": 10,
+      "arrivalX": 16,
+      "arrivalY": 11
+    }
+  ],
+  "CITYPoliceStationPrisonVisitingRoom": [
+    {
+      "name": "door_13",
+      "destMap": "CITYPoliceStationHoldingCells",
+      "destDoor": "",
+      "x": 25,
+      "y": 17,
+      "arrivalX": 3,
+      "arrivalY": 3
+    },
+    {
+      "name": "door_14",
+      "destMap": "CITYPoliceStationPrisonVisitingRoom",
+      "destDoor": "",
+      "x": 24,
+      "y": 5,
+      "arrivalX": 28,
+      "arrivalY": 20
+    },
+    {
+      "name": "door_15",
+      "destMap": "CITYPoliceStationPrisonCellBlockHallway",
+      "destDoor": "",
+      "x": 2,
+      "y": 18,
+      "arrivalX": 5,
+      "arrivalY": 10
+    }
+  ],
+  "CITYPoliceStationPrisonCellBlockHallway": [
+    {
+      "name": "door_32",
+      "destMap": "CITYPoliceStationPrisonVisitingRoom",
+      "destDoor": "",
+      "x": 24,
+      "y": 5,
+      "arrivalX": 3,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_33",
+      "destMap": "CITYPoliceStationPrisonShowers",
+      "destDoor": "",
+      "x": 11,
+      "y": 9,
+      "arrivalX": 2,
+      "arrivalY": 2
+    }
+  ],
+  "CITYPoliceStationPrisonShowers": [
+    {
+      "name": "door_16",
+      "destMap": "CITYPoliceStationPrisonCellBlockHallway",
+      "destDoor": "",
+      "x": 2,
+      "y": 1,
+      "arrivalX": 11,
+      "arrivalY": 10
+    }
+  ],
+  "CITYFireDepartmentGarage": [
+    {
+      "name": "door_0",
+      "destMap": "CITYFireDepartmentGarage",
+      "destDoor": "",
+      "x": 4,
+      "y": 31,
+      "arrivalX": 5,
+      "arrivalY": 31
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYFireDepartmentGarage",
+      "destDoor": "",
+      "x": 5,
+      "y": 31,
+      "arrivalX": 5,
+      "arrivalY": 31
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYFireDepartmentGarage",
+      "destDoor": "",
+      "x": 46,
+      "y": 51,
+      "arrivalX": 5,
+      "arrivalY": 31
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYFireDepartmentGarage",
+      "destDoor": "",
+      "x": 46,
+      "y": 52,
+      "arrivalX": 5,
+      "arrivalY": 31
+    },
+    {
+      "name": "door_14",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 46,
+      "y": 53,
+      "arrivalX": 1023,
+      "arrivalY": 10
+    },
+    {
+      "name": "warp_toUpstairs",
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destDoor": "",
+      "x": 41,
+      "y": 1,
+      "arrivalX": 24,
+      "arrivalY": 11
+    }
+  ],
+  "CITYFireDepartmentUpstairs": [
+    {
+      "name": "door_0",
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destDoor": "",
+      "x": 18,
+      "y": 10,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destDoor": "",
+      "x": 46,
+      "y": 12,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destDoor": "",
+      "x": 2,
+      "y": 16,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_11",
+      "destMap": "CITYFireDepartmentQuarters",
+      "destDoor": "",
+      "x": 20,
+      "y": 16,
+      "arrivalX": 46,
+      "arrivalY": 11
+    },
+    {
+      "name": "warp_toDownstairs",
+      "destMap": "CITYFireDepartmentGarage",
+      "destDoor": "",
+      "x": 41,
+      "y": 20,
+      "arrivalX": 24,
+      "arrivalY": 27
+    }
+  ],
+  "CITYFireDepartmentQuarters": [
+    {
+      "name": "door_16",
+      "destMap": "CITYFireDepartmentUpstairs",
+      "destDoor": "",
+      "x": 22,
+      "y": 25,
+      "arrivalX": 27,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_17",
+      "destMap": "CITYFireDepartmentBedroom",
+      "destDoor": "",
+      "x": 29,
+      "y": 25,
+      "arrivalX": 25,
+      "arrivalY": 29
+    },
+    {
+      "name": "door_18",
+      "destMap": "CITYFireDepartmentBathroom",
+      "destDoor": "",
+      "x": 46,
+      "y": 10,
+      "arrivalX": 10,
+      "arrivalY": 11
+    }
+  ],
+  "CITYFireDepartmentBedroom": [
+    {
+      "name": "door_0",
+      "destMap": "CITYFireDepartmentQuarters",
+      "destDoor": "",
+      "x": 24,
+      "y": 22,
+      "arrivalX": 25,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYFireDepartmentBathroom",
+      "destDoor": "",
+      "x": 2,
+      "y": 30,
+      "arrivalX": 13,
+      "arrivalY": 11
+    }
+  ],
+  "CITYFireDepartmentBathroom": [
+    {
+      "name": "door_5",
+      "destMap": "CITYFireDepartmentQuarters",
+      "destDoor": "",
+      "x": 1,
+      "y": 22,
+      "arrivalX": 5,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_6",
+      "destMap": "CITYFireDepartmentBedroom",
+      "destDoor": "",
+      "x": 10,
+      "y": 9,
+      "arrivalX": 2,
+      "arrivalY": 29
+    },
+    {
+      "name": "door_7",
+      "destMap": "CITYFireDepartmentBathroom",
+      "destDoor": "",
+      "x": 15,
+      "y": 9,
+      "arrivalX": 11,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_8",
+      "destMap": "CITYFireDepartmentBathroom",
+      "destDoor": "",
+      "x": 18,
+      "y": 10,
+      "arrivalX": 15,
+      "arrivalY": 11
+    }
+  ],
+  "CITYCityHallEntrance": [
+    {
+      "name": "door_17",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 82,
+      "y": 17,
+      "arrivalX": 33,
+      "arrivalY": 44
+    },
+    {
+      "name": "door_18",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 2,
+      "y": 12,
+      "arrivalX": 257,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_19",
+      "destMap": "CITYCityHallElevator",
+      "destDoor": "",
+      "x": 18,
+      "y": 12,
+      "arrivalX": 2,
+      "arrivalY": 11
+    }
+  ],
+  "CITYCityHallElevator": [
+    {
+      "name": "door_1",
+      "destMap": "CITYCityHallEntrance",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 18,
+      "arrivalY": 13
+    }
+  ],
+  "CITYCityHallOffices": [
+    {
+      "name": "door_20",
+      "destMap": "CITYCityHallElevator",
+      "destDoor": "",
+      "x": 23,
+      "y": 12
+    }
+  ],
+  "CITYCityHallMeetingRoom": [
+    {
+      "name": "door_18",
+      "destMap": "CITYCityHallElevator",
+      "destDoor": "",
+      "x": 92,
+      "y": 23
+    }
+  ],
+  "CITYCityHallMayorOffice": [
+    {
+      "name": "door_21",
+      "destMap": "CITYCityHallElevator",
+      "destDoor": "",
+      "x": 2,
+      "y": 12
+    }
+  ],
+  "CITYMuseumLobby": [
+    {
+      "name": "door_0",
+      "destMap": "CITYMuseumLobby",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_11",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 1,
+      "y": 10,
+      "arrivalX": 18,
+      "arrivalY": 22
+    },
+    {
+      "name": "door_12",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 541,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_13",
+      "destMap": "CITYMuseumGiftShop",
+      "destDoor": "",
+      "x": 50,
+      "y": 10,
+      "arrivalX": 14,
+      "arrivalY": 10
+    }
+  ],
+  "CITYMuseumExhibit": [
+    {
+      "name": "door_0",
+      "destMap": "CITYMuseumExhibit",
+      "destDoor": "",
+      "x": 3,
+      "y": 12,
+      "arrivalX": 3,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_19",
+      "destMap": "CITYMuseumGiftShop",
+      "destDoor": "",
+      "x": 30,
+      "y": 39,
+      "arrivalX": 12,
+      "arrivalY": 10
+    },
+    {
+      "name": "warp_toLobby",
+      "destMap": "CITYMuseumLobby",
+      "destDoor": "",
+      "x": 67,
+      "y": 54,
+      "arrivalX": 23,
+      "arrivalY": 9
+    }
+  ],
+  "CITYMuseumGiftShop": [
+    {
+      "name": "door_6",
+      "destMap": "CITYMuseumExhibit",
+      "destDoor": "",
+      "x": 24,
+      "y": 10,
+      "arrivalX": 7,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_7",
+      "destMap": "CITYMuseumLobby",
+      "destDoor": "",
+      "x": 14,
+      "y": 10,
+      "arrivalX": 50,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHotelEntrance": [
+    {
+      "name": "door_18",
+      "destMap": "CITYHotelEntrance",
+      "destDoor": "",
+      "x": 6,
+      "y": 15,
+      "arrivalX": 80,
+      "arrivalY": 58
+    },
+    {
+      "name": "door_19",
+      "destMap": "CITYHotelEntrance",
+      "destDoor": "",
+      "x": 79,
+      "y": 31,
+      "arrivalX": 66,
+      "arrivalY": 32
+    },
+    {
+      "name": "door_20",
+      "destMap": "CITYHotelElevator",
+      "destDoor": "",
+      "x": 22,
+      "y": 15,
+      "arrivalX": 1,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_21",
+      "destMap": "CITYHotelElevator2",
+      "destDoor": "",
+      "x": 41,
+      "y": 16,
+      "arrivalX": 3,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_22",
+      "destMap": "CITYHotelPool",
+      "destDoor": "",
+      "x": 10,
+      "y": 20,
+      "arrivalX": 37,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHotelPool": [
+    {
+      "name": "door_3",
+      "destMap": "CITYHotelEntrance",
+      "destDoor": "",
+      "x": 45,
+      "y": 16,
+      "arrivalX": 14,
+      "arrivalY": 54
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYHotelSauna",
+      "destDoor": "",
+      "x": 37,
+      "y": 11,
+      "arrivalX": 5,
+      "arrivalY": 12
+    }
+  ],
+  "CITYHotelSauna": [
+    {
+      "name": "door_8",
+      "destMap": "CITYHotelPool",
+      "destDoor": "",
+      "x": 5,
+      "y": 11,
+      "arrivalX": 37,
+      "arrivalY": 12
+    }
+  ],
+  "CITYHotelElevator": [
+    {
+      "name": "door_1",
+      "destMap": "CITYHotelEntrance",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 66,
+      "arrivalY": 33
+    }
+  ],
+  "CITYHotelElevator2": [
+    {
+      "name": "door_1",
+      "destMap": "CITYHotelEntrance",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 79,
+      "arrivalY": 33
+    }
+  ],
+  "CITYHotelHallway": [
+    {
+      "name": "door_9",
+      "destMap": "CITYHotelElevator",
+      "destDoor": "",
+      "x": 22,
+      "y": 33,
+      "arrivalX": 1,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_10",
+      "destMap": "CITYHotelElevator2",
+      "destDoor": "",
+      "x": 8,
+      "y": 46,
+      "arrivalX": 3,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_11",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "",
+      "x": 82,
+      "y": 33,
+      "arrivalX": 87,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_12",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "",
+      "x": 95,
+      "y": 37,
+      "arrivalX": 89,
+      "arrivalY": 38
+    },
+    {
+      "name": "door_13",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "",
+      "x": 95,
+      "y": 38,
+      "arrivalX": 89,
+      "arrivalY": 38
+    },
+    {
+      "name": "door_14",
+      "destMap": "CITYHotelRoom",
+      "destDoor": "",
+      "x": 53,
+      "y": 5,
+      "arrivalX": 25,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_15",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "",
+      "x": 95,
+      "y": 46,
+      "arrivalX": 89,
+      "arrivalY": 38
+    },
+    {
+      "name": "door_16",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "",
+      "x": 95,
+      "y": 47,
+      "arrivalX": 89,
+      "arrivalY": 38
+    },
+    {
+      "name": "door_17",
+      "destMap": "CITYHotelLinenCloset",
+      "destDoor": "",
+      "x": 95,
+      "y": 48,
+      "arrivalX": 10,
+      "arrivalY": 8
+    }
+  ],
+  "CITYHotelRoom": [
+    {
+      "name": "door_5",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "",
+      "x": 15,
+      "y": 31,
+      "arrivalX": 24,
+      "arrivalY": 38
+    },
+    {
+      "name": "door_6",
+      "destMap": "CITYHotelRoomBathroom",
+      "destDoor": "",
+      "x": 6,
+      "y": 19,
+      "arrivalX": 7,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHotelRoomBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYHotelRoom",
+      "destDoor": "",
+      "x": 7,
+      "y": 10,
+      "arrivalX": 6,
+      "arrivalY": 19
+    }
+  ],
+  "CITYHotelLinenCloset": [
+    {
+      "name": "door_2",
+      "destMap": "CITYHotelHallway",
+      "destDoor": "",
+      "x": 10,
+      "y": 8,
+      "arrivalX": 95,
+      "arrivalY": 49
+    }
+  ],
+  "CITYStadiumLobby": [
+    {
+      "name": "door_0",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 16,
+      "y": 11,
+      "arrivalX": 188,
+      "arrivalY": 29
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 130,
+      "y": 12
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 153,
+      "y": 12
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 162,
+      "y": 12
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 2,
+      "y": 1
+    },
+    {
+      "name": "door_5",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 7,
+      "y": 1
+    },
+    {
+      "name": "door_93",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 14,
+      "y": 1
+    },
+    {
+      "name": "door_94",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 94,
+      "y": 1
+    },
+    {
+      "name": "door_95",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 100,
+      "y": 1
+    },
+    {
+      "name": "door_96",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 108,
+      "y": 1
+    },
+    {
+      "name": "door_97",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 188,
+      "y": 1
+    },
+    {
+      "name": "door_98",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 193,
+      "y": 1
+    },
+    {
+      "name": "door_99",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 200,
+      "y": 1
+    },
+    {
+      "name": "door_100",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 24,
+      "y": 15
+    },
+    {
+      "name": "door_101",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 52,
+      "y": 15
+    },
+    {
+      "name": "door_102",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 56,
+      "y": 15
+    },
+    {
+      "name": "door_103",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 84,
+      "y": 15
+    },
+    {
+      "name": "door_104",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 118,
+      "y": 15
+    },
+    {
+      "name": "door_105",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "",
+      "x": 111,
+      "y": 11,
+      "arrivalX": 11,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_106",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "",
+      "x": 150,
+      "y": 15,
+      "arrivalX": 29,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_107",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 182,
+      "y": 11,
+      "arrivalX": 14,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_108",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 21,
+      "y": 16,
+      "arrivalX": 50,
+      "arrivalY": 11
+    },
+    {
+      "name": "warp_toUpperFloorRightStairwellLeft",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 188,
+      "y": 1,
+      "arrivalX": 100,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumBathroomLeftMens": [
+    {
+      "name": "door_16",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 31,
+      "y": 9,
+      "arrivalX": 76,
+      "arrivalY": 21
+    },
+    {
+      "name": "door_17",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 61,
+      "y": 10,
+      "arrivalX": 146,
+      "arrivalY": 16
+    },
+    {
+      "name": "door_18",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "",
+      "x": 56,
+      "y": 9,
+      "arrivalX": 53,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_19",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "",
+      "x": 67,
+      "y": 10,
+      "arrivalX": 64,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_20",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "",
+      "x": 70,
+      "y": 10,
+      "arrivalX": 64,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_21",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "",
+      "x": 73,
+      "y": 10,
+      "arrivalX": 64,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_22",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "",
+      "x": 76,
+      "y": 10,
+      "arrivalX": 64,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_23",
+      "destMap": "CITYStadiumBathroomLeftMens",
+      "destDoor": "",
+      "x": 79,
+      "y": 10,
+      "arrivalX": 64,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumBathroomRightWomens": [
+    {
+      "name": "door_12",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 3,
+      "y": 9,
+      "arrivalX": 75,
+      "arrivalY": 21
+    },
+    {
+      "name": "door_13",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 3,
+      "y": 11,
+      "arrivalX": 178,
+      "arrivalY": 16
+    },
+    {
+      "name": "door_14",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 43,
+      "y": 9,
+      "arrivalX": 39,
+      "arrivalY": 13
+    },
+    {
+      "name": "door_15",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 8,
+      "y": 11,
+      "arrivalX": 6,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_16",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 11,
+      "y": 11,
+      "arrivalX": 6,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_17",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 13,
+      "y": 11,
+      "arrivalX": 6,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_18",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 16,
+      "y": 11,
+      "arrivalX": 6,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_19",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 18,
+      "y": 11,
+      "arrivalX": 6,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_20",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 21,
+      "y": 11,
+      "arrivalX": 6,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_21",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 23,
+      "y": 11,
+      "arrivalX": 6,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_22",
+      "destMap": "CITYStadiumBathroomRightWomens",
+      "destDoor": "",
+      "x": 26,
+      "y": 11,
+      "arrivalX": 6,
+      "arrivalY": 12
+    }
+  ],
+  "CITYStadiumLeftHallway": [
+    {
+      "name": "door_8",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 8,
+      "arrivalY": 185
+    },
+    {
+      "name": "door_9",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 13,
+      "y": 10,
+      "arrivalX": 7,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumRightHallway": [
+    {
+      "name": "door_8",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 5,
+      "y": 181,
+      "arrivalX": 8,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_9",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 13,
+      "y": 10,
+      "arrivalX": 23,
+      "arrivalY": 34
+    }
+  ],
+  "CITYStadiumMain": [
+    {
+      "name": "door_0",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 29,
+      "y": 82,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 30,
+      "y": 82,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 225,
+      "y": 206,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 3,
+      "y": 214,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 12,
+      "y": 214,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_5",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 276,
+      "y": 214,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_6",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 285,
+      "y": 214,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_7",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 18,
+      "y": 33,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_94",
+      "destMap": "CITYStadiumRightHallway",
+      "destDoor": "",
+      "x": 5,
+      "y": 210,
+      "arrivalX": 14,
+      "arrivalY": 26
+    },
+    {
+      "name": "door_95",
+      "destMap": "CITYStadiumLeftHallway",
+      "destDoor": "",
+      "x": 265,
+      "y": 33,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "warp_toBehindStadiumLeft",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 18,
+      "y": 33,
+      "arrivalX": 100,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumMainIntro": [
+    {
+      "name": "door_0",
+      "destMap": "CITYStadiumMainIntro",
+      "destDoor": "",
+      "x": 78,
+      "y": 42,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYStadiumMainIntro",
+      "destDoor": "",
+      "x": 29,
+      "y": 69,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumMainIntro",
+      "destDoor": "",
+      "x": 30,
+      "y": 69,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumMainIntro",
+      "destDoor": "",
+      "x": 3,
+      "y": 201,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYStadiumMainIntro",
+      "destDoor": "",
+      "x": 12,
+      "y": 201,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_5",
+      "destMap": "CITYStadiumMainIntro",
+      "destDoor": "",
+      "x": 190,
+      "y": 201,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_6",
+      "destMap": "CITYStadiumMainIntro",
+      "destDoor": "",
+      "x": 199,
+      "y": 201,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_7",
+      "destMap": "CITYStadiumMainIntro",
+      "destDoor": "",
+      "x": 18,
+      "y": 20,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "warp_toBehindStadiumLeft",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 18,
+      "y": 20,
+      "arrivalX": 100,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumIntroOld": [
+    {
+      "name": "door_0",
+      "destMap": "CITYStadiumIntroOld",
+      "destDoor": "",
+      "x": 78,
+      "y": 42,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYStadiumIntroOld",
+      "destDoor": "",
+      "x": 29,
+      "y": 69,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumIntroOld",
+      "destDoor": "",
+      "x": 30,
+      "y": 69,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumIntroOld",
+      "destDoor": "",
+      "x": 3,
+      "y": 201,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYStadiumIntroOld",
+      "destDoor": "",
+      "x": 12,
+      "y": 201,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_5",
+      "destMap": "CITYStadiumIntroOld",
+      "destDoor": "",
+      "x": 190,
+      "y": 201,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_6",
+      "destMap": "CITYStadiumIntroOld",
+      "destDoor": "",
+      "x": 199,
+      "y": 201,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "door_7",
+      "destMap": "CITYStadiumIntroOld",
+      "destDoor": "",
+      "x": 18,
+      "y": 20,
+      "arrivalX": 78,
+      "arrivalY": 43
+    },
+    {
+      "name": "warp_toBehindStadiumLeft",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 18,
+      "y": 20,
+      "arrivalX": 100,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumMainOldCrowd": [
+    {
+      "name": "door_0",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 5,
+      "y": 197,
+      "arrivalX": 195,
+      "arrivalY": 202
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 171,
+      "y": 68,
+      "arrivalX": 178,
+      "arrivalY": 57
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 174,
+      "y": 68,
+      "arrivalX": 178,
+      "arrivalY": 57
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 171,
+      "y": 69,
+      "arrivalX": 178,
+      "arrivalY": 57
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 12,
+      "y": 201,
+      "arrivalX": 178,
+      "arrivalY": 57
+    },
+    {
+      "name": "door_5",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 190,
+      "y": 201,
+      "arrivalX": 178,
+      "arrivalY": 57
+    },
+    {
+      "name": "door_6",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 199,
+      "y": 201,
+      "arrivalX": 178,
+      "arrivalY": 57
+    },
+    {
+      "name": "door_7",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 178,
+      "y": 56,
+      "arrivalX": 178,
+      "arrivalY": 57
+    },
+    {
+      "name": "door_9",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 18,
+      "y": 20,
+      "arrivalX": 178,
+      "arrivalY": 57
+    },
+    {
+      "name": "door_10",
+      "destMap": "CITYStadiumMainOldCrowd",
+      "destDoor": "",
+      "x": 23,
+      "y": 20,
+      "arrivalX": 178,
+      "arrivalY": 57
+    },
+    {
+      "name": "warp_toBehindStadiumLeft",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 18,
+      "y": 20,
+      "arrivalX": 100,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumBackstage": [
+    {
+      "name": "door_0",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 55,
+      "y": 11,
+      "arrivalX": 55,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_1",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 55,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumLeftHallway",
+      "destDoor": "",
+      "x": 192,
+      "y": 18,
+      "arrivalX": 8,
+      "arrivalY": 22
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumRightHallway",
+      "destDoor": "",
+      "x": 10,
+      "y": 5,
+      "arrivalX": 14,
+      "arrivalY": 2
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYStadiumDressingRoom",
+      "destDoor": "",
+      "x": 45,
+      "y": 5,
+      "arrivalX": 13,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_5",
+      "destMap": "CITYStadiumDressingRoom2",
+      "destDoor": "",
+      "x": 185,
+      "y": 5,
+      "arrivalX": 6,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_6",
+      "destMap": "CITYStadiumProducerRoom",
+      "destDoor": "",
+      "x": 151,
+      "y": 5,
+      "arrivalX": 23,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_7",
+      "destMap": "CITYStadiumStarDressingRoom",
+      "destDoor": "",
+      "x": 52,
+      "y": 10,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "warp_toLobby",
+      "destMap": "CITYStadiumLobby",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 101,
+      "arrivalY": 13
+    },
+    {
+      "name": "warp_toStadiumMain",
+      "destMap": "CITYStadiumMain",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 144,
+      "arrivalY": 123
+    }
+  ],
+  "CITYStadiumProducerRoom": [
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 5,
+      "y": 9,
+      "arrivalX": 43,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumDressingRoom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 2,
+      "y": 5,
+      "arrivalX": 5,
+      "arrivalY": 15
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumDressingRoomBathroom",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 2,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumDressingRoomBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumDressingRoom",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 2,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumDressingRoom2": [
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumDressingRoom2Bathroom",
+      "destDoor": "",
+      "x": 2,
+      "y": 11,
+      "arrivalX": 5,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 40,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumDressingRoom2Bathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumDressingRoom2",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 14,
+      "arrivalY": 9
+    }
+  ],
+  "CITYStadiumStarDressingRoom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumDressingRoom3Bathroom",
+      "destDoor": "",
+      "x": 2,
+      "y": 11,
+      "arrivalX": 5,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_3",
+      "destMap": "CITYStadiumBackstage",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 52,
+      "arrivalY": 11
+    }
+  ],
+  "CITYStadiumDressingRoom3Bathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYStadiumStarDressingRoom",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 14,
+      "arrivalY": 9
+    }
+  ],
+  "CITYPawnShop": [
+    {
+      "name": "door_13",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 11,
+      "y": 10,
+      "arrivalX": 315,
+      "arrivalY": 6
+    }
+  ],
+  "CITYCasinoEntrance": [
+    {
+      "name": "door_0",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "",
+      "x": 8,
+      "y": 48,
+      "arrivalX": 9,
+      "arrivalY": 48
+    },
+    {
+      "name": "door_25",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 56,
+      "y": 43,
+      "arrivalX": 52,
+      "arrivalY": 47
+    },
+    {
+      "name": "door_26",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 81,
+      "y": 48,
+      "arrivalX": 1008,
+      "arrivalY": 6
+    },
+    {
+      "name": "door_27",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 89,
+      "y": 48,
+      "arrivalX": 1008,
+      "arrivalY": 6
+    },
+    {
+      "name": "door_28",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 71,
+      "y": 1,
+      "arrivalX": 1008,
+      "arrivalY": 6
+    },
+    {
+      "name": "warp_toCasinoMain",
+      "destMap": "CITYCasinoMain",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 59,
+      "arrivalY": 37
+    }
+  ],
+  "CITYCasinoMain": [
+    {
+      "name": "door_0",
+      "destMap": "CITYCasinoMain",
+      "destDoor": "",
+      "x": 56,
+      "y": 10,
+      "arrivalX": 56,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_74",
+      "destMap": "CITYCasinoBackroom",
+      "destDoor": "",
+      "x": 56,
+      "y": 11,
+      "arrivalX": 2,
+      "arrivalY": 11
+    },
+    {
+      "name": "warp_toLobby",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "",
+      "x": 46,
+      "y": 80,
+      "arrivalX": 48,
+      "arrivalY": 26
+    }
+  ],
+  "CITYCasinoBackroom": [
+    {
+      "name": "door_1",
+      "destMap": "CITYCasinoMain",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 56,
+      "arrivalY": 12
+    }
+  ],
+  "CITYHourlyMotel": [
+    {
+      "name": "door_4",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 23,
+      "y": 39,
+      "arrivalX": 22,
+      "arrivalY": 64
+    },
+    {
+      "name": "door_5",
+      "destMap": "CITYHourlyMotelRoom",
+      "destDoor": "",
+      "x": 23,
+      "y": 17,
+      "arrivalX": 3,
+      "arrivalY": 5
+    },
+    {
+      "name": "door_6",
+      "destMap": "CITYHourlyMotelRoom2",
+      "destDoor": "",
+      "x": 13,
+      "y": 53,
+      "arrivalX": 3,
+      "arrivalY": 12
+    }
+  ],
+  "CITYHourlyMotelRoom": [
+    {
+      "name": "door_3",
+      "destMap": "CITYHourlyMotel",
+      "destDoor": "",
+      "x": 15,
+      "y": 21,
+      "arrivalX": 22,
+      "arrivalY": 24
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYHourlyMotelRoomBathroom",
+      "destDoor": "",
+      "x": 9,
+      "y": 10,
+      "arrivalX": 7,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHourlyMotelRoomBathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYHourlyMotelRoom",
+      "destDoor": "",
+      "x": 7,
+      "y": 10,
+      "arrivalX": 9,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHourlyMotelRoom2": [
+    {
+      "name": "door_3",
+      "destMap": "CITYHourlyMotel",
+      "destDoor": "",
+      "x": 15,
+      "y": 21,
+      "arrivalX": 22,
+      "arrivalY": 24
+    },
+    {
+      "name": "door_4",
+      "destMap": "CITYHourlyMotelRoom2Bathroom",
+      "destDoor": "",
+      "x": 9,
+      "y": 10,
+      "arrivalX": 7,
+      "arrivalY": 11
+    }
+  ],
+  "CITYHourlyMotelRoom2Bathroom": [
+    {
+      "name": "door_2",
+      "destMap": "CITYHourlyMotelRoom2",
+      "destDoor": "",
+      "x": 7,
+      "y": 10,
+      "arrivalX": 9,
+      "arrivalY": 11
+    }
+  ],
+  "INTROTown": [
+    {
+      "name": "door_8",
+      "destMap": "INTROTown",
+      "destDoor": "",
+      "x": 53,
+      "y": 79,
+      "arrivalX": 158,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_9",
+      "destMap": "INTRODownstairs",
+      "destDoor": "",
+      "x": 155,
+      "y": 79,
+      "arrivalX": 30,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_10",
+      "destMap": "INTROTown",
+      "destDoor": "",
+      "x": 280,
+      "y": 50,
+      "arrivalX": 379,
+      "arrivalY": 49
+    },
+    {
+      "name": "door_11",
+      "destMap": "INTROTown",
+      "destDoor": "",
+      "x": 377,
+      "y": 50,
+      "arrivalX": 379,
+      "arrivalY": 49
+    }
+  ],
+  "SCHOOLPlayground": [
+    {
+      "name": "door_0",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 180,
+      "y": 66,
+      "arrivalX": 23,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_1",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 132,
+      "y": 41,
+      "arrivalX": 123,
+      "arrivalY": 30
+    },
+    {
+      "name": "door_2",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 192,
+      "y": 66,
+      "arrivalX": 23,
+      "arrivalY": 8
+    },
+    {
+      "name": "door_3",
+      "destMap": "SCHOOLBackHallway",
+      "destDoor": "",
+      "x": 132,
+      "y": 44,
+      "arrivalX": 188,
+      "arrivalY": 42
+    }
+  ],
+  "TOWNTown": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 1404,
+      "y": 167,
+      "arrivalX": 1404,
+      "arrivalY": 168
+    },
+    {
+      "name": "door_1",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 1454,
+      "y": 167,
+      "arrivalX": 1404,
+      "arrivalY": 168
+    },
+    {
+      "name": "door_2",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 1508,
+      "y": 167,
+      "arrivalX": 1404,
+      "arrivalY": 168
+    },
+    {
+      "name": "door_167",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 399,
+      "y": 260,
+      "arrivalX": 31,
+      "arrivalY": 30
+    },
+    {
+      "name": "door_168",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 1454,
+      "y": 168,
+      "arrivalX": 123,
+      "arrivalY": 31
+    },
+    {
+      "name": "door_169",
+      "destMap": "SCHOOLEntranceHallway",
+      "destDoor": "",
+      "x": 1508,
+      "y": 168,
+      "arrivalX": 123,
+      "arrivalY": 31
+    },
+    {
+      "name": "door_170",
+      "destMap": "TOWNDoctorsOfficeEntrance",
+      "destDoor": "",
+      "x": 493,
+      "y": 252,
+      "arrivalX": 32,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_171",
+      "destMap": "TOWNChurch",
+      "destDoor": "",
+      "x": 573,
+      "y": 253,
+      "arrivalX": 42,
+      "arrivalY": 32
+    },
+    {
+      "name": "door_172",
+      "destMap": "TOWNTacoBurger",
+      "destDoor": "",
+      "x": 708,
+      "y": 187,
+      "arrivalX": 36,
+      "arrivalY": 32
+    },
+    {
+      "name": "door_173",
+      "destMap": "TOWNGasStation",
+      "destDoor": "",
+      "x": 782,
+      "y": 224,
+      "arrivalX": 55,
+      "arrivalY": 24
+    },
+    {
+      "name": "door_174",
+      "destMap": "TOWNCoffeeShop",
+      "destDoor": "",
+      "x": 795,
+      "y": 225,
+      "arrivalX": 32,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_175",
+      "destMap": "TOWNBookstore",
+      "destDoor": "",
+      "x": 847,
+      "y": 224,
+      "arrivalX": 30,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_176",
+      "destMap": "TOWNPizzaPlace",
+      "destDoor": "",
+      "x": 889,
+      "y": 225,
+      "arrivalX": 36,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_177",
+      "destMap": "TOWNBeautySalon",
+      "destDoor": "",
+      "x": 924,
+      "y": 224,
+      "arrivalX": 40,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_178",
+      "destMap": "TOWNPets4Less",
+      "destDoor": "",
+      "x": 969,
+      "y": 190,
+      "arrivalX": 30,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_179",
+      "destMap": "TOWNDepartmentStore",
+      "destDoor": "",
+      "x": 1053,
+      "y": 190,
+      "arrivalX": 110,
+      "arrivalY": 24
+    },
+    {
+      "name": "door_180",
+      "destMap": "TOWNDepartmentStore",
+      "destDoor": "",
+      "x": 720,
+      "y": 172,
+      "arrivalX": 22,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_181",
+      "destMap": "TOWNDepartmentStore",
+      "destDoor": "",
+      "x": 1048,
+      "y": 172,
+      "arrivalX": 22,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_182",
+      "destMap": "TOWNDepartmentStore",
+      "destDoor": "",
+      "x": 1136,
+      "y": 172,
+      "arrivalX": 22,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_183",
+      "destMap": "TOWNGroceryStore",
+      "destDoor": "",
+      "x": 1157,
+      "y": 223,
+      "arrivalX": 110,
+      "arrivalY": 24
+    },
+    {
+      "name": "door_184",
+      "destMap": "TOWNGroceryStore",
+      "destDoor": "",
+      "x": 1415,
+      "y": 172,
+      "arrivalX": 67,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_185",
+      "destMap": "TOWNElectronicsStore",
+      "destDoor": "",
+      "x": 1194,
+      "y": 225,
+      "arrivalX": 38,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_186",
+      "destMap": "TOWNVideoRent",
+      "destDoor": "",
+      "x": 1243,
+      "y": 225,
+      "arrivalX": 39,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_187",
+      "destMap": "TOWNGameStore",
+      "destDoor": "",
+      "x": 1275,
+      "y": 224,
+      "arrivalX": 44,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_188",
+      "destMap": "TOWNArcade",
+      "destDoor": "",
+      "x": 1368,
+      "y": 224,
+      "arrivalX": 88,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_189",
+      "destMap": "TOWNRecordStore",
+      "destDoor": "",
+      "x": 1459,
+      "y": 189,
+      "arrivalX": 39,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_190",
+      "destMap": "TOWNMovieTheatreLobby",
+      "destDoor": "",
+      "x": 1475,
+      "y": 189,
+      "arrivalX": 50,
+      "arrivalY": 24
+    },
+    {
+      "name": "door_191",
+      "destMap": "TOWNMovieTheatreLobby",
+      "destDoor": "",
+      "x": 1523,
+      "y": 172,
+      "arrivalX": 15,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_192",
+      "destMap": "TOWNMovieTheatreLobby",
+      "destDoor": "",
+      "x": 708,
+      "y": 173,
+      "arrivalX": 15,
+      "arrivalY": 11
+    },
+    {
+      "name": "warp_toNeighborhood",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 5,
+      "y": 20,
+      "arrivalX": 258,
+      "arrivalY": 2
+    },
+    {
+      "name": "warp_toCity",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 1575,
+      "y": 170,
+      "arrivalX": 5,
+      "arrivalY": 40
+    }
+  ],
+  "TOWNOutsideNeighborhood": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 334,
+      "y": 82,
+      "arrivalX": 1458,
+      "arrivalY": 128
+    },
+    {
+      "name": "door_1",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 634,
+      "y": 35,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_2",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 1146,
+      "y": 36,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_3",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 762,
+      "y": 51,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_72",
+      "destMap": "TOWNYUUDownstairs",
+      "destDoor": "",
+      "x": 545,
+      "y": 56,
+      "arrivalX": 50,
+      "arrivalY": 33
+    },
+    {
+      "name": "door_73",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 762,
+      "y": 52,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_74",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 1078,
+      "y": 52,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_75",
+      "destMap": "TOWNFRIENDDownstairs",
+      "destDoor": "",
+      "x": 436,
+      "y": 82,
+      "arrivalX": 42,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_76",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 663,
+      "y": 53,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_77",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 760,
+      "y": 53,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_78",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 868,
+      "y": 53,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_79",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 972,
+      "y": 53,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_80",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 974,
+      "y": 53,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_81",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 1078,
+      "y": 53,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_82",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 316,
+      "y": 73,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_83",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 316,
+      "y": 74,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_84",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 380,
+      "y": 77,
+      "arrivalX": 837,
+      "arrivalY": 35
+    },
+    {
+      "name": "door_85",
+      "destMap": "TOWNFRIENDDownstairs",
+      "destDoor": "",
+      "x": 507,
+      "y": 87,
+      "arrivalX": 7,
+      "arrivalY": 22
+    },
+    {
+      "name": "door_86",
+      "destMap": "TOWNCRAZYDownstairs",
+      "destDoor": "",
+      "x": 522,
+      "y": 82,
+      "arrivalX": 44,
+      "arrivalY": 10
+    },
+    {
+      "name": "door_87",
+      "destMap": "TOWNYUUDownstairs",
+      "destDoor": "",
+      "x": 509,
+      "y": 87,
+      "arrivalX": 53,
+      "arrivalY": 25
+    },
+    {
+      "name": "door_88",
+      "destMap": "TOWNYUUBackyardToolShed",
+      "destDoor": "",
+      "x": 444,
+      "y": 123,
+      "arrivalX": 12,
+      "arrivalY": 7
+    },
+    {
+      "name": "door_89",
+      "destMap": "TOWNCRAZYDownstairs",
+      "destDoor": "",
+      "x": 511,
+      "y": 87,
+      "arrivalX": 5,
+      "arrivalY": 25
+    },
+    {
+      "name": "warp_toTownForestPath",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 258,
+      "y": 1,
+      "arrivalX": 5,
+      "arrivalY": 20
+    }
+  ],
+  "TOWNOutsideForest": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNOutsideForest",
+      "destDoor": "",
+      "x": 813,
+      "y": 27,
+      "arrivalX": 813,
+      "arrivalY": 28
+    },
+    {
+      "name": "door_1",
+      "destMap": "TOWNOutsideForest",
+      "destDoor": "",
+      "x": 68,
+      "y": 28,
+      "arrivalX": 813,
+      "arrivalY": 28
+    },
+    {
+      "name": "warp_toNeighborhood",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 45,
+      "y": 1,
+      "arrivalX": 790,
+      "arrivalY": 111
+    },
+    {
+      "name": "warp_toClubHouse",
+      "destMap": "TOWNClubHouse",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 13,
+      "arrivalY": 11
+    }
+  ],
+  "TOWNYUUBackyardToolShed": [
+    {
+      "name": "door_3",
+      "destMap": "TOWNOutsideNeighborhood",
+      "destDoor": "",
+      "x": 11,
+      "y": 9,
+      "arrivalX": 511,
+      "arrivalY": 87
+    }
+  ],
+  "TOWNClubHouse": [
+    {
+      "name": "door_0",
+      "destMap": "TOWNClubHouse",
+      "destDoor": "",
+      "x": 2,
+      "y": 8,
+      "arrivalX": 2,
+      "arrivalY": 9
+    },
+    {
+      "name": "warp_toForest",
+      "destMap": "TOWNOutsideForest",
+      "destDoor": "",
+      "x": 10,
+      "y": 21,
+      "arrivalX": 796,
+      "arrivalY": 160
+    }
+  ],
+  "CITYCity": [
+    {
+      "name": "door_0",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 494,
+      "y": 34,
+      "arrivalX": 527,
+      "arrivalY": 27
+    },
+    {
+      "name": "door_47",
+      "destMap": "CITYHourlyMotel",
+      "destDoor": "",
+      "x": 131,
+      "y": 34,
+      "arrivalX": 13,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_48",
+      "destMap": "CITYPawnShop",
+      "destDoor": "",
+      "x": 185,
+      "y": 34,
+      "arrivalX": 16,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_49",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "",
+      "x": 258,
+      "y": 34,
+      "arrivalX": 26,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_50",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "",
+      "x": 315,
+      "y": 6,
+      "arrivalX": 17,
+      "arrivalY": 48
+    },
+    {
+      "name": "door_51",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "",
+      "x": 92,
+      "y": 7,
+      "arrivalX": 17,
+      "arrivalY": 48
+    },
+    {
+      "name": "door_52",
+      "destMap": "CITYCasinoEntrance",
+      "destDoor": "",
+      "x": 315,
+      "y": 7,
+      "arrivalX": 17,
+      "arrivalY": 48
+    },
+    {
+      "name": "door_53",
+      "destMap": "CITYTheCafeEntrance",
+      "destDoor": "",
+      "x": 388,
+      "y": 34,
+      "arrivalX": 17,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_54",
+      "destMap": "CITYPoolHall",
+      "destDoor": "",
+      "x": 436,
+      "y": 34,
+      "arrivalX": 40,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_55",
+      "destMap": "CITYLaundromat",
+      "destDoor": "",
+      "x": 474,
+      "y": 10,
+      "arrivalX": 44,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_56",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 257,
+      "y": 8,
+      "arrivalX": 1008,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_57",
+      "destMap": "CITYNeighborAptInside",
+      "destDoor": "",
+      "x": 524,
+      "y": 10,
+      "arrivalX": 25,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_58",
+      "destMap": "CITYBobsAptInside",
+      "destDoor": "",
+      "x": 474,
+      "y": 22,
+      "arrivalX": 25,
+      "arrivalY": 1
+    },
+    {
+      "name": "door_59",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 842,
+      "y": 8,
+      "arrivalX": 1008,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_60",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 1011,
+      "y": 8,
+      "arrivalX": 1008,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_61",
+      "destMap": "CITYCity",
+      "destDoor": "",
+      "x": 1019,
+      "y": 8,
+      "arrivalX": 1008,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_62",
+      "destMap": "CITYAptMainOffice",
+      "destDoor": "",
+      "x": 555,
+      "y": 34,
+      "arrivalX": 62,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_63",
+      "destMap": "CITYDeli",
+      "destDoor": "",
+      "x": 599,
+      "y": 34,
+      "arrivalX": 30,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_64",
+      "destMap": "CITYPartyStore",
+      "destDoor": "",
+      "x": 698,
+      "y": 34,
+      "arrivalX": 55,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_65",
+      "destMap": "CITYCityHallEntrance",
+      "destDoor": "",
+      "x": 806,
+      "y": 33,
+      "arrivalX": 88,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_66",
+      "destMap": "CITYCityHallEntrance",
+      "destDoor": "",
+      "x": 330,
+      "y": 9,
+      "arrivalX": 75,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_67",
+      "destMap": "CITYMuseumLobby",
+      "destDoor": "",
+      "x": 879,
+      "y": 34,
+      "arrivalX": 51,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_68",
+      "destMap": "CITYMuseumLobby",
+      "destDoor": "",
+      "x": 575,
+      "y": 9,
+      "arrivalX": 50,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_69",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "",
+      "x": 987,
+      "y": 34,
+      "arrivalX": 81,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_70",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "",
+      "x": 842,
+      "y": 9,
+      "arrivalX": 4,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_71",
+      "destMap": "CITYHospitalEntrance",
+      "destDoor": "",
+      "x": 1011,
+      "y": 9,
+      "arrivalX": 4,
+      "arrivalY": 11
+    },
+    {
+      "name": "door_72",
+      "destMap": "CITYPoliceStationLobby",
+      "destDoor": "",
+      "x": 1039,
+      "y": 34,
+      "arrivalX": 30,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_73",
+      "destMap": "CITYFireDepartmentGarage",
+      "destDoor": "",
+      "x": 1090,
+      "y": 28,
+      "arrivalX": 47,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_74",
+      "destMap": "CITYBankEntrance",
+      "destDoor": "",
+      "x": 1206,
+      "y": 33,
+      "arrivalX": 73,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_75",
+      "destMap": "CITYFashionStore",
+      "destDoor": "",
+      "x": 1240,
+      "y": 33,
+      "arrivalX": 37,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_76",
+      "destMap": "CITYElevatedLifeplaceElevator",
+      "destDoor": "",
+      "x": 1273,
+      "y": 34,
+      "arrivalX": 10,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_77",
+      "destMap": "CITYElevatedLifeplace",
+      "destDoor": "",
+      "x": 1148,
+      "y": 33,
+      "arrivalX": 50,
+      "arrivalY": 4
+    },
+    {
+      "name": "door_78",
+      "destMap": "CITYFancyRestaurantEntrance",
+      "destDoor": "",
+      "x": 330,
+      "y": 10,
+      "arrivalX": 22,
+      "arrivalY": 11
+    },
+    {
+      "name": "warp_toTown",
+      "destMap": "TOWNTown",
+      "destDoor": "",
+      "x": 2,
+      "y": 40,
+      "arrivalX": 1570,
+      "arrivalY": 170
+    },
+    {
+      "name": "warp_toClub",
+      "destMap": "CITYGroovyClubEntrance",
+      "destDoor": "",
+      "x": 322,
+      "y": 35,
+      "arrivalX": 24,
+      "arrivalY": 9
+    }
+  ],
+  "ALPHAStadiumMain": [
+    {
+      "name": "door_0",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 29,
+      "y": 82,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_1",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 30,
+      "y": 82,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_2",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 225,
+      "y": 206,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_3",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 3,
+      "y": 214,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_4",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 12,
+      "y": 214,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_5",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 276,
+      "y": 214,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_6",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 285,
+      "y": 214,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "door_7",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 265,
+      "y": 33,
+      "arrivalX": 29,
+      "arrivalY": 83
+    },
+    {
+      "name": "warp_toBehindStadiumLeft",
+      "destMap": "ALPHAStadiumBackstage",
+      "destDoor": "",
+      "x": 18,
+      "y": 33,
+      "arrivalX": 100,
+      "arrivalY": 11
+    }
+  ],
+  "ALPHABobsApartment": [
+    {
+      "name": "door_22",
+      "destMap": "ALPHABobElevator",
+      "destDoor": "",
+      "x": 37,
+      "y": 27
+    }
+  ],
+  "ALPHABobElevator": [
+    {
+      "name": "door_0",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 8,
+      "y": 8
+    },
+    {
+      "name": "door_3",
+      "destMap": "ALPHABobElevator",
+      "destDoor": "",
+      "x": 4,
+      "y": 13,
+      "arrivalX": 5,
+      "arrivalY": 9
+    },
+    {
+      "name": "door_4",
+      "destMap": "ALPHABobElevator",
+      "destDoor": "",
+      "x": 7,
+      "y": 9,
+      "arrivalX": 4,
+      "arrivalY": 10
+    }
+  ],
+  "ALPHAStadiumBackstage": [
+    {
+      "name": "door_0",
+      "destMap": "ALPHAStadiumBackstage",
+      "destDoor": "",
+      "x": 55,
+      "y": 11,
+      "arrivalX": 55,
+      "arrivalY": 12
+    },
+    {
+      "name": "door_1",
+      "destMap": "ALPHAStadiumBackstage",
+      "destDoor": "",
+      "x": 2,
+      "y": 10,
+      "arrivalX": 55,
+      "arrivalY": 12
+    },
+    {
+      "name": "warp_toStadiumRight",
+      "destMap": "ALPHAStadiumMain",
+      "destDoor": "",
+      "x": 179,
+      "y": 22,
+      "arrivalX": 144,
+      "arrivalY": 123
+    }
+  ],
+  "TOWNGENERIC2Upstairs": [
+    {
+      "name": "warp_toDownstairs",
+      "destMap": "TOWNGENERIC2Downstairs",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 30,
+      "arrivalY": 20
+    }
+  ],
+  "TOWNGENERIC3Upstairs": [
+    {
+      "name": "warp_toDownstairs",
+      "destMap": "TOWNGENERIC3Downstairs",
+      "destDoor": "",
+      "x": 5,
+      "y": 5,
+      "arrivalX": 29,
+      "arrivalY": 19
+    }
+  ]
+}

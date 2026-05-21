@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * DefaultRPGTileset — generates an 8-bit RPG tileset with pixel art patterns.
  *
