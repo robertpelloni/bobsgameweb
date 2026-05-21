@@ -1,4 +1,17 @@
-## v3.0.5 — 2026-05-01
+## v3.0.7 — 2026-05-21
+
+### Added
+- **Automated Rollback Pipeline:** Implemented `scripts/deploy-with-rollback.sh` with remote backup and automatic restoration on verification failure.
+- **Workflow Documentation:** Created `README.md` and foundational documents (`VISION.md`, `MEMORY.md`, `ROADMAP.md`, `TODO.md`).
+- **Interactive SFX:** Added footstep and door sounds to the RPG `DemoWorld`.
+- **8-Directional Support:** Implemented 8-way movement and character rendering (eye offsets) in `DemoWorld.ts`.
+
+### Changed
+- Refactored "Blah" audio system into `TypedTextWriter` (TextEngine.ts) for engine-wide consistency.
+- Updated `package.json` with `deploy:hetzner` task.
+- Bumped project version to `3.0.7`.
+
+## v3.0.6 — 2026-05-01
 
 ### Added
 - **NPC Sprite Registry Recovery:** Extracted and categorized 800+ sprite IDs including Adults, Kids, Animals, Vehicles, and Interactive Objects.
@@ -10,7 +23,8 @@
 ### Changed
 - Refactored `MapDataRegistry` to support data-driven map loading from `data/maps/manifest.json`.
 - Updated `MapEntity` interface to support legacy `warp` and `door` coordinate mapping.
-- Bumped project version to `3.0.5`.
+- Bumped project version to `3.0.6`.
+- Implemented the "Blah System" in `DemoWorld.ts` by using the `AudioManager` to play random pitched sounds while dialogue text is typed.
 
 ### Verified
 - Automated unit tests for Legacy Import Pipeline: 15/15 passed.
@@ -66,7 +80,7 @@
 
 ### Changed
 
-- Synced the live version string across `VERSION.md`, root `package.json`, root `package-lock.json`, `src/shared/Config.ts`, `src/renderer/scenes/MainMenuScene.ts`, `server/index.js`, `server/package.json`, and `server/package-lock.json`
+- Synced the live version string across `VERSION.md`, root `package.json`, root `package-lock.json`, `src/shared/Config.ts`, `src/renderer/scenes/MainMenuScene.ts`, server/index.js, server/package.json, and server/package-lock.json
 - Main menu version text now uses `APP_VERSION` instead of a stale hard-coded string
 - Updated replay export, achievement snapshot export, backend achievement snapshot defaults, and IndexedDB cache version metadata to `3.0.2`
 - Corrected the tracked Hetzner frontend deploy path from `/var/www/bobsgame.com/current` to the nginx-served path `/srv/www/bobsgame.com`

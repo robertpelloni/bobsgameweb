@@ -23,6 +23,8 @@ import { NetworkManager } from "../network/NetworkManager";
 import { TileBatcher } from "../core/TileBatcher";
 import { WeatherRenderer, type WeatherType } from "../graphics/WeatherRenderer";
 import { EventTrigger } from "./event/BobEvent";
+import { AudioManager } from "../../audio/AudioManager";
+import { TypedTextWriter } from "../text";
 
 const log = new Logger("DemoWorld");
 
@@ -114,7 +116,10 @@ export class DemoWorld {
 	private screenFlashColor = 0;
 	private screenFlashAlpha = 0;
 	private screenFlashDuration = 0;
-	playerDir = 0; // 0=down, 1=left, 2=right, 3=up
+	/**
+	 * playerDir: 0=D, 1=DL, 2=L, 3=UL, 4=U, 5=UR, 6=R, 7=DR
+	 */
+	playerDir = 0;
 
 	// NPCs
 	private npcs: {
@@ -134,8 +139,7 @@ export class DemoWorld {
 	private dialogueLines: string[] = [];
 	private dialogueIndex = 0;
 	private dialogueNPC = "";
-	private dialogueTimer = 0;
-	private dialogueCharIndex = 0;
+	private dialogueWriter: TypedTextWriter | null = null;
 	private readonly DIALOGUE_SPEED = 30; // chars per second
 	private dialogueChoices: string[] = [];
 	private dialogueChoiceIndex = 0;
@@ -520,15 +524,7 @@ export class DemoWorld {
 		// Wire event manager → DemoWorld dialogue display
 		if (this.eventManager) {
 			this.eventManager.setShowMessageCallback((text: string) => {
-				this.showDialogue = true;
-				this.dialogueLines = [text];
-				this.dialogueIndex = 0;
-				this.dialogueNPC = "";
-				this.dialogueTimer = 0;
-				this.dialogueCharIndex = 0;
-				this.dialogueChoices = [];
-				this.dialogueWaitingChoice = false;
-				this.dialogueChoiceCallback = null;
+				this.initDialogue(text, "");
 			});
 		}
 		this.container = new Container();
@@ -606,9 +602,7 @@ export class DemoWorld {
 		log.info("DemoWorld created");
 	}
 
-	// ============================================================
 	// Audio
-	// ============================================================
 
 	private audioInitialized = false;
 
@@ -639,9 +633,7 @@ export class DemoWorld {
 		AudioUtils.playSFX(name, volume);
 	}
 
-	// ============================================================
 	// Network / Multiplayer Presence
-	// ============================================================
 
 	private initNetwork(): void {
 		try {
@@ -731,9 +723,7 @@ export class DemoWorld {
 		this.chatMessages.push({ from: "You", text, age: 0 });
 	}
 
-	// ============================================================
 	// Map Generation
-	// ============================================================
 
 	private generateMap(): void {
 		// Fill with grass
@@ -837,9 +827,7 @@ export class DemoWorld {
 		this.fillRect(26, 6, 4, 1, Tile.SAND);
 	}
 
-	// ============================================================
 	// Equipment System
-	// ============================================================
 
 	private tryEquip(itemName: string): void {
 		const equipMap: Record<
@@ -890,9 +878,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Intro Cutscene
-	// ============================================================
 
 	private playIntroCutscene(): void {
 		this.introPlayed = true;
@@ -989,9 +975,7 @@ export class DemoWorld {
 		});
 	}
 
-	// ============================================================
 	// Save / Load
-	// ============================================================
 
 	private autoSaveTimer = 0;
 	private positionBroadcastTimer = 0;
@@ -1122,9 +1106,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Level Up & Achievements
-	// ============================================================
 
 	// Skill points system
 	private skillPoints = 0;
@@ -1227,9 +1209,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Treasure Chests
-	// ============================================================
 
 	private openedChests = new Set<string>(); // 'x,y' keys
 	private chestItems = new Map<string, { name: string; icon: number }>([
@@ -1281,9 +1261,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Area Transitions
-	// ============================================================
 
 	private generateMountainArea(): void {
 		// Fill with rocky terrain (reuse GRASS for base, trees for rocks)
@@ -1474,9 +1452,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Map Data Loading (bridge from MapLoader/MapManager)
-	// ============================================================
 
 	/**
 	 * MapTile enum values from MapLoader → DemoWorld Tile color enum.
@@ -1581,6 +1557,11 @@ export class DemoWorld {
 		const door = this.loadedMapDoors.find((entry) => entry.x === playerTileX && entry.y === playerTileY);
 		if (!door) return false;
 
+		// Play door sound
+		if (AudioManager.isLoaded("menu_select")) {
+			AudioManager.playSound("menu_select", { volume: 0.2, pitch: 0.8 });
+		}
+
 		this.notifications.push({
 			text: `Entering ${door.destinationMapName}...`,
 			x: this.playerX,
@@ -1628,9 +1609,7 @@ export class DemoWorld {
 		return (this as any)._mapH ?? MAP_H;
 	}
 
-	// ============================================================
 	// NPCs
-	// ============================================================
 
 	private placeNPCs(): void {
 		this.npcs = [
@@ -1708,9 +1687,7 @@ export class DemoWorld {
 		];
 	}
 
-	// ============================================================
 	// Input
-	// ============================================================
 
 	private setupInput(): void {
 		window.addEventListener("keydown", (e) => {
@@ -1721,9 +1698,7 @@ export class DemoWorld {
 		});
 	}
 
-	// ============================================================
 	// Update
-	// ============================================================
 
 	update(dt: number): void {
 		this.gameTime += dt;
@@ -1778,15 +1753,9 @@ export class DemoWorld {
 
 		// If dialogue is showing, only handle dialogue input
 		if (this.showDialogue) {
-			this.dialogueTimer += dt;
-
-			// Advance text
-			if (this.dialogueIndex < this.dialogueLines.length) {
-				const line = this.dialogueLines[this.dialogueIndex];
-				this.dialogueCharIndex = Math.min(
-					line.length,
-					Math.floor(this.dialogueTimer * this.DIALOGUE_SPEED),
-				);
+			// Update writer
+			if (this.dialogueWriter) {
+				this.dialogueWriter.update(dt * 1000); // TypedTextWriter expects ms
 			}
 
 			// Choice navigation
@@ -1826,21 +1795,22 @@ export class DemoWorld {
 				this.keys[" "] = false;
 				this.keys["Enter"] = false;
 
-				const line = this.dialogueLines[this.dialogueIndex];
-				if (this.dialogueCharIndex < line.length) {
+				if (this.dialogueWriter && !this.dialogueWriter.isComplete()) {
 					// Show full line immediately
-					this.dialogueCharIndex = line.length;
+					this.dialogueWriter.skip();
 				} else {
 					// Next line or close
 					this.dialogueIndex++;
-					this.dialogueTimer = 0;
-					this.dialogueCharIndex = 0;
 					if (this.dialogueIndex >= this.dialogueLines.length) {
 						if (this.dialogueChoices.length > 0) {
 							this.dialogueWaitingChoice = true;
+							this.dialogueWriter = null;
 						} else {
 							this.showDialogue = false;
+							this.dialogueWriter = null;
 						}
+					} else {
+						this.createDialogueWriter();
 					}
 				}
 			}
@@ -1951,22 +1921,10 @@ export class DemoWorld {
 		if (this.insideBuilding) return;
 		let dx = 0,
 			dy = 0;
-		if (this.keys["ArrowUp"] || this.keys["w"] || this.keys["W"]) {
-			dy = -1;
-			this.playerDir = 3;
-		}
-		if (this.keys["ArrowDown"] || this.keys["s"] || this.keys["S"]) {
-			dy = 1;
-			this.playerDir = 0;
-		}
-		if (this.keys["ArrowLeft"] || this.keys["a"] || this.keys["A"]) {
-			dx = -1;
-			this.playerDir = 1;
-		}
-		if (this.keys["ArrowRight"] || this.keys["d"] || this.keys["D"]) {
-			dx = 1;
-			this.playerDir = 2;
-		}
+		if (this.keys["ArrowUp"] || this.keys["w"] || this.keys["W"]) dy = -1;
+		if (this.keys["ArrowDown"] || this.keys["s"] || this.keys["S"]) dy = 1;
+		if (this.keys["ArrowLeft"] || this.keys["a"] || this.keys["A"]) dx = -1;
+		if (this.keys["ArrowRight"] || this.keys["d"] || this.keys["D"]) dx = 1;
 
 		// Gamepad input (left stick + D-pad)
 		const gamepads = navigator.getGamepads();
@@ -1975,17 +1933,29 @@ export class DemoWorld {
 			const deadzone = 0.25;
 			const lx = Math.abs(gp.axes[0] ?? 0) > deadzone ? gp.axes[0]! : 0;
 			const ly = Math.abs(gp.axes[1] ?? 0) > deadzone ? gp.axes[1]! : 0;
-			if (lx !== 0) { dx = Math.sign(lx); this.playerDir = lx < 0 ? 1 : 2; }
-			if (ly !== 0) { dy = Math.sign(ly); this.playerDir = ly < 0 ? 3 : 0; }
+			if (lx !== 0) dx = Math.sign(lx);
+			if (ly !== 0) dy = Math.sign(ly);
 			// D-pad
-			if (gp.buttons[12]?.pressed) { dy = -1; this.playerDir = 3; }
-			if (gp.buttons[13]?.pressed) { dy = 1; this.playerDir = 0; }
-			if (gp.buttons[14]?.pressed) { dx = -1; this.playerDir = 1; }
-			if (gp.buttons[15]?.pressed) { dx = 1; this.playerDir = 2; }
+			if (gp.buttons[12]?.pressed) dy = -1;
+			if (gp.buttons[13]?.pressed) dy = 1;
+			if (gp.buttons[14]?.pressed) dx = -1;
+			if (gp.buttons[15]?.pressed) dx = 1;
 			// A button = interact/confirm
-			if (gp.buttons[0]?.pressed) { this.keys[" "] = true; }
+			if (gp.buttons[0]?.pressed) this.keys[" "] = true;
 			// B button = cancel/back
-			if (gp.buttons[1]?.pressed) { this.keys["Escape"] = true; }
+			if (gp.buttons[1]?.pressed) this.keys["Escape"] = true;
+		}
+
+		// Update player direction (8-way)
+		if (dx !== 0 || dy !== 0) {
+			if (dx === 0 && dy > 0) this.playerDir = 0; // Down
+			else if (dx < 0 && dy > 0) this.playerDir = 1; // Down-Left
+			else if (dx < 0 && dy === 0) this.playerDir = 2; // Left
+			else if (dx < 0 && dy < 0) this.playerDir = 3; // Up-Left
+			else if (dx === 0 && dy < 0) this.playerDir = 4; // Up
+			else if (dx > 0 && dy < 0) this.playerDir = 5; // Up-Right
+			else if (dx > 0 && dy === 0) this.playerDir = 6; // Right
+			else if (dx > 0 && dy > 0) this.playerDir = 7; // Down-Right
 		}
 
 		// Space / E to interact
@@ -2187,6 +2157,14 @@ export class DemoWorld {
 					age: 0,
 					maxAge: 0.4,
 				});
+
+				// Play footstep sound
+				if (AudioManager.isLoaded("piece_move")) {
+					AudioManager.playSound("piece_move", {
+						volume: 0.03,
+						pitch: 0.5 + Math.random() * 0.2,
+					});
+				}
 			}
 		} else {
 			this.stepTimer = this.STEP_INTERVAL; // Ready to emit on next step
@@ -2435,9 +2413,35 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// NPC Interaction
-	// ============================================================
+
+	private initDialogue(lines: string | string[], npcName: string): void {
+		this.showDialogue = true;
+		this.dialogueLines = Array.isArray(lines) ? lines : [lines];
+		this.dialogueIndex = 0;
+		this.dialogueNPC = npcName;
+		this.dialogueChoices = [];
+		this.dialogueWaitingChoice = false;
+		this.dialogueChoiceCallback = null;
+
+		this.createDialogueWriter();
+	}
+
+	private createDialogueWriter(): void {
+		if (this.dialogueIndex < this.dialogueLines.length) {
+			const line = this.dialogueLines[this.dialogueIndex]!;
+			this.dialogueWriter = new TypedTextWriter(line, {
+				style: new TextStyle({
+					fontFamily: "Arial, sans-serif",
+					fontSize: 14,
+					fill: 0xddddee,
+					wordWrap: true,
+					wordWrapWidth: this.width - 72,
+				}),
+				speed: this.DIALOGUE_SPEED,
+			});
+		}
+	}
 
 	private tryInteractNPC(): boolean {
 		if (this.insideBuilding) return false;
@@ -2452,15 +2456,7 @@ export class DemoWorld {
 					this.eventManager.triggerEvents(EventTrigger.TALK);
 				}
 
-				this.showDialogue = true;
-				this.dialogueLines = npc.dialogue;
-				this.dialogueIndex = 0;
-				this.dialogueNPC = npc.name;
-				this.dialogueTimer = 0;
-				this.dialogueCharIndex = 0;
-				this.dialogueChoices = [];
-				this.dialogueWaitingChoice = false;
-				this.dialogueChoiceCallback = null;
+				this.initDialogue(npc.dialogue, npc.name);
 
 				// Special NPC interactions with choices
 				if (npc.name === "Barista") {
@@ -2512,9 +2508,7 @@ export class DemoWorld {
 		return false;
 	}
 
-	// ============================================================
 	// Pause Menu
-	// ============================================================
 
 	private handlePauseOption(): void {
 		const option = this.pauseOptions[this.pauseCursorPos];
@@ -2565,9 +2559,7 @@ export class DemoWorld {
 		);
 	}
 
-	// ============================================================
 	// Building Entry
-	// ============================================================
 
 	private tryEnterBuilding(): void {
 		const playerTileX = Math.floor(this.playerX / TILE_SIZE);
@@ -2593,17 +2585,13 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Fishing
-	// ============================================================
 
 	private fishingState: "idle" | "casting" | "waiting" | "caught" = "idle";
 	private fishingTimer = 0;
 	private fishCaught: string[] = [];
 
-	// ============================================================
 	// Combat / Encounters
-	// ============================================================
 
 	private startEncounter(): void {
 		const template =
@@ -2748,9 +2736,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Chat & Online Status
-	// ============================================================
 
 	private renderChat(_camX: number, _camY: number): void {
 		if (this.chatMessages.length === 0) return;
@@ -2801,9 +2787,7 @@ export class DemoWorld {
 		this.container.addChild(text);
 	}
 
-	// ============================================================
 	// Pause Menu
-	// ============================================================
 
 	private renderPauseMenu(): void {
 		// Dark overlay
@@ -2875,9 +2859,7 @@ export class DemoWorld {
 		this.container.addChild(stats);
 	}
 
-	// ============================================================
 	// Celebration Particles
-	// ============================================================
 
 	private renderCelebrationParticles(): void {
 		// Legacy celebration particles
@@ -2905,9 +2887,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Screen Effects
-	// ============================================================
 
 	private triggerScreenShake(amount: number, duration: number): void {
 		this.screenShakeAmount = amount;
@@ -3229,9 +3209,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Render
-	// ============================================================
 
 	render(): Container {
 		this.container.removeChildren();
@@ -3483,13 +3461,9 @@ export class DemoWorld {
 		return this.container;
 	}
 
-	// ============================================================
 	// Building Interior Rendering
-	// ============================================================
 
-	// ============================================================
 	// Parallax Background
-	// ============================================================
 
 	private renderParallaxBackground(camX: number, camY: number): void {
 		const parallaxFactor = 0.3; // Stars/clouds scroll at 30% of camera speed
@@ -3682,9 +3656,7 @@ export class DemoWorld {
 		return this.container;
 	}
 
-	// ============================================================
 	// Shop System
-	// ============================================================
 
 	private renderShopOverlay(): void {
 		const boxW = 320;
@@ -3792,9 +3764,7 @@ export class DemoWorld {
 		this.container.addChild(exitText);
 	}
 
-	// ============================================================
 	// Cafe Overlay
-	// ============================================================
 
 	private renderCafeOverlay(): void {
 		const boxW = 300;
@@ -3988,9 +3958,7 @@ export class DemoWorld {
 		this.tryEquip(item.name);
 	}
 
-	// ============================================================
 	// Cafe System
-	// ============================================================
 
 	private buyCafeItem(itemIndex?: number): void {
 		const idx = itemIndex ?? this.cafeCursorPos;
@@ -4104,14 +4072,16 @@ export class DemoWorld {
 		c.addChild(head);
 
 		// Eyes (direction-based)
+		// playerDir: 0=D, 1=DL, 2=L, 3=UL, 4=U, 5=UR, 6=R, 7=DR
 		const eyeOffsets: Record<number, { ex: number; ey: number }[]> = {
-			0: [
-				{ ex: -3, ey: -25 },
-				{ ex: 3, ey: -25 },
-			], // down
-			1: [{ ex: -4, ey: -25 }], // left
-			2: [{ ex: 4, ey: -25 }], // right
-			3: [], // up (no eyes visible)
+			0: [{ ex: -3, ey: -25 }, { ex: 3, ey: -25 }], // down
+			1: [{ ex: -4, ey: -25 }, { ex: 1, ey: -25 }], // down-left
+			2: [{ ex: -4, ey: -25 }], // left
+			3: [{ ex: -3, ey: -25 }], // up-left
+			4: [], // up (no eyes visible)
+			5: [{ ex: 3, ey: -25 }], // up-right
+			6: [{ ex: 4, ey: -25 }], // right
+			7: [{ ex: -1, ey: -25 }, { ex: 4, ey: -25 }], // down-right
 		};
 		const eyes = eyeOffsets[dir] ?? eyeOffsets[0];
 		for (const eye of eyes) {
@@ -4296,9 +4266,7 @@ export class DemoWorld {
 		this.hudContainer.addChild(hint);
 	}
 
-	// ============================================================
 	// Dialogue Box
-	// ============================================================
 
 	private renderDialogueBox(): void {
 		const boxW = this.width - 40;
@@ -4332,24 +4300,13 @@ export class DemoWorld {
 		this.hudContainer.addChild(sep);
 
 		// Dialogue text (typewriter effect)
-		if (this.dialogueIndex < this.dialogueLines.length) {
-			const fullLine = this.dialogueLines[this.dialogueIndex];
-			const visibleText = fullLine.substring(0, this.dialogueCharIndex);
-
-			const textStyle = new TextStyle({
-				fontFamily: "Arial, sans-serif",
-				fontSize: 14,
-				fill: 0xddddee,
-				wordWrap: true,
-				wordWrapWidth: boxW - 32,
-			});
-			const text = new Text({ text: visibleText, style: textStyle });
-			text.position.set(boxX + 16, boxY + 38);
-			this.hudContainer.addChild(text);
+		if (this.dialogueWriter) {
+			const textObj = this.dialogueWriter.getDisplayObject();
+			textObj.position.set(boxX + 16, boxY + 38);
+			this.hudContainer.addChild(textObj);
 
 			// Advance indicator (blinking triangle)
-			const allCharsShown = this.dialogueCharIndex >= fullLine.length;
-			if (allCharsShown) {
+			if (this.dialogueWriter.isComplete()) {
 				const blink = Math.sin(this.gameTime * 5) > 0;
 				if (blink) {
 					const indicatorStyle = new TextStyle({
@@ -4408,9 +4365,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Access
-	// ============================================================
 
 	getContainer(): Container {
 		return this.container;
@@ -4432,9 +4387,7 @@ export class DemoWorld {
 		this.currentMapName = name;
 	}
 
-	// ============================================================
 	// Footstep Particles
-	// ============================================================
 
 	private renderStepParticles(camX: number, camY: number): void {
 		for (const p of this.stepParticles) {
@@ -4457,13 +4410,9 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Fishing Indicator Rendering
-	// ============================================================
 
-	// ============================================================
 	// Quest Log Rendering
-	// ============================================================
 
 	private renderQuestLog(): void {
 		const boxW = 360;
@@ -4617,9 +4566,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Weather Rendering
-	// ============================================================
 
 	private renderWeather(): void {
 		if (this.weatherType === "clear" || this.weatherParticles.length === 0)
@@ -4664,9 +4611,7 @@ export class DemoWorld {
 		this.container.addChild(indicator);
 	}
 
-	// ============================================================
 	// Inventory Rendering
-	// ============================================================
 
 	private renderInventory(): void {
 		const boxW = 340;
@@ -4811,9 +4756,7 @@ export class DemoWorld {
 		this.container.addChild(hint);
 	}
 
-	// ============================================================
 	// Day/Night Cycle
-	// ============================================================
 
 	private renderDayNight(): void {
 		if (this.dayNightOverlay) {
@@ -4870,9 +4813,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Floating Notifications
-	// ============================================================
 
 	private renderNotifications(camX: number, camY: number): void {
 		for (const notif of this.notifications) {
@@ -4893,9 +4834,7 @@ export class DemoWorld {
 		}
 	}
 
-	// ============================================================
 	// Minimap
-	// ============================================================
 
 	private renderMinimap(): void {
 		const padding = 8;
