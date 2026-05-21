@@ -280,8 +280,19 @@ export class WorldScene extends Scene {
       yuuAnim.anchor.set(0.5, 1.0);
       yuuAnim.play();
       sprite.sprite = yuuAnim;
-      sprite.currentAnimation = 'walk_down';
+      sprite.currentAnimation = 'Down';
+      (this as any).lastAnimDir = 'Down';
       console.log('[WorldScene] Using animated Yuu sprite');
+
+      // Add a visual shadow to the player
+      const shadowG = new Graphics();
+      shadowG.ellipse(0, 0, 6, 3);
+      shadowG.fill({ color: 0x000000, alpha: 0.3 });
+      const shadowTex = this.app.renderer.generateTexture(shadowG);
+      const shadowSprite = new Sprite(shadowTex);
+      shadowSprite.anchor.set(0.5, 0.5);
+      shadowSprite.position.set(0, -1); // Position at feet
+      yuuAnim.addChildAt(shadowSprite, 0); // Add behind character
     } else {
       // Fallback: static sprite frame
       const yuuSprite = this.spriteAtlas.createSprite('yuu', 0);
@@ -848,9 +859,11 @@ export class WorldScene extends Scene {
       if (this.map?.data.isOutside) {
         this.lightingSystem.ambientColor = 0xeeeeff;
         this.lightingSystem.dayDuration = 60.0;
+        this.lightingSystem.enableDayNightCycle = true;
       } else {
-        this.lightingSystem.ambientColor = 0x303050;
+        this.lightingSystem.ambientColor = 0x505070;
         this.lightingSystem.dayDuration = 999999;
+        this.lightingSystem.enableDayNightCycle = false;
       }
     }
     // Fade in from black (room transition effect)
@@ -1766,28 +1779,29 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
       this.playerIsMoving = (dx !== 0 || dy !== 0);
 
       // Update player sprite animation using named animation sequences
-      if (animDir) {
-        const playerSpriteComp = this.world.getComponent(
-          (this.world as any).playerEntityId,
-          'Sprite'
-        ) as any;
-        if (playerSpriteComp?.sprite) {
-          if (playerSpriteComp.currentAnimation !== animDir) {
-            // Get frames from the original game's animation data
-            const frames = this.spriteAtlas.getAnimationFrames('yuu', animDir);
-            if (frames.length > 0) {
-              playerSpriteComp.sprite.textures = frames;
-              playerSpriteComp.currentAnimation = animDir;
-            }
+      const playerSpriteComp = this.world.getComponent(
+        (this.world as any).playerEntityId,
+        'Sprite'
+      ) as any;
+      
+      if (playerSpriteComp?.sprite) {
+        const currentDir = animDir || (this as any).lastAnimDir || 'Down';
+        if (playerSpriteComp.currentAnimation !== currentDir) {
+          // Get frames from the original game's animation data
+          const frames = this.spriteAtlas.getAnimationFrames('yuu', currentDir);
+          if (frames.length > 0) {
+            playerSpriteComp.sprite.textures = frames;
+            playerSpriteComp.currentAnimation = currentDir;
+            if (animDir) (this as any).lastAnimDir = animDir;
           }
-          // Animate when moving, freeze when stopped
-          if (this.playerIsMoving) {
-            playerSpriteComp.sprite.animationSpeed = this.playerIsSprinting ? 0.25 : 0.15;
-            playerSpriteComp.sprite.play();
-          } else {
-            playerSpriteComp.sprite.animationSpeed = 0;
-            playerSpriteComp.sprite.stop();
-      }
+        }
+        
+        // Animate when moving, show first frame (standing) when stopped
+        if (this.playerIsMoving) {
+          playerSpriteComp.sprite.animationSpeed = this.playerIsSprinting ? 0.25 : 0.15;
+          playerSpriteComp.sprite.play();
+        } else {
+          playerSpriteComp.sprite.gotoAndStop(0);
         }
       }
 

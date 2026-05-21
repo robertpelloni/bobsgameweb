@@ -114,12 +114,14 @@ this.container.addChild(this.entitySpriteContainer);
     }
     // Set layer-specific alpha for visual quality
     this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7;
-    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.6;
+    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.35;
     this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 0.7;
-    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.5;
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.5;
-    // Light mask tiles are orange markers � tint to black for AO overlay
+    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.3;
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.3;
+    // Light mask tiles are orange markers → tint to black for AO overlay
     this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.35;
+    // Map lights (tiles) alpha
+    this.layers[MapData.MAP_LIGHT_LAYER].alpha = 0.8;
   // Above-layer tiles stay in their own layer containers (z=7, z=8)
   // so they render ON TOP of entities in entitySpriteContainer (z=6.5)
 
@@ -276,6 +278,8 @@ this.container.addChild(this.entitySpriteContainer);
       MapData.MAP_ABOVE_DETAIL_LAYER,
       MapData.MAP_SPRITE_SHADOW_LAYER,
       MapData.MAP_LIGHT_MASK_LAYER,
+      MapData.MAP_LIGHT_LAYER,
+      MapData.MAP_DOOR_LAYER,
     ];
 
     for (const l of renderableLayers) {
@@ -299,6 +303,11 @@ this.container.addChild(this.entitySpriteContainer);
         // Light mask tiles → tint black for AO
         if (l === MapData.MAP_LIGHT_MASK_LAYER) {
           sprite.tint = 0x000000;
+        }
+
+        // Additive blending for light tiles
+        if (l === MapData.MAP_LIGHT_LAYER) {
+          sprite.blendMode = 'add';
         }
 
 				layer.addChild(sprite);
