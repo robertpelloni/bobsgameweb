@@ -266,10 +266,14 @@ export class LegacyMapLoader {
 
     // Assign positions: for each door, find the closest scanned wall-opening
     const assigned = new Set<number>();
+    const DOOR_TILE_IDS = new Set([742, 1316, 755, 756]);
     for (let i = 0; i < mapData.doorDataList.length; i++) {
       const door = mapData.doorDataList[i];
       const gx = door.x ?? 0;
       const gy = door.y ?? 0;
+      
+      const curTile = mapData.getTileIndex(MapData.MAP_OBJECT_LAYER, gx, gy);
+      if (DOOR_TILE_IDS.has(curTile)) continue;
 
       let bestIdx = -1;
       let bestDist = Infinity;
@@ -284,7 +288,7 @@ export class LegacyMapLoader {
         }
       }
 
-      if (bestIdx >= 0 && bestDist <= 3) {
+      if (bestIdx >= 0 && bestDist <= 2) {
         door.x = doorPositions[bestIdx].x;
         door.y = doorPositions[bestIdx].y;
         assigned.add(bestIdx);
