@@ -284,7 +284,7 @@ export class LegacyMapLoader {
         }
       }
 
-      if (bestIdx >= 0 && bestDist <= 15) {
+      if (bestIdx >= 0 && bestDist <= 3) {
         door.x = doorPositions[bestIdx].x;
         door.y = doorPositions[bestIdx].y;
         assigned.add(bestIdx);

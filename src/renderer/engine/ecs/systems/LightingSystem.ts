@@ -37,6 +37,7 @@ export class LightingSystem extends System {
   private backgroundGraphic: Graphics;
   private lightBrush: Sprite;
   public ambientColor: number = 0xffffff;
+  public enableDayNightCycle: boolean = true;
   private timeOfDay: number = 0; // 0.0 to 1.0 (24h cycle)
   public dayDuration: number = 60.0;
   public cameraX: number = 0;
@@ -114,8 +115,10 @@ export class LightingSystem extends System {
   }
 
   public update(dt: number, entities: Map<EntityId, Map<string, Component>>): void {
-    this.timeOfDay = (this.timeOfDay + (dt / this.dayDuration)) % 1.0;
-    this.updateAmbientColor();
+    if (this.enableDayNightCycle) {
+      this.timeOfDay = (this.timeOfDay + (dt / (this.dayDuration * 1000))) % 1.0;
+      this.updateAmbientColor();
+    }
 
     // 1. Draw background ambient darkness
     this.backgroundGraphic.clear();

@@ -168,10 +168,8 @@ export class MapData extends AssetData {
     }
 
     public static isTileLayer(l: number): boolean {
-        if (l === MapData.MAP_DOOR_LAYER) return false;
         if (l === MapData.MAP_ENTITY_LAYER) return false;
         if (l === MapData.MAP_AREA_LAYER) return false;
-        if (l === MapData.MAP_LIGHT_LAYER) return false;
         return true;
     }
 
