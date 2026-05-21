@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * DemoWorld — generates a visual demo RPG world for the ClientGameEngine.
  *

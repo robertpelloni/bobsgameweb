@@ -1,0 +1,1 @@
+[{"name": "yellowBed", "sprite": "yellowBed", "x": 104.0, "y": 40.0, "nonWalkable": true, "disableShadow": false}, {"name": "deskChairFaceDown", "sprite": "deskChairFaceDown", "x": 80.0, "y": 112.0, "nonWalkable": false, "disableShadow": false}]

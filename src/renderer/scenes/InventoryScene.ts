@@ -28,6 +28,7 @@ export interface InventoryItem {
 		hp?: number;
 		mp?: number;
 		spd?: number;
+		luk?: number;
 	};
 	equipped?: boolean;
 	usable?: boolean;

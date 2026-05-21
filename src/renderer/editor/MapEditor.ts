@@ -525,7 +525,7 @@ export class MapEditor {
     private renderLayerList(): void {
         const list = this.container.querySelector('#layer-list')!;
         list.innerHTML = '';
-        const layerNames = ["GROUND", "G-DETAIL", "SHADER", "G-SHADOW", "OBJECT", "O-DETAIL", "O-SHADOW", "ABOVE", "A-DETAIL", "S-SHADOW", "CAMERA", "HIT", "ENTITY", "LIGHT", "AREA", "L-MASK", "DOOR"];
+        const layerNames = ["GROUND", "G-DETAIL", "G-SHADOW", "OBJECT", "O-DETAIL", "O-SHADOW", "ABOVE", "A-DETAIL", "S-SHADOW", "HIT", "L-MASK", "CAMERA", "ENTITY", "LIGHT", "AREA", "DOOR", "SHADER"];
         for (let i = 0; i < MapData.layers; i++) {
             const item = document.createElement('div');
             item.className = `layer-item ${this.selectedLayer === i ? 'selected' : ''}`;

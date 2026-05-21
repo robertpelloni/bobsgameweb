@@ -1,0 +1,4873 @@
+{
+  "RANDOMcar": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "RANDOMvan": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "RANDOMtruck": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "RANDOMsuv": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "RANDOMminivan": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "RANDOMferrari": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "RANDOMbicycle": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "RANDOMmotorcycle": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "RANDOMhelicopter": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "RANDOMskycar": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "policecar": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "mafiacar": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "tvvan": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "ambulance": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "tank": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "icecreamtruck": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "ufo": {
+    "Frame0": 0
+  },
+  "shoppingcart": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "lawnmower": {
+    "Down": 0,
+    "Up": 1,
+    "Left": 2,
+    "Right": 3
+  },
+  "getmycolorsright": {
+    "Frame0": 0
+  },
+  "lawnChairDownLeftRight": {
+    "Down": 0,
+    "Left": 1,
+    "Right": 2
+  },
+  "lawnBenchFaceDown": {
+    "Frame0": 0
+  },
+  "gardenHose": {
+    "Frame0": 0
+  },
+  "grillFaceLeft": {
+    "Frame0": 0
+  },
+  "schoolxingsign": {
+    "Frame0": 0
+  },
+  "stopsign": {
+    "Down": 0,
+    "Up": 1
+  },
+  "schoolFlag": {
+    "First": 0
+  },
+  "stainedglasswindow": {
+    "Frame0": 0
+  },
+  "disorderofbobsign": {
+    "Frame0": 0
+  },
+  "trafficlightfaceup": {
+    "Frame0": 0
+  },
+  "pizzasigndoorwide": {
+    "Frame0": 0
+  },
+  "pizzasignwindow1": {
+    "Frame0": 0
+  },
+  "coffeecafesign": {
+    "Frame0": 0
+  },
+  "departmentsign": {
+    "Frame0": 0
+  },
+  "storedeptsign": {
+    "Frame0": 0
+  },
+  "gasstationsign": {
+    "Frame0CopyCopy": 0,
+    "Frame0Copy": 2,
+    "Frame0": 3
+  },
+  "clubhouseboarded": {
+    "Frame0": 0
+  },
+  "groceryexpresssignstacked": {
+    "Frame0": 0
+  },
+  "grocerysign": {
+    "Frame0": 0
+  },
+  "expresssign": {
+    "Frame0": 0
+  },
+  "tacoburgersign": {
+    "Frame0Copy": 10,
+    "Frame0": 4,
+    "Frame0CopyCopy": 9
+  },
+  "gamestoresign": {
+    "Frame0": 0
+  },
+  "electronicssign": {
+    "Frame0": 0
+  },
+  "beautysalonsign": {
+    "Frame0": 0
+  },
+  "tanningsign": {
+    "Frame0": 0
+  },
+  "nailssign": {
+    "Frame0": 0
+  },
+  "hairsign": {
+    "Frame0": 0
+  },
+  "cdssign": {
+    "Frame0": 2
+  },
+  "recordssign": {
+    "Frame0": 0
+  },
+  "pets4lessdoorsign": {
+    "Frame0": 0
+  },
+  "cutesign": {
+    "Frame0": 0
+  },
+  "cheapsign": {
+    "Frame0": 0
+  },
+  "arcadesign": {
+    "Frame0": 0
+  },
+  "videorentsign": {
+    "Frame0": 0
+  },
+  "drums": {
+    "Frame0": 0
+  },
+  "mrcart": {
+    "Frame0": 0
+  },
+  "dinner": {
+    "Frame0": 0
+  },
+  "plate": {
+    "Frame0": 0
+  },
+  "lunchbag": {
+    "Frame0": 0
+  },
+  "batteries": {
+    "Frame0": 0
+  },
+  "pingcontroller": {
+    "Frame0": 0
+  },
+  "tv2x1mesflash": {
+    "Frame0": 0
+  },
+  "fountainwater": {
+    "Frame0": 0
+  },
+  "golfball": {
+    "Frame0": 0
+  },
+  "golfclub": {
+    "Frame0": 0
+  },
+  "museumsheet": {
+    "Frame0": 0
+  },
+  "jewelsparkle": {
+    "Frame0": 0
+  },
+  "wealthyProgrammerBigHead": {
+    "Frame0": 0
+  },
+  "bighead": {
+    "Frame0": 0
+  },
+  "bigheadolder": {
+    "Frame0": 0
+  },
+  "sparks": {
+    "Frame0": 0
+  },
+  "spotlight": {
+    "Frame0": 0
+  },
+  "yuu": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "yuurunning": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "youngyuu": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "youngyuurunning": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "dad": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "youngdad": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "friendsdad": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "mom": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "youngmom": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "friendsmom": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "crazylady": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "librarian": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "secretary": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "nurse": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "hallmonitor": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "principal": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "janitor": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "momo": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "oldmomo": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "sleazyunclebob": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "givenupteacher": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "maleangryteacher": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "malesadteacher": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "femaleangryteacher": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "femalesadteacher": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "grannycluelessteacher": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "pcteacher": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "crossingguard": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "mailman": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "doortodoorsalesman": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "firefighter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "securityguard": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "townsheriff": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "policeofficermale": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "policeofficerfemale": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "swat": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "privateeye": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "cia": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "newsreportermale": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "newsreporterfemale": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "cameraguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "familydoctordentist": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "surgeon": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "hospitaldirector": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "paramedic": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "psychiatrist": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "madscientist": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "professor": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "dogwalker": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "spandexjogger": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "shoppinglady": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "farmer": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "deliicecreamman": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "hotdogvendor": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "trafficcharityguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "magazinevendor": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "constructionworker": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "businessguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "businesswoman": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "richnerdguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "officeworkermale": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "officeworkerfemale": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "skinnymeekcoder": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "fatmeekcoder": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "wealthylady": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "bigwig": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "wealthygirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "wealthyguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "mayor": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "photographer": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "pizzaguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "mime": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "guitarguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "magician": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "clown": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "sandwichadguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "flyerguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "picketer": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "samurai": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "ninja": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "karateguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "kungfumaster": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "wiseman": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "hermit": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "tinfoilhatman": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "monk": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "shadywatchdealer": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "pickpocket": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "prothief": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "pawnshopguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "mafiaguy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "crimeboss": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "biker": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "dealer": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "bankrobber": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "convict": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "escapedconvict": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "prostitute": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "hustler": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "dancer": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "thug": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "mechanic": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "diseased": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "crippled": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "hobo": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "beggar": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "terrorist": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "cultenlister": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "alien": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "ghost": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "superhero": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "timetraveler": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "robot": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "bubbleheadcyborg": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "quack": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "army": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "transvestite": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "astronaut": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "buddy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "islandhermit": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "president": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "contortionistbountyhunter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "chris": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "RANDOMwomanbobcut": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "RANDOMmangrayhairsuit": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "RANDOMmangrayhairbigheadsuit": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "RANDOMwomangrayhairdress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "RANDOMwomangrayhairmakeupdress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "youngfriend": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "notfriend": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "bully": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "youngbrother": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "brother": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "youngsister": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "sister": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "littlebrother": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "bladerboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "scrawnyboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "paperboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "foreignboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "japaneseboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "skaterboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "gothboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "punkboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "emoboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "greaserboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "jockboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "pudgyboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "nerdboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "thugboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "conceitedboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "uglyboyDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "uglygirlDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "pudgygirlDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "gothgirlDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "nerdgirlDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "conceitedgirlDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "punkgirlDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "emogirlDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "skatergirlDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "jockgirlDEFAULT": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "baby": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "babyredhair": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "cat": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "puppy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "bigdog": {
+    "Down": 0,
+    "Up": 7,
+    "Left": 11,
+    "Right": 15
+  },
+  "skunk": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "bird": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "turtle": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "hamster": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "squirrel": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "rat": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "ant": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "fly": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "snake": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "electricshock": {
+    "Frame0": 0
+  },
+  "coffeeandnewspaper": {
+    "Frame0": 0
+  },
+  "ramio": {
+    "Frame0": 0
+  },
+  "ramiobob": {
+    "Frame0": 0
+  },
+  "ramioheart": {
+    "Frame0": 0
+  },
+  "ramioevil": {
+    "Frame0": 0
+  },
+  "ramiomoneyblock": {
+    "Frame0": 0
+  },
+  "ramiobrick": {
+    "Frame0": 0
+  },
+  "ramiobrickchunk": {
+    "Frame0": 0
+  },
+  "ramiomoney": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteFrontDoor": {
+    "closed": 0
+  },
+  "DoorUpWhiteFrontDoor": {
+    "Frame0": 0
+  },
+  "DoorUpWhiteSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteFrontDoorGlassWindowSilverKnob": {
+    "closed": 0
+  },
+  "DoorUpWhiteWindowKitchenSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteSquareWindowCatDoorSilverKnob": {
+    "closed": 0
+  },
+  "DoorUpWhiteKitchenWindowCatDoorSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownGraySilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpGraySilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpDarkGraySilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownDarkGraySilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpBrownGoldKnob": {
+    "Frame0": 0
+  },
+  "DoorDownBrownGoldKnob": {
+    "Frame0": 0
+  },
+  "DoorDownDarkBrownGoldKnob": {
+    "Frame0": 0
+  },
+  "DoorLeftBrownGoldKnob": {
+    "Frame0": 0
+  },
+  "DoorRightBrownGoldKnob": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleTallBrownGoldKnob": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleTallBrownGoldKnobs": {
+    "Frame0": 0
+  },
+  "DoorLeftDoubleBrownGoldKnobs": {
+    "Frame0": 0
+  },
+  "DoorRightDoubleBrownGoldKnobs": {
+    "Frame0": 0
+  },
+  "DoorJapanese": {
+    "Frame0": 0
+  },
+  "DoorSchoolBathroomDoor": {
+    "closed": 0,
+    "opening": 1,
+    "open": 2
+  },
+  "DoorBathroomStall": {
+    "closed": 0,
+    "open": 6
+  },
+  "DoorDownWhiteSecurityWindowSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpWhiteSecurityWindowSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleWhiteSecurityWindowSilverKnobs": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleWhiteSecurityWindowSilverKnobs": {
+    "Frame0": 0
+  },
+  "DoorUpGraySecurityWindowSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownGraySecurityWindowSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleGraySecurityWindowSilverKnobs": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleGraySecurityWindowSilverKnobs": {
+    "Frame0": 0
+  },
+  "DoorUpBrownSecurityWindowGoldKnob": {
+    "Frame0": 0
+  },
+  "DoorDownBrownSecurityWindowGoldKnob": {
+    "Frame0": 0
+  },
+  "DoorUpWhiteBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteBathroomSignSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteGirlsBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpWhiteGirlsBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteBoysBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpWhiteBoysBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleExitDoor": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleBlackSecurityWindows": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleBlackSecurityWindowDoor": {
+    "Frame0": 0
+  },
+  "DoorRightDoubleBlackSecurity": {
+    "Frame0": 0
+  },
+  "DoorLeftDoubleBlackSecurityDoor": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleTallBrownPeepHoleGoldKnobs": {
+    "Frame0": 0
+  },
+  "DoorUpAdultsOnly": {
+    "Frame0": 0
+  },
+  "DoorDownAdultsOnly": {
+    "Frame0": 0
+  },
+  "DoorUpWhiteDeadbolt": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteDeadbolt": {
+    "Frame0": 0
+  },
+  "DoorUpGrayDeadBolt": {
+    "Frame0": 0
+  },
+  "DoorUpGrayDeadboltTemp": {
+    "Frame0": 0
+  },
+  "DoorDownGrayDeadBolt": {
+    "Frame0": 0
+  },
+  "DoorDownDarkGrayDeadBolt": {
+    "Frame0": 0
+  },
+  "DoorUpDarkGrayDeadbolt": {
+    "Frame0": 0
+  },
+  "DoorUpGrayOpenSignSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownGrayInUseSignSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleTallGrayMovieTheaterDoors": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleTallGrayMovieTheaterDoors": {
+    "Frame0": 0
+  },
+  "DoorLeftRightTallDoubleGrayMovieTheater": {
+    "Frame0": 0
+  },
+  "DoorUpDarkGrayMensBathroomPushDoor": {
+    "Frame0": 0
+  },
+  "DoorDownDarkGrayMensBathroomPushDoor": {
+    "Frame0": 0
+  },
+  "DoorUpDarkGrayWomensBathroomPushDoor": {
+    "Frame0": 0
+  },
+  "DoorDownDarkGrayWomensBathroomPushDoor": {
+    "Frame0": 0
+  },
+  "DoorUpDarkGrayUnisexBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpWhiteUnisexBathroomDeadbolt": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteUnisexBathroomDeadbolt": {
+    "Frame0": 0
+  },
+  "DoorUpGrayUnisexBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownGrayUnisexBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpGrayMensBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownGrayMensBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpGrayWomensBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownGrayWomensBathroomSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleLightMetalElevatorDoors": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleMetalElevatorDoors": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleMetalElevatorDoors": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleThinMetalElevatorDoors": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleThinMetalElevatorDoors": {
+    "Frame0": 1
+  },
+  "DoorUpMetalFreezerDoor": {
+    "Frame0": 0
+  },
+  "DoorDownMetalFreezerDoor": {
+    "Frame0": 0
+  },
+  "DoorUpRedCurtainPhotoBooth": {
+    "Frame0": 0
+  },
+  "DoorDownRedCurtainPhotoBooth": {
+    "Frame0": 0
+  },
+  "DoorUpWhiteCurtainDressingRoomDoor": {
+    "Frame0": 0
+  },
+  "DoorDownWhiteCurtainDressingRoomDoor": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleWhiteWindowPushDoors": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleWhiteWindowPushDoorOperatingRoom": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleWhiteWindowPushDoorOperatingRoom": {
+    "Frame0": 0
+  },
+  "DoorUpGraySquareWindowSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownGraySquareWindowSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleGraySquareWindowSilverKnobs": {
+    "Frame0": 0
+  },
+  "DoorUpGrayWindowHospitalRoom": {
+    "Frame0": 0
+  },
+  "DoorDownGrayBigWindowSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownDarkGraySquareWindowSIlverKnob": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleDarkGrayWindowPushDoors": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleDarkGrayWindowPushDoors": {
+    "Frame0": 0
+  },
+  "DoorUpDarkerGraySquareWindow": {
+    "Frame0": 0
+  },
+  "DoorUpMetalBars": {
+    "Frame0": 0
+  },
+  "DoorDownDarkGrayDeadBoltPeepHole": {
+    "Frame0": 0
+  },
+  "DoorUpDarkGraySecurityLockPeepHole": {
+    "Frame0": 0
+  },
+  "DoorUpBrownGoldKnobDeadbolt": {
+    "Frame0": 0
+  },
+  "DoorDownBrownGoldKnobDeadbolt": {
+    "Frame0": 0
+  },
+  "DoorUpDarkGrayStarDoorSilverKnob": {
+    "Frame0": 0
+  },
+  "DoorDownGlass": {
+    "Frame0": 0
+  },
+  "DoorUpGlass": {
+    "closed": 0
+  },
+  "DoorUpBlackGlassHandle": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleGlass": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleGlass": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleGlassWithSecurityLock": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleGlassWithSecurityLock": {
+    "Frame0": 0
+  },
+  "DoorUpSteamyGlassSauna": {
+    "Frame0": 0
+  },
+  "DoorDownSteamySauna": {
+    "Frame0": 0
+  },
+  "DoorUpGlassOpenSign": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleGlassWithOpenSigns": {
+    "closed": 0
+  },
+  "DoorUpDoubleGlassOpenSignRight": {
+    "closed": 0
+  },
+  "DoorUpDoubleGlassNeonOpenSigns": {
+    "closed": 0
+  },
+  "DoorUpDoubleGlassSingleWindowNeonOpenSignLeftHoursRight": {
+    "closed": 0
+  },
+  "DoorDownDoubleGlassSingleWindow": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleGlassSingleWindow": {
+    "closed": 0
+  },
+  "DoorUpDoubleBlackGlassSingleWindowRedNeonOpenSign": {
+    "closed": 0
+  },
+  "DoorDownDoubleSlidingGlassDoors": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleGlassSlidingDoorOutSign": {
+    "closed": 0
+  },
+  "DoorUpDoubleGlassSlidingDoorInSign": {
+    "closed": 0
+  },
+  "DoorUpWoodTallNoHandleForestShack": {
+    "Frame0": 0
+  },
+  "DoorDownWoodenNoHandle": {
+    "Frame0": 0
+  },
+  "DoorUpDoubleTallWoodenShedDoors": {
+    "closed": 0
+  },
+  "DoorDownWoodenShedDoorCutout": {
+    "closed": 0
+  },
+  "boardsForShackDoor": {
+    "Frame0": 0
+  },
+  "movietheaterlightssign": {
+    "Frame0Copy": 1,
+    "Frame0": 2
+  },
+  "gameBobZero": {
+    "Frame0": 0
+  },
+  "whiteGameBobX": {
+    "Frame0": 0
+  },
+  "blackGameBobX": {
+    "Frame0": 0
+  },
+  "ultraGameBob": {
+    "Frame0": 0
+  },
+  "gameBob": {
+    "Frame0": 0
+  },
+  "schoolClock": {
+    "Frame0": 0
+  },
+  "smallTV": {
+    "Frame0": 0
+  },
+  "schoolTV": {
+    "Frame0": 0
+  },
+  "schoolDetentionTVCart": {
+    "Frame0": 0
+  },
+  "videoStoreTV": {
+    "Frame0": 0
+  },
+  "recordStoreTV": {
+    "Frame0": 0
+  },
+  "gameStoreKioskTV": {
+    "Frame0": 4
+  },
+  "fishTank": {
+    "Frame0": 0
+  },
+  "fishTankLeft": {
+    "Frame0": 0
+  },
+  "tanningBed": {
+    "Frame0": 0
+  },
+  "candle": {
+    "Frame0": 0
+  },
+  "cafeStageCurtainLeft": {
+    "Frame0": 0
+  },
+  "cafeStageCurtainRight": {
+    "Frame0": 0
+  },
+  "washingMachine": {
+    "Frame0": 0
+  },
+  "infant": {
+    "Frame0": 0
+  },
+  "water": {
+    "Frame0": 0
+  },
+  "crowdBlonde1": {
+    "Frame0": 0
+  },
+  "crowdBlonde2": {
+    "Frame0": 0
+  },
+  "crowdBlonde3": {
+    "Frame0": 0
+  },
+  "crowdBlonde4": {
+    "Frame0": 0
+  },
+  "crowdBlonde5": {
+    "Frame0": 0
+  },
+  "crowdBlonde6": {
+    "Frame0": 0
+  },
+  "crowdBlonde7": {
+    "Frame0": 0
+  },
+  "crowdBlonde8": {
+    "Frame0": 0
+  },
+  "crowdBrown1": {
+    "Frame0": 0
+  },
+  "crowdBrown2": {
+    "Frame0": 0
+  },
+  "crowdBrown3": {
+    "Frame0": 0
+  },
+  "crowdBrown4": {
+    "Frame0": 0
+  },
+  "crowdBrown5": {
+    "Frame0": 0
+  },
+  "crowdBrown6": {
+    "Frame0": 0
+  },
+  "crowdBrown7": {
+    "Frame0": 0
+  },
+  "crowdBrown8": {
+    "Frame0": 0
+  },
+  "crowdLightBrown1": {
+    "Frame0": 0
+  },
+  "crowdLightBrown2": {
+    "Frame0": 0
+  },
+  "crowdLightBrown3": {
+    "Frame0": 0
+  },
+  "crowdLightBrown4": {
+    "Frame0": 0
+  },
+  "crowdLightBrown5": {
+    "Frame0": 0
+  },
+  "crowdLightBrown6": {
+    "Frame0": 0
+  },
+  "crowdLightBrown7": {
+    "Frame0": 0
+  },
+  "crowdLightBrown8": {
+    "Frame0": 0
+  },
+  "crowdBlack1": {
+    "Frame0": 0
+  },
+  "crowdBlack2": {
+    "Frame0": 0
+  },
+  "crowdBlack3": {
+    "Frame0": 0
+  },
+  "crowdBlack4": {
+    "Frame0": 0
+  },
+  "crowdBlack5": {
+    "Frame0": 0
+  },
+  "crowdBlack6": {
+    "Frame0": 0
+  },
+  "crowdBlack7": {
+    "Frame0": 0
+  },
+  "crowdBlack8": {
+    "Frame0": 0
+  },
+  "crowdBrownSkin1": {
+    "Frame0": 0
+  },
+  "crowdBrownSkin2": {
+    "Frame0": 0
+  },
+  "crowdBrownSkin3": {
+    "Frame0": 0
+  },
+  "crowdBrownSkin4": {
+    "Frame0": 0
+  },
+  "crowdBrownSkin5": {
+    "Frame0": 0
+  },
+  "crowdBrownSkin6": {
+    "Frame0": 0
+  },
+  "crowdBrownSkin7": {
+    "Frame0": 0
+  },
+  "crowdGrayHair1": {
+    "Frame0": 0
+  },
+  "crowdGrayHair2": {
+    "Frame0": 0
+  },
+  "motelSign": {
+    "Frame0": 0
+  },
+  "hourlyRatesSign": {
+    "Frame0": 0
+  },
+  "pawnShopSign": {
+    "Frame0": 0
+  },
+  "casinoSign": {
+    "Frame0": 0
+  },
+  "casinoLightsSign": {
+    "Frame0Copy": 1,
+    "Frame0": 2
+  },
+  "poolHallSign": {
+    "Frame0": 0
+  },
+  "liquorSign": {
+    "Frame0": 0
+  },
+  "wineSign": {
+    "Frame0": 0
+  },
+  "beerSign": {
+    "Frame0": 0
+  },
+  "lottoSign": {
+    "Frame0": 0
+  },
+  "tobaccoSign": {
+    "Frame0": 0
+  },
+  "kitchenTable": {
+    "Frame0": 0
+  },
+  "kitchenTableSquare": {
+    "Frame0": 0
+  },
+  "smallGlassTable": {
+    "Frame0": 0
+  },
+  "longGlassTable": {
+    "Frame0": 0
+  },
+  "downstairsDiningRoomTable": {
+    "Frame0": 0
+  },
+  "squareWoodenTable": {
+    "Frame0": 0
+  },
+  "woodenTableHorizontal": {
+    "Frame0": 0
+  },
+  "woodenTableRectangle": {
+    "Frame0": 0
+  },
+  "kitchenChairFaceRight": {
+    "Frame0": 0
+  },
+  "kitchenChairFaceLeft": {
+    "Frame0": 0
+  },
+  "kitchenChairFaceDown": {
+    "Frame0": 0
+  },
+  "kitchenChairFaceUp": {
+    "Frame0": 0
+  },
+  "woodenChairFaceUp": {
+    "Frame0": 0
+  },
+  "woodenChairFaceRight": {
+    "Frame0": 0
+  },
+  "woodenChairFaceLeft": {
+    "Frame0": 0
+  },
+  "woodenChairFaceDown": {
+    "Frame0": 0
+  },
+  "schoolChairFaceRight": {
+    "Frame0": 0,
+    "over": 1
+  },
+  "schoolChairFaceLeft": {
+    "Frame0": 0,
+    "over": 1
+  },
+  "schoolChairFaceDown": {
+    "Frame0": 0
+  },
+  "schoolDeskChairFaceUp": {
+    "Frame0": 0
+  },
+  "scoolMetalArtChairFaceUp": {
+    "Frame0": 0
+  },
+  "laundryRack": {
+    "Frame0": 0
+  },
+  "basementPole": {
+    "Frame0": 0
+  },
+  "whiteTrashBag": {
+    "Frame0": 0
+  },
+  "greenTrashCan": {
+    "Frame0": 0
+  },
+  "cardboardBox0": {
+    "Frame0": 0
+  },
+  "cardboardBox1": {
+    "Frame0": 0
+  },
+  "cardboardBox2": {
+    "Frame0": 0
+  },
+  "cardboardBox3": {
+    "Frame0": 0
+  },
+  "cardboardBox4": {
+    "Frame0": 0
+  },
+  "cardboardBoxSmall": {
+    "Frame0": 0
+  },
+  "huge100InchTV": {
+    "Frame0": 0
+  },
+  "mediumTVBrothersRoom": {
+    "Frame0": 0
+  },
+  "mediumTV": {
+    "Frame0": 0
+  },
+  "tv3x2videogame": {
+    "Frame0": 0
+  },
+  "woodenBanister": {
+    "Frame0": 0
+  },
+  "tvOnWoodenStandFaceUp": {
+    "Frame0": 0
+  },
+  "bigTV": {
+    "Frame0": 0
+  },
+  "oldJapaneseWidescreenTV": {
+    "Frame0": 0
+  },
+  "bigOldTV": {
+    "Frame0": 0
+  },
+  "friendsBasementCurtain": {
+    "Frame0": 0
+  },
+  "smallTableWithLamp": {
+    "Frame0": 0
+  },
+  "crazyLadyJailCell": {
+    "Frame0": 0
+  },
+  "statueOfStandingGuy": {
+    "Frame0": 0
+  },
+  "statueOfBobStanding": {
+    "Frame0": 0
+  },
+  "statueOfArmlessLady": {
+    "Frame0": 0
+  },
+  "smallWhiteTrashCan": {
+    "Frame0": 0
+  },
+  "smallWhiteTrashCanSideways": {
+    "Frame0": 0
+  },
+  "schoolChalkBoardBig": {
+    "Frame0": 0
+  },
+  "schoolMusicRoomChalkBoardNotes": {
+    "Frame0": 0
+  },
+  "libraryCartVertical": {
+    "Frame0": 0
+  },
+  "broom": {
+    "Frame0": 0
+  },
+  "toiletPlunger": {
+    "Frame0": 0
+  },
+  "mopInBucket": {
+    "Frame0": 0
+  },
+  "yellowBucket": {
+    "Frame0": 0
+  },
+  "hallwaySweeperVertical": {
+    "Frame0": 0
+  },
+  "pottedTree": {
+    "Frame0": 0
+  },
+  "roundBlackGarbageCanOnWheels": {
+    "Frame0": 0
+  },
+  "roundBlackGarbageCanOnWheelsFullOfTrash": {
+    "Frame0": 0
+  },
+  "microphoneStand": {
+    "Frame0": 0
+  },
+  "smallWoodenBenchHorizontal": {
+    "Frame0": 0
+  },
+  "smallWoodenBenchVertical": {
+    "Frame0": 0
+  },
+  "basketOfRandomHorizontal": {
+    "Frame0": 0
+  },
+  "petStoreBackCage": {
+    "Frame0": 0
+  },
+  "ropeBarrier": {
+    "Frame0": 0
+  },
+  "dancingGameBar": {
+    "Frame0": 0
+  },
+  "maleMannequin": {
+    "Frame0": 0
+  },
+  "femaleMannequin": {
+    "Frame0": 0
+  },
+  "longClothingRack1": {
+    "Frame0": 0
+  },
+  "longClothingRack2": {
+    "Frame0": 0
+  },
+  "tacoBurgerPoleLeftSide": {
+    "Frame0": 0
+  },
+  "tacoBurgerPoleTopLeft": {
+    "Frame0": 0
+  },
+  "tacoBurgerPoleTopRight": {
+    "Frame0": 0
+  },
+  "tacoBurgerPoleMiddle": {
+    "Frame0": 0
+  },
+  "tacoBurgerPoleBottom": {
+    "Frame0": 0
+  },
+  "churchBench": {
+    "Frame0": 0
+  },
+  "movieTheaterRopeLeftUpRight": {
+    "Frame0": 0
+  },
+  "moveTheaterRopeLeftMiddle": {
+    "Frame0": 0
+  },
+  "movieTheaterRopeLeftLeft": {
+    "Frame0": 0
+  },
+  "movieTheaterRopeRightUpLeft": {
+    "Frame0": 0
+  },
+  "movieTheaterRopeLeftMiddle": {
+    "Frame0": 0
+  },
+  "movieTheaterRightRight": {
+    "Frame0": 0
+  },
+  "groovyClubTicketCounter": {
+    "Frame0": 0
+  },
+  "groovyClubEntranceRope": {
+    "Frame0": 0
+  },
+  "groovyClubRailing": {
+    "Frame0": 0
+  },
+  "groovyClubRailingCorner": {
+    "Frame0": 0
+  },
+  "waterCoolerWithCups": {
+    "Frame0": 0
+  },
+  "officeCubicleDivider": {
+    "Frame0": 0
+  },
+  "blackGarbageCanRoundTopFaceRight": {
+    "Frame0": 0
+  },
+  "blackRoundTopGarbageCanFaceLeft": {
+    "Frame0": 0
+  },
+  "officeRopeBarrier": {
+    "Frame0": 0
+  },
+  "blackFloorLamp": {
+    "Frame0": 0
+  },
+  "goldFloorLamp": {
+    "Frame0": 0
+  },
+  "bankAdvertisementSign": {
+    "Frame0": 0
+  },
+  "bankRopeBottom": {
+    "Frame0": 0
+  },
+  "bankRopeMiddle": {
+    "Frame0": 0
+  },
+  "fancyRestaurantRopeBarrier": {
+    "Frame0": 0
+  },
+  "fancyRestaurantRopeBarrierJustRope": {
+    "Frame0": 0
+  },
+  "fancyRestaurantTable": {
+    "Frame0": 0
+  },
+  "roundClothingRack": {
+    "Frame0": 0
+  },
+  "betterClothingRackHorizontal": {
+    "Frame0": 0
+  },
+  "betterClothingRackHorizontal1": {
+    "Frame0": 0
+  },
+  "poolTable": {
+    "Frame0": 0
+  },
+  "stripperPole": {
+    "Frame0": 0
+  },
+  "wheelChair": {
+    "Frame0": 0
+  },
+  "elevatedLifeplaceWoodenTable": {
+    "Frame0": 0
+  },
+  "hospitalCartVertical": {
+    "Frame0": 0
+  },
+  "hospitalCartHorizontal": {
+    "Frame0": 0
+  },
+  "blackLeatherCouchUp": {
+    "Frame0": 0
+  },
+  "blackStripedCouchFaceDown": {
+    "Frame0": 0
+  },
+  "blackStripedCouchFaceUp": {
+    "Frame0": 0
+  },
+  "blackStripedCouchFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "blackStripedCouchFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "blackCouchFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "blackCouchFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "blackCouchFaceUp": {
+    "Frame0": 0
+  },
+  "blackCouchFaceDown": {
+    "Frame0": 0
+  },
+  "comfyBrownChairFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "comfyBrownChairFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "comfyBlackChairFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "comfyRedChairFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "brownCouchFaceUp": {
+    "Frame0": 0
+  },
+  "brownCouchFaceDown": {
+    "Frame0": 0
+  },
+  "downstairsYellowCouchFaceDown": {
+    "Frame0": 0
+  },
+  "yellowCouchFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "pinkCouchFaceUp": {
+    "Frame0": 0
+  },
+  "pinkCouchFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "brownCouchFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "brownCouchFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "redCouchFaceDown": {
+    "Frame0": 0
+  },
+  "redCouchFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "redCouchFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "comfyBlackStripedChairFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "comfyBlackStripedChairFaceDown": {
+    "Frame0": 0
+  },
+  "fancyRestaurantChairFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "fancyRestaurantChairFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "roundedBlackChairFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "roundedBlackChairFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "roundedBackBlackChairFaceUp": {
+    "Frame0": 0
+  },
+  "roundedBlackChairFaceDownWholeChair": {
+    "Frame0": 0
+  },
+  "roundedBackBlackChairFaceDown": {
+    "Frame0": 0
+  },
+  "roundRedStool": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "blackRoundStool": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "doctorsOfficeStool": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "deskChairFaceDown": {
+    "Frame0": 0
+  },
+  "deskChairFaceUp": {
+    "Frame0": 0
+  },
+  "roundBlackStoolOnWheels": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "stadiumMetalChairFaceLeft": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "stadiumMetalChairFaceRight": {
+    "Frame0": 0,
+    "front": 1
+  },
+  "barrierRope": {
+    "Frame0": 0
+  },
+  "ivDripStand": {
+    "Frame0": 0
+  },
+  "operatingScreensCart": {
+    "Frame0": 0
+  },
+  "hospitalBabyIncubatorTop": {
+    "Frame0": 0
+  },
+  "operatingLightLeft": {
+    "Frame0": 0
+  },
+  "operatingLightRight": {
+    "Frame0": 0
+  },
+  "policeStationLobbyWindow": {
+    "Frame0": 0
+  },
+  "filingCabinetsFaceDown": {
+    "Frame0": 0
+  },
+  "holdingCellBars": {
+    "Frame0": 0
+  },
+  "prisonVisitingWindow": {
+    "Frame0": 0
+  },
+  "jailCellbars": {
+    "Frame0": 0
+  },
+  "filingCabinetSingle": {
+    "Frame0": 0
+  },
+  "firePole": {
+    "Frame0": 0
+  },
+  "cityHallRailing": {
+    "Frame0": 0
+  },
+  "cityHallMetalDetector": {
+    "Frame0": 0
+  },
+  "cityHallOfficeGlassSegment": {
+    "Frame0": 0
+  },
+  "cityHallOfficeGlassSegmentDouble": {
+    "Frame0": 0
+  },
+  "cityHallGolfClubStand": {
+    "Frame0": 0
+  },
+  "statueOfManStandingNoBase": {
+    "Frame0": 0
+  },
+  "statueOfLadyStandingNoBase": {
+    "Frame0": 0
+  },
+  "statueOfBobSittingNoBase": {
+    "Frame0": 0
+  },
+  "statueOfBlock": {
+    "Frame0": 0
+  },
+  "luggageCartHorizontal": {
+    "Frame0": 0
+  },
+  "poolChairHorizontal": {
+    "Frame0": 0
+  },
+  "stadiumRopeBarrier": {
+    "Frame0": 0
+  },
+  "stadiumRope": {
+    "Frame0": 0
+  },
+  "stadiumRopeMiddle": {
+    "Frame0": 0
+  },
+  "stadiumRopeSides": {
+    "Frame0": 0
+  },
+  "stadiumFrontRailing": {
+    "Frame0": 0
+  },
+  "purpleRopeBarrier": {
+    "Frame0": 0
+  },
+  "cameraFaceUpRight": {
+    "Frame0": 0
+  },
+  "cameraFaceUpLeft": {
+    "Frame0": 0
+  },
+  "cameraRailingLeft": {
+    "Frame0": 0
+  },
+  "cameraRailingRight": {
+    "Frame0": 0
+  },
+  "bobsGame": {
+    "Frame0": 0
+  },
+  "awardStand": {
+    "Frame0": 0
+  },
+  "glassTable3": {
+    "Frame0": 0
+  },
+  "friendsDeckRailing": {
+    "Frame0": 0
+  },
+  "friendsDeckRailingLeft": {
+    "Frame0": 0
+  },
+  "friendsDeckRailingRight": {
+    "Frame0": 0
+  },
+  "orangeCone": {
+    "Frame0": 0
+  },
+  "basketballHoopFaceRight": {
+    "Frame0": 0
+  },
+  "basketballHoopFaceLeft": {
+    "Frame0": 0
+  },
+  "playgroundHorizontalPipe": {
+    "Frame0": 0
+  },
+  "playgroundThreeBars": {
+    "Frame0": 0
+  },
+  "swingSetBars": {
+    "Frame0": 0
+  },
+  "swing": {
+    "Frame0": 0
+  },
+  "dodgeballFence": {
+    "Frame0": 0
+  },
+  "slide": {
+    "Frame0": 0
+  },
+  "swingsetVerticalBack": {
+    "Frame0": 0
+  },
+  "swingsetVerticalFront": {
+    "Frame0": 0
+  },
+  "swingVertical": {
+    "Frame0": 0
+  },
+  "jungleGym": {
+    "Frame0": 0
+  },
+  "duckSpringAnimal": {
+    "Frame0": 0
+  },
+  "whaleSpringAnimal": {
+    "Frame0": 0
+  },
+  "turtleSpringAnimal": {
+    "Frame0": 0
+  },
+  "pandaSpringAnimal": {
+    "Frame0": 0
+  },
+  "tireSwing": {
+    "Frame0": 0
+  },
+  "tireSwingTire": {
+    "Frame0": 0
+  },
+  "seesawHorizontal": {
+    "Frame0": 0
+  },
+  "seesawVertical": {
+    "Frame0": 0
+  },
+  "verticalPipe": {
+    "Frame0": 0
+  },
+  "powerLinePole": {
+    "Frame0": 0
+  },
+  "groundPowerLineRight": {
+    "Frame0": 0
+  },
+  "groundPowerLineLeft": {
+    "Frame0": 0
+  },
+  "fireHydrant": {
+    "Frame0": 0
+  },
+  "smallRoundTree": {
+    "Frame0": 0
+  },
+  "stopSignOnPoleFaceRight": {
+    "Frame0": 0
+  },
+  "stopSignOnPoleFaceDown": {
+    "Frame0": 0
+  },
+  "stopSignOnPoleFaceLeft": {
+    "Frame0": 0
+  },
+  "stopSignOnPoleFaceUp": {
+    "Frame0": 0
+  },
+  "townStreetSignOnPoleFaceDown": {
+    "Frame0": 0
+  },
+  "outsideMeshGarbageCan": {
+    "Frame0": 0
+  },
+  "schoolCrossingSignWithPoleFaceDown": {
+    "Frame0": 0
+  },
+  "noParkingSignOnPoleFaceDown": {
+    "Frame0": 0
+  },
+  "longWoodenBench": {
+    "Frame0": 0,
+    "over": 1
+  },
+  "mediumRoundTree": {
+    "Frame0": 0
+  },
+  "flagPoleNoFlag": {
+    "Frame0": 0
+  },
+  "bikeRack": {
+    "Frame0": 0
+  },
+  "fence1": {
+    "Frame0": 0
+  },
+  "fence2": {
+    "Frame0": 0
+  },
+  "fence3": {
+    "Frame0": 0
+  },
+  "suburbStreetSignWithPoleFaceDown": {
+    "Frame0": 0
+  },
+  "mailboxWithPole": {
+    "Frame0": 0
+  },
+  "smallTree1": {
+    "Frame0": 0
+  },
+  "smallTree2": {
+    "Frame0": 0
+  },
+  "mediumTree2": {
+    "Frame0": 0
+  },
+  "bigTree1": {
+    "Frame0": 0
+  },
+  "bigTree2": {
+    "Frame0": 0
+  },
+  "bigTree3": {
+    "Frame0": 0
+  },
+  "topOfBigTree": {
+    "Frame0": 0
+  },
+  "bigTree4": {
+    "Frame0": 0
+  },
+  "forestSign": {
+    "Frame0": 0
+  },
+  "fenceChunkSixLong": {
+    "Frame0": 0
+  },
+  "woodenFenceHole": {
+    "Frame0": 0
+  },
+  "friendsFenceChunk": {
+    "Frame0": 0
+  },
+  "noParkingSignWithPoleFaceDownTaller": {
+    "Frame0": 0
+  },
+  "blueMailboxFaceRight": {
+    "Frame0": 0
+  },
+  "parkingMeter": {
+    "Frame0": 0
+  },
+  "busStop": {
+    "Frame0": 0
+  },
+  "deliCounter": {
+    "Frame0": 0
+  },
+  "cityStreetLightPole": {
+    "Frame0": 0
+  },
+  "blackMeshBenchHorizontal": {
+    "Frame0": 0
+  },
+  "orangeConstructionBarrel": {
+    "Frame0": 0
+  },
+  "fancyRestaurantEntranceRoof": {
+    "Frame0": 0
+  },
+  "babyMobile": {
+    "Frame0": 0
+  },
+  "washingMachineFaceDown": {
+    "Frame0": 0
+  },
+  "smallTVFlashing": {
+    "Frame0": 0
+  },
+  "dryerFaceDown": {
+    "Frame0": 0
+  },
+  "bigFlatTVFaceLeft": {
+    "Frame0": 0
+  },
+  "bigFlatTVFaceRight": {
+    "Frame0": 0
+  },
+  "mediumFlatScreenTVFaceLeft": {
+    "Frame0": 0
+  },
+  "mediumFlatScreenTVFaceRight": {
+    "Frame0": 0
+  },
+  "mediumOldTVFaceRight": {
+    "Frame0": 0
+  },
+  "mediumOldTVFaceLeft": {
+    "Frame0": 0
+  },
+  "bigTVPlayingCNN": {
+    "Frame0": 0
+  },
+  "topOfWoodenTableTwoWide": {
+    "Frame0": 0
+  },
+  "drivingGame": {
+    "Frame0": 0
+  },
+  "oldGame1": {
+    "Frame0": 0
+  },
+  "dancingStage": {
+    "Frame0": 0
+  },
+  "oldGame2": {
+    "Frame0": 0
+  },
+  "oldGame3": {
+    "Frame0": 0
+  },
+  "fightingGame1": {
+    "Frame0": 0
+  },
+  "fightingGame2": {
+    "Frame0": 0
+  },
+  "shooterGame": {
+    "Frame0": 0
+  },
+  "coinPusher": {
+    "Frame0": 0
+  },
+  "danceGameScreen": {
+    "Frame0": 0
+  },
+  "gameStoreKioskTV2": {
+    "Frame0": 4
+  },
+  "gameStoreKioskTV3": {
+    "Frame0": 9
+  },
+  "movieTheaterLEDSign1": {
+    "Frame0": 0
+  },
+  "movieTheaterLEDSign2": {
+    "Frame0": 0
+  },
+  "discoFloor": {
+    "Frame0": 0
+  },
+  "boxOnBed": {
+    "Frame0": 0
+  },
+  "purpleBed": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "yellowBed": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "greenBed": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "pinkBedFaceUp": {
+    "Frame0": 0
+  },
+  "purpleBedWide": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "grayBed": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "grayBedWide": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "grayBedFaceUp": {
+    "Frame0": 0
+  },
+  "pinkBedWide": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "pinkBedWideMetalHeadboard": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "grayBedMetalHeadboard": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "grayBedMetalHeadboardTopBunk": {
+    "Frame0": 0,
+    "covers": 1
+  },
+  "nesCopy": {
+    "Frame0": 0
+  },
+  "atariCopy": {
+    "Frame0": 0
+  },
+  "gmaecubeCopy": {
+    "Frame0": 0
+  },
+  "snesCopy": {
+    "Frame0": 0
+  },
+  "n64Copy": {
+    "Frame0": 0
+  },
+  "gameBobZeroCopy": {
+    "Frame0": 0
+  },
+  "luggageCartVertical": {
+    "Frame0": 0
+  },
+  "luggageCartVerticalWithSuitcases": {
+    "Frame0": 0
+  },
+  "doctorPatientTable": {
+    "Frame0": 0
+  },
+  "copyMachine": {
+    "Frame0": 0,
+    "frame2": 1
+  },
+  "basementSink": {
+    "Frame0": 0
+  },
+  "prisonShower": {
+    "Frame0": 0
+  },
+  "prisonShowerWater": {
+    "Frame0": 0
+  },
+  "apartmentStairCase": {
+    "Frame0": 0
+  },
+  "apartmentStairCaseRails": {
+    "Frame0": 0
+  },
+  "apartmentStairCaseBackRail": {
+    "Frame0": 0
+  },
+  "drivingGameSeat": {
+    "Frame0": 0
+  },
+  "secretLabOperatingTable": {
+    "Frame0": 0
+  },
+  "movieTheaterSeat": {
+    "Frame0": 0
+  },
+  "movieTheaterRail": {
+    "Frame0": 0
+  },
+  "movieTheaterRailLeft": {
+    "Frame0": 0
+  },
+  "movieTheaterRailRight": {
+    "Frame0": 0
+  },
+  "stadiumSeatRow": {
+    "Frame0": 0
+  },
+  "stadiumSeatRowEmpty": {
+    "Frame0": 0
+  },
+  "stadiumSeatRowPeopleCopy": {
+    "Frame0": 0
+  },
+  "stadiumBackRailing": {
+    "Frame0": 0
+  },
+  "stadiumLongFrontRowRail": {
+    "Frame0": 0
+  },
+  "birdCage": {
+    "Frame0": 0
+  },
+  "soccerBall": {
+    "Frame0": 0
+  },
+  "tennisBall": {
+    "Frame0": 0
+  },
+  "kickBall": {
+    "Frame0": 0
+  },
+  "dodgeBall": {
+    "Frame0": 0
+  },
+  "basketBall": {
+    "Frame0": 0
+  },
+  "baseBall": {
+    "Frame0": 0
+  },
+  "pinkBall": {
+    "Frame0": 0
+  },
+  "boomerang": {
+    "Frame0": 0
+  },
+  "GENERICcolorSets": {
+    "Frame0": 0
+  },
+  "RANDOMhairColors": {
+    "Frame0": 0
+  },
+  "RANDOMeyeColors": {
+    "Frame0": 0
+  },
+  "RANDOMskinColors": {
+    "Frame0": 0
+  },
+  "RANDOMshirtColors": {
+    "Frame0": 0
+  },
+  "RANDOMpantsColors": {
+    "Frame0": 0
+  },
+  "RANDOMshoeColors": {
+    "Frame0": 0
+  },
+  "RANDOMcarColors": {
+    "Frame0": 0
+  },
+  "RANDOMyuu": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMyuuRunning": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "player": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyBuzzedHairLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyBuzzedHairShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyBuzzedHairLongSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyBuzzedHairShortSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyMessyHairLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyMessyHairShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyMessyHairLongSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyMessyHairShortSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyNormalHairLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyNormalHairShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyNormalHairLongSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyNormalHairShortSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyShortHairLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyShortHairShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyShortHairLongSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMBoyShortHairShortSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyBuzzedHairLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyBuzzedHairShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyBuzzedHairLongSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyBuzzedHairShortSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyMessyHairLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyMessyHairShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyMessyHairLongSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyMessyHairShortSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyNormalHairLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyNormalHairShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyNormalHairLongSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleBoyNormalHairShortSleeveShorts": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlLongHairDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlLongHairSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlLongHairSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlLongHairJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlLongHairJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlLongHairShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlPonytailDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlPonytailSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlPonytailSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlPonytailJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlPonytailJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlPonytailShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlShortHairDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlShortHairSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlShortHairSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlShortHairJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlShortHairJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMGirlShortHairShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlLongHairDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlLongHairSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlLongHairSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlLongHairJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlLongHairJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlLongHairShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlPonytailDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlPonytailSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlPonytailSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlPonytailJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlPonytailJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlPonytailShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlShortHairDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlShortHairSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlShortHairSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlShortHairJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlShortHairJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMLittleGirlShortHairShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldUndershirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldSuit": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldSweats": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldingUndershirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldingShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldingSuit": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldingSweats": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBaldingLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBeardUndershirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBeardShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBeardSuit": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBeardSweats": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManBeardLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManNormalHairUndershirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManNormalHairShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManNormalHairSuit": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManNormalHairSweats": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManNormalHairLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManShortHairUndershirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManShortHairShortSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManShortHairSuit": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManShortHairSweats": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMManShortHairLongSleeve": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanBunDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanBunSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanBunSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanBunJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanBunJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanBunShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanLongHairDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanLongHairSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanLongHairSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanLongHairJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanLongHairJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanLongHairShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPonytailDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPonytailSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPonytailSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPonytailJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPonytailJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPonytailShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPoofyHairDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPoofyHairSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPoofyHairSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPoofyHairJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPoofyHairJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanPoofyHairShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanShortHairDress": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanShortHairSkirt": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanShortHairSkirtHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanShortHairJeans": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanShortHairJeansHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "RANDOMWomanShortHairShortsHalter": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "popularboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "populargirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "hipsterboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "hipstergirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "gothboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "gothgirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "toughboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "toughgirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "athleticboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "athleticgirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "nerdyboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "nerdygirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "pudgyboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "pudgygirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "punkboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "punkgirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "skaterboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "skatergirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "thugboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "thuggirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "pimpleboy": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "pimplegirl": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "bob": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56,
+    "Sleep": 64,
+    "OneArmUp": 66,
+    "ArmsUp": 75
+  },
+  "bobOLD": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "bobscary": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56
+  },
+  "bobscaryOLD": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "boxpile": {
+    "Frame0": 0
+  },
+  "schoolSecretaryDesk": {
+    "Frame0": 0
+  },
+  "schoolDesk": {
+    "Frame0": 0
+  },
+  "grayTableHorizonal": {
+    "Frame0": 0
+  },
+  "clinicDesk": {
+    "Frame0": 0
+  },
+  "musicRoomTeacherDesk": {
+    "Frame0": 0
+  },
+  "artRoomTable": {
+    "Frame0": 0
+  },
+  "artRoomDeskBench": {
+    "Frame0": 0
+  },
+  "computerRoomTeacherPodium": {
+    "Frame0": 0
+  },
+  "libraryCounter": {
+    "Frame0": 0
+  },
+  "janitorDesk": {
+    "Frame0": 0
+  },
+  "schoolBathroomStallWall": {
+    "Frame0": 0
+  },
+  "schoolBathroomStallInsideWall": {
+    "Frame0": 0
+  },
+  "schoolClassroomDesk": {
+    "Frame0": 0
+  },
+  "schoolClassroomTeacherDesk": {
+    "Frame0": 0
+  },
+  "schoolClassroomTeacherPodium": {
+    "Frame0": 0
+  },
+  "schoolClassroomFrontTable": {
+    "Frame0": 0
+  },
+  "lunchroomTable": {
+    "Frame0": 0
+  },
+  "coffeeShopCounter": {
+    "Frame0": 0
+  },
+  "coffeeShopTable": {
+    "Frame0": 0
+  },
+  "pizzaTable": {
+    "Frame0": 0
+  },
+  "pizzaCounter": {
+    "Frame0": 0
+  },
+  "pizzaCounterSoda": {
+    "Frame0": 0
+  },
+  "bookstoreCounter": {
+    "Frame0": 0
+  },
+  "videoStoreCounter": {
+    "Frame0": 0
+  },
+  "petStoreCounter": {
+    "Frame0": 0
+  },
+  "petStoreBackCounter": {
+    "Frame0": 0
+  },
+  "electronicsStoreCounter": {
+    "Frame0": 0
+  },
+  "coffeeTable": {
+    "Frame0": 0
+  },
+  "nailsCounter": {
+    "Frame0": 0
+  },
+  "tanningCounter": {
+    "Frame0": 0
+  },
+  "beautySalonCounter": {
+    "Frame0": 0
+  },
+  "hairDryer": {
+    "Frame0": 0
+  },
+  "arcadeTicketCounter": {
+    "Frame0": 0
+  },
+  "gasStationCounter": {
+    "Frame0": 0
+  },
+  "departmentStoreElectronicsCounter": {
+    "Frame0": 0
+  },
+  "departmentStoreJewelryCounter": {
+    "Frame0": 0
+  },
+  "tacoBurgerCounter": {
+    "Frame0": 0
+  },
+  "tacoBurgerTableSmall": {
+    "Frame0": 0
+  },
+  "tacoBurgerTableLong": {
+    "Frame0": 0
+  },
+  "tacoBurgerTableVertical": {
+    "Frame0": 0
+  },
+  "doctorsOfficeCounter": {
+    "Frame0": 0
+  },
+  "gameStoreCounter": {
+    "Frame0": 0
+  },
+  "movieTicketCounter": {
+    "Frame0": 0
+  },
+  "movieTheaterTicketPodium": {
+    "Frame0": 0
+  },
+  "movieTheaterSnackCounter": {
+    "Frame0": 0
+  },
+  "partyStoreRegisterCounter": {
+    "Frame0": 0
+  },
+  "groovyClubTable": {
+    "Frame0": 0
+  },
+  "officeCubicleWallInside": {
+    "Frame0": 0
+  },
+  "officeSecretaryDesk": {
+    "Frame0": 0
+  },
+  "apartmentRentalDesk": {
+    "Frame0": 0
+  },
+  "bankTellerCounter": {
+    "Frame0": 0
+  },
+  "fancyRestaurantPodium": {
+    "Frame0": 0
+  },
+  "fancyRestaurantBarCounter": {
+    "Frame0": 0
+  },
+  "fancyRestaurantKitchenStove": {
+    "Frame0": 0
+  },
+  "fashionStoreCounter": {
+    "Frame0": 0
+  },
+  "stripClubTable": {
+    "Frame0": 0
+  },
+  "poolHallDrinkTable": {
+    "Frame0": 0
+  },
+  "hospitalFrontDesk": {
+    "Frame0": 0
+  },
+  "psychWardCounter": {
+    "Frame0": 0
+  },
+  "psychWardPillCounter": {
+    "Frame0": 0
+  },
+  "grayDrawerCabinet": {
+    "Frame0": 0
+  },
+  "policeOfficeDesk": {
+    "Frame0": 0
+  },
+  "fireDeptDesk": {
+    "Frame0": 0
+  },
+  "cityHallOfficeDeskDown": {
+    "Frame0": 0
+  },
+  "cityHallOfficeDeskUp": {
+    "Frame0": 0
+  },
+  "museumFrontDesk": {
+    "Frame0": 0
+  },
+  "museumGiftShopCounter": {
+    "Frame0": 0
+  },
+  "hotelFrontCounter": {
+    "Frame0": 0
+  },
+  "stadiumCounter": {
+    "Frame0": 0
+  },
+  "pawnShopCounter": {
+    "Frame0": 0
+  },
+  "casinoCounter": {
+    "Frame0": 0
+  },
+  "slotMachine": {
+    "Frame0": 0
+  },
+  "casinoBar": {
+    "Frame0": 0
+  },
+  "lightPole": {
+    "Frame0": 0
+  },
+  "schoolSignBricks": {
+    "Frame0": 0
+  },
+  "tacoBurgerOutSign": {
+    "Frame0": 0
+  },
+  "tacoBurgerInSign": {
+    "Frame0": 0
+  },
+  "citySignPost": {
+    "Frame0": 0
+  },
+  "crazyLadyFence": {
+    "Frame0": 0
+  },
+  "lightPoleNoGrass": {
+    "Frame0": 0
+  },
+  "trafficLightUp": {
+    "Frame0": 0
+  },
+  "trafficLightDown": {
+    "Frame0": 0
+  },
+  "newsStand": {
+    "Frame0": 0
+  },
+  "cityStreetTrafficLightPoleLeft": {
+    "Frame0": 0
+  },
+  "cityStreetTrafficLightPoleRight": {
+    "Frame0": 0
+  },
+  "roofVentThing": {
+    "Frame0": 0
+  },
+  "actionIcon": {
+    "Frame0": 0
+  },
+  "cityHallOfficeConferenceTable": {
+    "Frame0": 0
+  },
+  "teachersLoungeTable": {
+    "Frame0": 0
+  },
+  "grass": {
+    "Frame0": 0
+  },
+  "stadiumScreenTVLines": {
+    "Frame0": 0
+  },
+  "bobsGameLogoSmall": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24
+  },
+  "stadiumScreenTVLinesBig": {
+    "Frame0": 0
+  },
+  "nD": {
+    "Frame0": 0
+  },
+  "stadiumSeatRowCopy": {
+    "Frame0": 0
+  },
+  "stadiumSeatRowCopy2": {
+    "Frame0": 0
+  },
+  "stadiumSeatRowCopy2Copy": {
+    "Frame0": 0
+  },
+  "everyone0": {
+    "Frame0": 0
+  },
+  "everyone1": {
+    "Frame0": 0
+  },
+  "everyone2": {
+    "Frame0": 0
+  },
+  "everyone3": {
+    "Frame0": 0
+  },
+  "everyone4": {
+    "Frame0": 0
+  },
+  "everyone5": {
+    "Frame0": 0
+  },
+  "everyone6": {
+    "Frame0": 0
+  },
+  "everyone7": {
+    "Frame0": 0
+  },
+  "bobDesk": {
+    "ComputerOff": 0,
+    "ComputerOn": 1
+  },
+  "bobDeskCoffee": {
+    "noCoffee": 0,
+    "yesCoffee": 1
+  },
+  "bobMattress": {
+    "Frame0": 0
+  },
+  "bobBlanket": {
+    "Frame0": 0
+  },
+  "blackFloorLampGreenBulb": {
+    "Frame0": 0
+  },
+  "bobSmallTable": {
+    "Frame0": 0
+  },
+  "bobChair": {
+    "Frame0": 0
+  },
+  "DoorDownDoubleThinMetalElevatorDoorsNotChopped": {
+    "Frame0": 0
+  },
+  "nDPodiumSmall": {
+    "nD": 0,
+    "nonD": 1
+  },
+  "bobCopy1059": {
+    "Down": 0,
+    "Up": 8,
+    "Left": 16,
+    "Right": 24,
+    "UpLeft": 32,
+    "UpRight": 40,
+    "DownRight": 48,
+    "DownLeft": 56,
+    "Sleep": 64
+  }
+}

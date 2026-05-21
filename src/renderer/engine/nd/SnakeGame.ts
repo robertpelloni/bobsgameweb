@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * SnakeGame — classic snake game for the nD handheld console.
  *

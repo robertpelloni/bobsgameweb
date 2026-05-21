@@ -1,0 +1,6242 @@
+[
+  {
+    "sourceMap": "TOWNYUUDownstairs",
+    "name": "dad",
+    "destMap": "TOWNYUUUpstairs",
+    "destDoor": "",
+    "spawnX": 384.0,
+    "spawnY": 216.0,
+    "arrX": 32,
+    "arrY": 184
+  },
+  {
+    "sourceMap": "TOWNYUUDownstairs",
+    "name": "TOWNYUUDownstairs.Load",
+    "destMap": "TOWNYUUDownstairsBathroom",
+    "destDoor": "toDownstairs",
+    "spawnX": 200.0,
+    "spawnY": 248.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNYUUDownstairs",
+    "name": "TOWNYUUDownstairs.toBathroom",
+    "destMap": "TOWNYUUBasement",
+    "destDoor": "toDownstairs",
+    "spawnX": 16.0,
+    "spawnY": 72.0,
+    "arrX": 224,
+    "arrY": 288
+  },
+  {
+    "sourceMap": "TOWNYUUDownstairs",
+    "name": "TOWNYUUDownstairs.toBasement",
+    "destMap": "TOWNYUUGarage",
+    "destDoor": "toKitchen",
+    "spawnX": 8.0,
+    "spawnY": 40.0,
+    "arrX": 40,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "TOWNYUUDownstairs",
+    "name": "TOWNYUUDownstairs.toGarage",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toKitchen",
+    "spawnX": 232.0,
+    "spawnY": 32.0,
+    "arrX": 16,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "TOWNYUUDownstairs",
+    "name": "TOWNYUUDownstairs.toBackyard",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toYuusHouseBack",
+    "spawnX": 80.0,
+    "spawnY": 288.0,
+    "arrX": 256,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairs",
+    "name": "lamp0",
+    "destMap": "TOWNYUUDownstairs",
+    "destDoor": "",
+    "spawnX": 306.0,
+    "spawnY": 48.0,
+    "arrX": 32,
+    "arrY": 192
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairs",
+    "name": "TOWNYUUUpstairs.Load",
+    "destMap": "TOWNYUUUpstairsParentsRoom",
+    "destDoor": "toHallway",
+    "spawnX": 80.0,
+    "spawnY": 80.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairs",
+    "name": "TOWNYUUUpstairs.toParentsRoom",
+    "destMap": "TOWNYUUUpstairsBabyRoom",
+    "destDoor": "toHallway",
+    "spawnX": 264.0,
+    "spawnY": 80.0,
+    "arrX": 104,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairs",
+    "name": "TOWNYUUUpstairs.toLittleBrothersRoom",
+    "destMap": "TOWNYUUUpstairsBathroom",
+    "destDoor": "toHallway",
+    "spawnX": 408.0,
+    "spawnY": 80.0,
+    "arrX": 288,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairs",
+    "name": "TOWNYUUUpstairs.toBathroom",
+    "destMap": "TOWNYUUUpstairsBrothersRoom",
+    "destDoor": "toHallway",
+    "spawnX": 184.0,
+    "spawnY": 32.0,
+    "arrX": 432,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairs",
+    "name": "TOWNYUUUpstairs.toBrothersRoom",
+    "destMap": "TOWNYUUUpstairsYuusRoom",
+    "destDoor": "toHallway",
+    "spawnX": 368.0,
+    "spawnY": 32.0,
+    "arrX": 208,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairsYuusRoom",
+    "name": "TOWNYUUUpstairsYuusRoom.Load",
+    "destMap": "TOWNYUUUpstairs",
+    "destDoor": "toYuusRoom",
+    "spawnX": 136.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairsBabyRoom",
+    "name": "TOWNYUUUpstairsBabyRoom.Load",
+    "destMap": "TOWNYUUUpstairs",
+    "destDoor": "toLittleBrothersRoom",
+    "spawnX": 48.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairsBrothersRoom",
+    "name": "TOWNYUUUpstairsBrothersRoom.Load",
+    "destMap": "TOWNYUUUpstairs",
+    "destDoor": "toBrothersRoom",
+    "spawnX": 184.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairsBathroom",
+    "name": "TOWNYUUUpstairsBathroom.Load",
+    "destMap": "TOWNYUUUpstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 48.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNYUUUpstairsParentsRoom",
+    "name": "TOWNYUUUpstairsParentsRoom.Load",
+    "destMap": "TOWNYUUUpstairs",
+    "destDoor": "toParentsRoom",
+    "spawnX": 24.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNYUUBasement",
+    "name": "TOWNYUUBasement.Load",
+    "destMap": "TOWNYUUDownstairs",
+    "destDoor": "toBasement",
+    "spawnX": 16.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNYUUGarage",
+    "name": "trashBag0",
+    "destMap": "TOWNYUUGarage",
+    "destDoor": "",
+    "spawnX": 184.0,
+    "spawnY": 192.0,
+    "arrX": 48,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "TOWNYUUGarage",
+    "name": "TOWNYUUGarage.Load",
+    "destMap": "TOWNYUUDownstairs",
+    "destDoor": "toGarage",
+    "spawnX": 168.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNYUUAttic",
+    "name": "toGarage",
+    "destMap": "TOWNYUUAttic",
+    "destDoor": "",
+    "spawnX": 93.0,
+    "spawnY": 52.0,
+    "arrX": 40,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "TOWNYUUDownstairsBathroom",
+    "name": "TOWNYUUDownstairsBathroom.Load",
+    "destMap": "TOWNYUUDownstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 24.0,
+    "spawnY": 88.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTRODownstairs",
+    "name": "boxpile",
+    "destMap": "INTRODownstairs",
+    "destDoor": "",
+    "spawnX": 328.0,
+    "spawnY": 184.0,
+    "arrX": 32,
+    "arrY": 184
+  },
+  {
+    "sourceMap": "INTRODownstairs",
+    "name": "INTRODownstairs.Load",
+    "destMap": "INTROGarage",
+    "destDoor": "toKitchen",
+    "spawnX": 8.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTRODownstairs",
+    "name": "INTRODownstairs.toGarage",
+    "destMap": "INTROBasement",
+    "destDoor": "toKitchen",
+    "spawnX": 16.0,
+    "spawnY": 72.0,
+    "arrX": 16,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "INTRODownstairs",
+    "name": "INTRODownstairs.toBasement",
+    "destMap": "INTROTown",
+    "destDoor": "toKitchen",
+    "spawnX": 232.0,
+    "spawnY": 32.0,
+    "arrX": 40,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "INTRODownstairs",
+    "name": "INTRODownstairs.toBackyard",
+    "destMap": "INTRODownstairsBathroom",
+    "destDoor": "toYuusHouse",
+    "spawnX": 208.0,
+    "spawnY": 248.0,
+    "arrX": 256,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "INTROUpstairs",
+    "name": "INTROUpstairs.Load",
+    "destMap": "INTROUpstairsParentsRoom",
+    "destDoor": "toHallway",
+    "spawnX": 80.0,
+    "spawnY": 80.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTROUpstairs",
+    "name": "INTROUpstairs.toParentsRoom",
+    "destMap": "INTROUpstairsBabyRoom",
+    "destDoor": "toHallway",
+    "spawnX": 264.0,
+    "spawnY": 80.0,
+    "arrX": 104,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "INTROUpstairs",
+    "name": "INTROUpstairs.toLittleBrothersRoom",
+    "destMap": "INTROUpstairsBathroom",
+    "destDoor": "toHallway",
+    "spawnX": 408.0,
+    "spawnY": 80.0,
+    "arrX": 288,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "INTROUpstairs",
+    "name": "INTROUpstairs.toBathroom",
+    "destMap": "INTROUpstairsBrothersRoom",
+    "destDoor": "toHallway",
+    "spawnX": 184.0,
+    "spawnY": 32.0,
+    "arrX": 432,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "INTROUpstairs",
+    "name": "INTROUpstairs.toBrothersRoom",
+    "destMap": "INTROUpstairsYuusRoom",
+    "destDoor": "toHallway",
+    "spawnX": 368.0,
+    "spawnY": 32.0,
+    "arrX": 208,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "INTROUpstairsYuusRoom",
+    "name": "INTROUpstairsYuusRoom.Load",
+    "destMap": "INTROUpstairs",
+    "destDoor": "toYuusRoom",
+    "spawnX": 136.0,
+    "spawnY": 128.0,
+    "arrX": 160,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "INTROUpstairsBabyRoom",
+    "name": "INTROUpstairsBabyRoom.nextToCrib",
+    "destMap": "INTROUpstairs",
+    "destDoor": "toLittleBrothersRoom",
+    "spawnX": 48.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTROUpstairsBrothersRoom",
+    "name": "INTROUpstairsBrothersRoom.Load",
+    "destMap": "INTROUpstairs",
+    "destDoor": "toBrothersRoom",
+    "spawnX": 184.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTROUpstairsBathroom",
+    "name": "INTROUpstairsBathroom.Load",
+    "destMap": "INTROUpstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 48.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTROUpstairsParentsRoom",
+    "name": "DEFAULT",
+    "destMap": "INTROUpstairs",
+    "destDoor": "toParentsRoom",
+    "spawnX": 24.0,
+    "spawnY": 32.0,
+    "arrX": 48,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "INTROBasement",
+    "name": "INTROBasement.Load",
+    "destMap": "INTRODownstairs",
+    "destDoor": "toBasement",
+    "spawnX": 16.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTROGarage",
+    "name": "cardboardBox2",
+    "destMap": "INTROGarage",
+    "destDoor": "",
+    "spawnX": 120.0,
+    "spawnY": 104.0,
+    "arrX": 48,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "INTROGarage",
+    "name": "INTROGarage.Load",
+    "destMap": "INTRODownstairs",
+    "destDoor": "toGarage",
+    "spawnX": 168.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTRODownstairsBathroom",
+    "name": "INTRODownstairsBathroom.Load",
+    "destMap": "INTRODownstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 24.0,
+    "spawnY": 88.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTROAttic",
+    "name": "toGarage",
+    "destMap": "INTROAttic",
+    "destDoor": "",
+    "spawnX": 94.0,
+    "spawnY": 52.0,
+    "arrX": 40,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "GENERIC1Downstairs",
+    "name": "blackStripedCouchFaceRight0",
+    "destMap": "GENERIC1Downstairs",
+    "destDoor": "",
+    "spawnX": 320.0,
+    "spawnY": 120.0,
+    "arrX": 32,
+    "arrY": 184
+  },
+  {
+    "sourceMap": "GENERIC1Downstairs",
+    "name": "GENERIC1Downstairs.Load",
+    "destMap": "GENERIC1Downstairs",
+    "destDoor": "toBackyard",
+    "spawnX": 72.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "GENERIC1Downstairs",
+    "name": "GENERIC1Downstairs.toBackyard",
+    "destMap": "GENERIC1Garage",
+    "destDoor": "toBackyard",
+    "spawnX": 8.0,
+    "spawnY": 40.0,
+    "arrX": 96,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "GENERIC1Downstairs",
+    "name": "GENERIC1Downstairs.toGarage",
+    "destMap": "GENERIC1DownstairsBathroom",
+    "destDoor": "toKitchen",
+    "spawnX": 88.0,
+    "spawnY": 248.0,
+    "arrX": 16,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "GENERIC1Downstairs",
+    "name": "GENERIC1Downstairs.toBathroom",
+    "destMap": "GENERIC1Basement",
+    "destDoor": "toKitchen",
+    "spawnX": 16.0,
+    "spawnY": 72.0,
+    "arrX": 112,
+    "arrY": 288
+  },
+  {
+    "sourceMap": "GENERIC1Downstairs",
+    "name": "GENERIC1Downstairs.toBasement",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toKitchen",
+    "spawnX": 200.0,
+    "spawnY": 288.0,
+    "arrX": 40,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "GENERIC1Upstairs",
+    "name": "lamp0",
+    "destMap": "GENERIC1Upstairs",
+    "destDoor": "",
+    "spawnX": 307.0,
+    "spawnY": 46.0,
+    "arrX": 32,
+    "arrY": 192
+  },
+  {
+    "sourceMap": "GENERIC1Upstairs",
+    "name": "GENERIC1Upstairs.toDownstairs",
+    "destMap": "GENERIC1UpstairsMasterBedroom",
+    "destDoor": "toHallway",
+    "spawnX": 112.0,
+    "spawnY": 80.0,
+    "arrX": 136,
+    "arrY": 192
+  },
+  {
+    "sourceMap": "GENERIC1Upstairs",
+    "name": "GENERIC1Upstairs.toMasterBedroom",
+    "destMap": "GENERIC1UpstairsBathroom",
+    "destDoor": "toHallway",
+    "spawnX": 408.0,
+    "spawnY": 80.0,
+    "arrX": 136,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "GENERIC1Upstairs",
+    "name": "GENERIC1Upstairs.toBathroom",
+    "destMap": "GENERIC1UpstairsBedroom1",
+    "destDoor": "toHallway",
+    "spawnX": 368.0,
+    "spawnY": 32.0,
+    "arrX": 432,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "GENERIC1Upstairs",
+    "name": "GENERIC1Upstairs.toBedroom1",
+    "destMap": "GENERIC1UpstairsBedroom2",
+    "destDoor": "toHallway",
+    "spawnX": 56.0,
+    "spawnY": 32.0,
+    "arrX": 392,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "GENERIC1UpstairsBedroom1",
+    "name": "GENERIC1UpstairsBedroom1.Load",
+    "destMap": "GENERIC1Upstairs",
+    "destDoor": "toBedroom1",
+    "spawnX": 136.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "GENERIC1UpstairsBedroom2",
+    "name": "GENERIC1UpstairsBedroom2.Load",
+    "destMap": "GENERIC1Upstairs",
+    "destDoor": "toBedroom2",
+    "spawnX": 56.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "GENERIC1UpstairsMasterBedroom",
+    "name": "GENERIC1UpstairsMasterBedroom.Load",
+    "destMap": "GENERIC1Upstairs",
+    "destDoor": "toMasterBedroom",
+    "spawnX": 112.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "GENERIC1UpstairsBathroom",
+    "name": "GENERIC1UpstairsBathroom.Load",
+    "destMap": "GENERIC1Upstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 48.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "GENERIC1Basement",
+    "name": "GENERIC1Basement.Load",
+    "destMap": "GENERIC1Downstairs",
+    "destDoor": "toBasement",
+    "spawnX": 16.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "GENERIC1Garage",
+    "name": "toAttic",
+    "destMap": "GENERIC1Garage",
+    "destDoor": "toGarage",
+    "spawnX": 102.0,
+    "spawnY": 44.0,
+    "arrX": 48,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "GENERIC1Garage",
+    "name": "GENERIC1Garage.toAttic",
+    "destMap": "GENERIC1Downstairs",
+    "destDoor": "toGarage",
+    "spawnX": 168.0,
+    "spawnY": 40.0,
+    "arrX": 48,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "GENERIC1DownstairsBathroom",
+    "name": "GENERIC1DownstairsBathroom.Load",
+    "destMap": "GENERIC1Downstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 24.0,
+    "spawnY": 88.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "GENERIC1Attic",
+    "name": "toGarage",
+    "destMap": "GENERIC1Attic",
+    "destDoor": "",
+    "spawnX": 94.0,
+    "spawnY": 52.0,
+    "arrX": 40,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "TOWNGENERIC2Downstairs",
+    "name": "blackCouchFaceRight0",
+    "destMap": "TOWNGENERIC2Downstairs",
+    "destDoor": "",
+    "spawnX": 336.0,
+    "spawnY": 96.0,
+    "arrX": 264,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "TOWNGENERIC2Downstairs",
+    "name": "TOWNGENERIC2Downstairs.Load",
+    "destMap": "TOWNGENERIC2Downstairs",
+    "destDoor": "toBasement",
+    "spawnX": 240.0,
+    "spawnY": 64.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNGENERIC2Downstairs",
+    "name": "TOWNGENERIC2Downstairs.toBasement",
+    "destMap": "TOWNGENERIC2Downstairs",
+    "destDoor": "toBasement",
+    "spawnX": 184.0,
+    "spawnY": 32.0,
+    "arrX": 264,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "TOWNGENERIC2Downstairs",
+    "name": "TOWNGENERIC2Downstairs.toBackyard",
+    "destMap": "TOWNGENERIC2Downstairs",
+    "destDoor": "toBackyard",
+    "spawnX": 8.0,
+    "spawnY": 40.0,
+    "arrX": 208,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "TOWNGENERIC2Downstairs",
+    "name": "TOWNGENERIC2Downstairs.toGarage",
+    "destMap": "TOWNGENERIC2Downstairs",
+    "destDoor": "toGarage",
+    "spawnX": 80.0,
+    "spawnY": 216.0,
+    "arrX": 16,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "TOWNGENERIC2Downstairs",
+    "name": "TOWNGENERIC2Downstairs.toBathroom",
+    "destMap": "TOWNGENERIC2Downstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 200.0,
+    "spawnY": 288.0,
+    "arrX": 88,
+    "arrY": 264
+  },
+  {
+    "sourceMap": "TOWNGENERIC3Downstairs",
+    "name": "mediumFlatScreenTVFaceLeft",
+    "destMap": "TOWNGENERIC3Downstairs",
+    "destDoor": "",
+    "spawnX": 400.0,
+    "spawnY": 96.0,
+    "arrX": 456,
+    "arrY": 184
+  },
+  {
+    "sourceMap": "TOWNGENERIC3Downstairs",
+    "name": "TOWNGENERIC3Downstairs.toUpstairs",
+    "destMap": "TOWNGENERIC3Downstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 352.0,
+    "spawnY": 248.0,
+    "arrX": 376,
+    "arrY": 184
+  },
+  {
+    "sourceMap": "TOWNGENERIC3Downstairs",
+    "name": "TOWNGENERIC3Downstairs.toBathroom",
+    "destMap": "TOWNGENERIC3Downstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 432.0,
+    "spawnY": 72.0,
+    "arrX": 376,
+    "arrY": 288
+  },
+  {
+    "sourceMap": "TOWNGENERIC3Downstairs",
+    "name": "TOWNGENERIC3Downstairs.toBasement",
+    "destMap": "TOWNGENERIC3Downstairs",
+    "destDoor": "toBasement",
+    "spawnX": 376.0,
+    "spawnY": 32.0,
+    "arrX": 456,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "TOWNGENERIC3Downstairs",
+    "name": "TOWNGENERIC3Downstairs.toBackyard",
+    "destMap": "TOWNGENERIC3Downstairs",
+    "destDoor": "toBackyard",
+    "spawnX": 448.0,
+    "spawnY": 40.0,
+    "arrX": 400,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "TOWNGENERIC3Downstairs",
+    "name": "TOWNGENERIC3Downstairs.toGarage",
+    "destMap": "TOWNGENERIC3Downstairs",
+    "destDoor": "toGarage",
+    "spawnX": 240.0,
+    "spawnY": 288.0,
+    "arrX": 472,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "TOWNFRIENDDownstairs",
+    "name": "mediumFlatScreenTVFaceLeft",
+    "destMap": "TOWNFRIENDDownstairs",
+    "destDoor": "",
+    "spawnX": 400.0,
+    "spawnY": 96.0,
+    "arrX": 456,
+    "arrY": 184
+  },
+  {
+    "sourceMap": "TOWNFRIENDDownstairs",
+    "name": "TOWNFRIENDDownstairs.Load",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toFriendsHouseBack",
+    "spawnX": 368.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNFRIENDDownstairs",
+    "name": "TOWNFRIENDDownstairs.toBackyard",
+    "destMap": "TOWNFRIENDBasement",
+    "destDoor": "toFriendsHouseBack",
+    "spawnX": 432.0,
+    "spawnY": 72.0,
+    "arrX": 392,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "TOWNFRIENDDownstairs",
+    "name": "TOWNFRIENDDownstairs.toBasement",
+    "destMap": "TOWNFRIENDDownstairsBathroom",
+    "destDoor": "toDownstairs",
+    "spawnX": 352.0,
+    "spawnY": 248.0,
+    "arrX": 456,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "TOWNFRIENDDownstairs",
+    "name": "TOWNFRIENDDownstairs.toBathroom",
+    "destMap": "TOWNFRIENDGarage",
+    "destDoor": "toDownstairs",
+    "spawnX": 448.0,
+    "spawnY": 40.0,
+    "arrX": 376,
+    "arrY": 288
+  },
+  {
+    "sourceMap": "TOWNFRIENDDownstairs",
+    "name": "TOWNFRIENDDownstairs.toGarage",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toDownstairs",
+    "spawnX": 240.0,
+    "spawnY": 288.0,
+    "arrX": 472,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "TOWNFRIENDUpstairs",
+    "name": "lamp",
+    "destMap": "TOWNFRIENDUpstairs",
+    "destDoor": "",
+    "spawnX": 146.0,
+    "spawnY": 47.0,
+    "arrX": 456,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "TOWNFRIENDUpstairs",
+    "name": "TOWNFRIENDUpstairs.Load",
+    "destMap": "TOWNFRIENDUpstairsFriendsRoom",
+    "destDoor": "toHallway",
+    "spawnX": 288.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNFRIENDUpstairs",
+    "name": "TOWNFRIENDUpstairs.toFriendsRoom",
+    "destMap": "TOWNFRIENDUpstairsSistersRoom",
+    "destDoor": "toHallway",
+    "spawnX": 40.0,
+    "spawnY": 32.0,
+    "arrX": 312,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "TOWNFRIENDUpstairs",
+    "name": "toFriendsParentsRoom",
+    "destMap": "TOWNFRIENDUpstairsParentsRoom",
+    "destDoor": "toHallway",
+    "spawnX": 232.0,
+    "spawnY": 80.0,
+    "arrX": 64,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "TOWNFRIENDUpstairs",
+    "name": "TOWNFRIENDUpstairs.toFriendsParentsRoom",
+    "destMap": "TOWNFRIENDUpstairsBathroom",
+    "destDoor": "toHallway",
+    "spawnX": 48.0,
+    "spawnY": 80.0,
+    "arrX": 256,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "TOWNFRIENDUpstairsFriendsRoom",
+    "name": "TOWNFRIENDUpstairsFriendsRoom.Load",
+    "destMap": "TOWNFRIENDUpstairs",
+    "destDoor": "toFriendsRoom",
+    "spawnX": 40.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNFRIENDUpstairsSistersRoom",
+    "name": "TOWNFRIENDUpstairsSistersRoom.Load",
+    "destMap": "TOWNFRIENDUpstairs",
+    "destDoor": "toFriendsSistersRoom",
+    "spawnX": 48.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNFRIENDUpstairsBathroom",
+    "name": "TOWNFRIENDUpstairsBathroom.Load",
+    "destMap": "TOWNFRIENDUpstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 64.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNFRIENDUpstairsParentsRoom",
+    "name": "TOWNFRIENDUpstairsParentsRoom.Load",
+    "destMap": "TOWNFRIENDUpstairs",
+    "destDoor": "toFriendsParentsRoom",
+    "spawnX": 112.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNFRIENDBasement",
+    "name": "TOWNFRIENDBasement.Load",
+    "destMap": "TOWNFRIENDDownstairs",
+    "destDoor": "toBasement",
+    "spawnX": 432.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNFRIENDGarage",
+    "name": "TOWNFRIENDGarage.Load",
+    "destMap": "TOWNFRIENDDownstairs",
+    "destDoor": "toGarage",
+    "spawnX": 8.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNFRIENDDownstairsBathroom",
+    "name": "TOWNFRIENDDownstairsBathroom.Load",
+    "destMap": "TOWNFRIENDDownstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 24.0,
+    "spawnY": 88.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "JAPANBedroom",
+    "name": "JAPANBedroom.Load",
+    "destMap": "JAPANBedroom",
+    "destDoor": "toJapaneseHouse",
+    "spawnX": 104.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "JAPANHouse",
+    "name": "JAPANHouse.Load",
+    "destMap": "JAPANHouse",
+    "destDoor": "toJapaneseHouse",
+    "spawnX": 104.0,
+    "spawnY": 120.0,
+    "arrX": 120,
+    "arrY": 152
+  },
+  {
+    "sourceMap": "TOWNCRAZYDownstairs",
+    "name": "pinkCouchFaceRight0",
+    "destMap": "TOWNCRAZYDownstairs",
+    "destDoor": "",
+    "spawnX": 200.0,
+    "spawnY": 96.0,
+    "arrX": 152,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "TOWNCRAZYDownstairs",
+    "name": "TOWNCRAZYDownstairs.Load",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toCrazyHouse",
+    "spawnX": 272.0,
+    "spawnY": 248.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNCRAZYDownstairs",
+    "name": "TOWNCRAZYDownstairs.toFrontyard",
+    "destMap": "TOWNCRAZYDownstairsBathroom",
+    "destDoor": "toCrazyHouse",
+    "spawnX": 72.0,
+    "spawnY": 224.0,
+    "arrX": 296,
+    "arrY": 280
+  },
+  {
+    "sourceMap": "TOWNCRAZYDownstairs",
+    "name": "TOWNCRAZYDownstairs.toBathroom",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toDownstairs",
+    "spawnX": 168.0,
+    "spawnY": 32.0,
+    "arrX": 96,
+    "arrY": 264
+  },
+  {
+    "sourceMap": "TOWNCRAZYDownstairs",
+    "name": "TOWNCRAZYDownstairs.toBackyard",
+    "destMap": "TOWNCRAZYBasement",
+    "destDoor": "toCrazyHouseBack",
+    "spawnX": 136.0,
+    "spawnY": 64.0,
+    "arrX": 192,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "TOWNCRAZYDownstairs",
+    "name": "TOWNCRAZYDownstairs.toBasement",
+    "destMap": "TOWNCRAZYGarage",
+    "destDoor": "toDownstairs",
+    "spawnX": 8.0,
+    "spawnY": 160.0,
+    "arrX": 160,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "TOWNCRAZYUpstairs",
+    "name": "lamp",
+    "destMap": "TOWNCRAZYUpstairs",
+    "destDoor": "",
+    "spawnX": 18.0,
+    "spawnY": 55.0,
+    "arrX": 152,
+    "arrY": 152
+  },
+  {
+    "sourceMap": "TOWNCRAZYUpstairs",
+    "name": "TOWNCRAZYUpstairs.Load",
+    "destMap": "TOWNCRAZYUpstairsBedroom",
+    "destDoor": "toHallway",
+    "spawnX": 80.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNCRAZYUpstairs",
+    "name": "TOWNCRAZYUpstairs.toBedroom",
+    "destMap": "TOWNCRAZYUpstairsBathroom",
+    "destDoor": "toHallway",
+    "spawnX": 48.0,
+    "spawnY": 80.0,
+    "arrX": 104,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "TOWNCRAZYUpstairs",
+    "name": "TOWNCRAZYUpstairs.toBathroom",
+    "destMap": "TOWNCRAZYUpstairsHidden",
+    "destDoor": "toHallway",
+    "spawnX": 152.0,
+    "spawnY": 32.0,
+    "arrX": 72,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "TOWNCRAZYUpstairsBedroom",
+    "name": "TOWNCRAZYUpstairsBedroom.Load",
+    "destMap": "TOWNCRAZYUpstairs",
+    "destDoor": "toBedroom",
+    "spawnX": 56.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNCRAZYUpstairsBathroom",
+    "name": "TOWNCRAZYUpstairsBathroom.Load",
+    "destMap": "TOWNCRAZYUpstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 48.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNCRAZYDownstairsBathroom",
+    "name": "TOWNCRAZYDownstairsBathroom.Load",
+    "destMap": "TOWNCRAZYDownstairs",
+    "destDoor": "toBathroom",
+    "spawnX": 16.0,
+    "spawnY": 72.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNCRAZYBasement",
+    "name": "TOWNCRAZYBasement.Load",
+    "destMap": "TOWNCRAZYDownstairs",
+    "destDoor": "toBasement",
+    "spawnX": 144.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNCRAZYGarage",
+    "name": "TOWNCRAZYGarage.Load",
+    "destMap": "TOWNCRAZYDownstairs",
+    "destDoor": "toGarage",
+    "spawnX": 168.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNCRAZYUpstairsHidden",
+    "name": "TOWNCRAZYUpstairsHidden.Load",
+    "destMap": "TOWNCRAZYUpstairs",
+    "destDoor": "toTortureDungeon",
+    "spawnX": 8.0,
+    "spawnY": 168.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNMANSIONDownstairs",
+    "name": "fountainwater2",
+    "destMap": "TOWNMANSIONDownstairs",
+    "destDoor": "",
+    "spawnX": 704.0,
+    "spawnY": 168.0,
+    "arrX": 288,
+    "arrY": 24
+  },
+  {
+    "sourceMap": "TOWNMANSIONDownstairs",
+    "name": "TOWNMANSIONDownstairs.Load",
+    "destMap": "TOWNMANSIONDownstairs",
+    "destDoor": "toFrontyard",
+    "spawnX": 344.0,
+    "spawnY": 224.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNMANSIONDownstairs",
+    "name": "TOWNMANSIONDownstairs.toFrontyard",
+    "destMap": "TOWNMANSIONDownstairsKitchen",
+    "destDoor": "toFrontyard",
+    "spawnX": 40.0,
+    "spawnY": 32.0,
+    "arrX": 376,
+    "arrY": 264
+  },
+  {
+    "sourceMap": "TOWNMANSIONDownstairs",
+    "name": "TOWNMANSIONDownstairs.toDiningRoom",
+    "destMap": "TOWNMANSIONDownstairsKitchen",
+    "destDoor": "toEntranceLeft",
+    "spawnX": 680.0,
+    "spawnY": 32.0,
+    "arrX": 72,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "TOWNMANSIONDownstairs",
+    "name": "TOWNMANSIONDownstairs.toKitchen",
+    "destMap": "TOWNMANSIONDownstairs",
+    "destDoor": "toEntranceRight",
+    "spawnX": 8.0,
+    "spawnY": 56.0,
+    "arrX": 712,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "TOWNMANSIONDownstairsKitchen",
+    "name": "TOWNMANSIONDownstairsKitchen.Load",
+    "destMap": "TOWNMANSIONDownstairs",
+    "destDoor": "toDiningRoom",
+    "spawnX": 40.0,
+    "spawnY": 160.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNMANSIONDownstairsKitchen",
+    "name": "toEntranceRight",
+    "destMap": "TOWNMANSIONDownstairs",
+    "destDoor": "toDiningRoom",
+    "spawnX": 680.0,
+    "spawnY": 160.0,
+    "arrX": 72,
+    "arrY": 200
+  },
+  {
+    "sourceMap": "TOWNMANSIONUpstairsVideoGameRoom",
+    "name": "blackGameBobX",
+    "destMap": "TOWNMANSIONUpstairsVideoGameRoom",
+    "destDoor": "",
+    "spawnX": 512.0,
+    "spawnY": 144.0,
+    "arrX": 288,
+    "arrY": 328
+  },
+  {
+    "sourceMap": "SCHOOLMainOffice",
+    "name": "SCHOOLMainOffice.talkToSecretary",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toSecretaryOffice",
+    "spawnX": 104.0,
+    "spawnY": 168.0,
+    "arrX": 136,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLMainOffice",
+    "name": "SCHOOLMainOffice.toHallway",
+    "destMap": "SCHOOLPrincipalsOffice",
+    "destDoor": "toSecretaryOffice",
+    "spawnX": 8.0,
+    "spawnY": 64.0,
+    "arrX": 136,
+    "arrY": 200
+  },
+  {
+    "sourceMap": "SCHOOLPrincipalsOffice",
+    "name": "SCHOOLPrincipalsOffice.Load",
+    "destMap": "SCHOOLMainOffice",
+    "destDoor": "toPrincipalOffice",
+    "spawnX": 176.0,
+    "spawnY": 64.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLDetention",
+    "name": "SCHOOLDetention.Load",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toDetention",
+    "spawnX": 64.0,
+    "spawnY": 168.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLClinic",
+    "name": "SCHOOLClinic.Load",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toClinic",
+    "spawnX": 224.0,
+    "spawnY": 168.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLClinic",
+    "name": "SCHOOLClinic.toHallway",
+    "destMap": "SCHOOLClinicBathroom",
+    "destDoor": "toClinic",
+    "spawnX": 24.0,
+    "spawnY": 112.0,
+    "arrX": 248,
+    "arrY": 200
+  },
+  {
+    "sourceMap": "SCHOOLClinicBathroom",
+    "name": "SCHOOLClinicBathroom.Load",
+    "destMap": "SCHOOLClinic",
+    "destDoor": "toBathroom",
+    "spawnX": 24.0,
+    "spawnY": 88.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLTeachersLounge",
+    "name": "SCHOOLTeachersLounge.Load",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toTeachersLounge",
+    "spawnX": 96.0,
+    "spawnY": 168.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLMusicRoom",
+    "name": "SCHOOLMusicRoom.Load",
+    "destMap": "SCHOOLGymHallway",
+    "destDoor": "toMusicRoom",
+    "spawnX": 144.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLArtRoom",
+    "name": "SCHOOLArtRoom.Load",
+    "destMap": "SCHOOLGymHallway",
+    "destDoor": "toArtRoom",
+    "spawnX": 144.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLComputerLab",
+    "name": "SCHOOLComputerLab.Load",
+    "destMap": "SCHOOLGymHallway",
+    "destDoor": "toComputerLab",
+    "spawnX": 144.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLKitchen",
+    "name": "SCHOOLKitchen.Load",
+    "destMap": "SCHOOLGymHallway",
+    "destDoor": "toKitchen",
+    "spawnX": 48.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLLibrary",
+    "name": "SCHOOLLibrary.talkToLibarian",
+    "destMap": "SCHOOLClassHallway",
+    "destDoor": "toLibrary",
+    "spawnX": 136.0,
+    "spawnY": 264.0,
+    "arrX": 168,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLCustodian",
+    "name": "SCHOOLCustodian.Load",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toCustodianOffice",
+    "spawnX": 24.0,
+    "spawnY": 304.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLCustodian",
+    "name": "SCHOOLCustodian.toHallway",
+    "destMap": "SCHOOLCustodian",
+    "destDoor": "toCustodianOffice",
+    "spawnX": 88.0,
+    "spawnY": 8.0,
+    "arrX": 48,
+    "arrY": 336
+  },
+  {
+    "sourceMap": "SCHOOLGirlsBathroom",
+    "name": "SCHOOLGirlsBathroom.Load",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toGirlsBathroom",
+    "spawnX": 64.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLGirlsBathroom",
+    "name": "DoorSchoolBathroomDoor",
+    "destMap": "SCHOOLGirlsBathroom",
+    "destDoor": "toGirlsBathroom",
+    "spawnX": 80.0,
+    "spawnY": 176.0,
+    "arrX": 88,
+    "arrY": 296
+  },
+  {
+    "sourceMap": "SCHOOLGirlsBathroom",
+    "name": "DoorSchoolBathroomDoor0",
+    "destMap": "SCHOOLGirlsBathroom",
+    "destDoor": "DoorSchoolBathroomDoor",
+    "spawnX": 80.0,
+    "spawnY": 144.0,
+    "arrX": 88,
+    "arrY": 224
+  },
+  {
+    "sourceMap": "SCHOOLGirlsBathroom",
+    "name": "DoorSchoolBathroomDoor1",
+    "destMap": "SCHOOLGirlsBathroom",
+    "destDoor": "DoorSchoolBathroomDoor0",
+    "spawnX": 80.0,
+    "spawnY": 112.0,
+    "arrX": 88,
+    "arrY": 192
+  },
+  {
+    "sourceMap": "SCHOOLGirlsBathroom",
+    "name": "DoorSchoolBathroomDoor2",
+    "destMap": "SCHOOLGirlsBathroom",
+    "destDoor": "DoorSchoolBathroomDoor1",
+    "spawnX": 80.0,
+    "spawnY": 80.0,
+    "arrX": 88,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "SCHOOLGirlsBathroom",
+    "name": "DoorSchoolBathroomDoor3",
+    "destMap": "SCHOOLGirlsBathroom",
+    "destDoor": "DoorSchoolBathroomDoor2",
+    "spawnX": 80.0,
+    "spawnY": 48.0,
+    "arrX": 88,
+    "arrY": 128
+  },
+  {
+    "sourceMap": "SCHOOLBoysBathroom",
+    "name": "SCHOOLBoysBathroom.Load",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toBoysBathroom",
+    "spawnX": 64.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLBoysBathroom",
+    "name": "SCHOOLBoysBathroom.toHallway",
+    "destMap": "SCHOOLBoysBathroom",
+    "destDoor": "toBoysBathroom",
+    "spawnX": 80.0,
+    "spawnY": 144.0,
+    "arrX": 88,
+    "arrY": 296
+  },
+  {
+    "sourceMap": "SCHOOLBoysBathroom",
+    "name": "DoorSchoolBathroomDoor0",
+    "destMap": "SCHOOLBoysBathroom",
+    "destDoor": "DoorSchoolBathroomDoor",
+    "spawnX": 80.0,
+    "spawnY": 112.0,
+    "arrX": 88,
+    "arrY": 192
+  },
+  {
+    "sourceMap": "SCHOOLBoysBathroom",
+    "name": "DoorSchoolBathroomDoor1",
+    "destMap": "SCHOOLBoysBathroom",
+    "destDoor": "DoorSchoolBathroomDoor0",
+    "spawnX": 80.0,
+    "spawnY": 80.0,
+    "arrX": 88,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "SCHOOLBoysBathroom",
+    "name": "DoorSchoolBathroomDoor2",
+    "destMap": "SCHOOLBoysBathroom",
+    "destDoor": "DoorSchoolBathroomDoor1",
+    "spawnX": 80.0,
+    "spawnY": 48.0,
+    "arrX": 88,
+    "arrY": 128
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "SCHOOLEntranceHallway.Load",
+    "destMap": "SCHOOLPlayground",
+    "destDoor": "toEntranceHallwayLeft",
+    "spawnX": 48.0,
+    "spawnY": 272.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "toPlaygroundRight",
+    "destMap": "SCHOOLPlayground",
+    "destDoor": "toEntranceHallwayLeft",
+    "spawnX": 840.0,
+    "spawnY": 272.0,
+    "arrX": 80,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "toOutsideLeft",
+    "destMap": "TOWNTown",
+    "destDoor": "toEntranceHallwayRight",
+    "spawnX": 1128.0,
+    "spawnY": 336.0,
+    "arrX": 872,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "toOutsideMiddle",
+    "destMap": "TOWNTown",
+    "destDoor": "toEntranceHallwayLeft",
+    "spawnX": 1200.0,
+    "spawnY": 336.0,
+    "arrX": 1160,
+    "arrY": 376
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "toOutsideRight",
+    "destMap": "TOWNTown",
+    "destDoor": "toEntranceHallwayMiddle",
+    "spawnX": 1272.0,
+    "spawnY": 336.0,
+    "arrX": 1232,
+    "arrY": 376
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "toGymHallwayLeft",
+    "destMap": "SCHOOLGymHallway",
+    "destDoor": "toEntranceHallwayRight",
+    "spawnX": 48.0,
+    "spawnY": 48.0,
+    "arrX": 1304,
+    "arrY": 376
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "toGymHallwayMiddle",
+    "destMap": "SCHOOLGymHallway",
+    "destDoor": "toEntranceHallwayLeft",
+    "spawnX": 792.0,
+    "spawnY": 48.0,
+    "arrX": 80,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "toGymCafeteria",
+    "destMap": "SCHOOLGymCafeteria",
+    "destDoor": "toEntranceHallwayMiddle",
+    "spawnX": 1536.0,
+    "spawnY": 48.0,
+    "arrX": 824,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "toTeachersLounge",
+    "destMap": "SCHOOLTeachersLounge",
+    "destDoor": "toEntranceHallway",
+    "spawnX": 232.0,
+    "spawnY": 176.0,
+    "arrX": 1568,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "toSecretaryOffice",
+    "destMap": "SCHOOLMainOffice",
+    "destDoor": "toHallway",
+    "spawnX": 1200.0,
+    "spawnY": 176.0,
+    "arrX": 264,
+    "arrY": 216
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "SCHOOLEntranceHallway.toSecretaryOffice",
+    "destMap": "SCHOOLClinic",
+    "destDoor": "toHallway",
+    "spawnX": 672.0,
+    "spawnY": 176.0,
+    "arrX": 1232,
+    "arrY": 216
+  },
+  {
+    "sourceMap": "SCHOOLEntranceHallway",
+    "name": "SCHOOLEntranceHallway.toClinic",
+    "destMap": "SCHOOLDetention",
+    "destDoor": "toHallway",
+    "spawnX": 1384.0,
+    "spawnY": 176.0,
+    "arrX": 696,
+    "arrY": 216
+  },
+  {
+    "sourceMap": "SCHOOLGymHallway",
+    "name": "SCHOOLGymHallway.Load",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toGymHallwayLeft",
+    "spawnX": 48.0,
+    "spawnY": 376.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLGymHallway",
+    "name": "toEntranceHallwayMiddle",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toGymHallwayLeft",
+    "spawnX": 792.0,
+    "spawnY": 376.0,
+    "arrX": 80,
+    "arrY": 408
+  },
+  {
+    "sourceMap": "SCHOOLGymHallway",
+    "name": "toClassHallwayLeft",
+    "destMap": "SCHOOLClassHallway",
+    "destDoor": "toGymHallwayMiddle",
+    "spawnX": 48.0,
+    "spawnY": 48.0,
+    "arrX": 824,
+    "arrY": 408
+  },
+  {
+    "sourceMap": "SCHOOLGymHallway",
+    "name": "toMusicRoom",
+    "destMap": "SCHOOLMusicRoom",
+    "destDoor": "toGymHallwayLeft",
+    "spawnX": 296.0,
+    "spawnY": 272.0,
+    "arrX": 80,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "SCHOOLGymHallway",
+    "name": "toArtRoom",
+    "destMap": "SCHOOLArtRoom",
+    "destDoor": "toHallway",
+    "spawnX": 616.0,
+    "spawnY": 272.0,
+    "arrX": 320,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLGymHallway",
+    "name": "toComputerLab",
+    "destMap": "SCHOOLComputerLab",
+    "destDoor": "toHallway",
+    "spawnX": 936.0,
+    "spawnY": 272.0,
+    "arrX": 640,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLGymHallway",
+    "name": "SCHOOLGymHallway.toComputerLab",
+    "destMap": "SCHOOLKitchen",
+    "destDoor": "toHallway",
+    "spawnX": 1160.0,
+    "spawnY": 272.0,
+    "arrX": 960,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLGymHallway",
+    "name": "toGymCafeteria",
+    "destMap": "SCHOOLGymCafeteria",
+    "destDoor": "toHallway",
+    "spawnX": 1248.0,
+    "spawnY": 288.0,
+    "arrX": 1184,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLClassHallway",
+    "name": "SCHOOLClassHallway.Load",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toClassHallwayLeft",
+    "spawnX": 48.0,
+    "spawnY": 48.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLClassHallway",
+    "name": "toBackHallwayRight",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toClassHallwayLeft",
+    "spawnX": 1536.0,
+    "spawnY": 48.0,
+    "arrX": 80,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "SCHOOLClassHallway",
+    "name": "toGymCafeteria",
+    "destMap": "SCHOOLGymCafeteria",
+    "destDoor": "toClassHallwayRight",
+    "spawnX": 1536.0,
+    "spawnY": 376.0,
+    "arrX": 1568,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "SCHOOLClassHallway",
+    "name": "toGymHallwayLeft",
+    "destMap": "SCHOOLGymHallway",
+    "destDoor": "toClassHallway",
+    "spawnX": 48.0,
+    "spawnY": 376.0,
+    "arrX": 1568,
+    "arrY": 408
+  },
+  {
+    "sourceMap": "SCHOOLClassHallway",
+    "name": "toClassroom6",
+    "destMap": "SCHOOLClassroom6",
+    "destDoor": "toClassHallwayLeft",
+    "spawnX": 1320.0,
+    "spawnY": 272.0,
+    "arrX": 80,
+    "arrY": 408
+  },
+  {
+    "sourceMap": "SCHOOLClassHallway",
+    "name": "toClassroom5",
+    "destMap": "SCHOOLClassroom5",
+    "destDoor": "toHallway",
+    "spawnX": 1000.0,
+    "spawnY": 272.0,
+    "arrX": 1344,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLClassHallway",
+    "name": "toClassroom4",
+    "destMap": "SCHOOLClassroom4",
+    "destDoor": "toHallway",
+    "spawnX": 680.0,
+    "spawnY": 272.0,
+    "arrX": 1024,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLClassHallway",
+    "name": "toLibrary",
+    "destMap": "SCHOOLLibrary",
+    "destDoor": "toHallway",
+    "spawnX": 288.0,
+    "spawnY": 272.0,
+    "arrX": 704,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "SCHOOLBackHallway.Load",
+    "destMap": "SCHOOLClassHallway",
+    "destDoor": "toBackHallwayLeft",
+    "spawnX": 48.0,
+    "spawnY": 376.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "toClassHallwayRight",
+    "destMap": "SCHOOLClassHallway",
+    "destDoor": "toBackHallwayLeft",
+    "spawnX": 1536.0,
+    "spawnY": 376.0,
+    "arrX": 80,
+    "arrY": 408
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "toPlaygroundLeft",
+    "destMap": "SCHOOLPlayground",
+    "destDoor": "toBackHallwayRight",
+    "spawnX": 816.0,
+    "spawnY": 56.0,
+    "arrX": 1568,
+    "arrY": 408
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "toPlaygroundRight",
+    "destMap": "SCHOOLPlayground",
+    "destDoor": "toBackHallwayLeft",
+    "spawnX": 912.0,
+    "spawnY": 56.0,
+    "arrX": 848,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "toCustodianOffice",
+    "destMap": "SCHOOLCustodian",
+    "destDoor": "toBackHallwayRight",
+    "spawnX": 24.0,
+    "spawnY": 272.0,
+    "arrX": 944,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "toClassroom3",
+    "destMap": "SCHOOLClassroom3",
+    "destDoor": "toHallway",
+    "spawnX": 280.0,
+    "spawnY": 272.0,
+    "arrX": 48,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "toClassroom2",
+    "destMap": "SCHOOLClassroom2",
+    "destDoor": "toHallway",
+    "spawnX": 600.0,
+    "spawnY": 272.0,
+    "arrX": 304,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "toClassroom1",
+    "destMap": "SCHOOLClassroom1",
+    "destDoor": "toHallway",
+    "spawnX": 1168.0,
+    "spawnY": 272.0,
+    "arrX": 624,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "SCHOOLBackHallway.toClassroom1",
+    "destMap": "SCHOOLGirlsBathroom",
+    "destDoor": "toHallway",
+    "spawnX": 1400.0,
+    "spawnY": 272.0,
+    "arrX": 1192,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLBackHallway",
+    "name": "SCHOOLBackHallway.toGirlsBathroom",
+    "destMap": "SCHOOLBoysBathroom",
+    "destDoor": "toHallway",
+    "spawnX": 1552.0,
+    "spawnY": 272.0,
+    "arrX": 1424,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "SCHOOLClassroom1",
+    "name": "SCHOOLClassroom1.Load",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toClassroom1",
+    "spawnX": 152.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLClassroom2",
+    "name": "SCHOOLClassroom2.Load",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toClassroom2",
+    "spawnX": 152.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLClassroom3",
+    "name": "SCHOOLClassroom3.Load",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toClassroom3",
+    "spawnX": 152.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLClassroom4",
+    "name": "SCHOOLClassroom4.Load",
+    "destMap": "SCHOOLClassHallway",
+    "destDoor": "toClassroom4",
+    "spawnX": 152.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLClassroom5",
+    "name": "SCHOOLClassroom5.Load",
+    "destMap": "SCHOOLClassHallway",
+    "destDoor": "toClassroom5",
+    "spawnX": 152.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLClassroom6",
+    "name": "SCHOOLClassroom6.Load",
+    "destMap": "SCHOOLClassHallway",
+    "destDoor": "toClassroom6",
+    "spawnX": 152.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLGymCafeteria",
+    "name": "SCHOOLGymCafeteria.Load",
+    "destMap": "SCHOOLClassHallway",
+    "destDoor": "toGymCafeteria",
+    "spawnX": 352.0,
+    "spawnY": 48.0,
+    "arrX": 55,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "SCHOOLGymCafeteria",
+    "name": "SCHOOLGymCafeteria.toClassHallway",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toGymCafeteria",
+    "spawnX": 352.0,
+    "spawnY": 368.0,
+    "arrX": 384,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "SCHOOLGymCafeteria",
+    "name": "SCHOOLGymCafeteria.toEntranceHallway",
+    "destMap": "SCHOOLGymHallway",
+    "destDoor": "toGymCafeteria",
+    "spawnX": 8.0,
+    "spawnY": 264.0,
+    "arrX": 384,
+    "arrY": 408
+  },
+  {
+    "sourceMap": "SCHOOLGymGym",
+    "name": "SCHOOLGymGym.Load",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toGymCafeteria",
+    "spawnX": 352.0,
+    "spawnY": 368.0,
+    "arrX": 384,
+    "arrY": 408
+  },
+  {
+    "sourceMap": "SCHOOLGymGym",
+    "name": "SCHOOLGymGym.toEntranceHallway",
+    "destMap": "SCHOOLClassHallway",
+    "destDoor": "toGymCafeteria",
+    "spawnX": 352.0,
+    "spawnY": 48.0,
+    "arrX": 384,
+    "arrY": 408
+  },
+  {
+    "sourceMap": "SCHOOLGymGym",
+    "name": "SCHOOLGymGym.toClassHallway",
+    "destMap": "SCHOOLGymHallway",
+    "destDoor": "toGymCafeteria",
+    "spawnX": 8.0,
+    "spawnY": 272.0,
+    "arrX": 384,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "TOWNCoffeeShop",
+    "name": "TOWNCoffeeShop.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toCoffeeShop",
+    "spawnX": 184.0,
+    "spawnY": 480.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNPizzaPlace",
+    "name": "TOWNPizzaPlace.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toPizzaStore",
+    "spawnX": 184.0,
+    "spawnY": 208.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNBookstore",
+    "name": "TOWNBookstore.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toBookStore",
+    "spawnX": 24.0,
+    "spawnY": 360.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNBookstore",
+    "name": "TOWNBookstore.toTown",
+    "destMap": "TOWNBookstoreBathroom",
+    "destDoor": "toBookStore",
+    "spawnX": 72.0,
+    "spawnY": 32.0,
+    "arrX": 56,
+    "arrY": 392
+  },
+  {
+    "sourceMap": "TOWNBookstoreBathroom",
+    "name": "TOWNBookstoreBathroom.Load",
+    "destMap": "TOWNBookstore",
+    "destDoor": "toBathroom",
+    "spawnX": 8.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNVideoRent",
+    "name": "TOWNVideoRent.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toVideoStore",
+    "spawnX": 64.0,
+    "spawnY": 248.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNVideoRent",
+    "name": "TOWNVideoRent.toTown",
+    "destMap": "TOWNVideoRentAdultRoom",
+    "destDoor": "toVideoStore",
+    "spawnX": 248.0,
+    "spawnY": 104.0,
+    "arrX": 88,
+    "arrY": 280
+  },
+  {
+    "sourceMap": "TOWNVideoRentAdultRoom",
+    "name": "TOWNVideoRentAdultRoom.leftShelf1",
+    "destMap": "TOWNVideoRent",
+    "destDoor": "toAdultVideoRoom",
+    "spawnX": 32.0,
+    "spawnY": 96.0,
+    "arrX": 56,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNRecordStore",
+    "name": "TOWNRecordStore.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toRecordStore",
+    "spawnX": 64.0,
+    "spawnY": 328.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNPets4Less",
+    "name": "TOWNPets4Less.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toPetStore",
+    "spawnX": 176.0,
+    "spawnY": 368.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNElectronicsStore",
+    "name": "TOWNElectronicsStore.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toElectronicsStore",
+    "spawnX": 24.0,
+    "spawnY": 368.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNElectronicsStore",
+    "name": "TOWNElectronicsStore.toTown",
+    "destMap": "TOWNElectronicsStoreBackRoom",
+    "destDoor": "toElectronicsStore",
+    "spawnX": 136.0,
+    "spawnY": 40.0,
+    "arrX": 56,
+    "arrY": 400
+  },
+  {
+    "sourceMap": "TOWNElectronicsStoreBackRoom",
+    "name": "TOWNElectronicsStoreBackRoom.Load",
+    "destMap": "TOWNElectronicsStore",
+    "destDoor": "toBackRoom",
+    "spawnX": 104.0,
+    "spawnY": 176.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNBeautySalon",
+    "name": "TOWNBeautySalon.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toBeautySalon",
+    "spawnX": 216.0,
+    "spawnY": 280.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNBeautySalon",
+    "name": "TOWNBeautySalon.toTown",
+    "destMap": "TOWNBeautySalonTanningRoom",
+    "destDoor": "toBeautySalon",
+    "spawnX": 48.0,
+    "spawnY": 40.0,
+    "arrX": 248,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "TOWNBeautySalonTanningRoom",
+    "name": "TOWNBeautySalonTanningRoom.Load",
+    "destMap": "TOWNBeautySalon",
+    "destDoor": "toTanningRoom",
+    "spawnX": 48.0,
+    "spawnY": 112.0,
+    "arrX": 72,
+    "arrY": 144
+  },
+  {
+    "sourceMap": "TOWNArcade",
+    "name": "TOWNArcade.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toArcade",
+    "spawnX": 32.0,
+    "spawnY": 208.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNGroceryStore",
+    "name": "TOWNGroceryStore.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toGroceryStoreLeft",
+    "spawnX": 72.0,
+    "spawnY": 664.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNGroceryStore",
+    "name": "TOWNGroceryStore.toTownLeft",
+    "destMap": "TOWNTown",
+    "destDoor": "toGroceryStoreLeft",
+    "spawnX": 568.0,
+    "spawnY": 664.0,
+    "arrX": 112,
+    "arrY": 696
+  },
+  {
+    "sourceMap": "TOWNGroceryStore",
+    "name": "TOWNGroceryStore.toTownRight",
+    "destMap": "TOWNGroceryStore",
+    "destDoor": "toGroceryStoreRight",
+    "spawnX": 304.0,
+    "spawnY": 40.0,
+    "arrX": 608,
+    "arrY": 696
+  },
+  {
+    "sourceMap": "TOWNGasStation",
+    "name": "TOWNGasStation.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toGasStation",
+    "spawnX": 88.0,
+    "spawnY": 288.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNDepartmentStore",
+    "name": "TOWNDepartmentStore.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toDepartmentStore1",
+    "spawnX": 288.0,
+    "spawnY": 584.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNDepartmentStore",
+    "name": "TOWNDepartmentStore.toTownLeft",
+    "destMap": "TOWNTown",
+    "destDoor": "toDepartmentStore1",
+    "spawnX": 376.0,
+    "spawnY": 584.0,
+    "arrX": 320,
+    "arrY": 616
+  },
+  {
+    "sourceMap": "TOWNDepartmentStore",
+    "name": "toTownMiddleRight",
+    "destMap": "TOWNTown",
+    "destDoor": "toDepartmentStore2",
+    "spawnX": 464.0,
+    "spawnY": 584.0,
+    "arrX": 408,
+    "arrY": 616
+  },
+  {
+    "sourceMap": "TOWNDepartmentStore",
+    "name": "TOWNDepartmentStore.toTownMiddleRight",
+    "destMap": "TOWNTown",
+    "destDoor": "toDepartmentStore3",
+    "spawnX": 552.0,
+    "spawnY": 584.0,
+    "arrX": 496,
+    "arrY": 616
+  },
+  {
+    "sourceMap": "TOWNTacoBurger",
+    "name": "TOWNTacoBurger.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toTacoBurger",
+    "spawnX": 192.0,
+    "spawnY": 384.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNChurch",
+    "name": "TOWNChurch.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toChurch",
+    "spawnX": 136.0,
+    "spawnY": 448.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNDoctorsOfficeEntrance",
+    "name": "TOWNDoctorsOfficeEntrance.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toClinic",
+    "spawnX": 24.0,
+    "spawnY": 184.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNDoctorsOfficeEntrance",
+    "name": "TOWNDoctorsOfficeEntrance.toTown",
+    "destMap": "TOWNDoctorsOfficeBackHall",
+    "destDoor": "toClinic",
+    "spawnX": 24.0,
+    "spawnY": 48.0,
+    "arrX": 48,
+    "arrY": 216
+  },
+  {
+    "sourceMap": "TOWNDoctorsOfficeBackHall",
+    "name": "TOWNDoctorsOfficeBackHall.Load",
+    "destMap": "TOWNDoctorsOfficeEntrance",
+    "destDoor": "toReception",
+    "spawnX": 24.0,
+    "spawnY": 184.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNDoctorsOfficeBackHall",
+    "name": "toDoctorsOffice",
+    "destMap": "TOWNDoctorsOfficeBackRoom",
+    "destDoor": "toReception",
+    "spawnX": 32.0,
+    "spawnY": 48.0,
+    "arrX": 48,
+    "arrY": 216
+  },
+  {
+    "sourceMap": "TOWNDoctorsOfficeBackRoom",
+    "name": "TOWNDoctorsOfficeBackRoom.Load",
+    "destMap": "TOWNDoctorsOfficeBackHall",
+    "destDoor": "toDoctorsOffice",
+    "spawnX": 32.0,
+    "spawnY": 144.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNGameStore",
+    "name": "TOWNGameStore.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toGameStore",
+    "spawnX": 152.0,
+    "spawnY": 296.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNGameStore",
+    "name": "TOWNGameStore.toTown",
+    "destMap": "TOWNGameStore",
+    "destDoor": "toGameStore",
+    "spawnX": 32.0,
+    "spawnY": 40.0,
+    "arrX": 184,
+    "arrY": 328
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreLobby",
+    "name": "TOWNMovieTheatreLobby.Load",
+    "destMap": "TOWNTown",
+    "destDoor": "toTheaterMiddle",
+    "spawnX": 168.0,
+    "spawnY": 224.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreLobby",
+    "name": "TOWNMovieTheatreLobby.toTownMiddle",
+    "destMap": "TOWNTown",
+    "destDoor": "toTheaterMiddle",
+    "spawnX": 104.0,
+    "spawnY": 224.0,
+    "arrX": 200,
+    "arrY": 256
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreLobby",
+    "name": "TOWNMovieTheatreLobby.toTownLeft",
+    "destMap": "TOWNTown",
+    "destDoor": "toTheaterLeft",
+    "spawnX": 232.0,
+    "spawnY": 224.0,
+    "arrX": 136,
+    "arrY": 256
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreLobby",
+    "name": "toTheaterLeft",
+    "destMap": "TOWNMovieTheatreMainHall",
+    "destDoor": "toTheaterRight",
+    "spawnX": 24.0,
+    "spawnY": 40.0,
+    "arrX": 264,
+    "arrY": 256
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreLobby",
+    "name": "toTheaterRight",
+    "destMap": "TOWNMovieTheatreMainHall",
+    "destDoor": "toLobbyLeft",
+    "spawnX": 312.0,
+    "spawnY": 40.0,
+    "arrX": 56,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMainHall",
+    "name": "TOWNMovieTheatreMainHall.Load",
+    "destMap": "TOWNMovieTheatreLobby",
+    "destDoor": "toTheaterLeft",
+    "spawnX": 384.0,
+    "spawnY": 352.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMainHall",
+    "name": "toLobbyRight",
+    "destMap": "TOWNMovieTheatreLobby",
+    "destDoor": "toTheaterLeft",
+    "spawnX": 672.0,
+    "spawnY": 352.0,
+    "arrX": 416,
+    "arrY": 384
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMainHall",
+    "name": "toTheaterBufferUpLeft",
+    "destMap": "TOWNMovieTheaterBufferLeft",
+    "destDoor": "toTheaterRight",
+    "spawnX": 24.0,
+    "spawnY": 48.0,
+    "arrX": 704,
+    "arrY": 384
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMainHall",
+    "name": "toTheaterBufferUpRight",
+    "destMap": "TOWNMovieTheaterBufferRight",
+    "destDoor": "toTheaterHallway",
+    "spawnX": 1056.0,
+    "spawnY": 48.0,
+    "arrX": 48,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMainHall",
+    "name": "toTheaterBufferDownLeft",
+    "destMap": "TOWNMovieTheatreMainHall",
+    "destDoor": "toTheaterHallway",
+    "spawnX": 24.0,
+    "spawnY": 232.0,
+    "arrX": 1080,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMainHall",
+    "name": "toTheaterBufferDownRight",
+    "destMap": "TOWNMovieTheatreMainHall",
+    "destDoor": "toTheaterBufferDownLeft",
+    "spawnX": 1056.0,
+    "spawnY": 232.0,
+    "arrX": 48,
+    "arrY": 272
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMainHall",
+    "name": "toWomensBathroom",
+    "destMap": "TOWNMovieTheatreWomensBathroom",
+    "destDoor": "toTheaterBufferDownRight",
+    "spawnX": 736.0,
+    "spawnY": 80.0,
+    "arrX": 1080,
+    "arrY": 272
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMainHall",
+    "name": "toMensBathroom",
+    "destMap": "TOWNMovieTheatreMensBathroom",
+    "destDoor": "toTheaterHallway",
+    "spawnX": 360.0,
+    "spawnY": 80.0,
+    "arrX": 752,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMainHall",
+    "name": "toPhotoBooth",
+    "destMap": "TOWNMovieTheatrePhotoBooth",
+    "destDoor": "toTheaterHallway",
+    "spawnX": 816.0,
+    "spawnY": 104.0,
+    "arrX": 384,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "TOWNMovieTheatrePhotoBooth",
+    "name": "TOWNMovieTheatrePhotoBooth.Load",
+    "destMap": "TOWNMovieTheatreMainHall",
+    "destDoor": "toPhotoBooth",
+    "spawnX": 24.0,
+    "spawnY": 56.0,
+    "arrX": -1,
+    "arrY": 7
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMensBathroom",
+    "name": "TOWNMovieTheatreMensBathroom.Load",
+    "destMap": "TOWNMovieTheatreMainHall",
+    "destDoor": "toMensBathroom",
+    "spawnX": 280.0,
+    "spawnY": 112.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMensBathroom",
+    "name": "DoorBathroomStall",
+    "destMap": "TOWNMovieTheatreMensBathroom",
+    "destDoor": "toMensBathroom",
+    "spawnX": 56.0,
+    "spawnY": 72.0,
+    "arrX": 304,
+    "arrY": 144
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMensBathroom",
+    "name": "DoorBathroomStall0",
+    "destMap": "TOWNMovieTheatreMensBathroom",
+    "destDoor": "DoorBathroomStall",
+    "spawnX": 16.0,
+    "spawnY": 72.0,
+    "arrX": 64,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreMensBathroom",
+    "name": "DoorBathroomStall1",
+    "destMap": "TOWNMovieTheatreMensBathroom",
+    "destDoor": "DoorBathroomStall0",
+    "spawnX": 96.0,
+    "spawnY": 72.0,
+    "arrX": 24,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreWomensBathroom",
+    "name": "TOWNMovieTheatreWomensBathroom.Load",
+    "destMap": "TOWNMovieTheatreMainHall",
+    "destDoor": "toWomensBathroom",
+    "spawnX": 40.0,
+    "spawnY": 112.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreWomensBathroom",
+    "name": "DoorBathroomStall",
+    "destMap": "TOWNMovieTheatreWomensBathroom",
+    "destDoor": "toWomensBathroom",
+    "spawnX": 192.0,
+    "spawnY": 72.0,
+    "arrX": 48,
+    "arrY": 144
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreWomensBathroom",
+    "name": "DoorBathroomStall0",
+    "destMap": "TOWNMovieTheatreWomensBathroom",
+    "destDoor": "DoorBathroomStall",
+    "spawnX": 272.0,
+    "spawnY": 72.0,
+    "arrX": 200,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreWomensBathroom",
+    "name": "DoorBathroomStall1",
+    "destMap": "TOWNMovieTheatreWomensBathroom",
+    "destDoor": "DoorBathroomStall0",
+    "spawnX": 312.0,
+    "spawnY": 72.0,
+    "arrX": 280,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreWomensBathroom",
+    "name": "DoorBathroomStall2",
+    "destMap": "TOWNMovieTheatreWomensBathroom",
+    "destDoor": "DoorBathroomStall1",
+    "spawnX": 232.0,
+    "spawnY": 72.0,
+    "arrX": 320,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreWomensBathroom",
+    "name": "DoorBathroomStall3",
+    "destMap": "TOWNMovieTheatreWomensBathroom",
+    "destDoor": "DoorBathroomStall2",
+    "spawnX": 152.0,
+    "spawnY": 72.0,
+    "arrX": 240,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "TOWNMovieTheaterBufferLeft",
+    "name": "TOWNMovieTheaterBufferLeft.Load",
+    "destMap": "TOWNMovieTheatreMainHall",
+    "destDoor": "toTheaterBufferUpLeft",
+    "spawnX": 16.0,
+    "spawnY": 264.0,
+    "arrX": 40,
+    "arrY": 304
+  },
+  {
+    "sourceMap": "TOWNMovieTheaterBufferLeft",
+    "name": "toTheaterLeft",
+    "destMap": "TOWNMovieTheatreInsideLeft",
+    "destDoor": "toTheaterBufferUpLeft",
+    "spawnX": 80.0,
+    "spawnY": 48.0,
+    "arrX": 40,
+    "arrY": 304
+  },
+  {
+    "sourceMap": "TOWNMovieTheaterBufferLeft",
+    "name": "toTheaterRight",
+    "destMap": "TOWNMovieTheatreInsideLeft",
+    "destDoor": "toTheaterBufferLeft",
+    "spawnX": 456.0,
+    "spawnY": 48.0,
+    "arrX": 72,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "TOWNMovieTheaterBufferRight",
+    "name": "TOWNMovieTheaterBufferRight.Load",
+    "destMap": "TOWNMovieTheatreMainHall",
+    "destDoor": "toTheaterBufferUpRight",
+    "spawnX": 464.0,
+    "spawnY": 264.0,
+    "arrX": 496,
+    "arrY": 296
+  },
+  {
+    "sourceMap": "TOWNMovieTheaterBufferRight",
+    "name": "toTheaterLeft",
+    "destMap": "TOWNMovieTheatreInsideRight",
+    "destDoor": "toTheaterBufferUpRight",
+    "spawnX": 80.0,
+    "spawnY": 48.0,
+    "arrX": 496,
+    "arrY": 296
+  },
+  {
+    "sourceMap": "TOWNMovieTheaterBufferRight",
+    "name": "toTheaterRight",
+    "destMap": "TOWNMovieTheatreInsideRight",
+    "destDoor": "toTheaterBufferLeft",
+    "spawnX": 456.0,
+    "spawnY": 48.0,
+    "arrX": 72,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreInsideLeft",
+    "name": "TOWNMovieTheatreInsideLeft.Load",
+    "destMap": "TOWNMovieTheaterBufferLeft",
+    "destDoor": "toTheaterRight",
+    "spawnX": 384.0,
+    "spawnY": 440.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreInsideLeft",
+    "name": "toTheaterBufferLeft",
+    "destMap": "TOWNMovieTheaterBufferLeft",
+    "destDoor": "toTheaterRight",
+    "spawnX": 8.0,
+    "spawnY": 440.0,
+    "arrX": 376,
+    "arrY": 512
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreInsideRight",
+    "name": "TOWNMovieTheatreInsideRight.Load",
+    "destMap": "TOWNMovieTheaterBufferRight",
+    "destDoor": "toTheaterRight",
+    "spawnX": 384.0,
+    "spawnY": 440.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreInsideRight",
+    "name": "toTheaterBufferLeft",
+    "destMap": "TOWNMovieTheaterBufferRight",
+    "destDoor": "toTheaterRight",
+    "spawnX": 8.0,
+    "spawnY": 440.0,
+    "arrX": 376,
+    "arrY": 512
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreInsideWithCrowdSprites",
+    "name": "TOWNMovieTheatreInsideWithCrowdSprites.Load",
+    "destMap": "TOWNMovieTheatreInsideWithCrowdSprites",
+    "destDoor": "toTheaterBufferRight",
+    "spawnX": 384.0,
+    "spawnY": 440.0,
+    "arrX": 376,
+    "arrY": 512
+  },
+  {
+    "sourceMap": "TOWNMovieTheatreInsideWithCrowdSprites",
+    "name": "toTheaterBufferLeft",
+    "destMap": "TOWNMovieTheatreInsideWithCrowdSprites",
+    "destDoor": "toTheaterBufferRight",
+    "spawnX": 8.0,
+    "spawnY": 440.0,
+    "arrX": 376,
+    "arrY": 512
+  },
+  {
+    "sourceMap": "CITYPartyStore",
+    "name": "CITYPartyStore.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toPartyStore",
+    "spawnX": 232.0,
+    "spawnY": 288.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPartyStore",
+    "name": "CITYPartyStore.toCity",
+    "destMap": "CITYPartyStoreBathroom",
+    "destDoor": "toPartyStore",
+    "spawnX": 104.0,
+    "spawnY": 40.0,
+    "arrX": 264,
+    "arrY": 320
+  },
+  {
+    "sourceMap": "CITYPartyStoreBathroom",
+    "name": "CITYPartyStoreBathroom.Load",
+    "destMap": "CITYPartyStore",
+    "destDoor": "toBathroom",
+    "spawnX": 64.0,
+    "spawnY": 72.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYGroovyClubEntrance",
+    "name": "groovyClubEntranceRope",
+    "destMap": "CITYGroovyClubEntrance",
+    "destDoor": "",
+    "spawnX": 368.0,
+    "spawnY": 64.0,
+    "arrX": 96,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "CITYGroovyClub",
+    "name": "groovyClubTable1",
+    "destMap": "CITYGroovyClub",
+    "destDoor": "",
+    "spawnX": 16.0,
+    "spawnY": 536.0,
+    "arrX": 384,
+    "arrY": 576
+  },
+  {
+    "sourceMap": "CITYOfficeEntrance",
+    "name": "CITYOfficeEntrance.Load",
+    "destMap": "CITYOfficeEntrance",
+    "destDoor": "toCity",
+    "spawnX": 224.0,
+    "spawnY": 296.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYOfficeEntrance",
+    "name": "CITYOfficeEntrance.toCity",
+    "destMap": "CITYOfficeElevator",
+    "destDoor": "toCity",
+    "spawnX": 56.0,
+    "spawnY": 120.0,
+    "arrX": 256,
+    "arrY": 328
+  },
+  {
+    "sourceMap": "CITYOfficeElevator",
+    "name": "CITYOfficeElevator.Load",
+    "destMap": "CITYOfficeEntrance",
+    "destDoor": "toElevator",
+    "spawnX": 40.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYOfficeWorkroom",
+    "name": "CITYOfficeWorkroom.Load",
+    "destMap": "CITYOfficeElevator",
+    "destDoor": "toOffice",
+    "spawnX": 56.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYOfficeBreakRoom",
+    "name": "CITYOfficeBreakRoom.Load",
+    "destMap": "CITYOfficeElevator",
+    "destDoor": "toOffice",
+    "spawnX": 56.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYOfficeBossFloor",
+    "name": "CITYOfficeBossFloor.Load",
+    "destMap": "CITYOfficeElevator",
+    "destDoor": "toOffice",
+    "spawnX": 56.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYOfficeBossFloor",
+    "name": "DoorLeftRightTallDoubleGrayMovieTheater",
+    "destMap": "CITYOfficeBossFloor",
+    "destDoor": "toOffice",
+    "spawnX": 264.0,
+    "spawnY": 240.0,
+    "arrX": 72,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYBobsAptInside",
+    "name": "CITYBobsAptInside.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toBobsApartment",
+    "spawnX": 128.0,
+    "spawnY": 224.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYBobsAptInside",
+    "name": "CITYBobsAptInside.toCity",
+    "destMap": "CITYBobsBathroom",
+    "destDoor": "toBobsApartment",
+    "spawnX": 128.0,
+    "spawnY": 128.0,
+    "arrX": 152,
+    "arrY": 256
+  },
+  {
+    "sourceMap": "CITYBobsBathroom",
+    "name": "CITYBobsBathroom.Load",
+    "destMap": "CITYBobsAptInside",
+    "destDoor": "toBathroom",
+    "spawnX": 96.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYBobsAptInsideTrashed",
+    "name": "CITYBobsAptInsideTrashed.Load",
+    "destMap": "CITYBobsAptInsideTrashed",
+    "destDoor": "toCity",
+    "spawnX": 128.0,
+    "spawnY": 224.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYBobsAptInsideTrashed",
+    "name": "CITYBobsAptInsideTrashed.toCity",
+    "destMap": "CITYBobsAptInsideTrashed",
+    "destDoor": "toCity",
+    "spawnX": 128.0,
+    "spawnY": 128.0,
+    "arrX": 152,
+    "arrY": 256
+  },
+  {
+    "sourceMap": "CITYNeighborAptInside",
+    "name": "CITYNeighborAptInside.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toNeighborsApartment",
+    "spawnX": 128.0,
+    "spawnY": 224.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYNeighborAptInside",
+    "name": "CITYNeighborAptInside.toCity",
+    "destMap": "CITYNeighborsAptBathroom",
+    "destDoor": "toNeighborsApartment",
+    "spawnX": 128.0,
+    "spawnY": 128.0,
+    "arrX": 152,
+    "arrY": 256
+  },
+  {
+    "sourceMap": "CITYNeighborsAptBathroom",
+    "name": "CITYNeighborsAptBathroom.Load",
+    "destMap": "CITYNeighborAptInside",
+    "destDoor": "toBathroom",
+    "spawnX": 96.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYAptMainOffice",
+    "name": "CITYAptMainOffice.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toApartmentOffice",
+    "spawnX": 256.0,
+    "spawnY": 224.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYBankEntrance",
+    "name": "CITYBankEntrance.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toBank",
+    "spawnX": 264.0,
+    "spawnY": 288.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYBankEntrance",
+    "name": "CITYBankEntrance.toCity",
+    "destMap": "CITYBankElevator",
+    "destDoor": "toBank",
+    "spawnX": 496.0,
+    "spawnY": 120.0,
+    "arrX": 296,
+    "arrY": 320
+  },
+  {
+    "sourceMap": "CITYBankElevator",
+    "name": "CITYBankElevator.Load",
+    "destMap": "CITYBankEntrance",
+    "destDoor": "toElevator",
+    "spawnX": 40.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYBankOwnerOffice",
+    "name": "CITYBankOwnerOffice.Load",
+    "destMap": "CITYBankElevator",
+    "destDoor": "toBank",
+    "spawnX": 496.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFancyRestaurantEntrance",
+    "name": "fancyRestaurantPodium",
+    "destMap": "CITYFancyRestaurantEntrance",
+    "destDoor": "",
+    "spawnX": 184.0,
+    "spawnY": 112.0,
+    "arrX": 112,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "CITYFancyRestaurantEntrance",
+    "name": "CITYFancyRestaurantEntrance.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toRestaurant",
+    "spawnX": 208.0,
+    "spawnY": 152.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFancyRestaurant",
+    "name": "fancyRestaurantBarCounter",
+    "destMap": "CITYFancyRestaurant",
+    "destDoor": "",
+    "spawnX": 16.0,
+    "spawnY": 104.0,
+    "arrX": 112,
+    "arrY": 512
+  },
+  {
+    "sourceMap": "CITYFancyRestaurant",
+    "name": "toKitchen",
+    "destMap": "CITYFancyRestaurantKitchen",
+    "destDoor": "toRestaurant",
+    "spawnX": 336.0,
+    "spawnY": 96.0,
+    "arrX": 368,
+    "arrY": 136
+  },
+  {
+    "sourceMap": "CITYFancyRestaurantKitchen",
+    "name": "CITYFancyRestaurantKitchen.Load",
+    "destMap": "CITYFancyRestaurant",
+    "destDoor": "toKitchen",
+    "spawnX": 144.0,
+    "spawnY": 208.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFancyRestaurantKitchen",
+    "name": "CITYFancyRestaurantKitchen.toRestaurant",
+    "destMap": "CITYFancyRestaurantKitchenFreezer",
+    "destDoor": "toKitchen",
+    "spawnX": 24.0,
+    "spawnY": 40.0,
+    "arrX": 176,
+    "arrY": 240
+  },
+  {
+    "sourceMap": "CITYFancyRestaurantKitchenFreezer",
+    "name": "CITYFancyRestaurantKitchenFreezer.Load",
+    "destMap": "CITYFancyRestaurantKitchen",
+    "destDoor": "toFreezer",
+    "spawnX": 16.0,
+    "spawnY": 80.0,
+    "arrX": 40,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "CITYFashionStore",
+    "name": "CITYFashionStore.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toFashionStore",
+    "spawnX": 104.0,
+    "spawnY": 384.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFashionStore",
+    "name": "CITYFashionStore.toCity",
+    "destMap": "CITYFashionStoreDressingRoom",
+    "destDoor": "toFashionStore",
+    "spawnX": 40.0,
+    "spawnY": 40.0,
+    "arrX": 136,
+    "arrY": 416
+  },
+  {
+    "sourceMap": "CITYFashionStore",
+    "name": "toDressingRoomRight",
+    "destMap": "CITYFashionStoreDressingRoom2",
+    "destDoor": "toStoreLeft",
+    "spawnX": 136.0,
+    "spawnY": 40.0,
+    "arrX": 56,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYFashionStoreDressingRoom",
+    "name": "CITYFashionStoreDressingRoom.Load",
+    "destMap": "CITYFashionStore",
+    "destDoor": "toDressingRoomLeft",
+    "spawnX": 32.0,
+    "spawnY": 112.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFashionStoreDressingRoom2",
+    "name": "CITYFashionStoreDressingRoom2.Load",
+    "destMap": "CITYFashionStore",
+    "destDoor": "toDressingRoomRight",
+    "spawnX": 32.0,
+    "spawnY": 112.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplace",
+    "name": "CITYElevatedLifeplace.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toFancyApartmentOffice",
+    "spawnX": 304.0,
+    "spawnY": 296.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceElevator",
+    "name": "CITYElevatedLifeplaceElevator.Load",
+    "destMap": "CITYElevatedLifeplaceHallway",
+    "destDoor": "toElevator",
+    "spawnX": 32.0,
+    "spawnY": 32.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceElevator",
+    "name": "toCity",
+    "destMap": "CITYCity",
+    "destDoor": "toElevator",
+    "spawnX": 32.0,
+    "spawnY": 136.0,
+    "arrX": 40,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceHallway",
+    "name": "CITYElevatedLifeplaceHallway.Load",
+    "destMap": "CITYElevatedLifeplaceElevator",
+    "destDoor": "toApartmentHallway",
+    "spawnX": 32.0,
+    "spawnY": 240.0,
+    "arrX": 40,
+    "arrY": 240
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceHallway",
+    "name": "toApartment",
+    "destMap": "CITYElevatedLifeplaceApartment",
+    "destDoor": "toApartmentHallway",
+    "spawnX": 48.0,
+    "spawnY": 56.0,
+    "arrX": 40,
+    "arrY": 240
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceApartment",
+    "name": "CITYElevatedLifeplaceApartment.Load",
+    "destMap": "CITYElevatedLifeplaceHallway",
+    "destDoor": "toApartment",
+    "spawnX": 8.0,
+    "spawnY": 56.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceApartment",
+    "name": "toBedroom",
+    "destMap": "CITYElevatedLifeplaceBedroom",
+    "destDoor": "toApartment",
+    "spawnX": 128.0,
+    "spawnY": 40.0,
+    "arrX": 16,
+    "arrY": 112
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceApartment",
+    "name": "toBathroom",
+    "destMap": "CITYElevatedLifeplaceBathroom",
+    "destDoor": "toApartment",
+    "spawnX": 128.0,
+    "spawnY": 136.0,
+    "arrX": 152,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceBathroom",
+    "name": "CITYElevatedLifeplaceBathroom.Load",
+    "destMap": "CITYElevatedLifeplaceApartment",
+    "destDoor": "toBathroom",
+    "spawnX": 8.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceBathroom",
+    "name": "CITYElevatedLifeplaceBathroom.toApartment",
+    "destMap": "CITYElevatedLifeplaceBedroom",
+    "destDoor": "toBathroom",
+    "spawnX": 16.0,
+    "spawnY": 40.0,
+    "arrX": 16,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceBedroom",
+    "name": "CITYElevatedLifeplaceBedroom.Load",
+    "destMap": "CITYElevatedLifeplaceApartment",
+    "destDoor": "toBedroom",
+    "spawnX": 8.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYElevatedLifeplaceBedroom",
+    "name": "toBathroom",
+    "destMap": "CITYElevatedLifeplaceBathroom",
+    "destDoor": "toBedroom",
+    "spawnX": 16.0,
+    "spawnY": 144.0,
+    "arrX": 16,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYDeli",
+    "name": "CITYDeli.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toDeli",
+    "spawnX": 144.0,
+    "spawnY": 288.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYTheCafeEntrance",
+    "name": "CITYTheCafeEntrance.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toCafe",
+    "spawnX": 40.0,
+    "spawnY": 96.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYTheCafeEntrance",
+    "name": "CITYTheCafeEntrance.toCity",
+    "destMap": "CITYTheCafe",
+    "destDoor": "toCafe",
+    "spawnX": 40.0,
+    "spawnY": 32.0,
+    "arrX": 72,
+    "arrY": 128
+  },
+  {
+    "sourceMap": "CITYTheCafe",
+    "name": "CITYTheCafe.Load",
+    "destMap": "CITYTheCafeEntrance",
+    "destDoor": "toCafe",
+    "spawnX": 40.0,
+    "spawnY": 256.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYTheCafe",
+    "name": "CITYTheCafe.toCafeEntrance",
+    "destMap": "CITYTheCafeBathroom",
+    "destDoor": "toCafe",
+    "spawnX": 24.0,
+    "spawnY": 40.0,
+    "arrX": 72,
+    "arrY": 288
+  },
+  {
+    "sourceMap": "CITYTheCafe",
+    "name": "CITYTheCafe.toBathroom",
+    "destMap": "CITYTheCafeDressingRoom",
+    "destDoor": "toCafe",
+    "spawnX": 80.0,
+    "spawnY": 80.0,
+    "arrX": 48,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYTheCafe",
+    "name": "CITYTheCafe.toDressingRoomLeft",
+    "destMap": "CITYTheCafeDressingRoom",
+    "destDoor": "toCafeLeft",
+    "spawnX": 184.0,
+    "spawnY": 24.0,
+    "arrX": 104,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "CITYTheCafeBathroom",
+    "name": "CITYTheCafeBathroom.Load",
+    "destMap": "CITYTheCafe",
+    "destDoor": "toBathroom",
+    "spawnX": 24.0,
+    "spawnY": 112.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYTheCafeDressingRoom",
+    "name": "CITYTheCafeDressingRoom.Load",
+    "destMap": "CITYTheCafe",
+    "destDoor": "toDressingRoomRight",
+    "spawnX": 120.0,
+    "spawnY": 112.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYTheCafeDressingRoom",
+    "name": "CITYTheCafeDressingRoom.toCafeStageRight",
+    "destMap": "CITYTheCafe",
+    "destDoor": "toDressingRoomRight",
+    "spawnX": 16.0,
+    "spawnY": 152.0,
+    "arrX": 144,
+    "arrY": 144
+  },
+  {
+    "sourceMap": "CITYPoolHall",
+    "name": "CITYPoolHall.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toPoolHall",
+    "spawnX": 224.0,
+    "spawnY": 448.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYLaundromat",
+    "name": "CITYLaundromat.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toLaundromat",
+    "spawnX": 256.0,
+    "spawnY": 328.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalEntrance",
+    "name": "CITYHospitalEntrance.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toHospital1",
+    "spawnX": 112.0,
+    "spawnY": 288.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalEntrance",
+    "name": "CITYHospitalEntrance.toCityLeft",
+    "destMap": "CITYCity",
+    "destDoor": "toHospital1",
+    "spawnX": 192.0,
+    "spawnY": 288.0,
+    "arrX": 144,
+    "arrY": 320
+  },
+  {
+    "sourceMap": "CITYHospitalEntrance",
+    "name": "CITYHospitalEntrance.toCityMiddle",
+    "destMap": "CITYCity",
+    "destDoor": "toHospital2",
+    "spawnX": 272.0,
+    "spawnY": 288.0,
+    "arrX": 224,
+    "arrY": 320
+  },
+  {
+    "sourceMap": "CITYHospitalEntrance",
+    "name": "CITYHospitalEntrance.toCityRight",
+    "destMap": "CITYHospitalEntranceBathroom",
+    "destDoor": "toHospital3",
+    "spawnX": 336.0,
+    "spawnY": 112.0,
+    "arrX": 304,
+    "arrY": 320
+  },
+  {
+    "sourceMap": "CITYHospitalEntrance",
+    "name": "toElevatorLeft",
+    "destMap": "CITYHospitalElevator",
+    "destDoor": "toEntrance",
+    "spawnX": 448.0,
+    "spawnY": 120.0,
+    "arrX": 360,
+    "arrY": 152
+  },
+  {
+    "sourceMap": "CITYHospitalEntrance",
+    "name": "toElevatorRight",
+    "destMap": "CITYHospitalElevator2",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 568.0,
+    "spawnY": 120.0,
+    "arrX": 464,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYHospitalEntranceBathroom",
+    "name": "CITYHospitalEntranceBathroom.Load",
+    "destMap": "CITYHospitalEntrance",
+    "destDoor": "toBathroom",
+    "spawnX": 96.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalEntranceBathroom",
+    "name": "DoorBathroomStall",
+    "destMap": "CITYHospitalEntranceBathroom",
+    "destDoor": "toBathroom",
+    "spawnX": 16.0,
+    "spawnY": 72.0,
+    "arrX": 120,
+    "arrY": 152
+  },
+  {
+    "sourceMap": "CITYHospitalElevator",
+    "name": "CITYHospitalElevator.Load",
+    "destMap": "CITYHospitalEntrance",
+    "destDoor": "toElevatorLeft",
+    "spawnX": 40.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalElevator2",
+    "name": "CITYHospitalElevator2.Load",
+    "destMap": "CITYHospitalEntrance",
+    "destDoor": "toElevatorRight",
+    "spawnX": 40.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalWaitingOutPatient",
+    "name": "CITYHospitalWaitingOutPatient.Load",
+    "destMap": "CITYHospitalElevator",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 448.0,
+    "spawnY": 232.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalWaitingOutPatient",
+    "name": "toElevatorRight",
+    "destMap": "CITYHospitalElevator2",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 568.0,
+    "spawnY": 232.0,
+    "arrX": 464,
+    "arrY": 272
+  },
+  {
+    "sourceMap": "CITYHospitalWaitingOutPatient",
+    "name": "toMensBathroom",
+    "destMap": "CITYHospitalOutPatientMensBathroom",
+    "destDoor": "toHospitalRight",
+    "spawnX": 216.0,
+    "spawnY": 240.0,
+    "arrX": 584,
+    "arrY": 272
+  },
+  {
+    "sourceMap": "CITYHospitalWaitingOutPatient",
+    "name": "toWomensBathroom",
+    "destMap": "CITYHospitalOutPatientWomensBathroom",
+    "destDoor": "toWaitingRoom",
+    "spawnX": 344.0,
+    "spawnY": 240.0,
+    "arrX": 240,
+    "arrY": 280
+  },
+  {
+    "sourceMap": "CITYHospitalWaitingOutPatient",
+    "name": "toRoom1",
+    "destMap": "CITYHospitalPatientRoom",
+    "destDoor": "toWaitingRoom",
+    "spawnX": 40.0,
+    "spawnY": 40.0,
+    "arrX": 368,
+    "arrY": 280
+  },
+  {
+    "sourceMap": "CITYHospitalWaitingOutPatient",
+    "name": "CITYHospitalWaitingOutPatient.toRoom1",
+    "destMap": "CITYHospitalPatientRoom2",
+    "destDoor": "toWaitingRoom1",
+    "spawnX": 208.0,
+    "spawnY": 40.0,
+    "arrX": 64,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHospitalWaitingOutPatient",
+    "name": "toRoom3",
+    "destMap": "CITYHospitalPatientRoom3",
+    "destDoor": "toWaitingRoom2",
+    "spawnX": 376.0,
+    "spawnY": 40.0,
+    "arrX": 232,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHospitalWaitingOutPatient",
+    "name": "toOperatingRoom",
+    "destMap": "CITYHospitalOperatingRoom",
+    "destDoor": "toWaitingRoom3",
+    "spawnX": 544.0,
+    "spawnY": 40.0,
+    "arrX": 400,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHospitalOutPatientMensBathroom",
+    "name": "CITYHospitalOutPatientMensBathroom.Load",
+    "destMap": "CITYHospitalWaitingOutPatient",
+    "destDoor": "toMensBathroom",
+    "spawnX": 16.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalOutPatientMensBathroom",
+    "name": "DoorBathroomStall",
+    "destMap": "CITYHospitalOutPatientMensBathroom",
+    "destDoor": "toMensBathroom",
+    "spawnX": 72.0,
+    "spawnY": 72.0,
+    "arrX": 40,
+    "arrY": 152
+  },
+  {
+    "sourceMap": "CITYHospitalOutPatientWomensBathroom",
+    "name": "CITYHospitalOutPatientWomensBathroom.Load",
+    "destMap": "CITYHospitalWaitingOutPatient",
+    "destDoor": "toWomensBathroom",
+    "spawnX": 48.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalOutPatientWomensBathroom",
+    "name": "DoorBathroomStall",
+    "destMap": "CITYHospitalOutPatientWomensBathroom",
+    "destDoor": "toWomensBathroom",
+    "spawnX": 16.0,
+    "spawnY": 72.0,
+    "arrX": 72,
+    "arrY": 152
+  },
+  {
+    "sourceMap": "CITYHospitalPatientRoom",
+    "name": "CITYHospitalPatientRoom.Load",
+    "destMap": "CITYHospitalWaitingOutPatient",
+    "destDoor": "toRoom1",
+    "spawnX": 40.0,
+    "spawnY": 192.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalPatientRoom2",
+    "name": "CITYHospitalPatientRoom2.Load",
+    "destMap": "CITYHospitalWaitingOutPatient",
+    "destDoor": "toRoom2",
+    "spawnX": 40.0,
+    "spawnY": 192.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalPatientRoom3",
+    "name": "CITYHospitalPatientRoom3.Load",
+    "destMap": "CITYHospitalWaitingOutPatient",
+    "destDoor": "toRoom3",
+    "spawnX": 40.0,
+    "spawnY": 192.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalOperatingRoom",
+    "name": "CITYHospitalOperatingRoom.Load",
+    "destMap": "CITYHospitalWaitingOutPatient",
+    "destDoor": "toOperatingRoom",
+    "spawnX": 88.0,
+    "spawnY": 256.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalPsychiatricWard",
+    "name": "CITYHospitalPsychiatricWard.Load",
+    "destMap": "CITYHospitalElevator2",
+    "destDoor": "toHospitalRight",
+    "spawnX": 568.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalPsychiatricWard",
+    "name": "toElevatorLeft",
+    "destMap": "CITYHospitalElevator",
+    "destDoor": "toHospitalRight",
+    "spawnX": 448.0,
+    "spawnY": 120.0,
+    "arrX": 584,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYHospitalPsychiatricWard",
+    "name": "toPaddedRoom1",
+    "destMap": "CITYHospitalSoftRoom",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 40.0,
+    "spawnY": 40.0,
+    "arrX": 464,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYHospitalPsychiatricWard",
+    "name": "toPaddedRoom2",
+    "destMap": "CITYHospitalSoftRoom2",
+    "destDoor": "toRelaxation1",
+    "spawnX": 152.0,
+    "spawnY": 40.0,
+    "arrX": 64,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHospitalPsychiatricWard",
+    "name": "toPaddedRoom3",
+    "destMap": "CITYHospitalSoftRoom3",
+    "destDoor": "toRelaxation2",
+    "spawnX": 264.0,
+    "spawnY": 40.0,
+    "arrX": 176,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHospitalPsychiatricWard",
+    "name": "DoorLeftDoubleBlackSecurityDoor",
+    "destMap": "CITYHospitalPsychiatricWard",
+    "destDoor": "toRelaxation3",
+    "spawnX": 344.0,
+    "spawnY": 152.0,
+    "arrX": 288,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHospitalSoftRoom",
+    "name": "CITYHospitalSoftRoom.Load",
+    "destMap": "CITYHospitalPsychiatricWard",
+    "destDoor": "toPaddedRoom1",
+    "spawnX": 40.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalSoftRoom2",
+    "name": "CITYHospitalSoftRoom2.Load",
+    "destMap": "CITYHospitalPsychiatricWard",
+    "destDoor": "toPaddedRoom2",
+    "spawnX": 40.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalSoftRoom3",
+    "name": "CITYHospitalSoftRoom3.Load",
+    "destMap": "CITYHospitalPsychiatricWard",
+    "destDoor": "toPaddedRoom3",
+    "spawnX": 40.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalMaternityWard",
+    "name": "CITYHospitalMaternityWard.Load",
+    "destMap": "CITYHospitalElevator",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 448.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalMaternityWard",
+    "name": "toElevatorRight",
+    "destMap": "CITYHospitalElevator2",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 568.0,
+    "spawnY": 120.0,
+    "arrX": 464,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYHospitalMaternityWard",
+    "name": "toInfirmary",
+    "destMap": "CITYHospitalMaternityWardInfirmary",
+    "destDoor": "toHospitalRight",
+    "spawnX": 24.0,
+    "spawnY": 256.0,
+    "arrX": 584,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYHospitalMaternityWardInfirmary",
+    "name": "CITYHospitalMaternityWardInfirmary.Load",
+    "destMap": "CITYHospitalMaternityWard",
+    "destDoor": "toInfirmary",
+    "spawnX": 24.0,
+    "spawnY": 160.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalEmergencyEntrance",
+    "name": "CITYHospitalEmergencyEntrance.Load",
+    "destMap": "CITYHospitalEmergencyEntrance",
+    "destDoor": "toEmergencyRoom",
+    "spawnX": 32.0,
+    "spawnY": 256.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalEmergencyEntrance",
+    "name": "toCity",
+    "destMap": "CITYHospitalEmergencyEntrance",
+    "destDoor": "toEmergencyRoom",
+    "spawnX": 648.0,
+    "spawnY": 264.0,
+    "arrX": 64,
+    "arrY": 296
+  },
+  {
+    "sourceMap": "CITYHospitalMorgue",
+    "name": "CITYHospitalMorgue.Load",
+    "destMap": "CITYHospitalElevator",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 448.0,
+    "spawnY": 120.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHospitalMorgue",
+    "name": "toElevatorRight",
+    "destMap": "CITYHospitalElevator2",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 568.0,
+    "spawnY": 120.0,
+    "arrX": 464,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYHospitalSecretLab",
+    "name": "CITYHospitalSecretLab.Load",
+    "destMap": "CITYHospitalElevator",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 448.0,
+    "spawnY": 120.0,
+    "arrX": 464,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYHospitalSecretLab",
+    "name": "toElevatorRight",
+    "destMap": "CITYHospitalElevator2",
+    "destDoor": "toHospitalLeft",
+    "spawnX": 568.0,
+    "spawnY": 120.0,
+    "arrX": 464,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYPoliceStationLobby",
+    "name": "CITYPoliceStationLobby.Load",
+    "destMap": "CITYPoliceStationStairWellToHoldCell",
+    "destDoor": "toEntrance",
+    "spawnX": 192.0,
+    "spawnY": 48.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPoliceStationLobby",
+    "name": "CITYPoliceStationLobby.toPrisonerHallway",
+    "destMap": "CITYCity",
+    "destDoor": "toEntrance",
+    "spawnX": 128.0,
+    "spawnY": 128.0,
+    "arrX": 216,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "CITYPoliceStationLobby",
+    "name": "CITYPoliceStationLobby.toCity",
+    "destMap": "CITYPoliceStationOffice",
+    "destDoor": "toPoliceDepartment",
+    "spawnX": 16.0,
+    "spawnY": 48.0,
+    "arrX": 160,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYPoliceStationOffice",
+    "name": "CITYPoliceStationOffice.Load",
+    "destMap": "CITYPoliceStationOffice2WayMirror",
+    "destDoor": "toOffice",
+    "spawnX": 16.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPoliceStationOffice",
+    "name": "CITYPoliceStationOffice.toObservation",
+    "destMap": "CITYPoliceStationLobby",
+    "destDoor": "toOffice",
+    "spawnX": 16.0,
+    "spawnY": 328.0,
+    "arrX": 40,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYPoliceStationInterrogationRoom",
+    "name": "CITYPoliceStationInterrogationRoom.Load",
+    "destMap": "CITYPoliceStationStairWellToHoldCell",
+    "destDoor": "toInterrogation",
+    "spawnX": 80.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPoliceStationOffice2WayMirror",
+    "name": "CITYPoliceStationOffice2WayMirror.Load",
+    "destMap": "CITYPoliceStationOffice",
+    "destDoor": "toObservation",
+    "spawnX": 16.0,
+    "spawnY": 168.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPoliceStationOffice2WayMirror",
+    "name": "toEvidence",
+    "destMap": "CITYPoliceStationEvidenceRoom",
+    "destDoor": "toObservation",
+    "spawnX": 16.0,
+    "spawnY": 80.0,
+    "arrX": 40,
+    "arrY": 200
+  },
+  {
+    "sourceMap": "CITYPoliceStationEvidenceRoom",
+    "name": "CITYPoliceStationEvidenceRoom.Load",
+    "destMap": "CITYPoliceStationOffice2WayMirror",
+    "destDoor": "toEvidence",
+    "spawnX": 16.0,
+    "spawnY": 144.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPoliceStationStairWellToHoldCell",
+    "name": "CITYPoliceStationStairWellToHoldCell.Load",
+    "destMap": "CITYPoliceStationInterrogationRoom",
+    "destDoor": "toPrisonerHallway",
+    "spawnX": 56.0,
+    "spawnY": 40.0,
+    "arrX": 80,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYPoliceStationStairWellToHoldCell",
+    "name": "toHoldingCells",
+    "destMap": "CITYPoliceStationHoldingCells",
+    "destDoor": "toPrisonerHallway",
+    "spawnX": 8.0,
+    "spawnY": 144.0,
+    "arrX": 80,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYPoliceStationStairWellToHoldCell",
+    "name": "toEntrance",
+    "destMap": "CITYPoliceStationLobby",
+    "destDoor": "toPrisonerHallway",
+    "spawnX": 56.0,
+    "spawnY": 328.0,
+    "arrX": 32,
+    "arrY": 184
+  },
+  {
+    "sourceMap": "CITYPoliceStationHoldingCells",
+    "name": "CITYPoliceStationHoldingCells.Load",
+    "destMap": "CITYPoliceStationStairWellToHoldCell",
+    "destDoor": "toHoldingCells",
+    "spawnX": 144.0,
+    "spawnY": 160.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPoliceStationHoldingCells",
+    "name": "toVisitation",
+    "destMap": "CITYPoliceStationPrisonVisitingRoom",
+    "destDoor": "toHoldingCells",
+    "spawnX": 192.0,
+    "spawnY": 40.0,
+    "arrX": 168,
+    "arrY": 192
+  },
+  {
+    "sourceMap": "CITYPoliceStationHoldingCells",
+    "name": "DoorUpMetalBars",
+    "destMap": "CITYPoliceStationHoldingCells",
+    "destDoor": "toHoldingCell",
+    "spawnX": 72.0,
+    "spawnY": 96.0,
+    "arrX": 216,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYPoliceStationPrisonVisitingRoom",
+    "name": "CITYPoliceStationPrisonVisitingRoom.Load",
+    "destMap": "CITYPoliceStationHoldingCells",
+    "destDoor": "toVisitation",
+    "spawnX": 192.0,
+    "spawnY": 208.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPoliceStationPrisonVisitingRoom",
+    "name": "toPrisonerSide",
+    "destMap": "CITYPoliceStationPrisonVisitingRoom",
+    "destDoor": "toVisitation",
+    "spawnX": 200.0,
+    "spawnY": 136.0,
+    "arrX": 216,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYPoliceStationPrisonVisitingRoom",
+    "name": "toPrison",
+    "destMap": "CITYPoliceStationPrisonCellBlockHallway",
+    "destDoor": "toPrisonerSide",
+    "spawnX": 192.0,
+    "spawnY": 40.0,
+    "arrX": 224,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYPoliceStationPrisonCellBlockHallway",
+    "name": "CITYPoliceStationPrisonCellBlockHallway.Load",
+    "destMap": "CITYPoliceStationPrisonVisitingRoom",
+    "destDoor": "toPrison",
+    "spawnX": 192.0,
+    "spawnY": 656.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPoliceStationPrisonCellBlockHallway",
+    "name": "toPrisonShower",
+    "destMap": "CITYPoliceStationPrisonShowers",
+    "destDoor": "toPrison",
+    "spawnX": 192.0,
+    "spawnY": 40.0,
+    "arrX": 216,
+    "arrY": 680
+  },
+  {
+    "sourceMap": "CITYPoliceStationPrisonShowers",
+    "name": "CITYPoliceStationPrisonShowers.Load",
+    "destMap": "CITYPoliceStationPrisonCellBlockHallway",
+    "destDoor": "toPrisonShower",
+    "spawnX": 192.0,
+    "spawnY": 176.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFireDepartmentGarage",
+    "name": "fireDeptDesk",
+    "destMap": "CITYFireDepartmentGarage",
+    "destDoor": "",
+    "spawnX": 264.0,
+    "spawnY": 320.0,
+    "arrX": 344,
+    "arrY": 24
+  },
+  {
+    "sourceMap": "CITYFireDepartmentGarage",
+    "name": "CITYFireDepartmentGarage.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toFireDepartment",
+    "spawnX": 264.0,
+    "spawnY": 384.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFireDepartmentUpstairs",
+    "name": "Light12",
+    "destMap": "CITYFireDepartmentUpstairs",
+    "destDoor": "",
+    "spawnX": 115.0,
+    "spawnY": 94.0,
+    "arrX": 344,
+    "arrY": 152
+  },
+  {
+    "sourceMap": "CITYFireDepartmentUpstairs",
+    "name": "CITYFireDepartmentUpstairs.Load",
+    "destMap": "CITYFireDepartmentQuarters",
+    "destDoor": "toHallway",
+    "spawnX": 184.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFireDepartmentQuarters",
+    "name": "CITYFireDepartmentQuarters.Load",
+    "destMap": "CITYFireDepartmentUpstairs",
+    "destDoor": "toRecRoom",
+    "spawnX": 184.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFireDepartmentQuarters",
+    "name": "CITYFireDepartmentQuarters.toHallway",
+    "destMap": "CITYFireDepartmentBedroom",
+    "destDoor": "toRecRoom",
+    "spawnX": 176.0,
+    "spawnY": 200.0,
+    "arrX": 216,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYFireDepartmentQuarters",
+    "name": "CITYFireDepartmentQuarters.toBedroom",
+    "destMap": "CITYFireDepartmentBathroom",
+    "destDoor": "toRecRoom",
+    "spawnX": 232.0,
+    "spawnY": 200.0,
+    "arrX": 200,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYFireDepartmentBedroom",
+    "name": "CITYFireDepartmentBedroom.Load",
+    "destMap": "CITYFireDepartmentQuarters",
+    "destDoor": "toBedroom",
+    "spawnX": 176.0,
+    "spawnY": 40.0,
+    "arrX": 200,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYFireDepartmentBedroom",
+    "name": "CITYFireDepartmentBedroom.toRecRoom",
+    "destMap": "CITYFireDepartmentBathroom",
+    "destDoor": "toBedroom",
+    "spawnX": 192.0,
+    "spawnY": 176.0,
+    "arrX": 200,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYFireDepartmentBathroom",
+    "name": "CITYFireDepartmentBathroom.Load",
+    "destMap": "CITYFireDepartmentQuarters",
+    "destDoor": "toBathroom",
+    "spawnX": 16.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYFireDepartmentBathroom",
+    "name": "CITYFireDepartmentBathroom.toRecRoom",
+    "destMap": "CITYFireDepartmentBedroom",
+    "destDoor": "toBathroom",
+    "spawnX": 8.0,
+    "spawnY": 176.0,
+    "arrX": 40,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYFireDepartmentBathroom",
+    "name": "DoorBathroomStall",
+    "destMap": "CITYFireDepartmentBathroom",
+    "destDoor": "toBathroom",
+    "spawnX": 80.0,
+    "spawnY": 72.0,
+    "arrX": 16,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYFireDepartmentBathroom",
+    "name": "DoorBathroomStall0",
+    "destMap": "CITYFireDepartmentBathroom",
+    "destDoor": "DoorBathroomStall",
+    "spawnX": 120.0,
+    "spawnY": 72.0,
+    "arrX": 88,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYCityHallEntrance",
+    "name": "CITYCityHallEntrance.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toCityHall1",
+    "spawnX": 168.0,
+    "spawnY": 320.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYCityHallEntrance",
+    "name": "CITYCityHallEntrance.toCityLeft",
+    "destMap": "CITYCity",
+    "destDoor": "toCityHall1",
+    "spawnX": 232.0,
+    "spawnY": 320.0,
+    "arrX": 200,
+    "arrY": 352
+  },
+  {
+    "sourceMap": "CITYCityHallEntrance",
+    "name": "CITYCityHallEntrance.toCityRight",
+    "destMap": "CITYCityHallElevator",
+    "destDoor": "toCityHall2",
+    "spawnX": 656.0,
+    "spawnY": 136.0,
+    "arrX": 264,
+    "arrY": 352
+  },
+  {
+    "sourceMap": "CITYCityHallElevator",
+    "name": "CITYCityHallElevator.Load",
+    "destMap": "CITYCityHallEntrance",
+    "destDoor": "toElevator",
+    "spawnX": 40.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYCityHallOffices",
+    "name": "CITYCityHallOffices.Load",
+    "destMap": "CITYCityHallElevator",
+    "destDoor": "toCityHall",
+    "spawnX": 656.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYCityHallMeetingRoom",
+    "name": "CITYCityHallMeetingRoom.Load",
+    "destMap": "CITYCityHallElevator",
+    "destDoor": "toCityHall",
+    "spawnX": 656.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYCityHallMayorOffice",
+    "name": "CITYCityHallMayorOffice.Load",
+    "destMap": "CITYCityHallElevator",
+    "destDoor": "toCityHall",
+    "spawnX": 656.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYMuseumLobby",
+    "name": "museumFrontDesk",
+    "destMap": "CITYMuseumLobby",
+    "destDoor": "",
+    "spawnX": 136.0,
+    "spawnY": 88.0,
+    "arrX": 352,
+    "arrY": 96
+  },
+  {
+    "sourceMap": "CITYMuseumLobby",
+    "name": "CITYMuseumLobby.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toMuseum1",
+    "spawnX": 48.0,
+    "spawnY": 144.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYMuseumLobby",
+    "name": "CITYMuseumLobby.toCityLeft",
+    "destMap": "CITYCity",
+    "destDoor": "toMuseum1",
+    "spawnX": 112.0,
+    "spawnY": 144.0,
+    "arrX": 80,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "CITYMuseumLobby",
+    "name": "toGiftShop",
+    "destMap": "CITYMuseumGiftShop",
+    "destDoor": "toMuseum2",
+    "spawnX": 8.0,
+    "spawnY": 80.0,
+    "arrX": 144,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "CITYMuseumExhibit",
+    "name": "jewelsparkle",
+    "destMap": "CITYMuseumExhibit",
+    "destDoor": "",
+    "spawnX": 112.0,
+    "spawnY": 72.0,
+    "arrX": 560,
+    "arrY": 424
+  },
+  {
+    "sourceMap": "CITYMuseumExhibit",
+    "name": "CITYMuseumExhibit.Load",
+    "destMap": "CITYMuseumGiftShop",
+    "destDoor": "toExhibit",
+    "spawnX": 24.0,
+    "spawnY": 400.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYMuseumGiftShop",
+    "name": "CITYMuseumGiftShop.Load",
+    "destMap": "CITYMuseumExhibit",
+    "destDoor": "toGiftShop",
+    "spawnX": 24.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYMuseumGiftShop",
+    "name": "CITYMuseumGiftShop.toExhibit",
+    "destMap": "CITYMuseumLobby",
+    "destDoor": "toGiftShop",
+    "spawnX": 192.0,
+    "spawnY": 80.0,
+    "arrX": 56,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHotelEntrance",
+    "name": "CITYHotelEntrance.Load",
+    "destMap": "CITYHotelEntrance",
+    "destDoor": "toCityLeft",
+    "spawnX": 544.0,
+    "spawnY": 432.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHotelEntrance",
+    "name": "CITYHotelEntrance.toCityLeft",
+    "destMap": "CITYHotelEntrance",
+    "destDoor": "toCityLeft",
+    "spawnX": 608.0,
+    "spawnY": 432.0,
+    "arrX": 576,
+    "arrY": 464
+  },
+  {
+    "sourceMap": "CITYHotelEntrance",
+    "name": "CITYHotelEntrance.toCityRight",
+    "destMap": "CITYHotelElevator",
+    "destDoor": "toCityRight",
+    "spawnX": 48.0,
+    "spawnY": 120.0,
+    "arrX": 640,
+    "arrY": 464
+  },
+  {
+    "sourceMap": "CITYHotelEntrance",
+    "name": "CITYHotelEntrance.toElevatorLeft",
+    "destMap": "CITYHotelElevator2",
+    "destDoor": "toHotelLeft",
+    "spawnX": 176.0,
+    "spawnY": 120.0,
+    "arrX": 64,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYHotelEntrance",
+    "name": "CITYHotelEntrance.toElevatorRight",
+    "destMap": "CITYHotelPool",
+    "destDoor": "toHotelRight",
+    "spawnX": 328.0,
+    "spawnY": 128.0,
+    "arrX": 192,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYHotelPool",
+    "name": "CITYHotelPool.Load",
+    "destMap": "CITYHotelEntrance",
+    "destDoor": "toPool",
+    "spawnX": 72.0,
+    "spawnY": 400.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHotelPool",
+    "name": "CITYHotelPool.toHotelLobby",
+    "destMap": "CITYHotelSauna",
+    "destDoor": "toPool",
+    "spawnX": 360.0,
+    "spawnY": 128.0,
+    "arrX": 112,
+    "arrY": 432
+  },
+  {
+    "sourceMap": "CITYHotelSauna",
+    "name": "CITYHotelSauna.Load",
+    "destMap": "CITYHotelPool",
+    "destDoor": "toSauna",
+    "spawnX": 24.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHotelElevator",
+    "name": "CITYHotelElevator.Load",
+    "destMap": "CITYHotelEntrance",
+    "destDoor": "toElevatorLeft",
+    "spawnX": 40.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHotelElevator2",
+    "name": "CITYHotelElevator2.Load",
+    "destMap": "CITYHotelEntrance",
+    "destDoor": "toElevatorRight",
+    "spawnX": 40.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHotelHallway",
+    "name": "CITYHotelHallway.Load",
+    "destMap": "CITYHotelElevator",
+    "destDoor": "toHotelLeft",
+    "spawnX": 48.0,
+    "spawnY": 264.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHotelHallway",
+    "name": "CITYHotelHallway.toElevatorLeft",
+    "destMap": "CITYHotelElevator2",
+    "destDoor": "toHotelLeft",
+    "spawnX": 176.0,
+    "spawnY": 264.0,
+    "arrX": 64,
+    "arrY": 304
+  },
+  {
+    "sourceMap": "CITYHotelHallway",
+    "name": "CITYHotelHallway.toElevatorRight",
+    "destMap": "CITYHotelHallway",
+    "destDoor": "toHotelRight",
+    "spawnX": 64.0,
+    "spawnY": 368.0,
+    "arrX": 192,
+    "arrY": 304
+  },
+  {
+    "sourceMap": "CITYHotelHallway",
+    "name": "CITYHotelHallway.toRoom4",
+    "destMap": "CITYHotelHallway",
+    "destDoor": "toRoom4",
+    "spawnX": 312.0,
+    "spawnY": 368.0,
+    "arrX": 88,
+    "arrY": 400
+  },
+  {
+    "sourceMap": "CITYHotelHallway",
+    "name": "CITYHotelHallway.toRoom5",
+    "destMap": "CITYHotelHallway",
+    "destDoor": "toRoom5",
+    "spawnX": 560.0,
+    "spawnY": 368.0,
+    "arrX": 336,
+    "arrY": 400
+  },
+  {
+    "sourceMap": "CITYHotelHallway",
+    "name": "CITYHotelHallway.toRoom6",
+    "destMap": "CITYHotelRoom",
+    "destDoor": "toRoom6",
+    "spawnX": 176.0,
+    "spawnY": 40.0,
+    "arrX": 584,
+    "arrY": 400
+  },
+  {
+    "sourceMap": "CITYHotelHallway",
+    "name": "CITYHotelHallway.toRoom1",
+    "destMap": "CITYHotelHallway",
+    "destDoor": "toHallwayRoom1",
+    "spawnX": 424.0,
+    "spawnY": 40.0,
+    "arrX": 200,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHotelHallway",
+    "name": "CITYHotelHallway.toRoom2",
+    "destMap": "CITYHotelHallway",
+    "destDoor": "toRoom2",
+    "spawnX": 672.0,
+    "spawnY": 40.0,
+    "arrX": 448,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHotelHallway",
+    "name": "CITYHotelHallway.toRoom3",
+    "destMap": "CITYHotelLinenCloset",
+    "destDoor": "toRoom3",
+    "spawnX": 656.0,
+    "spawnY": 264.0,
+    "arrX": 696,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYHotelRoom",
+    "name": "CITYHotelRoom.Load",
+    "destMap": "CITYHotelHallway",
+    "destDoor": "toRoom1",
+    "spawnX": 168.0,
+    "spawnY": 272.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHotelRoom",
+    "name": "CITYHotelRoom.toHallwayRoom1",
+    "destMap": "CITYHotelRoomBathroom",
+    "destDoor": "toRoom1",
+    "spawnX": 120.0,
+    "spawnY": 248.0,
+    "arrX": 192,
+    "arrY": 304
+  },
+  {
+    "sourceMap": "CITYHotelRoomBathroom",
+    "name": "CITYHotelRoomBathroom.Load",
+    "destMap": "CITYHotelRoom",
+    "destDoor": "toBathroom",
+    "spawnX": 88.0,
+    "spawnY": 48.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHotelLinenCloset",
+    "name": "CITYHotelLinenCloset.Load",
+    "destMap": "CITYHotelHallway",
+    "destDoor": "toLinenCloset",
+    "spawnX": 16.0,
+    "spawnY": 112.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "stadiumCounter2",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "",
+    "spawnX": 1200.0,
+    "spawnY": 128.0,
+    "arrX": 1520,
+    "arrY": 24
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.Load",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityLeft1",
+    "spawnX": 64.0,
+    "spawnY": 200.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityLeft1",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityLeft1",
+    "spawnX": 152.0,
+    "spawnY": 200.0,
+    "arrX": 96,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityLeft2",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityLeft2",
+    "spawnX": 240.0,
+    "spawnY": 200.0,
+    "arrX": 184,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityLeft3",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityLeft3",
+    "spawnX": 328.0,
+    "spawnY": 200.0,
+    "arrX": 272,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityLeft4",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityLeft4",
+    "spawnX": 632.0,
+    "spawnY": 200.0,
+    "arrX": 360,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityMiddle1",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityMiddle1",
+    "spawnX": 720.0,
+    "spawnY": 200.0,
+    "arrX": 664,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityMiddle2",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityMiddle2",
+    "spawnX": 808.0,
+    "spawnY": 200.0,
+    "arrX": 752,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityMiddle3",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityMiddle3",
+    "spawnX": 896.0,
+    "spawnY": 200.0,
+    "arrX": 840,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityMiddle4",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityMiddle4",
+    "spawnX": 1208.0,
+    "spawnY": 200.0,
+    "arrX": 928,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityRight1",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityRight1",
+    "spawnX": 1296.0,
+    "spawnY": 200.0,
+    "arrX": 1240,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityRight2",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityRight2",
+    "spawnX": 1384.0,
+    "spawnY": 200.0,
+    "arrX": 1328,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityRight3",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toCityRight3",
+    "spawnX": 1472.0,
+    "spawnY": 200.0,
+    "arrX": 1416,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "CITYStadiumLobby.toCityRight4",
+    "destMap": "CITYStadiumBathroomLeftMens",
+    "destDoor": "toCityRight4",
+    "spawnX": 128.0,
+    "spawnY": 88.0,
+    "arrX": 1504,
+    "arrY": 232
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "toMensBathroomRight",
+    "destMap": "CITYStadiumBathroomLeftMens",
+    "destDoor": "toLobbyLeft",
+    "spawnX": 696.0,
+    "spawnY": 88.0,
+    "arrX": 152,
+    "arrY": 128
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "toWomensBathroomLeft",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "toLobbyRight",
+    "spawnX": 888.0,
+    "spawnY": 88.0,
+    "arrX": 720,
+    "arrY": 128
+  },
+  {
+    "sourceMap": "CITYStadiumLobby",
+    "name": "toWomensBathroomRight",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "toLobbyLeft",
+    "spawnX": 1456.0,
+    "spawnY": 88.0,
+    "arrX": 896,
+    "arrY": 128
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomLeftMens",
+    "name": "CITYStadiumBathroomLeftMens.Load",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toMensBathroomLeft",
+    "spawnX": 16.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomLeftMens",
+    "name": "toLobbyRight",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toMensBathroomLeft",
+    "spawnX": 584.0,
+    "spawnY": 136.0,
+    "arrX": 40,
+    "arrY": 168
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomLeftMens",
+    "name": "DoorBathroomStall",
+    "destMap": "CITYStadiumBathroomLeftMens",
+    "destDoor": "toMensBathroomRight",
+    "spawnX": 248.0,
+    "spawnY": 72.0,
+    "arrX": 608,
+    "arrY": 168
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomLeftMens",
+    "name": "DoorBathroomStall0",
+    "destMap": "CITYStadiumBathroomLeftMens",
+    "destDoor": "DoorBathroomStall",
+    "spawnX": 288.0,
+    "spawnY": 72.0,
+    "arrX": 264,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomLeftMens",
+    "name": "DoorBathroomStall1",
+    "destMap": "CITYStadiumBathroomLeftMens",
+    "destDoor": "DoorBathroomStall0",
+    "spawnX": 328.0,
+    "spawnY": 72.0,
+    "arrX": 304,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomLeftMens",
+    "name": "DoorBathroomStall2",
+    "destMap": "CITYStadiumBathroomLeftMens",
+    "destDoor": "DoorBathroomStall1",
+    "spawnX": 368.0,
+    "spawnY": 72.0,
+    "arrX": 344,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomLeftMens",
+    "name": "DoorBathroomStall3",
+    "destMap": "CITYStadiumBathroomLeftMens",
+    "destDoor": "DoorBathroomStall2",
+    "spawnX": 408.0,
+    "spawnY": 72.0,
+    "arrX": 384,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomLeftMens",
+    "name": "DoorBathroomStall4",
+    "destMap": "CITYStadiumBathroomLeftMens",
+    "destDoor": "DoorBathroomStall3",
+    "spawnX": 448.0,
+    "spawnY": 72.0,
+    "arrX": 424,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "CITYStadiumBathroomRightWomens.Load",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toWomensBathroomLeft",
+    "spawnX": 24.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "toLobbyRight",
+    "destMap": "CITYStadiumLobby",
+    "destDoor": "toWomensBathroomLeft",
+    "spawnX": 592.0,
+    "spawnY": 136.0,
+    "arrX": 32,
+    "arrY": 168
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "DoorBathroomStall",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "toWomensBathroomRight",
+    "spawnX": 24.0,
+    "spawnY": 72.0,
+    "arrX": 600,
+    "arrY": 168
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "DoorBathroomStall0",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "DoorBathroomStall",
+    "spawnX": 64.0,
+    "spawnY": 72.0,
+    "arrX": 32,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "DoorBathroomStall1",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "DoorBathroomStall0",
+    "spawnX": 104.0,
+    "spawnY": 72.0,
+    "arrX": 72,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "DoorBathroomStall2",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "DoorBathroomStall1",
+    "spawnX": 144.0,
+    "spawnY": 72.0,
+    "arrX": 112,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "DoorBathroomStall3",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "DoorBathroomStall2",
+    "spawnX": 184.0,
+    "spawnY": 72.0,
+    "arrX": 152,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "DoorBathroomStall4",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "DoorBathroomStall3",
+    "spawnX": 224.0,
+    "spawnY": 72.0,
+    "arrX": 192,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "DoorBathroomStall5",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "DoorBathroomStall4",
+    "spawnX": 264.0,
+    "spawnY": 72.0,
+    "arrX": 232,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "DoorBathroomStall6",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "DoorBathroomStall5",
+    "spawnX": 304.0,
+    "spawnY": 72.0,
+    "arrX": 272,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumBathroomRightWomens",
+    "name": "DoorBathroomStall7",
+    "destMap": "CITYStadiumBathroomRightWomens",
+    "destDoor": "DoorBathroomStall6",
+    "spawnX": 344.0,
+    "spawnY": 72.0,
+    "arrX": 312,
+    "arrY": 104
+  },
+  {
+    "sourceMap": "CITYStadiumLeftHallway",
+    "name": "CITYStadiumLeftHallway.Load",
+    "destMap": "CITYStadiumMain",
+    "destDoor": "toBackstageHallwayLeft",
+    "spawnX": 40.0,
+    "spawnY": 1448.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumLeftHallway",
+    "name": "toStadiumBackStageLeft",
+    "destMap": "CITYStadiumBackstage",
+    "destDoor": "toBackstageHallwayLeft",
+    "spawnX": 40.0,
+    "spawnY": 40.0,
+    "arrX": 64,
+    "arrY": 1480
+  },
+  {
+    "sourceMap": "CITYStadiumRightHallway",
+    "name": "CITYStadiumRightHallway.Load",
+    "destMap": "CITYStadiumBackstage",
+    "destDoor": "toBackstageHallwayRight",
+    "spawnX": 40.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumRightHallway",
+    "name": "toStadiumRight",
+    "destMap": "CITYStadiumMain",
+    "destDoor": "toBackstageHallwayRight",
+    "spawnX": 40.0,
+    "spawnY": 1448.0,
+    "arrX": 64,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYStadiumMain",
+    "name": "stadiumRopeBarrier3",
+    "destMap": "CITYStadiumMain",
+    "destDoor": "",
+    "spawnX": 520.0,
+    "spawnY": 1696.0,
+    "arrX": 160,
+    "arrY": 280
+  },
+  {
+    "sourceMap": "CITYStadiumMain",
+    "name": "CITYStadiumMain.Load",
+    "destMap": "CITYStadiumRightHallway",
+    "destDoor": "toStadiumRight",
+    "spawnX": 2224.0,
+    "spawnY": 1680.0,
+    "arrX": 279,
+    "arrY": 103
+  },
+  {
+    "sourceMap": "CITYStadiumMain",
+    "name": "toBackstageHallwayLeft",
+    "destMap": "CITYStadiumLeftHallway",
+    "destDoor": "toStadiumRight",
+    "spawnX": 40.0,
+    "spawnY": 1680.0,
+    "arrX": 2248,
+    "arrY": 1720
+  },
+  {
+    "sourceMap": "CITYStadiumMainIntro",
+    "name": "bobsGameLogoSmall",
+    "destMap": "CITYStadiumMainIntro",
+    "destDoor": "",
+    "spawnX": 720.0,
+    "spawnY": 88.0,
+    "arrX": 160,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "CITYStadiumIntroOld",
+    "name": "stadiumLongFrontRowRail0",
+    "destMap": "CITYStadiumIntroOld",
+    "destDoor": "",
+    "spawnX": 840.0,
+    "spawnY": 632.0,
+    "arrX": 160,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "CITYStadiumMainOldCrowd",
+    "name": "awardStand",
+    "destMap": "CITYStadiumMainOldCrowd",
+    "destDoor": "",
+    "spawnX": 592.0,
+    "spawnY": 272.0,
+    "arrX": 160,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "CITYStadiumMainOldCrowd",
+    "name": "toLobbyRightStairwellLeft",
+    "destMap": "CITYStadiumMainOldCrowd",
+    "destDoor": "",
+    "spawnX": 1536.0,
+    "spawnY": 1576.0,
+    "arrX": 1520,
+    "arrY": 1760
+  },
+  {
+    "sourceMap": "CITYStadiumMainOldCrowd",
+    "name": "CITYStadiumMainOldCrowd.Load",
+    "destMap": "CITYStadiumMainOldCrowd",
+    "destDoor": "toBackstageHallwayRight",
+    "spawnX": 1536.0,
+    "spawnY": 1576.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumMainOldCrowd",
+    "name": "toBackstageHallwayLeft",
+    "destMap": "CITYStadiumMainOldCrowd",
+    "destDoor": "toBackstageHallwayRight",
+    "spawnX": 40.0,
+    "spawnY": 1576.0,
+    "arrX": 1560,
+    "arrY": 1616
+  },
+  {
+    "sourceMap": "CITYStadiumBackstage",
+    "name": "Light37",
+    "destMap": "CITYStadiumBackstage",
+    "destDoor": "",
+    "spawnX": 1542.0,
+    "spawnY": 32.0,
+    "arrX": 1448,
+    "arrY": 168
+  },
+  {
+    "sourceMap": "CITYStadiumBackstage",
+    "name": "toStadiumRight",
+    "destMap": "CITYStadiumBackstage",
+    "destDoor": "",
+    "spawnX": 40.0,
+    "spawnY": 144.0,
+    "arrX": 1448,
+    "arrY": 168
+  },
+  {
+    "sourceMap": "CITYStadiumBackstage",
+    "name": "CITYStadiumBackstage.toStadiumLeft",
+    "destMap": "CITYStadiumLeftHallway",
+    "destDoor": "toStadiumBackStageLeft",
+    "spawnX": 40.0,
+    "spawnY": 144.0,
+    "arrX": 64,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "CITYStadiumBackstage",
+    "name": "toBackstageHallwayRight",
+    "destMap": "CITYStadiumRightHallway",
+    "destDoor": "toStadiumBackStageLeft",
+    "spawnX": 1536.0,
+    "spawnY": 144.0,
+    "arrX": 64,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "CITYStadiumBackstage",
+    "name": "toDressingRoom1",
+    "destMap": "CITYStadiumDressingRoom",
+    "destDoor": "toStadiumBackstageRight",
+    "spawnX": 80.0,
+    "spawnY": 40.0,
+    "arrX": 1560,
+    "arrY": 176
+  },
+  {
+    "sourceMap": "CITYStadiumBackstage",
+    "name": "CITYStadiumBackstage.toDressingRoom1",
+    "destMap": "CITYStadiumDressingRoom2",
+    "destDoor": "toHallway1",
+    "spawnX": 360.0,
+    "spawnY": 40.0,
+    "arrX": 104,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYStadiumBackstage",
+    "name": "CITYStadiumBackstage.toDressingRoom2",
+    "destMap": "CITYStadiumProducerRoom",
+    "destDoor": "toHallway2",
+    "spawnX": 1480.0,
+    "spawnY": 40.0,
+    "arrX": 384,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYStadiumBackstage",
+    "name": "CITYStadiumBackstage.toProductionRoom",
+    "destMap": "CITYStadiumStarDressingRoom",
+    "destDoor": "toHallway",
+    "spawnX": 1208.0,
+    "spawnY": 40.0,
+    "arrX": 1504,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYStadiumProducerRoom",
+    "name": "CITYStadiumProducerRoom.Load",
+    "destMap": "CITYStadiumBackstage",
+    "destDoor": "toProductionRoom",
+    "spawnX": 88.0,
+    "spawnY": 168.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumDressingRoom",
+    "name": "CITYStadiumDressingRoom.Load",
+    "destMap": "CITYStadiumBackstage",
+    "destDoor": "toDressingRoom1",
+    "spawnX": 16.0,
+    "spawnY": 88.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumDressingRoom",
+    "name": "CITYStadiumDressingRoom.toHallway1",
+    "destMap": "CITYStadiumDressingRoomBathroom",
+    "destDoor": "toDressingRoom1",
+    "spawnX": 16.0,
+    "spawnY": 40.0,
+    "arrX": 40,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "CITYStadiumDressingRoomBathroom",
+    "name": "CITYStadiumDressingRoomBathroom.Load",
+    "destMap": "CITYStadiumDressingRoom",
+    "destDoor": "toBathroom",
+    "spawnX": 16.0,
+    "spawnY": 88.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumDressingRoom2",
+    "name": "CITYStadiumDressingRoom2.Load",
+    "destMap": "CITYStadiumDressingRoom2Bathroom",
+    "destDoor": "toDressingRoom",
+    "spawnX": 16.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumDressingRoom2",
+    "name": "toHallway2",
+    "destMap": "CITYStadiumBackstage",
+    "destDoor": "toDressingRoom",
+    "spawnX": 16.0,
+    "spawnY": 88.0,
+    "arrX": 40,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYStadiumDressingRoom2Bathroom",
+    "name": "CITYStadiumDressingRoom2Bathroom.Load",
+    "destMap": "CITYStadiumDressingRoom2",
+    "destDoor": "toBathroom",
+    "spawnX": 16.0,
+    "spawnY": 88.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumStarDressingRoom",
+    "name": "CITYStadiumStarDressingRoom.Load",
+    "destMap": "CITYStadiumDressingRoom3Bathroom",
+    "destDoor": "toStarDressingRoom",
+    "spawnX": 16.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYStadiumStarDressingRoom",
+    "name": "toHallway",
+    "destMap": "CITYStadiumBackstage",
+    "destDoor": "toStarDressingRoom",
+    "spawnX": 16.0,
+    "spawnY": 88.0,
+    "arrX": 40,
+    "arrY": 80
+  },
+  {
+    "sourceMap": "CITYStadiumDressingRoom3Bathroom",
+    "name": "CITYStadiumDressingRoom3Bathroom.Load",
+    "destMap": "CITYStadiumStarDressingRoom",
+    "destDoor": "toBathroom",
+    "spawnX": 16.0,
+    "spawnY": 88.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYPawnShop",
+    "name": "CITYPawnShop.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toPawnShop",
+    "spawnX": 80.0,
+    "spawnY": 304.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYCasinoEntrance",
+    "name": "casinoCounter",
+    "destMap": "CITYCasinoEntrance",
+    "destDoor": "",
+    "spawnX": 312.0,
+    "spawnY": 232.0,
+    "arrX": 384,
+    "arrY": 88
+  },
+  {
+    "sourceMap": "CITYCasinoEntrance",
+    "name": "CITYCasinoEntrance.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toCasino1",
+    "spawnX": 256.0,
+    "spawnY": 344.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYCasinoEntrance",
+    "name": "CITYCasinoEntrance.toCity1",
+    "destMap": "CITYCity",
+    "destDoor": "toCasino1",
+    "spawnX": 320.0,
+    "spawnY": 344.0,
+    "arrX": 288,
+    "arrY": 376
+  },
+  {
+    "sourceMap": "CITYCasinoEntrance",
+    "name": "CITYCasinoEntrance.toCity2",
+    "destMap": "CITYCity",
+    "destDoor": "toCasino2",
+    "spawnX": 384.0,
+    "spawnY": 344.0,
+    "arrX": 352,
+    "arrY": 376
+  },
+  {
+    "sourceMap": "CITYCasinoEntrance",
+    "name": "CITYCasinoEntrance.toCity3",
+    "destMap": "CITYCity",
+    "destDoor": "toCasino3",
+    "spawnX": 448.0,
+    "spawnY": 344.0,
+    "arrX": 416,
+    "arrY": 376
+  },
+  {
+    "sourceMap": "CITYCasinoMain",
+    "name": "casinoBar",
+    "destMap": "CITYCasinoMain",
+    "destDoor": "",
+    "spawnX": 480.0,
+    "spawnY": 152.0,
+    "arrX": 384,
+    "arrY": 632
+  },
+  {
+    "sourceMap": "CITYCasinoMain",
+    "name": "CITYCasinoMain.Load",
+    "destMap": "CITYCasinoBackroom",
+    "destDoor": "toCasino",
+    "spawnX": 32.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYCasinoBackroom",
+    "name": "CITYCasinoBackroom.Load",
+    "destMap": "CITYCasinoMain",
+    "destDoor": "toBackroom",
+    "spawnX": 32.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHourlyMotel",
+    "name": "CITYHourlyMotel.Load",
+    "destMap": "CITYCity",
+    "destDoor": "toMotel",
+    "spawnX": 152.0,
+    "spawnY": 480.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHourlyMotel",
+    "name": "CITYHourlyMotel.toCity",
+    "destMap": "CITYHourlyMotelRoom",
+    "destDoor": "toMotel",
+    "spawnX": 184.0,
+    "spawnY": 312.0,
+    "arrX": 176,
+    "arrY": 512
+  },
+  {
+    "sourceMap": "CITYHourlyMotel",
+    "name": "CITYHourlyMotel.toRoom1",
+    "destMap": "CITYHourlyMotelRoom2",
+    "destDoor": "toHotel1",
+    "spawnX": 184.0,
+    "spawnY": 136.0,
+    "arrX": 192,
+    "arrY": 368
+  },
+  {
+    "sourceMap": "CITYHourlyMotelRoom",
+    "name": "CITYHourlyMotelRoom.Load",
+    "destMap": "CITYHourlyMotel",
+    "destDoor": "toRoom1",
+    "spawnX": 152.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHourlyMotelRoom",
+    "name": "CITYHourlyMotelRoom.toHotel1",
+    "destMap": "CITYHourlyMotelRoomBathroom",
+    "destDoor": "toRoom1",
+    "spawnX": 120.0,
+    "spawnY": 168.0,
+    "arrX": 176,
+    "arrY": 192
+  },
+  {
+    "sourceMap": "CITYHourlyMotelRoomBathroom",
+    "name": "CITYHourlyMotelRoomBathroom.Load",
+    "destMap": "CITYHourlyMotelRoom",
+    "destDoor": "toBathroom",
+    "spawnX": 88.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHourlyMotelRoom2",
+    "name": "CITYHourlyMotelRoom2.Load",
+    "destMap": "CITYHourlyMotel",
+    "destDoor": "toRoom2",
+    "spawnX": 152.0,
+    "spawnY": 136.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYHourlyMotelRoom2",
+    "name": "CITYHourlyMotelRoom2.toHotel2",
+    "destMap": "CITYHourlyMotelRoom2Bathroom",
+    "destDoor": "toRoom2",
+    "spawnX": 120.0,
+    "spawnY": 168.0,
+    "arrX": 176,
+    "arrY": 192
+  },
+  {
+    "sourceMap": "CITYHourlyMotelRoom2Bathroom",
+    "name": "CITYHourlyMotelRoom2Bathroom.Load",
+    "destMap": "CITYHourlyMotelRoom2",
+    "destDoor": "toBathroom",
+    "spawnX": 88.0,
+    "spawnY": 40.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTROTown",
+    "name": "INTROTown.Load",
+    "destMap": "INTROTown",
+    "destDoor": "toShed",
+    "spawnX": 2112.0,
+    "spawnY": 424.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "INTROTown",
+    "name": "INTROTown.toShed",
+    "destMap": "INTRODownstairs",
+    "destDoor": "toShed",
+    "spawnX": 1928.0,
+    "spawnY": 632.0,
+    "arrX": 2136,
+    "arrY": 464
+  },
+  {
+    "sourceMap": "INTROTown",
+    "name": "INTROTown.toYuusHouse",
+    "destMap": "INTROTown",
+    "destDoor": "toBackyard",
+    "spawnX": 1240.0,
+    "spawnY": 632.0,
+    "arrX": 1952,
+    "arrY": 664
+  },
+  {
+    "sourceMap": "INTROTown",
+    "name": "INTROTown.toCrazyHouse",
+    "destMap": "INTROTown",
+    "destDoor": "toCrazyHouse",
+    "spawnX": 424.0,
+    "spawnY": 632.0,
+    "arrX": 1264,
+    "arrY": 664
+  },
+  {
+    "sourceMap": "SCHOOLPlayground",
+    "name": "SCHOOLPlayground.Load",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toPlaygroundLeft",
+    "spawnX": 672.0,
+    "spawnY": 1776.0,
+    "arrX": 704,
+    "arrY": 1816
+  },
+  {
+    "sourceMap": "SCHOOLPlayground",
+    "name": "toEntranceHallwayRight",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toPlaygroundLeft",
+    "spawnX": 1464.0,
+    "spawnY": 1776.0,
+    "arrX": 704,
+    "arrY": 1816
+  },
+  {
+    "sourceMap": "SCHOOLPlayground",
+    "name": "toBackHallwayLeft",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toPlaygroundRight",
+    "spawnX": 1440.0,
+    "spawnY": 528.0,
+    "arrX": 1496,
+    "arrY": 1816
+  },
+  {
+    "sourceMap": "SCHOOLPlayground",
+    "name": "toBackHallwayRight",
+    "destMap": "SCHOOLBackHallway",
+    "destDoor": "toPlaygroundLeft",
+    "spawnX": 1536.0,
+    "spawnY": 528.0,
+    "arrX": 1472,
+    "arrY": 560
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "grass15",
+    "destMap": "TOWNTown",
+    "destDoor": "",
+    "spawnX": 4096.0,
+    "spawnY": 2152.0,
+    "arrX": 12232,
+    "arrY": 2816
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.Load",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toOutsideLeft",
+    "spawnX": 1832.0,
+    "spawnY": 1888.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "toEntranceHallwayMiddle",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toOutsideLeft",
+    "spawnX": 1904.0,
+    "spawnY": 1888.0,
+    "arrX": 1864,
+    "arrY": 1928
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "toEntranceHallwayRight",
+    "destMap": "SCHOOLEntranceHallway",
+    "destDoor": "toOutsideMiddle",
+    "spawnX": 1976.0,
+    "spawnY": 1888.0,
+    "arrX": 1936,
+    "arrY": 1928
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toEntranceHallwayRight",
+    "destMap": "TOWNDoctorsOfficeEntrance",
+    "destDoor": "toOutsideRight",
+    "spawnX": 3192.0,
+    "spawnY": 2080.0,
+    "arrX": 2008,
+    "arrY": 1928
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toClinic",
+    "destMap": "TOWNChurch",
+    "destDoor": "toTown",
+    "spawnX": 3944.0,
+    "spawnY": 2016.0,
+    "arrX": 3216,
+    "arrY": 2120
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toChurch",
+    "destMap": "TOWNTacoBurger",
+    "destDoor": "toTown",
+    "spawnX": 4584.0,
+    "spawnY": 2024.0,
+    "arrX": 3976,
+    "arrY": 2064
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toTacoBurger",
+    "destMap": "TOWNGasStation",
+    "destDoor": "toTown",
+    "spawnX": 5664.0,
+    "spawnY": 1496.0,
+    "arrX": 4616,
+    "arrY": 2064
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toGasStation",
+    "destMap": "TOWNCoffeeShop",
+    "destDoor": "toTown",
+    "spawnX": 6256.0,
+    "spawnY": 1792.0,
+    "arrX": 5704,
+    "arrY": 1536
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toCoffeeShop",
+    "destMap": "TOWNBookstore",
+    "destDoor": "toTown",
+    "spawnX": 6360.0,
+    "spawnY": 1800.0,
+    "arrX": 6280,
+    "arrY": 1832
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toBookStore",
+    "destMap": "TOWNPizzaPlace",
+    "destDoor": "toTown",
+    "spawnX": 6776.0,
+    "spawnY": 1792.0,
+    "arrX": 6400,
+    "arrY": 1840
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toPizzaStore",
+    "destMap": "TOWNBeautySalon",
+    "destDoor": "toTown",
+    "spawnX": 7112.0,
+    "spawnY": 1800.0,
+    "arrX": 6800,
+    "arrY": 1832
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toBeautySalon",
+    "destMap": "TOWNPets4Less",
+    "destDoor": "toTown",
+    "spawnX": 7392.0,
+    "spawnY": 1792.0,
+    "arrX": 7152,
+    "arrY": 1840
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toPetStore",
+    "destMap": "TOWNDepartmentStore",
+    "destDoor": "toTown",
+    "spawnX": 7752.0,
+    "spawnY": 1520.0,
+    "arrX": 7416,
+    "arrY": 1832
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toDepartmentStore1",
+    "destMap": "TOWNDepartmentStore",
+    "destDoor": "toTownLeft",
+    "spawnX": 7840.0,
+    "spawnY": 1520.0,
+    "arrX": 7784,
+    "arrY": 1560
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "toDepartmentStore3",
+    "destMap": "TOWNDepartmentStore",
+    "destDoor": "toTownMiddleLeft",
+    "spawnX": 7928.0,
+    "spawnY": 1520.0,
+    "arrX": 7872,
+    "arrY": 1560
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "toDepartmentStore4",
+    "destMap": "TOWNDepartmentStore",
+    "destDoor": "toTownMiddleRight",
+    "spawnX": 8016.0,
+    "spawnY": 1520.0,
+    "arrX": 7960,
+    "arrY": 1560
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toDepartmentStore4",
+    "destMap": "TOWNGroceryStore",
+    "destDoor": "toTownRight",
+    "spawnX": 8424.0,
+    "spawnY": 1520.0,
+    "arrX": 8048,
+    "arrY": 1560
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toGroceryStoreLeft",
+    "destMap": "TOWNGroceryStore",
+    "destDoor": "toTownLeft",
+    "spawnX": 8920.0,
+    "spawnY": 1520.0,
+    "arrX": 8464,
+    "arrY": 1560
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toGroceryStoreRight",
+    "destMap": "TOWNElectronicsStore",
+    "destDoor": "toTownRight",
+    "spawnX": 9256.0,
+    "spawnY": 1784.0,
+    "arrX": 8960,
+    "arrY": 1560
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toElectronicsStore",
+    "destMap": "TOWNVideoRent",
+    "destDoor": "toTown",
+    "spawnX": 9552.0,
+    "spawnY": 1800.0,
+    "arrX": 9296,
+    "arrY": 1824
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toVideoStore",
+    "destMap": "TOWNGameStore",
+    "destDoor": "toTown",
+    "spawnX": 9944.0,
+    "spawnY": 1800.0,
+    "arrX": 9576,
+    "arrY": 1840
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toGameStore",
+    "destMap": "TOWNArcade",
+    "destDoor": "toTown",
+    "spawnX": 10200.0,
+    "spawnY": 1792.0,
+    "arrX": 9976,
+    "arrY": 1840
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toArcade",
+    "destMap": "TOWNRecordStore",
+    "destDoor": "toTown",
+    "spawnX": 10944.0,
+    "spawnY": 1792.0,
+    "arrX": 10232,
+    "arrY": 1832
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toRecordStore",
+    "destMap": "TOWNMovieTheatreLobby",
+    "destDoor": "toTown",
+    "spawnX": 11672.0,
+    "spawnY": 1512.0,
+    "arrX": 10968,
+    "arrY": 1832
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toTheaterLeft",
+    "destMap": "TOWNMovieTheatreLobby",
+    "destDoor": "toTownLeft",
+    "spawnX": 11736.0,
+    "spawnY": 1512.0,
+    "arrX": 11704,
+    "arrY": 1552
+  },
+  {
+    "sourceMap": "TOWNTown",
+    "name": "TOWNTown.toTheaterMiddle",
+    "destMap": "TOWNMovieTheatreLobby",
+    "destDoor": "toTownMiddle",
+    "spawnX": 11800.0,
+    "spawnY": 1512.0,
+    "arrX": 11768,
+    "arrY": 1552
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "grass3",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "",
+    "spawnX": 3752.0,
+    "spawnY": 448.0,
+    "arrX": 2136,
+    "arrY": 16
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.Load",
+    "destMap": "TOWNYUUDownstairs",
+    "destDoor": "toFrontYard",
+    "spawnX": 4024.0,
+    "spawnY": 984.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toYuusHouse",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toFrontYard",
+    "spawnX": 920.0,
+    "spawnY": 984.0,
+    "arrX": 4048,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse1",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouse1",
+    "spawnX": 1944.0,
+    "spawnY": 984.0,
+    "arrX": 944,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse2",
+    "destMap": "TOWNFRIENDDownstairs",
+    "destDoor": "toHouse2",
+    "spawnX": 2544.0,
+    "spawnY": 984.0,
+    "arrX": 1968,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toFriendsHouse",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toFrontyard",
+    "spawnX": 4912.0,
+    "spawnY": 984.0,
+    "arrX": 2568,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse6",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouse6",
+    "spawnX": 5704.0,
+    "spawnY": 984.0,
+    "arrX": 4936,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse7",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouse7",
+    "spawnX": 6624.0,
+    "spawnY": 984.0,
+    "arrX": 5728,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse8",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouse8",
+    "spawnX": 7400.0,
+    "spawnY": 984.0,
+    "arrX": 6648,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse9",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouse9",
+    "spawnX": 8248.0,
+    "spawnY": 984.0,
+    "arrX": 7424,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse10",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouse10",
+    "spawnX": 9040.0,
+    "spawnY": 984.0,
+    "arrX": 8272,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse11",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouse11",
+    "spawnX": 10016.0,
+    "spawnY": 984.0,
+    "arrX": 9064,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse12",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouse12",
+    "spawnX": 10792.0,
+    "spawnY": 984.0,
+    "arrX": 10040,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouse13",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouse13",
+    "spawnX": 11640.0,
+    "spawnY": 984.0,
+    "arrX": 10816,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "toFriendsHouseBack",
+    "destMap": "TOWNFRIENDDownstairs",
+    "destDoor": "toHouse14",
+    "spawnX": 2672.0,
+    "spawnY": 656.0,
+    "arrX": 11664,
+    "arrY": 1024
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "toCrazyHouseBack",
+    "destMap": "TOWNCRAZYDownstairs",
+    "destDoor": "toBackyard",
+    "spawnX": 3488.0,
+    "spawnY": 656.0,
+    "arrX": 2704,
+    "arrY": 688
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "toYuusHouseBack",
+    "destMap": "TOWNYUUDownstairs",
+    "destDoor": "toBackyard",
+    "spawnX": 4176.0,
+    "spawnY": 656.0,
+    "arrX": 3520,
+    "arrY": 688
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "toHouseShed",
+    "destMap": "TOWNYUUBackyardToolShed",
+    "destDoor": "toBackyard",
+    "spawnX": 4360.0,
+    "spawnY": 448.0,
+    "arrX": 4208,
+    "arrY": 688
+  },
+  {
+    "sourceMap": "TOWNOutsideNeighborhood",
+    "name": "TOWNOutsideNeighborhood.toHouseShed",
+    "destMap": "TOWNCRAZYDownstairs",
+    "destDoor": "toBackyard",
+    "spawnX": 3552.0,
+    "spawnY": 984.0,
+    "arrX": 4384,
+    "arrY": 488
+  },
+  {
+    "sourceMap": "TOWNOutsideForest",
+    "name": "Light82",
+    "destMap": "TOWNOutsideForest",
+    "destDoor": "",
+    "spawnX": 12338.0,
+    "spawnY": 608.0,
+    "arrX": 424,
+    "arrY": 16
+  },
+  {
+    "sourceMap": "TOWNYUUBackyardToolShed",
+    "name": "TOWNYUUBackyardToolShed.Load",
+    "destMap": "TOWNOutsideNeighborhood",
+    "destDoor": "toHouseShed",
+    "spawnX": 32.0,
+    "spawnY": 128.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "TOWNClubHouse",
+    "name": "Light2",
+    "destMap": "TOWNClubHouse",
+    "destDoor": "",
+    "spawnX": 56.0,
+    "spawnY": 34.0,
+    "arrX": 88,
+    "arrY": 160
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "cityStreetTrafficLightPoleRight",
+    "destMap": "CITYCity",
+    "destDoor": "",
+    "spawnX": 5344.0,
+    "spawnY": 248.0,
+    "arrX": 2592,
+    "arrY": 288
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.Load",
+    "destMap": "CITYHourlyMotel",
+    "destDoor": "toCity",
+    "spawnX": 848.0,
+    "spawnY": 272.0,
+    "arrX": -1,
+    "arrY": -1
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toMotel",
+    "destMap": "CITYPawnShop",
+    "destDoor": "toCity",
+    "spawnX": 1048.0,
+    "spawnY": 272.0,
+    "arrX": 872,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toPawnShop",
+    "destMap": "CITYCasinoEntrance",
+    "destDoor": "toCity",
+    "spawnX": 1480.0,
+    "spawnY": 272.0,
+    "arrX": 1080,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toCasino1",
+    "destMap": "CITYCasinoEntrance",
+    "destDoor": "toCity1",
+    "spawnX": 1544.0,
+    "spawnY": 272.0,
+    "arrX": 1512,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toCasino2",
+    "destMap": "CITYCasinoEntrance",
+    "destDoor": "toCity2",
+    "spawnX": 1608.0,
+    "spawnY": 272.0,
+    "arrX": 1576,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toCasino3",
+    "destMap": "CITYCasinoEntrance",
+    "destDoor": "toCity3",
+    "spawnX": 1672.0,
+    "spawnY": 272.0,
+    "arrX": 1640,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toCasino4",
+    "destMap": "CITYTheCafeEntrance",
+    "destDoor": "toCity4",
+    "spawnX": 2064.0,
+    "spawnY": 272.0,
+    "arrX": 1704,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toCafe",
+    "destMap": "CITYPoolHall",
+    "destDoor": "toCity",
+    "spawnX": 3104.0,
+    "spawnY": 272.0,
+    "arrX": 2104,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toPoolHall",
+    "destMap": "CITYLaundromat",
+    "destDoor": "toCity",
+    "spawnX": 3488.0,
+    "spawnY": 272.0,
+    "arrX": 3144,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toLaundromat",
+    "destMap": "CITYCity",
+    "destDoor": "toCity",
+    "spawnX": 3792.0,
+    "spawnY": 80.0,
+    "arrX": 3528,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toApartment4",
+    "destMap": "CITYNeighborAptInside",
+    "destDoor": "toApartment4",
+    "spawnX": 3992.0,
+    "spawnY": 80.0,
+    "arrX": 3816,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toNeighborsApartment",
+    "destMap": "CITYBobsAptInside",
+    "destDoor": "toCity",
+    "spawnX": 4192.0,
+    "spawnY": 80.0,
+    "arrX": 4016,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toBobsApartment",
+    "destMap": "CITYCity",
+    "destDoor": "toCity",
+    "spawnX": 3792.0,
+    "spawnY": 176.0,
+    "arrX": 4216,
+    "arrY": 120
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toApartment1",
+    "destMap": "CITYCity",
+    "destDoor": "toApartment1",
+    "spawnX": 3992.0,
+    "spawnY": 176.0,
+    "arrX": 3816,
+    "arrY": 216
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toApartment2",
+    "destMap": "CITYCity",
+    "destDoor": "toApartment2",
+    "spawnX": 4192.0,
+    "spawnY": 176.0,
+    "arrX": 4016,
+    "arrY": 216
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toApartment3",
+    "destMap": "CITYAptMainOffice",
+    "destDoor": "toApartment3",
+    "spawnX": 3952.0,
+    "spawnY": 272.0,
+    "arrX": 4216,
+    "arrY": 216
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toApartmentOffice",
+    "destMap": "CITYDeli",
+    "destDoor": "toCity",
+    "spawnX": 4440.0,
+    "spawnY": 272.0,
+    "arrX": 3984,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toDeli",
+    "destMap": "CITYPartyStore",
+    "destDoor": "toCity",
+    "spawnX": 4792.0,
+    "spawnY": 272.0,
+    "arrX": 4472,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toPartyStore",
+    "destMap": "CITYCityHallEntrance",
+    "destDoor": "toCity",
+    "spawnX": 5584.0,
+    "spawnY": 272.0,
+    "arrX": 4832,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toCityHall1",
+    "destMap": "CITYCityHallEntrance",
+    "destDoor": "toCityLeft",
+    "spawnX": 5648.0,
+    "spawnY": 272.0,
+    "arrX": 5616,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toCityHall2",
+    "destMap": "CITYMuseumLobby",
+    "destDoor": "toCityRight",
+    "spawnX": 6448.0,
+    "spawnY": 264.0,
+    "arrX": 5680,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toMuseum1",
+    "destMap": "CITYMuseumLobby",
+    "destDoor": "toCityLeft",
+    "spawnX": 6512.0,
+    "spawnY": 264.0,
+    "arrX": 6480,
+    "arrY": 304
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toMuseum2",
+    "destMap": "CITYHospitalEntrance",
+    "destDoor": "toCityRight",
+    "spawnX": 7032.0,
+    "spawnY": 272.0,
+    "arrX": 6544,
+    "arrY": 304
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toHospital1",
+    "destMap": "CITYHospitalEntrance",
+    "destDoor": "toCityLeft",
+    "spawnX": 7112.0,
+    "spawnY": 272.0,
+    "arrX": 7064,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toHospital2",
+    "destMap": "CITYHospitalEntrance",
+    "destDoor": "toCityMiddle",
+    "spawnX": 7192.0,
+    "spawnY": 272.0,
+    "arrX": 7144,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toHospital3",
+    "destMap": "CITYPoliceStationLobby",
+    "destDoor": "toCityRight",
+    "spawnX": 7896.0,
+    "spawnY": 272.0,
+    "arrX": 7224,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toPoliceDepartment",
+    "destMap": "CITYFireDepartmentGarage",
+    "destDoor": "toCity",
+    "spawnX": 8312.0,
+    "spawnY": 272.0,
+    "arrX": 7928,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toFireDepartment",
+    "destMap": "CITYBankEntrance",
+    "destDoor": "toCity",
+    "spawnX": 8720.0,
+    "spawnY": 224.0,
+    "arrX": 8344,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toBank",
+    "destMap": "CITYFashionStore",
+    "destDoor": "toCity",
+    "spawnX": 9648.0,
+    "spawnY": 264.0,
+    "arrX": 8752,
+    "arrY": 264
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toFashionStore",
+    "destMap": "CITYElevatedLifeplaceElevator",
+    "destDoor": "toCity",
+    "spawnX": 9920.0,
+    "spawnY": 264.0,
+    "arrX": 9688,
+    "arrY": 304
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toFancyApartmentElevator",
+    "destMap": "CITYElevatedLifeplace",
+    "destDoor": "toCity",
+    "spawnX": 10184.0,
+    "spawnY": 272.0,
+    "arrX": 9928,
+    "arrY": 304
+  },
+  {
+    "sourceMap": "CITYCity",
+    "name": "CITYCity.toFancyApartmentOffice",
+    "destMap": "CITYFancyRestaurantEntrance",
+    "destDoor": "toCity",
+    "spawnX": 9184.0,
+    "spawnY": 264.0,
+    "arrX": 10216,
+    "arrY": 312
+  },
+  {
+    "sourceMap": "ALPHAStadiumMain",
+    "name": "bob",
+    "destMap": "ALPHAStadiumMain",
+    "destDoor": "",
+    "spawnX": 2240.0,
+    "spawnY": 1752.0,
+    "arrX": 152,
+    "arrY": 296
+  },
+  {
+    "sourceMap": "ALPHABobsApartment",
+    "name": "toElevator",
+    "destMap": "ALPHABobElevator",
+    "destDoor": "toBobApartment",
+    "spawnX": 224.0,
+    "spawnY": 216.0,
+    "arrX": 240,
+    "arrY": 248
+  },
+  {
+    "sourceMap": "ALPHABobElevator",
+    "name": "Light0",
+    "destMap": "ALPHAStadiumMain",
+    "destDoor": "",
+    "spawnX": 43.0,
+    "spawnY": 110.0,
+    "arrX": 48,
+    "arrY": 136
+  },
+  {
+    "sourceMap": "ALPHABobElevator",
+    "name": "toBobApartment",
+    "destMap": "ALPHABobElevator",
+    "destDoor": "toBobApartment",
+    "spawnX": 32.0,
+    "spawnY": 32.0,
+    "arrX": 40,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "ALPHABobElevator",
+    "name": "fakeElevatorDoor",
+    "destMap": "ALPHABobElevator",
+    "destDoor": "toBobApartment",
+    "spawnX": 32.0,
+    "spawnY": 104.0,
+    "arrX": 40,
+    "arrY": 72
+  },
+  {
+    "sourceMap": "ALPHAStadiumBackstage",
+    "name": "Light37",
+    "destMap": "ALPHAStadiumBackstage",
+    "destDoor": "",
+    "spawnX": 1542.0,
+    "spawnY": 32.0,
+    "arrX": 1448,
+    "arrY": 168
+  }
+]

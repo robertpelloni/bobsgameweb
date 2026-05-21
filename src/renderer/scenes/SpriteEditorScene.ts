@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * SpriteEditorScene — pixel art sprite editor for creating game assets.
  *

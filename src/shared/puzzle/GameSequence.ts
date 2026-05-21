@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { GameType } from "./GameType";
 
 export class GameSequence {

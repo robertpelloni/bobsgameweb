@@ -165,6 +165,7 @@ export class QuestLogScene extends Scene {
 	private quests: QuestData[];
 	private selectedTab = 0;
 	private selectedQuest = 0;
+	private selectedItem = 0;
 	private questsList: Container;
 	private detailPanel: Container;
 	private tabBar: Container;

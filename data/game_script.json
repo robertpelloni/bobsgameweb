@@ -1,0 +1,4069 @@
+{
+  "version": "3.0.8",
+  "dialogues": {
+    "0": {
+      "id": 0,
+      "name": "",
+      "caption": "Look At Video",
+      "rawText": "Responsibility - A Guide To Giving Up Your Dreams And Holding Yourself Back In Order To Behave Properly Enough To Impress Those In Power",
+      "lines": [
+        "Responsibility - A Guide To Giving Up Your Dreams And Holding Yourself Back In Order To Behave Properly Enough To Impress Those In Power"
+      ]
+    },
+    "1": {
+      "id": 1,
+      "name": "",
+      "caption": "Look In Urinal",
+      "rawText": "There is a dollar in the urinal. Pick it up?",
+      "lines": [
+        "There is a dollar in the urinal. Pick it up?"
+      ]
+    },
+    "3": {
+      "id": 3,
+      "name": "",
+      "caption": "Turn Off Electricity?",
+      "rawText": "It says \"Danger! High Voltage! Risk Of Death!\" all over it.<.><NEWLINE>Sounds like fun!",
+      "lines": [
+        "It says \"Danger! High Voltage! Risk Of Death!\" all over it.",
+        "Sounds like fun!"
+      ]
+    },
+    "4": {
+      "id": 4,
+      "name": "",
+      "caption": "Talk To Principal",
+      "rawText": "Look, kid.<.><NEWLINE>I just don't like you, ok?<NEWLINE>I worked hard and got this job, because it put me in a position of power. My decisions will change your entire fate.<NEWLINE>I can decide on a whim whether you end up homeless in a gutter, or a Wall Street millionaire investment banker.<NEWLINE>Up to me!<.>And guess what? I just decided that I don't like your face.<NEWLINE>Oops! Too bad. You lose.<NEWLINE>So now, no matter what you do, no matter how hard you try, well, you're never going to get anywhere. Mark my words.<.>You think that's not fair? You think it's not fair? Tell that to Johnny Parkins, back in '83.<NEWLINE>Johnny thought it was really funny to steal my girl. Hilarious.<NEWLINE>And you know what? You kind of look a little bit like Johnny.<NEWLINE>So that's it, kid.",
+      "lines": [
+        "Look, kid.",
+        "I just don't like you, ok?",
+        "I worked hard and got this job, because it put me in a position of power. My decisions will change your entire fate.",
+        "I can decide on a whim whether you end up homeless in a gutter, or a Wall Street millionaire investment banker.",
+        "Up to me!",
+        "And guess what? I just decided that I don't like your face.",
+        "Oops! Too bad. You lose.",
+        "So now, no matter what you do, no matter how hard you try, well, you're never going to get anywhere. Mark my words.",
+        "You think that's not fair? You think it's not fair? Tell that to Johnny Parkins, back in '83.",
+        "Johnny thought it was really funny to steal my girl. Hilarious.",
+        "And you know what? You kind of look a little bit like Johnny.",
+        "So that's it, kid."
+      ]
+    },
+    "5": {
+      "id": 5,
+      "name": "",
+      "caption": "Talk To Secretary",
+      "rawText": "Hello.",
+      "lines": [
+        "Hello."
+      ]
+    },
+    "6": {
+      "id": 6,
+      "name": "",
+      "caption": "Talk To The Baby",
+      "rawText": "Hello baby! You're certainly in for a surprise!<NEWLINE>First of all, I'm going to let you know straight away that you were a complete accident.<NEWLINE>You might think \"not me!\" but that's simply the case for 99% of humans!<NEWLINE>You see, nobody actually wants children. Sometimes they are overcome by hormones and delusionally proclaim that they do!<NEWLINE>This is just another intinctual emotion, not something people actually want, but something their body is controlling them to say and do.<NEWLINE>Our parents, like every other paired couple with offspring on this planet, just couldn't control their biological addictions, and were overcome in a humiliating moment of lost control, compulsively slamming engorged appendages into random orifices and spraying biohazardous material all over each other.<NEWLINE>As ashamed as they were, they couldn't help but to continue repeating this revolting process endlessly, occasionally deluding themselves into believing it is something they are doing of their own volition.<NEWLINE>You are their living mark of shame! Look at the cute baby! Look at the humiliating submission into animal instinct! Look at the loss of integrity and conviction!<NEWLINE>Yay! You destroyed our dreams! We're so happy! This is everything we ever wanted! Life is so great now!<NEWLINE>The best part is, that while you were a complete accident, now you'll be forced into a system against your will where you will be tortured for the next 3 decades without a say in the matter. <NEWLINE>You won't ever get anything you want, you'll never get any time off, you'll never escape, and you'll be a complete slave until you fall victim to this delusional process yourself and create yet another hapless victim together with an unsuspecting partner, just as compulsive and pathetic as yourself.<NEWLINE>Life is wonderful, because if we didn't keep telling ourselves that, we might all sink into a suicidal depression, and that, fortunately, has been outlawed. <NEWLINE>Sleep tight! Mommy and Daddy love you very much!",
+      "lines": [
+        "Hello baby! You're certainly in for a surprise!",
+        "First of all, I'm going to let you know straight away that you were a complete accident.",
+        "You might think \"not me!\" but that's simply the case for 99% of humans!",
+        "You see, nobody actually wants children. Sometimes they are overcome by hormones and delusionally proclaim that they do!",
+        "This is just another intinctual emotion, not something people actually want, but something their body is controlling them to say and do.",
+        "Our parents, like every other paired couple with offspring on this planet, just couldn't control their biological addictions, and were overcome in a humiliating moment of lost control, compulsively slamming engorged appendages into random orifices and spraying biohazardous material all over each other.",
+        "As ashamed as they were, they couldn't help but to continue repeating this revolting process endlessly, occasionally deluding themselves into believing it is something they are doing of their own volition.",
+        "You are their living mark of shame! Look at the cute baby! Look at the humiliating submission into animal instinct! Look at the loss of integrity and conviction!",
+        "Yay! You destroyed our dreams! We're so happy! This is everything we ever wanted! Life is so great now!",
+        "The best part is, that while you were a complete accident, now you'll be forced into a system against your will where you will be tortured for the next 3 decades without a say in the matter.",
+        "You won't ever get anything you want, you'll never get any time off, you'll never escape, and you'll be a complete slave until you fall victim to this delusional process yourself and create yet another hapless victim together with an unsuspecting partner, just as compulsive and pathetic as yourself.",
+        "Life is wonderful, because if we didn't keep telling ourselves that, we might all sink into a suicidal depression, and that, fortunately, has been outlawed.",
+        "Sleep tight! Mommy and Daddy love you very much!"
+      ]
+    },
+    "7": {
+      "id": 7,
+      "name": "",
+      "caption": "Talk To Brother",
+      "rawText": "Hey Bro. Have you seen one of my boxes in here? The one with the lotion in it? Yeah. Dude, that's disgusting. Get it out of here and keep it in your room. GET OUT!!!",
+      "lines": [
+        "Hey Bro. Have you seen one of my boxes in here? The one with the lotion in it? Yeah. Dude, that's disgusting. Get it out of here and keep it in your room. GET OUT!!!"
+      ]
+    },
+    "8": {
+      "id": 8,
+      "name": "",
+      "caption": "Use The Toilet",
+      "rawText": "Man, toilets are weird. Why can't we come up with something better than this?",
+      "lines": [
+        "Man, toilets are weird. Why can't we come up with something better than this?"
+      ]
+    },
+    "9": {
+      "id": 9,
+      "name": "",
+      "caption": "Look At The TV",
+      "rawText": "It's playing the Suburban Housewives Talk Show, a show designed to shape the opinions of bored suburban housewives. Some wealthy, sociopathic looking women wearing heavy makeup are sitting around a table telling the audience what they should think about various topics.",
+      "lines": [
+        "It's playing the Suburban Housewives Talk Show, a show designed to shape the opinions of bored suburban housewives. Some wealthy, sociopathic looking women wearing heavy makeup are sitting around a table telling the audience what they should think about various topics."
+      ]
+    },
+    "10": {
+      "id": 10,
+      "name": "",
+      "caption": "Look At The TV",
+      "rawText": "It's playing the Home Improvement Shopping Channel. A rough, macho looking alpha male with a gruff voice is describing how to endlessly add value to your household, while avoiding interaction with your family on the weekends. This is designed to satiate the human male instinct to preen their nest and demonstrate dominance towards the family units nearby. Oh, look. It's a pile of bricks! Manly bricks!",
+      "lines": [
+        "It's playing the Home Improvement Shopping Channel. A rough, macho looking alpha male with a gruff voice is describing how to endlessly add value to your household, while avoiding interaction with your family on the weekends. This is designed to satiate the human male instinct to preen their nest and demonstrate dominance towards the family units nearby. Oh, look. It's a pile of bricks! Manly bricks!"
+      ]
+    },
+    "11": {
+      "id": 11,
+      "name": "",
+      "caption": "Look In The Fridge",
+      "rawText": "The fridge is stuffed to the brim, but there's nothing to eat! Literally, it is stuffed with plastic containers filled with moldy leftovers of questionable edibility.",
+      "lines": [
+        "The fridge is stuffed to the brim, but there's nothing to eat! Literally, it is stuffed with plastic containers filled with moldy leftovers of questionable edibility."
+      ]
+    },
+    "12": {
+      "id": 12,
+      "name": "",
+      "caption": "Look At The Alarm Clock",
+      "rawText": "It's an alarm clock.  Some people believe the atomic bomb was a bad invention, and others believe the invention of gunpowder was the worst.  The truth is, the simple alarm clock is definitively the utmost devastating invention ever devised by mankind, forcing billions of humans to become slaves to a single blinking LED, taking away any control they may have had over their vital biological needs.  It's like a toilet that slams shut halfway through, that everyone has somehow enthusiastically accepted into their lives.  Inventions like these could only have been created by the most evil of madman.",
+      "lines": [
+        "It's an alarm clock.  Some people believe the atomic bomb was a bad invention, and others believe the invention of gunpowder was the worst.  The truth is, the simple alarm clock is definitively the utmost devastating invention ever devised by mankind, forcing billions of humans to become slaves to a single blinking LED, taking away any control they may have had over their vital biological needs.  It's like a toilet that slams shut halfway through, that everyone has somehow enthusiastically accepted into their lives.  Inventions like these could only have been created by the most evil of madman."
+      ]
+    },
+    "13": {
+      "id": 13,
+      "name": "",
+      "caption": "Use Old Computer",
+      "rawText": "The cursor was spinning when I got here.  It doesn't look like it's going to stop anytime soon.",
+      "lines": [
+        "The cursor was spinning when I got here.  It doesn't look like it's going to stop anytime soon."
+      ]
+    },
+    "14": {
+      "id": 14,
+      "name": "",
+      "caption": "Talk To Librarian",
+      "rawText": "Hey.  Uh, so what is this place?  It's a library!  You mean, like, iTunes?  No, it's a place where you can borrow books.  Isn't that illegal?",
+      "lines": [
+        "Hey.  Uh, so what is this place?  It's a library!  You mean, like, iTunes?  No, it's a place where you can borrow books.  Isn't that illegal?"
+      ]
+    },
+    "15": {
+      "id": 15,
+      "name": "",
+      "caption": "Talk To Secretary",
+      "rawText": "Hi",
+      "lines": [
+        "Hi"
+      ]
+    },
+    "16": {
+      "id": 16,
+      "name": "",
+      "caption": "Talk To Boss",
+      "rawText": "Hi",
+      "lines": [
+        "Hi"
+      ]
+    },
+    "17": {
+      "id": 17,
+      "name": "",
+      "caption": "",
+      "rawText": "<NOCANCEL><0>?<.><1>It's time.<.><0>...<.>",
+      "lines": [
+        "?",
+        "It's time.",
+        "..."
+      ]
+    },
+    "18": {
+      "id": 18,
+      "name": "",
+      "caption": "",
+      "rawText": "<NOCANCEL><SETSPRITEBOX0TOENTITY:bob>...and now we commence The First Interdimensional \"bob's game\" Championship!<.>Our first challenger is \"Yuu,\" an unknown newcomer with incredible beginner's luck- that somehow made it here against all odds, clearly by some kind of mistake.<.>Get ready!  Let's see what Yuu can do!",
+      "lines": [
+        "...and now we commence The First Interdimensional \"bob's game\" Championship!",
+        "Our first challenger is \"Yuu,\" an unknown newcomer with incredible beginner's luck- that somehow made it here against all odds, clearly by some kind of mistake.",
+        "Get ready!  Let's see what Yuu can do!"
+      ]
+    },
+    "19": {
+      "id": 19,
+      "name": "",
+      "caption": "",
+      "rawText": "<NOCANCEL><SETSPRITEBOX0TOENTITY:bob>That was close!  It looked like Yuu was winning!<NEWLINE>Don't worry, it's not the only chance- the nD is only the beginning!<.>The World's First!  The Global Debut!  \"bob's game\" has finally begun!<NEWLINE>I've packed it in with the nD!  (And they all said it couldn't be done!)<.>The greatest game that ever was, and I'll give it away for free!<NEWLINE>Now everyone can play \"bob's game\" each on their own nD!<.>The universal handheld!  The ultimate gaming machine!<NEWLINE>I'll put it into all your hands, how nice!  How kind of me!<.>Images and words and sounds, played back on a glowing screen.<NEWLINE>Loading programs into your brain, how more harmless could it be?<.>But they don't know...  it's MIND CONTROL!  Yes, this is modern sorcery!<NEWLINE>I've packed it full of hypnotic spells, subconscious iconography!<.>Flashing colors, spinning lights, pulsing logos mesmerize.<NEWLINE>Achievement unlocked- your brain is washed, and now I own your mind!<.>Oh, they've all been quite well studied, the techniques and imagery.<NEWLINE>The more obvious the \"PSI points\" are, the stronger the \"wizardry!\"<.>The \"consumers\" as we call them, they're completely blind, they'll never see!<NEWLINE>We bind a \"halo\" right onto their heads and tell them it's their \"destiny!\"<.>It's all hiding in plain sight, and so they won't suspect a thing.<NEWLINE>Simple images and words, they don't know the power that they bring!<.>We make them chant \"I'll catch them all!\" and tell them they're the best.<NEWLINE>A thousand hours later, they're so proud they passed our test!<.>And still!  They think they have free will, and Yuu surely thinks the same-<NEWLINE>While his subroutines control his every move, like a character in a game!<.>They don't realize it at all, but they're hypnotically enslaved!<NEWLINE>We bound their hands as children and then we programmed their brains!<.>It's deliberate indoctrination in our elaborate pyramid scheme.<NEWLINE>The lights, the stage, the dreams, the whole Game Industry!<.>We're con men!  We're crooks!  We're criminally insane!<NEWLINE>We're evil psychic psychopaths, and we've trapped you in our maze!<.>Surely someone someday will expose us puppet-master fiends!<NEWLINE>Fortunately, we control the media, the websites, and all the magazines!<.>The greatest trick in history!  We convinced them PSYCHIC POWER doesn't exist!<NEWLINE>Oh, and that pyramid on the dollar bill?  It's completely meaningless!<.>...<.>Calm down, relax!  Sit!  Don't take things so seriously, it's just a funny joke!<NEWLINE>Of course, I'm only kidding, ha ha!  Forget everything I spoke!<.>This is the end of \"bob's game\" - the beginning of nDworld!<NEWLINE>Don't worry, the mysteries will all eventually be uncurled.<.>\"bob's game\" cannot be stopped!  nDworld never ends!<NEWLINE>Sign up now and Yuu can play \"bob's game\" with all your friends!",
+      "lines": [
+        "That was close!  It looked like Yuu was winning!",
+        "Don't worry, it's not the only chance- the nD is only the beginning!",
+        "The World's First!  The Global Debut!  \"bob's game\" has finally begun!",
+        "I've packed it in with the nD!  (And they all said it couldn't be done!)",
+        "The greatest game that ever was, and I'll give it away for free!",
+        "Now everyone can play \"bob's game\" each on their own nD!",
+        "The universal handheld!  The ultimate gaming machine!",
+        "I'll put it into all your hands, how nice!  How kind of me!",
+        "Images and words and sounds, played back on a glowing screen.",
+        "Loading programs into your brain, how more harmless could it be?",
+        "But they don't know...  it's MIND CONTROL!  Yes, this is modern sorcery!",
+        "I've packed it full of hypnotic spells, subconscious iconography!",
+        "Flashing colors, spinning lights, pulsing logos mesmerize.",
+        "Achievement unlocked- your brain is washed, and now I own your mind!",
+        "Oh, they've all been quite well studied, the techniques and imagery.",
+        "The more obvious the \"PSI points\" are, the stronger the \"wizardry!\"",
+        "The \"consumers\" as we call them, they're completely blind, they'll never see!",
+        "We bind a \"halo\" right onto their heads and tell them it's their \"destiny!\"",
+        "It's all hiding in plain sight, and so they won't suspect a thing.",
+        "Simple images and words, they don't know the power that they bring!",
+        "We make them chant \"I'll catch them all!\" and tell them they're the best.",
+        "A thousand hours later, they're so proud they passed our test!",
+        "And still!  They think they have free will, and Yuu surely thinks the same-",
+        "While his subroutines control his every move, like a character in a game!",
+        "They don't realize it at all, but they're hypnotically enslaved!",
+        "We bound their hands as children and then we programmed their brains!",
+        "It's deliberate indoctrination in our elaborate pyramid scheme.",
+        "The lights, the stage, the dreams, the whole Game Industry!",
+        "We're con men!  We're crooks!  We're criminally insane!",
+        "We're evil psychic psychopaths, and we've trapped you in our maze!",
+        "Surely someone someday will expose us puppet-master fiends!",
+        "Fortunately, we control the media, the websites, and all the magazines!",
+        "The greatest trick in history!  We convinced them PSYCHIC POWER doesn't exist!",
+        "Oh, and that pyramid on the dollar bill?  It's completely meaningless!",
+        "...",
+        "Calm down, relax!  Sit!  Don't take things so seriously, it's just a funny joke!",
+        "Of course, I'm only kidding, ha ha!  Forget everything I spoke!",
+        "This is the end of \"bob's game\" - the beginning of nDworld!",
+        "Don't worry, the mysteries will all eventually be uncurled.",
+        "\"bob's game\" cannot be stopped!  nDworld never ends!",
+        "Sign up now and Yuu can play \"bob's game\" with all your friends!"
+      ]
+    },
+    "20": {
+      "id": 20,
+      "name": "",
+      "caption": "",
+      "rawText": "<SETSPRITEBOX0TOENTITY:cia>Everything is prepared to specification.<.>Uh, did you just wake up?",
+      "lines": [
+        "Everything is prepared to specification.",
+        "Uh, did you just wake up?"
+      ]
+    },
+    "21": {
+      "id": 21,
+      "name": "",
+      "caption": "",
+      "rawText": "<SETSPRITEBOX0TOENTITY:cia>P-p-p-pardon me, but, uh...<NEWLINE>Sir, when's the last time you took a shower?",
+      "lines": [
+        "P-p-p-pardon me, but, uh...",
+        "Sir, when's the last time you took a shower?"
+      ]
+    }
+  },
+  "areaEvents": {
+    "TOWNYUUDownstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 16,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNYUUUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 16,
+        "y": 200,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNYUUUpstairsYuusRoom": [
+      {
+        "areaName": "alarmClock",
+        "x": 216,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          12
+        ]
+      }
+    ],
+    "TOWNYUUUpstairsBabyRoom": [
+      {
+        "areaName": "inBed",
+        "x": 120,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNYUUUpstairsBrothersRoom": [
+      {
+        "areaName": "inBed",
+        "x": 32,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNYUUUpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 80,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNYUUUpstairsParentsRoom": [
+      {
+        "areaName": "tv",
+        "x": 112,
+        "y": 88,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNYUUBasement": [
+      {
+        "areaName": "bottomOfStairs",
+        "x": 32,
+        "y": 264,
+        "w": 16,
+        "h": 8,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          3
+        ]
+      }
+    ],
+    "TOWNYUUGarage": [
+      {
+        "areaName": "toAttic",
+        "x": 32,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNYUUAttic": [
+      {
+        "areaName": "toGarage",
+        "x": 32,
+        "y": 104,
+        "w": 24,
+        "h": 24,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNYUUDownstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "INTRODownstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 16,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "INTROUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 16,
+        "y": 200,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "INTROUpstairsBabyRoom": [
+      {
+        "areaName": "nextToCrib",
+        "x": 88,
+        "y": 80,
+        "w": 16,
+        "h": 32,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          6
+        ]
+      }
+    ],
+    "INTROUpstairsBrothersRoom": [
+      {
+        "areaName": "nextToBed",
+        "x": 176,
+        "y": 96,
+        "w": 16,
+        "h": 32,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          7
+        ]
+      }
+    ],
+    "INTROUpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 80,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          8
+        ]
+      }
+    ],
+    "INTROBasement": [
+      {
+        "areaName": "bottomOfStairs",
+        "x": 32,
+        "y": 264,
+        "w": 24,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "INTROGarage": [
+      {
+        "areaName": "toAttic",
+        "x": 32,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "INTRODownstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "INTROAttic": [
+      {
+        "areaName": "toGarage",
+        "x": 32,
+        "y": 104,
+        "w": 24,
+        "h": 24,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1Downstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 16,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1Upstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 16,
+        "y": 200,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1UpstairsBedroom1": [
+      {
+        "areaName": "inBed",
+        "x": 200,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1UpstairsBedroom2": [
+      {
+        "areaName": "inBed",
+        "x": 128,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1UpstairsMasterBedroom": [
+      {
+        "areaName": "toilet",
+        "x": 56,
+        "y": 72,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1UpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 80,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1Basement": [
+      {
+        "areaName": "bottomOfStairs",
+        "x": 32,
+        "y": 264,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1Garage": [
+      {
+        "areaName": "toAttic",
+        "x": 32,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1DownstairsBathroom": [
+      {
+        "areaName": "sink",
+        "x": 56,
+        "y": 88,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "GENERIC1Attic": [
+      {
+        "areaName": "toGarage",
+        "x": 32,
+        "y": 104,
+        "w": 24,
+        "h": 24,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNGENERIC2Downstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 240,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNGENERIC3Downstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 432,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNFRIENDDownstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 432,
+        "y": 168,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNFRIENDUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 432,
+        "y": 240,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNFRIENDUpstairsFriendsRoom": [
+      {
+        "areaName": "inBed",
+        "x": 80,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNFRIENDUpstairsSistersRoom": [
+      {
+        "areaName": "atDesk",
+        "x": 128,
+        "y": 136,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNFRIENDUpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 120,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNFRIENDUpstairsParentsRoom": [
+      {
+        "areaName": "toilet",
+        "x": 56,
+        "y": 72,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNFRIENDBasement": [
+      {
+        "areaName": "dryer",
+        "x": 376,
+        "y": 160,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNFRIENDGarage": [
+      {
+        "areaName": "tools",
+        "x": 56,
+        "y": 88,
+        "w": 32,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNFRIENDDownstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "JAPANBedroom": [
+      {
+        "areaName": "inBed",
+        "x": 32,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNCRAZYDownstairs": [
+      {
+        "areaName": "toUpstairs",
+        "x": 136,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNCRAZYUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 136,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNCRAZYUpstairsBedroom": [
+      {
+        "areaName": "inBed",
+        "x": 112,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNCRAZYUpstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 80,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNCRAZYDownstairsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 40,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNCRAZYBasement": [
+      {
+        "areaName": "bottomOfStairs",
+        "x": 152,
+        "y": 248,
+        "w": 32,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNCRAZYGarage": [
+      {
+        "areaName": "shelfWithFertilizer",
+        "x": 112,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNCRAZYUpstairsHidden": [
+      {
+        "areaName": "behindGateDoor",
+        "x": 80,
+        "y": 176,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMANSIONDownstairs": [
+      {
+        "areaName": "toUpstairsLeft",
+        "x": 264,
+        "y": 8,
+        "w": 64,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMANSIONDownstairsKitchen": [
+      {
+        "areaName": "tableUpperLeft",
+        "x": 216,
+        "y": 120,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMANSIONUpstairsVideoGameRoom": [
+      {
+        "areaName": "toDownstairsLeft",
+        "x": 264,
+        "y": 336,
+        "w": 64,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLMainOffice": [
+      {
+        "areaName": "sittingAtDesk",
+        "x": 136,
+        "y": 128,
+        "w": 16,
+        "h": 16,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          5
+        ]
+      }
+    ],
+    "SCHOOLPrincipalsOffice": [
+      {
+        "areaName": "chairFaceLeft",
+        "x": 128,
+        "y": 152,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLDetention": [
+      {
+        "areaName": "teacherChair",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLClinic": [
+      {
+        "areaName": "nurseSittingInChair",
+        "x": 224,
+        "y": 128,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLClinicBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 56,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLTeachersLounge": [
+      {
+        "areaName": "chairBottomLeft",
+        "x": 72,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLMusicRoom": [
+      {
+        "areaName": "teacherSittingInChair",
+        "x": 40,
+        "y": 120,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLArtRoom": [
+      {
+        "areaName": "teacherSittingAtDesk",
+        "x": 280,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLComputerLab": [
+      {
+        "areaName": "teacherSittingAtDesk",
+        "x": 152,
+        "y": 128,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLKitchen": [
+      {
+        "areaName": "sink",
+        "x": 40,
+        "y": 240,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLLibrary": [
+      {
+        "areaName": "behindCounter1",
+        "x": 272,
+        "y": 224,
+        "w": 16,
+        "h": 16,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          13
+        ]
+      }
+    ],
+    "SCHOOLCustodian": [
+      {
+        "areaName": "sittingAtDesk",
+        "x": 40,
+        "y": 248,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLGirlsBathroom": [
+      {
+        "areaName": "inStall",
+        "x": 128,
+        "y": 216,
+        "w": 8,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLBoysBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 128,
+        "y": 120,
+        "w": 8,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLEntranceHallway": [
+      {
+        "areaName": "fireAlarm",
+        "x": 1448,
+        "y": 232,
+        "w": 8,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLGymHallway": [
+      {
+        "areaName": "drinkingFountain",
+        "x": 1128,
+        "y": 336,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLClassHallway": [
+      {
+        "areaName": "lockers1",
+        "x": 32,
+        "y": 112,
+        "w": 16,
+        "h": 232,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLBackHallway": [
+      {
+        "areaName": "drinkingFountain1",
+        "x": 1512,
+        "y": 336,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLClassroom1": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLClassroom2": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLClassroom3": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLClassroom4": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLClassroom5": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLClassroom6": [
+      {
+        "areaName": "teacherAtDesk",
+        "x": 88,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "SCHOOLGymCafeteria": [
+      {
+        "areaName": "lunchTableSeat1",
+        "x": 144,
+        "y": 248,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNCoffeeShop": [
+      {
+        "areaName": "microphone",
+        "x": 120,
+        "y": 120,
+        "w": 8,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNPizzaPlace": [
+      {
+        "areaName": "cooler",
+        "x": 248,
+        "y": 128,
+        "w": 16,
+        "h": 104,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNBookstore": [
+      {
+        "areaName": "payPhone1",
+        "x": 40,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNBookstoreBathroom": [
+      {
+        "areaName": "handDryer",
+        "x": 40,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNVideoRent": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 144,
+        "y": 264,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNVideoRentAdultRoom": [
+      {
+        "areaName": "leftShelf1",
+        "x": 24,
+        "y": 120,
+        "w": 16,
+        "h": 16,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          0
+        ]
+      }
+    ],
+    "TOWNRecordStore": [
+      {
+        "areaName": "waitingInLineStart",
+        "x": 88,
+        "y": 272,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNPets4Less": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 208,
+        "y": 304,
+        "w": 8,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNElectronicsStore": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 216,
+        "y": 296,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNElectronicsStoreBackRoom": [
+      {
+        "areaName": "leftOfTable",
+        "x": 72,
+        "y": 136,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNBeautySalon": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 224,
+        "y": 216,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNArcade": [
+      {
+        "areaName": "changeMachine",
+        "x": 72,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNGroceryStore": [
+      {
+        "areaName": "vegetableRack1",
+        "x": 680,
+        "y": 624,
+        "w": 128,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNGasStation": [
+      {
+        "areaName": "customerRegister",
+        "x": 112,
+        "y": 200,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNDepartmentStore": [
+      {
+        "areaName": "behindRegister1",
+        "x": 608,
+        "y": 472,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNTacoBurger": [
+      {
+        "areaName": "trash1",
+        "x": 248,
+        "y": 296,
+        "w": 16,
+        "h": 56,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNChurch": [
+      {
+        "areaName": "pew6",
+        "x": 64,
+        "y": 224,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNDoctorsOfficeEntrance": [
+      {
+        "areaName": "window1",
+        "x": 128,
+        "y": 88,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNDoctorsOfficeBackHall": [
+      {
+        "areaName": "counter1",
+        "x": 136,
+        "y": 200,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNDoctorsOfficeBackRoom": [
+      {
+        "areaName": "doctorStool",
+        "x": 128,
+        "y": 152,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNGameStore": [
+      {
+        "areaName": "securityLock",
+        "x": 72,
+        "y": 80,
+        "w": 8,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMovieTheatreLobby": [
+      {
+        "areaName": "behindCounterRegister1",
+        "x": 144,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMovieTheatreMainHall": [
+      {
+        "areaName": "behindCounterRegister1",
+        "x": 472,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMovieTheatrePhotoBooth": [
+      {
+        "areaName": "photoBoothStool",
+        "x": 32,
+        "y": 64,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMovieTheatreMensBathroom": [
+      {
+        "areaName": "sink1",
+        "x": 264,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMovieTheatreWomensBathroom": [
+      {
+        "areaName": "sink1",
+        "x": 32,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMovieTheatreInsideLeft": [
+      {
+        "areaName": "seat",
+        "x": 72,
+        "y": 280,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNMovieTheatreInsideRight": [
+      {
+        "areaName": "seat",
+        "x": 72,
+        "y": 280,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPartyStore": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 392,
+        "y": 232,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPartyStoreBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 24,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYGroovyClubEntrance": [
+      {
+        "areaName": "toOutside",
+        "x": 80,
+        "y": 184,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYGroovyClub": [
+      {
+        "areaName": "toLobby",
+        "x": 376,
+        "y": 584,
+        "w": 32,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYOfficeEntrance": [
+      {
+        "areaName": "chair1",
+        "x": 144,
+        "y": 240,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYOfficeElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYOfficeWorkroom": [
+      {
+        "areaName": "elevatorButton",
+        "x": 104,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYOfficeBreakRoom": [
+      {
+        "areaName": "elevatorButton",
+        "x": 104,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYOfficeBossFloor": [
+      {
+        "areaName": "elevatorButton",
+        "x": 104,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          15
+        ]
+      }
+    ],
+    "CITYBobsAptInside": [
+      {
+        "areaName": "coffeeMaker",
+        "x": 72,
+        "y": 240,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYBobsBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYBobsAptInsideTrashed": [
+      {
+        "areaName": "coffeeMaker0",
+        "x": 72,
+        "y": 240,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYNeighborAptInside": [
+      {
+        "areaName": "microwave",
+        "x": 72,
+        "y": 240,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYNeighborsAptBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYAptMainOffice": [
+      {
+        "areaName": "chair1",
+        "x": 344,
+        "y": 200,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYBankEntrance": [
+      {
+        "areaName": "lineStart",
+        "x": 232,
+        "y": 272,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYBankElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYBankOwnerOffice": [
+      {
+        "areaName": "elevatorButton",
+        "x": 544,
+        "y": 168,
+        "w": 8,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFancyRestaurantEntrance": [
+      {
+        "areaName": "toRestaurant",
+        "x": 96,
+        "y": 80,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFancyRestaurant": [
+      {
+        "areaName": "toLobby",
+        "x": 96,
+        "y": 520,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFancyRestaurantKitchen": [
+      {
+        "areaName": "fridge",
+        "x": 96,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFashionStore": [
+      {
+        "areaName": "shirtsTable1",
+        "x": 40,
+        "y": 376,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFashionStoreDressingRoom": [
+      {
+        "areaName": "mirror",
+        "x": 40,
+        "y": 80,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFashionStoreDressingRoom2": [
+      {
+        "areaName": "mirror",
+        "x": 40,
+        "y": 80,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYElevatedLifeplace": [
+      {
+        "areaName": "couch1",
+        "x": 288,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYElevatedLifeplaceElevator": [
+      {
+        "areaName": "elevatorButtonToOutside",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYElevatedLifeplaceApartment": [
+      {
+        "areaName": "couch",
+        "x": 72,
+        "y": 192,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYElevatedLifeplaceBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 104,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYElevatedLifeplaceBedroom": [
+      {
+        "areaName": "inBed",
+        "x": 104,
+        "y": 96,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYDeli": [
+      {
+        "areaName": "breadTable",
+        "x": 208,
+        "y": 248,
+        "w": 16,
+        "h": 40,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYTheCafeEntrance": [
+      {
+        "areaName": "payPhone",
+        "x": 24,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYTheCafe": [
+      {
+        "areaName": "booth1",
+        "x": 24,
+        "y": 200,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYTheCafeBathroom": [
+      {
+        "areaName": "urinal",
+        "x": 48,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventType": "dialogue",
+        "dialogueIds": [
+          1
+        ]
+      }
+    ],
+    "CITYTheCafeDressingRoom": [
+      {
+        "areaName": "chair1",
+        "x": 32,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoolHall": [
+      {
+        "areaName": "jukebox",
+        "x": 200,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYLaundromat": [
+      {
+        "areaName": "vendingMachine",
+        "x": 192,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalEntrance": [
+      {
+        "areaName": "behindCounterRegister2",
+        "x": 192,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalEntranceBathroom": [
+      {
+        "areaName": "handDryer",
+        "x": 64,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalElevator2": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalWaitingOutPatient": [
+      {
+        "areaName": "magazineRack",
+        "x": 520,
+        "y": 288,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalOutPatientMensBathroom": [
+      {
+        "areaName": "sink",
+        "x": 24,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalOutPatientWomensBathroom": [
+      {
+        "areaName": "sink",
+        "x": 80,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalPatientRoom": [
+      {
+        "areaName": "chair1",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalPatientRoom2": [
+      {
+        "areaName": "chair1",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalPatientRoom3": [
+      {
+        "areaName": "chair1",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalOperatingRoom": [
+      {
+        "areaName": "operatingTable",
+        "x": 128,
+        "y": 200,
+        "w": 8,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalPsychiatricWard": [
+      {
+        "areaName": "elevatorButton2",
+        "x": 616,
+        "y": 168,
+        "w": 8,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalSoftRoom": [
+      {
+        "areaName": "inBed",
+        "x": 80,
+        "y": 112,
+        "w": 8,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalSoftRoom2": [
+      {
+        "areaName": "nextToBed",
+        "x": 48,
+        "y": 112,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalSoftRoom3": [
+      {
+        "areaName": "inBed",
+        "x": 80,
+        "y": 112,
+        "w": 8,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalMaternityWard": [
+      {
+        "areaName": "elevatorButton1",
+        "x": 496,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalMaternityWardInfirmary": [
+      {
+        "areaName": "baby1",
+        "x": 96,
+        "y": 104,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalEmergencyEntrance": [
+      {
+        "areaName": "aquarium",
+        "x": 480,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHospitalMorgue": [
+      {
+        "areaName": "elevatorButton1",
+        "x": 496,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationLobby": [
+      {
+        "areaName": "counter2",
+        "x": 112,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationOffice": [
+      {
+        "areaName": "stoolBehindCounter",
+        "x": 104,
+        "y": 344,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationInterrogationRoom": [
+      {
+        "areaName": "nextToTable",
+        "x": 80,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationOffice2WayMirror": [
+      {
+        "areaName": "chair",
+        "x": 152,
+        "y": 144,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationEvidenceRoom": [
+      {
+        "areaName": "powder",
+        "x": 176,
+        "y": 96,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationHoldingCells": [
+      {
+        "areaName": "behindCounter",
+        "x": 216,
+        "y": 160,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationPrisonVisitingRoom": [
+      {
+        "areaName": "visitorSideOfDoor",
+        "x": 216,
+        "y": 176,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationPrisonCellBlockHallway": [
+      {
+        "areaName": "outsideCell1",
+        "x": 48,
+        "y": 632,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationPrisonShowers": [
+      {
+        "areaName": "guardArea",
+        "x": 216,
+        "y": 32,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPoliceStationPrisonCell": [
+      {
+        "areaName": "outsideBars",
+        "x": 48,
+        "y": 56,
+        "w": 16,
+        "h": 16,
+        "eventType": "none",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFireDepartmentGarage": [
+      {
+        "areaName": "toUpstairs",
+        "x": 328,
+        "y": 8,
+        "w": 40,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFireDepartmentUpstairs": [
+      {
+        "areaName": "toDownstairs",
+        "x": 328,
+        "y": 160,
+        "w": 40,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFireDepartmentQuarters": [
+      {
+        "areaName": "chair4",
+        "x": 88,
+        "y": 184,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYFireDepartmentBathroom": [
+      {
+        "areaName": "sink1",
+        "x": 32,
+        "y": 128,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYCityHallEntrance": [
+      {
+        "areaName": "securityGuardStool",
+        "x": 608,
+        "y": 304,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYCityHallElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYCityHallOffices": [
+      {
+        "areaName": "elevatorButton",
+        "x": 704,
+        "y": 184,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYCityHallMeetingRoom": [
+      {
+        "areaName": "elevatorButton",
+        "x": 704,
+        "y": 184,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYCityHallMayorOffice": [
+      {
+        "areaName": "elevatorButton",
+        "x": 704,
+        "y": 184,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYMuseumLobby": [
+      {
+        "areaName": "toMuseum",
+        "x": 328,
+        "y": 80,
+        "w": 64,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYMuseumExhibit": [
+      {
+        "areaName": "toLobby",
+        "x": 536,
+        "y": 432,
+        "w": 64,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYMuseumGiftShop": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 120,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHotelEntrance": [
+      {
+        "areaName": "pamphletRack",
+        "x": 368,
+        "y": 328,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHotelPool": [
+      {
+        "areaName": "saunaRules",
+        "x": 408,
+        "y": 168,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHotelSauna": [
+      {
+        "areaName": "bench1",
+        "x": 32,
+        "y": 128,
+        "w": 8,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHotelElevator": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHotelElevator2": [
+      {
+        "areaName": "elevatorButton",
+        "x": 16,
+        "y": 136,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHotelHallway": [
+      {
+        "areaName": "elevatorButton1",
+        "x": 96,
+        "y": 312,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHotelRoom": [
+      {
+        "areaName": "miniBar",
+        "x": 208,
+        "y": 224,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHotelRoomBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHotelLinenCloset": [
+      {
+        "areaName": "supplyShelf",
+        "x": 88,
+        "y": 128,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumLobby": [
+      {
+        "areaName": "toUpperFloorRightStairwellLeft",
+        "x": 1504,
+        "y": 8,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumBathroomLeftMens": [
+      {
+        "areaName": "handDryer1",
+        "x": 32,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumBathroomRightWomens": [
+      {
+        "areaName": "handDryer1",
+        "x": 552,
+        "y": 80,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumLeftHallway": [
+      {
+        "areaName": "vendingMachine1",
+        "x": 40,
+        "y": 1064,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumRightHallway": [
+      {
+        "areaName": "vendingMachine1",
+        "x": 72,
+        "y": 1240,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumMain": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 264,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumMainIntro": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumIntroOld": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumMainOldCrowd": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 160,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumBackstage": [
+      {
+        "areaName": "toStadiumRight",
+        "x": 1432,
+        "y": 176,
+        "w": 48,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumProducerRoom": [
+      {
+        "areaName": "bigTV",
+        "x": 104,
+        "y": 104,
+        "w": 24,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumDressingRoom": [
+      {
+        "areaName": "chair",
+        "x": 160,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumDressingRoomBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 24,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumDressingRoom2": [
+      {
+        "areaName": "chair",
+        "x": 160,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumDressingRoom2Bathroom": [
+      {
+        "areaName": "sink",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumStarDressingRoom": [
+      {
+        "areaName": "chair",
+        "x": 160,
+        "y": 104,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYStadiumDressingRoom3Bathroom": [
+      {
+        "areaName": "sink",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYPawnShop": [
+      {
+        "areaName": "behindCounterRegister",
+        "x": 128,
+        "y": 120,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYCasinoEntrance": [
+      {
+        "areaName": "toCasino",
+        "x": 368,
+        "y": 80,
+        "w": 48,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYCasinoMain": [
+      {
+        "areaName": "toLobby",
+        "x": 368,
+        "y": 640,
+        "w": 48,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYCasinoBackroom": [
+      {
+        "areaName": "chair",
+        "x": 80,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHourlyMotel": [
+      {
+        "areaName": "behindCounterStool",
+        "x": 64,
+        "y": 472,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHourlyMotelRoom": [
+      {
+        "areaName": "vibratingBed",
+        "x": 168,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHourlyMotelRoomBathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHourlyMotelRoom2": [
+      {
+        "areaName": "vibratingBed",
+        "x": 168,
+        "y": 152,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "CITYHourlyMotelRoom2Bathroom": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 96,
+        "w": 16,
+        "h": 16,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "INTROTown": [
+      {
+        "areaName": "friendsBackYardBenchLeft",
+        "x": 192,
+        "y": 568,
+        "w": 24,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNTown": [
+      {
+        "areaName": "toNeighborhoodRight",
+        "x": 12040,
+        "y": 2824,
+        "w": 384,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNOutsideNeighborhood": [
+      {
+        "areaName": "toTownForestPath",
+        "x": 2064,
+        "y": 8,
+        "w": 160,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNOutsideForest": [
+      {
+        "areaName": "toNeighborhood",
+        "x": 360,
+        "y": 8,
+        "w": 136,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNYUUBackyardToolShed": [
+      {
+        "areaName": "rake",
+        "x": 40,
+        "y": 88,
+        "w": 16,
+        "h": 8,
+        "eventType": "door",
+        "dialogueIds": []
+      }
+    ],
+    "TOWNClubHouse": [
+      {
+        "areaName": "toForest",
+        "x": 80,
+        "y": 168,
+        "w": 32,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYCity": [
+      {
+        "areaName": "toClub",
+        "x": 2576,
+        "y": 280,
+        "w": 48,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "ALPHAStadiumMain": [
+      {
+        "areaName": "toBehindStadiumLeft",
+        "x": 144,
+        "y": 264,
+        "w": 48,
+        "h": 16,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "CITYBobsBathroomCopy": [
+      {
+        "areaName": "toilet",
+        "x": 64,
+        "y": 88,
+        "w": 16,
+        "h": 16,
+        "eventType": "sound",
+        "dialogueIds": []
+      }
+    ],
+    "ALPHABobsApartment": [
+      {
+        "areaName": "futon",
+        "x": 248,
+        "y": 112,
+        "w": 8,
+        "h": 8,
+        "eventType": "sound",
+        "dialogueIds": []
+      }
+    ],
+    "ALPHABobElevator": [
+      {
+        "areaName": "toStadium",
+        "x": 32,
+        "y": 168,
+        "w": 32,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ],
+    "ALPHAStadiumBackstage": [
+      {
+        "areaName": "toStadiumRight",
+        "x": 1432,
+        "y": 176,
+        "w": 48,
+        "h": 8,
+        "eventType": "warp",
+        "dialogueIds": []
+      }
+    ]
+  },
+  "npcDialogueMap": {
+    "secretary": {
+      "name": "secretary",
+      "dialogueIds": [
+        5
+      ],
+      "lines": [
+        "Hello."
+      ],
+      "caption": "Talk To Secretary"
+    },
+    "principal": {
+      "name": "principal",
+      "dialogueIds": [
+        4
+      ],
+      "lines": [
+        "Look, kid.",
+        "I just don't like you, ok?",
+        "I worked hard and got this job, because it put me in a position of power. My decisions will change your entire fate.",
+        "I can decide on a whim whether you end up homeless in a gutter, or a Wall Street millionaire investment banker.",
+        "Up to me!",
+        "And guess what? I just decided that I don't like your face.",
+        "Oops! Too bad. You lose.",
+        "So now, no matter what you do, no matter how hard you try, well, you're never going to get anywhere. Mark my words.",
+        "You think that's not fair? You think it's not fair? Tell that to Johnny Parkins, back in '83.",
+        "Johnny thought it was really funny to steal my girl. Hilarious.",
+        "And you know what? You kind of look a little bit like Johnny.",
+        "So that's it, kid."
+      ],
+      "caption": "Talk To Principal"
+    },
+    "baby": {
+      "name": "baby",
+      "dialogueIds": [
+        6
+      ],
+      "lines": [
+        "Hello baby! You're certainly in for a surprise!",
+        "First of all, I'm going to let you know straight away that you were a complete accident.",
+        "You might think \"not me!\" but that's simply the case for 99% of humans!",
+        "You see, nobody actually wants children. Sometimes they are overcome by hormones and delusionally proclaim that they do!",
+        "This is just another intinctual emotion, not something people actually want, but something their body is controlling them to say and do.",
+        "Our parents, like every other paired couple with offspring on this planet, just couldn't control their biological addictions, and were overcome in a humiliating moment of lost control, compulsively slamming engorged appendages into random orifices and spraying biohazardous material all over each other.",
+        "As ashamed as they were, they couldn't help but to continue repeating this revolting process endlessly, occasionally deluding themselves into believing it is something they are doing of their own volition.",
+        "You are their living mark of shame! Look at the cute baby! Look at the humiliating submission into animal instinct! Look at the loss of integrity and conviction!",
+        "Yay! You destroyed our dreams! We're so happy! This is everything we ever wanted! Life is so great now!",
+        "The best part is, that while you were a complete accident, now you'll be forced into a system against your will where you will be tortured for the next 3 decades without a say in the matter.",
+        "You won't ever get anything you want, you'll never get any time off, you'll never escape, and you'll be a complete slave until you fall victim to this delusional process yourself and create yet another hapless victim together with an unsuspecting partner, just as compulsive and pathetic as yourself.",
+        "Life is wonderful, because if we didn't keep telling ourselves that, we might all sink into a suicidal depression, and that, fortunately, has been outlawed.",
+        "Sleep tight! Mommy and Daddy love you very much!"
+      ],
+      "caption": "Talk To The Baby"
+    },
+    "maleangryteacher": {
+      "name": "maleangryteacher",
+      "dialogueIds": [
+        7
+      ],
+      "lines": [
+        "Hey Bro. Have you seen one of my boxes in here? The one with the lotion in it? Yeah. Dude, that's disgusting. Get it out of here and keep it in your room. GET OUT!!!"
+      ],
+      "caption": "Talk To Brother"
+    },
+    "librarian": {
+      "name": "librarian",
+      "dialogueIds": [
+        13
+      ],
+      "lines": [
+        "The cursor was spinning when I got here.  It doesn't look like it's going to stop anytime soon."
+      ],
+      "caption": "Use Old Computer"
+    },
+    "mom": {
+      "name": "mom",
+      "dialogueIds": [
+        9,
+        11,
+        10
+      ],
+      "lines": [
+        "It's playing the Suburban Housewives Talk Show, a show designed to shape the opinions of bored suburban housewives. Some wealthy, sociopathic looking women wearing heavy makeup are sitting around a table telling the audience what they should think about various topics.",
+        "The fridge is stuffed to the brim, but there's nothing to eat! Literally, it is stuffed with plastic containers filled with moldy leftovers of questionable edibility.",
+        "It's playing the Home Improvement Shopping Channel. A rough, macho looking alpha male with a gruff voice is describing how to endlessly add value to your household, while avoiding interaction with your family on the weekends. This is designed to satiate the human male instinct to preen their nest and demonstrate dominance towards the family units nearby. Oh, look. It's a pile of bricks! Manly bricks!"
+      ],
+      "caption": "Look At The TV"
+    },
+    "dad": {
+      "name": "dad",
+      "dialogueIds": [
+        9,
+        11,
+        10
+      ],
+      "lines": [
+        "It's playing the Suburban Housewives Talk Show, a show designed to shape the opinions of bored suburban housewives. Some wealthy, sociopathic looking women wearing heavy makeup are sitting around a table telling the audience what they should think about various topics.",
+        "The fridge is stuffed to the brim, but there's nothing to eat! Literally, it is stuffed with plastic containers filled with moldy leftovers of questionable edibility.",
+        "It's playing the Home Improvement Shopping Channel. A rough, macho looking alpha male with a gruff voice is describing how to endlessly add value to your household, while avoiding interaction with your family on the weekends. This is designed to satiate the human male instinct to preen their nest and demonstrate dominance towards the family units nearby. Oh, look. It's a pile of bricks! Manly bricks!"
+      ],
+      "caption": "Look At The TV"
+    },
+    "sleazyunclebob": {
+      "name": "sleazyunclebob",
+      "dialogueIds": [
+        17
+      ],
+      "lines": [
+        "?",
+        "It's time.",
+        "..."
+      ],
+      "caption": "Sleazyunclebob"
+    },
+    "bob": {
+      "name": "bob",
+      "dialogueIds": [
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "lines": [
+        "?",
+        "It's time.",
+        "...",
+        "...and now we commence The First Interdimensional \"bob's game\" Championship!",
+        "Our first challenger is \"Yuu,\" an unknown newcomer with incredible beginner's luck- that somehow made it here against all odds, clearly by some kind of mistake.",
+        "Get ready!  Let's see what Yuu can do!",
+        "That was close!  It looked like Yuu was winning!",
+        "Don't worry, it's not the only chance- the nD is only the beginning!",
+        "The World's First!  The Global Debut!  \"bob's game\" has finally begun!",
+        "I've packed it in with the nD!  (And they all said it couldn't be done!)",
+        "The greatest game that ever was, and I'll give it away for free!",
+        "Now everyone can play \"bob's game\" each on their own nD!",
+        "The universal handheld!  The ultimate gaming machine!",
+        "I'll put it into all your hands, how nice!  How kind of me!",
+        "Images and words and sounds, played back on a glowing screen.",
+        "Loading programs into your brain, how more harmless could it be?",
+        "But they don't know...  it's MIND CONTROL!  Yes, this is modern sorcery!",
+        "I've packed it full of hypnotic spells, subconscious iconography!",
+        "Flashing colors, spinning lights, pulsing logos mesmerize.",
+        "Achievement unlocked- your brain is washed, and now I own your mind!",
+        "Oh, they've all been quite well studied, the techniques and imagery.",
+        "The more obvious the \"PSI points\" are, the stronger the \"wizardry!\"",
+        "The \"consumers\" as we call them, they're completely blind, they'll never see!",
+        "We bind a \"halo\" right onto their heads and tell them it's their \"destiny!\"",
+        "It's all hiding in plain sight, and so they won't suspect a thing.",
+        "Simple images and words, they don't know the power that they bring!",
+        "We make them chant \"I'll catch them all!\" and tell them they're the best.",
+        "A thousand hours later, they're so proud they passed our test!",
+        "And still!  They think they have free will, and Yuu surely thinks the same-",
+        "While his subroutines control his every move, like a character in a game!",
+        "They don't realize it at all, but they're hypnotically enslaved!",
+        "We bound their hands as children and then we programmed their brains!",
+        "It's deliberate indoctrination in our elaborate pyramid scheme.",
+        "The lights, the stage, the dreams, the whole Game Industry!",
+        "We're con men!  We're crooks!  We're criminally insane!",
+        "We're evil psychic psychopaths, and we've trapped you in our maze!",
+        "Surely someone someday will expose us puppet-master fiends!",
+        "Fortunately, we control the media, the websites, and all the magazines!",
+        "The greatest trick in history!  We convinced them PSYCHIC POWER doesn't exist!",
+        "Oh, and that pyramid on the dollar bill?  It's completely meaningless!",
+        "...",
+        "Calm down, relax!  Sit!  Don't take things so seriously, it's just a funny joke!",
+        "Of course, I'm only kidding, ha ha!  Forget everything I spoke!",
+        "This is the end of \"bob's game\" - the beginning of nDworld!",
+        "Don't worry, the mysteries will all eventually be uncurled.",
+        "\"bob's game\" cannot be stopped!  nDworld never ends!",
+        "Sign up now and Yuu can play \"bob's game\" with all your friends!",
+        "Everything is prepared to specification.",
+        "Uh, did you just wake up?",
+        "P-p-p-pardon me, but, uh...",
+        "Sir, when's the last time you took a shower?"
+      ],
+      "caption": "Bob"
+    },
+    "gameBobZero": {
+      "name": "gameBobZero",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Gamebobzero"
+    },
+    "schoolClock": {
+      "name": "schoolClock",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Schoolclock"
+    },
+    "schoolTV": {
+      "name": "schoolTV",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Schooltv"
+    },
+    "schoolChairFaceDown": {
+      "name": "schoolChairFaceDown",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Schoolchairfacedown"
+    },
+    "roundBlackGarbageCanOnWheels": {
+      "name": "roundBlackGarbageCanOnWheels",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Roundblackgarbagecanonwheels"
+    },
+    "schoolBathroomStallWall": {
+      "name": "schoolBathroomStallWall",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Schoolbathroomstallwall"
+    },
+    "microphoneStand": {
+      "name": "microphoneStand",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Microphonestand"
+    },
+    "roundedBackBlackChairFaceUp": {
+      "name": "roundedBackBlackChairFaceUp",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Roundedbackblackchairfaceup"
+    },
+    "smallWoodenBenchHorizontal": {
+      "name": "smallWoodenBenchHorizontal",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Smallwoodenbenchhorizontal"
+    },
+    "videoStoreTV": {
+      "name": "videoStoreTV",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Videostoretv"
+    },
+    "recordStoreTV": {
+      "name": "recordStoreTV",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Recordstoretv"
+    },
+    "fishTank": {
+      "name": "fishTank",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Fishtank"
+    },
+    "smallTV": {
+      "name": "smallTV",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Smalltv"
+    },
+    "blackRoundStool": {
+      "name": "blackRoundStool",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Blackroundstool"
+    },
+    "richnerdguy": {
+      "name": "richnerdguy",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Richnerdguy"
+    },
+    "ghost": {
+      "name": "ghost",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Ghost"
+    },
+    "crippled": {
+      "name": "crippled",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Crippled"
+    },
+    "diseased": {
+      "name": "diseased",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Diseased"
+    },
+    "securityguard": {
+      "name": "securityguard",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Securityguard"
+    },
+    "jailCellbars": {
+      "name": "jailCellbars",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Jailcellbars"
+    },
+    "prisonShower": {
+      "name": "prisonShower",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Prisonshower"
+    },
+    "filingCabinetSingle": {
+      "name": "filingCabinetSingle",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Filingcabinetsingle"
+    },
+    "stadiumRopeBarrier": {
+      "name": "stadiumRopeBarrier",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Stadiumropebarrier"
+    },
+    "bighead": {
+      "name": "bighead",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Bighead"
+    },
+    "bobDesk": {
+      "name": "bobDesk",
+      "dialogueIds": [],
+      "lines": [],
+      "caption": "Bobdesk"
+    }
+  },
+  "npcDialogues": {
+    "secretary": {
+      "lines": [
+        "Hello."
+      ],
+      "caption": "Talk To Secretary"
+    },
+    "principal": {
+      "lines": [
+        "Look, kid.",
+        "I just don't like you, ok?",
+        "I worked hard and got this job, because it put me in a position of power. My decisions will change your entire fate.",
+        "I can decide on a whim whether you end up homeless in a gutter, or a Wall Street millionaire investment banker.",
+        "Up to me!",
+        "And guess what? I just decided that I don't like your face.",
+        "Oops! Too bad. You lose.",
+        "So now, no matter what you do, no matter how hard you try, well, you're never going to get anywhere. Mark my words.",
+        "You think that's not fair? You think it's not fair? Tell that to Johnny Parkins, back in '83.",
+        "Johnny thought it was really funny to steal my girl. Hilarious.",
+        "And you know what? You kind of look a little bit like Johnny.",
+        "So that's it, kid."
+      ],
+      "caption": "Talk To Principal"
+    },
+    "baby": {
+      "lines": [
+        "Hello baby! You're certainly in for a surprise!",
+        "First of all, I'm going to let you know straight away that you were a complete accident.",
+        "You might think \"not me!\" but that's simply the case for 99% of humans!",
+        "You see, nobody actually wants children. Sometimes they are overcome by hormones and delusionally proclaim that they do!",
+        "This is just another intinctual emotion, not something people actually want, but something their body is controlling them to say and do.",
+        "Our parents, like every other paired couple with offspring on this planet, just couldn't control their biological addictions, and were overcome in a humiliating moment of lost control, compulsively slamming engorged appendages into random orifices and spraying biohazardous material all over each other.",
+        "As ashamed as they were, they couldn't help but to continue repeating this revolting process endlessly, occasionally deluding themselves into believing it is something they are doing of their own volition.",
+        "You are their living mark of shame! Look at the cute baby! Look at the humiliating submission into animal instinct! Look at the loss of integrity and conviction!",
+        "Yay! You destroyed our dreams! We're so happy! This is everything we ever wanted! Life is so great now!",
+        "The best part is, that while you were a complete accident, now you'll be forced into a system against your will where you will be tortured for the next 3 decades without a say in the matter.",
+        "You won't ever get anything you want, you'll never get any time off, you'll never escape, and you'll be a complete slave until you fall victim to this delusional process yourself and create yet another hapless victim together with an unsuspecting partner, just as compulsive and pathetic as yourself.",
+        "Life is wonderful, because if we didn't keep telling ourselves that, we might all sink into a suicidal depression, and that, fortunately, has been outlawed.",
+        "Sleep tight! Mommy and Daddy love you very much!"
+      ],
+      "caption": "Talk To The Baby"
+    },
+    "maleangryteacher": {
+      "lines": [
+        "Hey Bro. Have you seen one of my boxes in here? The one with the lotion in it? Yeah. Dude, that's disgusting. Get it out of here and keep it in your room. GET OUT!!!"
+      ],
+      "caption": "Talk To Brother"
+    },
+    "librarian": {
+      "lines": [
+        "The cursor was spinning when I got here.  It doesn't look like it's going to stop anytime soon."
+      ],
+      "caption": "Use Old Computer"
+    },
+    "mom": {
+      "lines": [
+        "It's playing the Suburban Housewives Talk Show, a show designed to shape the opinions of bored suburban housewives. Some wealthy, sociopathic looking women wearing heavy makeup are sitting around a table telling the audience what they should think about various topics.",
+        "The fridge is stuffed to the brim, but there's nothing to eat! Literally, it is stuffed with plastic containers filled with moldy leftovers of questionable edibility.",
+        "It's playing the Home Improvement Shopping Channel. A rough, macho looking alpha male with a gruff voice is describing how to endlessly add value to your household, while avoiding interaction with your family on the weekends. This is designed to satiate the human male instinct to preen their nest and demonstrate dominance towards the family units nearby. Oh, look. It's a pile of bricks! Manly bricks!"
+      ],
+      "caption": "Look At The TV"
+    },
+    "dad": {
+      "lines": [
+        "It's playing the Suburban Housewives Talk Show, a show designed to shape the opinions of bored suburban housewives. Some wealthy, sociopathic looking women wearing heavy makeup are sitting around a table telling the audience what they should think about various topics.",
+        "The fridge is stuffed to the brim, but there's nothing to eat! Literally, it is stuffed with plastic containers filled with moldy leftovers of questionable edibility.",
+        "It's playing the Home Improvement Shopping Channel. A rough, macho looking alpha male with a gruff voice is describing how to endlessly add value to your household, while avoiding interaction with your family on the weekends. This is designed to satiate the human male instinct to preen their nest and demonstrate dominance towards the family units nearby. Oh, look. It's a pile of bricks! Manly bricks!"
+      ],
+      "caption": "Look At The TV"
+    },
+    "sleazyunclebob": {
+      "lines": [
+        "?",
+        "It's time.",
+        "..."
+      ],
+      "caption": "Sleazyunclebob"
+    },
+    "bob": {
+      "lines": [
+        "?",
+        "It's time.",
+        "...",
+        "...and now we commence The First Interdimensional \"bob's game\" Championship!",
+        "Our first challenger is \"Yuu,\" an unknown newcomer with incredible beginner's luck- that somehow made it here against all odds, clearly by some kind of mistake.",
+        "Get ready!  Let's see what Yuu can do!",
+        "That was close!  It looked like Yuu was winning!",
+        "Don't worry, it's not the only chance- the nD is only the beginning!",
+        "The World's First!  The Global Debut!  \"bob's game\" has finally begun!",
+        "I've packed it in with the nD!  (And they all said it couldn't be done!)",
+        "The greatest game that ever was, and I'll give it away for free!",
+        "Now everyone can play \"bob's game\" each on their own nD!",
+        "The universal handheld!  The ultimate gaming machine!",
+        "I'll put it into all your hands, how nice!  How kind of me!",
+        "Images and words and sounds, played back on a glowing screen.",
+        "Loading programs into your brain, how more harmless could it be?",
+        "But they don't know...  it's MIND CONTROL!  Yes, this is modern sorcery!",
+        "I've packed it full of hypnotic spells, subconscious iconography!",
+        "Flashing colors, spinning lights, pulsing logos mesmerize.",
+        "Achievement unlocked- your brain is washed, and now I own your mind!",
+        "Oh, they've all been quite well studied, the techniques and imagery.",
+        "The more obvious the \"PSI points\" are, the stronger the \"wizardry!\"",
+        "The \"consumers\" as we call them, they're completely blind, they'll never see!",
+        "We bind a \"halo\" right onto their heads and tell them it's their \"destiny!\"",
+        "It's all hiding in plain sight, and so they won't suspect a thing.",
+        "Simple images and words, they don't know the power that they bring!",
+        "We make them chant \"I'll catch them all!\" and tell them they're the best.",
+        "A thousand hours later, they're so proud they passed our test!",
+        "And still!  They think they have free will, and Yuu surely thinks the same-",
+        "While his subroutines control his every move, like a character in a game!",
+        "They don't realize it at all, but they're hypnotically enslaved!",
+        "We bound their hands as children and then we programmed their brains!",
+        "It's deliberate indoctrination in our elaborate pyramid scheme.",
+        "The lights, the stage, the dreams, the whole Game Industry!",
+        "We're con men!  We're crooks!  We're criminally insane!",
+        "We're evil psychic psychopaths, and we've trapped you in our maze!",
+        "Surely someone someday will expose us puppet-master fiends!",
+        "Fortunately, we control the media, the websites, and all the magazines!",
+        "The greatest trick in history!  We convinced them PSYCHIC POWER doesn't exist!",
+        "Oh, and that pyramid on the dollar bill?  It's completely meaningless!",
+        "...",
+        "Calm down, relax!  Sit!  Don't take things so seriously, it's just a funny joke!",
+        "Of course, I'm only kidding, ha ha!  Forget everything I spoke!",
+        "This is the end of \"bob's game\" - the beginning of nDworld!",
+        "Don't worry, the mysteries will all eventually be uncurled.",
+        "\"bob's game\" cannot be stopped!  nDworld never ends!",
+        "Sign up now and Yuu can play \"bob's game\" with all your friends!",
+        "Everything is prepared to specification.",
+        "Uh, did you just wake up?",
+        "P-p-p-pardon me, but, uh...",
+        "Sir, when's the last time you took a shower?"
+      ],
+      "caption": "Bob"
+    }
+  },
+  "areaDialogues": {
+    "TOWNYUUUpstairsYuusRoom.alarmClock": {
+      "lines": [
+        "It's an alarm clock.  Some people believe the atomic bomb was a bad invention, and others believe the invention of gunpowder was the worst.  The truth is, the simple alarm clock is definitively the utmost devastating invention ever devised by mankind, forcing billions of humans to become slaves to a single blinking LED, taking away any control they may have had over their vital biological needs.  It's like a toilet that slams shut halfway through, that everyone has somehow enthusiastically accepted into their lives.  Inventions like these could only have been created by the most evil of madman."
+      ],
+      "caption": "Look At The Alarm Clock"
+    },
+    "TOWNYUUBasement.bottomOfStairs": {
+      "lines": [
+        "It says \"Danger! High Voltage! Risk Of Death!\" all over it.",
+        "Sounds like fun!"
+      ],
+      "caption": "Turn Off Electricity?"
+    },
+    "INTROUpstairsBabyRoom.nextToCrib": {
+      "lines": [
+        "Hello baby! You're certainly in for a surprise!",
+        "First of all, I'm going to let you know straight away that you were a complete accident.",
+        "You might think \"not me!\" but that's simply the case for 99% of humans!",
+        "You see, nobody actually wants children. Sometimes they are overcome by hormones and delusionally proclaim that they do!",
+        "This is just another intinctual emotion, not something people actually want, but something their body is controlling them to say and do.",
+        "Our parents, like every other paired couple with offspring on this planet, just couldn't control their biological addictions, and were overcome in a humiliating moment of lost control, compulsively slamming engorged appendages into random orifices and spraying biohazardous material all over each other.",
+        "As ashamed as they were, they couldn't help but to continue repeating this revolting process endlessly, occasionally deluding themselves into believing it is something they are doing of their own volition.",
+        "You are their living mark of shame! Look at the cute baby! Look at the humiliating submission into animal instinct! Look at the loss of integrity and conviction!",
+        "Yay! You destroyed our dreams! We're so happy! This is everything we ever wanted! Life is so great now!",
+        "The best part is, that while you were a complete accident, now you'll be forced into a system against your will where you will be tortured for the next 3 decades without a say in the matter.",
+        "You won't ever get anything you want, you'll never get any time off, you'll never escape, and you'll be a complete slave until you fall victim to this delusional process yourself and create yet another hapless victim together with an unsuspecting partner, just as compulsive and pathetic as yourself.",
+        "Life is wonderful, because if we didn't keep telling ourselves that, we might all sink into a suicidal depression, and that, fortunately, has been outlawed.",
+        "Sleep tight! Mommy and Daddy love you very much!"
+      ],
+      "caption": "Talk To The Baby"
+    },
+    "INTROUpstairsBrothersRoom.nextToBed": {
+      "lines": [
+        "Hey Bro. Have you seen one of my boxes in here? The one with the lotion in it? Yeah. Dude, that's disgusting. Get it out of here and keep it in your room. GET OUT!!!"
+      ],
+      "caption": "Talk To Brother"
+    },
+    "INTROUpstairsBathroom.toilet": {
+      "lines": [
+        "Man, toilets are weird. Why can't we come up with something better than this?"
+      ],
+      "caption": "Use The Toilet"
+    },
+    "SCHOOLMainOffice.sittingAtDesk": {
+      "lines": [
+        "Hello."
+      ],
+      "caption": "Talk To Secretary"
+    },
+    "SCHOOLLibrary.behindCounter1": {
+      "lines": [
+        "The cursor was spinning when I got here.  It doesn't look like it's going to stop anytime soon."
+      ],
+      "caption": "Use Old Computer"
+    },
+    "TOWNVideoRentAdultRoom.leftShelf1": {
+      "lines": [
+        "Responsibility - A Guide To Giving Up Your Dreams And Holding Yourself Back In Order To Behave Properly Enough To Impress Those In Power"
+      ],
+      "caption": "Look At Video"
+    },
+    "CITYOfficeBossFloor.elevatorButton": {
+      "lines": [
+        "Hi"
+      ],
+      "caption": "Talk To Secretary"
+    },
+    "CITYTheCafeBathroom.urinal": {
+      "lines": [
+        "There is a dollar in the urinal. Pick it up?"
+      ],
+      "caption": "Look In Urinal"
+    }
+  },
+  "mapEntities": {
+    "TOWNYUUDownstairs": [
+      {
+        "name": "mom",
+        "spriteName": "mom",
+        "x": 112.0,
+        "y": 96.0
+      },
+      {
+        "name": "dad",
+        "spriteName": "dad",
+        "x": 384.0,
+        "y": 216.0
+      }
+    ],
+    "SCHOOLMainOffice": [
+      {
+        "name": "secretary",
+        "spriteName": "secretary",
+        "x": 136.0,
+        "y": 88.0
+      }
+    ],
+    "SCHOOLPrincipalsOffice": [
+      {
+        "name": "principal",
+        "spriteName": "principal",
+        "x": 64.0,
+        "y": 112.0
+      }
+    ],
+    "SCHOOLDetention": [
+      {
+        "name": "hallmonitor",
+        "spriteName": "hallmonitor",
+        "x": 48.0,
+        "y": 80.0
+      }
+    ],
+    "SCHOOLClinic": [
+      {
+        "name": "nurse",
+        "spriteName": "nurse",
+        "x": 224.0,
+        "y": 88.0
+      }
+    ],
+    "SCHOOLTeachersLounge": [
+      {
+        "name": "givenupteacher",
+        "spriteName": "givenupteacher",
+        "x": 72.0,
+        "y": 80.0
+      },
+      {
+        "name": "maleangryteacher",
+        "spriteName": "maleangryteacher",
+        "x": 104.0,
+        "y": 80.0
+      },
+      {
+        "name": "malesadteacher",
+        "spriteName": "malesadteacher",
+        "x": 136.0,
+        "y": 80.0
+      }
+    ],
+    "SCHOOLMusicRoom": [
+      {
+        "name": "femalesadteacher",
+        "spriteName": "femalesadteacher",
+        "x": 160.0,
+        "y": 112.0
+      }
+    ],
+    "SCHOOLArtRoom": [
+      {
+        "name": "femaleangryteacher",
+        "spriteName": "femaleangryteacher",
+        "x": 160.0,
+        "y": 96.0
+      }
+    ],
+    "SCHOOLComputerLab": [
+      {
+        "name": "pcteacher",
+        "spriteName": "pcteacher",
+        "x": 176.0,
+        "y": 56.0
+      }
+    ],
+    "SCHOOLKitchen": [
+      {
+        "name": "sleazyunclebob",
+        "spriteName": "sleazyunclebob",
+        "x": 64.0,
+        "y": 128.0
+      }
+    ],
+    "SCHOOLLibrary": [
+      {
+        "name": "librarian",
+        "spriteName": "librarian",
+        "x": 264.0,
+        "y": 200.0
+      }
+    ],
+    "SCHOOLCustodian": [
+      {
+        "name": "janitor",
+        "spriteName": "janitor",
+        "x": 40.0,
+        "y": 216.0
+      }
+    ],
+    "SCHOOLClassroom1": [
+      {
+        "name": "grannycluelessteacher",
+        "spriteName": "grannycluelessteacher",
+        "x": 160.0,
+        "y": 64.0
+      }
+    ],
+    "SCHOOLClassroom2": [
+      {
+        "name": "femaleangryteacher",
+        "spriteName": "femaleangryteacher",
+        "x": 160.0,
+        "y": 64.0
+      }
+    ],
+    "SCHOOLClassroom3": [
+      {
+        "name": "maleangryteacher",
+        "spriteName": "maleangryteacher",
+        "x": 160.0,
+        "y": 64.0
+      }
+    ],
+    "SCHOOLClassroom4": [
+      {
+        "name": "malesadteacher",
+        "spriteName": "malesadteacher",
+        "x": 160.0,
+        "y": 64.0
+      }
+    ],
+    "SCHOOLClassroom5": [
+      {
+        "name": "femalesadteacher",
+        "spriteName": "femalesadteacher",
+        "x": 160.0,
+        "y": 64.0
+      }
+    ],
+    "SCHOOLClassroom6": [
+      {
+        "name": "givenupteacher",
+        "spriteName": "givenupteacher",
+        "x": 160.0,
+        "y": 64.0
+      }
+    ],
+    "SCHOOLGymCafeteria": [
+      {
+        "name": "hallmonitor",
+        "spriteName": "hallmonitor",
+        "x": 256.0,
+        "y": 176.0
+      }
+    ],
+    "SCHOOLGymGym": [
+      {
+        "name": "maleangryteacher",
+        "spriteName": "maleangryteacher",
+        "x": 200.0,
+        "y": 176.0
+      }
+    ],
+    "TOWNCoffeeShop": [
+      {
+        "name": "deliicecreamman",
+        "spriteName": "deliicecreamman",
+        "x": 64.0,
+        "y": 336.0
+      },
+      {
+        "name": "guitarguy",
+        "spriteName": "guitarguy",
+        "x": 64.0,
+        "y": 88.0
+      },
+      {
+        "name": "prostitute",
+        "spriteName": "prostitute",
+        "x": 112.0,
+        "y": 80.0
+      },
+      {
+        "name": "chris",
+        "spriteName": "chris",
+        "x": 40.0,
+        "y": 64.0
+      },
+      {
+        "name": "islandhermit",
+        "spriteName": "islandhermit",
+        "x": 96.0,
+        "y": 40.0
+      },
+      {
+        "name": "deliicecreamman0",
+        "spriteName": "deliicecreamman",
+        "x": 40.0,
+        "y": 336.0
+      }
+    ],
+    "TOWNPizzaPlace": [
+      {
+        "name": "hotdogvendor",
+        "spriteName": "hotdogvendor",
+        "x": 208.0,
+        "y": 56.0
+      },
+      {
+        "name": "pizzaguy",
+        "spriteName": "pizzaguy",
+        "x": 160.0,
+        "y": 56.0
+      },
+      {
+        "name": "pizzaguy0",
+        "spriteName": "pizzaguy",
+        "x": 40.0,
+        "y": 32.0
+      }
+    ],
+    "TOWNBookstore": [
+      {
+        "name": "psychiatrist",
+        "spriteName": "psychiatrist",
+        "x": 208.0,
+        "y": 280.0
+      },
+      {
+        "name": "professor",
+        "spriteName": "professor",
+        "x": 192.0,
+        "y": 256.0
+      }
+    ],
+    "TOWNVideoRent": [
+      {
+        "name": "fatmeekcoder",
+        "spriteName": "fatmeekcoder",
+        "x": 168.0,
+        "y": 216.0
+      },
+      {
+        "name": "skinnymeekcoder",
+        "spriteName": "skinnymeekcoder",
+        "x": 144.0,
+        "y": 232.0
+      }
+    ],
+    "TOWNRecordStore": [
+      {
+        "name": "richnerdguy",
+        "spriteName": "richnerdguy",
+        "x": 24.0,
+        "y": 280.0
+      }
+    ],
+    "TOWNPets4Less": [
+      {
+        "name": "bigdog",
+        "spriteName": "bigdog",
+        "x": 160.0,
+        "y": 40.0
+      },
+      {
+        "name": "puppy",
+        "spriteName": "puppy",
+        "x": 176.0,
+        "y": 40.0
+      },
+      {
+        "name": "puppy0",
+        "spriteName": "puppy",
+        "x": 136.0,
+        "y": 40.0
+      },
+      {
+        "name": "cat",
+        "spriteName": "cat",
+        "x": 216.0,
+        "y": 40.0
+      },
+      {
+        "name": "hamster",
+        "spriteName": "hamster",
+        "x": 24.0,
+        "y": 320.0
+      },
+      {
+        "name": "hamster0",
+        "spriteName": "hamster",
+        "x": 16.0,
+        "y": 328.0
+      },
+      {
+        "name": "hamster1",
+        "spriteName": "hamster",
+        "x": 16.0,
+        "y": 264.0
+      },
+      {
+        "name": "bird",
+        "spriteName": "bird",
+        "x": 72.0,
+        "y": 288.0
+      },
+      {
+        "name": "bird0",
+        "spriteName": "bird",
+        "x": 112.0,
+        "y": 288.0
+      },
+      {
+        "name": "officeworkerfemale",
+        "spriteName": "officeworkerfemale",
+        "x": 216.0,
+        "y": 288.0
+      },
+      {
+        "name": "officeworkermale",
+        "spriteName": "officeworkermale",
+        "x": 200.0,
+        "y": 272.0
+      }
+    ],
+    "TOWNElectronicsStore": [
+      {
+        "name": "fatmeekcoder",
+        "spriteName": "fatmeekcoder",
+        "x": 256.0,
+        "y": 264.0
+      },
+      {
+        "name": "officeworkermale",
+        "spriteName": "officeworkermale",
+        "x": 200.0,
+        "y": 240.0
+      }
+    ],
+    "TOWNBeautySalon": [
+      {
+        "name": "momo",
+        "spriteName": "momo",
+        "x": 216.0,
+        "y": 120.0
+      },
+      {
+        "name": "oldmomo",
+        "spriteName": "oldmomo",
+        "x": 248.0,
+        "y": 136.0
+      }
+    ],
+    "CITYGroovyClubEntrance": [
+      {
+        "name": "richnerdguy",
+        "spriteName": "richnerdguy",
+        "x": 65.0,
+        "y": 60.0
+      }
+    ],
+    "CITYFancyRestaurantKitchenFreezer": [
+      {
+        "name": "ghost",
+        "spriteName": "ghost",
+        "x": 216.0,
+        "y": 40.0
+      }
+    ],
+    "CITYHospitalEntrance": [
+      {
+        "name": "crippled",
+        "spriteName": "crippled",
+        "x": 352.0,
+        "y": 240.0
+      }
+    ],
+    "CITYHospitalWaitingOutPatient": [
+      {
+        "name": "nurse",
+        "spriteName": "nurse",
+        "x": 120.0,
+        "y": 304.0
+      }
+    ],
+    "CITYHospitalMorgue": [
+      {
+        "name": "diseased",
+        "spriteName": "diseased",
+        "x": 280.0,
+        "y": 232.0
+      },
+      {
+        "name": "alien",
+        "spriteName": "alien",
+        "x": 160.0,
+        "y": 232.0
+      }
+    ],
+    "CITYHospitalSecretLab": [
+      {
+        "name": "diseased",
+        "spriteName": "diseased",
+        "x": 280.0,
+        "y": 232.0
+      },
+      {
+        "name": "alien",
+        "spriteName": "alien",
+        "x": 160.0,
+        "y": 232.0
+      }
+    ],
+    "CITYPoliceStationPrisonVisitingRoom": [
+      {
+        "name": "securityguard",
+        "spriteName": "securityguard",
+        "x": 56.0,
+        "y": 48.0
+      },
+      {
+        "name": "securityguard0",
+        "spriteName": "securityguard",
+        "x": 120.0,
+        "y": 48.0
+      },
+      {
+        "name": "securityguard1",
+        "spriteName": "securityguard",
+        "x": 168.0,
+        "y": 48.0
+      },
+      {
+        "name": "convict",
+        "spriteName": "convict",
+        "x": 32.0,
+        "y": 112.0
+      },
+      {
+        "name": "convict0",
+        "spriteName": "convict",
+        "x": 128.0,
+        "y": 112.0
+      },
+      {
+        "name": "escapedconvict",
+        "spriteName": "escapedconvict",
+        "x": 80.0,
+        "y": 112.0
+      }
+    ],
+    "CITYPoliceStationPrisonCellBlockHallway": [
+      {
+        "name": "convict",
+        "spriteName": "convict",
+        "x": 56.0,
+        "y": 64.0
+      },
+      {
+        "name": "convict0",
+        "spriteName": "convict",
+        "x": 136.0,
+        "y": 32.0
+      },
+      {
+        "name": "convict1",
+        "spriteName": "convict",
+        "x": 24.0,
+        "y": 288.0
+      }
+    ],
+    "CITYPoliceStationPrisonShowers": [
+      {
+        "name": "securityguard",
+        "spriteName": "securityguard",
+        "x": 216.0,
+        "y": 0.0
+      },
+      {
+        "name": "securityguard0",
+        "spriteName": "securityguard",
+        "x": 176.0,
+        "y": 0.0
+      },
+      {
+        "name": "securityguard1",
+        "spriteName": "securityguard",
+        "x": 24.0,
+        "y": 0.0
+      }
+    ],
+    "CITYFireDepartmentGarage": [
+      {
+        "name": "paramedic",
+        "spriteName": "paramedic",
+        "x": 296.0,
+        "y": 288.0
+      },
+      {
+        "name": "firefighter",
+        "spriteName": "firefighter",
+        "x": 248.0,
+        "y": 264.0
+      },
+      {
+        "name": "paramedic0",
+        "spriteName": "paramedic",
+        "x": 272.0,
+        "y": 96.0
+      },
+      {
+        "name": "paramedic4",
+        "spriteName": "paramedic",
+        "x": 240.0,
+        "y": 152.0
+      },
+      {
+        "name": "firefighter2",
+        "spriteName": "firefighter",
+        "x": 24.0,
+        "y": 96.0
+      },
+      {
+        "name": "firefighter3",
+        "spriteName": "firefighter",
+        "x": 144.0,
+        "y": 128.0
+      },
+      {
+        "name": "trafficcharityguy",
+        "spriteName": "trafficcharityguy",
+        "x": 224.0,
+        "y": 320.0
+      }
+    ],
+    "CITYStadiumMain": [
+      {
+        "name": "cameraguy",
+        "spriteName": "cameraguy",
+        "x": 184.0,
+        "y": 536.0
+      },
+      {
+        "name": "cameraguy0",
+        "spriteName": "cameraguy",
+        "x": 216.0,
+        "y": 528.0
+      },
+      {
+        "name": "cameraguy1",
+        "spriteName": "cameraguy",
+        "x": 216.0,
+        "y": 592.0
+      },
+      {
+        "name": "newsreportermale",
+        "spriteName": "newsreportermale",
+        "x": 1872.0,
+        "y": 448.0
+      },
+      {
+        "name": "newsreportermale0",
+        "spriteName": "newsreportermale",
+        "x": 328.0,
+        "y": 448.0
+      },
+      {
+        "name": "newsreporterfemale",
+        "spriteName": "newsreporterfemale",
+        "x": 1976.0,
+        "y": 440.0
+      },
+      {
+        "name": "newsreporterfemale0",
+        "spriteName": "newsreporterfemale",
+        "x": 408.0,
+        "y": 448.0
+      }
+    ],
+    "CITYStadiumMainIntro": [
+      {
+        "name": "cameraguy",
+        "spriteName": "cameraguy",
+        "x": 184.0,
+        "y": 432.0
+      },
+      {
+        "name": "cameraguy0",
+        "spriteName": "cameraguy",
+        "x": 216.0,
+        "y": 424.0
+      },
+      {
+        "name": "cameraguy1",
+        "spriteName": "cameraguy",
+        "x": 216.0,
+        "y": 488.0
+      },
+      {
+        "name": "newsreportermale",
+        "spriteName": "newsreportermale",
+        "x": 1184.0,
+        "y": 344.0
+      },
+      {
+        "name": "newsreportermale0",
+        "spriteName": "newsreportermale",
+        "x": 328.0,
+        "y": 344.0
+      },
+      {
+        "name": "newsreporterfemale",
+        "spriteName": "newsreporterfemale",
+        "x": 1288.0,
+        "y": 336.0
+      },
+      {
+        "name": "newsreporterfemale0",
+        "spriteName": "newsreporterfemale",
+        "x": 408.0,
+        "y": 344.0
+      }
+    ],
+    "CITYStadiumIntroOld": [
+      {
+        "name": "bob",
+        "spriteName": "bobOLD",
+        "x": 776.0,
+        "y": 264.0
+      }
+    ],
+    "CITYStadiumMainOldCrowd": [
+      {
+        "name": "bob",
+        "spriteName": "bobOLD",
+        "x": 776.0,
+        "y": 264.0
+      }
+    ],
+    "ALPHAStadiumMain": [
+      {
+        "name": "cameraguy",
+        "spriteName": "cameraguy",
+        "x": 184.0,
+        "y": 536.0
+      },
+      {
+        "name": "cameraguy0",
+        "spriteName": "cameraguy",
+        "x": 216.0,
+        "y": 528.0
+      },
+      {
+        "name": "cameraguy1",
+        "spriteName": "cameraguy",
+        "x": 216.0,
+        "y": 592.0
+      },
+      {
+        "name": "newsreportermale",
+        "spriteName": "newsreportermale",
+        "x": 1872.0,
+        "y": 448.0
+      },
+      {
+        "name": "newsreportermale0",
+        "spriteName": "newsreportermale",
+        "x": 328.0,
+        "y": 448.0
+      },
+      {
+        "name": "newsreporterfemale",
+        "spriteName": "newsreporterfemale",
+        "x": 1976.0,
+        "y": 440.0
+      },
+      {
+        "name": "newsreporterfemale0",
+        "spriteName": "newsreporterfemale",
+        "x": 408.0,
+        "y": 448.0
+      },
+      {
+        "name": "bob",
+        "spriteName": "bob",
+        "x": 2240.0,
+        "y": 1752.0
+      }
+    ],
+    "ALPHABobsApartment": [
+      {
+        "name": "cat",
+        "spriteName": "cat",
+        "x": 112.0,
+        "y": 160.0
+      }
+    ]
+  }
+}

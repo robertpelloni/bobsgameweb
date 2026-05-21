@@ -1,0 +1,21 @@
+{
+	"BACKEND_DEPLOY.md": true,
+	"BACKEND_RECOVERY.md": true,
+	"BACKUP_RESTORE.md": true,
+	"CHANGELOG.md": true,
+	"DEPLOY.md": true,
+	"HANDOFF.md": true,
+	"HARDENING_CHECKLIST.md": true,
+	"HETZNER_FIRST_DEPLOY.md": true,
+	"HETZNER_SETUP.md": true,
+	"HETZNER_UNIFIED_STACK_STATUS.md": true,
+	"IDEAS.md": true,
+	"MAINTENANCE_WINDOW_RUNBOOK.md": true,
+	"MYSQL_MIGRATION.md": true,
+	"OPS_CHEATSHEET.md": true,
+	"POSTGRES_SHARED_SERVICES.md": true,
+	"POST_DEPLOY_CHECKLIST.md": true,
+	"REDIS_SHARED_SERVICES.md": true,
+	"VERSION.md": true,
+	"WS_BACKEND_SETUP.md": true
+}

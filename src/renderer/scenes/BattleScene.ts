@@ -390,7 +390,7 @@ export class BattleScene extends Scene<BattleSceneConfig> {
         this.playerSprite.tint = 0x44ff44;
         setTimeout(() => this.playerSprite.tint = 0xffffff, 500);
 
-        this.spawnDamageNumber(this.pOriginalX, this.pOriginalY - 50, `+${healAmount}`, 0x44ff44);
+        this.spawnDamageNumber(this.pOriginalX, this.pOriginalY - 50, healAmount, 0x44ff44);
         if (AudioManager.isLoaded('menu_select')) AudioManager.playSound('menu_select', { volume: 0.3 });
 
         this.updateHealthBars();
@@ -479,7 +479,7 @@ export class BattleScene extends Scene<BattleSceneConfig> {
         setTimeout(() => this.enemySprite.tint = 0xffffff, 500);
 
         this.updateHealthBars();
-        setTimeout(() => this.playerTurn(), 1000);
+        this.turn = 'player';
     }
 
     private checkVictory(wasEnemyTurn: boolean = false): void {

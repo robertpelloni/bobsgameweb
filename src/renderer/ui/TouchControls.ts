@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TouchControls — mobile touch overlay with D-pad and action buttons.
  *

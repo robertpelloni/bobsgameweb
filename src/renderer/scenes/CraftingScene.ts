@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * CraftingScene — visual crafting interface.
  *

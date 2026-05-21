@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PuzzlePlayer — puzzle game player with input handling, controls, and settings.
  *

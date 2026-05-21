@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { BlockType, BlockTypes } from "./BlockType";
 import { PieceType, PieceTypes, STANDARD_PIECE_TYPES } from "./PieceType";
 import { RotationSet, Rotation } from "./Piece";

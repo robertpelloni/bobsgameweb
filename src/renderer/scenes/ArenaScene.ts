@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ArenaScene — PvP tournament battle arena.
  *

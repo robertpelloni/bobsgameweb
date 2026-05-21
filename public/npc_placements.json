@@ -1,0 +1,1442 @@
+{
+  "TOWNYUUDownstairs": [
+    {
+      "sprite": "mom",
+      "x": 96,
+      "y": 80,
+      "name": "mom",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "dad",
+      "x": 360,
+      "y": 240,
+      "name": "dad",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLMainOffice": [
+    {
+      "sprite": "secretary",
+      "x": 128,
+      "y": 80,
+      "name": "secretary",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLPrincipalsOffice": [
+    {
+      "sprite": "principal",
+      "x": 56,
+      "y": 104,
+      "name": "principal",
+      "eventName": "SCHOOLPrincipalsOffice.principal",
+      "dialogueRefs": [
+        "4"
+      ]
+    }
+  ],
+  "SCHOOLDetention": [
+    {
+      "sprite": "hallmonitor",
+      "x": 48.0,
+      "y": 80.0,
+      "name": "hallmonitor",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLClinic": [
+    {
+      "sprite": "nurse",
+      "x": 224.0,
+      "y": 88.0,
+      "name": "nurse",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLTeachersLounge": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 16.0,
+      "y": 144.0,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "givenupteacher",
+      "x": 72.0,
+      "y": 80.0,
+      "name": "givenupteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "maleangryteacher",
+      "x": 104.0,
+      "y": 80.0,
+      "name": "maleangryteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "malesadteacher",
+      "x": 136.0,
+      "y": 80.0,
+      "name": "malesadteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLMusicRoom": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 264,
+      "y": 96,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 208,
+      "y": 312,
+      "name": "roundBlackTrashCanOnWheels0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "femalesadteacher",
+      "x": 144,
+      "y": 96,
+      "name": "femalesadteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLArtRoom": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 312,
+      "y": 176,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "femaleangryteacher",
+      "x": 160.0,
+      "y": 96.0,
+      "name": "femaleangryteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLComputerLab": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 8,
+      "y": 256,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 104,
+      "y": 264,
+      "name": "roundBlackTrashCanOnWheels0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 8,
+      "y": 104,
+      "name": "roundBlackTrashCanOnWheels1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "pcteacher",
+      "x": 176.0,
+      "y": 56.0,
+      "name": "pcteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLKitchen": [
+    {
+      "sprite": "sleazyunclebob",
+      "x": 40,
+      "y": 104,
+      "name": "sleazyunclebob",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLLibrary": [
+    {
+      "sprite": "librarian",
+      "x": 264.0,
+      "y": 200.0,
+      "name": "librarian",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLCustodian": [
+    {
+      "sprite": "janitor",
+      "x": 8,
+      "y": 184,
+      "name": "janitor",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLGirlsBathroom": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 144,
+      "y": 216,
+      "name": "roundBlackGarbageCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLBoysBathroom": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 144,
+      "y": 152,
+      "name": "roundBlackGarbageCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLEntranceHallway": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 1624.0,
+      "y": 88.0,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 1320,
+      "y": 248,
+      "name": "roundBlackTrashCanOnWheels0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 1056,
+      "y": 328,
+      "name": "roundBlackTrashCanOnWheels1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 880.0,
+      "y": 88.0,
+      "name": "roundBlackTrashCanOnWheels2",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 160,
+      "y": 176,
+      "name": "roundBlackTrashCanOnWheels3",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 16.0,
+      "y": 88.0,
+      "name": "roundBlackTrashCanOnWheels4",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLGymHallway": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 240.0,
+      "y": 312.0,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 560.0,
+      "y": 312.0,
+      "name": "roundBlackTrashCanOnWheels0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 1024,
+      "y": 424,
+      "name": "roundBlackTrashCanOnWheels1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 1072.0,
+      "y": 312.0,
+      "name": "roundBlackTrashCanOnWheels2",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLClassHallway": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 440.0,
+      "y": 312.0,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLBackHallway": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 1424,
+      "y": 424,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLClassroom1": [
+    {
+      "sprite": "grannycluelessteacher",
+      "x": 160.0,
+      "y": 64.0,
+      "name": "grannycluelessteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLClassroom2": [
+    {
+      "sprite": "femaleangryteacher",
+      "x": 160.0,
+      "y": 64.0,
+      "name": "femaleangryteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLClassroom3": [
+    {
+      "sprite": "maleangryteacher",
+      "x": 160.0,
+      "y": 64.0,
+      "name": "maleangryteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLClassroom4": [
+    {
+      "sprite": "malesadteacher",
+      "x": 160.0,
+      "y": 64.0,
+      "name": "malesadteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLClassroom5": [
+    {
+      "sprite": "femalesadteacher",
+      "x": 160.0,
+      "y": 64.0,
+      "name": "femalesadteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLClassroom6": [
+    {
+      "sprite": "givenupteacher",
+      "x": 160.0,
+      "y": 64.0,
+      "name": "givenupteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLGymCafeteria": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheelsFullOfTrash",
+      "x": 176,
+      "y": 152,
+      "name": "roundBlackGarbageCanOnWheelsFullOfTrash",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheelsFullOfTrash",
+      "x": 136,
+      "y": 424,
+      "name": "roundBlackGarbageCanOnWheelsFullOfTrash0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheelsFullOfTrash",
+      "x": 464,
+      "y": 240,
+      "name": "roundBlackGarbageCanOnWheelsFullOfTrash1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheelsFullOfTrash",
+      "x": 440.0,
+      "y": 88.0,
+      "name": "roundBlackGarbageCanOnWheelsFullOfTrash2",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheelsFullOfTrash",
+      "x": 304,
+      "y": 104,
+      "name": "roundBlackGarbageCanOnWheelsFullOfTrash3",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheelsFullOfTrash",
+      "x": 312.0,
+      "y": 88.0,
+      "name": "roundBlackGarbageCanOnWheelsFullOfTrash4",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "hallmonitor",
+      "x": 232,
+      "y": 152,
+      "name": "hallmonitor",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "SCHOOLGymGym": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 256,
+      "y": 104,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 264,
+      "y": 104,
+      "name": "roundBlackTrashCanOnWheels0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 280,
+      "y": 96,
+      "name": "roundBlackTrashCanOnWheels1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 312.0,
+      "y": 88.0,
+      "name": "roundBlackTrashCanOnWheels2",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 440.0,
+      "y": 88.0,
+      "name": "roundBlackTrashCanOnWheels3",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "maleangryteacher",
+      "x": 176,
+      "y": 152,
+      "name": "maleangryteacher",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "TOWNCoffeeShop": [
+    {
+      "sprite": "deliicecreamman",
+      "x": 88,
+      "y": 312,
+      "name": "deliicecreamman",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "guitarguy",
+      "x": 64.0,
+      "y": 88.0,
+      "name": "guitarguy",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "prostitute",
+      "x": 88,
+      "y": 56,
+      "name": "prostitute",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "chris",
+      "x": 40.0,
+      "y": 64.0,
+      "name": "chris",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "islandhermit",
+      "x": 96.0,
+      "y": 40.0,
+      "name": "islandhermit",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "deliicecreamman",
+      "x": 32,
+      "y": 328,
+      "name": "deliicecreamman0",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "TOWNPizzaPlace": [
+    {
+      "sprite": "hotdogvendor",
+      "x": 184,
+      "y": 32,
+      "name": "hotdogvendor",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "pizzaguy",
+      "x": 160.0,
+      "y": 56.0,
+      "name": "pizzaguy",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "pizzaguy",
+      "x": 24,
+      "y": 16,
+      "name": "pizzaguy0",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "TOWNBookstore": [
+    {
+      "sprite": "psychiatrist",
+      "x": 192,
+      "y": 264,
+      "name": "psychiatrist",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "professor",
+      "x": 192.0,
+      "y": 256.0,
+      "name": "professor",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "TOWNVideoRent": [
+    {
+      "sprite": "fatmeekcoder",
+      "x": 176,
+      "y": 200,
+      "name": "fatmeekcoder",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "skinnymeekcoder",
+      "x": 136,
+      "y": 240,
+      "name": "skinnymeekcoder",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "TOWNRecordStore": [
+    {
+      "sprite": "richnerdguy",
+      "x": 16,
+      "y": 272,
+      "name": "richnerdguy",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "TOWNPets4Less": [
+    {
+      "sprite": "bigdog",
+      "x": 128,
+      "y": 8,
+      "name": "bigdog",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "puppy",
+      "x": 144,
+      "y": 8,
+      "name": "puppy",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "puppy",
+      "x": 120,
+      "y": 24,
+      "name": "puppy0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cat",
+      "x": 240,
+      "y": 16,
+      "name": "cat",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "hamster",
+      "x": 16,
+      "y": 312,
+      "name": "hamster",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "hamster",
+      "x": 8,
+      "y": 320,
+      "name": "hamster0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "hamster",
+      "x": 8,
+      "y": 256,
+      "name": "hamster1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "hamster",
+      "x": 8,
+      "y": 232,
+      "name": "hamster2",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "hamster",
+      "x": 64,
+      "y": 352,
+      "name": "hamster3",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "hamster",
+      "x": 32,
+      "y": 352,
+      "name": "hamster4",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "hamster",
+      "x": 88,
+      "y": 352,
+      "name": "hamster5",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "hamster",
+      "x": 104,
+      "y": 352,
+      "name": "hamster6",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "bird",
+      "x": 80,
+      "y": 272,
+      "name": "bird",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "bird",
+      "x": 96,
+      "y": 272,
+      "name": "bird0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "officeworkerfemale",
+      "x": 216.0,
+      "y": 288.0,
+      "name": "officeworkerfemale",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "officeworkermale",
+      "x": 192,
+      "y": 280,
+      "name": "officeworkermale",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "TOWNElectronicsStore": [
+    {
+      "sprite": "fatmeekcoder",
+      "x": 248,
+      "y": 256,
+      "name": "fatmeekcoder",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "officeworkermale",
+      "x": 200.0,
+      "y": 240.0,
+      "name": "officeworkermale",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "TOWNBeautySalon": [
+    {
+      "sprite": "momo",
+      "x": 176,
+      "y": 80,
+      "name": "momo",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "oldmomo",
+      "x": 296,
+      "y": 88,
+      "name": "oldmomo",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYGroovyClubEntrance": [
+    {
+      "sprite": "richnerdguy",
+      "x": 65.0,
+      "y": 60.0,
+      "name": "richnerdguy",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYOfficeBreakRoom": [
+    {
+      "sprite": "roundBlackGarbageCanOnWheels",
+      "x": 144.0,
+      "y": 136.0,
+      "name": "roundBlackTrashCanOnWheels",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYFancyRestaurantKitchenFreezer": [
+    {
+      "sprite": "ghost",
+      "x": 216.0,
+      "y": 40.0,
+      "name": "ghost",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYHospitalEntrance": [
+    {
+      "sprite": "crippled",
+      "x": 416,
+      "y": 176,
+      "name": "crippled",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYHospitalWaitingOutPatient": [
+    {
+      "sprite": "nurse",
+      "x": 120.0,
+      "y": 304.0,
+      "name": "nurse",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYHospitalMorgue": [
+    {
+      "sprite": "diseased",
+      "x": 240,
+      "y": 272,
+      "name": "diseased",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "alien",
+      "x": 104,
+      "y": 288,
+      "name": "alien",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYHospitalSecretLab": [
+    {
+      "sprite": "diseased",
+      "x": 240,
+      "y": 272,
+      "name": "diseased",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "alien",
+      "x": 104,
+      "y": 288,
+      "name": "alien",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYPoliceStationPrisonVisitingRoom": [
+    {
+      "sprite": "securityguard",
+      "x": 56.0,
+      "y": 48.0,
+      "name": "securityguard",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "securityguard",
+      "x": 120.0,
+      "y": 48.0,
+      "name": "securityguard0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "securityguard",
+      "x": 168.0,
+      "y": 48.0,
+      "name": "securityguard1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "convict",
+      "x": 8,
+      "y": 88,
+      "name": "convict",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "convict",
+      "x": 88,
+      "y": 72,
+      "name": "convict0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "escapedconvict",
+      "x": 40,
+      "y": 72,
+      "name": "escapedconvict",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYPoliceStationPrisonCellBlockHallway": [
+    {
+      "sprite": "convict",
+      "x": 56.0,
+      "y": 64.0,
+      "name": "convict",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "convict",
+      "x": 136.0,
+      "y": 32.0,
+      "name": "convict0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "convict",
+      "x": 24.0,
+      "y": 288.0,
+      "name": "convict1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "convict",
+      "x": 136.0,
+      "y": 304.0,
+      "name": "convict2",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "convict",
+      "x": 48.0,
+      "y": 512.0,
+      "name": "convict3",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "convict",
+      "x": 136.0,
+      "y": 544.0,
+      "name": "convict4",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYPoliceStationPrisonShowers": [
+    {
+      "sprite": "securityguard",
+      "x": 216.0,
+      "y": 0.0,
+      "name": "securityguard",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "securityguard",
+      "x": 176.0,
+      "y": 0.0,
+      "name": "securityguard0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "securityguard",
+      "x": 24.0,
+      "y": 0.0,
+      "name": "securityguard1",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYFireDepartmentGarage": [
+    {
+      "sprite": "paramedic",
+      "x": 336,
+      "y": 248,
+      "name": "paramedic",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "firefighter",
+      "x": 224,
+      "y": 240,
+      "name": "firefighter",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "paramedic",
+      "x": 272.0,
+      "y": 96.0,
+      "name": "paramedic0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "paramedic",
+      "x": 192,
+      "y": 104,
+      "name": "paramedic4",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "firefighter",
+      "x": 16,
+      "y": 88,
+      "name": "firefighter2",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "firefighter",
+      "x": 136,
+      "y": 104,
+      "name": "firefighter3",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "firefighter",
+      "x": 128,
+      "y": 336,
+      "name": "firefighter4",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "trafficcharityguy",
+      "x": 184,
+      "y": 312,
+      "name": "trafficcharityguy",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYStadiumMain": [
+    {
+      "sprite": "cameraguy",
+      "x": 176,
+      "y": 544,
+      "name": "cameraguy",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 200,
+      "y": 544,
+      "name": "cameraguy0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 248,
+      "y": 560,
+      "name": "cameraguy1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 232,
+      "y": 544,
+      "name": "cameraguy2",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 328,
+      "y": 384,
+      "name": "cameraguy3",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 1744,
+      "y": 384,
+      "name": "cameraguy4",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 2104,
+      "y": 544,
+      "name": "cameraguy5",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 2048,
+      "y": 544,
+      "name": "cameraguy6",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 2064,
+      "y": 544,
+      "name": "cameraguy7",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 2048,
+      "y": 560,
+      "name": "cameraguy8",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreportermale",
+      "x": 1808,
+      "y": 384,
+      "name": "newsreportermale",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreportermale",
+      "x": 264,
+      "y": 384,
+      "name": "newsreportermale0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreporterfemale",
+      "x": 1920,
+      "y": 384,
+      "name": "newsreporterfemale",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreporterfemale",
+      "x": 344,
+      "y": 384,
+      "name": "newsreporterfemale0",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYStadiumMainIntro": [
+    {
+      "sprite": "cameraguy",
+      "x": 176,
+      "y": 440,
+      "name": "cameraguy",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 200,
+      "y": 440,
+      "name": "cameraguy0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 248,
+      "y": 456,
+      "name": "cameraguy1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 232,
+      "y": 440,
+      "name": "cameraguy2",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 424.0,
+      "y": 376.0,
+      "name": "cameraguy3",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 1152.0,
+      "y": 376.0,
+      "name": "cameraguy4",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 1416,
+      "y": 440,
+      "name": "cameraguy5",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 1360,
+      "y": 440,
+      "name": "cameraguy6",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 1376,
+      "y": 440,
+      "name": "cameraguy7",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 1360,
+      "y": 456,
+      "name": "cameraguy8",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreportermale",
+      "x": 1184.0,
+      "y": 344.0,
+      "name": "newsreportermale",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreportermale",
+      "x": 232,
+      "y": 440,
+      "name": "newsreportermale0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreporterfemale",
+      "x": 1360,
+      "y": 440,
+      "name": "newsreporterfemale",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreporterfemale",
+      "x": 256,
+      "y": 440,
+      "name": "newsreporterfemale0",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYStadiumIntroOld": [
+    {
+      "sprite": "bobOLD",
+      "x": 728,
+      "y": 216,
+      "name": "bob",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "CITYStadiumMainOldCrowd": [
+    {
+      "sprite": "bobOLD",
+      "x": 728,
+      "y": 216,
+      "name": "bob",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "ALPHAStadiumMain": [
+    {
+      "sprite": "cameraguy",
+      "x": 176,
+      "y": 544,
+      "name": "cameraguy",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 200,
+      "y": 544,
+      "name": "cameraguy0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 248,
+      "y": 560,
+      "name": "cameraguy1",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 232,
+      "y": 544,
+      "name": "cameraguy2",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 328,
+      "y": 384,
+      "name": "cameraguy3",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 1744,
+      "y": 384,
+      "name": "cameraguy4",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 2104,
+      "y": 544,
+      "name": "cameraguy5",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 2048,
+      "y": 544,
+      "name": "cameraguy6",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 2064,
+      "y": 544,
+      "name": "cameraguy7",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "cameraguy",
+      "x": 2048,
+      "y": 560,
+      "name": "cameraguy8",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreportermale",
+      "x": 1808,
+      "y": 384,
+      "name": "newsreportermale",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreportermale",
+      "x": 264,
+      "y": 384,
+      "name": "newsreportermale0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreporterfemale",
+      "x": 1920,
+      "y": 384,
+      "name": "newsreporterfemale",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "newsreporterfemale",
+      "x": 344,
+      "y": 384,
+      "name": "newsreporterfemale0",
+      "eventName": "",
+      "dialogueRefs": []
+    },
+    {
+      "sprite": "bob",
+      "x": 2200,
+      "y": 1712,
+      "name": "bob",
+      "eventName": "",
+      "dialogueRefs": []
+    }
+  ],
+  "ALPHABobsApartment": [
+    {
+      "sprite": "cat",
+      "x": 32,
+      "y": 200,
+      "name": "cat",
+      "eventName": "ALPHABobsApartment.cat",
+      "dialogueRefs": []
+    }
+  ]
+}

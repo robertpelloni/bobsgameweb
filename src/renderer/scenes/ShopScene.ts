@@ -78,7 +78,7 @@ const CATEGORY_TABS = ["All", "Weapons", "Armor", "Items", "Special"];
 // ============================================================
 
 export class ShopScene extends Scene {
-	private config: ShopConfig;
+	private shopConfig!: ShopConfig;
 	private items: ShopItem[];
 	private gold: number;
 	private selectedTab = 0;
@@ -272,7 +272,7 @@ export class ShopScene extends Scene {
 			const isSelected = idx === this.selectedItem;
 			const canAfford = this.gold >= item.price;
 			const inStock = item.stock === -1 || item.stock > 0;
-			const owned = this.config.inventory.includes(item.id);
+			const owned = this.shopConfig.inventory.includes(item.id);
 
 			// Item row
 			const row = new Container();
@@ -483,12 +483,12 @@ export class ShopScene extends Scene {
 		this.goldText.text = `💰 ${this.gold} G`;
 
 		if (item.stock > 0) item.stock--;
-		this.config.inventory.push(item.id);
+		this.shopConfig.inventory.push(item.id);
 
 		this.showMessage(`Bought ${item.name} for ${item.price}G!`, 2);
 
-		if (this.config.onBuy) {
-			this.config.onBuy(item.id, this.gold);
+		if (this.shopConfig.onBuy) {
+			this.shopConfig.onBuy(item.id, this.gold);
 		}
 
 		this.refreshUI();
@@ -497,7 +497,7 @@ export class ShopScene extends Scene {
 	private sellItem(item: ShopItem): void {
 		if (!item) return;
 
-		const owned = this.config.inventory.filter(id => id === item.id).length;
+		const owned = this.shopConfig.inventory.filter(id => id === item.id).length;
 		if (owned === 0) {
 			this.showMessage("You don't have this item!", 1.5);
 			return;
@@ -508,13 +508,13 @@ export class ShopScene extends Scene {
 		this.goldText.text = `💰 ${this.gold} G`;
 
 		// Remove one from inventory
-		const idx = this.config.inventory.indexOf(item.id);
-		if (idx !== -1) this.config.inventory.splice(idx, 1);
+		const idx = this.shopConfig.inventory.indexOf(item.id);
+		if (idx !== -1) this.shopConfig.inventory.splice(idx, 1);
 
 		this.showMessage(`Sold ${item.name} for ${item.sellPrice}G!`, 2);
 
-		if (this.config.onSell) {
-			this.config.onSell(item.id, this.gold);
+		if (this.shopConfig.onSell) {
+			this.shopConfig.onSell(item.id, this.gold);
 		}
 
 		this.refreshUI();

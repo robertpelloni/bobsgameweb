@@ -7,5 +7,5 @@ export class CombatComponent extends Component {
     public atk: number = 10;
     public def: number = 5;
     public isPlayer: boolean = false;
-    public isDead: boolean = false;
+    public level: number = 1;
 }

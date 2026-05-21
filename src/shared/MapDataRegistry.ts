@@ -68,17 +68,40 @@ export class MapDataRegistry {
 		if (this.loaded) return;
 
 		try {
-			// In a real browser environment, we'd fetch manifest.json
-			// For this implementation, we'll register the core maps and provide a path for dynamic loading
+			// Fetch the manifest and load all legacy maps
+			const resp = await fetch('/maps/legacy-house-manifest.json');
+			if (resp.ok) {
+				const manifest: { id: number; name: string; path: string }[] = await resp.json();
+				for (const entry of manifest) {
+					try {
+						const mapResp = await fetch(entry.path);
+						if (mapResp.ok) {
+							const json = await mapResp.json();
+							this.register(this.importLegacyMap(json));
+						}
+					} catch (e) {
+						console.warn(`[MapDataRegistry] Failed to load ${entry.path}:`, e);
+					}
+			}
+			console.log(`[MapDataRegistry] Loaded ${this.maps.size} legacy maps from manifest`);
+		} else {
+			// Fallback to placeholder maps if manifest not available
 			this.register(this.createTownyuu());
 			this.register(this.createDarkForest());
 			this.register(this.createBeach());
 			this.register(this.createDragonLair());
+		}
 
-			// Mark as loaded
-			this.loaded = true;
+		// Mark as loaded
+		this.loaded = true;
 		} catch (error) {
 			console.error("Failed to load MapDataRegistry:", error);
+			// Fallback
+			this.register(this.createTownyuu());
+			this.register(this.createDarkForest());
+			this.register(this.createBeach());
+			this.register(this.createDragonLair());
+			this.loaded = true;
 		}
 	}
 
