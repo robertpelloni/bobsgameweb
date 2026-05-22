@@ -1,3 +1,16 @@
+## v3.0.7 — 2026-05-22
+
+### Added
+- **Automated Rollback Pipeline:** Implemented `scripts/deploy-with-rollback.sh` with remote backup and automatic restoration on verification failure.
+- **Workflow Documentation:** Created `README.md` and foundational documents (`VISION.md`, `MEMORY.md`, etc.).
+- **Interactive SFX:** Added footstep and door sounds to the RPG `DemoWorld`.
+- **8-Directional Support:** Implemented 8-way movement and character rendering (eye offsets) in `DemoWorld.ts`.
+
+### Changed
+- Refactored "Blah" audio system into `TypedTextWriter` (TextEngine.ts) for engine-wide consistency.
+- Updated `package.json` with `deploy:hetzner` task.
+- Bumped project version to `3.0.7`.
+
 ## v3.0.5 — 2026-05-01
 
 ### Added
