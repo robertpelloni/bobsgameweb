@@ -1,43 +1,37 @@
-# Handoff — 2026-05-01 — Version 3.0.5
+# Handoff — 2026-05-21 — Version 3.0.7
 
 ## Agent
-Gemini (Performance & Context Specialist)
+Jules (Software Engineer)
 
 ## Session Summary
-Achieved a major breakthrough in the **Great Recovery** phase. Successfully indexed the complete structural metadata of the original Java engine (v8830) and implemented the **Legacy Import Pipeline** to bridge the data into the TypeScript engine. Version **3.0.5** marks the transition from "Placeholder World" to "Restored Legacy World."
+Successfully implemented automated rollback capabilities for the Hetzner deployment pipeline and established a comprehensive documentation foundation. Also achieved significant progress on engine feature parity, specifically in audio simulation and directional movement.
 
 ## What Was Completed
 
-### 1. Sprite Registry Completion (IDs 0–804+)
-The entire entity library has been extracted and categorized:
-- **Vehicles:** 20 specialized IDs (isCar:true) for traffic simulation.
-- **Adult NPCs:** Professional and social archetypes (Medical, Law Enforcement, Education).
-- **Kids/Students:** 20+ school archetypes with height/collision variances.
-- **Animals & Critters:** Pets, wildlife, and interactive insects (Ant, Fly).
-- **Main Character (Yuu):** 8-directional, 64-frame animation metadata confirmed.
-- **Interactive Objects:** 50+ furniture and commercial props (IDs 492–541).
+### 1. Foundational Documentation & Workflow
+- Created `README.md` to document development, build, and deployment workflows.
+- Established `VISION.md`, `MEMORY.md`, `ROADMAP.md`, and `TODO.md` as per core project directives.
+- Updated `package.json` with `deploy:hetzner` script.
 
-### 2. World Graph Stabilization (144 Maps)
-Documented the connectivity and specs for 7 regional clusters:
-- **Town Core:** Intro House, Neighborhood, Hub.
-- **City Core:** 10,000-pixel wide central hub and commercial interiors.
-- **Hospital, Police, City Hall, Stadium:** Complex mega-maps (e.g., Stadium 289x246 tiles).
-- **Japan Trip:** Post-game/Expansion maps.
+### 2. Automated Rollback Pipeline
+- Implemented `scripts/deploy-with-rollback.sh`.
+- **Strategy:** Creates a remote backup of the production directory before deployment. Runs `scripts/verify-production-stack.sh` post-deployment.
+- **Auto-Rollback:** Automatically restores the backup if deployment or verification fails.
 
-### 3. Audio & Music Indexing
-- **SFX:** 87 OGG sound effects mapped (Environment, Interaction, Vehicles).
-- **Music:** 81 tracks extracted. Noted the mix of Tracker Modules (MOD/S3M/XM) and preloaded OGG streams.
-- **Dialogue Sound:** Recovered the "blah" mumbling system (IDs 1-14).
+### 3. "Blah" System Refactor & Audio
+- Moved dialogue audio logic into `TypedTextWriter` in `src/renderer/engine/text/TextEngine.ts`.
+- Dialogue now automatically plays random-pitched 'piece_move' sounds (simulating the 14 legacy "blah" sounds) during text reveal.
+- Hooked interactive SFX: Footstep sounds in `DemoWorld.ts` movement and door sounds in transitions.
 
-### 4. Legacy Import Pipeline (v3.0.5 Bridge)
-- Refactored `src/shared/MapDataRegistry.ts` to be data-driven via `manifest.json`.
-- Implemented `importLegacyMap(json)` to convert Java coordinate/tile formats to PixiJS engine format.
-- **Validation:** Created `src/__tests__/legacy-import.test.ts` (15/15 tests passing).
+### 4. 8-Directional Movement Support
+- Updated `DemoWorld.ts` movement logic to support 8-way directional input.
+- Added eye-rendering offsets for all 8 directions in `renderCharacter`.
+- **Direction Indexing:** 0=D, 1=DL, 2=L, 3=UL, 4=U, 5=UR, 6=R, 7=DR.
 
 ## Production Actions Performed
-- Updated `VERSION.md` to **3.0.5**.
-- Updated `CHANGELOG.md` with recovery milestones.
-- Generated `data/maps/manifest.json` for all extracted map assets.
+- Updated `VERSION.md` to **3.0.7**.
+- Updated `CHANGELOG.md` with rollback and audio milestones.
+- Committed all changes to the feature branch.
 
 ## Crucial Technical Insight
 - **The "Blah" System:** Implemented! `DemoWorld.ts` now triggers pitched `piece_move` sounds via `AudioManager` when characters speak.
