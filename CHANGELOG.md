@@ -285,3 +285,11 @@ Ported from `okgame/src/Engine/text/` + Java BitmapFont
 - Save/Load: localStorage-based with quicksave/quickload + auto-save
 - Achievement system: 8 achievements tracked across all game systems
 - Leveling: XP-based with scaling thresholds and stat bonuses
+
+## v2.2.5 - Project Analysis and Submodule Expansion
+
+### Features & Documentation
+- **Massive Documentation Overhaul**: Generated `ROADMAP.md`, `TODO.md`, `VISION.md`, `MEMORY.md`, `IDEAS.md`, and `SUBMODULES.md` representing an extensive analysis of the current project state and future direction towards the ultimate omni-engine.
+- **LLM Agent Instructions**: Created explicit rule files for multiple agent platforms (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `GPT.md`, `copilot-instructions.md`) dictating deep analysis, exhaustive commenting, and autonomous operation.
+- **Submodule Integration**: Initiated integration of 30+ external game dev tools (sprite editors, tile editors, voxel editors) as git submodules into `/submodules/` directory for reference and eventual merging into `bgeditor`.
+- **Omni-Engine Roadmap**: Outlined plan to achieve 100% feature parity with top 2D engines (Defold, Love2D, Phaser, Construct, GameMaker, RPGMaker) across Web, C++, and Java.
