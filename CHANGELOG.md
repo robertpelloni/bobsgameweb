@@ -67,7 +67,7 @@
 
 ### Changed
 
-- Synced the live version string across `VERSION.md`, root `package.json`, root `package-lock.json`, `src/shared/Config.ts`, `src/renderer/scenes/MainMenuScene.ts`, `server/index.js`, `server/package.json`, and `server/package-lock.json`
+- Synced the live version string across `VERSION.md`, root `package.json`, root `package-lock.json`, `src/shared/Config.ts`, `src/renderer/scenes/MainMenuScene.ts`, server/index.js, server/package.json, and server/package-lock.json
 - Main menu version text now uses `APP_VERSION` instead of a stale hard-coded string
 - Updated replay export, achievement snapshot export, backend achievement snapshot defaults, and IndexedDB cache version metadata to `3.0.2`
 - Corrected the tracked Hetzner frontend deploy path from `/var/www/bobsgame.com/current` to the nginx-served path `/srv/www/bobsgame.com`
