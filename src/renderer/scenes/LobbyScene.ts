@@ -6,6 +6,11 @@ import { NetworkManager, LobbyRoom } from '../../shared/puzzle/NetworkManager';
 import { PuzzleScene } from '../puzzle/PuzzleScene';
 import { SERVER_URL } from '../../shared/Config';
 import { getPlayerDisplayName } from '../data/AchievementIdentity';
+import { TextInput } from '../ui/TextInput';
+import { Checkbox } from '../ui/Checkbox';
+import { Dropdown } from '../ui/Dropdown';
+import { Panel } from '../ui/Panel';
+import { Button } from '../ui/Button';
 
 export interface LobbyRoomExt extends LobbyRoom {
     hasPassword?: boolean;
@@ -20,6 +25,15 @@ export class LobbyScene extends Scene {
     private connectingText!: Text;
     private eloText!: Text;
     private uiElements: HTMLElement[] = [];
+    private pixiCreateRoomPanel!: Panel;
+    private pixiRoomNameInput!: TextInput;
+    private pixiRoomPasswordInput!: TextInput;
+    private pixiGameModeInput!: Dropdown;
+    private pixiStartLevelInput!: TextInput;
+    private pixiRoomPrivateInput!: Checkbox;
+    private pixiRoomTournamentInput!: Checkbox;
+    private pixiCreateRoomBtn!: Button;
+    private pixiBackBtn!: Button;
     private chatContainer: HTMLElement | null = null;
     private bracketContainer: HTMLElement | null = null;
     private playersContainer: HTMLElement | null = null;
@@ -56,44 +70,44 @@ export class LobbyScene extends Scene {
         this.eloText.position.set(20, 20);
         this.container.addChild(this.eloText);
 
-        const createRoomDiv = document.createElement('div');
-        createRoomDiv.style.position = 'absolute';
-        createRoomDiv.style.left = '50%';
-        createRoomDiv.style.top = '120px';
-        createRoomDiv.style.transform = 'translateX(-50%)';
-        createRoomDiv.style.display = 'flex';
-        createRoomDiv.style.gap = '10px';
-        createRoomDiv.style.background = 'rgba(0,0,0,0.7)';
-        createRoomDiv.style.padding = '10px';
-        createRoomDiv.style.borderRadius = '8px';
-        createRoomDiv.innerHTML = `
-            <div style="display: flex; flex-direction: column; gap: 5px;">
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="roomNameInput" placeholder="Room Name" value="New Room" style="padding: 5px;" />
-                    <input type="password" id="roomPasswordInput" placeholder="Password (Optional)" style="padding: 5px;" />
-                </div>
-                <div style="display: flex; gap: 10px; align-items: center; color: white;">
-                    <select id="gameModeInput" style="padding: 5px;">
-                        <option value="marathon">Marathon</option>
-                        <option value="sprint">Sprint (40 Lines)</option>
-                        <option value="ultra">Ultra (3 Min)</option>
-                    </select>
-                    <input type="number" id="startLevelInput" value="1" min="1" max="20" style="width: 50px; padding: 5px;" />
-                    <label style="display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="roomPrivateInput" /> Private
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="roomTournamentInput" /> Tournament
-                    </label>
-                </div>
-                <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                    <button id="createRoomBtn" style="padding: 5px 10px; cursor: pointer;">Create Room</button>
-                    <button id="backBtn" style="padding: 5px 10px; cursor: pointer;">Back</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(createRoomDiv);
-        this.uiElements.push(createRoomDiv);
+
+        this.pixiCreateRoomPanel = new Panel();
+        this.pixiCreateRoomPanel.setPosition(this.app.screen.width / 2 - 250, 120);
+
+        this.pixiRoomNameInput = new TextInput("Room Name", { width: 200, height: 30 });
+        this.pixiRoomNameInput.setPosition(10, 10);
+        this.pixiCreateRoomPanel.addChild(this.pixiRoomNameInput.container);
+
+        this.pixiRoomPasswordInput = new TextInput("Password (Optional)", { width: 200, height: 30 });
+        this.pixiRoomPasswordInput.setPosition(220, 10);
+        this.pixiCreateRoomPanel.addChild(this.pixiRoomPasswordInput.container);
+
+        this.pixiGameModeInput = new Dropdown([{label:"Marathon", value:"marathon"},{label:"Sprint", value:"sprint"},{label:"Ultra", value:"ultra"}]);
+        this.pixiGameModeInput.setPosition(10, 50);
+        this.pixiCreateRoomPanel.addChild(this.pixiGameModeInput.container);
+
+        this.pixiStartLevelInput = new TextInput("1", { width: 50, height: 30 });
+        this.pixiStartLevelInput.setPosition(220, 50);
+        this.pixiCreateRoomPanel.addChild(this.pixiStartLevelInput.container);
+
+        this.pixiRoomPrivateInput = new Checkbox("Private");
+        this.pixiRoomPrivateInput.setPosition(280, 55);
+        this.pixiCreateRoomPanel.addChild(this.pixiRoomPrivateInput.container);
+
+        this.pixiRoomTournamentInput = new Checkbox("Tournament");
+        this.pixiRoomTournamentInput.setPosition(380, 55);
+        this.pixiCreateRoomPanel.addChild(this.pixiRoomTournamentInput.container);
+
+        this.pixiCreateRoomBtn = new Button("Create Room", { width: 120, height: 30 });
+        this.pixiCreateRoomBtn.setPosition(240, 150);
+        this.pixiCreateRoomPanel.addChild(this.pixiCreateRoomBtn.container);
+
+        this.pixiBackBtn = new Button("Back", { width: 80, height: 30 });
+        this.pixiBackBtn.setPosition(380, 150);
+        this.pixiCreateRoomPanel.addChild(this.pixiBackBtn.container);
+
+        this.container.addChild(this.pixiCreateRoomPanel.container);
+
 
         document.getElementById('createRoomBtn')!.onclick = () => {
             const name = (document.getElementById('roomNameInput') as HTMLInputElement).value;

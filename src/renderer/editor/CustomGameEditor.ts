@@ -1,3 +1,5 @@
+import { Dropdown } from '../ui/Dropdown';
+import { Checkbox } from '../ui/Checkbox';
 import { GameType, BlockType, PieceType, GamePlayMode, networkManager } from '../puzzle';
 import { TurnFromBlockTypeToType } from '../../shared/puzzle/BlockType';
 import { Rotation } from '../../shared/puzzle/Piece';
@@ -42,12 +44,21 @@ type PresetCatalogEntry = {
   chain: string;
 };
 
+import { Container, Text as PIXIText } from "pixi.js";
+import { GenerativeAIManager } from "./GenerativeAIManager";
+import { TextInput } from "../ui/TextInput";
+import { Button } from "../ui/Button";
+import { Panel } from "../ui/Panel";
+
 export class CustomGameEditor {
+  public pixiContainer: Container = new Container();
+
   private container: HTMLElement;
   private currentGameType: GameType;
 
   // UI Elements
   private nameInput!: HTMLInputElement;
+  private pixiNameInput!: TextInput;
   private modeSelect!: HTMLSelectElement;
   private gridWidthInput!: HTMLInputElement;
   private gridHeightInput!: HTMLInputElement;
@@ -122,6 +133,408 @@ export class CustomGameEditor {
     
     this.currentGameType = new GameType();
     
+
+    const namePanel = new Panel({ width: 350, height: 80, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
+    namePanel.setPosition(20, 380);
+    const nameLabel = new PIXIText({ text: "Game Name", style: { fill: 0xcccccc, fontSize: 16 } });
+    nameLabel.position.set(10, 10);
+    namePanel.addChild(nameLabel);
+    this.pixiNameInput = new TextInput("Enter Game Name", { width: 330, height: 30 });
+    this.pixiNameInput.setPosition(10, 35);
+    this.pixiNameInput.on("change", (val: string) => {
+      this.nameInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    namePanel.addChild(this.pixiNameInput.container);
+    this.pixiContainer.addChild(namePanel.container);
+
+    const actionPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
+    actionPanel.setPosition(20, 20);
+
+    const saveBtn = new Button("Save to Slot 1", { width: 140, height: 30 });
+    saveBtn.on("click", () => this.savePresetSlot(1));
+    saveBtn.setPosition(10, 10);
+    actionPanel.addChild(saveBtn.container);
+
+
+    const infoLabel = new PIXIText({ text: "Porting UI to Native Pixi", style: { fill: 0xffffff, fontSize: 16 } });
+    infoLabel.position.set(10, 85);
+    actionPanel.addChild(infoLabel);
+
+
+    const aiPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x220022, backgroundAlpha: 0.9, borderColor: 0xff00ff });
+    aiPanel.setPosition(20, 140);
+
+    const aiTitle = new PIXIText({ text: "Generative AI Tools", style: { fill: 0xff88ff, fontSize: 18, fontWeight: "bold" } });
+    aiTitle.position.set(10, 10);
+    aiPanel.addChild(aiTitle);
+
+    const txt2SpriteBtn = new Button("Text-to-Sprite", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2SpriteBtn.on("click", () => GenerativeAIManager.generateSpriteFromText("blue hero character walking"));
+    txt2SpriteBtn.setPosition(10, 45);
+    aiPanel.addChild(txt2SpriteBtn.container);
+
+    const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2TileBtn.on("click", () => GenerativeAIManager.generateTilesetFromText("16x16 dungeon stone floor"));
+
+    const palettePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x002222, backgroundAlpha: 0.9, borderColor: 0x00ffff });
+    palettePanel.setPosition(20, 260);
+
+    const paletteTitle = new PIXIText({ text: "Color Palette", style: { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" } });
+    paletteTitle.position.set(10, 10);
+    palettePanel.addChild(paletteTitle);
+
+    const addColorBtn = new Button("Add Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    addColorBtn.setPosition(10, 45);
+    palettePanel.addChild(addColorBtn.container);
+
+    const rmColorBtn = new Button("Remove Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    rmColorBtn.setPosition(170, 45);
+    palettePanel.addChild(rmColorBtn.container);
+
+    this.pixiContainer.addChild(palettePanel.container);
+
+
+    const presetPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000022, backgroundAlpha: 0.9, borderColor: 0x0000ff });
+    presetPanel.setPosition(380, 20);
+
+    const presetTitle = new PIXIText({ text: "Preset Families", style: { fill: 0x8888ff, fontSize: 18, fontWeight: "bold" } });
+    presetTitle.position.set(10, 10);
+    presetPanel.addChild(presetTitle);
+
+    const preset1 = new Button("Classic Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset1.on("click", () => this.applyPreset("classic"));
+    preset1.setPosition(10, 45);
+    presetPanel.addChild(preset1.container);
+
+    const preset2 = new Button("Sprint Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset2.on("click", () => this.applyPreset("sprint"));
+    preset2.setPosition(120, 45);
+    presetPanel.addChild(preset2.container);
+
+    const preset3 = new Button("Cascade", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset3.on("click", () => this.applyPreset("cascade"));
+    preset3.setPosition(230, 45);
+    presetPanel.addChild(preset3.container);
+
+    const preset4 = new Button("Zen Garden", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset4.on("click", () => this.applyPreset("zen"));
+    preset4.setPosition(10, 80);
+    presetPanel.addChild(preset4.container);
+
+    const preset5 = new Button("Stack", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset5.on("click", () => this.applyPreset("stack"));
+    preset5.setPosition(120, 80);
+    presetPanel.addChild(preset5.container);
+
+    const preset6 = new Button("Micro", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset6.on("click", () => this.applyPreset("micro"));
+    preset6.setPosition(230, 80);
+    presetPanel.addChild(preset6.container);
+
+    this.pixiContainer.addChild(presetPanel.container);
+
+    const timelinePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x222200, backgroundAlpha: 0.9, borderColor: 0xffff00 });
+    timelinePanel.setPosition(380, 260);
+
+    const timelineTitle = new PIXIText({ text: "Animation Timeline", style: { fill: 0xffff88, fontSize: 18, fontWeight: "bold" } });
+    timelineTitle.position.set(10, 10);
+    timelinePanel.addChild(timelineTitle);
+
+    const playBtn = new Button("Play", { width: 100, height: 30, backgroundColor: 0x444400 });
+    playBtn.setPosition(10, 45);
+    timelinePanel.addChild(playBtn.container);
+
+    const stopBtn = new Button("Stop", { width: 100, height: 30, backgroundColor: 0x444400 });
+    stopBtn.setPosition(120, 45);
+    timelinePanel.addChild(stopBtn.container);
+
+    this.pixiContainer.addChild(timelinePanel.container);
+
+
+    txt2TileBtn.setPosition(170, 45);
+    aiPanel.addChild(txt2TileBtn.container);
+
+    this.pixiContainer.addChild(aiPanel.container);
+
+    const externalToolsPanel = new Panel();
+    externalToolsPanel.setPosition(10, 480);
+    const extToolsLabel = new PIXIText("External Pixel Tools", { fill: 0xffffff, fontSize: 16, fontWeight: "bold" });
+    extToolsLabel.position.set(10, 10);
+    externalToolsPanel.addChild(extToolsLabel);
+
+    const asepriteBtn = new Button("Launch Aseprite", { width: 140, height: 30 });
+    asepriteBtn.setPosition(10, 40);
+    asepriteBtn.on("click", () => {
+        console.log("[CustomGameEditor] Requesting Aseprite launch...");
+        // In a native Electron environment, this event would be caught by IPC to launch the desktop binary.
+        // In a web environment, we would ideally iframe a WASM port here.
+        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "aseprite" } }));
+    });
+    externalToolsPanel.addChild(asepriteBtn.container);
+
+    const tilemapBtn = new Button("Launch Tilemap Studio", { width: 160, height: 30 });
+    tilemapBtn.setPosition(160, 40);
+    tilemapBtn.on("click", () => {
+        console.log("[CustomGameEditor] Requesting Tilemap Studio launch...");
+        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "tilemap-studio" } }));
+    });
+    externalToolsPanel.addChild(tilemapBtn.container);
+
+    this.pixiContainer.addChild(externalToolsPanel.container);
+
+
+    const saveBtn2 = new Button("Save 2", { width: 70, height: 30 });
+    saveBtn2.on("click", () => this.savePresetSlot(2));
+    saveBtn2.setPosition(10, 45);
+    actionPanel.addChild(saveBtn2.container);
+    const loadBtn2 = new Button("Load 2", { width: 70, height: 30 });
+    loadBtn2.on("click", () => this.loadPresetSlot(2));
+    loadBtn2.setPosition(85, 45);
+    actionPanel.addChild(loadBtn2.container);
+    const saveBtn3 = new Button("Save 3", { width: 70, height: 30 });
+    saveBtn3.on("click", () => this.savePresetSlot(3));
+    saveBtn3.setPosition(160, 45);
+    actionPanel.addChild(saveBtn3.container);
+    const loadBtn3 = new Button("Load 3", { width: 70, height: 30 });
+    loadBtn3.on("click", () => this.loadPresetSlot(3));
+    loadBtn3.setPosition(235, 45);
+    actionPanel.addChild(loadBtn3.container);
+
+    const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
+    loadBtn.on("click", () => this.loadPresetSlot(1));
+    loadBtn.setPosition(160, 10);
+    actionPanel.addChild(loadBtn.container);
+
+    this.pixiContainer.addChild(actionPanel.container);
+
+
+    const libPanel = new Panel({ width: 710, height: 120, backgroundColor: 0x000000, backgroundAlpha: 0.9, borderColor: 0x555555 });
+    libPanel.setPosition(20, 500);
+
+    const libTitle = new PIXIText({ text: "Unified Template Library Search", style: { fill: 0xffffff, fontSize: 18, fontWeight: "bold" } });
+    libTitle.position.set(10, 10);
+    libPanel.addChild(libTitle);
+
+    const libSearch = new TextInput("Search templates...", { width: 330, height: 30 });
+    libSearch.setPosition(10, 45);
+    libSearch.on("change", (val: string) => {
+      this.librarySearchQuery = val.toLowerCase();
+      // this.renderUnifiedTemplateLibrary();
+    });
+    libPanel.addChild(libSearch.container);
+
+    const libAllBtn = new Button("All Sources", { width: 80, height: 30, backgroundColor: 0x333333 });
+    libAllBtn.setPosition(350, 45);
+    libPanel.addChild(libAllBtn.container);
+
+    const libBuiltInBtn = new Button("Built-In", { width: 80, height: 30, backgroundColor: 0x333333 });
+    libBuiltInBtn.setPosition(440, 45);
+    libPanel.addChild(libBuiltInBtn.container);
+
+    const libSlotsBtn = new Button("Slots", { width: 80, height: 30, backgroundColor: 0x333333 });
+    libSlotsBtn.setPosition(530, 45);
+    libPanel.addChild(libSlotsBtn.container);
+
+    const libHistoryBtn = new Button("History", { width: 80, height: 30, backgroundColor: 0x333333 });
+    libHistoryBtn.setPosition(620, 45);
+    libPanel.addChild(libHistoryBtn.container);
+
+    this.pixiContainer.addChild(libPanel.container);
+
+
+    const settingsPanel = new Panel({ width: 350, height: 350, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
+    settingsPanel.setPosition(20, 640);
+
+    const settingsTitle = new PIXIText({ text: "Game Settings", style: { fill: 0xffffff, fontSize: 18, fontWeight: "bold" } });
+    settingsTitle.position.set(10, 10);
+    settingsPanel.addChild(settingsTitle);
+
+    // We will use TextInput for now even for numbers and selects, simulating the fields.
+    // In a full PIXI UI system, we would create a Dropdown and NumberInput component.
+
+    const modeLabel = new PIXIText({ text: "Game Mode", style: { fill: 0xcccccc, fontSize: 14 } });
+    modeLabel.position.set(10, 45);
+    settingsPanel.addChild(modeLabel);
+    const modeInput = new Dropdown([
+        { label: "Classic Drop", value: "DROP" },
+        { label: "Stacking", value: "STACK" },
+        { label: "Matching", value: "MATCH" }
+    ], "DROP", { width: 330, height: 30 });
+    modeInput.on("change", (val: string) => {
+      this.modeSelect.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    modeInput.setPosition(10, 65);
+    settingsPanel.addChild(modeInput.container);
+
+    const widthLabel = new PIXIText({ text: "Grid Width", style: { fill: 0xcccccc, fontSize: 14 } });
+    widthLabel.position.set(10, 105);
+    settingsPanel.addChild(widthLabel);
+    const widthInput = new TextInput("10", { width: 160, height: 30 });
+    widthInput.on("change", (val: string) => {
+      this.gridWidthInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    widthInput.setPosition(10, 125);
+    settingsPanel.addChild(widthInput.container);
+
+    const heightLabel = new PIXIText({ text: "Grid Height", style: { fill: 0xcccccc, fontSize: 14 } });
+    heightLabel.position.set(180, 105);
+    settingsPanel.addChild(heightLabel);
+    const heightInput = new TextInput("20", { width: 160, height: 30 });
+    heightInput.on("change", (val: string) => {
+      this.gridHeightInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    heightInput.setPosition(180, 125);
+    settingsPanel.addChild(heightInput.container);
+
+    const gravityLabel = new PIXIText({ text: "Gravity Base", style: { fill: 0xcccccc, fontSize: 14 } });
+    gravityLabel.position.set(10, 165);
+    settingsPanel.addChild(gravityLabel);
+    const gravityInput = new TextInput("1.0", { width: 160, height: 30 });
+    gravityInput.on("change", (val: string) => {
+      this.gravityInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    gravityInput.setPosition(10, 185);
+    settingsPanel.addChild(gravityInput.container);
+
+    const lockLabel = new PIXIText({ text: "Lock Delay", style: { fill: 0xcccccc, fontSize: 14 } });
+    lockLabel.position.set(180, 165);
+    settingsPanel.addChild(lockLabel);
+    const lockInput = new TextInput("30", { width: 160, height: 30 });
+    lockInput.on("change", (val: string) => {
+      this.lockDelayInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    lockInput.setPosition(180, 185);
+    settingsPanel.addChild(lockInput.container);
+
+    const chainLabel = new PIXIText({ text: "Chain Clear Amount", style: { fill: 0xcccccc, fontSize: 14 } });
+    chainLabel.position.set(10, 225);
+    settingsPanel.addChild(chainLabel);
+    const chainInput = new TextInput("4", { width: 160, height: 30 });
+    chainInput.on("change", (val: string) => {
+      this.chainAmountInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    chainInput.setPosition(10, 245);
+    settingsPanel.addChild(chainInput.container);
+
+    const nextLabel = new PIXIText({ text: "Next Pieces Count", style: { fill: 0xcccccc, fontSize: 14 } });
+    nextLabel.position.set(180, 225);
+    settingsPanel.addChild(nextLabel);
+    const nextInput = new TextInput("5", { width: 160, height: 30 });
+    nextInput.on("change", (val: string) => {
+      this.nextPiecesInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    nextInput.setPosition(180, 245);
+    settingsPanel.addChild(nextInput.container);
+
+    this.pixiContainer.addChild(settingsPanel.container);
+
+
+    const blocksPanel = new Panel({ width: 350, height: 200, backgroundColor: 0x1a0000, backgroundAlpha: 0.9, borderColor: 0xff4444 });
+    blocksPanel.setPosition(380, 380);
+
+    const blocksTitle = new PIXIText({ text: "Block Palette", style: { fill: 0xffaaaa, fontSize: 18, fontWeight: "bold" } });
+    blocksTitle.position.set(10, 10);
+    blocksPanel.addChild(blocksTitle);
+
+    const addBlockBtn = new Button("Add Block", { width: 100, height: 30, backgroundColor: 0x880000 });
+    addBlockBtn.setPosition(10, 45);
+    blocksPanel.addChild(addBlockBtn.container);
+
+    const rmBlockBtn = new Button("Remove Block", { width: 120, height: 30, backgroundColor: 0x880000 });
+    rmBlockBtn.setPosition(120, 45);
+    blocksPanel.addChild(rmBlockBtn.container);
+
+    this.pixiContainer.addChild(blocksPanel.container);
+
+    const piecesPanel = new Panel({ width: 350, height: 300, backgroundColor: 0x001a00, backgroundAlpha: 0.9, borderColor: 0x44ff44 });
+    piecesPanel.setPosition(740, 20);
+
+    const piecesTitle = new PIXIText({ text: "Pieces Editor", style: { fill: 0xaaffaa, fontSize: 18, fontWeight: "bold" } });
+    piecesTitle.position.set(10, 10);
+    piecesPanel.addChild(piecesTitle);
+
+    const addPieceBtn = new Button("Add Piece", { width: 100, height: 30, backgroundColor: 0x008800 });
+    addPieceBtn.setPosition(10, 45);
+    piecesPanel.addChild(addPieceBtn.container);
+
+    const rmPieceBtn = new Button("Remove Piece", { width: 120, height: 30, backgroundColor: 0x008800 });
+    rmPieceBtn.setPosition(120, 45);
+    piecesPanel.addChild(rmPieceBtn.container);
+
+    const addRotationBtn = new Button("Add Rotation", { width: 120, height: 30, backgroundColor: 0x006600 });
+    addRotationBtn.setPosition(10, 85);
+    piecesPanel.addChild(addRotationBtn.container);
+
+    this.pixiContainer.addChild(piecesPanel.container);
+
+
+    const blockEditorPanel = new Panel({ width: 350, height: 350, backgroundColor: 0x110000, backgroundAlpha: 0.9, borderColor: 0xaa2222 });
+    blockEditorPanel.setPosition(380, 600);
+
+    const blockEditorTitle = new PIXIText({ text: "Block Properties", style: { fill: 0xff8888, fontSize: 18, fontWeight: "bold" } });
+    blockEditorTitle.position.set(10, 10);
+    blockEditorPanel.addChild(blockEditorTitle);
+
+    const pixiBlockNameInput = new TextInput("Block Name", { width: 330, height: 30 });
+    pixiBlockNameInput.setPosition(10, 45);
+    pixiBlockNameInput.on("change", (val: string) => {
+      this.blockNameInput.value = val; this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockNameInput.container);
+
+    const pixiBlockColorInput = new TextInput("#RRGGBB", { width: 160, height: 30 });
+    pixiBlockColorInput.setPosition(10, 85);
+    pixiBlockColorInput.on("change", (val: string) => {
+      this.blockColorInput.value = val;
+      this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockColorInput.container);
+
+    const pixiBlockNormalCb = new Checkbox("Use in normal pieces");
+    pixiBlockNormalCb.setPosition(10, 125);
+    pixiBlockNormalCb.on("change", (val: boolean) => {
+      this.blockNormalCheckbox.checked = val;
+      this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockNormalCb.container);
+
+    const pixiBlockGarbageCb = new Checkbox("Use as garbage");
+    pixiBlockGarbageCb.setPosition(10, 155);
+    pixiBlockGarbageCb.on("change", (val: boolean) => {
+      this.blockGarbageCheckbox.checked = val;
+      this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockGarbageCb.container);
+
+    const pixiBlockFillerCb = new Checkbox("Use as filler");
+    pixiBlockFillerCb.setPosition(10, 185);
+    pixiBlockFillerCb.on("change", (val: boolean) => {
+      this.blockFillerCheckbox.checked = val;
+      this.blockNameInput.dispatchEvent(new Event("change"));
+    });
+    blockEditorPanel.addChild(pixiBlockFillerCb.container);
+
+    this.pixiContainer.addChild(blockEditorPanel.container);
+
+
+
+
     this.buildUI();
     this.loadFromGameType();
   }
@@ -130,6 +543,7 @@ export class CustomGameEditor {
     this.container.innerHTML = `
       <style>
         .custom-game-editor {
+          display: none;
           background: #1a1a1a;
           color: #eee;
           padding: 20px;
@@ -259,7 +673,7 @@ export class CustomGameEditor {
         </div>
       </div>
       <div id="unified-template-library-panel" class="preset-slots-panel"></div>
-      
+
       <div class="form-group" style="margin-top: 16px;">
         <label>Template Library Search</label>
         <input type="text" id="library-search" placeholder="Search templates by name...">
@@ -269,13 +683,13 @@ export class CustomGameEditor {
       <div id="preset-slots-panel" class="preset-slots-panel"></div>
       <div id="recent-history" class="recent-history-panel"></div>
       <div id="recent-actions" class="recent-actions-panel"></div>
-      
+
       <div class="editor-tabs">
         <button class="tab-btn active" data-tab="settings">Settings</button>
         <button class="tab-btn" data-tab="blocks">Blocks</button>
         <button class="tab-btn" data-tab="pieces">Pieces</button>
       </div>
-      
+
       <div class="tab-content" id="tab-settings">
         <div class="form-group">
           <label>Game Name</label>
@@ -320,7 +734,7 @@ export class CustomGameEditor {
         </div>
         <div class="form-group">
           <label>Advanced Rule Toggles</label>
-          <div class="toggle-grid">
+          <div class="toggle-grid" style="display: none;">
             <label><input type="checkbox" id="toggle-cascade-gravity"> Cascade gravity</label>
             <label><input type="checkbox" id="toggle-disconnected-gravity"> Only move disconnected blocks</label>
             <label><input type="checkbox" id="toggle-chain-row"> Chain checks rows</label>
@@ -331,7 +745,7 @@ export class CustomGameEditor {
         </div>
         <div class="form-group">
           <label>Movement / Randomizer Toggles</label>
-          <div class="toggle-grid">
+          <div class="toggle-grid" style="display: none;">
             <label><input type="checkbox" id="toggle-next-piece-enabled"> Show next pieces</label>
             <label><input type="checkbox" id="toggle-hold-piece-enabled"> Enable hold piece</label>
             <label><input type="checkbox" id="toggle-bag-randomizer"> Use bag randomizer</label>
@@ -345,9 +759,9 @@ export class CustomGameEditor {
         </div>
         <div id="rules-summary" class="summary-panel"></div>
       </div>
-      
+
       <div class="tab-content hidden" id="tab-blocks">
-        <div class="editor-columns">
+        <div class="editor-columns" style="display: none;">
           <div class="item-list">
             <h3>Block Types</h3>
             <select id="block-list" size="10"></select>
@@ -356,7 +770,7 @@ export class CustomGameEditor {
               <button id="btn-remove-block">-</button>
             </div>
           </div>
-          <div id="block-details" class="item-details">
+          <div id="block-details" class="item-details" style="display: none;">
             <div class="form-group">
               <label>Block Name</label>
               <input type="text" id="block-name">
@@ -391,7 +805,7 @@ export class CustomGameEditor {
             </div>
             <div class="form-group">
               <label>Usage</label>
-              <div class="toggle-grid">
+              <div class="toggle-grid" style="display: none;">
                 <label><input type="checkbox" id="block-use-normal"> Use in normal pieces</label>
                 <label><input type="checkbox" id="block-use-garbage"> Use as garbage</label>
                 <label><input type="checkbox" id="block-use-filler"> Use as filler</label>
@@ -428,9 +842,9 @@ export class CustomGameEditor {
           </div>
         </div>
       </div>
-      
+
       <div class="tab-content hidden" id="tab-pieces">
-        <div class="editor-columns">
+        <div class="editor-columns" style="display: none;">
           <div class="item-list">
             <h3>Piece Types</h3>
             <select id="piece-list" size="10"></select>
@@ -440,7 +854,7 @@ export class CustomGameEditor {
               <button id="btn-remove-piece">-</button>
             </div>
           </div>
-          <div id="piece-details" class="item-details">
+          <div id="piece-details" class="item-details" style="display: none;">
             <h4 id="piece-name-display">Select a piece</h4>
             <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap: wrap; align-items:center;">
                 <button id="btn-prev-rot"> < </button>
@@ -1001,6 +1415,7 @@ export class CustomGameEditor {
 
   private loadFromGameType() {
     this.nameInput.value = this.currentGameType.name;
+    if (this.pixiNameInput) this.pixiNameInput.value = this.currentGameType.name;
     this.modeSelect.value = this.currentGameType.gameMode;
     this.gridWidthInput.value = this.currentGameType.gridWidth.toString();
     this.gridHeightInput.value = this.currentGameType.gridHeight.toString();
@@ -2555,6 +2970,155 @@ export class CustomGameEditor {
 
   private createNew() {
     this.currentGameType = new GameType();
+
+
+    const namePanel = new Panel({ width: 350, height: 80, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
+    namePanel.setPosition(20, 380);
+    const nameLabel = new PIXIText({ text: "Game Name", style: { fill: 0xcccccc, fontSize: 16 } });
+    nameLabel.position.set(10, 10);
+    namePanel.addChild(nameLabel);
+    this.pixiNameInput = new TextInput("Enter Game Name", { width: 330, height: 30 });
+    this.pixiNameInput.setPosition(10, 35);
+    this.pixiNameInput.on("change", (val: string) => {
+      this.nameInput.value = val;
+      this.applyFormValuesToGameType();
+      this.updateSummary();
+    });
+    namePanel.addChild(this.pixiNameInput.container);
+    this.pixiContainer.addChild(namePanel.container);
+
+    const actionPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000000, backgroundAlpha: 0.8 });
+    actionPanel.setPosition(20, 20);
+
+    const saveBtn = new Button("Save to Slot 1", { width: 140, height: 30 });
+    saveBtn.on("click", () => this.savePresetSlot(1));
+    saveBtn.setPosition(10, 10);
+    actionPanel.addChild(saveBtn.container);
+
+
+    const infoLabel = new PIXIText({ text: "Porting UI to Native Pixi", style: { fill: 0xffffff, fontSize: 16 } });
+    infoLabel.position.set(10, 85);
+    actionPanel.addChild(infoLabel);
+
+
+    const aiPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x220022, backgroundAlpha: 0.9, borderColor: 0xff00ff });
+    aiPanel.setPosition(20, 140);
+
+    const aiTitle = new PIXIText({ text: "Generative AI Tools", style: { fill: 0xff88ff, fontSize: 18, fontWeight: "bold" } });
+    aiTitle.position.set(10, 10);
+    aiPanel.addChild(aiTitle);
+
+    const txt2SpriteBtn = new Button("Text-to-Sprite", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2SpriteBtn.on("click", () => GenerativeAIManager.generateSpriteFromText("blue hero character walking"));
+    txt2SpriteBtn.setPosition(10, 45);
+    aiPanel.addChild(txt2SpriteBtn.container);
+
+    const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+    txt2TileBtn.on("click", () => GenerativeAIManager.generateTilesetFromText("16x16 dungeon stone floor"));
+
+    const palettePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x002222, backgroundAlpha: 0.9, borderColor: 0x00ffff });
+    palettePanel.setPosition(20, 260);
+
+    const paletteTitle = new PIXIText({ text: "Color Palette", style: { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" } });
+    paletteTitle.position.set(10, 10);
+    palettePanel.addChild(paletteTitle);
+
+    const addColorBtn = new Button("Add Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    addColorBtn.setPosition(10, 45);
+    palettePanel.addChild(addColorBtn.container);
+
+    const rmColorBtn = new Button("Remove Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    rmColorBtn.setPosition(170, 45);
+    palettePanel.addChild(rmColorBtn.container);
+
+    this.pixiContainer.addChild(palettePanel.container);
+
+
+    const presetPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000022, backgroundAlpha: 0.9, borderColor: 0x0000ff });
+    presetPanel.setPosition(380, 20);
+
+    const presetTitle = new PIXIText({ text: "Preset Families", style: { fill: 0x8888ff, fontSize: 18, fontWeight: "bold" } });
+    presetTitle.position.set(10, 10);
+    presetPanel.addChild(presetTitle);
+
+    const preset1 = new Button("Classic Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset1.on("click", () => this.applyPreset("classic"));
+    preset1.setPosition(10, 45);
+    presetPanel.addChild(preset1.container);
+
+    const preset2 = new Button("Sprint Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset2.on("click", () => this.applyPreset("sprint"));
+    preset2.setPosition(120, 45);
+    presetPanel.addChild(preset2.container);
+
+    const preset3 = new Button("Cascade", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset3.on("click", () => this.applyPreset("cascade"));
+    preset3.setPosition(230, 45);
+    presetPanel.addChild(preset3.container);
+
+    const preset4 = new Button("Zen Garden", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset4.on("click", () => this.applyPreset("zen"));
+    preset4.setPosition(10, 80);
+    presetPanel.addChild(preset4.container);
+
+    const preset5 = new Button("Stack", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset5.on("click", () => this.applyPreset("stack"));
+    preset5.setPosition(120, 80);
+    presetPanel.addChild(preset5.container);
+
+    const preset6 = new Button("Micro", { width: 100, height: 30, backgroundColor: 0x000044 });
+    preset6.on("click", () => this.applyPreset("micro"));
+    preset6.setPosition(230, 80);
+    presetPanel.addChild(preset6.container);
+
+    this.pixiContainer.addChild(presetPanel.container);
+
+    const timelinePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x222200, backgroundAlpha: 0.9, borderColor: 0xffff00 });
+    timelinePanel.setPosition(380, 260);
+
+    const timelineTitle = new PIXIText({ text: "Animation Timeline", style: { fill: 0xffff88, fontSize: 18, fontWeight: "bold" } });
+    timelineTitle.position.set(10, 10);
+    timelinePanel.addChild(timelineTitle);
+
+    const playBtn = new Button("Play", { width: 100, height: 30, backgroundColor: 0x444400 });
+    playBtn.setPosition(10, 45);
+    timelinePanel.addChild(playBtn.container);
+
+    const stopBtn = new Button("Stop", { width: 100, height: 30, backgroundColor: 0x444400 });
+    stopBtn.setPosition(120, 45);
+    timelinePanel.addChild(stopBtn.container);
+
+    this.pixiContainer.addChild(timelinePanel.container);
+
+
+    txt2TileBtn.setPosition(170, 45);
+    aiPanel.addChild(txt2TileBtn.container);
+
+    this.pixiContainer.addChild(aiPanel.container);
+
+    const saveBtn2 = new Button("Save 2", { width: 70, height: 30 });
+    saveBtn2.on("click", () => this.savePresetSlot(2));
+    saveBtn2.setPosition(10, 45);
+    actionPanel.addChild(saveBtn2.container);
+    const loadBtn2 = new Button("Load 2", { width: 70, height: 30 });
+    loadBtn2.on("click", () => this.loadPresetSlot(2));
+    loadBtn2.setPosition(85, 45);
+    actionPanel.addChild(loadBtn2.container);
+    const saveBtn3 = new Button("Save 3", { width: 70, height: 30 });
+    saveBtn3.on("click", () => this.savePresetSlot(3));
+    saveBtn3.setPosition(160, 45);
+    actionPanel.addChild(saveBtn3.container);
+    const loadBtn3 = new Button("Load 3", { width: 70, height: 30 });
+    loadBtn3.on("click", () => this.loadPresetSlot(3));
+    loadBtn3.setPosition(235, 45);
+    actionPanel.addChild(loadBtn3.container);
+
+    const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
+    loadBtn.on("click", () => this.loadPresetSlot(1));
+    loadBtn.setPosition(160, 10);
+    actionPanel.addChild(loadBtn.container);
+
+    this.pixiContainer.addChild(actionPanel.container);
     this.loadFromGameType();
     this.selectPiece(0);
     this.updateSummary();
