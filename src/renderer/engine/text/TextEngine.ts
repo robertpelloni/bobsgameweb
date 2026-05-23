@@ -5,6 +5,7 @@
  * Provides typed text rendering, scrolling text boxes, and dialogue display.
  */
 import { Container, Graphics, Text, TextStyle, Sprite, Texture } from 'pixi.js';
+import { AudioManager } from '../../audio/AudioManager';
 
 // ============================================================
 // TypedTextWriter — animates text appearing one character at a time
@@ -15,6 +16,8 @@ export interface TypedTextWriterConfig {
     speed?: number; // characters per second
     onComplete?: () => void;
     onCharacter?: (char: string, index: number) => void;
+    useBlahSound?: boolean;
+    blahSoundName?: string;
 }
 
 export class TypedTextWriter {
@@ -25,12 +28,16 @@ export class TypedTextWriter {
     private text: Text;
     private onComplete?: () => void;
     private onCharacter?: (char: string, index: number) => void;
+    private useBlahSound: boolean;
+    private blahSoundName: string;
 
     constructor(fullText: string, config: TypedTextWriterConfig) {
         this.fullText = fullText;
         this.speed = config.speed ?? 30;
         this.onComplete = config.onComplete;
         this.onCharacter = config.onCharacter;
+        this.useBlahSound = config.useBlahSound ?? true;
+        this.blahSoundName = config.blahSoundName ?? 'piece_move';
 
         this.text = new Text({ text: '', style: config.style });
     }
@@ -47,7 +54,18 @@ export class TypedTextWriter {
             this.text.text = this.fullText.substring(0, this.displayedLength);
 
             for (let i = prevLen; i < this.displayedLength; i++) {
-                this.onCharacter?.(this.fullText[i]!, i);
+                const char = this.fullText[i]!;
+                this.onCharacter?.(char, i);
+
+                // Play 'blah' sound for non-whitespace characters
+                if (this.useBlahSound && char.trim().length > 0) {
+                    if (AudioManager.isLoaded(this.blahSoundName)) {
+                        AudioManager.playSound(this.blahSoundName, {
+                            volume: 0.05,
+                            pitch: 0.8 + Math.random() * 0.4
+                        });
+                    }
+                }
             }
 
             if (this.displayedLength >= this.fullText.length) {

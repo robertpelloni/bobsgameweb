@@ -32,6 +32,7 @@ export class CustomGameEditorScene extends Scene {
         document.body.appendChild(this.editorDiv);
 
         this.editor = new CustomGameEditor('editor-mount-point');
+        this.container.addChild(this.editor.pixiContainer);
 
         document.addEventListener('test-custom-game', this.testGameListener);
     }
