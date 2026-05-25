@@ -228,26 +228,25 @@ export class WorldScene extends Scene {
     let spawnX: number;
     let spawnY: number;
     const mapName = this.currentMapName || '';
-    if (mapName === 'TOWNYUUUpstairsYuusRoom') {
-      spawnX = 30; spawnY = 22; // Original: (240, 176) pixels = (30, 22) tiles
+    if (mapName === 'TOWNYUUUpstairsYuusRoom' || mapName === 'INTROUpstairsYuusRoom') {
+      spawnX = 16; spawnY = 17; // Center of Yuu's room (walkable carpet area)
     } else {
       spawnX = this.map?.data.defaultSpawnX ?? Math.floor((this.map?.data.widthTiles1X ?? 33) / 2);
       spawnY = this.map?.data.defaultSpawnY ?? Math.floor((this.map?.data.heightTiles1X ?? 23) / 2);
     }
     // Override with local save position if available
-    // But validate it's on a walkable tile (old saves may have bad positions)
+    // Validate using full collision check (not just extra layer)
     if (localSave?.x && localSave?.y) {
       const saveTileX = Math.floor(localSave.x / WorldScene.TILE_PX);
       const saveTileY = Math.floor(localSave.y / WorldScene.TILE_PX);
-      const saveExtra = this.map?.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, saveTileX, saveTileY) ?? 0;
-      if (saveExtra !== 0) {
-        // Save position is on an interior tile, use it
+      if (!this.isHitTile(saveTileX, saveTileY)) {
+        // Save position is walkable, use it
         transform.x = localSave.x;
         transform.y = localSave.y;
         console.log(`[WorldScene] Restored save at (${saveTileX},${saveTileY})`);
       } else {
-        // Save position is on void/wall, ignore it
-        console.warn(`[WorldScene] Save at (${saveTileX},${saveTileY}) is on void, using default spawn`);
+        // Save position is blocked, use default spawn
+        console.warn(`[WorldScene] Save at (${saveTileX},${saveTileY}) is blocked, using default spawn (${spawnX},${spawnY})`);
         transform.x = spawnX * WorldScene.TILE_PX;
         transform.y = spawnY * WorldScene.TILE_PX;
       }
@@ -261,11 +260,10 @@ export class WorldScene extends Scene {
     networkManager.emit('loadCharacter', identity);
     networkManager.once('characterLoaded', (data: any) => {
       if (data.success && data.charData) {
-        // Validate server position is on a walkable tile
+        // Validate server position is on a walkable tile (full collision check)
         const saveTileX = Math.floor(data.charData.x / WorldScene.TILE_PX);
         const saveTileY = Math.floor(data.charData.y / WorldScene.TILE_PX);
-        const saveExtra = this.map?.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, saveTileX, saveTileY) ?? 0;
-        if (saveExtra !== 0) {
+        if (!this.isHitTile(saveTileX, saveTileY)) {
           transform.x = data.charData.x;
           transform.y = data.charData.y;
         }
