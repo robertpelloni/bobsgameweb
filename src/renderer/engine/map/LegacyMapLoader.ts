@@ -187,30 +187,68 @@ export class LegacyMapLoader {
       }
     }
     // Scan objects layer for door tiles and refine positions
-    // (door_graph.json has approximate positions; scanForDoors finds exact door tiles)
     LegacyMapLoader.scanForDoors(mapData, legacy);
-
-    // Find default spawn point (walkable floor tile from center)
-    mapData.defaultSpawnX = Math.floor(w / 2);
-    mapData.defaultSpawnY = Math.floor(h / 2);
 
     const cx = Math.floor(w / 2);
     const cy = Math.floor(h / 2);
-    const WALL_GROUND_IDS = new Set([839, 700, 744, 743, 745, 24, 795, 740]);
-    for (let r = 0; r < Math.max(w, h); r++) {
-      for (let dy = -r; dy <= r; dy++) {
-        for (let dx = -r; dx <= r; dx++) {
-          const sx = cx + dx;
-          const sy = cy + dy;
+    const WALL_IDS = new Set([839, 8280, 700, 744, 743, 745, 24, 795, 740]);
+
+    const isWalkable = (sx: number, sy: number): boolean => {
+      const extraVal = mapData.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, sx, sy);
+      const gndVal = mapData.getTileIndex(MapData.MAP_GROUND_LAYER, sx, sy);
+      const objVal = mapData.getTileIndex(MapData.MAP_OBJECT_LAYER, sx, sy);
+      const hitVal = mapData.getTileIndex(MapData.MAP_HIT_LAYER, sx, sy);
+
+      if (hitVal !== 0) return false;
+      if (WALL_IDS.has(objVal)) return false;
+      if (WALL_IDS.has(gndVal)) return false;
+      if (gndVal === 0) return false;
+      if (extraVal === 0) {
+        if (gndVal === 0 || WALL_IDS.has(gndVal)) return false;
+      }
+      return true;
+    };
+
+    // Priority 1: Search near doors (usually guaranteed walkable path)
+    let spawnFound = false;
+    if (mapData.doorDataList.length > 0) {
+      for (const door of mapData.doorDataList) {
+        const tx = door.x;
+        const ty = door.y;
+        // Try the door itself and then 1-2 tiles around it
+        const offsets = [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [2, 0], [-2, 0], [0, 2], [0, -2]];
+        for (const [ox, oy] of offsets) {
+          const sx = tx + ox;
+          const sy = ty + oy;
           if (sx >= 0 && sx < w && sy >= 0 && sy < h) {
-            const extraVal = mapData.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, sx, sy);
-            const gndVal = mapData.getTileIndex(MapData.MAP_GROUND_LAYER, sx, sy);
-            const objVal = mapData.getTileIndex(MapData.MAP_OBJECT_LAYER, sx, sy);
-     if (extraVal !== 0 && gndVal !== 0 && !WALL_GROUND_IDS.has(gndVal) && objVal === 0) {
+            if (isWalkable(sx, sy)) {
               mapData.defaultSpawnX = sx;
               mapData.defaultSpawnY = sy;
-              console.log(`[LegacyMapLoader] Spawn at (${sx},${sy}) ground=${gndVal}`);
-              r = w + h; dy = r + 1; break;
+              spawnFound = true;
+              console.log(`[LegacyMapLoader] Found door spawn at (${sx},${sy})`);
+              break;
+            }
+          }
+        }
+        if (spawnFound) break;
+      }
+    }
+
+    // Priority 2: Spiral search from center (fallback)
+    if (!spawnFound) {
+      for (let r = 0; r < Math.max(w, h); r++) {
+        for (let dy = -r; dy <= r; dy++) {
+          for (let dx = -r; dx <= r; dx++) {
+            const sx = cx + dx;
+            const sy = cy + dy;
+            if (sx >= 0 && sx < w && sy >= 0 && sy < h) {
+              if (isWalkable(sx, sy)) {
+                mapData.defaultSpawnX = sx;
+                mapData.defaultSpawnY = sy;
+                spawnFound = true;
+                console.log(`[LegacyMapLoader] Found fallback spiral spawn at (${sx},${sy})`);
+                r = w + h; dy = r + 1; break;
+              }
             }
           }
         }
@@ -223,14 +261,12 @@ export class LegacyMapLoader {
 
   /**
    * Known door frame tile IDs from the original game.
-   * These are the ONLY tile IDs that represent actual doors/stairs
-   * in the objects layer. Other tiles between walls (floor, furniture)
-   * are NOT doors.
    */
   private static readonly DOOR_TILE_IDS = new Set([
     732, 733, 734, 735, 736, 737, 741, 742, // Door frames
-    1495, 1503, 1511, // Staircase tiles (indoor)
+    1316, 1495, 1503, 1511, // Staircase tiles (indoor)
     14144, 15440, // Special door frames
+    755, 756 // paths
   ]);
 
   /**
@@ -246,34 +282,38 @@ export class LegacyMapLoader {
     const WALL_TILE = 839;
 
     // Collect positions of KNOWN door tiles between walls
-    const doorPositions: { x: number; y: number }[] = [];
+    const doorPositions: { x: number; y: number; tileId: number }[] = [];
     for (let y = 1; y < h - 1; y++) {
       for (let x = 1; x < w - 1; x++) {
         const tileId = dense[y * w + x];
-        // Only accept known door/staircase tiles
         if (!LegacyMapLoader.DOOR_TILE_IDS.has(tileId)) continue;
+        
         const left = dense[y * w + (x - 1)];
         const right = dense[y * w + (x + 1)];
         const above = dense[(y - 1) * w + x];
         const below = dense[(y + 1) * w + x];
+        
         const isHOpening = (left === WALL_TILE && right === WALL_TILE);
         const isVOpening = (above === WALL_TILE && below === WALL_TILE);
+        
         if (isHOpening || isVOpening) {
-          doorPositions.push({ x, y });
+          doorPositions.push({ x, y, tileId });
         }
       }
     }
 
     // Assign positions: for each door, find the closest scanned wall-opening
     const assigned = new Set<number>();
-    const DOOR_TILE_IDS = new Set([742, 1316, 755, 756]);
     for (let i = 0; i < mapData.doorDataList.length; i++) {
       const door = mapData.doorDataList[i];
       const gx = door.x ?? 0;
       const gy = door.y ?? 0;
       
       const curTile = mapData.getTileIndex(MapData.MAP_OBJECT_LAYER, gx, gy);
-      if (DOOR_TILE_IDS.has(curTile)) continue;
+      if (LegacyMapLoader.DOOR_TILE_IDS.has(curTile)) {
+          console.log(`[LegacyMapLoader] Door "${door.name}" already on valid tile ${curTile} at (${gx},${gy})`);
+          continue;
+      }
 
       let bestIdx = -1;
       let bestDist = Infinity;
@@ -288,22 +328,14 @@ export class LegacyMapLoader {
         }
       }
 
-      if (bestIdx >= 0 && bestDist <= 2) {
+      if (bestIdx >= 0 && bestDist <= 3) {
+        console.log(`[LegacyMapLoader] Snapping door "${door.name}" from (${gx},${gy}) to opening at (${doorPositions[bestIdx].x},${doorPositions[bestIdx].y}) tile=${doorPositions[bestIdx].tileId}`);
         door.x = doorPositions[bestIdx].x;
         door.y = doorPositions[bestIdx].y;
         assigned.add(bestIdx);
-      } else if (gx === 0 && gy === 0 && doorPositions.length > 0) {
-        // No existing position - assign by order
-        let fallbackIdx = 0;
-        while (fallbackIdx < doorPositions.length && assigned.has(fallbackIdx)) fallbackIdx++;
-        if (fallbackIdx < doorPositions.length) {
-          door.x = doorPositions[fallbackIdx].x;
-          door.y = doorPositions[fallbackIdx].y;
-          assigned.add(fallbackIdx);
-        }
+      } else {
+          console.log(`[LegacyMapLoader] Door "${door.name}" at (${gx},${gy}) dist to nearest opening: ${bestDist}`);
       }
-      // If door has a position from door_graph and no nearby scanForDoors match,
-      // keep the door_graph position (warp area position, still usable for detection)
     }
 
     console.log(`[LegacyMapLoader] scanForDoors: ${doorPositions.length} wall-openings, assigned ${assigned.size}/${mapData.doorDataList.length} doors`);

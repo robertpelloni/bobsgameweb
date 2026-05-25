@@ -1,3 +1,18 @@
+## v3.0.8 — 2026-05-25
+
+### Changed
+- **Map System Refactor:** Centralized `MapData` in `src/shared/MapData.ts` for consistent use between client and server.
+- **Enhanced Map Rendering:** Improved `GameMap` rendering with optimized `zIndex` layering and `blendMode` support for shadows (`multiply`) and lights (`add`).
+- **Robust Collision Detection:** Updated `WorldScene` collision logic with new `WALL_IDS` and `FLOOR_IDS` registries in `MapData` for more accurate tile-based movement.
+- **Improved Map Loading:** Refined `LegacyMapLoader` with prioritized spawn point detection near doors and improved door snapping to wall openings.
+- Synchronized version 3.0.8 across `package.json`, `server/package.json`, `src/shared/Config.ts`, and `VERSION.md`.
+
+## v3.0.7 — 2026-05-22
+
+### Changed
+- Synchronized version 3.0.7 across metadata files.
+- Merged feature branches for dialogue audio ('blah' system) and 8-way movement.
+
 ## v3.0.6 — 2026-05-01
 
 ### Added

@@ -10,7 +10,7 @@ export { Door, DoorData } from "./Door";
 export { EntityData, RenderOrder } from "./EntityData";
 export { GameMap } from "./GameMap";
 export { Light, LightData } from "./Light";
-export { MapData } from "./MapData";
+export { MapData } from "../../../shared/MapData";
 export { LegacyMapLoader } from "./LegacyMapLoader";
 export { MapLoader, MapTile, TILE_COLORS } from "./MapLoader";
 export { TilesetBuilder } from "./TilesetBuilder";
