@@ -2135,32 +2135,40 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
     const gndTile = this.map.data.getTileIndex(MapData.MAP_GROUND_LAYER, tx, ty);
     const objTile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
     const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
+    const extraTile = this.map.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, tx, ty);
 
-    // 1. Explicit Hit Markers (High Priority)
+    // 1. Explicit Hit Markers (Highest Priority)
     if (hitTile !== 0) return true;
 
-    // 2. Floor Exception (Highest priority walkable rule)
-    if (MapData.FLOOR_IDS.has(gndTile)) {
-        // Only block if the object is a DIFFERENT strict wall (not 839/8280)
-        if (objTile !== 0 && objTile !== 839 && objTile !== 8280 && MapData.WALL_IDS.has(objTile)) return true;
-        return false; // Valid floor and no strict wall object
-    }
+    // 2. Extra Layer Override (Original game walkable zone)
+    // 1 = interior/walkable, 0 = void/blocked
+    // If extra is 1, it overrides walls in ground/object layers.
+    if (extraTile === 1) return false;
 
-    // 3. Strict Wall ID Blocking
+    // 3. Strict Wall ID Blocking (if no extra override)
     if (objTile === 839 || objTile === 8280) return true;
     if (MapData.WALL_IDS.has(objTile)) return true;
     if (MapData.WALL_IDS.has(gndTile)) return true;
 
-    // 4. Void check
-    if (gndTile === 0 && objTile === 0) return true;
+    // 4. Floor Exception (Walkable floor IDs)
+    if (MapData.FLOOR_IDS.has(gndTile)) {
+        // Only block if the object is a DIFFERENT strict wall
+        if (objTile !== 0 && MapData.WALL_IDS.has(objTile)) return true;
+        return false;
+    }
 
-    // 5. Doors (Passage Zone)
+    // 5. Void check (if not a floor and no extra marker, empty is blocked)
+    if (gndTile === 0 && objTile === 0) return true;
+    if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
+
+    // 6. Doors (Passage Zone)
     const isDoor = this.map.data.doorDataList.some(d =>
       tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height
     );
     if (isDoor) return false;
 
-    // 6. Entity collision (furniture bounding boxes)
+    // 7. Entity collision (furniture bounding boxes)
+
     const px = tx * WorldScene.TILE_PX;
     const py = ty * WorldScene.TILE_PX;
     for (const ec of this.entityColliders) {

@@ -100,6 +100,7 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
       // Fallback: synthetic tileset
       for (let l = 0; l < MapData.layers; l++) {
         if (!MapData.isTileLayer(l)) continue;
+        if (l === MapData.MAP_HIT_LAYER || l === MapData.MAP_CAMERA_BOUNDS_LAYER) continue;
         this.renderLayer(l, tileset, palette);
       }
     }
@@ -109,29 +110,33 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
   private renderWithRealTileset() {
     for (let l = 0; l < MapData.layers; l++) {
       if (!MapData.isTileLayer(l)) continue;
-      if (l === MapData.MAP_HIT_LAYER) continue; // Don't render hit bounds visually
- if (l === MapData.MAP_CAMERA_BOUNDS_LAYER) continue; // Don't render wall collision data
- if (l === MapData.MAP_ENTITY_LAYER) continue; // Don't render entity data
+      // Skip non-visual utility layers
+      if (l === MapData.MAP_HIT_LAYER || l === MapData.MAP_CAMERA_BOUNDS_LAYER || l === MapData.MAP_ENTITY_LAYER) continue;
+
       this.renderLayerReal(l);
     }
     // Set layer-specific alpha for visual quality
-    this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7;
+    this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7; 
     this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.12;
     this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
     this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
-    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.1;
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.1;
+    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.1; 
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.1; 
     // Light mask tiles are orange markers → tint to black for AO overlay
-    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.35;
+    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.35;   
     // Map lights (tiles) alpha
     this.layers[MapData.MAP_LIGHT_LAYER].alpha = 1.0;
-  // Above-layer tiles stay in their own layer containers (z=7, z=8)
-  // so they render ON TOP of entities in entitySpriteContainer (z=6.5)
+
+    // Ensure correct sorting order
+    this.layers[MapData.MAP_LIGHT_MASK_LAYER].zIndex = 2;
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].zIndex = 7;
+    this.entitySpriteContainer.zIndex = 8;
+    this.layers[MapData.MAP_ABOVE_LAYER].zIndex = 10;
+    this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
 
     const totalSprites = this.layers.reduce((sum, l) => sum + l.children.length, 0);
     console.log(`[GameMap] Total sprites rendered: ${totalSprites} for ${this.data.name}`);
   }
-
   /** Render a single layer using real tileset atlas textures */
  private renderLayerReal(l: number) {
     const layer = this.layers[l];
