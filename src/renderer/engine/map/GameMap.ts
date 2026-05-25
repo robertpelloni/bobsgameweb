@@ -49,19 +49,21 @@ this.layers.push(layer);
 this.container.addChild(layer);
 }
 // Fix zIndex for non-sequential render order:
-// Light mask renders as ground-level AO (zIndex 1.5, covered by walls)
-this.layers[MapData.MAP_LIGHT_MASK_LAYER].zIndex = 1.5;
-// Sprite shadows render after objects but below entities (zIndex 5.5)
-this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].zIndex = 5.5;
+// Light mask renders as ground-level AO (zIndex 2, covered by walls)
+this.layers[MapData.MAP_LIGHT_MASK_LAYER].zIndex = 2;
+// Sprite shadows render after objects but below entities (zIndex 7)
+this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].zIndex = 7;
 
-// Entity sprite container: between object shadow (5) and above-layers (6, 7)
+// Entity sprite container: between object shadow (6) and above-layers (10, 11)
 // so entities render on top of objects but below rooftops.
-// zIndex 5.8 places it between layer 5 (objectShadow) and layer 6 (above).
 this.entitySpriteContainer = new Container();
     this.entitySpriteContainer.sortableChildren = true; // Y-based depth sort
  this.entitySpriteContainer.cullable = true;
-this.entitySpriteContainer.zIndex = 5.8;
+this.entitySpriteContainer.zIndex = 8;
 this.container.addChild(this.entitySpriteContainer);
+// Above layers (10, 11)
+this.layers[MapData.MAP_ABOVE_LAYER].zIndex = 10;
+this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
   }
 
   /** Set camera target position (usually follows the player) */
@@ -114,11 +116,11 @@ this.container.addChild(this.entitySpriteContainer);
     }
     // Set layer-specific alpha for visual quality
     this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7;
-    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.5;
+    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.12;
     this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
-    this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 0.8;
-    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.4;
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.4;
+    this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
+    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.1;
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.1;
     // Light mask tiles are orange markers → tint to black for AO overlay
     this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.35;
     // Map lights (tiles) alpha
@@ -173,9 +175,16 @@ this.container.addChild(this.entitySpriteContainer);
           sprite.tint = 0x000000;
         }
 
-        // Do NOT override per-sprite alpha for shadow/light layers:
-        // Container-level alpha handles transparency and shadow tiles
-        // have their own baked-in alpha values.
+        // Additive blending for light tiles
+        if (l === MapData.MAP_LIGHT_LAYER) {
+          sprite.blendMode = 'add';
+        }
+        
+        // Multiply blending for shadows
+        if (l === MapData.MAP_OBJECT_SHADOW_LAYER || l === MapData.MAP_GROUND_SHADOW_LAYER || l === MapData.MAP_SPRITE_SHADOW_LAYER) {
+          sprite.blendMode = 'multiply';
+        }
+
         layer.addChild(sprite);
       }
     }

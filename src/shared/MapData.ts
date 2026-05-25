@@ -35,6 +35,22 @@ export class MapData extends AssetData {
 
     public static readonly layers = 17;
 
+    public static readonly WALL_IDS = new Set([
+        839, 8280, // Solid black walls
+        700, 744, 743, 745, // Map edges / boundaries
+        24, 795, 740, // Corner / filler walls
+        1261, 1262, 1234, 15488, // Specific room boundary frames
+        1416, 15513, 1477, 1292, // Hallway wall filler
+    ]);
+
+    /**
+     * Known floor/walkable ground tile IDs.
+     */
+    public static readonly FLOOR_IDS = new Set([
+        1327, 1322, 1305, 1316, 14168, 1415, 1752,
+        15640, 15672, 15624, 15656, 15856
+    ]);
+
     public mapNote: string = "";
     public widthTiles1X: number = 40;
     public heightTiles1X: number = 30;

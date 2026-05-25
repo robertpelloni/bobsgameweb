@@ -32,7 +32,8 @@ export class NPCBehavior extends Behavior {
         this.timer += dt;
 
         // Check for player proximity and interaction
-        const playerTransform = (this.world as any).scene?.playerTransform as TransformComponent;
+        const scene = (this.world as any).scene;
+        const playerTransform = scene?.playerTransform as TransformComponent;
         const interactionComp = this.world.getComponent<InteractionComponent>(this.entityId, 'Interaction');
 
         if (playerTransform && interactionComp) {
@@ -50,7 +51,7 @@ export class NPCBehavior extends Behavior {
                 this.updateSpriteAnimation(false);
             }
 
-            if (dist < 40 && (this.world as any).scene?.isActionJustPressed) {
+            if (dist < 40 && scene?.isActionJustPressed) {
                 // this.triggerInteractions(interactionComp); // Handled by WorldScene
             }
         }

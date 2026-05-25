@@ -10,7 +10,6 @@ import { Container, Graphics, Text, TextStyle } from "pixi.js";
 export class TouchControls extends Container {
 	private dpad: Container;
 	private buttons: Container;
-	private visible = false;
 
 	constructor(
 		private screenWidth: number,
@@ -108,13 +107,5 @@ export class TouchControls extends Container {
 		this.screenWidth = width;
 		this.screenHeight = height;
 		this.layout();
-	}
-
-	public override get visible(): boolean {
-		return super.visible;
-	}
-
-	public override set visible(v: boolean) {
-		super.visible = v;
 	}
 }

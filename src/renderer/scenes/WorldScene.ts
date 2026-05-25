@@ -131,6 +131,7 @@ export class WorldScene extends Scene {
     super(config);
     this.worldContainer = new Container();
     this.worldContainer.zIndex = 0;
+    this.worldContainer.sortableChildren = true;
     this.container.addChild(this.worldContainer);
     this.world = new World();
     // Build the interpretive legacy tileset with proper palette
@@ -2131,33 +2132,35 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
     if (tx < 0 || ty < 0 || tx >= this.map.data.widthTiles1X || ty >= this.map.data.heightTiles1X) return true;
     if (this.godMode) return false;
 
-    // EXTRA layer (cameraBounds): 1 = interior/walkable, 0 = void/blocked
-    const extraTile = this.map.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, tx, ty);
-    // If extraTile is 0, we only block if the ground is ALSO empty or a solid wall.
-    // This fixes "shrunken" hit layers in extracted maps where extra data is incomplete.
-    if (extraTile === 0) {
-      const gndTile = this.map.data.getTileIndex(MapData.MAP_GROUND_LAYER, tx, ty);
-      if (gndTile === 0 || gndTile === 839 || gndTile === 8280) return true;
-    }
-
-    // HIT layer (hitBounds): non-zero = explicit collision marker
-    const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
-    if (hitTile !== 0) return true; // wall/furniture collision = blocked
-
-    // OBJECT layer wall detection:
-    // - Always-block tile IDs (solid black walls): 839, 8280
+    const gndTile = this.map.data.getTileIndex(MapData.MAP_GROUND_LAYER, tx, ty);
     const objTile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
-    if (objTile !== 0) {
-      // Check if this position is a door
-      const isDoor = this.map.data.doorDataList.some(d =>
-        tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height
-      );
-      if (!isDoor) {
-        if (objTile === 839 || objTile === 8280) return true;
-      }
+    const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
+
+    // 1. Explicit Hit Markers (High Priority)
+    if (hitTile !== 0) return true;
+
+    // 2. Floor Exception (Highest priority walkable rule)
+    if (MapData.FLOOR_IDS.has(gndTile)) {
+        // Only block if the object is a DIFFERENT strict wall (not 839/8280)
+        if (objTile !== 0 && objTile !== 839 && objTile !== 8280 && MapData.WALL_IDS.has(objTile)) return true;
+        return false; // Valid floor and no strict wall object
     }
 
-    // Check entity collision (furniture bounding boxes)
+    // 3. Strict Wall ID Blocking
+    if (objTile === 839 || objTile === 8280) return true;
+    if (MapData.WALL_IDS.has(objTile)) return true;
+    if (MapData.WALL_IDS.has(gndTile)) return true;
+
+    // 4. Void check
+    if (gndTile === 0 && objTile === 0) return true;
+
+    // 5. Doors (Passage Zone)
+    const isDoor = this.map.data.doorDataList.some(d =>
+      tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height
+    );
+    if (isDoor) return false;
+
+    // 6. Entity collision (furniture bounding boxes)
     const px = tx * WorldScene.TILE_PX;
     const py = ty * WorldScene.TILE_PX;
     for (const ec of this.entityColliders) {

@@ -1,4 +1,4 @@
-# Handoff — 2026-05-21 — Version 3.0.7
+# Handoff — 2026-05-25 — Version 3.0.8
 
 ## Agent
 Jules (Software Engineer)
