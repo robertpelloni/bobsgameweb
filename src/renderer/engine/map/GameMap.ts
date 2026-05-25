@@ -194,7 +194,9 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
       }
     }
 
-    console.log(`[GameMap] Layer ${l}: ${layer.children.length} sprites`);
+    const layerNames = ['ground','groundDetail','groundShadow','objects','objects2','objectShadow','above','above2','spriteShadow','hitBounds','lightMask','cameraBounds','entity','light','area','door','shader'];
+    const lname = layerNames[l] || `layer${l}`;
+    console.log(`[GameMap] Layer ${l} (${lname}): ${layer.children.length} sprites, zIndex=${layer.zIndex}, alpha=${layer.alpha}`);
   }
 
   /** Fallback: render a single layer using the synthetic tileset */
