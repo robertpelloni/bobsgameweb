@@ -1746,13 +1746,6 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
     this.world.update(dt);
     // === Player Movement with hit-collision ===
     if (this.playerTransform && this.map && !this.isDialogueActive) {
-      // Debug: log once when movement is first attempted
-      if (!(this as any)._moveDebug && (InputManager.isUpHeld() || InputManager.isDownHeld() || InputManager.isLeftHeld() || InputManager.isRightHeld())) {
-        (this as any)._moveDebug = true;
-        const ptx = Math.floor(this.playerTransform.x / WorldScene.TILE_PX);
-        const pty = Math.floor(this.playerTransform.y / WorldScene.TILE_PX);
-        console.log(`[WorldScene] Movement input detected at (${ptx},${pty}), isHit=${this.isHitTile(ptx, pty)}, godMode=${this.godMode}`);
-      }
       const PLAYER_SPEED = (this as any)._customSpeed ?? 80; // pixels per second at 1X
       const SPRINT_MULT = this.playerIsSprinting ? 1.8 : 1.0;
       let dx = 0, dy = 0;
