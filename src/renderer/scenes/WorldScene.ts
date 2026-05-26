@@ -122,6 +122,14 @@ export class WorldScene extends Scene {
   private playerIsMoving: boolean = false;
   private playerIsSprinting: boolean = false;
   private godMode: boolean = false;
+  // Animation state: 8-direction turning + idle breathing
+  private animDirection: number = 1; // 0=Up,1=Down,2=Left,3=Right,4=UpLeft,5=UpRight,6=DownLeft,7=DownRight
+  private moveDirection: number = 1; // Target direction from input
+  private isTurning: boolean = false;
+  private turnTimer: number = 0;
+  private turnDelay: number = 0.06; // seconds between turn steps
+  private idleTimer: number = 0;
+  private idleFrame: number = 0; // alternates between standing poses
   private versionText: Text | null = null;
  private fpsText: Text | null = null;
  private fpsFrameCount: number = 0;
@@ -1752,57 +1760,116 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
       if (InputManager.isDownHeld()) dy += 1;
       if (InputManager.isLeftHeld()) dx -= 1;
       if (InputManager.isRightHeld()) dx += 1;
-            // Track facing direction for sprite animation (8 directions for yuu)
-      let animDir = ''; // Named direction from original game
-      if (dx !== 0 || dy !== 0) {
-        if (dx === 0 && dy > 0) animDir = 'Down';
-        else if (dx === 0 && dy < 0) animDir = 'Up';
-        else if (dx < 0 && dy === 0) animDir = 'Left';
-        else if (dx > 0 && dy === 0) animDir = 'Right';
-        else if (dx < 0 && dy < 0) animDir = 'UpLeft';
-        else if (dx > 0 && dy < 0) animDir = 'UpRight';
-        else if (dx > 0 && dy > 0) animDir = 'DownRight';
-        else if (dx < 0 && dy > 0) animDir = 'DownLeft';
+// === 8-Direction Animation System (from original game) ===
+    // Direction constants: 0=Up, 1=Down, 2=Left, 3=Right, 4=UpLeft, 5=UpRight, 6=DownLeft, 7=DownRight
+    const DIR_NAMES = ['Up', 'Down', 'Left', 'Right', 'UpLeft', 'UpRight', 'DownLeft', 'DownRight'] as const;
 
-        // If sprite doesn't have 8-dir animations, map diagonals to cardinal
-        if (animDir && !this.spriteAtlas.has8Directions('yuu')) {
-          if (Math.abs(dx) > Math.abs(dy)) {
-            animDir = dx > 0 ? 'Right' : 'Left';
-          } else {
-            animDir = dy > 0 ? 'Down' : 'Up';
-          }
+    // Calculate movement direction from input (8 directions + diagonal)
+    let targetDir = this.animDirection;
+    if (dx !== 0 || dy !== 0) {
+      if (dx === 0 && dy > 0) targetDir = 1;      // Down
+      else if (dx === 0 && dy < 0) targetDir = 0;  // Up
+      else if (dx < 0 && dy === 0) targetDir = 2;  // Left
+      else if (dx > 0 && dy === 0) targetDir = 3;  // Right
+      else if (dx < 0 && dy < 0) targetDir = 4;    // UpLeft
+      else if (dx > 0 && dy < 0) targetDir = 5;    // UpRight
+      else if (dx < 0 && dy > 0) targetDir = 6;    // DownLeft
+      else if (dx > 0 && dy > 0) targetDir = 7;    // DownRight
+      this.moveDirection = targetDir;
+    }
+
+    this.playerIsSprinting = InputManager.isKeyHeld('Shift');
+    this.playerIsMoving = (dx !== 0 || dy !== 0);
+
+    const playerSpriteComp = this.world.getComponent(
+      (this.world as any).playerEntityId, 'Sprite'
+    ) as any;
+
+    if (playerSpriteComp?.sprite) {
+      const has8Dir = this.spriteAtlas.has8Directions('yuu');
+      let displayDir = this.animDirection;
+
+      // === Turning System ===
+      // When direction changes, turn through intermediate directions
+      if (this.playerIsMoving && this.animDirection !== this.moveDirection) {
+        if (!this.isTurning) {
+          this.isTurning = true;
+          this.turnTimer = 0;
         }
-      }
-
-      this.playerIsSprinting = InputManager.isKeyHeld('Shift');
-      this.playerIsMoving = (dx !== 0 || dy !== 0);
-
-      // Update player sprite animation using named animation sequences
-      const playerSpriteComp = this.world.getComponent(
-        (this.world as any).playerEntityId,
-        'Sprite'
-      ) as any;
-      
-      if (playerSpriteComp?.sprite) {
-        const currentDir = animDir || (this as any).lastAnimDir || 'Down';
-        if (playerSpriteComp.currentAnimation !== currentDir) {
-          // Get frames from the original game's animation data
-          const frames = this.spriteAtlas.getAnimationFrames('yuu', currentDir);
-          if (frames.length > 0) {
-            playerSpriteComp.sprite.textures = frames;
-            playerSpriteComp.currentAnimation = currentDir;
-            if (animDir) (this as any).lastAnimDir = animDir;
-          }
-        }
-        
-        // Animate when moving, show first frame (standing) when stopped
-        if (this.playerIsMoving) {
-          playerSpriteComp.sprite.animationSpeed = this.playerIsSprinting ? 0.25 : 0.15;
-          playerSpriteComp.sprite.play();
+        this.turnTimer -= dt;
+        if (this.turnTimer <= 0) {
+          this.turnTimer = this.turnDelay;
+          displayDir = this.getNextTurnDirection(this.animDirection, this.moveDirection, has8Dir);
+          this.animDirection = displayDir;
+          if (displayDir === this.moveDirection) this.isTurning = false;
         } else {
-          playerSpriteComp.sprite.gotoAndStop(0);
+          displayDir = this.animDirection;
+        }
+      } else if (this.playerIsMoving) {
+        this.isTurning = false;
+        displayDir = this.animDirection;
+      } else {
+        this.isTurning = false;
+        displayDir = this.animDirection;
+      }
+
+      // Map direction index to animation name
+      let animName = DIR_NAMES[displayDir] || 'Down';
+      if (!has8Dir && displayDir >= 4) {
+        if (displayDir === 4 || displayDir === 5) animName = 'Up';
+        else animName = 'Down';
+      }
+
+      // Apply animation direction
+      if (playerSpriteComp.currentAnimation !== animName) {
+        const frames = this.spriteAtlas.getAnimationFrames('yuu', animName);
+        if (frames.length > 0) {
+          playerSpriteComp.sprite.textures = frames;
+          playerSpriteComp.currentAnimation = animName;
         }
       }
+
+      // === Walk/Run Animation ===
+      if (this.playerIsMoving && !this.isTurning) {
+        // Reset idle state when starting to move
+        this.idleFrame = 0;
+        this.idleTimer = 0;
+        playerSpriteComp.sprite.animationSpeed = this.playerIsSprinting ? 0.25 : 0.15;
+        playerSpriteComp.sprite.play();
+      }
+      // === Idle Animation (from original game's doStandingAnimation) ===
+      else if (!this.playerIsMoving) {
+        this.idleTimer -= dt;
+        if (this.idleTimer <= 0) {
+          // Random delay between idle frames (~0.5-1.5 seconds)
+          this.idleTimer = 0.5 + Math.random() * 1.0;
+          // Alternate between standing poses:
+          // Original: frame offset 0 -> (numFrames/2 - 1) -> (numFrames - 1) -> 0
+          const seq = this.spriteAtlas.getAnimation('yuu', animName);
+          const numFrames = seq ? seq.numFrames : 8;
+          if (this.idleFrame === 0) {
+            this.idleFrame = Math.floor(numFrames / 2) - 1;
+          } else if (this.idleFrame === Math.floor(numFrames / 2) - 1) {
+            this.idleFrame = numFrames - 1;
+          } else {
+            this.idleFrame = 0;
+          }
+          // Subtle pixel jitter (1px, matching original game)
+          if (Math.random() < 0.3) {
+            playerSpriteComp.sprite.x = this.playerTransform.x + (Math.random() < 0.5 ? -0.5 : 0.5);
+          } else {
+            playerSpriteComp.sprite.x = this.playerTransform.x;
+          }
+        }
+        playerSpriteComp.sprite.gotoAndStop(this.idleFrame);
+        playerSpriteComp.sprite.stop();
+      }
+      // === Turning Animation ===
+      else if (this.isTurning) {
+        playerSpriteComp.sprite.gotoAndStop(0);
+        playerSpriteComp.sprite.stop();
+      }
+    }
 
  // Footstep sounds
       if (this.playerIsMoving) {
@@ -2134,56 +2201,93 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
       requestAnimationFrame(step);
     });
   }
+  /**
+   * Calculate the next direction when turning from current to target.
+   * Implements the original game's step-by-step turning logic:
+   * characters turn through intermediate directions rather than snapping.
+   * Directions: 0=Up, 1=Down, 2=Left, 3=Right, 4=UpLeft, 5=UpRight, 6=DownLeft, 7=DownRight
+   */
+  private getNextTurnDirection(current: number, target: number, has8Dir: boolean): number {
+    if (current === target) return target;
+    if (!has8Dir) return target; // 4-dir sprites snap immediately
+
+    // Turning lookup table from the original Java game
+    // Maps (currentDir, targetDir) -> nextDir
+    // Each entry gives the immediate next direction to turn towards
+    const TURN_TABLE: Record<string, number> = {
+      // Target: Up
+      '0-0': 0, '1-0': 6, '2-0': 4, '3-0': 5, '4-0': 0, '5-0': 0, '6-0': 2, '7-0': 3,
+      // Target: Down
+      '0-1': 4, '1-1': 1, '2-1': 6, '3-1': 7, '4-1': 2, '5-1': 3, '6-1': 1, '7-1': 1,
+      // Target: Left
+      '0-2': 4, '1-2': 6, '2-2': 2, '3-2': 4, '4-2': 2, '5-2': 0, '6-2': 2, '7-2': 1,
+      // Target: Right
+      '0-3': 5, '1-3': 7, '2-3': 5, '3-3': 3, '4-3': 0, '5-3': 3, '6-3': 1, '7-3': 3,
+      // Target: UpLeft
+      '0-4': 4, '1-4': 6, '2-4': 4, '3-4': 5, '4-4': 4, '5-4': 0, '6-4': 2, '7-4': 3,
+      // Target: UpRight
+      '0-5': 5, '1-5': 7, '2-5': 4, '3-5': 5, '4-5': 0, '5-5': 5, '6-5': 2, '7-5': 3,
+      // Target: DownLeft
+      '0-6': 4, '1-6': 6, '2-6': 6, '3-6': 7, '4-6': 2, '5-6': 0, '6-6': 6, '7-6': 1,
+      // Target: DownRight
+      '0-7': 5, '1-7': 7, '2-7': 6, '3-7': 7, '4-7': 2, '5-7': 3, '6-7': 1, '7-7': 7,
+    };
+
+    const key = `${current}-${target}`;
+    let next = TURN_TABLE[key];
+
+    // For 180-degree turns, randomly choose left or right path
+    // (matching original game's behavior)
+    if (next === undefined) {
+      // Direct assignment for any missing entries
+      next = target;
+    }
+    // Random 180-degree turn override
+    if ((current === 0 && target === 1) || (current === 1 && target === 0) ||
+        (current === 2 && target === 3) || (current === 3 && target === 2)) {
+      // Flip a coin for which way to turn
+      const goLeft = Math.random() < 0.5;
+      if (current === 1 && target === 0) next = goLeft ? 6 : 7;  // Down->Up: turn via DownLeft or DownRight
+      else if (current === 0 && target === 1) next = goLeft ? 4 : 5;  // Up->Down: turn via UpLeft or UpRight
+      else if (current === 2 && target === 3) next = goLeft ? 4 : 6;  // Left->Right: turn via UpLeft or DownLeft
+      else if (current === 3 && target === 2) next = goLeft ? 5 : 7;  // Right->Left: turn via UpRight or DownRight
+    }
+
+    return next;
+  }
+
   private isHitTile(tx: number, ty: number): boolean {
     if (!this.map) return true;
     if (tx < 0 || ty < 0 || tx >= this.map.data.widthTiles1X || ty >= this.map.data.heightTiles1X) return true;
     if (this.godMode) return false;
 
-    const gndTile = this.map.data.getTileIndex(MapData.MAP_GROUND_LAYER, tx, ty);
-    const objTile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
+    // 1. Hit Bounds Layer (authoritative collision from original game)
+    // Non-zero values = blocked. Regenerated from tile analysis for all 257 maps.
     const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
-    const extraTile = this.map.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, tx, ty);
-
-    // 1. Explicit Hit Markers (Highest Priority)
     if (hitTile !== 0) return true;
 
-    // 2. Extra Layer Override (Original game walkable zone)
-    // 1 = interior/walkable, 0 = void/blocked
-    // If extra is 1, it overrides walls in ground/object layers.
-    if (extraTile === 1) return false;
-
-    // 3. Strict Wall ID Blocking (if no extra override)
-    if (objTile === 839 || objTile === 8280) return true;
-    if (MapData.WALL_IDS.has(objTile)) return true;
-    if (MapData.WALL_IDS.has(gndTile)) return true;
-
-    // 4. Floor Exception (Walkable floor IDs)
-    if (MapData.FLOOR_IDS.has(gndTile)) {
-        // Only block if the object is a DIFFERENT strict wall
-        if (objTile !== 0 && MapData.WALL_IDS.has(objTile)) return true;
-        return false;
-    }
-
-    // 5. Void check (if not a floor and no extra marker, empty is blocked)
+    // 2. Void check (no ground AND no object = empty/void tile)
+    const gndTile = this.map.data.getTileIndex(MapData.MAP_GROUND_LAYER, tx, ty);
+    const objTile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
     if (gndTile === 0 && objTile === 0) return true;
-    if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
 
-    // 6. Doors (Passage Zone)
+    // 3. Doors (always passable)
     const isDoor = this.map.data.doorDataList.some(d =>
-      tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height
+      tx >= d.x && tx < d.x + d.width &&
+      ty >= d.y && ty < d.y + d.height
     );
     if (isDoor) return false;
 
-    // 7. Entity collision (furniture bounding boxes)
-
+    // 4. Entity collision (furniture bounding boxes)
     const px = tx * WorldScene.TILE_PX;
     const py = ty * WorldScene.TILE_PX;
     for (const ec of this.entityColliders) {
       if (px + WorldScene.TILE_PX > ec.x && px < ec.x + ec.w &&
           py + WorldScene.TILE_PX > ec.y && py < ec.y + ec.h) {
-        return true; // inside entity bounding box = blocked
+        return true;
       }
     }
+
     return false; // walkable
   }
 
