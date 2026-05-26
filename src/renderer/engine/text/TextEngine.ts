@@ -45,7 +45,7 @@ export class TypedTextWriter {
     update(dt: number): void {
         if (this.displayedLength >= this.fullText.length) return;
 
-        this.accumulator += (dt / 1000) * this.speed;
+        this.accumulator += dt * this.speed;
         const charsToAdd = Math.floor(this.accumulator);
         if (charsToAdd > 0) {
             this.accumulator -= charsToAdd;

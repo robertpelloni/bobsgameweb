@@ -81,8 +81,8 @@ export class NPCBehavior extends Behavior {
                 this.timer = 0;
             }
         } else if (this.state === 'walking') {
-            const newX = transform.x + this.vx * (dt / 1000);
-            const newY = transform.y + this.vy * (dt / 1000);
+            const newX = transform.x + this.vx * dt;
+            const newY = transform.y + this.vy * dt;
             // Check wall collision before moving
             const TILE_PX = 8;
             const scene = (this.world as any).scene;
