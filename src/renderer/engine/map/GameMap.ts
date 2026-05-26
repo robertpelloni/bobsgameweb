@@ -117,7 +117,7 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
     }
     // Set layer-specific alpha for visual quality
     this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7; 
-    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.12;
+    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.05;
     this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
     this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
     this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.1; 
@@ -190,15 +190,7 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
           sprite.blendMode = 'multiply';
         }
 
-        // Objects2 and above2 layers need Y-sorting with entities
-        if (l === MapData.MAP_OBJECT_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
-          sprite.zIndex = sprite.y;
-          (sprite as any)._isTileSprite = true;
-          if (l === MapData.MAP_ABOVE_DETAIL_LAYER) (sprite as any)._isAboveDetailTile = true;
-          this.entitySpriteContainer.addChild(sprite);
-        } else {
-          layer.addChild(sprite);
-        }
+        layer.addChild(sprite);
       }
     }
 
@@ -221,15 +213,7 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
         const sprite = new Sprite(texture);
         sprite.x = x * Tileset.TILE_SIZE;
         sprite.y = y * Tileset.TILE_SIZE;
-        // Objects2 and above2 layers need Y-sorting with entities
-        if (l === MapData.MAP_OBJECT_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
-          sprite.zIndex = sprite.y;
-          (sprite as any)._isTileSprite = true;
-          if (l === MapData.MAP_ABOVE_DETAIL_LAYER) (sprite as any)._isAboveDetailTile = true;
-          this.entitySpriteContainer.addChild(sprite);
-        } else {
-          layer.addChild(sprite);
-        }
+        layer.addChild(sprite);
       }
     }
   }
@@ -348,15 +332,7 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
           sprite.blendMode = 'multiply';
         }
 
-        // Objects2 and above2 layers need Y-sorting with entities
-        if (l === MapData.MAP_OBJECT_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
-          sprite.zIndex = sprite.y;
-          (sprite as any)._isTileSprite = true;
-          if (l === MapData.MAP_ABOVE_DETAIL_LAYER) (sprite as any)._isAboveDetailTile = true;
-          this.entitySpriteContainer.addChild(sprite);
-        } else {
-          layer.addChild(sprite);
-        }        }
+        layer.addChild(sprite);        }
       }
     }
 

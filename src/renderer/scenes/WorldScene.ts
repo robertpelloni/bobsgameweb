@@ -2258,6 +2258,11 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
     const objTile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
     if (gndTile === 0 && objTile === 0) return true;
 
+    // 2.5. Objects2 (furniture) collision
+    // Non-zero objects2 tiles are solid furniture (wastebaskets, bookshelves, etc.)
+    const obj2Tile = this.map.data.getTileIndex(MapData.MAP_OBJECT_DETAIL_LAYER, tx, ty);
+    if (obj2Tile !== 0) return true;
+
     // 3. Doors (always passable)
     const isDoor = this.map.data.doorDataList.some(d =>
       tx >= d.x && tx < d.x + d.width &&
