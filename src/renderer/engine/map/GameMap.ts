@@ -190,7 +190,15 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
           sprite.blendMode = 'multiply';
         }
 
-        layer.addChild(sprite);
+        // Objects2 and above2 layers need Y-sorting with entities
+        if (l === MapData.MAP_OBJECT_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
+          sprite.zIndex = sprite.y;
+          (sprite as any)._isTileSprite = true;
+          if (l === MapData.MAP_ABOVE_DETAIL_LAYER) (sprite as any)._isAboveDetailTile = true;
+          this.entitySpriteContainer.addChild(sprite);
+        } else {
+          layer.addChild(sprite);
+        }
       }
     }
 
@@ -213,7 +221,15 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
         const sprite = new Sprite(texture);
         sprite.x = x * Tileset.TILE_SIZE;
         sprite.y = y * Tileset.TILE_SIZE;
-        layer.addChild(sprite);
+        // Objects2 and above2 layers need Y-sorting with entities
+        if (l === MapData.MAP_OBJECT_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
+          sprite.zIndex = sprite.y;
+          (sprite as any)._isTileSprite = true;
+          if (l === MapData.MAP_ABOVE_DETAIL_LAYER) (sprite as any)._isAboveDetailTile = true;
+          this.entitySpriteContainer.addChild(sprite);
+        } else {
+          layer.addChild(sprite);
+        }
       }
     }
   }
@@ -332,7 +348,15 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
           sprite.blendMode = 'multiply';
         }
 
-        layer.addChild(sprite);        }
+        // Objects2 and above2 layers need Y-sorting with entities
+        if (l === MapData.MAP_OBJECT_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
+          sprite.zIndex = sprite.y;
+          (sprite as any)._isTileSprite = true;
+          if (l === MapData.MAP_ABOVE_DETAIL_LAYER) (sprite as any)._isAboveDetailTile = true;
+          this.entitySpriteContainer.addChild(sprite);
+        } else {
+          layer.addChild(sprite);
+        }        }
       }
     }
 

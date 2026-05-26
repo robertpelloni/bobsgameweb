@@ -291,15 +291,9 @@ export class WorldScene extends Scene {
       (this as any).lastAnimDir = 'Down';
       console.log('[WorldScene] Using animated Yuu sprite');
 
-      // Add a visual shadow to the player
-      const shadowG = new Graphics();
-      shadowG.ellipse(0, 0, 6, 3);
-      shadowG.fill({ color: 0x000000, alpha: 0.3 });
-      const shadowTex = this.app.renderer.generateTexture(shadowG);
-      const shadowSprite = new Sprite(shadowTex);
-      shadowSprite.anchor.set(0.5, 0.5);
-      shadowSprite.position.set(0, -1); // Position at feet
-      yuuAnim.addChildAt(shadowSprite, 0); // Add behind character
+      // Player shadow: upside-down shrunken version of the sprite
+      // Will be created and added to entitySpriteContainer in the update loop
+      (this as any).playerShadowSprite = null;
     } else {
       // Fallback: static sprite frame
       const yuuSprite = this.spriteAtlas.createSprite('yuu', 0);
