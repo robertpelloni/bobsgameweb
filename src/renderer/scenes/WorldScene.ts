@@ -1246,8 +1246,8 @@ export class WorldScene extends Scene {
     g.clear();
     // Update and draw rain
     for (const drop of this.rainDrops) {
-      drop.y += drop.speed * (dt / 1000);
-      drop.x -= 30 * (dt / 1000); // Slight wind
+      drop.y += drop.speed * dt;
+      drop.x -= 30 * dt; // Slight wind
       if (drop.y > this.height) {
         drop.y = -10;
         drop.x = Math.random() * this.width;
@@ -1821,8 +1821,8 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
         dx *= inv;
         dy *= inv;
       }
-      const newX = this.playerTransform.x + dx * PLAYER_SPEED * SPRINT_MULT * (dt / 1000);
-      const newY = this.playerTransform.y + dy * PLAYER_SPEED * SPRINT_MULT * (dt / 1000);
+      const newX = this.playerTransform.x + dx * PLAYER_SPEED * SPRINT_MULT * dt;
+      const newY = this.playerTransform.y + dy * PLAYER_SPEED * SPRINT_MULT * dt;
       // Hit-collision check using the map's hitBounds layer
       const PW = 8;  // player half-width (collision box)
       const PH = 8;  // player collision height (feet only)

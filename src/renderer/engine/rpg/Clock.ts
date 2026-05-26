@@ -28,7 +28,7 @@ export class GameClock {
         if (this._paused) return;
 
         const speed = this._fast ? GameClock.FAST_SPEED : GameClock.NORMAL_SPEED;
-        this.accumulator += (dt / 1000) * speed;
+        this.accumulator += dt * speed;
 
         while (this.accumulator >= 1) {
             this.accumulator -= 1;
