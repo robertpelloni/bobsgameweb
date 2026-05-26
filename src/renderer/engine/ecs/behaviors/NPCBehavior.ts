@@ -98,6 +98,10 @@ export class NPCBehavior extends Behavior {
         const objTile = map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, testTx, testTy);
         if (gndTile === 0 && objTile === 0) walkable = false;
       }
+      if (walkable) {
+        const obj2Tile = map.data.getTileIndex(MapData.MAP_OBJECT_DETAIL_LAYER, testTx, testTy);
+        if (obj2Tile !== 0) walkable = false;
+      }
 
       if (walkable) {
         transform.x = newX;
