@@ -362,6 +362,8 @@ export class WorldScene extends Scene {
     // Spawn NPCs from the real placement data
     await this.createNPCs();
     this.createTorches();
+    // Spawn map entity sprites (furniture, props) on initial load
+    this.createMapEntities();
     this.createDialogueUI();
  
     this.createConsoleUI();
