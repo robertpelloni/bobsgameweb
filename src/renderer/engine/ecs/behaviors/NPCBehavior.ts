@@ -87,23 +87,16 @@ export class NPCBehavior extends Behavior {
             const TILE_PX = 8;
             const scene = (this.world as any).scene;
             const map = scene?.map;
-            if (map) {
+            if (map && scene) {
                 const testTx = Math.floor(newX / TILE_PX);
                 const testTy = Math.floor(newY / TILE_PX);
-                // Use hitBounds layer (authoritative) + void check
-      const hitTile = map.data.getTileIndex(MapData.MAP_HIT_LAYER, testTx, testTy);
-      let walkable = hitTile === 0;
-      if (walkable) {
-        const gndTile = map.data.getTileIndex(MapData.MAP_GROUND_LAYER, testTx, testTy);
-        const objTile = map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, testTx, testTy);
-        if (gndTile === 0 && objTile === 0) walkable = false;
-      }
+                // Use the authoritative scene.isHitTile logic
+                const walkable = !scene.isHitTile(testTx, testTy);
 
-
-      if (walkable) {
-        transform.x = newX;
-        transform.y = newY;
-      } else {
+                if (walkable) {
+                    transform.x = newX;
+                    transform.y = newY;
+                } else {
                     // Hit a wall, stop walking
                     this.state = 'idle';
                     this.timer = 0;
