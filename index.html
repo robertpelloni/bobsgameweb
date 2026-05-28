@@ -81,7 +81,64 @@
       @keyframes spin {
         to { transform: rotate(360deg); }
       }
-    </style>
+    
+/* Under Construction Banner - 90s style */
+#construction-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  text-align: center;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+  animation: bannerBlink 1s step-end infinite;
+  pointer-events: none;
+}
+#construction-banner .hazard-strip {
+  background: repeating-linear-gradient(
+    -45deg,
+    #FFD700,
+    #FFD700 10px,
+    #000000 10px,
+    #000000 20px
+  );
+  height: 8px;
+}
+#construction-banner .banner-content {
+  background: #FFFF00;
+  color: #000000;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: 3px outset #FFD700;
+  display: inline-block;
+  image-rendering: pixelated;
+}
+#construction-banner .banner-content .emoji {
+  animation: workerWave 0.6s ease-in-out infinite alternate;
+  display: inline-block;
+}
+#construction-banner .hazard-strip-bottom {
+  background: repeating-linear-gradient(
+    -45deg,
+    #000000,
+    #000000 10px,
+    #FFD700 10px,
+    #FFD700 20px
+  );
+  height: 8px;
+}
+@keyframes bannerBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+@keyframes workerWave {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(10deg); }
+}
+</style>
   </head>
   <body>
     <div id="loading">
@@ -98,5 +155,16 @@
         }, 500);
       });
     </script>
-  </body>
+  
+<!-- 90s Under Construction Banner -->
+<div id="construction-banner">
+  <div class="hazard-strip"></div>
+  <div style="background:#FFD700;padding:2px 0;">
+    <span class="banner-content">
+      <span class="emoji">🚧</span> UNDER CONSTRUCTION <span class="emoji">👷</span> 
+    </span>
+  </div>
+  <div class="hazard-strip-bottom"></div>
+</div>
+</body>
 </html>

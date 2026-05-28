@@ -291,9 +291,15 @@ export class WorldScene extends Scene {
       (this as any).lastAnimDir = 'Down';
       console.log('[WorldScene] Using animated Yuu sprite');
 
-      // Player shadow: upside-down shrunken version of the sprite
-      // Will be created and added to entitySpriteContainer in the update loop
-      (this as any).playerShadowSprite = null;
+      // Player shadow: upside-down shrunken version of the sprite (from Java: shadowSize=0.65, shadowAlpha=0.60)
+    // Create a shadow that mirrors the player's current frame, flipped vertically
+    const shadowSprite = new Sprite(yuuAnim.textures[0]);
+    shadowSprite.anchor.set(0.5, 1.0); // bottom-center (feet), same as player
+    shadowSprite.scale.y = -0.65; // flip upside-down, squish to 65% height (shadowSize from Java)
+    shadowSprite.tint = 0x000000; // black
+    shadowSprite.alpha = 0.60; // shadowAlpha from Java
+    (this as any).playerShadowSprite = shadowSprite;
+    (this as any).playerShadowTextures = yuuAnim.textures;
     } else {
       // Fallback: static sprite frame
       const yuuSprite = this.spriteAtlas.createSprite('yuu', 0);
@@ -465,6 +471,12 @@ export class WorldScene extends Scene {
     if (!legacy) {
       console.warn(`[WorldScene] Cannot find map named: "${mapName}"`);
       return false;
+    }
+
+    // Add player shadow sprite to entitySpriteContainer
+    const shadow = (this as any).playerShadowSprite as Sprite | null;
+    if (shadow && !shadow.parent && this.map?.entitySpriteContainer) {
+      this.map.entitySpriteContainer.addChild(shadow);
     }
     // Find the filename to use the normal load path
     const filename = LegacyMapLoader.getFilenameForMap(mapName);
@@ -1821,7 +1833,7 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
         // Reset idle state when starting to move
         this.idleFrame = 0;
         this.idleTimer = 0;
-        playerSpriteComp.sprite.animationSpeed = this.playerIsSprinting ? 0.25 : 0.15;
+        playerSpriteComp.sprite.animationSpeed = this.playerIsSprinting ? 0.4 : 0.2; // Match Java: normal=80ms/frame, sprint=30ms/frame
         playerSpriteComp.sprite.play();
       }
       // === Idle Animation (from original game's doStandingAnimation) ===
@@ -1932,6 +1944,21 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
         playerSpriteComp.sprite.y = this.playerTransform.y;
           playerSpriteComp.sprite.zIndex = this.playerTransform.y;
       }
+  // Update player shadow sprite (from Java: shadowSize=0.65, shadowAlpha=0.60)
+  // Shadow is the same texture as the current frame, flipped upside-down at the player's feet
+  const shadow = (this as any).playerShadowSprite as Sprite | null;
+  if (shadow && this.playerTransform && this.map?.entitySpriteContainer) {
+    const playerSprite = playerSpriteComp?.sprite as any;
+    if (playerSprite?.texture) {
+      shadow.texture = playerSprite.texture;
+    }
+    shadow.x = this.playerTransform.x;
+    shadow.y = this.playerTransform.y;
+    shadow.zIndex = this.playerTransform.y - 0.1;
+    if (!shadow.parent) {
+      this.map.entitySpriteContainer.addChild(shadow);
+    }
+  }
       // Direct door proximity check (backup for TeleportSystem)
       // Cooldown to prevent immediate re-trigger on arrival
       if (this._doorCooldown > 0) this._doorCooldown -= dt;
@@ -2257,11 +2284,6 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
     const gndTile = this.map.data.getTileIndex(MapData.MAP_GROUND_LAYER, tx, ty);
     const objTile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
     if (gndTile === 0 && objTile === 0) return true;
-
-    // 2.5. Objects2 (furniture) collision
-    // Non-zero objects2 tiles are solid furniture (wastebaskets, bookshelves, etc.)
-    const obj2Tile = this.map.data.getTileIndex(MapData.MAP_OBJECT_DETAIL_LAYER, tx, ty);
-    if (obj2Tile !== 0) return true;
 
     // 3. Doors (always passable)
     const isDoor = this.map.data.doorDataList.some(d =>

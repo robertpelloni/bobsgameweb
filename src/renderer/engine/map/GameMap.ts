@@ -117,7 +117,7 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
     }
     // Set layer-specific alpha for visual quality
     this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7; 
-    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.05;
+    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.03;
     this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
     this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
     this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.1; 
@@ -298,6 +298,13 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
       MapData.MAP_LIGHT_LAYER,
       MapData.MAP_DOOR_LAYER,
     ];
+
+    // Remove stale tile sprites from entitySpriteContainer before re-rendering
+    const tileSpritesToRemove: any[] = [];
+    for (const child of this.entitySpriteContainer.children) {
+      if ((child as any)._isTileSprite) tileSpritesToRemove.push(child);
+    }
+    for (const s of tileSpritesToRemove) this.entitySpriteContainer.removeChild(s);
 
     for (const l of renderableLayers) {
       const layer = this.layers[l];
