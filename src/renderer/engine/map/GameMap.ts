@@ -124,7 +124,7 @@ export class GameMap {
       this.renderLayerReal(l);
     }
     // Set layer-specific alpha for visual quality
-    this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7; 
+    this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; 
     this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.01;
     this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
     this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
@@ -198,7 +198,14 @@ export class GameMap {
           sprite.blendMode = 'multiply';
         }
 
-        layer.addChild(sprite);
+        // Only objects2 needs Y-sorting with entities
+        if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
+          sprite.zIndex = sprite.y;
+          (sprite as any)._isTileSprite = true;
+          this.entitySpriteContainer.addChild(sprite);
+        } else {
+          layer.addChild(sprite);
+        }
       }
     }
 
@@ -348,7 +355,15 @@ export class GameMap {
           sprite.blendMode = 'multiply';
         }
 
-        layer.addChild(sprite);        }
+        // Only objects2 needs Y-sorting with entities
+        if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
+          sprite.zIndex = sprite.y;
+          (sprite as any)._isTileSprite = true;
+          this.entitySpriteContainer.addChild(sprite);
+        } else {
+          layer.addChild(sprite);
+        }
+        }
       }
     }
 
