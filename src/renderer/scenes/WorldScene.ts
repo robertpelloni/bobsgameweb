@@ -243,18 +243,18 @@ export class WorldScene extends Scene {
       spawnY = this.map?.data.defaultSpawnY ?? Math.floor((this.map?.data.heightTiles1X ?? 23) / 2);
     }
     // Override with local save position if available
-    // Validate using full collision check (not just extra layer)
+    // Validate using full collision check for the feet (not just top-left)
     if (localSave?.x && localSave?.y) {
       const saveTileX = Math.floor(localSave.x / WorldScene.TILE_PX);
-      const saveTileY = Math.floor(localSave.y / WorldScene.TILE_PX);
-      if (!this.isHitTile(saveTileX, saveTileY)) {
+      const saveFeetY = Math.floor((localSave.y + 16) / WorldScene.TILE_PX);
+      if (!this.isHitTile(saveTileX, saveFeetY)) {
         // Save position is walkable, use it
         transform.x = localSave.x;
         transform.y = localSave.y;
-        console.log(`[WorldScene] Restored save at (${saveTileX},${saveTileY})`);
+        console.log(`[WorldScene] Restored save at (${saveTileX},${saveFeetY})`);
       } else {
         // Save position is blocked, use default spawn
-        console.warn(`[WorldScene] Save at (${saveTileX},${saveTileY}) is blocked, using default spawn (${spawnX},${spawnY})`);
+        console.warn(`[WorldScene] Save at (${saveTileX},${saveFeetY}) is blocked, using default spawn (${spawnX},${spawnY})`);
         transform.x = spawnX * WorldScene.TILE_PX;
         transform.y = spawnY * WorldScene.TILE_PX;
       }
@@ -268,14 +268,13 @@ export class WorldScene extends Scene {
     networkManager.emit('loadCharacter', identity);
     networkManager.once('characterLoaded', (data: any) => {
       if (data.success && data.charData) {
-        // Validate server position is on a walkable tile (full collision check)
+        // Validate server position is on a walkable tile for feet
         const saveTileX = Math.floor(data.charData.x / WorldScene.TILE_PX);
-        const saveTileY = Math.floor(data.charData.y / WorldScene.TILE_PX);
-        if (!this.isHitTile(saveTileX, saveTileY)) {
+        const saveFeetY = Math.floor((data.charData.y + 16) / WorldScene.TILE_PX);
+        if (!this.isHitTile(saveTileX, saveFeetY)) {
           transform.x = data.charData.x;
           transform.y = data.charData.y;
         }
-        // If invalid, keep the default spawn position
       }
     });
     // Player sprite — animated Yuu sprite with walk cycles
@@ -746,6 +745,23 @@ export class WorldScene extends Scene {
           // Add to entity sprite container (renders below above-layer)
           if (this.map && (this.currentMapName || "") === mapName) {
             this.map.entitySpriteContainer.addChild(sprite);
+
+            // Add dynamic light for TVs
+            if (ent.sprite.toLowerCase().includes('tv')) {
+                const lightEntity = this.world.createEntity();
+                const ltransform = new TransformComponent();
+                ltransform.x = ent.x + fw / 2;
+                ltransform.y = ent.y + fh / 2;
+                this.world.addComponent(lightEntity, ltransform);
+                
+                const light = new LightComponent();
+                light.radius = 120;
+                light.baseRadius = 120;
+                light.color = 0x88ccff; // Cool TV blue
+                light.flicker = true;
+                light.intensity = 0.6;
+                this.world.addComponent(lightEntity, light);
+            }
           }
 
           spawned++;
@@ -1953,7 +1969,7 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
       shadow.texture = playerSprite.texture;
     }
     shadow.x = this.playerTransform.x;
-    shadow.y = this.playerTransform.y;
+    shadow.y = this.playerTransform.y - 4;  // lift shadow 4 pixels to sit flush with player feet
     shadow.zIndex = this.playerTransform.y - 0.1;
     if (!shadow.parent) {
       this.map.entitySpriteContainer.addChild(shadow);

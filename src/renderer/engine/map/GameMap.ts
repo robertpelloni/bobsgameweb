@@ -38,32 +38,40 @@ export class GameMap {
     this.data = data;
     this.realTileset = realTileset ?? null;
     this.container = new Container();
-this.container.sortableChildren = true; // Enable zIndex-based render ordering
- this.container.cullable = true; // Enable automatic viewport culling
-this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
-for (let i = 0; i < MapData.layers; i++) {
-const layer = new Container();
-layer.zIndex = i;
-  layer.cullable = true;
-this.layers.push(layer);
-this.container.addChild(layer);
-}
-// Fix zIndex for non-sequential render order:
-// Light mask renders as ground-level AO (zIndex 2, covered by walls)
-this.layers[MapData.MAP_LIGHT_MASK_LAYER].zIndex = 2;
-// Sprite shadows render after objects but below entities (zIndex 7)
-this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].zIndex = 7;
+    this.container.sortableChildren = true;
+    this.container.cullable = false; // Disable culling to prevent disappearing sprites
+    this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
+    for (let i = 0; i < MapData.layers; i++) {
+      const layer = new Container();
+      layer.zIndex = i;
+      layer.cullable = false;
+      this.layers.push(layer);
+      this.container.addChild(layer);
+    }
 
-// Entity sprite container: between object shadow (6) and above-layers (10, 11)
-// so entities render on top of objects but below rooftops.
-this.entitySpriteContainer = new Container();
-    this.entitySpriteContainer.sortableChildren = true; // Y-based depth sort
- this.entitySpriteContainer.cullable = true;
-this.entitySpriteContainer.zIndex = 8;
-this.container.addChild(this.entitySpriteContainer);
-// Above layers (10, 11)
-this.layers[MapData.MAP_ABOVE_LAYER].zIndex = 10;
-this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
+    // Correct depth sorting order:
+    // Ground: 0, 1
+    // Ground Shadow: 2
+    // Objects: 3, 4
+    // Object Shadow: 5
+    // Above (Roofs): 6, 7 (will be moved up)
+    // Sprite Shadow: 8
+    // Hit/Utility: 9, 10, 11
+    
+    this.layers[MapData.MAP_LIGHT_MASK_LAYER].zIndex = 20; // Above world, below lights
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].zIndex = 7;
+
+    // Entity sprite container: above objects (3,4) and object shadow (5), but below roofs (6,7)
+    // We move roofs to z=10+ to ensure they stay on top.
+    this.entitySpriteContainer = new Container();
+    this.entitySpriteContainer.sortableChildren = true;
+    this.entitySpriteContainer.cullable = false;
+    this.entitySpriteContainer.zIndex = 8;
+    this.container.addChild(this.entitySpriteContainer);
+
+    this.layers[MapData.MAP_ABOVE_LAYER].zIndex = 10;
+    this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
+    this.layers[MapData.MAP_LIGHT_LAYER].zIndex = 21;
   }
 
   /** Set camera target position (usually follows the player) */
@@ -117,13 +125,13 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
     }
     // Set layer-specific alpha for visual quality
     this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7; 
-    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.03;
+    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.01;
     this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
     this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
-    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.1; 
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.1; 
+    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.01;
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.01;
     // Light mask tiles are orange markers → tint to black for AO overlay
-    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.35;   
+    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.15;
     // Map lights (tiles) alpha
     this.layers[MapData.MAP_LIGHT_LAYER].alpha = 1.0;
 
@@ -276,8 +284,9 @@ this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
     this.lastViewportCY = tileCY;
 
     // Calculate visible area
-    const halfW = Math.ceil(screenW / (8 * zoom * 2)) + 8;
-    const halfH = Math.ceil(screenH / (8 * zoom * 2)) + 8;
+    const extraMargin = 16;
+    const halfW = Math.ceil(screenW / (8 * zoom * 2)) + 8 + extraMargin;
+    const halfH = Math.ceil(screenH / (8 * zoom * 2)) + 8 + extraMargin;
     const startX = Math.max(0, tileCX - halfW);
     const startY = Math.max(0, tileCY - halfH);
     const endX = Math.min(this.data.widthTiles1X, tileCX + halfW);
