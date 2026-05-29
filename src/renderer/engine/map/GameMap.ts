@@ -39,39 +39,46 @@ export class GameMap {
     this.realTileset = realTileset ?? null;
     this.container = new Container();
     this.container.sortableChildren = true;
-    this.container.cullable = false; // Disable culling to prevent disappearing sprites
+    this.container.cullable = false;
     this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
+
+    // Initialize layers with robust z-indices
+    // Ground: 0-2
+    // Objects: 3-5
+    // Above: 100-110 (Well above entities)
+    // Utilities: 200+
+    const Z_MAP: Record<number, number> = {
+      [MapData.MAP_GROUND_LAYER]: 0,
+      [MapData.MAP_GROUND_DETAIL_LAYER]: 1,
+      [MapData.MAP_GROUND_SHADOW_LAYER]: 2,
+      [MapData.MAP_OBJECT_LAYER]: 3,
+      [MapData.MAP_OBJECT_DETAIL_LAYER]: 4,
+      [MapData.MAP_OBJECT_SHADOW_LAYER]: 5,
+      [MapData.MAP_ABOVE_LAYER]: 100,
+      [MapData.MAP_ABOVE_DETAIL_LAYER]: 101,
+      [MapData.MAP_SPRITE_SHADOW_LAYER]: 7,
+      [MapData.MAP_HIT_LAYER]: 200,
+      [MapData.MAP_LIGHT_MASK_LAYER]: 150,
+      [MapData.MAP_CAMERA_BOUNDS_LAYER]: 201,
+      [MapData.MAP_ENTITY_LAYER]: 202,
+      [MapData.MAP_LIGHT_LAYER]: 160,
+    };
+
     for (let i = 0; i < MapData.layers; i++) {
       const layer = new Container();
-      layer.zIndex = i;
+      layer.zIndex = Z_MAP[i] ?? i;
       layer.cullable = false;
+      layer.sortableChildren = false; // Static tile layers don't need internal sorting
       this.layers.push(layer);
       this.container.addChild(layer);
     }
 
-    // Correct depth sorting order:
-    // Ground: 0, 1
-    // Ground Shadow: 2
-    // Objects: 3, 4
-    // Object Shadow: 5
-    // Above (Roofs): 6, 7 (will be moved up)
-    // Sprite Shadow: 8
-    // Hit/Utility: 9, 10, 11
-    
-    this.layers[MapData.MAP_LIGHT_MASK_LAYER].zIndex = 20; // Above world, below lights
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].zIndex = 7;
-
-    // Entity sprite container: above objects (3,4) and object shadow (5), but below roofs (6,7)
-    // We move roofs to z=10+ to ensure they stay on top.
+    // Entity sprite container: Between objects (5) and above-layers (100)
     this.entitySpriteContainer = new Container();
-    this.entitySpriteContainer.sortableChildren = true;
+    this.entitySpriteContainer.sortableChildren = true; // Crucial for Y-sorting
     this.entitySpriteContainer.cullable = false;
-    this.entitySpriteContainer.zIndex = 8;
+    this.entitySpriteContainer.zIndex = 50; 
     this.container.addChild(this.entitySpriteContainer);
-
-    this.layers[MapData.MAP_ABOVE_LAYER].zIndex = 10;
-    this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
-    this.layers[MapData.MAP_LIGHT_LAYER].zIndex = 21;
   }
 
   /** Set camera target position (usually follows the player) */
@@ -125,22 +132,15 @@ export class GameMap {
     }
     // Set layer-specific alpha for visual quality
     this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; 
-    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.01;
+    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.05;
     this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
     this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
-    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.01;
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.01;
+    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.05;
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.05;
     // Light mask tiles are orange markers → tint to black for AO overlay
-    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.15;
+    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.25;
     // Map lights (tiles) alpha
     this.layers[MapData.MAP_LIGHT_LAYER].alpha = 1.0;
-
-    // Ensure correct sorting order
-    this.layers[MapData.MAP_LIGHT_MASK_LAYER].zIndex = 2;
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].zIndex = 7;
-    this.entitySpriteContainer.zIndex = 8;
-    this.layers[MapData.MAP_ABOVE_LAYER].zIndex = 10;
-    this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
 
     const totalSprites = this.layers.reduce((sum, l) => sum + l.children.length, 0);
     console.log(`[GameMap] Total sprites rendered: ${totalSprites} for ${this.data.name}`);
