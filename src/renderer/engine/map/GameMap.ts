@@ -1,9 +1,9 @@
 import { MapData } from '../../../shared/MapData';
-import { Entity } from '../../entity/Entity';
+import type { Entity } from '../../entity/Entity';
 import { Container, Sprite, Texture } from 'pixi.js';
 import { Tileset } from '../../../shared/Tileset';
-import { Palette } from '../../../shared/Palette';
-import { RealTileset } from './RealTileset';
+import type { Palette } from '../../../shared/Palette';
+import type { RealTileset } from './RealTileset';
 
 export interface CameraBounds {
   minX: number;
@@ -132,13 +132,13 @@ export class GameMap {
     }
     // Set layer-specific alpha for visual quality
     this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; 
-    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.05;
+    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.02;
     this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
     this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
-    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.05;
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.05;
+    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.02;
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.02;
     // Light mask tiles are orange markers → tint to black for AO overlay
-    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.25;
+    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.10;
     // Map lights (tiles) alpha
     this.layers[MapData.MAP_LIGHT_LAYER].alpha = 1.0;
 
@@ -198,8 +198,8 @@ export class GameMap {
           sprite.blendMode = 'multiply';
         }
 
-        // Only objects2 needs Y-sorting with entities
-        if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
+        // Only objects2 and above2 need Y-sorting with entities
+        if (l === MapData.MAP_OBJECT_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
           sprite.zIndex = sprite.y;
           (sprite as any)._isTileSprite = true;
           this.entitySpriteContainer.addChild(sprite);
@@ -207,9 +207,9 @@ export class GameMap {
           layer.addChild(sprite);
         }
       }
-    }
+}
 
-    const layerNames = ['ground','groundDetail','groundShadow','objects','objects2','objectShadow','above','above2','spriteShadow','hitBounds','lightMask','cameraBounds','entity','light','area','door','shader'];
+const layerNames = ['ground','groundDetail','groundShadow','objects','objects2','objectShadow','above','above2','spriteShadow','hitBounds','lightMask','cameraBounds','entity','light','area','door','shader'];
     const lname = layerNames[l] || `layer${l}`;
     console.log(`[GameMap] Layer ${l} (${lname}): ${layer.children.length} sprites, zIndex=${layer.zIndex}, alpha=${layer.alpha}`);
   }
@@ -355,8 +355,8 @@ export class GameMap {
           sprite.blendMode = 'multiply';
         }
 
-        // Only objects2 needs Y-sorting with entities
-        if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
+        // Only objects2 and above2 need Y-sorting with entities
+        if (l === MapData.MAP_OBJECT_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
           sprite.zIndex = sprite.y;
           (sprite as any)._isTileSprite = true;
           this.entitySpriteContainer.addChild(sprite);
@@ -364,8 +364,8 @@ export class GameMap {
           layer.addChild(sprite);
         }
         }
-      }
-    }
+}
+}
 
 
     // Viewport re-rendered (throttled log)

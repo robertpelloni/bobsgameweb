@@ -1,4 +1,4 @@
-import { Scene, SceneConfig } from '../state/Scene';
+import { Scene, type SceneConfig } from '../state/Scene';
 import { World } from '../engine/ecs/World';
 import { GameMap } from '../engine/map/GameMap';
 import { MapData } from '../../shared/MapData';
@@ -13,49 +13,49 @@ import { TweenSystem } from '../engine/ecs/systems/TweenSystem';
 import { TransformComponent } from '../engine/ecs/components/TransformComponent';
 import { SpriteComponent } from '../engine/ecs/components/SpriteComponent';
 import { BehaviorComponent } from '../engine/ecs/components/BehaviorComponent';
-import { PathfindingComponent } from '../engine/ecs/components/PathfindingComponent';
+import type { PathfindingComponent } from '../engine/ecs/components/PathfindingComponent';
 import { CombatComponent } from '../engine/ecs/components/CombatComponent';
 import { QuestComponent } from '../engine/ecs/components/QuestComponent';
 import { InventoryComponent } from '../engine/ecs/components/InventoryComponent';
-import { ShopComponent } from '../engine/ecs/components/ShopComponent';
+import type { ShopComponent } from '../engine/ecs/components/ShopComponent';
 import { SkillTreeComponent } from '../engine/ecs/components/SkillTreeComponent';
-import { AudioReactiveComponent } from '../engine/ecs/components/AudioReactiveComponent';
+// AudioReactiveComponent - reserved for future use
 import { TeleportComponent } from '../engine/ecs/components/TeleportComponent';
 import { MapGenComponent } from '../engine/ecs/components/MapGenComponent';
-import { WeatherComponent, WeatherType } from '../engine/ecs/components/WeatherComponent';
-import { TweenComponent } from '../engine/ecs/components/TweenComponent';
+import { WeatherComponent } from '../engine/ecs/components/WeatherComponent';
+// TweenComponent - reserved for future use
 import { InteractionComponent } from '../engine/ecs/components/InteractionComponent';
-import { AIComponent } from '../engine/ecs/components/AIComponent';
+// AIComponent - reserved for future use
 import { NPCBehavior } from '../engine/ecs/behaviors/NPCBehavior';
 import { BattleScene } from './BattleScene';
 import { QuestLogScene } from './QuestLogScene';
 import { InventoryScene } from './InventoryScene';
 import { ShopScene } from './ShopScene';
 import { SkillTreeScene } from './SkillTreeScene';
-import { Sprite, Graphics, Texture, Container, Text, TextStyle, AnimatedSprite, Assets, RenderTexture } from 'pixi.js';
+import { Sprite, Graphics, Texture, Container, Text, TextStyle } from 'pixi.js';
 import { InputManager, Key } from '../input/InputManager';
 import { StateManager } from '../state/StateManager';
 import { SceneTransition } from '../state/SceneTransition';
-import { Tileset } from '../../shared/Tileset';
-import { Palette } from '../../shared/Palette';
+import type { Tileset } from '../../shared/Tileset';
+import type { Palette } from '../../shared/Palette';
 import { AudioManager } from '../audio/AudioManager';
 import { LightingSystem } from '../engine/ecs/systems/LightingSystem';
 import { LightComponent } from '../engine/ecs/components/LightComponent';
 import { ParticleSystem } from '../engine/ecs/systems/ParticleSystem';
 import { ParticleComponent } from '../engine/ecs/components/ParticleComponent';
 import { TouchControls } from '../ui/TouchControls';
-import { Localization, Language } from '../../shared/Localization';
-import { Easing } from '../../shared/Easing';
+import { Localization, type Language } from '../../shared/Localization';
+// Easing - reserved for future use
 import { networkManager } from '../puzzle';
 import { SERVER_URL } from '../../shared/Config';
 import { AchievementManager } from '../data/AchievementManager';
-import { getPersistenceIdentity, getPlayerDisplayName } from '../data/AchievementIdentity';
+import { getPersistenceIdentity } from '../data/AchievementIdentity';
 import { LegacyMapLoader } from '../engine/map/LegacyMapLoader';
 import { loadDoorGraph, getDoorGraphForMap } from '../engine/map/DoorGraphLoader';
 import { TilesetBuilder } from '../engine/map/TilesetBuilder';
 import { RealTileset } from '../engine/map/RealTileset';
 import { SpriteAtlas } from '../engine/map/SpriteAtlas';
-import { loadGameScript, getNPCDialogue, hasDialogue, getAreaDialogue, AREA_TRIGGERS, getMapEntities, getAreaTriggersForMap, getWarpAreasForMap, getDoorAreasForMap, getOriginalDialogue } from '../engine/map/NPCDialogue';
+import { loadGameScript, getNPCDialogue, hasDialogue, getAreaDialogue, AREA_TRIGGERS, getMapEntities, getWarpAreasForMap, getDoorAreasForMap, getOriginalDialogue } from '../engine/map/NPCDialogue';
 import { DialogueTracker } from '../engine/event/DialogueTracker';
 import { FlagManager } from '../engine/event/FlagManager';
 import { AmbientMusicGenerator } from '../audio/AmbientMusicGenerator';
@@ -95,7 +95,7 @@ export class WorldScene extends Scene {
   private readonly SAVE_INTERVAL = 30000; // 30 seconds
   private lightingSystem: LightingSystem | null = null;
   private currentMapName: string = "";
-  private currentMapId: number = -1;
+  private _currentMapId: number = -1;
   private mapTransitioning: boolean = false;
  private fadeOverlay: Graphics | null = null;
  private roomBanner: Text | null = null;
@@ -103,7 +103,7 @@ export class WorldScene extends Scene {
  private interactionHint: Text | null = null;
  private debugHud: Text | null = null;
  private _doorCooldown: number = 0;
-  private _lastDialogueId: number = -1;
+  private __lastDialogueId: number = -1;
  private controlsOverlay: Container | null = null;
  private footstepTimer: number = 0;
  private footstepIndex: number = 0;
@@ -112,13 +112,13 @@ export class WorldScene extends Scene {
  private rainDrops: { x: number; y: number; speed: number }[] = [];
  private isExteriorMap: boolean = false;
  private isPaused: boolean = false;
-  private autoSaveIntervalId: number = 0;
+  private _autoSaveIntervalId: number = 0;
  private _autoSaveTimer: number = 0;
  private pauseContainer: Container | null = null;
   private static readonly TILE_PX = 8; // pixels per tile at 1X (matches Tileset.TILE_SIZE)
-  private spriteAnimTimer: number = 0;
-  private spriteAnimFrame: number = 0;
-  private playerFacingRight: boolean = true;
+  private _spriteAnimTimer: number = 0;
+  private _spriteAnimFrame: number = 0;
+  private _playerFacingRight: boolean = true;
   private playerIsMoving: boolean = false;
   private playerIsSprinting: boolean = false;
   private godMode: boolean = false;
@@ -280,7 +280,7 @@ export class WorldScene extends Scene {
     // Player sprite — animated Yuu sprite with walk cycles
     const sprite = new SpriteComponent();
     // Auto-detect frames per direction for yuu (32 frames in atlas = 4 dirs x 8)
-    const yuuFramesPerDir = 8; // Yuu has 64 frames = 8 dirs x 8 frames
+    const _yuuFramesPerDir = 8; // Yuu has 64 frames = 8 dirs x 8 frames
     const yuuAnim = this.spriteAtlas.createAnimatedSprite('yuu', 'Down', 0.15);
     if (yuuAnim) {
       yuuAnim.anchor.set(0.5, 1.0);
@@ -421,12 +421,12 @@ export class WorldScene extends Scene {
         this.worldContainer.removeChild(psc.sprite);
       }
       this.currentMapName = "Empty";
-      this.currentMapId = -1;
+      this._currentMapId = -1;
       return;
     }
     const mapData = LegacyMapLoader.toMapData(legacy);
     this.currentMapName = legacy.name;
-    this.currentMapId = legacy.id;
+    this._currentMapId = legacy.id;
     // Remove old map container if exists
     if (this.map) {
       // Save player sprite from old map's entitySpriteContainer before destroying
@@ -486,7 +486,7 @@ export class WorldScene extends Scene {
     // Direct conversion if no filename mapping
     const mapData = LegacyMapLoader.toMapData(legacy);
     this.currentMapName = legacy.name;
-    this.currentMapId = legacy.id;
+    this._currentMapId = legacy.id;
     if (this.map) {
       // Save player sprite from old map's entitySpriteContainer before destroying
       const playerSpriteComp = this.world.getComponent((this.world as any).playerEntityId, 'Sprite') as SpriteComponent | undefined;
@@ -527,16 +527,40 @@ export class WorldScene extends Scene {
       transform.x = doorX * WorldScene.TILE_PX;
       transform.y = doorY * WorldScene.TILE_PX;
       this.world.addComponent(entity, transform);
-      // Invisible teleport zone
-      const sprite = new SpriteComponent();
-      const doorWidth = (door.width ?? 1) * WorldScene.TILE_PX;
-      const doorHeight = (door.height ?? 1) * WorldScene.TILE_PX;
-      const g = new Graphics();
-      g.rect(0, 0, doorWidth, doorHeight);
-      g.fill({ color: 0x44ff44, alpha: 0.12 }); // door indicator
-      g.stroke({ color: 0x88ff88, width: 1, alpha: 0.3 });
-      const tex = this.app.renderer.generateTexture(g);
-      sprite.sprite = new Sprite(tex);
+    // Door sprite: render door frame tiles from the real tileset if available
+    const sprite = new SpriteComponent();
+    const doorWidth = (door.width ?? 2) * WorldScene.TILE_PX;
+    const doorHeight = (door.height ?? 2) * WorldScene.TILE_PX;
+
+    // Try to render door frame using real tileset textures
+    const doorContainer = new Container();
+    const realTileset = (this.map as any).realTileset;
+    if (realTileset && realTileset.loaded) {
+      // Door frame tiles: 742 (left frame), 743 (right frame), 744/745 (top corners)
+      const leftTex = realTileset.getTileTexture(742);
+      const rightTex = realTileset.getTileTexture(743);
+      const topTex = realTileset.getTileTexture(744);
+      if (leftTex && rightTex) {
+        // Top row of door frame
+        if (topTex) {
+          const topSprite = new Sprite(topTex);
+          topSprite.x = 0;
+          topSprite.y = 0;
+          doorContainer.addChild(topSprite);
+        }
+        // Bottom row: left + right frame
+        const leftSprite = new Sprite(leftTex);
+        leftSprite.x = 0;
+        leftSprite.y = 8;
+        doorContainer.addChild(leftSprite);
+        const rightSprite = new Sprite(rightTex);
+        rightSprite.x = 8;
+        rightSprite.y = 8;
+        doorContainer.addChild(rightSprite);
+      }
+    }
+    const tex = this.app.renderer.generateTexture(doorContainer);
+    sprite.sprite = new Sprite(tex);
       this.world.addComponent(entity, sprite);
       const teleport = new TeleportComponent();
       teleport.targetMapId = door.destinationMapName ?? "";
@@ -757,7 +781,7 @@ export class WorldScene extends Scene {
                 const light = new LightComponent();
                 light.radius = 120;
                 light.baseRadius = 120;
-                light.color = 0x88ccff; // Cool TV blue
+                light.color = 0xe7ffff; // TV light: warm white-blue (from map_lights.json: r=231, g=255, b=255)
                 light.flicker = true;
                 light.intensity = 0.6;
                 this.world.addComponent(lightEntity, light);
@@ -1138,7 +1162,7 @@ export class WorldScene extends Scene {
     return name || mapId;
   }
   /** Controls overlay - shows on first load, dismisses on any key */
-  private createControlsOverlay(): void {
+  private _createControlsOverlay(): void {
     this.controlsOverlay = new Container();
     this.controlsOverlay.zIndex = 9998;
     this.container.addChild(this.controlsOverlay);
@@ -1636,7 +1660,7 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
           this.playerTransform.y = parseInt(args[2]) || 0;
         }
         break;
-      case 'map':
+      case 'map': {
         // Load a specific map file: "map map_5.json"
         const filename = args[1] || "map_12.json";
         this.loadLegacyMap(filename).then(() => {
@@ -1651,10 +1675,12 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
           this.showDialogue(`Loaded: ${this.currentMapName}`);
         });
         break;
-      case 'maps':
+      }
+      case 'maps': {
         const names = LegacyMapLoader.getAllMapNames();
         this.showDialogue(names.map((n, i) => `${i + 1}. ${n}`).join('\n'));
         break;
+      }
       case 'msg':
         this.showDialogue(args.slice(1).join(' '));
         break;
@@ -1668,7 +1694,7 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
         Localization.setLanguage((args[1] as Language) || 'en');
         this.showDialogue(Localization.get('greeting'));
         break;
-      case 'warp':
+      case 'warp': {
         // Warp to any map by name: "warp TOWNOutsideNeighborhood"
         const warpName = args.slice(1).join(' ');
         if (warpName) {
@@ -1688,6 +1714,7 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
             : 'No doors found for current map');
         }
         break;
+      }
       case 'door': {
         const doorMap = this.currentMapName;
         const doorInfo = getDoorGraphForMap(doorMap);
@@ -1969,7 +1996,7 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
       shadow.texture = playerSprite.texture;
     }
     shadow.x = this.playerTransform.x;
-    shadow.y = this.playerTransform.y - 4;  // lift shadow 4 pixels to sit flush with player feet
+    shadow.y = this.playerTransform.y - 2;  // lift shadow 2 pixels to sit flush with player feet
     shadow.zIndex = this.playerTransform.y - 0.1;
     if (!shadow.parent) {
       this.map.entitySpriteContainer.addChild(shadow);
@@ -2154,7 +2181,7 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
     if (hintText) {
       this.interactionHint.text = hintText;
       // Position above the player in screen space
-      const zoom = this.camera?.zoom ?? 2;
+      const _zoom = this.camera?.zoom ?? 2;
       this.interactionHint.position.set(
         this.width / 2,
         this.height / 2 - 40
@@ -2180,7 +2207,7 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
       this.container.addChild(this.roomBanner);
     }
     // Clean up the name - remove prefix like "TOWNYUU"
-    let displayName = name
+    const displayName = name
       .replace(/^(TOWN|CITY|SCHOOL|INTRO|ALPHA|BLANK|MISC)([A-Z])/g, '$2')
       .replace(/([a-z])([A-Z])/g, '$1 $2')  // camelCase to spaces
       .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2'); // acronym before word
@@ -2451,7 +2478,7 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
         if (this.isActionJustPressed) {
           const dialogue = getAreaDialogue(area.key);
           if (dialogue && dialogue.lines.length > 0) {
-            this._lastDialogueId = area.dialogueId;
+            this.__lastDialogueId = area.dialogueId;
             this.showDialogue(dialogue.lines, false, dialogue.caption);
           }
         }
