@@ -70,3 +70,10 @@ data/lancedb/
 .tormentnexus/
 .tormentnexus-session.json
 .pi-lens/
+
+# Session archives
+*.gz
+
+# Legacy map formats (maps_v2 is primary)
+data/maps/
+data/maps_opt/
