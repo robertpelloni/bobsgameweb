@@ -130,7 +130,7 @@ export class GameMap {
 		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.02;
 		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.02;
 		// Light mask tiles are orange markers → tint to black for AO overlay
-		this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.35;
+		this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0; // Disabled - LightingSystem handles lighting
 		// Map lights (tiles) alpha
 		this.layers[MapData.MAP_LIGHT_LAYER].alpha = 1.0;
 

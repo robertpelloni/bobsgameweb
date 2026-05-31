@@ -1089,7 +1089,7 @@ export class WorldScene extends Scene {
 				this.lightingSystem.dayDuration = 60.0;
 				this.lightingSystem.enableDayNightCycle = true;
 			} else {
-				this.lightingSystem.ambientColor = 0x505070;
+				this.lightingSystem.ambientColor = 0xffffff; // Indoor: full brightness, lights add warmth
 				this.lightingSystem.dayDuration = 999999;
 				this.lightingSystem.enableDayNightCycle = false;
 			}
@@ -2408,21 +2408,20 @@ export class WorldScene extends Scene {
 				ptx,
 				pty,
 			);
-			const aboveDetailTile = this.map.data.getTileIndex(
-				MapData.MAP_ABOVE_DETAIL_LAYER,
-				ptx,
-				pty,
-			);
-			// If any tile exists on the above layers at the player's position, they're under something
-			// This includes wall tiles (839) on the above layer - they're overhead structures
-			const underRoof = aboveTile !== 0 || aboveDetailTile !== 0;
-			const targetAlpha = underRoof ? 0.3 : 1.0;
-			const aboveLayer = this.map.layers[MapData.MAP_ABOVE_LAYER];
-			const aboveDetailLayer = this.map.layers[MapData.MAP_ABOVE_DETAIL_LAYER];
-			if (aboveLayer)
-				aboveLayer.alpha += (targetAlpha - aboveLayer.alpha) * 0.15; // smooth transition
-			if (aboveDetailLayer)
-				aboveDetailLayer.alpha += (targetAlpha - aboveDetailLayer.alpha) * 0.15;
+ // above2 tile check not needed - curtains/decorations always visible
+ // Only the above layer (rooftops/ceilings) triggers fade.
+ // above2 (curtains, decorations) should NOT fade - they're always visible.
+ const underRoof = aboveTile !== 0;
+ const targetAlpha = underRoof ? 0.3 : 1.0;
+ const aboveLayer = this.map.layers[MapData.MAP_ABOVE_LAYER];
+ const aboveDetailLayer = this.map.layers[MapData.MAP_ABOVE_DETAIL_LAYER];
+ if (aboveLayer)
+ aboveLayer.alpha += (targetAlpha - aboveLayer.alpha) * 0.15; // smooth transition
+ // above2 (curtains, decorations) stays fully opaque always
+ if (aboveDetailLayer && !underRoof)
+ aboveDetailLayer.alpha += (1.0 - aboveDetailLayer.alpha) * 0.15;
+ else if (aboveDetailLayer && underRoof)
+ aboveDetailLayer.alpha += (targetAlpha - aboveDetailLayer.alpha) * 0.15;
 		}
 
 		// Set facing direction via Transform so RenderSystem picks it up
