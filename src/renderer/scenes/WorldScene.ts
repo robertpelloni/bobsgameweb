@@ -2120,7 +2120,7 @@ export class WorldScene extends Scene {
 						`Extra: ${extra} Hit: ${hit} GodMode: ${this.godMode}`,
 						`Entities: ${this.map?.entities.length ?? 0} | Colliders: ${this.entityColliders.length}`,
 						`Layer sprites: ${this.map?.layers.reduce((s, l) => s + l.children.length, 0) ?? 0}`,
-			`ESC children: ${this.map?.entitySpriteContainer.children.length ?? 0} (tiles: ${this.map?.entitySpriteContainer.children.filter((c: any) => c._isTileSprite).length ?? 0})`,
+						`ESC children: ${this.map?.entitySpriteContainer.children.length ?? 0} (tiles: ${this.map?.entitySpriteContainer.children.filter((c: any) => c._isTileSprite).length ?? 0})`,
 					]);
 				}
 				break;

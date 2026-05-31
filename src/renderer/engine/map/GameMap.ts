@@ -262,14 +262,14 @@ export class GameMap {
 			"area",
 			"door",
 			"shader",
-];
-const lname = layerNames[l] || `layer${l}`;
-console.log(
-`[GameMap] Layer ${l} (${lname}): ${layer.children.length} sprites, zIndex=${layer.zIndex}, alpha=${layer.alpha}`,
-);
-}
+		];
+		const lname = layerNames[l] || `layer${l}`;
+		console.log(
+			`[GameMap] Layer ${l} (${lname}): ${layer.children.length} sprites, zIndex=${layer.zIndex}, alpha=${layer.alpha}`,
+		);
+	}
 
-/** Fallback: render a single layer using the synthetic tileset */
+	/** Fallback: render a single layer using the synthetic tileset */
 	public renderLayer(l: number, tileset: Tileset, palette: Palette) {
 		const layer = this.layers[l];
 		layer.removeChildren();
