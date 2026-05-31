@@ -87,11 +87,27 @@ export class NPCBehavior extends Behavior {
             const TILE_PX = 8;
             const scene = (this.world as any).scene;
             const map = scene?.map;
-            if (map && scene) {
+            if (map) {
                 const testTx = Math.floor(newX / TILE_PX);
                 const testTy = Math.floor(newY / TILE_PX);
-                // Use the authoritative scene.isHitTile logic
-                const walkable = !scene.isHitTile(testTx, testTy);
+                const extraTile = map.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, testTx, testTy);
+                
+                // If extraTile is 0, we only block if the ground is ALSO empty or a wall.
+                let walkable = true;
+                if (extraTile === 0) {
+                    const gndTile = map.data.getTileIndex(MapData.MAP_GROUND_LAYER, testTx, testTy);
+                    if (gndTile === 0 || gndTile === 839 || gndTile === 8280) walkable = false;
+                }
+                
+                if (walkable) {
+                    const hitTile = map.data.getTileIndex(MapData.MAP_HIT_LAYER, testTx, testTy);
+                    if (hitTile !== 0) walkable = false;
+                }
+
+                if (walkable) {
+                    const objTile = map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, testTx, testTy);
+                    if (objTile === 839 || objTile === 8280) walkable = false;
+                }
 
                 if (walkable) {
                     transform.x = newX;

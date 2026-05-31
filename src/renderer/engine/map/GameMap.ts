@@ -38,47 +38,32 @@ export class GameMap {
     this.data = data;
     this.realTileset = realTileset ?? null;
     this.container = new Container();
-    this.container.sortableChildren = true;
-    this.container.cullable = false;
-    this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
+this.container.sortableChildren = true; // Enable zIndex-based render ordering
+ this.container.cullable = true; // Enable automatic viewport culling
+this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
+for (let i = 0; i < MapData.layers; i++) {
+const layer = new Container();
+layer.zIndex = i;
+  layer.cullable = true;
+this.layers.push(layer);
+this.container.addChild(layer);
+}
+// Fix zIndex for non-sequential render order:
+// Light mask renders as ground-level AO (zIndex 2, covered by walls)
+this.layers[MapData.MAP_LIGHT_MASK_LAYER].zIndex = 2;
+// Sprite shadows render after objects but below entities (zIndex 7)
+this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].zIndex = 7;
 
-    // Initialize layers with robust z-indices
-    // Ground: 0-2
-    // Objects: 3-5
-    // Above: 100-110 (Well above entities)
-    // Utilities: 200+
-    const Z_MAP: Record<number, number> = {
-      [MapData.MAP_GROUND_LAYER]: 0,
-      [MapData.MAP_GROUND_DETAIL_LAYER]: 1,
-      [MapData.MAP_GROUND_SHADOW_LAYER]: 2,
-      [MapData.MAP_OBJECT_LAYER]: 3,
-      [MapData.MAP_OBJECT_DETAIL_LAYER]: 4,
-      [MapData.MAP_OBJECT_SHADOW_LAYER]: 5,
-      [MapData.MAP_ABOVE_LAYER]: 100,
-      [MapData.MAP_ABOVE_DETAIL_LAYER]: 101,
-      [MapData.MAP_SPRITE_SHADOW_LAYER]: 7,
-      [MapData.MAP_HIT_LAYER]: 200,
-      [MapData.MAP_LIGHT_MASK_LAYER]: 150,
-      [MapData.MAP_CAMERA_BOUNDS_LAYER]: 201,
-      [MapData.MAP_ENTITY_LAYER]: 202,
-      [MapData.MAP_LIGHT_LAYER]: 160,
-    };
-
-    for (let i = 0; i < MapData.layers; i++) {
-      const layer = new Container();
-      layer.zIndex = Z_MAP[i] ?? i;
-      layer.cullable = false;
-      layer.sortableChildren = false; // Static tile layers don't need internal sorting
-      this.layers.push(layer);
-      this.container.addChild(layer);
-    }
-
-    // Entity sprite container: Between objects (5) and above-layers (100)
-    this.entitySpriteContainer = new Container();
-    this.entitySpriteContainer.sortableChildren = true; // Crucial for Y-sorting
-    this.entitySpriteContainer.cullable = false;
-    this.entitySpriteContainer.zIndex = 50; 
-    this.container.addChild(this.entitySpriteContainer);
+// Entity sprite container: between object shadow (6) and above-layers (10, 11)
+// so entities render on top of objects but below rooftops.
+this.entitySpriteContainer = new Container();
+    this.entitySpriteContainer.sortableChildren = true; // Y-based depth sort
+ this.entitySpriteContainer.cullable = true;
+this.entitySpriteContainer.zIndex = 8;
+this.container.addChild(this.entitySpriteContainer);
+// Above layers (10, 11)
+this.layers[MapData.MAP_ABOVE_LAYER].zIndex = 10;
+this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
   }
 
   /** Set camera target position (usually follows the player) */
@@ -131,16 +116,23 @@ export class GameMap {
       this.renderLayerReal(l);
     }
     // Set layer-specific alpha for visual quality
-    this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; 
-    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.05;
+    this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7; 
+    this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.12;
     this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
     this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
-    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.05;
-    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.05;
+    this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.1; 
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.1; 
     // Light mask tiles are orange markers → tint to black for AO overlay
-    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.25;
+    this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.35;   
     // Map lights (tiles) alpha
     this.layers[MapData.MAP_LIGHT_LAYER].alpha = 1.0;
+
+    // Ensure correct sorting order
+    this.layers[MapData.MAP_LIGHT_MASK_LAYER].zIndex = 2;
+    this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].zIndex = 7;
+    this.entitySpriteContainer.zIndex = 8;
+    this.layers[MapData.MAP_ABOVE_LAYER].zIndex = 10;
+    this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].zIndex = 11;
 
     const totalSprites = this.layers.reduce((sum, l) => sum + l.children.length, 0);
     console.log(`[GameMap] Total sprites rendered: ${totalSprites} for ${this.data.name}`);
@@ -198,14 +190,7 @@ export class GameMap {
           sprite.blendMode = 'multiply';
         }
 
-        // Only objects2 needs Y-sorting with entities
-        if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
-          sprite.zIndex = sprite.y;
-          (sprite as any)._isTileSprite = true;
-          this.entitySpriteContainer.addChild(sprite);
-        } else {
-          layer.addChild(sprite);
-        }
+        layer.addChild(sprite);
       }
     }
 
@@ -291,9 +276,8 @@ export class GameMap {
     this.lastViewportCY = tileCY;
 
     // Calculate visible area
-    const extraMargin = 16;
-    const halfW = Math.ceil(screenW / (8 * zoom * 2)) + 8 + extraMargin;
-    const halfH = Math.ceil(screenH / (8 * zoom * 2)) + 8 + extraMargin;
+    const halfW = Math.ceil(screenW / (8 * zoom * 2)) + 8;
+    const halfH = Math.ceil(screenH / (8 * zoom * 2)) + 8;
     const startX = Math.max(0, tileCX - halfW);
     const startY = Math.max(0, tileCY - halfH);
     const endX = Math.min(this.data.widthTiles1X, tileCX + halfW);
@@ -314,13 +298,6 @@ export class GameMap {
       MapData.MAP_LIGHT_LAYER,
       MapData.MAP_DOOR_LAYER,
     ];
-
-    // Remove stale tile sprites from entitySpriteContainer before re-rendering
-    const tileSpritesToRemove: any[] = [];
-    for (const child of this.entitySpriteContainer.children) {
-      if ((child as any)._isTileSprite) tileSpritesToRemove.push(child);
-    }
-    for (const s of tileSpritesToRemove) this.entitySpriteContainer.removeChild(s);
 
     for (const l of renderableLayers) {
       const layer = this.layers[l];
@@ -355,15 +332,7 @@ export class GameMap {
           sprite.blendMode = 'multiply';
         }
 
-        // Only objects2 needs Y-sorting with entities
-        if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
-          sprite.zIndex = sprite.y;
-          (sprite as any)._isTileSprite = true;
-          this.entitySpriteContainer.addChild(sprite);
-        } else {
-          layer.addChild(sprite);
-        }
-        }
+        layer.addChild(sprite);        }
       }
     }
 
