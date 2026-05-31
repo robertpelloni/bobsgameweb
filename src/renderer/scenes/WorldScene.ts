@@ -112,7 +112,6 @@ export class WorldScene extends Scene {
 	private readonly SAVE_INTERVAL = 30000; // 30 seconds
 	private lightingSystem: LightingSystem | null = null;
 	private currentMapName: string = "";
-	private _currentMapId: number = -1;
 	private mapTransitioning: boolean = false;
 	private fadeOverlay: Graphics | null = null;
 	private roomBanner: Text | null = null;
@@ -120,7 +119,6 @@ export class WorldScene extends Scene {
 	private interactionHint: Text | null = null;
 	private debugHud: Text | null = null;
 	private _doorCooldown: number = 0;
-	private __lastDialogueId: number = -1;
 	private controlsOverlay: Container | null = null;
 	private footstepTimer: number = 0;
 	private footstepIndex: number = 0;
@@ -129,13 +127,9 @@ export class WorldScene extends Scene {
 	private rainDrops: { x: number; y: number; speed: number }[] = [];
 	private isExteriorMap: boolean = false;
 	private isPaused: boolean = false;
-	private _autoSaveIntervalId: number = 0;
 	private _autoSaveTimer: number = 0;
 	private pauseContainer: Container | null = null;
 	private static readonly TILE_PX = 8; // pixels per tile at 1X (matches Tileset.TILE_SIZE)
-	private _spriteAnimTimer: number = 0;
-	private _spriteAnimFrame: number = 0;
-	private _playerFacingRight: boolean = true;
 	private playerIsMoving: boolean = false;
 	private playerIsSprinting: boolean = false;
 	private godMode: boolean = false;
@@ -348,7 +342,6 @@ export class WorldScene extends Scene {
 		// Player sprite — animated Yuu sprite with walk cycles
 		const sprite = new SpriteComponent();
 		// Auto-detect frames per direction for yuu (32 frames in atlas = 4 dirs x 8)
-		const _yuuFramesPerDir = 8; // Yuu has 64 frames = 8 dirs x 8 frames
 		const yuuAnim = this.spriteAtlas.createAnimatedSprite("yuu", "Down", 0.15);
 		if (yuuAnim) {
 			yuuAnim.anchor.set(0.5, 1.0);
@@ -364,7 +357,7 @@ export class WorldScene extends Scene {
 			shadowSprite.anchor.set(0.5, 1.0); // bottom-center (feet), same as player
 			shadowSprite.scale.y = -0.65; // flip upside-down, squish to 65% height (shadowSize from Java)
 			shadowSprite.tint = 0x000000; // black
-			shadowSprite.alpha = 0.6; // shadowAlpha from Java
+			shadowSprite.alpha = 0.3; // softer shadow for web (Java ref: 0.60 but web rendering is darker)
 			(this as any).playerShadowSprite = shadowSprite;
 			(this as any).playerShadowTextures = yuuAnim.textures;
 		} else {
@@ -511,12 +504,10 @@ export class WorldScene extends Scene {
 				this.worldContainer.removeChild(psc.sprite);
 			}
 			this.currentMapName = "Empty";
-			this._currentMapId = -1;
 			return;
 		}
 		const mapData = LegacyMapLoader.toMapData(legacy);
 		this.currentMapName = legacy.name;
-		this._currentMapId = legacy.id;
 		// Remove old map container if exists
 		if (this.map) {
 			// Save player sprite from old map's entitySpriteContainer before destroying
@@ -589,7 +580,6 @@ export class WorldScene extends Scene {
 		// Direct conversion if no filename mapping
 		const mapData = LegacyMapLoader.toMapData(legacy);
 		this.currentMapName = legacy.name;
-		this._currentMapId = legacy.id;
 		if (this.map) {
 			// Save player sprite from old map's entitySpriteContainer before destroying
 			const playerSpriteComp = this.world.getComponent(
@@ -1366,48 +1356,6 @@ export class WorldScene extends Scene {
 		// Split on capital letters
 		name = name.replace(/([A-Z])/g, " $1").trim();
 		return name || mapId;
-	}
-	/** Controls overlay - shows on first load, dismisses on any key */
-	private _createControlsOverlay(): void {
-		this.controlsOverlay = new Container();
-		this.controlsOverlay.zIndex = 9998;
-		this.container.addChild(this.controlsOverlay);
-		this.controlsOverlay.visible = true;
-		const bg = new Graphics();
-		bg.rect(this.width / 2 - 150, this.height / 2 - 80, 300, 160);
-		bg.fill({ color: 0x000000, alpha: 0.85 });
-		bg.stroke({ color: 0x3366ff, width: 2 });
-		this.controlsOverlay.addChild(bg);
-		const title = new Text({
-			text: "bob's game",
-			style: new TextStyle({
-				fill: "#3366ff",
-				fontSize: 24,
-				fontWeight: "bold",
-			}),
-		});
-		title.anchor.set(0.5);
-		title.position.set(this.width / 2, this.height / 2 - 55);
-		this.controlsOverlay.addChild(title);
-		const controls = new Text({
-			text: "WASD / Arrows - Move\nShift - Sprint\nE - Talk / Interact\nEsc - Pause Menu\nI - Inventory\nQ - Quest Log\n` (Tilde) - Debug Console",
-			style: new TextStyle({
-				fill: "#cccccc",
-				fontSize: 13,
-				lineHeight: 22,
-				align: "center",
-			}),
-		});
-		controls.anchor.set(0.5);
-		controls.position.set(this.width / 2, this.height / 2 + 5);
-		this.controlsOverlay.addChild(controls);
-		const hint = new Text({
-			text: "Press any key to start",
-			style: new TextStyle({ fill: "#666666", fontSize: 12 }),
-		});
-		hint.anchor.set(0.5);
-		hint.position.set(this.width / 2, this.height / 2 + 60);
-		this.controlsOverlay.addChild(hint);
 	}
 	private updateHud(): void {
 		// Show version in corner
@@ -2465,10 +2413,9 @@ export class WorldScene extends Scene {
 				ptx,
 				pty,
 			);
-			// Only trigger if it's NOT a wall tile (839)
-			const underRoof =
-				(aboveTile !== 0 && aboveTile !== 839) ||
-				(aboveDetailTile !== 0 && aboveDetailTile !== 839);
+			// If any tile exists on the above layers at the player's position, they're under something
+			// This includes wall tiles (839) on the above layer - they're overhead structures
+			const underRoof = aboveTile !== 0 || aboveDetailTile !== 0;
 			const targetAlpha = underRoof ? 0.3 : 1.0;
 			const aboveLayer = this.map.layers[MapData.MAP_ABOVE_LAYER];
 			const aboveDetailLayer = this.map.layers[MapData.MAP_ABOVE_DETAIL_LAYER];
@@ -2646,7 +2593,6 @@ export class WorldScene extends Scene {
 		if (hintText) {
 			this.interactionHint.text = hintText;
 			// Position above the player in screen space
-			const _zoom = this.camera?.zoom ?? 2;
 			this.interactionHint.position.set(this.width / 2, this.height / 2 - 40);
 			this.interactionHint.alpha = Math.min(
 				1,
@@ -2862,10 +2808,22 @@ export class WorldScene extends Scene {
 			return true;
 		if (this.godMode) return false;
 
-		const gndTile = this.map.data.getTileIndex(MapData.MAP_GROUND_LAYER, tx, ty);
-		const objTile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
+		const gndTile = this.map.data.getTileIndex(
+			MapData.MAP_GROUND_LAYER,
+			tx,
+			ty,
+		);
+		const objTile = this.map.data.getTileIndex(
+			MapData.MAP_OBJECT_LAYER,
+			tx,
+			ty,
+		);
 		const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
-		const extraTile = this.map.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, tx, ty);
+		const extraTile = this.map.data.getTileIndex(
+			MapData.MAP_CAMERA_BOUNDS_LAYER,
+			tx,
+			ty,
+		);
 
 		// 1. Explicit Hit Markers (Highest Priority)
 		if (hitTile !== 0) return true;
@@ -2892,10 +2850,7 @@ export class WorldScene extends Scene {
 		// 6. Doors (Passage Zone)
 		const isDoor = this.map.data.doorDataList.some(
 			(d) =>
-				tx >= d.x &&
-				tx < d.x + d.width &&
-				ty >= d.y &&
-				ty < d.y + d.height,
+				tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height,
 		);
 		if (isDoor) return false;
 
@@ -3076,7 +3031,6 @@ export class WorldScene extends Scene {
 				if (this.isActionJustPressed) {
 					const dialogue = getAreaDialogue(area.key);
 					if (dialogue && dialogue.lines.length > 0) {
-						this.__lastDialogueId = area.dialogueId;
 						this.showDialogue(dialogue.lines, false, dialogue.caption);
 					}
 				}

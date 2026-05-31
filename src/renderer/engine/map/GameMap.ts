@@ -72,7 +72,7 @@ export class GameMap {
 		// Entity sprite container: Between objects (5) and above-layers (100)
 		this.entitySpriteContainer = new Container();
 		this.entitySpriteContainer.sortableChildren = true; // Crucial for Y-sorting
-		this.entitySpriteContainer.cullable = true; // Enable viewport culling
+		this.entitySpriteContainer.cullable = false; // Don't cull ESC - tiles extend beyond bounds
 		this.entitySpriteContainer.zIndex = 50;
 		this.container.addChild(this.entitySpriteContainer);
 	}
@@ -123,14 +123,14 @@ export class GameMap {
 			this.renderLayerReal(l);
 		}
 		// Set layer-specific alpha for visual quality
-		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7;
+		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; // Floor overlays should be fully visible
 		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.02;
 		this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
-		this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default
+		this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops/curtains opaque
 		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.02;
 		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.02;
 		// Light mask tiles are orange markers → tint to black for AO overlay
-		this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.1;
+		this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0.35;
 		// Map lights (tiles) alpha
 		this.layers[MapData.MAP_LIGHT_LAYER].alpha = 1.0;
 
@@ -226,15 +226,11 @@ export class GameMap {
 					sprite.blendMode = "multiply";
 				}
 
-				// objects2, above, and above2 all need Y-sorting with entities
-				// This ensures walls/rooftops render correctly relative to the player:
-				// - Player below a wall (higher Y) renders in front of the wall
-				// - Player above a wall (lower Y) renders behind the wall
-				if (
-					l === MapData.MAP_OBJECT_DETAIL_LAYER ||
-					l === MapData.MAP_ABOVE_LAYER ||
-					l === MapData.MAP_ABOVE_DETAIL_LAYER
-				) {
+				// objects2 needs Y-sorting with entities (furniture, tables)
+				// above/above2 are ALWAYS above entities (rooftops, wall tops, curtains)
+				// The Java game renders: objects2 -> entities -> above -> above2
+				// The underRoof fade in WorldScene handles visibility when player is under a rooftop
+				if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
 					sprite.zIndex = sprite.y;
 					(sprite as any)._isTileSprite = true;
 					this.entitySpriteContainer.addChild(sprite);
@@ -432,12 +428,9 @@ export class GameMap {
 						sprite.blendMode = "multiply";
 					}
 
-					// objects2, above, and above2 all need Y-sorting with entities
-					if (
-						l === MapData.MAP_OBJECT_DETAIL_LAYER ||
-						l === MapData.MAP_ABOVE_LAYER ||
-						l === MapData.MAP_ABOVE_DETAIL_LAYER
-					) {
+					// objects2 needs Y-sorting with entities (furniture, tables)
+					// above/above2 are ALWAYS above entities (rooftops, wall tops, curtains)
+					if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
 						sprite.zIndex = sprite.y;
 						(sprite as any)._isTileSprite = true;
 						this.entitySpriteContainer.addChild(sprite);
