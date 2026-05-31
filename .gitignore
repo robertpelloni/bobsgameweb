@@ -60,3 +60,13 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+
+# Large data files - not needed in git
+data/lancedb/
+.borg/
+.hypercode/
+.hypercode-session.json
+.hypercode_startup_marker
+.tormentnexus/
+.tormentnexus-session.json
+.pi-lens/
