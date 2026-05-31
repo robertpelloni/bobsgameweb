@@ -35,7 +35,7 @@ export class GameMap {
 		this.realTileset = realTileset ?? null;
 		this.container = new Container();
 		this.container.sortableChildren = true;
-		this.container.cullable = false;
+		this.container.cullable = true; // Enable viewport culling for performance
 		this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
 
 		// Initialize layers with robust z-indices
@@ -72,7 +72,7 @@ export class GameMap {
 		// Entity sprite container: Between objects (5) and above-layers (100)
 		this.entitySpriteContainer = new Container();
 		this.entitySpriteContainer.sortableChildren = true; // Crucial for Y-sorting
-		this.entitySpriteContainer.cullable = false;
+		this.entitySpriteContainer.cullable = true; // Enable viewport culling
 		this.entitySpriteContainer.zIndex = 50;
 		this.container.addChild(this.entitySpriteContainer);
 	}
@@ -123,7 +123,7 @@ export class GameMap {
 			this.renderLayerReal(l);
 		}
 		// Set layer-specific alpha for visual quality
-		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0;
+		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 0.7;
 		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.02;
 		this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
 		this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops opaque by default

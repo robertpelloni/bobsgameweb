@@ -308,18 +308,18 @@ export class WorldScene extends Scene {
 		// Validate using full collision check for the feet (not just top-left)
 		if (localSave?.x && localSave?.y) {
 			const saveTileX = Math.floor(localSave.x / WorldScene.TILE_PX);
-			const saveFeetY = Math.floor((localSave.y + 16) / WorldScene.TILE_PX);
-			if (!this.isHitTile(saveTileX, saveFeetY)) {
+			const saveTileY = Math.floor(localSave.y / WorldScene.TILE_PX);
+			if (!this.isHitTile(saveTileX, saveTileY)) {
 				// Save position is walkable, use it
 				transform.x = localSave.x;
 				transform.y = localSave.y;
 				console.log(
-					`[WorldScene] Restored save at (${saveTileX},${saveFeetY})`,
+					`[WorldScene] Restored save at (${saveTileX},${saveTileY})`,
 				);
 			} else {
 				// Save position is blocked, use default spawn
 				console.warn(
-					`[WorldScene] Save at (${saveTileX},${saveFeetY}) is blocked, using default spawn (${spawnX},${spawnY})`,
+					`[WorldScene] Save at (${saveTileX},${saveTileY}) is blocked, using default spawn (${spawnX},${spawnY})`,
 				);
 				transform.x = spawnX * WorldScene.TILE_PX;
 				transform.y = spawnY * WorldScene.TILE_PX;
@@ -336,10 +336,10 @@ export class WorldScene extends Scene {
 			if (data.success && data.charData) {
 				// Validate server position is on a walkable tile for feet
 				const saveTileX = Math.floor(data.charData.x / WorldScene.TILE_PX);
-				const saveFeetY = Math.floor(
+				const saveTileY = Math.floor(
 					(data.charData.y + 16) / WorldScene.TILE_PX,
 				);
-				if (!this.isHitTile(saveTileX, saveFeetY)) {
+				if (!this.isHitTile(saveTileX, saveTileY)) {
 					transform.x = data.charData.x;
 					transform.y = data.charData.y;
 				}
@@ -2862,32 +2862,44 @@ export class WorldScene extends Scene {
 			return true;
 		if (this.godMode) return false;
 
-		// 1. Hit Bounds Layer (authoritative collision from original game)
-		// Non-zero values = blocked. Regenerated from tile analysis for all 257 maps.
+		const gndTile = this.map.data.getTileIndex(MapData.MAP_GROUND_LAYER, tx, ty);
+		const objTile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
 		const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
+		const extraTile = this.map.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, tx, ty);
+
+		// 1. Explicit Hit Markers (Highest Priority)
 		if (hitTile !== 0) return true;
 
-		// 2. Void check (no ground AND no object = empty/void tile)
-		const gndTile = this.map.data.getTileIndex(
-			MapData.MAP_GROUND_LAYER,
-			tx,
-			ty,
-		);
-		const objTile = this.map.data.getTileIndex(
-			MapData.MAP_OBJECT_LAYER,
-			tx,
-			ty,
-		);
-		if (gndTile === 0 && objTile === 0) return true;
+		// 2. Extra Layer Override (Original game walkable zone)
+		// 1 = interior/walkable, 0 = void/blocked
+		if (extraTile === 1) return false;
 
-		// 3. Doors (always passable)
+		// 3. Strict Wall ID Blocking (if no extra override)
+		if (objTile === 839 || objTile === 8280) return true;
+		if (MapData.WALL_IDS.has(objTile)) return true;
+		if (MapData.WALL_IDS.has(gndTile)) return true;
+
+		// 4. Floor Exception (Walkable floor IDs)
+		if (MapData.FLOOR_IDS.has(gndTile)) {
+			if (objTile !== 0 && MapData.WALL_IDS.has(objTile)) return true;
+			return false;
+		}
+
+		// 5. Void check (if not a floor and no extra marker, empty is blocked)
+		if (gndTile === 0 && objTile === 0) return true;
+		if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
+
+		// 6. Doors (Passage Zone)
 		const isDoor = this.map.data.doorDataList.some(
 			(d) =>
-				tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height,
+				tx >= d.x &&
+				tx < d.x + d.width &&
+				ty >= d.y &&
+				ty < d.y + d.height,
 		);
 		if (isDoor) return false;
 
-		// 4. Entity collision (furniture bounding boxes)
+		// 7. Entity collision (furniture bounding boxes)
 		const px = tx * WorldScene.TILE_PX;
 		const py = ty * WorldScene.TILE_PX;
 		for (const ec of this.entityColliders) {
@@ -2897,10 +2909,9 @@ export class WorldScene extends Scene {
 				py + WorldScene.TILE_PX > ec.y &&
 				py < ec.y + ec.h
 			) {
-				return true;
+				return true; // inside entity bounding box = blocked
 			}
 		}
-
 		return false; // walkable
 	}
 
