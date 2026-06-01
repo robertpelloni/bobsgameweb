@@ -43,16 +43,19 @@ export class GameMap {
 		// Objects: 3-5
 		// Above: 100-110 (Well above entities)
 		// Utilities: 200+
+		// Z-index map matching Java game rendering order:
+		// ground -> groundDetail -> groundShadow -> objects -> [objects2+entities in ESC]
+		// -> objectShadow -> above -> aboveDetail -> spriteShadow
 		const Z_MAP: Record<number, number> = {
 			[MapData.MAP_GROUND_LAYER]: 0,
 			[MapData.MAP_GROUND_DETAIL_LAYER]: 1,
 			[MapData.MAP_GROUND_SHADOW_LAYER]: 2,
 			[MapData.MAP_OBJECT_LAYER]: 3,
-			[MapData.MAP_SPRITE_SHADOW_LAYER]: 4, // Entity shadows render after walls, before entities
-			[MapData.MAP_OBJECT_DETAIL_LAYER]: 5, // objects2 Y-sorted with entities in ESC
-			[MapData.MAP_OBJECT_SHADOW_LAYER]: 6, // Object shadows on top of entities
-			[MapData.MAP_ABOVE_LAYER]: 100, // Rooftops, ceilings
-			[MapData.MAP_ABOVE_DETAIL_LAYER]: 101, // Curtains, wall decorations (always visible)
+			// objects2 (MAP_OBJECT_DETAIL_LAYER) is in entitySpriteContainer (zIndex=50) for Y-sorting
+			[MapData.MAP_OBJECT_SHADOW_LAYER]: 55, // After ESC, before above (Java: layer 5 after objects2)
+			[MapData.MAP_ABOVE_LAYER]: 100, // Rooftops, ceilings (Java: layer 6)
+			[MapData.MAP_ABOVE_DETAIL_LAYER]: 101, // Curtains, wall decorations (Java: layer 7)
+			[MapData.MAP_SPRITE_SHADOW_LAYER]: 102, // After above2 (Java: layer 8, last)
 			[MapData.MAP_HIT_LAYER]: 200,
 			[MapData.MAP_LIGHT_MASK_LAYER]: 150,
 			[MapData.MAP_CAMERA_BOUNDS_LAYER]: 201,
