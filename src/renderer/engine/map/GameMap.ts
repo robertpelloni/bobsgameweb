@@ -124,9 +124,9 @@ export class GameMap {
 		}
 		// Set layer-specific alpha for visual quality
 		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; // Floor overlays: carpet, rug patterns
-		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.15; // Ground shadows: subtle darkening
-		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.15; // Object shadows: subtle darkening
-		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.3; // Entity shadows on ground
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.4; // Translucent ground shadow overlay
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.4; // Translucent object shadow overlay
+		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.5; // Translucent entity shadow overlay
 		this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0; // Rooftops/ceilings
 		this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Curtains/wall decorations: always fully visible
 		// Light mask tiles are orange markers → tint to black for AO overlay
@@ -224,13 +224,14 @@ export class GameMap {
 					sprite.blendMode = "add";
 				}
 
-				// Multiply blending for shadows - tint BLACK so multiply only darkens
+				// Shadow layers: translucent overlay with original tile colors
+				// No black tint - shadow tiles have their own shape and darkness
+				// Layer container alpha controls translucency
 				if (
 					l === MapData.MAP_OBJECT_SHADOW_LAYER ||
 					l === MapData.MAP_GROUND_SHADOW_LAYER ||
 					l === MapData.MAP_SPRITE_SHADOW_LAYER
 				) {
-					sprite.tint = 0x000000;
 					sprite.blendMode = "multiply";
 				}
 
@@ -441,13 +442,12 @@ export class GameMap {
 						sprite.blendMode = "add";
 					}
 
-					// Multiply blending for shadows - tint BLACK so multiply only darkens
+					// Shadow layers: translucent overlay with original tile colors
 					if (
 						l === MapData.MAP_OBJECT_SHADOW_LAYER ||
 						l === MapData.MAP_GROUND_SHADOW_LAYER ||
 						l === MapData.MAP_SPRITE_SHADOW_LAYER
 					) {
-						sprite.tint = 0x000000;
 						sprite.blendMode = "multiply";
 					}
 
