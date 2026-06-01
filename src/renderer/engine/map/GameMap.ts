@@ -149,6 +149,8 @@ export class GameMap {
 		console.log(
 			`[GameMap] entitySpriteContainer: ${this.entitySpriteContainer.children.length} children (${escTiles} tiles, ${escEntities} entities), zIndex=${this.entitySpriteContainer.zIndex}`,
 		);
+		// Ensure container children are sorted by zIndex (PixiJS v8 sortableChildren)
+		this.container.sortChildren();
 	}
 	/** Render a single layer using real tileset atlas textures */
 	private renderLayerReal(l: number) {
@@ -185,6 +187,11 @@ export class GameMap {
 
 				// On ground layer, skip tile ID 1 (solid black background in Java)
 				if (l === MapData.MAP_GROUND_LAYER && tileId === 1) continue;
+
+				// Skip tile 839: Java game's near-black (1,1,1) wall/collision marker.
+				// Renders as opaque black, covering groundDetail overlays and above2
+				// curtains. In the Java engine, RGB(1,1,1) was the transparency key.
+				if (tileId === 839) continue;
 
 				// Skip factor for very large maps to reduce sprite count
 				const skipFactor = totalTiles > 50000 ? 2 : 1;
@@ -262,8 +269,21 @@ export class GameMap {
 		];
 		const lname = layerNames[l] || `layer${l}`;
 		console.log(
-			`[GameMap] Layer ${l} (${lname}): ${layer.children.length} sprites, zIndex=${layer.zIndex}, alpha=${layer.alpha}`,
+			`[GameMap] Layer ${l} (${lname}): ${layer.children.length} sprites, zIndex=${layer.zIndex}, alpha=${layer.alpha}, visible=${layer.visible}, renderable=${layer.renderable}`,
 		);
+		// Extra debug for above2 (curtains) and groundDetail (overlay)
+		if (l === MapData.MAP_ABOVE_DETAIL_LAYER && layer.children.length > 0) {
+			const first = layer.children[0] as any;
+			console.log(
+				`[GameMap] above2 first sprite: x=${first.x}, y=${first.y}, tex=${!!first.texture}, tint=${first.tint}`,
+			);
+		}
+		if (l === MapData.MAP_GROUND_DETAIL_LAYER && layer.children.length > 0) {
+			const first = layer.children[0] as any;
+			console.log(
+				`[GameMap] groundDetail first sprite: x=${first.x}, y=${first.y}, tex=${!!first.texture}`,
+			);
+		}
 	}
 
 	/** Fallback: render a single layer using the synthetic tileset */
@@ -402,6 +422,7 @@ export class GameMap {
 					const tileId = this.data.getTileIndex(l, x, y);
 					if (tileId === 0) continue;
 					if (l === MapData.MAP_GROUND_LAYER && tileId === 1) continue;
+					if (tileId === 839) continue; // Java near-black wall marker - skip
 
 					const texture = this.realTileset!.getTileTexture(tileId);
 					if (!texture) continue;
