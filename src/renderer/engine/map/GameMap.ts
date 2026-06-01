@@ -48,11 +48,11 @@ export class GameMap {
 			[MapData.MAP_GROUND_DETAIL_LAYER]: 1,
 			[MapData.MAP_GROUND_SHADOW_LAYER]: 2,
 			[MapData.MAP_OBJECT_LAYER]: 3,
-			[MapData.MAP_OBJECT_DETAIL_LAYER]: 4,
-			[MapData.MAP_OBJECT_SHADOW_LAYER]: 5,
-			[MapData.MAP_ABOVE_LAYER]: 100,
-			[MapData.MAP_ABOVE_DETAIL_LAYER]: 101,
-			[MapData.MAP_SPRITE_SHADOW_LAYER]: 7,
+			[MapData.MAP_SPRITE_SHADOW_LAYER]: 4, // Entity shadows render after walls, before entities
+			[MapData.MAP_OBJECT_DETAIL_LAYER]: 5, // objects2 Y-sorted with entities in ESC
+			[MapData.MAP_OBJECT_SHADOW_LAYER]: 6, // Object shadows on top of entities
+			[MapData.MAP_ABOVE_LAYER]: 100, // Rooftops, ceilings
+			[MapData.MAP_ABOVE_DETAIL_LAYER]: 101, // Curtains, wall decorations (always visible)
 			[MapData.MAP_HIT_LAYER]: 200,
 			[MapData.MAP_LIGHT_MASK_LAYER]: 150,
 			[MapData.MAP_CAMERA_BOUNDS_LAYER]: 201,
@@ -123,12 +123,12 @@ export class GameMap {
 			this.renderLayerReal(l);
 		}
 		// Set layer-specific alpha for visual quality
-		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; // Floor overlays should be fully visible
-		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.02;
-		this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0;
-		this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Keep rooftops/curtains opaque
-		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.02;
-		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.02;
+		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; // Floor overlays: carpet, rug patterns
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.15; // Ground shadows: subtle darkening
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.15; // Object shadows: subtle darkening
+		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.3; // Entity shadows on ground
+		this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0; // Rooftops/ceilings
+		this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Curtains/wall decorations: always fully visible
 		// Light mask tiles are orange markers → tint to black for AO overlay
 		this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0; // Disabled - LightingSystem handles lighting
 		// Map lights (tiles) alpha
@@ -217,12 +217,13 @@ export class GameMap {
 					sprite.blendMode = "add";
 				}
 
-				// Multiply blending for shadows
+				// Multiply blending for shadows - tint BLACK so multiply only darkens
 				if (
 					l === MapData.MAP_OBJECT_SHADOW_LAYER ||
 					l === MapData.MAP_GROUND_SHADOW_LAYER ||
 					l === MapData.MAP_SPRITE_SHADOW_LAYER
 				) {
+					sprite.tint = 0x000000;
 					sprite.blendMode = "multiply";
 				}
 
@@ -419,12 +420,13 @@ export class GameMap {
 						sprite.blendMode = "add";
 					}
 
-					// Multiply blending for shadows
+					// Multiply blending for shadows - tint BLACK so multiply only darkens
 					if (
 						l === MapData.MAP_OBJECT_SHADOW_LAYER ||
 						l === MapData.MAP_GROUND_SHADOW_LAYER ||
 						l === MapData.MAP_SPRITE_SHADOW_LAYER
 					) {
+						sprite.tint = 0x000000;
 						sprite.blendMode = "multiply";
 					}
 

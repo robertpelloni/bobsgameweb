@@ -357,7 +357,7 @@ export class WorldScene extends Scene {
 			shadowSprite.anchor.set(0.5, 1.0); // bottom-center (feet), same as player
 			shadowSprite.scale.y = -0.65; // flip upside-down, squish to 65% height (shadowSize from Java)
 			shadowSprite.tint = 0x000000; // black
-			shadowSprite.alpha = 0.3; // softer shadow for web (Java ref: 0.60 but web rendering is darker)
+			shadowSprite.alpha = 0.5; // Java ref: 0.60 shadow alpha
 			(this as any).playerShadowSprite = shadowSprite;
 			(this as any).playerShadowTextures = yuuAnim.textures;
 		} else {
@@ -2237,14 +2237,11 @@ export class WorldScene extends Scene {
 					if (this.idleTimer <= 0) {
 						// Random delay between idle frames (~0.5-1.5 seconds)
 						this.idleTimer = 0.5 + Math.random() * 1.0;
-						// Alternate between standing poses:
-						// Original: frame offset 0 -> (numFrames/2 - 1) -> (numFrames - 1) -> 0
-						const seq = this.spriteAtlas.getAnimation("yuu", animName);
-						const numFrames = seq ? seq.numFrames : 8;
+						// Idle: alternate between standing (0) and breathing (3)
+						// Frame 0 = neutral stand, Frame 3 = breathing pose
+						// Skip frame 7 which is a walk-cycle extreme, not an idle pose
 						if (this.idleFrame === 0) {
-							this.idleFrame = Math.floor(numFrames / 2) - 1;
-						} else if (this.idleFrame === Math.floor(numFrames / 2) - 1) {
-							this.idleFrame = numFrames - 1;
+							this.idleFrame = 3;
 						} else {
 							this.idleFrame = 0;
 						}
@@ -2365,7 +2362,7 @@ export class WorldScene extends Scene {
 					shadow.texture = playerSprite.texture;
 				}
 				shadow.x = this.playerTransform.x;
-				shadow.y = this.playerTransform.y - 4; // lift shadow 4 pixels to sit flush with player feet
+				shadow.y = this.playerTransform.y - 2; // lift shadow 2 pixels to sit at player feet
 				shadow.zIndex = this.playerTransform.y - 0.1;
 				if (!shadow.parent) {
 					this.map.entitySpriteContainer.addChild(shadow);
@@ -2408,20 +2405,17 @@ export class WorldScene extends Scene {
 				ptx,
 				pty,
 			);
- // above2 tile check not needed - curtains/decorations always visible
- // Only the above layer (rooftops/ceilings) triggers fade.
- // above2 (curtains, decorations) should NOT fade - they're always visible.
- const underRoof = aboveTile !== 0;
- const targetAlpha = underRoof ? 0.3 : 1.0;
- const aboveLayer = this.map.layers[MapData.MAP_ABOVE_LAYER];
- const aboveDetailLayer = this.map.layers[MapData.MAP_ABOVE_DETAIL_LAYER];
- if (aboveLayer)
- aboveLayer.alpha += (targetAlpha - aboveLayer.alpha) * 0.15; // smooth transition
- // above2 (curtains, decorations) stays fully opaque always
- if (aboveDetailLayer && !underRoof)
- aboveDetailLayer.alpha += (1.0 - aboveDetailLayer.alpha) * 0.15;
- else if (aboveDetailLayer && underRoof)
- aboveDetailLayer.alpha += (targetAlpha - aboveDetailLayer.alpha) * 0.15;
+			// Only the above layer (rooftops/ceilings) triggers fade.
+			// above2 (curtains, decorations) should NEVER fade - always fully visible.
+			const underRoof = aboveTile !== 0;
+			const targetAlpha = underRoof ? 0.3 : 1.0;
+			const aboveLayer = this.map.layers[MapData.MAP_ABOVE_LAYER];
+			const aboveDetailLayer = this.map.layers[MapData.MAP_ABOVE_DETAIL_LAYER];
+			if (aboveLayer)
+				aboveLayer.alpha += (targetAlpha - aboveLayer.alpha) * 0.15; // smooth transition
+			// above2 (curtains, decorations) ALWAYS stays fully opaque
+			if (aboveDetailLayer)
+				aboveDetailLayer.alpha += (1.0 - aboveDetailLayer.alpha) * 0.15;
 		}
 
 		// Set facing direction via Transform so RenderSystem picks it up
