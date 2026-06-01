@@ -67,10 +67,7 @@ export class RealTileset {
 
 	getTileTexture(tileId: number): Texture | null {
 		if (tileId === 0 || !this.atlasCtx) return null;
-		// Skip tile 839: Java game's near-black (1,1,1) wall/collision marker
-		// Renders as opaque black, covering overlays and curtains
-		if (tileId === 839) return null;
-		// Skip tiles not in the atlas map (no pixel data)
+				// Skip tiles not in the atlas map (no pixel data)
 		if (this.validTileIds.size > 0 && !this.validTileIds.has(tileId))
 			return null;
 		if (this.tileTextureCache.has(tileId))
@@ -95,24 +92,17 @@ export class RealTileset {
 		const imageData = this.atlasCtx.getImageData(x, y, this.TILE_SIZE, this.TILE_SIZE);
 
 		// Skip fully transparent tiles
-		// Also treat Java game transparency key RGB(1,1,1) as transparent
-		// The Java engine used palette index 1 = (1,1,1) as the transparent color
-		let hasVisiblePixels = false;
-		for (let i = 0; i < imageData.data.length; i += 4) {
-			const r = imageData.data[i];
-			const g = imageData.data[i + 1];
-			const b = imageData.data[i + 2];
-			const a = imageData.data[i + 3];
-			if (a > 0) {
-				if (r <= 2 && g <= 2 && b <= 2) {
-					// Near-black (1,1,1) = Java transparency key -> make transparent
-					imageData.data[i + 3] = 0;
-				} else {
-					hasVisiblePixels = true;
-				}
+		// Note: (1,1,1) near-black pixels are kept OPAQUE here — they serve as
+		// black outlines on sprites. Shadow translucency is handled per-layer
+		// in GameMap by setting the shadow layer container alpha.
+		let hasPixels = false;
+		for (let i = 3; i < imageData.data.length; i += 4) {
+			if (imageData.data[i] > 0) {
+				hasPixels = true;
+				break;
 			}
 		}
-		if (!hasVisiblePixels) return null;
+		if (!hasPixels) return null;
 
 		// Create small canvas
 		const tileCanvas = document.createElement("canvas");
