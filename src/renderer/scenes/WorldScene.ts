@@ -122,14 +122,6 @@ export class WorldScene extends Scene {
   private playerIsMoving: boolean = false;
   private playerIsSprinting: boolean = false;
   private godMode: boolean = false;
-  // Animation state: 8-direction turning + idle breathing
-  private animDirection: number = 1; // 0=Up,1=Down,2=Left,3=Right,4=UpLeft,5=UpRight,6=DownLeft,7=DownRight
-  private moveDirection: number = 1; // Target direction from input
-  private isTurning: boolean = false;
-  private turnTimer: number = 0;
-  private turnDelay: number = 0.06; // seconds between turn steps
-  private idleTimer: number = 0;
-  private idleFrame: number = 0; // alternates between standing poses
   private versionText: Text | null = null;
  private fpsText: Text | null = null;
  private fpsFrameCount: number = 0;
@@ -243,18 +235,18 @@ export class WorldScene extends Scene {
       spawnY = this.map?.data.defaultSpawnY ?? Math.floor((this.map?.data.heightTiles1X ?? 23) / 2);
     }
     // Override with local save position if available
-    // Validate using full collision check for the feet (not just top-left)
+    // Validate using full collision check (not just extra layer)
     if (localSave?.x && localSave?.y) {
       const saveTileX = Math.floor(localSave.x / WorldScene.TILE_PX);
-      const saveFeetY = Math.floor((localSave.y + 16) / WorldScene.TILE_PX);
-      if (!this.isHitTile(saveTileX, saveFeetY)) {
+      const saveTileY = Math.floor(localSave.y / WorldScene.TILE_PX);
+      if (!this.isHitTile(saveTileX, saveTileY)) {
         // Save position is walkable, use it
         transform.x = localSave.x;
         transform.y = localSave.y;
-        console.log(`[WorldScene] Restored save at (${saveTileX},${saveFeetY})`);
+        console.log(`[WorldScene] Restored save at (${saveTileX},${saveTileY})`);
       } else {
         // Save position is blocked, use default spawn
-        console.warn(`[WorldScene] Save at (${saveTileX},${saveFeetY}) is blocked, using default spawn (${spawnX},${spawnY})`);
+        console.warn(`[WorldScene] Save at (${saveTileX},${saveTileY}) is blocked, using default spawn (${spawnX},${spawnY})`);
         transform.x = spawnX * WorldScene.TILE_PX;
         transform.y = spawnY * WorldScene.TILE_PX;
       }
@@ -268,13 +260,14 @@ export class WorldScene extends Scene {
     networkManager.emit('loadCharacter', identity);
     networkManager.once('characterLoaded', (data: any) => {
       if (data.success && data.charData) {
-        // Validate server position is on a walkable tile for feet
+        // Validate server position is on a walkable tile (full collision check)
         const saveTileX = Math.floor(data.charData.x / WorldScene.TILE_PX);
-        const saveFeetY = Math.floor((data.charData.y + 16) / WorldScene.TILE_PX);
-        if (!this.isHitTile(saveTileX, saveFeetY)) {
+        const saveTileY = Math.floor(data.charData.y / WorldScene.TILE_PX);
+        if (!this.isHitTile(saveTileX, saveTileY)) {
           transform.x = data.charData.x;
           transform.y = data.charData.y;
         }
+        // If invalid, keep the default spawn position
       }
     });
     // Player sprite — animated Yuu sprite with walk cycles
@@ -290,15 +283,15 @@ export class WorldScene extends Scene {
       (this as any).lastAnimDir = 'Down';
       console.log('[WorldScene] Using animated Yuu sprite');
 
-      // Player shadow: upside-down shrunken version of the sprite (from Java: shadowSize=0.65, shadowAlpha=0.60)
-    // Create a shadow that mirrors the player's current frame, flipped vertically
-    const shadowSprite = new Sprite(yuuAnim.textures[0]);
-    shadowSprite.anchor.set(0.5, 1.0); // bottom-center (feet), same as player
-    shadowSprite.scale.y = -0.65; // flip upside-down, squish to 65% height (shadowSize from Java)
-    shadowSprite.tint = 0x000000; // black
-    shadowSprite.alpha = 0.60; // shadowAlpha from Java
-    (this as any).playerShadowSprite = shadowSprite;
-    (this as any).playerShadowTextures = yuuAnim.textures;
+      // Add a visual shadow to the player
+      const shadowG = new Graphics();
+      shadowG.ellipse(0, 0, 6, 3);
+      shadowG.fill({ color: 0x000000, alpha: 0.3 });
+      const shadowTex = this.app.renderer.generateTexture(shadowG);
+      const shadowSprite = new Sprite(shadowTex);
+      shadowSprite.anchor.set(0.5, 0.5);
+      shadowSprite.position.set(0, -1); // Position at feet
+      yuuAnim.addChildAt(shadowSprite, 0); // Add behind character
     } else {
       // Fallback: static sprite frame
       const yuuSprite = this.spriteAtlas.createSprite('yuu', 0);
@@ -470,12 +463,6 @@ export class WorldScene extends Scene {
     if (!legacy) {
       console.warn(`[WorldScene] Cannot find map named: "${mapName}"`);
       return false;
-    }
-
-    // Add player shadow sprite to entitySpriteContainer
-    const shadow = (this as any).playerShadowSprite as Sprite | null;
-    if (shadow && !shadow.parent && this.map?.entitySpriteContainer) {
-      this.map.entitySpriteContainer.addChild(shadow);
     }
     // Find the filename to use the normal load path
     const filename = LegacyMapLoader.getFilenameForMap(mapName);
@@ -745,23 +732,6 @@ export class WorldScene extends Scene {
           // Add to entity sprite container (renders below above-layer)
           if (this.map && (this.currentMapName || "") === mapName) {
             this.map.entitySpriteContainer.addChild(sprite);
-
-            // Add dynamic light for TVs
-            if (ent.sprite.toLowerCase().includes('tv')) {
-                const lightEntity = this.world.createEntity();
-                const ltransform = new TransformComponent();
-                ltransform.x = ent.x + fw / 2;
-                ltransform.y = ent.y + fh / 2;
-                this.world.addComponent(lightEntity, ltransform);
-                
-                const light = new LightComponent();
-                light.radius = 120;
-                light.baseRadius = 120;
-                light.color = 0x88ccff; // Cool TV blue
-                light.flicker = true;
-                light.intensity = 0.6;
-                this.world.addComponent(lightEntity, light);
-            }
           }
 
           spawned++;
@@ -1768,6 +1738,13 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
     this.world.update(dt);
     // === Player Movement with hit-collision ===
     if (this.playerTransform && this.map && !this.isDialogueActive) {
+      // Debug: log once when movement is first attempted
+      if (!(this as any)._moveDebug && (InputManager.isUpHeld() || InputManager.isDownHeld() || InputManager.isLeftHeld() || InputManager.isRightHeld())) {
+        (this as any)._moveDebug = true;
+        const ptx = Math.floor(this.playerTransform.x / WorldScene.TILE_PX);
+        const pty = Math.floor(this.playerTransform.y / WorldScene.TILE_PX);
+        console.log(`[WorldScene] Movement input detected at (${ptx},${pty}), isHit=${this.isHitTile(ptx, pty)}, godMode=${this.godMode}`);
+      }
       const PLAYER_SPEED = (this as any)._customSpeed ?? 80; // pixels per second at 1X
       const SPRINT_MULT = this.playerIsSprinting ? 1.8 : 1.0;
       let dx = 0, dy = 0;
@@ -1775,116 +1752,57 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
       if (InputManager.isDownHeld()) dy += 1;
       if (InputManager.isLeftHeld()) dx -= 1;
       if (InputManager.isRightHeld()) dx += 1;
-// === 8-Direction Animation System (from original game) ===
-    // Direction constants: 0=Up, 1=Down, 2=Left, 3=Right, 4=UpLeft, 5=UpRight, 6=DownLeft, 7=DownRight
-    const DIR_NAMES = ['Up', 'Down', 'Left', 'Right', 'UpLeft', 'UpRight', 'DownLeft', 'DownRight'] as const;
+            // Track facing direction for sprite animation (8 directions for yuu)
+      let animDir = ''; // Named direction from original game
+      if (dx !== 0 || dy !== 0) {
+        if (dx === 0 && dy > 0) animDir = 'Down';
+        else if (dx === 0 && dy < 0) animDir = 'Up';
+        else if (dx < 0 && dy === 0) animDir = 'Left';
+        else if (dx > 0 && dy === 0) animDir = 'Right';
+        else if (dx < 0 && dy < 0) animDir = 'UpLeft';
+        else if (dx > 0 && dy < 0) animDir = 'UpRight';
+        else if (dx > 0 && dy > 0) animDir = 'DownRight';
+        else if (dx < 0 && dy > 0) animDir = 'DownLeft';
 
-    // Calculate movement direction from input (8 directions + diagonal)
-    let targetDir = this.animDirection;
-    if (dx !== 0 || dy !== 0) {
-      if (dx === 0 && dy > 0) targetDir = 1;      // Down
-      else if (dx === 0 && dy < 0) targetDir = 0;  // Up
-      else if (dx < 0 && dy === 0) targetDir = 2;  // Left
-      else if (dx > 0 && dy === 0) targetDir = 3;  // Right
-      else if (dx < 0 && dy < 0) targetDir = 4;    // UpLeft
-      else if (dx > 0 && dy < 0) targetDir = 5;    // UpRight
-      else if (dx < 0 && dy > 0) targetDir = 6;    // DownLeft
-      else if (dx > 0 && dy > 0) targetDir = 7;    // DownRight
-      this.moveDirection = targetDir;
-    }
-
-    this.playerIsSprinting = InputManager.isKeyHeld('Shift');
-    this.playerIsMoving = (dx !== 0 || dy !== 0);
-
-    const playerSpriteComp = this.world.getComponent(
-      (this.world as any).playerEntityId, 'Sprite'
-    ) as any;
-
-    if (playerSpriteComp?.sprite) {
-      const has8Dir = this.spriteAtlas.has8Directions('yuu');
-      let displayDir = this.animDirection;
-
-      // === Turning System ===
-      // When direction changes, turn through intermediate directions
-      if (this.playerIsMoving && this.animDirection !== this.moveDirection) {
-        if (!this.isTurning) {
-          this.isTurning = true;
-          this.turnTimer = 0;
+        // If sprite doesn't have 8-dir animations, map diagonals to cardinal
+        if (animDir && !this.spriteAtlas.has8Directions('yuu')) {
+          if (Math.abs(dx) > Math.abs(dy)) {
+            animDir = dx > 0 ? 'Right' : 'Left';
+          } else {
+            animDir = dy > 0 ? 'Down' : 'Up';
+          }
         }
-        this.turnTimer -= dt;
-        if (this.turnTimer <= 0) {
-          this.turnTimer = this.turnDelay;
-          displayDir = this.getNextTurnDirection(this.animDirection, this.moveDirection, has8Dir);
-          this.animDirection = displayDir;
-          if (displayDir === this.moveDirection) this.isTurning = false;
+      }
+
+      this.playerIsSprinting = InputManager.isKeyHeld('Shift');
+      this.playerIsMoving = (dx !== 0 || dy !== 0);
+
+      // Update player sprite animation using named animation sequences
+      const playerSpriteComp = this.world.getComponent(
+        (this.world as any).playerEntityId,
+        'Sprite'
+      ) as any;
+      
+      if (playerSpriteComp?.sprite) {
+        const currentDir = animDir || (this as any).lastAnimDir || 'Down';
+        if (playerSpriteComp.currentAnimation !== currentDir) {
+          // Get frames from the original game's animation data
+          const frames = this.spriteAtlas.getAnimationFrames('yuu', currentDir);
+          if (frames.length > 0) {
+            playerSpriteComp.sprite.textures = frames;
+            playerSpriteComp.currentAnimation = currentDir;
+            if (animDir) (this as any).lastAnimDir = animDir;
+          }
+        }
+        
+        // Animate when moving, show first frame (standing) when stopped
+        if (this.playerIsMoving) {
+          playerSpriteComp.sprite.animationSpeed = this.playerIsSprinting ? 0.25 : 0.15;
+          playerSpriteComp.sprite.play();
         } else {
-          displayDir = this.animDirection;
-        }
-      } else if (this.playerIsMoving) {
-        this.isTurning = false;
-        displayDir = this.animDirection;
-      } else {
-        this.isTurning = false;
-        displayDir = this.animDirection;
-      }
-
-      // Map direction index to animation name
-      let animName = DIR_NAMES[displayDir] || 'Down';
-      if (!has8Dir && displayDir >= 4) {
-        if (displayDir === 4 || displayDir === 5) animName = 'Up';
-        else animName = 'Down';
-      }
-
-      // Apply animation direction
-      if (playerSpriteComp.currentAnimation !== animName) {
-        const frames = this.spriteAtlas.getAnimationFrames('yuu', animName);
-        if (frames.length > 0) {
-          playerSpriteComp.sprite.textures = frames;
-          playerSpriteComp.currentAnimation = animName;
+          playerSpriteComp.sprite.gotoAndStop(0);
         }
       }
-
-      // === Walk/Run Animation ===
-      if (this.playerIsMoving && !this.isTurning) {
-        // Reset idle state when starting to move
-        this.idleFrame = 0;
-        this.idleTimer = 0;
-        playerSpriteComp.sprite.animationSpeed = this.playerIsSprinting ? 0.4 : 0.2; // Match Java: normal=80ms/frame, sprint=30ms/frame
-        playerSpriteComp.sprite.play();
-      }
-      // === Idle Animation (from original game's doStandingAnimation) ===
-      else if (!this.playerIsMoving) {
-        this.idleTimer -= dt;
-        if (this.idleTimer <= 0) {
-          // Random delay between idle frames (~0.5-1.5 seconds)
-          this.idleTimer = 0.5 + Math.random() * 1.0;
-          // Alternate between standing poses:
-          // Original: frame offset 0 -> (numFrames/2 - 1) -> (numFrames - 1) -> 0
-          const seq = this.spriteAtlas.getAnimation('yuu', animName);
-          const numFrames = seq ? seq.numFrames : 8;
-          if (this.idleFrame === 0) {
-            this.idleFrame = Math.floor(numFrames / 2) - 1;
-          } else if (this.idleFrame === Math.floor(numFrames / 2) - 1) {
-            this.idleFrame = numFrames - 1;
-          } else {
-            this.idleFrame = 0;
-          }
-          // Subtle pixel jitter (1px, matching original game)
-          if (Math.random() < 0.3) {
-            playerSpriteComp.sprite.x = this.playerTransform.x + (Math.random() < 0.5 ? -0.5 : 0.5);
-          } else {
-            playerSpriteComp.sprite.x = this.playerTransform.x;
-          }
-        }
-        playerSpriteComp.sprite.gotoAndStop(this.idleFrame);
-        playerSpriteComp.sprite.stop();
-      }
-      // === Turning Animation ===
-      else if (this.isTurning) {
-        playerSpriteComp.sprite.gotoAndStop(0);
-        playerSpriteComp.sprite.stop();
-      }
-    }
 
  // Footstep sounds
       if (this.playerIsMoving) {
@@ -1960,21 +1878,6 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
         playerSpriteComp.sprite.y = this.playerTransform.y;
           playerSpriteComp.sprite.zIndex = this.playerTransform.y;
       }
-  // Update player shadow sprite (from Java: shadowSize=0.65, shadowAlpha=0.60)
-  // Shadow is the same texture as the current frame, flipped upside-down at the player's feet
-  const shadow = (this as any).playerShadowSprite as Sprite | null;
-  if (shadow && this.playerTransform && this.map?.entitySpriteContainer) {
-    const playerSprite = playerSpriteComp?.sprite as any;
-    if (playerSprite?.texture) {
-      shadow.texture = playerSprite.texture;
-    }
-    shadow.x = this.playerTransform.x;
-    shadow.y = this.playerTransform.y - 4;  // lift shadow 4 pixels to sit flush with player feet
-    shadow.zIndex = this.playerTransform.y - 0.1;
-    if (!shadow.parent) {
-      this.map.entitySpriteContainer.addChild(shadow);
-    }
-  }
       // Direct door proximity check (backup for TeleportSystem)
       // Cooldown to prevent immediate re-trigger on arrival
       if (this._doorCooldown > 0) this._doorCooldown -= dt;
@@ -2231,93 +2134,56 @@ this.dialogueText.text = currentText + '\n[Press E/Space ' + page + '/' + total 
       requestAnimationFrame(step);
     });
   }
-  /**
-   * Calculate the next direction when turning from current to target.
-   * Implements the original game's step-by-step turning logic:
-   * characters turn through intermediate directions rather than snapping.
-   * Directions: 0=Up, 1=Down, 2=Left, 3=Right, 4=UpLeft, 5=UpRight, 6=DownLeft, 7=DownRight
-   */
-  private getNextTurnDirection(current: number, target: number, has8Dir: boolean): number {
-    if (current === target) return target;
-    if (!has8Dir) return target; // 4-dir sprites snap immediately
-
-    // Turning lookup table from the original Java game
-    // Maps (currentDir, targetDir) -> nextDir
-    // Each entry gives the immediate next direction to turn towards
-    const TURN_TABLE: Record<string, number> = {
-      // Target: Up
-      '0-0': 0, '1-0': 6, '2-0': 4, '3-0': 5, '4-0': 0, '5-0': 0, '6-0': 2, '7-0': 3,
-      // Target: Down
-      '0-1': 4, '1-1': 1, '2-1': 6, '3-1': 7, '4-1': 2, '5-1': 3, '6-1': 1, '7-1': 1,
-      // Target: Left
-      '0-2': 4, '1-2': 6, '2-2': 2, '3-2': 4, '4-2': 2, '5-2': 0, '6-2': 2, '7-2': 1,
-      // Target: Right
-      '0-3': 5, '1-3': 7, '2-3': 5, '3-3': 3, '4-3': 0, '5-3': 3, '6-3': 1, '7-3': 3,
-      // Target: UpLeft
-      '0-4': 4, '1-4': 6, '2-4': 4, '3-4': 5, '4-4': 4, '5-4': 0, '6-4': 2, '7-4': 3,
-      // Target: UpRight
-      '0-5': 5, '1-5': 7, '2-5': 4, '3-5': 5, '4-5': 0, '5-5': 5, '6-5': 2, '7-5': 3,
-      // Target: DownLeft
-      '0-6': 4, '1-6': 6, '2-6': 6, '3-6': 7, '4-6': 2, '5-6': 0, '6-6': 6, '7-6': 1,
-      // Target: DownRight
-      '0-7': 5, '1-7': 7, '2-7': 6, '3-7': 7, '4-7': 2, '5-7': 3, '6-7': 1, '7-7': 7,
-    };
-
-    const key = `${current}-${target}`;
-    let next = TURN_TABLE[key];
-
-    // For 180-degree turns, randomly choose left or right path
-    // (matching original game's behavior)
-    if (next === undefined) {
-      // Direct assignment for any missing entries
-      next = target;
-    }
-    // Random 180-degree turn override
-    if ((current === 0 && target === 1) || (current === 1 && target === 0) ||
-        (current === 2 && target === 3) || (current === 3 && target === 2)) {
-      // Flip a coin for which way to turn
-      const goLeft = Math.random() < 0.5;
-      if (current === 1 && target === 0) next = goLeft ? 6 : 7;  // Down->Up: turn via DownLeft or DownRight
-      else if (current === 0 && target === 1) next = goLeft ? 4 : 5;  // Up->Down: turn via UpLeft or UpRight
-      else if (current === 2 && target === 3) next = goLeft ? 4 : 6;  // Left->Right: turn via UpLeft or DownLeft
-      else if (current === 3 && target === 2) next = goLeft ? 5 : 7;  // Right->Left: turn via UpRight or DownRight
-    }
-
-    return next;
-  }
-
   private isHitTile(tx: number, ty: number): boolean {
     if (!this.map) return true;
     if (tx < 0 || ty < 0 || tx >= this.map.data.widthTiles1X || ty >= this.map.data.heightTiles1X) return true;
     if (this.godMode) return false;
 
-    // 1. Hit Bounds Layer (authoritative collision from original game)
-    // Non-zero values = blocked. Regenerated from tile analysis for all 257 maps.
-    const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
-    if (hitTile !== 0) return true;
-
-    // 2. Void check (no ground AND no object = empty/void tile)
     const gndTile = this.map.data.getTileIndex(MapData.MAP_GROUND_LAYER, tx, ty);
     const objTile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
-    if (gndTile === 0 && objTile === 0) return true;
+    const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
+    const extraTile = this.map.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, tx, ty);
 
-    // 3. Doors (always passable)
+    // 1. Explicit Hit Markers (Highest Priority)
+    if (hitTile !== 0) return true;
+
+    // 2. Extra Layer Override (Original game walkable zone)
+    // 1 = interior/walkable, 0 = void/blocked
+    // If extra is 1, it overrides walls in ground/object layers.
+    if (extraTile === 1) return false;
+
+    // 3. Strict Wall ID Blocking (if no extra override)
+    if (objTile === 839 || objTile === 8280) return true;
+    if (MapData.WALL_IDS.has(objTile)) return true;
+    if (MapData.WALL_IDS.has(gndTile)) return true;
+
+    // 4. Floor Exception (Walkable floor IDs)
+    if (MapData.FLOOR_IDS.has(gndTile)) {
+        // Only block if the object is a DIFFERENT strict wall
+        if (objTile !== 0 && MapData.WALL_IDS.has(objTile)) return true;
+        return false;
+    }
+
+    // 5. Void check (if not a floor and no extra marker, empty is blocked)
+    if (gndTile === 0 && objTile === 0) return true;
+    if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
+
+    // 6. Doors (Passage Zone)
     const isDoor = this.map.data.doorDataList.some(d =>
-      tx >= d.x && tx < d.x + d.width &&
-      ty >= d.y && ty < d.y + d.height
+      tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height
     );
     if (isDoor) return false;
 
-    // 4. Entity collision (furniture bounding boxes)
+    // 7. Entity collision (furniture bounding boxes)
+
     const px = tx * WorldScene.TILE_PX;
     const py = ty * WorldScene.TILE_PX;
     for (const ec of this.entityColliders) {
       if (px + WorldScene.TILE_PX > ec.x && px < ec.x + ec.w &&
           py + WorldScene.TILE_PX > ec.y && py < ec.y + ec.h) {
-        return true;
+        return true; // inside entity bounding box = blocked
       }
     }
-
     return false; // walkable
   }
 
