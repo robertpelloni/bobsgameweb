@@ -12,7 +12,7 @@ export class RealTileset {
     private atlasCanvas: HTMLCanvasElement | null = null;
     private atlasCtx: CanvasRenderingContext2D | null = null;
     private tileTextureCache: Map<number, Texture> = new Map();
-    private shadowTextureCache: Map<number, Texture> = new Map();
+    private overlayTextureCache: Map<number, Texture> = new Map();
     private validTileIds: Set<number> = new Set();
     private readonly COLS = 256;
     private readonly TILE_SIZE = 8;
@@ -96,25 +96,20 @@ export class RealTileset {
             this.TILE_SIZE,
         );
 
-        // Java transparency key: RGB(1,1,1) was palette index 1 (transparent).
-        // Make these pixels transparent to match the Java game's rendering.
-        // This correctly handles: curtain backgrounds, shadow transparent areas,
-        // wall fill tiles (700, 839), and any other transparency-key pixels.
-        // Colored pixels remain fully opaque.
-        let hasVisiblePixels = false;
-        for (let i = 0; i < imageData.data.length; i += 4) {
-            const r = imageData.data[i];
-            const g = imageData.data[i + 1];
-            const b = imageData.data[i + 2];
-            const a = imageData.data[i + 3];
-            if (r <= 2 && g <= 2 && b <= 2 && a > 0) {
-                // Near-black pixel = Java transparency key → transparent
-                imageData.data[i + 3] = 0;
-            } else if (a > 0) {
-                hasVisiblePixels = true;
+        // Skip fully transparent tiles.
+        // (1,1,1) near-black pixels are kept OPAQUE — they serve as
+        // black outlines on objects and black shadow pixels on shadow layers.
+        // Shadow layers use container alpha for translucency.
+        // Overlay layers (groundDetail, aboveDetail) use getOverlayTileTexture
+        // which strips (1,1,1) backgrounds for proper overlay rendering.
+        let hasPixels = false;
+        for (let i = 3; i < imageData.data.length; i += 4) {
+            if (imageData.data[i] > 0) {
+                hasPixels = true;
+                break;
             }
         }
-        if (!hasVisiblePixels) return null; // All pixels were transparency key
+        if (!hasPixels) return null;
 
         // Create small canvas
         const tileCanvas = document.createElement("canvas");
@@ -131,18 +126,18 @@ export class RealTileset {
     }
 
     /**
-     * Get a shadow-specific tile texture where (1,1,1) pixels are transparent.
-     * In the Java game, RGB(1,1,1) was the palette index 1 transparency key.
-     * For shadow layers, we need this behavior so shadow tiles show only
-     * their actual colored pixels (brown, gray, etc.) without the (1,1,1)
-     * "outline" pixels that would otherwise appear as opaque dark spots.
+     * Get an overlay-specific tile texture where (1,1,1) pixels are transparent.
+     * Used for groundDetail (floor overlays) and aboveDetail (curtains) layers
+     * where (1,1,1) pixels are background areas that should be see-through,
+     * not opaque black. This matches the Java game's transparency key behavior
+     * for overlay/decoration tiles.
      */
-    getShadowTileTexture(tileId: number): Texture | null {
+    getOverlayTileTexture(tileId: number): Texture | null {
         if (tileId === 0 || !this.atlasCtx) return null;
         if (this.validTileIds.size > 0 && !this.validTileIds.has(tileId))
             return null;
-        if (this.shadowTextureCache.has(tileId))
-            return this.shadowTextureCache.get(tileId)!;
+        if (this.overlayTextureCache.has(tileId))
+            return this.overlayTextureCache.get(tileId)!;
 
         const col = tileId % this.COLS;
         const row = Math.floor(tileId / this.COLS);
@@ -188,7 +183,7 @@ export class RealTileset {
 
         const tex = Texture.from(tileCanvas);
         (tex.source as any).scaleMode = "nearest";
-        this.shadowTextureCache.set(tileId, tex);
+        this.overlayTextureCache.set(tileId, tex);
         return tex;
     }
 
@@ -203,8 +198,8 @@ export class RealTileset {
     destroy(): void {
         for (const t of this.tileTextureCache.values()) t.destroy(true);
         this.tileTextureCache.clear();
-        for (const t of this.shadowTextureCache.values()) t.destroy(true);
-        this.shadowTextureCache.clear();
+        for (const t of this.overlayTextureCache.values()) t.destroy(true);
+        this.overlayTextureCache.clear();
         this.atlasCanvas = null;
         this.atlasCtx = null;
         this._loaded = false;

@@ -127,9 +127,9 @@ export class GameMap {
 		}
 		// Set layer-specific alpha for visual quality
 		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; // Floor overlays: carpet, rug patterns
-		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.4; // Translucent shadow overlay
-		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.4; // Translucent shadow overlay
-		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.4; // Translucent shadow overlay
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.5; // Translucent shadow (opaque black pixels on semi-transparent layer)
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.5; // Translucent shadow (opaque black pixels on semi-transparent layer)
+		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.5; // Translucent shadow (opaque black pixels on semi-transparent layer)
 		this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0; // Rooftops/ceilings
 		this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Curtains/wall decorations: always fully visible
 		// Light mask tiles are orange markers → tint to black for AO overlay
@@ -190,10 +190,10 @@ export class GameMap {
 				const tileId = this.data.getTileIndex(l, x, y);
 				if (tileId === 0) continue;
 
-				// On ground layer, skip tile ID 1 (solid black background in Java)
 				
-				// Tile 839 and other all-(1,1,1) tiles now return null from
-				// getTileTexture (Java transparency key) → skipped automatically
+				
+				// Skip tile 839: opaque (1,1,1) wall/collision marker covering content
+				if (tileId === 839) continue;
 
 				// Skip factor for very large maps to reduce sprite count
 				const skipFactor = totalTiles > 50000 ? 2 : 1;
@@ -226,10 +226,16 @@ export class GameMap {
 					sprite.blendMode = "add";
 				}
 
-				// Shadow layers: translucent overlay via layer alpha
-				// (1,1,1) pixels appear as dark semi-transparent overlay
-				// Layer container alpha controls overall translucency
-				// No special texture needed - normal tile textures work fine
+				// Overlay layers (groundDetail, aboveDetail): use transparency-key textures
+				// where (1,1,1) pixels are transparent. These layers have decorative tiles
+				// (curtains, carpet patterns) where (1,1,1) is background, not outline.
+				if (l === MapData.MAP_GROUND_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
+					const overlayTex = this.realTileset!.getOverlayTileTexture(tileId);
+					if (overlayTex) sprite.texture = overlayTex;
+					else continue;
+				}
+				// Shadow layers: opaque black pixels on translucent layer containers
+				// Layer alpha controls translucency (0.5 = semi-transparent dark overlay)
 
 				// objects2 needs Y-sorting with entities (furniture, tables)
 				// above/above2 are ALWAYS above entities (rooftops, wall tops, curtains)
@@ -418,7 +424,8 @@ export class GameMap {
 				for (let x = startX; x < endX; x++) {
 					const tileId = this.data.getTileIndex(l, x, y);
 					if (tileId === 0) continue;
-					// Tile 839 handled by getTileTexture transparency key
+					// Skip tile 839: opaque (1,1,1) wall/collision marker
+					if (tileId === 839) continue;
 
 					const texture = this.realTileset!.getTileTexture(tileId);
 					if (!texture) continue;
@@ -437,8 +444,12 @@ export class GameMap {
 						sprite.blendMode = "add";
 					}
 
-					// Shadow layers: translucent overlay via layer alpha
-
+					// Overlay layers: transparency-key textures (1,1,1 = transparent)
+					if (l === MapData.MAP_GROUND_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
+						const overlayTex = this.realTileset!.getOverlayTileTexture(tileId);
+						if (overlayTex) sprite.texture = overlayTex;
+						else continue;
+					}
 					// objects2 needs Y-sorting with entities (furniture, tables)
 					// above/above2 are ALWAYS above entities (rooftops, wall tops, curtains)
 					if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
