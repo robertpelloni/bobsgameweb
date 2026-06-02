@@ -1,9 +1,17 @@
-import { System } from '../System';
-import type { EntityId } from '../Entity';
-import type { Component } from '../Component';
-import type { LightComponent } from '../components/LightComponent';
-import type { TransformComponent } from '../components/TransformComponent';
-import { type Application, Container, Graphics, RenderTexture, Sprite, Texture, type BLEND_MODES } from 'pixi.js';
+import { System } from "../System";
+import type { EntityId } from "../Entity";
+import type { Component } from "../Component";
+import type { LightComponent } from "../components/LightComponent";
+import type { TransformComponent } from "../components/TransformComponent";
+import {
+	type Application,
+	Container,
+	Graphics,
+	RenderTexture,
+	Sprite,
+	Texture,
+	type BLEND_MODES,
+} from "pixi.js";
 
 /** Light data from map_lights.json (extracted from _Project.txt) */
 export interface MapLightData {
@@ -54,14 +62,17 @@ export class LightingSystem extends System {
 	private lightsLoaded: boolean = false;
 
 	/** Current map name for light lookup */
-	public currentMapName: string = '';
+	public currentMapName: string = "";
 
 	constructor(app: Application, parentContainer: Container) {
 		super();
 		this.app = app;
-		this.lightTexture = RenderTexture.create({ width: app.screen.width, height: app.screen.height });
+		this.lightTexture = RenderTexture.create({
+			width: app.screen.width,
+			height: app.screen.height,
+		});
 		this.lightSprite = new Sprite(this.lightTexture);
-		this.lightSprite.blendMode = 'multiply' as BLEND_MODES;
+		this.lightSprite.blendMode = "multiply" as BLEND_MODES;
 		this.lightLayer = new Container();
 		this.lightLayer.addChild(this.lightSprite);
 		parentContainer.addChild(this.lightLayer);
@@ -73,20 +84,20 @@ export class LightingSystem extends System {
 		this.tempContainer.addChild(this.backgroundGraphic);
 
 		// Create a radial gradient brush for lights
-		const canvas = document.createElement('canvas');
+		const canvas = document.createElement("canvas");
 		canvas.width = 128;
 		canvas.height = 128;
-		const ctx = canvas.getContext('2d')!;
+		const ctx = canvas.getContext("2d")!;
 		const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-		gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
-		gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.5)');
-		gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+		gradient.addColorStop(0, "rgba(255, 255, 255, 1.0)");
+		gradient.addColorStop(0.5, "rgba(255, 255, 255, 0.5)");
+		gradient.addColorStop(1, "rgba(255, 255, 255, 0.0)");
 		ctx.fillStyle = gradient;
 		ctx.fillRect(0, 0, 128, 128);
 		const tex = Texture.from(canvas);
 		this.lightBrush = new Sprite(tex);
 		this.lightBrush.anchor.set(0.5);
-		this.lightBrush.blendMode = 'add' as BLEND_MODES;
+		this.lightBrush.blendMode = "add" as BLEND_MODES;
 
 		// Load map lights data
 		this.loadMapLights();
@@ -95,17 +106,19 @@ export class LightingSystem extends System {
 	/** Load per-map light data from map_lights.json */
 	private async loadMapLights(): Promise<void> {
 		try {
-			const resp = await fetch('/map_lights.json');
+			const resp = await fetch("/map_lights.json");
 			if (resp.ok) {
 				const data = await resp.json();
 				for (const [mapName, lights] of Object.entries(data)) {
 					this.mapLightsCache.set(mapName, lights as MapLightData[]);
 				}
 				this.lightsLoaded = true;
-				console.log(`[LightingSystem] Loaded lights for ${this.mapLightsCache.size} maps`);
+				console.log(
+					`[LightingSystem] Loaded lights for ${this.mapLightsCache.size} maps`,
+				);
 			}
 		} catch (e) {
-			console.warn('[LightingSystem] Could not load map_lights.json:', e);
+			console.warn("[LightingSystem] Could not load map_lights.json:", e);
 		}
 	}
 
@@ -118,7 +131,7 @@ export class LightingSystem extends System {
 		}
 		const sprite = new Sprite(this.lightBrush.texture);
 		sprite.anchor.set(0.5);
-		sprite.blendMode = 'add' as BLEND_MODES;
+		sprite.blendMode = "add" as BLEND_MODES;
 		this.lightSpritePool.push(sprite);
 		this.lightSpritePoolIndex++;
 		return sprite;
@@ -129,19 +142,29 @@ export class LightingSystem extends System {
 		this.currentMapName = mapName;
 		this.mapLights = this.mapLightsCache.get(mapName) ?? [];
 		if (this.mapLights.length > 0) {
-			console.log(`[LightingSystem] Map "${mapName}": ${this.mapLights.length} lights`);
+			console.log(
+				`[LightingSystem] Map "${mapName}": ${this.mapLights.length} lights`,
+			);
 		}
 	}
 
-	public update(dt: number, entities: Map<EntityId, Map<string, Component>>): void {
+	public update(
+		dt: number,
+		entities: Map<EntityId, Map<string, Component>>,
+	): void {
 		if (this.enableDayNightCycle) {
-			this.timeOfDay = (this.timeOfDay + (dt / (this.dayDuration * 1000))) % 1.0;
+			this.timeOfDay = (this.timeOfDay + dt / (this.dayDuration * 1000)) % 1.0;
 			this.updateAmbientColor();
 		}
 
 		// 1. Draw background ambient darkness
 		this.backgroundGraphic.clear();
-		this.backgroundGraphic.rect(0, 0, this.app.screen.width, this.app.screen.height);
+		this.backgroundGraphic.rect(
+			0,
+			0,
+			this.app.screen.width,
+			this.app.screen.height,
+		);
 		this.backgroundGraphic.fill({ color: this.ambientColor, alpha: 1.0 });
 
 		// Reset sprite pool index (reuse sprites instead of creating/destroying each frame)
@@ -162,8 +185,13 @@ export class LightingSystem extends System {
 
 			// Skip if off-screen (with generous margin for large lights)
 			const margin = light.radius * 2 * this.cameraZoom;
-			if (screenX < -margin || screenX > this.app.screen.width + margin ||
-				screenY < -margin || screenY > this.app.screen.height + margin) continue;
+			if (
+				screenX < -margin ||
+				screenX > this.app.screen.width + margin ||
+				screenY < -margin ||
+				screenY > this.app.screen.height + margin
+			)
+				continue;
 
 			const sprite = this.getPoolSprite();
 
@@ -194,12 +222,15 @@ export class LightingSystem extends System {
 
 		// 3. Draw ECS dynamic lights (from LightComponent entities)
 		for (const [entityId, components] of entities) {
-			const light = components.get('Light') as LightComponent;
-			const transform = components.get('Transform') as TransformComponent;
+			const light = components.get("Light") as LightComponent;
+			const transform = components.get("Transform") as TransformComponent;
 			if (light && transform) {
 				let currentRadius = light.radius;
 				if (light.flicker) {
-					currentRadius = light.baseRadius + Math.sin(Date.now() / 200 * light.flickerSpeed) * (light.baseRadius * 0.1);
+					currentRadius =
+						light.baseRadius +
+						Math.sin((Date.now() / 200) * light.flickerSpeed) *
+							(light.baseRadius * 0.1);
 				}
 				const sprite = this.getPoolSprite();
 				sprite.tint = light.color;
@@ -216,7 +247,11 @@ export class LightingSystem extends System {
 		}
 
 		// Hide unused pool sprites
-		for (let i = this.lightSpritePoolIndex; i < this.lightSpritePool.length; i++) {
+		for (
+			let i = this.lightSpritePoolIndex;
+			i < this.lightSpritePool.length;
+			i++
+		) {
 			this.lightSpritePool[i].visible = false;
 		}
 
@@ -224,13 +259,15 @@ export class LightingSystem extends System {
 		this.app.renderer.render({
 			container: this.tempContainer,
 			target: this.lightTexture,
-			clear: true
+			clear: true,
 		});
 	}
 
 	private updateAmbientColor(): void {
 		// Sunrise -> Day -> Sunset -> Night
-		let r = 255, g = 255, b = 255;
+		let r = 255,
+			g = 255,
+			b = 255;
 		if (this.timeOfDay < 0.25) {
 			// Midnight to Dawn
 			const t = this.timeOfDay / 0.25;
@@ -256,7 +293,8 @@ export class LightingSystem extends System {
 			g = this.lerp(120, 20, t);
 			b = this.lerp(100, 80, t);
 		}
-		this.ambientColor = (Math.floor(r) << 16) | (Math.floor(g) << 8) | Math.floor(b);
+		this.ambientColor =
+			(Math.floor(r) << 16) | (Math.floor(g) << 8) | Math.floor(b);
 	}
 
 	private lerp(start: number, end: number, t: number): number {

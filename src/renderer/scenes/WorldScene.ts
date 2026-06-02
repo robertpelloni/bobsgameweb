@@ -2362,7 +2362,7 @@ export class WorldScene extends Scene {
 					shadow.texture = playerSprite.texture;
 				}
 				shadow.x = this.playerTransform.x;
-				shadow.y = this.playerTransform.y - 2; // lift shadow 2 pixels to sit at player feet
+				shadow.y = this.playerTransform.y - 3; // lift shadow 3 pixels to sit at player feet
 				shadow.zIndex = this.playerTransform.y - 0.1;
 				if (!shadow.parent) {
 					this.map.entitySpriteContainer.addChild(shadow);

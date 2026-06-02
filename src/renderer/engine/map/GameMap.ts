@@ -127,9 +127,9 @@ export class GameMap {
 		}
 		// Set layer-specific alpha for visual quality
 		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; // Floor overlays: carpet, rug patterns
-		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.4; // Translucent ground shadow overlay
-		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.4; // Translucent object shadow overlay
-		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.5; // Translucent entity shadow overlay
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.4; // Translucent shadow overlay
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.4; // Translucent shadow overlay
+		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.4; // Translucent shadow overlay
 		this.layers[MapData.MAP_ABOVE_LAYER].alpha = 1.0; // Rooftops/ceilings
 		this.layers[MapData.MAP_ABOVE_DETAIL_LAYER].alpha = 1.0; // Curtains/wall decorations: always fully visible
 		// Light mask tiles are orange markers → tint to black for AO overlay
@@ -154,7 +154,9 @@ export class GameMap {
 		);
 		// Ensure container children are sorted by zIndex (PixiJS v8 sortableChildren)
 		this.container.sortChildren();
-	}
+
+}
+
 	/** Render a single layer using real tileset atlas textures */
 	private renderLayerReal(l: number) {
 		const layer = this.layers[l];
@@ -227,21 +229,19 @@ export class GameMap {
 					sprite.blendMode = "add";
 				}
 
-				// Shadow layers: translucent overlay with original tile colors
-				// No black tint - shadow tiles have their own shape and darkness
-				// Layer container alpha controls translucency
-				if (
-					l === MapData.MAP_OBJECT_SHADOW_LAYER ||
-					l === MapData.MAP_GROUND_SHADOW_LAYER ||
-					l === MapData.MAP_SPRITE_SHADOW_LAYER
-				) {
-					sprite.blendMode = "multiply";
-				}
+				// Shadow layers: translucent overlay via layer alpha
+				// (1,1,1) pixels appear as dark semi-transparent overlay
+				// Layer container alpha controls overall translucency
+				// No special texture needed - normal tile textures work fine
 
 				// objects2 needs Y-sorting with entities (furniture, tables)
 				// above/above2 are ALWAYS above entities (rooftops, wall tops, curtains)
 				// The Java game renders: objects2 -> entities -> above -> above2
 				// The underRoof fade in WorldScene handles visibility when player is under a rooftop
+				// DEBUG: Tint above2 sprites bright magenta to verify rendering
+				if (l === MapData.MAP_ABOVE_DETAIL_LAYER) {
+					sprite.tint = 0xff00ff;
+				}
 				if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
 					sprite.zIndex = sprite.y;
 					(sprite as any)._isTileSprite = true;
@@ -445,17 +445,14 @@ export class GameMap {
 						sprite.blendMode = "add";
 					}
 
-					// Shadow layers: translucent overlay with original tile colors
-					if (
-						l === MapData.MAP_OBJECT_SHADOW_LAYER ||
-						l === MapData.MAP_GROUND_SHADOW_LAYER ||
-						l === MapData.MAP_SPRITE_SHADOW_LAYER
-					) {
-						sprite.blendMode = "multiply";
-					}
+					// Shadow layers: translucent overlay via layer alpha
 
 					// objects2 needs Y-sorting with entities (furniture, tables)
 					// above/above2 are ALWAYS above entities (rooftops, wall tops, curtains)
+					// DEBUG: Tint above2 sprites bright magenta
+					if (l === MapData.MAP_ABOVE_DETAIL_LAYER) {
+						sprite.tint = 0xff00ff;
+					}
 					if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
 						sprite.zIndex = sprite.y;
 						(sprite as any)._isTileSprite = true;
