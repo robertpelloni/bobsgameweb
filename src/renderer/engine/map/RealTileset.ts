@@ -96,18 +96,25 @@ export class RealTileset {
             this.TILE_SIZE,
         );
 
-        // Skip fully transparent tiles
-        // Note: (1,1,1) near-black pixels are kept OPAQUE here — they serve as
-        // black outlines on sprites. Shadow translucency is handled per-layer
-        // in GameMap by setting the shadow layer container alpha.
-        let hasPixels = false;
-        for (let i = 3; i < imageData.data.length; i += 4) {
-            if (imageData.data[i] > 0) {
-                hasPixels = true;
-                break;
+        // Java transparency key: RGB(1,1,1) was palette index 1 (transparent).
+        // Make these pixels transparent to match the Java game's rendering.
+        // This correctly handles: curtain backgrounds, shadow transparent areas,
+        // wall fill tiles (700, 839), and any other transparency-key pixels.
+        // Colored pixels remain fully opaque.
+        let hasVisiblePixels = false;
+        for (let i = 0; i < imageData.data.length; i += 4) {
+            const r = imageData.data[i];
+            const g = imageData.data[i + 1];
+            const b = imageData.data[i + 2];
+            const a = imageData.data[i + 3];
+            if (r <= 2 && g <= 2 && b <= 2 && a > 0) {
+                // Near-black pixel = Java transparency key → transparent
+                imageData.data[i + 3] = 0;
+            } else if (a > 0) {
+                hasVisiblePixels = true;
             }
         }
-        if (!hasPixels) return null;
+        if (!hasVisiblePixels) return null; // All pixels were transparency key
 
         // Create small canvas
         const tileCanvas = document.createElement("canvas");

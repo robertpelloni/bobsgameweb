@@ -163,7 +163,7 @@ export class LegacyMapLoader {
       for (let i = 0; i < dense.length && i < totalTiles; i++) {
         const tileId = dense[i];
         if (tileId === 0) continue;
-        if (layerName === 'ground' && tileId === 1) continue;
+        // Tile 1 is now handled by transparency key in getTileTexture
         const x = i % w;
         const y = Math.floor(i / w);
         mapData.setTileIndex(layerIdx, x, y, tileId);
