@@ -9,7 +9,7 @@
 import { Texture } from "pixi.js";
 
 export class RealTileset {
-    static BUILD_VER = "3.0.7";
+    static BUILD_VER = "3.0.8";
     private atlasCanvas: HTMLCanvasElement | null = null;
     private atlasCtx: CanvasRenderingContext2D | null = null;
     private tileTextureCache: Map<number, Texture> = new Map();
@@ -67,6 +67,14 @@ export class RealTileset {
         }
     }
 
+    /**
+     * Get a tile texture for OBJECT and SHADOW layers.
+     * (1,1,1) transparency-key pixels are REPLACED with true black (0,0,0)
+     * so they render as OPAQUE black — visible as outlines on objects
+     * and as shadow pixels on shadow layers (where the layer container
+     * alpha makes them translucent).
+     * Fully-(1,1,1) tiles (like 839) become all-black and are returned.
+     */
     getTileTexture(tileId: number): Texture | null {
         if (tileId === 0 || !this.atlasCtx) return null;
         // Skip tiles not in the atlas map (no pixel data)
@@ -97,17 +105,27 @@ export class RealTileset {
             this.TILE_SIZE,
         );
 
-        // Skip fully transparent tiles.
-        // (1,1,1) near-black pixels are kept OPAQUE — they serve as
-        // black outlines on objects and black shadow pixels on shadow layers.
-        // Shadow layers use container alpha for translucency.
-        // Overlay layers (groundDetail, aboveDetail) use getOverlayTileTexture
-        // which strips (1,1,1) backgrounds for proper overlay rendering.
+        // Replace (1,1,1) transparency-key pixels with true black (0,0,0).
+        // In the extracted atlas, palette index 1 was saved as RGB(1,1,1).
+        // In the original Java game, index 1 was transparent, BUT the outlines
+        // and shadows that used this palette entry should be visible as black.
+        // Replacing with (0,0,0) ensures they render as opaque black pixels
+        // that won't be confused with any future transparency processing.
         let hasPixels = false;
-        for (let i = 3; i < imageData.data.length; i += 4) {
-            if (imageData.data[i] > 0) {
+        for (let i = 0; i < imageData.data.length; i += 4) {
+            const r = imageData.data[i];
+            const g = imageData.data[i + 1];
+            const b = imageData.data[i + 2];
+            const a = imageData.data[i + 3];
+            if (a > 0) {
                 hasPixels = true;
-                break;
+                if (r <= 2 && g <= 2 && b <= 2) {
+                    // (1,1,1) transparency key → true opaque black
+                    imageData.data[i] = 0;
+                    imageData.data[i + 1] = 0;
+                    imageData.data[i + 2] = 0;
+                    imageData.data[i + 3] = 255;
+                }
             }
         }
         if (!hasPixels) return null;
@@ -127,11 +145,10 @@ export class RealTileset {
     }
 
     /**
-     * Get an overlay-specific tile texture where (1,1,1) pixels are transparent.
-     * Used for groundDetail (floor overlays) and aboveDetail (curtains) layers
-     * where (1,1,1) pixels are background areas that should be see-through,
-     * not opaque black. This matches the Java game's transparency key behavior
-     * for overlay/decoration tiles.
+     * Get a tile texture for OVERLAY layers (groundDetail, aboveDetail).
+     * (1,1,1) transparency-key pixels are made TRANSPARENT — these are
+     * background/filler areas in overlay tiles (curtains, carpet patterns)
+     * that should be see-through. Only the colored foreground pixels remain.
      */
     getOverlayTileTexture(tileId: number): Texture | null {
         if (tileId === 0 || !this.atlasCtx) return null;
@@ -173,8 +190,7 @@ export class RealTileset {
                 hasVisiblePixels = true;
             }
         }
-
-        if (!hasVisiblePixels) return null; // Tile was ALL (1,1,1) — nothing to show
+        if (!hasVisiblePixels) return null; // Tile was ALL (1,1,1)
 
         const tileCanvas = document.createElement("canvas");
         tileCanvas.width = this.TILE_SIZE;
