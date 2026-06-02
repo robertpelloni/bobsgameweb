@@ -9,6 +9,7 @@
 import { Texture } from "pixi.js";
 
 export class RealTileset {
+    static BUILD_VER = "3.0.7";
     private atlasCanvas: HTMLCanvasElement | null = null;
     private atlasCtx: CanvasRenderingContext2D | null = null;
     private tileTextureCache: Map<number, Texture> = new Map();
