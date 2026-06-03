@@ -126,6 +126,7 @@ export class GameMap {
 			this.renderLayerReal(l);
 		}
 		// Set layer-specific alpha for visual quality
+		console.log("[GameMap] renderWithRealTileset complete, BUILD=" + (this.realTileset as any)?.constructor?.BUILD_VER);
 		this.layers[MapData.MAP_GROUND_DETAIL_LAYER].alpha = 1.0; // Floor overlays: carpet, rug patterns
 		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.5; // Translucent shadow (opaque black pixels on semi-transparent layer)
 		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.5; // Translucent shadow (opaque black pixels on semi-transparent layer)
@@ -136,6 +137,7 @@ export class GameMap {
 		this.layers[MapData.MAP_LIGHT_MASK_LAYER].alpha = 0; // Disabled - LightingSystem handles lighting
 		// Map lights (tiles) alpha
 		this.layers[MapData.MAP_LIGHT_LAYER].alpha = 1.0;
+		console.log("[GameMap] POST-ALPHA: groundShadow.alpha=" + this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha + ", objectShadow.alpha=" + this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha + ", spriteShadow.alpha=" + this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha);
 
 		const totalSprites = this.layers.reduce(
 			(sum, l) => sum + l.children.length,
@@ -226,16 +228,14 @@ export class GameMap {
 					sprite.blendMode = "add";
 				}
 
-				// Overlay layers (groundDetail, aboveDetail): use transparency-key textures
-				// where (1,1,1) pixels are transparent. These layers have decorative tiles
-				// (curtains, carpet patterns) where (1,1,1) is background, not outline.
-				if (l === MapData.MAP_GROUND_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
-					const overlayTex = this.realTileset!.getOverlayTileTexture(tileId);
-					if (overlayTex) sprite.texture = overlayTex;
-					else continue;
+				// Shadow layers use overlay textures: (1,1,1) background pixels
+				// are stripped to transparent, leaving only the colored shadow pixels.
+				// Layer alpha (0.5) makes the colored shadow pixels translucent.
+				if (l === MapData.MAP_GROUND_SHADOW_LAYER || l === MapData.MAP_OBJECT_SHADOW_LAYER || l === MapData.MAP_SPRITE_SHADOW_LAYER) {
+					const shadowTex = this.realTileset!.getOverlayTileTexture(tileId);
+					if (shadowTex) sprite.texture = shadowTex;
+					else continue; // All-(1,1,1) shadow tile: nothing to show
 				}
-				// Shadow layers: opaque black pixels on translucent layer containers
-				// Layer alpha controls translucency (0.5 = semi-transparent dark overlay)
 
 				// objects2 needs Y-sorting with entities (furniture, tables)
 				// above/above2 are ALWAYS above entities (rooftops, wall tops, curtains)
@@ -444,10 +444,10 @@ export class GameMap {
 						sprite.blendMode = "add";
 					}
 
-					// Overlay layers: transparency-key textures (1,1,1 = transparent)
-					if (l === MapData.MAP_GROUND_DETAIL_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER) {
-						const overlayTex = this.realTileset!.getOverlayTileTexture(tileId);
-						if (overlayTex) sprite.texture = overlayTex;
+					// Shadow layers use overlay textures: strip (1,1,1) backgrounds
+					if (l === MapData.MAP_GROUND_SHADOW_LAYER || l === MapData.MAP_OBJECT_SHADOW_LAYER || l === MapData.MAP_SPRITE_SHADOW_LAYER) {
+						const shadowTex = this.realTileset!.getOverlayTileTexture(tileId);
+						if (shadowTex) sprite.texture = shadowTex;
 						else continue;
 					}
 					// objects2 needs Y-sorting with entities (furniture, tables)
