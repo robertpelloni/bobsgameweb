@@ -1,3 +1,10 @@
+## v3.0.9 — 2026-05-28
+
+### Added
+- **SFX Library Integration**: Mapped legacy SFX IDs (0-87) to available audio assets in `AudioManager`.
+- **8-Directional Yuu Animations**: Implemented 64-frame animation support for Yuu in `DemoWorld`.
+- **Collision Parity**: Integrated `hitBoxFromTop` logic for accurate entity depth-sorting and collisions.
+
 ## v3.0.8 — 2026-05-25
 
 ### Changed

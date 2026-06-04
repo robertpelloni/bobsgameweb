@@ -1144,7 +1144,7 @@ export class WorldScene extends Scene {
     // Show version in corner
     if (!this.versionText && this.hudContainer) {
       const style = new TextStyle({ fill: '#888888', fontSize: 10 });
-      this.versionText = new Text({ text: 'v3.3.5', style });
+      this.versionText = new Text({ text: `v${APP_VERSION}`, style });
       this.versionText.position.set(4, this.height - 16);
       this.container.addChild(this.versionText);
     }
