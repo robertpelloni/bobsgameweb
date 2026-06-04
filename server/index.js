@@ -17,7 +17,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const SERVER_VERSION = "3.0.8";
+const SERVER_VERSION = "3.0.9";
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = parseInt(process.env.PORT || "6065", 10);
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
