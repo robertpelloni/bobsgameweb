@@ -5,3 +5,5 @@
 - [x] Finalize dialogue integration with scripting tags.
 - [ ] Optimize Tracker playback or pre-convert to OGG.
 - [ ] Implement `YuuEntity` class to centralize player logic and animations.
+- [ ] Implement system path configuration for external tool launching (Aseprite, Tilemap Studio) in `CustomGameEditor.ts`.
+- [ ] Evaluate `bobui` C++ integration with `cpp_port/` as the engine matures.
