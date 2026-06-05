@@ -348,6 +348,9 @@ const rooms = new Map();
 /** Connected players keyed by socket.id */
 const players = new Map();
 
+/** Active tournaments keyed by tournamentId */
+const tournaments = new Map();
+
 // ============================================================
 // Connection Handler
 // ============================================================
@@ -1104,7 +1107,7 @@ io.on("connection", (socket) => {
 	// Tournament Orchestration
 	// ----------------------------------------------------------
 
-	const tournaments = new Map();
+	// (tournaments Map moved to top-level scope)
 
 	// ----------------------------------------------------------
 	// Tournament Brackets (Enhanced)
