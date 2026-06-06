@@ -160,6 +160,7 @@ export class LegacyMapLoader {
       const layerIdx = LAYER_MAP[layerName];
       if (layerIdx === undefined) continue;
       const dense = LegacyMapLoader.expandLayer(layerData, totalTiles);
+      let shadowNonZero = 0;
       for (let i = 0; i < dense.length && i < totalTiles; i++) {
         const tileId = dense[i];
         if (tileId === 0) continue;
@@ -167,6 +168,14 @@ export class LegacyMapLoader {
         const x = i % w;
         const y = Math.floor(i / w);
         mapData.setTileIndex(layerIdx, x, y, tileId);
+        if (layerIdx === MapData.MAP_GROUND_SHADOW_LAYER ||
+                    layerIdx === MapData.MAP_OBJECT_SHADOW_LAYER ||
+                    layerIdx === MapData.MAP_SPRITE_SHADOW_LAYER) {
+                shadowNonZero++;
+        }
+      }
+      if (shadowNonZero > 0) {
+        console.log(`[LegacyMapLoader] ${legacy.name} ${layerName}(L${layerIdx}): ${shadowNonZero} shadow tiles loaded`);
       }
     }
 
