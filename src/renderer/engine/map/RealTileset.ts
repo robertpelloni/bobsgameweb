@@ -1,112 +1,255 @@
 /**
  * RealTileset — Loads the actual binary-extracted tileset atlas.
- * The atlas is laid out at NATIVE tile ID positions:
- * col = tileId % 256, row = tileId / 256
- * The tileset_atlas_map.json records which tile IDs have data
- * (sparse — only 8,128 out of 83,392 possible tiles exist).
- * Uses canvas-based tile extraction to avoid UV batching issues.
+ *
+ * Three atlases:
+ * - REAL atlas: full color, RGB(1,1,1) = opaque near-black outlines.
+ *   Used for ALL non-shadow layers.
+ * - SHADOW-BLACK atlas: same tile shapes but ALL non-transparent pixels
+ *   are solid black (0,0,0,255). Used for groundShadow (L2) and
+ *   objectShadow (L5) — rendered translucent for shadow effect.
+ * - SHADOW atlas (legacy): RGB(1,1,1) replaced with transparency.
+ *   Kept for compatibility but not currently used by GameMap.
  */
-import { Texture } from 'pixi.js';
+
+import { Texture, Assets, Rectangle } from "pixi.js";
 
 export class RealTileset {
-  private atlasCanvas: HTMLCanvasElement | null = null;
-  private atlasCtx: CanvasRenderingContext2D | null = null;
-  private tileTextureCache: Map<number, Texture> = new Map();
-  private validTileIds: Set<number> = new Set();
-  private readonly COLS = 256;
-  private readonly TILE_SIZE = 8;
-  private _loaded: boolean = false;
+	static BUILD_VER = "3.6.1";
+	private atlasTexture: Texture | null = null;
+	private shadowBlackAtlasTexture: Texture | null = null;
+	private shadowAtlasTexture: Texture | null = null;
+	private tileTextureCache: Map<number, Texture> = new Map();
+	private shadowBlackTileTextureCache: Map<number, Texture> = new Map();
+	private shadowTileTextureCache: Map<number, Texture> = new Map();
+	private validTileIds: Set<number> = new Set();
+	private readonly COLS = 256;
+	private readonly TILE_SIZE = 8;
+	private _loaded: boolean = false;
 
-  get loaded(): boolean { return this._loaded; }
+	get loaded(): boolean {
+		return this._loaded;
+	}
 
-  async load(): Promise<void> {
-    try {
-      // Load atlas map to know which tile IDs actually have data
-      const mapResp = await fetch('/tileset_atlas_map.json');
-      if (mapResp.ok) {
-        const atlasMap = await mapResp.json();
-        for (const tid of atlasMap.tileIds) {
-          this.validTileIds.add(tid);
-        }
-        console.log(`[RealTileset] Atlas map: ${this.validTileIds.size} valid tile IDs`);
-      } else {
-        console.warn('[RealTileset] Could not load atlas map — all tileIds assumed valid');
-      }
+	/** Cache-busting query param to avoid stale browser cache */
+	private get cacheBust(): string {
+		return `?v=${RealTileset.BUILD_VER}`;
+	}
 
-      // Load atlas as Image
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      await new Promise<void>((resolve, reject) => {
-        img.onload = () => resolve();
-        img.onerror = reject;
-        img.src = '/tileset_atlas_real.png';
-      });
+	/** Fetch with retry to handle transient cache errors */
+	private async fetchWithRetry(url: string, retries = 2): Promise<Response> {
+		for (let attempt = 0; attempt <= retries; attempt++) {
+			try {
+				const resp = await fetch(url);
+				if (resp.ok) return resp;
+				if (attempt < retries) {
+					console.warn(
+						`[RealTileset] Fetch ${url} returned ${resp.status}, retrying...`,
+					);
+					await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+					continue;
+				}
+				return resp;
+			} catch (e) {
+				if (attempt < retries) {
+					console.warn(
+						`[RealTileset] Fetch ${url} failed (attempt ${attempt + 1}):`,
+						e,
+					);
+					await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+					continue;
+				}
+				throw e;
+			}
+		}
+		throw new Error(`Fetch failed after ${retries + 1} attempts: ${url}`);
+	}
 
-      // Draw to canvas for pixel extraction
-      this.atlasCanvas = document.createElement('canvas');
-      this.atlasCanvas.width = img.width;
-      this.atlasCanvas.height = img.height;
-      this.atlasCtx = this.atlasCanvas.getContext('2d', { willReadFrequently: true })!;
-      this.atlasCtx.drawImage(img, 0, 0);
-      this._loaded = true;
-      console.log(`[RealTileset] Loaded atlas: ${img.width}x${img.height}, layout: native tileId positions`);
-    } catch (e) {
-      console.warn('[RealTileset] Failed to load atlas:', e);
-    }
-  }
+	async load(): Promise<void> {
+		try {
+			// Load atlas map (tile ID validation) with cache-bust
+			const mapResp = await this.fetchWithRetry(
+				`/tileset_atlas_map.json${this.cacheBust}`,
+			);
+			if (mapResp.ok) {
+				const atlasMap = await mapResp.json();
+				for (const tid of atlasMap.tileIds) {
+					this.validTileIds.add(tid);
+				}
+				console.log(
+					`[RealTileset] Atlas map: ${this.validTileIds.size} valid tile IDs`,
+				);
+			} else {
+				console.warn(
+					"[RealTileset] Could not load atlas map — all tileIds assumed valid",
+				);
+			}
 
-  getTileTexture(tileId: number): Texture | null {
-    if (tileId === 0 || !this.atlasCtx) return null;
-    // Skip tiles not in the atlas map (no pixel data)
-    if (this.validTileIds.size > 0 && !this.validTileIds.has(tileId)) return null;
-    if (this.tileTextureCache.has(tileId)) return this.tileTextureCache.get(tileId)!;
+			// Load real atlas with cache-bust
+			this.atlasTexture = await Assets.load(
+				`/tileset_atlas_real.png${this.cacheBust}`,
+			);
+			this.atlasTexture!.source.scaleMode = "nearest";
+			if (this.atlasTexture!.source.style) {
+				this.atlasTexture!.source.style.addressMode = "clamp-to-edge";
+			}
 
-    // Native layout: col = tileId % 256, row = tileId / 256
-    const col = tileId % this.COLS;
-    const row = Math.floor(tileId / this.COLS);
+			// Load shadow-black atlas (solid black silhouettes for shadow layers)
+			try {
+				this.shadowBlackAtlasTexture = await Assets.load(
+					`/tileset_atlas_shadow_black.png${this.cacheBust}`,
+				);
+				this.shadowBlackAtlasTexture!.source.scaleMode = "nearest";
+				if (this.shadowBlackAtlasTexture!.source.style) {
+					this.shadowBlackAtlasTexture!.source.style.addressMode =
+						"clamp-to-edge";
+				}
+				console.log(
+					`[RealTileset] Shadow-black atlas loaded: ${this.shadowBlackAtlasTexture!.width}x${this.shadowBlackAtlasTexture!.height}`,
+				);
+			} catch (e) {
+				console.warn("[RealTileset] Shadow-black atlas failed to load:", e);
+			}
 
-    const x = col * this.TILE_SIZE;
-    const y = row * this.TILE_SIZE;
+			// Load shadow atlas (RGB 1,1,1 = transparent, for overlay layers)
+			try {
+				this.shadowAtlasTexture = await Assets.load(
+					`/tileset_atlas_shadow.png${this.cacheBust}`,
+				);
+				this.shadowAtlasTexture!.source.scaleMode = "nearest";
+				if (this.shadowAtlasTexture!.source.style) {
+					this.shadowAtlasTexture!.source.style.addressMode = "clamp-to-edge";
+				}
+				console.log(
+					`[RealTileset] Shadow atlas loaded: ${this.shadowAtlasTexture!.width}x${this.shadowAtlasTexture!.height}`,
+				);
+			} catch (e) {
+				console.warn("[RealTileset] Shadow atlas failed to load:", e);
+			}
 
-    // Check bounds
-    if (x + this.TILE_SIZE > (this.atlasCanvas?.width ?? 0) ||
-        y + this.TILE_SIZE > (this.atlasCanvas?.height ?? 0)) {
-      return null;
-    }
+			this._loaded = true;
+			console.log(
+				`[RealTileset] Loaded atlas: ${this.atlasTexture!.width}x${this.atlasTexture!.height}, shadowBlack=${this.shadowBlackAtlasTexture ? "yes" : "no"}, shadow=${this.shadowAtlasTexture ? "yes" : "no"}, BUILD ${RealTileset.BUILD_VER}`,
+			);
+		} catch (e) {
+			console.warn("[RealTileset] Failed to load atlas:", e);
+		}
+	}
 
-    // Extract 8x8 pixels
-    const imageData = this.atlasCtx.getImageData(x, y, this.TILE_SIZE, this.TILE_SIZE);
+	/**
+	 * Get a tile texture from the REAL atlas (full color).
+	 * Used for ground, objects, objects2, above, spriteShadow, etc.
+	 */
+	getTileTexture(tileId: number): Texture | null {
+		if (tileId === 0 || !this.atlasTexture) return null;
+		if (this.validTileIds.size > 0 && !this.validTileIds.has(tileId))
+			return null;
 
-    // Skip fully transparent tiles
-    let hasPixels = false;
-    for (let i = 3; i < imageData.data.length; i += 4) {
-      if (imageData.data[i] > 0) { hasPixels = true; break; }
-    }
-    if (!hasPixels) return null;
+		if (this.tileTextureCache.has(tileId))
+			return this.tileTextureCache.get(tileId)!;
 
-    // Create small canvas
-    const tileCanvas = document.createElement('canvas');
-    tileCanvas.width = this.TILE_SIZE;
-    tileCanvas.height = this.TILE_SIZE;
-    const ctx = tileCanvas.getContext('2d')!;
-    ctx.putImageData(imageData, 0, 0);
+		const col = tileId % this.COLS;
+		const row = Math.floor(tileId / this.COLS);
+		const x = col * this.TILE_SIZE;
+		const y = row * this.TILE_SIZE;
 
-    // Create texture
-    const tex = Texture.from(tileCanvas);
-    (tex.source as any).scaleMode = 'nearest';
-    this.tileTextureCache.set(tileId, tex);
-    return tex;
-  }
+		if (
+			x + this.TILE_SIZE > this.atlasTexture!.width ||
+			y + this.TILE_SIZE > this.atlasTexture!.height
+		) {
+			return null;
+		}
 
-  hasTile(tileId: number): boolean {
-    return tileId > 0 && this.validTileIds.has(tileId) && !!this.atlasCanvas;
-  }
+		const tex = new Texture({
+			source: this.atlasTexture!.source,
+			frame: new Rectangle(x, y, this.TILE_SIZE, this.TILE_SIZE),
+		});
+		this.tileTextureCache.set(tileId, tex);
+		return tex;
+	}
 
-  destroy(): void {
-    for (const t of this.tileTextureCache.values()) t.destroy(true);
-    this.tileTextureCache.clear();
-    this.atlasCanvas = null;
-    this.atlasCtx = null;
-    this._loaded = false;
-  }
+	/**
+	 * Get a tile texture from the SHADOW-BLACK atlas.
+	 * All non-transparent pixels are solid black (0,0,0,255).
+	 * Used for groundShadow (L2) and objectShadow (L5).
+	 * Falls back to getTileTexture if atlas unavailable.
+	 */
+	getShadowBlackTileTexture(tileId: number): Texture | null {
+		if (tileId === 0) return null;
+		if (this.validTileIds.size > 0 && !this.validTileIds.has(tileId))
+			return null;
+		if (!this.shadowBlackAtlasTexture) return this.getTileTexture(tileId);
+
+		if (this.shadowBlackTileTextureCache.has(tileId))
+			return this.shadowBlackTileTextureCache.get(tileId)!;
+
+		const col = tileId % this.COLS;
+		const row = Math.floor(tileId / this.COLS);
+		const x = col * this.TILE_SIZE;
+		const y = row * this.TILE_SIZE;
+
+		if (
+			x + this.TILE_SIZE > this.shadowBlackAtlasTexture!.width ||
+			y + this.TILE_SIZE > this.shadowBlackAtlasTexture!.height
+		) {
+			return this.getTileTexture(tileId);
+		}
+
+		const tex = new Texture({
+			source: this.shadowBlackAtlasTexture!.source,
+			frame: new Rectangle(x, y, this.TILE_SIZE, this.TILE_SIZE),
+		});
+		this.shadowBlackTileTextureCache.set(tileId, tex);
+		return tex;
+	}
+
+	/**
+	 * Get a tile texture from the SHADOW atlas where RGB(1,1,1) = transparent.
+	 * Used for overlay layers (spriteShadow L8, objects2 L4).
+	 * Falls back to getTileTexture if atlas unavailable.
+	 */
+	getShadowTileTexture(tileId: number): Texture | null {
+		if (tileId === 0) return null;
+		if (this.validTileIds.size > 0 && !this.validTileIds.has(tileId))
+			return null;
+		if (!this.shadowAtlasTexture) return this.getTileTexture(tileId);
+
+		if (this.shadowTileTextureCache.has(tileId))
+			return this.shadowTileTextureCache.get(tileId)!;
+
+		const col = tileId % this.COLS;
+		const row = Math.floor(tileId / this.COLS);
+		const x = col * this.TILE_SIZE;
+		const y = row * this.TILE_SIZE;
+
+		if (
+			x + this.TILE_SIZE > this.shadowAtlasTexture!.width ||
+			y + this.TILE_SIZE > this.shadowAtlasTexture!.height
+		) {
+			return this.getTileTexture(tileId);
+		}
+
+		const tex = new Texture({
+			source: this.shadowAtlasTexture!.source,
+			frame: new Rectangle(x, y, this.TILE_SIZE, this.TILE_SIZE),
+		});
+		this.shadowTileTextureCache.set(tileId, tex);
+		return tex;
+	}
+
+	hasTile(tileId: number): boolean {
+		return tileId > 0 && this.validTileIds.has(tileId) && !!this.atlasTexture;
+	}
+
+	destroy(): void {
+		for (const t of this.tileTextureCache.values()) t.destroy(true);
+		this.tileTextureCache.clear();
+		for (const t of this.shadowBlackTileTextureCache.values()) t.destroy(true);
+		this.shadowBlackTileTextureCache.clear();
+		for (const t of this.shadowTileTextureCache.values()) t.destroy(true);
+		this.shadowTileTextureCache.clear();
+		this.atlasTexture = null;
+		this.shadowBlackAtlasTexture = null;
+		this.shadowAtlasTexture = null;
+		this._loaded = false;
+	}
 }

@@ -1,7 +1,7 @@
 import { AssetData } from './AssetData';
-import { MapStateData } from './MapStateData';
-import { EventData } from './EventData';
-import { DoorData } from './DoorData';
+import type { MapStateData } from './MapStateData';
+import type { EventData } from './EventData';
+import type { DoorData } from './DoorData';
 
 export enum RenderOrder {
     GROUND,
@@ -34,6 +34,26 @@ export class MapData extends AssetData {
     public static readonly MAP_SHADER_LAYER = 16;
 
     public static readonly layers = 17;
+
+  public static readonly LAYER_NAMES: Record<number, string> = {
+    [MapData.MAP_GROUND_LAYER]: 'ground',
+    [MapData.MAP_GROUND_DETAIL_LAYER]: 'groundDetail',
+    [MapData.MAP_GROUND_SHADOW_LAYER]: 'groundShadow',
+    [MapData.MAP_OBJECT_LAYER]: 'objects',
+    [MapData.MAP_OBJECT_DETAIL_LAYER]: 'objects2',
+    [MapData.MAP_OBJECT_SHADOW_LAYER]: 'objectShadow',
+    [MapData.MAP_ABOVE_LAYER]: 'above',
+    [MapData.MAP_ABOVE_DETAIL_LAYER]: 'above2',
+    [MapData.MAP_SPRITE_SHADOW_LAYER]: 'spriteShadow',
+    [MapData.MAP_HIT_LAYER]: 'hitBounds',
+    [MapData.MAP_LIGHT_MASK_LAYER]: 'lightMask',
+    [MapData.MAP_CAMERA_BOUNDS_LAYER]: 'cameraBounds',
+    [MapData.MAP_ENTITY_LAYER]: 'entity',
+    [MapData.MAP_LIGHT_LAYER]: 'light',
+    [MapData.MAP_AREA_LAYER]: 'area',
+    [MapData.MAP_DOOR_LAYER]: 'door',
+    [MapData.MAP_SHADER_LAYER]: 'shader',
+  };
 
     public static readonly WALL_IDS = new Set([
         839, 8280, // Solid black walls
