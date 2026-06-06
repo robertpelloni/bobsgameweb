@@ -62,7 +62,7 @@ export class GameMap {
 		const Z_MAP: Record<number, number> = {
 			[MapData.MAP_GROUND_LAYER]: 0,
 			[MapData.MAP_GROUND_DETAIL_LAYER]: 1,
-			[MapData.MAP_SPRITE_SHADOW_LAYER]: 1.5,
+			[MapData.MAP_SPRITE_SHADOW_LAYER]: 102,
 			[MapData.MAP_GROUND_SHADOW_LAYER]: 2,
 			[MapData.MAP_OBJECT_LAYER]: 3,
 			// objects2 in objectDetailContainer at z=3.5
