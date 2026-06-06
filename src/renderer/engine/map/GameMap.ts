@@ -16,12 +16,15 @@ export interface CameraBounds {
  * Layer rendering rules:
  *
  * SHADOW layers (L2 groundShadow, L5 objectShadow):
- *   - Use shadow-black atlas: same tile shapes but RGB(1,1,1) → solid black.
- *   - Rendered TRANSLUCENT (container alpha 0.5 / 0.75).
- *   - Result: translucent black silhouettes.
+ *   Use shadow-black atlas (solid black silhouettes).
+ *   Rendered TRANSLUCENT (container alpha 0.5 / 0.75).
  *
- * ALL OTHER layers (ground, objects, objects2, spriteShadow, above, etc.):
- *   - Use real atlas. Opaque. Never strip outlines.
+ * objects2 (L4):
+ *   Rendered in objectDetailContainer ABOVE objects layer.
+ *   Uses real atlas. NOT Y-sorted (all objects2 tiles render above all objects).
+ *
+ * ALL OTHER layers:
+ *   Real atlas. Opaque.
  */
 
 export class GameMap {
@@ -53,6 +56,9 @@ export class GameMap {
 
 		this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
 
+		// Z-order: ground(0) < groundDetail(1) < spriteShadow(1.5) < groundShadow(2)
+		// < objects(3) < objects2(3.5) < objectShadow(4) < entities(50)
+		// < above(100) < aboveDetail(101)
 		const Z_MAP: Record<number, number> = {
 			[MapData.MAP_GROUND_LAYER]: 0,
 			[MapData.MAP_GROUND_DETAIL_LAYER]: 1,
@@ -79,14 +85,16 @@ export class GameMap {
 			this.container.addChild(layer);
 		}
 
-		// objects2: ABOVE objects so overlay tiles draw on top of furniture
+		// objects2 container: z=3.5, ABOVE objects (z=3) so curtains/overlays
+		// always render on top of furniture. No Y-sorting needed - all objects2
+		// tiles should be above all objects tiles regardless of Y position.
 		this.objectDetailContainer = new Container();
-		this.objectDetailContainer.sortableChildren = true;
+		this.objectDetailContainer.sortableChildren = false;
 		this.objectDetailContainer.cullable = false;
 		this.objectDetailContainer.zIndex = 3.5;
 		this.container.addChild(this.objectDetailContainer);
 
-		// Entity container: Y-sorted sprites above objectShadow
+		// Entity container: Y-sorted sprites
 		this.entitySpriteContainer = new Container();
 		this.entitySpriteContainer.sortableChildren = true;
 		this.entitySpriteContainer.cullable = false;
@@ -134,7 +142,7 @@ export class GameMap {
 			this.renderLayerReal(l);
 		}
 
-		// Shadow layers: translucent
+		// Shadow layers: translucent black silhouettes
 		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.5;
 		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.75;
 
@@ -150,7 +158,7 @@ export class GameMap {
 		this.container.sortChildren();
 	}
 
-	/** Shadow layers use shadow-black atlas; all others use real atlas */
+	/** Shadow layers → shadow-black atlas; all others → real atlas */
 	private isShadowLayer(l: number): boolean {
 		return (
 			l === MapData.MAP_GROUND_SHADOW_LAYER ||
@@ -158,7 +166,6 @@ export class GameMap {
 		);
 	}
 
-	/** Pick correct atlas texture for a layer */
 	private getTextureForLayer(l: number, tileId: number): Texture | null {
 		if (this.isShadowLayer(l)) {
 			return this.realTileset!.getShadowBlackTileTexture(tileId);
@@ -222,8 +229,12 @@ export class GameMap {
 				}
 
 				const sprite = new Sprite(texture);
+				// Round to integer pixel positions to prevent sub-pixel grid gaps
 				sprite.x = x * 8;
 				sprite.y = y * 8;
+				// Ensure no fractional positioning from rounding errors
+				sprite.x = Math.round(sprite.x);
+				sprite.y = Math.round(sprite.y);
 
 				if (l === MapData.MAP_LIGHT_MASK_LAYER) {
 					sprite.tint = 0x000000;
@@ -232,9 +243,8 @@ export class GameMap {
 					sprite.blendMode = "add";
 				}
 
-				// objects2 → objectDetailContainer (z=3.5, above objects)
+				// objects2 → objectDetailContainer (z=3.5, above ALL objects)
 				if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
-					sprite.zIndex = sprite.y;
 					(sprite as any)._isTileSprite = true;
 					this.objectDetailContainer.addChild(sprite);
 					spriteCount++;
@@ -389,14 +399,13 @@ export class GameMap {
 					if (!texture) continue;
 
 					const sprite = new Sprite(texture);
-					sprite.x = x * 8;
-					sprite.y = y * 8;
+					sprite.x = Math.round(x * 8);
+					sprite.y = Math.round(y * 8);
 
 					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
 					if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";
 
 					if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
-						sprite.zIndex = sprite.y;
 						(sprite as any)._isTileSprite = true;
 						this.objectDetailContainer.addChild(sprite);
 					} else {
