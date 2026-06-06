@@ -1,0 +1,3567 @@
+{
+  "success": true,
+  "issues": [
+    {
+      "type": "file",
+      "name": "generate_placeholder_maps.js",
+      "file": "generate_placeholder_maps.js"
+    },
+    {
+      "type": "file",
+      "name": "scripts/build-mobile.cjs",
+      "file": "scripts/build-mobile.cjs"
+    },
+    {
+      "type": "file",
+      "name": "scripts/convert_maps.js",
+      "file": "scripts/convert_maps.js"
+    },
+    {
+      "type": "file",
+      "name": "scripts/generate-audio.cjs",
+      "file": "scripts/generate-audio.cjs"
+    },
+    {
+      "type": "file",
+      "name": "scripts/generate-dummy-assets.cjs",
+      "file": "scripts/generate-dummy-assets.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
+    },
+    {
+      "type": "file",
+      "name": "src/main/index.ts",
+      "file": "src/main/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/main/preload.ts",
+      "file": "src/main/preload.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/AutoTiler.ts",
+      "file": "src/shared/AutoTiler.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/DefaultStrings.ts",
+      "file": "src/shared/DefaultStrings.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/index.ts",
+      "file": "src/shared/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/MapDataRegistry.ts",
+      "file": "src/shared/MapDataRegistry.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/platform.ts",
+      "file": "src/shared/platform.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/validation.ts",
+      "file": "src/shared/validation.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/achievement-quest.test.ts",
+      "file": "src/__tests__/achievement-quest.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/arena-cutscene.test.ts",
+      "file": "src/__tests__/arena-cutscene.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/bestiary-world.test.ts",
+      "file": "src/__tests__/bestiary-world.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/e2e-flow.test.ts",
+      "file": "src/__tests__/e2e-flow.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/enchant-rep.test.ts",
+      "file": "src/__tests__/enchant-rep.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/event-system.test.ts",
+      "file": "src/__tests__/event-system.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/fishing-guild.test.ts",
+      "file": "src/__tests__/fishing-guild.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/legacy-import.test.ts",
+      "file": "src/__tests__/legacy-import.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/loot-table.test.ts",
+      "file": "src/__tests__/loot-table.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/map-data.test.ts",
+      "file": "src/__tests__/map-data.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/networking.test.ts",
+      "file": "src/__tests__/networking.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/pet-bossrush.test.ts",
+      "file": "src/__tests__/pet-bossrush.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/puzzle-logic.test.ts",
+      "file": "src/__tests__/puzzle-logic.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-advanced.test.ts",
+      "file": "src/__tests__/rpg-advanced.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-expansion.test.ts",
+      "file": "src/__tests__/rpg-expansion.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-mechanics.test.ts",
+      "file": "src/__tests__/rpg-mechanics.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-meta.test.ts",
+      "file": "src/__tests__/rpg-meta.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-professions.test.ts",
+      "file": "src/__tests__/rpg-professions.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-social.test.ts",
+      "file": "src/__tests__/rpg-social.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-systems.test.ts",
+      "file": "src/__tests__/rpg-systems.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-v3.test.ts",
+      "file": "src/__tests__/rpg-v3.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-world.test.ts",
+      "file": "src/__tests__/rpg-world.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/status-effects.test.ts",
+      "file": "src/__tests__/status-effects.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/tileset.test.ts",
+      "file": "src/__tests__/tileset.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/trade-daynight.test.ts",
+      "file": "src/__tests__/trade-daynight.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/tutorial-leaderboard.test.ts",
+      "file": "src/__tests__/tutorial-leaderboard.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/validation.test.ts",
+      "file": "src/__tests__/validation.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/visual-systems.test.ts",
+      "file": "src/__tests__/visual-systems.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/weather.test.ts",
+      "file": "src/__tests__/weather.test.ts"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-check-update.js",
+      "file": ".pi/gsd/hooks/gsd-check-update.js"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-context-monitor.js",
+      "file": ".pi/gsd/hooks/gsd-context-monitor.js"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-prompt-guard.js",
+      "file": ".pi/gsd/hooks/gsd-prompt-guard.js"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-statusline.js",
+      "file": ".pi/gsd/hooks/gsd-statusline.js"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-workflow-guard.js",
+      "file": ".pi/gsd/hooks/gsd-workflow-guard.js"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/assets/AssetLoader.ts",
+      "file": "src/renderer/assets/AssetLoader.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/assets/index.ts",
+      "file": "src/renderer/assets/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/audio/index.ts",
+      "file": "src/renderer/audio/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/GameWorker.ts",
+      "file": "src/renderer/engine/GameWorker.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/entity/index.ts",
+      "file": "src/renderer/entity/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/index.ts",
+      "file": "src/renderer/graphics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/Sprite.ts",
+      "file": "src/renderer/graphics/Sprite.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/SpriteSheet.ts",
+      "file": "src/renderer/graphics/SpriteSheet.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/Texture.ts",
+      "file": "src/renderer/graphics/Texture.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/TextureCache.ts",
+      "file": "src/renderer/graphics/TextureCache.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/MapEditor.ts",
+      "file": "src/renderer/editor/MapEditor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/input/index.ts",
+      "file": "src/renderer/input/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/AchievementPopup.ts",
+      "file": "src/renderer/ui/AchievementPopup.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/ComboCounter.ts",
+      "file": "src/renderer/ui/ComboCounter.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/index.ts",
+      "file": "src/renderer/ui/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/Label.ts",
+      "file": "src/renderer/ui/Label.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/MenuGamepadNavigator.ts",
+      "file": "src/renderer/ui/MenuGamepadNavigator.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/NotificationStack.ts",
+      "file": "src/renderer/ui/NotificationStack.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/OnlineNotificationManager.ts",
+      "file": "src/renderer/ui/OnlineNotificationManager.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/Panel.ts",
+      "file": "src/renderer/ui/Panel.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/Tooltip.ts",
+      "file": "src/renderer/ui/Tooltip.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/scenes/index.ts",
+      "file": "src/renderer/scenes/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/scenes/TournamentResultsScene.ts",
+      "file": "src/renderer/scenes/TournamentResultsScene.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/audio/visualizer/ProjectM.ts",
+      "file": "src/renderer/audio/visualizer/ProjectM.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/audio/AudioManager.ts",
+      "file": "src/renderer/engine/audio/AudioManager.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/audio/index.ts",
+      "file": "src/renderer/engine/audio/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/audio/OggDecoder.ts",
+      "file": "src/renderer/engine/audio/OggDecoder.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/audio/WaveData.ts",
+      "file": "src/renderer/engine/audio/WaveData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/GlowTileBackground.ts",
+      "file": "src/renderer/engine/cinematics/GlowTileBackground.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/index.ts",
+      "file": "src/renderer/engine/cinematics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/TitleIntroAnimation.ts",
+      "file": "src/renderer/engine/cinematics/TitleIntroAnimation.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/core/MessageBatcher.ts",
+      "file": "src/renderer/engine/core/MessageBatcher.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/core/ObjectPool.ts",
+      "file": "src/renderer/engine/core/ObjectPool.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/debug/index.ts",
+      "file": "src/renderer/engine/debug/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/BobSprite.ts",
+      "file": "src/renderer/engine/entity/BobSprite.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/index.ts",
+      "file": "src/renderer/engine/entity/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/RandomCharacter.ts",
+      "file": "src/renderer/engine/entity/RandomCharacter.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/ScreenSprite.ts",
+      "file": "src/renderer/engine/entity/ScreenSprite.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/Sprite.ts",
+      "file": "src/renderer/engine/entity/Sprite.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/SpriteAnimation.ts",
+      "file": "src/renderer/engine/entity/SpriteAnimation.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/event/EventScript.ts",
+      "file": "src/renderer/engine/event/EventScript.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/DayNightCycle.ts",
+      "file": "src/renderer/engine/graphics/DayNightCycle.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/FogOfWarMinimap.ts",
+      "file": "src/renderer/engine/graphics/FogOfWarMinimap.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/index.ts",
+      "file": "src/renderer/engine/graphics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/MapTransition.ts",
+      "file": "src/renderer/engine/graphics/MapTransition.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/ScreenEffects.ts",
+      "file": "src/renderer/engine/graphics/ScreenEffects.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/WorldMinimap.ts",
+      "file": "src/renderer/engine/graphics/WorldMinimap.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/AsepriteParser.ts",
+      "file": "src/renderer/engine/map/AsepriteParser.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/AutoTiler.ts",
+      "file": "src/renderer/engine/map/AutoTiler.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/CanvasTileRenderer.ts",
+      "file": "src/renderer/engine/map/CanvasTileRenderer.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/DoorGraph.ts",
+      "file": "src/renderer/engine/map/DoorGraph.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/EntityData.ts",
+      "file": "src/renderer/engine/map/EntityData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/index.ts",
+      "file": "src/renderer/engine/map/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/MapData.ts",
+      "file": "src/renderer/engine/map/MapData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/MapStateData.ts",
+      "file": "src/renderer/engine/map/MapStateData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/index.ts",
+      "file": "src/renderer/engine/nd/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/NDMenu.ts",
+      "file": "src/renderer/engine/nd/NDMenu.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/Ping.ts",
+      "file": "src/renderer/engine/nd/Ping.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/Ramio.ts",
+      "file": "src/renderer/engine/nd/Ramio.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/SnakeGame.ts",
+      "file": "src/renderer/engine/nd/SnakeGame.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/Wheel.ts",
+      "file": "src/renderer/engine/nd/Wheel.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/WheelItem.ts",
+      "file": "src/renderer/engine/nd/WheelItem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/GameClientTCP.ts",
+      "file": "src/renderer/engine/network/GameClientTCP.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/index.ts",
+      "file": "src/renderer/engine/network/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/OKNet.ts",
+      "file": "src/renderer/engine/network/OKNet.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/PeerConnection.ts",
+      "file": "src/renderer/engine/network/PeerConnection.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/ServerConnection.ts",
+      "file": "src/renderer/engine/network/ServerConnection.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/input/index.ts",
+      "file": "src/renderer/engine/input/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/Block.ts",
+      "file": "src/renderer/engine/puzzle/Block.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/FrameState.ts",
+      "file": "src/renderer/engine/puzzle/FrameState.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/index.ts",
+      "file": "src/renderer/engine/puzzle/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/Piece.ts",
+      "file": "src/renderer/engine/puzzle/Piece.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/PuzzleRenderer.ts",
+      "file": "src/renderer/engine/puzzle/PuzzleRenderer.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/physics/index.ts",
+      "file": "src/renderer/engine/physics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/physics/Physics.ts",
+      "file": "src/renderer/engine/physics/Physics.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/AchievementEngine.ts",
+      "file": "src/renderer/engine/rpg/AchievementEngine.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/ActionManager.ts",
+      "file": "src/renderer/engine/rpg/ActionManager.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/AlchemySystem.ts",
+      "file": "src/renderer/engine/rpg/AlchemySystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/ArtifactSystem.ts",
+      "file": "src/renderer/engine/rpg/ArtifactSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/AuctionHouseSystem.ts",
+      "file": "src/renderer/engine/rpg/AuctionHouseSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/BountySystem.ts",
+      "file": "src/renderer/engine/rpg/BountySystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/CapeSystem.ts",
+      "file": "src/renderer/engine/rpg/CapeSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/CardGameSystem.ts",
+      "file": "src/renderer/engine/rpg/CardGameSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/CookingSystem.ts",
+      "file": "src/renderer/engine/rpg/CookingSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/CutsceneEngine.ts",
+      "file": "src/renderer/engine/rpg/CutsceneEngine.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/DayNightCycle.ts",
+      "file": "src/renderer/engine/rpg/DayNightCycle.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/DungeonSystem.ts",
+      "file": "src/renderer/engine/rpg/DungeonSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/EnchantmentSystem.ts",
+      "file": "src/renderer/engine/rpg/EnchantmentSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/FactionWarSystem.ts",
+      "file": "src/renderer/engine/rpg/FactionWarSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/FarmingSystem.ts",
+      "file": "src/renderer/engine/rpg/FarmingSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/GuildSystem.ts",
+      "file": "src/renderer/engine/rpg/GuildSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/HousingSystem.ts",
+      "file": "src/renderer/engine/rpg/HousingSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/index.ts",
+      "file": "src/renderer/engine/rpg/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/JobSystem.ts",
+      "file": "src/renderer/engine/rpg/JobSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/LootTable.ts",
+      "file": "src/renderer/engine/rpg/LootTable.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/MarriageSystem.ts",
+      "file": "src/renderer/engine/rpg/MarriageSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/MiningSystem.ts",
+      "file": "src/renderer/engine/rpg/MiningSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/MountCombatSystem.ts",
+      "file": "src/renderer/engine/rpg/MountCombatSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/MountSystem.ts",
+      "file": "src/renderer/engine/rpg/MountSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/NavalSystem.ts",
+      "file": "src/renderer/engine/rpg/NavalSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/PartySystem.ts",
+      "file": "src/renderer/engine/rpg/PartySystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/PetSystem.ts",
+      "file": "src/renderer/engine/rpg/PetSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/PlayerStatsEngine.ts",
+      "file": "src/renderer/engine/rpg/PlayerStatsEngine.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/QuestEngine.ts",
+      "file": "src/renderer/engine/rpg/QuestEngine.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/ReputationSystem.ts",
+      "file": "src/renderer/engine/rpg/ReputationSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/SiegeEngineSystem.ts",
+      "file": "src/renderer/engine/rpg/SiegeEngineSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/SkillTreeSystem.ts",
+      "file": "src/renderer/engine/rpg/SkillTreeSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/StatusEffectSystem.ts",
+      "file": "src/renderer/engine/rpg/StatusEffectSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/TalentSystem.ts",
+      "file": "src/renderer/engine/rpg/TalentSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/TitleSystem.ts",
+      "file": "src/renderer/engine/rpg/TitleSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/TradeSystem.ts",
+      "file": "src/renderer/engine/rpg/TradeSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/WeatherSystem.ts",
+      "file": "src/renderer/engine/rpg/WeatherSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/WorldBossSystem.ts",
+      "file": "src/renderer/engine/rpg/WorldBossSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/WorldEventSystem.ts",
+      "file": "src/renderer/engine/rpg/WorldEventSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/AssetData.ts",
+      "file": "src/renderer/engine/shared/AssetData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/Cache.ts",
+      "file": "src/renderer/engine/shared/Cache.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/FileUtils.ts",
+      "file": "src/renderer/engine/shared/FileUtils.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/HQ2X.ts",
+      "file": "src/renderer/engine/shared/HQ2X.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/index.ts",
+      "file": "src/renderer/engine/shared/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/ManifestLoader.ts",
+      "file": "src/renderer/engine/shared/ManifestLoader.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKMath.ts",
+      "file": "src/renderer/engine/shared/OKMath.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/index.ts",
+      "file": "src/renderer/engine/stadium/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
+      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
+      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/GameFlowStates.ts",
+      "file": "src/renderer/engine/state/GameFlowStates.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/index.ts",
+      "file": "src/renderer/engine/state/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/behaviors/Behavior.ts",
+      "file": "src/renderer/engine/ecs/behaviors/Behavior.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/behaviors/EightDirectionBehavior.ts",
+      "file": "src/renderer/engine/ecs/behaviors/EightDirectionBehavior.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/behaviors/index.ts",
+      "file": "src/renderer/engine/ecs/behaviors/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
+      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/index.ts",
+      "file": "src/renderer/engine/ecs/systems/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
+      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/stats/GameStats.ts",
+      "file": "src/renderer/engine/puzzle/stats/GameStats.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/stats/index.ts",
+      "file": "src/renderer/engine/puzzle/stats/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/stats/Leaderboard.ts",
+      "file": "src/renderer/engine/puzzle/stats/Leaderboard.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/stats/UserStats.ts",
+      "file": "src/renderer/engine/puzzle/stats/UserStats.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/gui/GameItem.ts",
+      "file": "src/renderer/engine/rpg/gui/GameItem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/gui/index.ts",
+      "file": "src/renderer/engine/rpg/gui/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/save/index.ts",
+      "file": "src/renderer/engine/rpg/save/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/tiles/DefaultRPGTileset.ts",
+      "file": "src/renderer/engine/rpg/tiles/DefaultRPGTileset.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/tiles/index.ts",
+      "file": "src/renderer/engine/rpg/tiles/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/tiles/TileRenderer.ts",
+      "file": "src/renderer/engine/rpg/tiles/TileRenderer.ts"
+    },
+    {
+      "type": "dependency",
+      "name": "@capacitor/android",
+      "file": "package.json",
+      "line": 41
+    },
+    {
+      "type": "dependency",
+      "name": "@capacitor/core",
+      "file": "package.json",
+      "line": 42
+    },
+    {
+      "type": "dependency",
+      "name": "@capacitor/ios",
+      "file": "package.json",
+      "line": 43
+    },
+    {
+      "type": "dependency",
+      "name": "@pixi/sound",
+      "file": "package.json",
+      "line": 44
+    },
+    {
+      "type": "dependency",
+      "name": "butterchurn",
+      "file": "package.json",
+      "line": 45
+    },
+    {
+      "type": "dependency",
+      "name": "butterchurn-presets",
+      "file": "package.json",
+      "line": 46
+    },
+    {
+      "type": "dependency",
+      "name": "chiptune3",
+      "file": "package.json",
+      "line": 47
+    },
+    {
+      "type": "dependency",
+      "name": "localforage",
+      "file": "package.json",
+      "line": 50
+    },
+    {
+      "type": "devDependency",
+      "name": "@typescript-eslint/eslint-plugin",
+      "file": "package.json",
+      "line": 29
+    },
+    {
+      "type": "devDependency",
+      "name": "@typescript-eslint/parser",
+      "file": "package.json",
+      "line": 30
+    },
+    {
+      "type": "export",
+      "name": "CRT_VERTEX",
+      "file": "src/renderer/graphics/Filters.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "CRT_FRAGMENT",
+      "file": "src/renderer/graphics/Filters.ts",
+      "line": 14
+    },
+    {
+      "type": "export",
+      "name": "DEFAULT_SETTINGS",
+      "file": "src/renderer/engine/shared/GlobalSettings.ts",
+      "line": 54
+    },
+    {
+      "type": "export",
+      "name": "RotationSet",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "Rotation",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "BlockOffset",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "RotationType",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "Grid",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 7
+    },
+    {
+      "type": "export",
+      "name": "PieceRotationType",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "NetworkManager",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "PuzzleScene",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "DifficultyType",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "ScoreType",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "PuzzleGameEvents",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "PuzzleRendererConfig",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "PuzzleKeyBindings",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "getAchievementProfileName",
+      "file": "src/renderer/data/AchievementIdentity.ts",
+      "line": 43
+    },
+    {
+      "type": "export",
+      "name": "BIG_DATA_URL",
+      "file": "src/shared/Config.ts",
+      "line": 33
+    },
+    {
+      "type": "export",
+      "name": "lerp",
+      "file": "src/shared/Easing.ts",
+      "line": 194
+    },
+    {
+      "type": "export",
+      "name": "clamp",
+      "file": "src/shared/Easing.ts",
+      "line": 195
+    },
+    {
+      "type": "export",
+      "name": "normalize",
+      "file": "src/shared/Easing.ts",
+      "line": 196
+    },
+    {
+      "type": "export",
+      "name": "remap",
+      "file": "src/shared/Easing.ts",
+      "line": 197
+    },
+    {
+      "type": "export",
+      "name": "smoothstep",
+      "file": "src/shared/Easing.ts",
+      "line": 198
+    },
+    {
+      "type": "export",
+      "name": "smootherstep",
+      "file": "src/shared/Easing.ts",
+      "line": 199
+    },
+    {
+      "type": "export",
+      "name": "isDoorGraphLoaded",
+      "file": "src/renderer/engine/map/DoorGraphLoader.ts",
+      "line": 54
+    },
+    {
+      "type": "export",
+      "name": "hasAreaDialogue",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 154
+    },
+    {
+      "type": "export",
+      "name": "getOriginalDialogue",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 201
+    },
+    {
+      "type": "export",
+      "name": "FLAGS",
+      "file": "src/renderer/engine/event/FlagManager.ts",
+      "line": 7
+    },
+    {
+      "type": "export",
+      "name": "ND_SCREEN_WIDTH",
+      "file": "src/renderer/engine/nd/ND.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "ND_SCREEN_HEIGHT",
+      "file": "src/renderer/engine/nd/ND.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
+      "name": "GameString",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "EventParameter",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "EventParameterType",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "EventCommandType",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "EventScriptCommand",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "EventScriptQualifier",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "EventType",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "Qualifiers",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "Commands",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "ALL_QUALIFIERS",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "ALL_COMMANDS",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "DialogueData",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "FlagData",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "SkillData",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "GameStringData",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "DefaultEvents",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 14
+    },
+    {
+      "type": "export",
+      "name": "BranchingDialogueSystem",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "SHOPKEEPER_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "MAYOR_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "MYSTERY_NPC_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "TypedTextWriter",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "TextWindow",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 2
+    },
+    {
+      "type": "export",
+      "name": "BitmapFont",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "TextManager",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "TextEngineState",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "CaptionManager",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "Caption",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "CaptionPosition",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "TypedTextWriterConfig",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "DialogueBoxConfig",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "TextWindowConfig",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 2
+    },
+    {
+      "type": "export",
+      "name": "BitmapFontGlyph",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "CaptionConfig",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "TILE_COLORS",
+      "file": "src/renderer/engine/map/MapLoader.ts",
+      "line": 60
+    },
+    {
+      "type": "export",
+      "name": "MapTile",
+      "file": "src/renderer/engine/map/MapLoader.ts",
+      "line": 36
+    },
+    {
+      "type": "export",
+      "name": "rgba",
+      "file": "src/renderer/graphics/Graphics.ts",
+      "line": 161
+    },
+    {
+      "type": "export",
+      "name": "rgbaInt",
+      "file": "src/renderer/graphics/Graphics.ts",
+      "line": 165
+    },
+    {
+      "type": "export",
+      "name": "DrawStyle",
+      "file": "src/renderer/graphics/Graphics.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "EventScriptCommand",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 26
+    },
+    {
+      "type": "export",
+      "name": "EventScriptQualifier",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 55
+    },
+    {
+      "type": "export",
+      "name": "Qualifiers",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 65
+    },
+    {
+      "type": "export",
+      "name": "Commands",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 150
+    },
+    {
+      "type": "export",
+      "name": "ALL_QUALIFIERS",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 312
+    },
+    {
+      "type": "export",
+      "name": "ALL_COMMANDS",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 317
+    },
+    {
+      "type": "export",
+      "name": "EventType",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "DialogueData",
+      "file": "src/renderer/engine/rpg/event/EventDataTypes.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "FlagData",
+      "file": "src/renderer/engine/rpg/event/EventDataTypes.ts",
+      "line": 38
+    },
+    {
+      "type": "export",
+      "name": "SkillData",
+      "file": "src/renderer/engine/rpg/event/EventDataTypes.ts",
+      "line": 65
+    },
+    {
+      "type": "export",
+      "name": "GameStringData",
+      "file": "src/renderer/engine/rpg/event/EventDataTypes.ts",
+      "line": 96
+    },
+    {
+      "type": "export",
+      "name": "BranchingDialogueSystem",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 63
+    },
+    {
+      "type": "export",
+      "name": "SHOPKEEPER_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 266
+    },
+    {
+      "type": "export",
+      "name": "MAYOR_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 337
+    },
+    {
+      "type": "export",
+      "name": "MYSTERY_NPC_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 398
+    },
+    {
+      "type": "export",
+      "name": "DialogueChoice",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 19
+    },
+    {
+      "type": "export",
+      "name": "DialogueNode",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 35
+    },
+    {
+      "type": "export",
+      "name": "DialogueTree",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 50
+    },
+    {
+      "type": "export",
+      "name": "DialogueState",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 56
+    },
+    {
+      "type": "export",
+      "name": "TextWindow",
+      "file": "src/renderer/engine/text/TextWindow.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "TextWindowConfig",
+      "file": "src/renderer/engine/text/TextWindow.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "BitmapFont",
+      "file": "src/renderer/engine/text/BitmapFont.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "BitmapFontGlyph",
+      "file": "src/renderer/engine/text/BitmapFont.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "TextManager",
+      "file": "src/renderer/engine/text/TextManager.ts",
+      "line": 19
+    },
+    {
+      "type": "export",
+      "name": "TextEngineState",
+      "file": "src/renderer/engine/text/TextManager.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "Caption",
+      "file": "src/renderer/engine/text/CaptionManager.ts",
+      "line": 32
+    },
+    {
+      "type": "export",
+      "name": "CaptionManager",
+      "file": "src/renderer/engine/text/CaptionManager.ts",
+      "line": 135
+    },
+    {
+      "type": "export",
+      "name": "CaptionPosition",
+      "file": "src/renderer/engine/text/CaptionManager.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "CaptionConfig",
+      "file": "src/renderer/engine/text/CaptionManager.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "NetworkGameSequence",
+      "file": "src/shared/puzzle/GameSequence.ts",
+      "line": 31
+    },
+    {
+      "type": "export",
+      "name": "Door",
+      "file": "src/renderer/engine/map/Door.ts",
+      "line": 52
+    },
+    {
+      "type": "export",
+      "name": "Light",
+      "file": "src/renderer/engine/map/Light.ts",
+      "line": 65
+    },
+    {
+      "type": "export",
+      "name": "DEFAULT_ROOM_CONFIG",
+      "file": "src/renderer/engine/network/BobsGameRoom.ts",
+      "line": 62
+    },
+    {
+      "type": "export",
+      "name": "DropLockType",
+      "file": "src/shared/puzzle/GameType.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "CursorType",
+      "file": "src/shared/puzzle/GameType.ts",
+      "line": 54
+    },
+    {
+      "type": "export",
+      "name": "AudioEvents",
+      "file": "src/renderer/audio/AudioManager.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "AchievementCondition",
+      "file": "src/renderer/data/AchievementManager.ts",
+      "line": 32
+    },
+    {
+      "type": "export",
+      "name": "PlayerStats",
+      "file": "src/renderer/data/AchievementManager.ts",
+      "line": 115
+    },
+    {
+      "type": "export",
+      "name": "AchievementSnapshot",
+      "file": "src/renderer/data/AchievementManager.ts",
+      "line": 119
+    },
+    {
+      "type": "export",
+      "name": "AchievementUnlockCallback",
+      "file": "src/renderer/data/AchievementManager.ts",
+      "line": 130
+    },
+    {
+      "type": "export",
+      "name": "MouseButton",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 37
+    },
+    {
+      "type": "export",
+      "name": "GamepadButton",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 43
+    },
+    {
+      "type": "export",
+      "name": "GamepadAxis",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 62
+    },
+    {
+      "type": "export",
+      "name": "InputEvents",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 69
+    },
+    {
+      "type": "export",
+      "name": "GamepadState",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 81
+    },
+    {
+      "type": "export",
+      "name": "ToastConfig",
+      "file": "src/renderer/ui/ToastManager.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "RenderOrder",
+      "file": "src/shared/MapData.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "InteractionType",
+      "file": "src/renderer/engine/ecs/components/InteractionComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "QuestObjective",
+      "file": "src/renderer/scenes/QuestLogScene.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "LegacyDoor",
+      "file": "src/renderer/engine/map/LegacyMapLoader.ts",
+      "line": 36
+    },
+    {
+      "type": "export",
+      "name": "EasingName",
+      "file": "src/shared/Tween.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "PartyMember",
+      "file": "src/renderer/engine/party/PartyManager.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "EventCondition",
+      "file": "src/renderer/engine/eventsheet/EventSheet.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "EventAction",
+      "file": "src/renderer/engine/eventsheet/EventSheet.ts",
+      "line": 6
+    }
+  ],
+  "unusedExports": [
+    {
+      "type": "export",
+      "name": "CRT_VERTEX",
+      "file": "src/renderer/graphics/Filters.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "CRT_FRAGMENT",
+      "file": "src/renderer/graphics/Filters.ts",
+      "line": 14
+    },
+    {
+      "type": "export",
+      "name": "DEFAULT_SETTINGS",
+      "file": "src/renderer/engine/shared/GlobalSettings.ts",
+      "line": 54
+    },
+    {
+      "type": "export",
+      "name": "RotationSet",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "Rotation",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "BlockOffset",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "RotationType",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "Grid",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 7
+    },
+    {
+      "type": "export",
+      "name": "PieceRotationType",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "NetworkManager",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "PuzzleScene",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "DifficultyType",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "ScoreType",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "PuzzleGameEvents",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "PuzzleRendererConfig",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "PuzzleKeyBindings",
+      "file": "src/renderer/puzzle/index.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "getAchievementProfileName",
+      "file": "src/renderer/data/AchievementIdentity.ts",
+      "line": 43
+    },
+    {
+      "type": "export",
+      "name": "BIG_DATA_URL",
+      "file": "src/shared/Config.ts",
+      "line": 33
+    },
+    {
+      "type": "export",
+      "name": "lerp",
+      "file": "src/shared/Easing.ts",
+      "line": 194
+    },
+    {
+      "type": "export",
+      "name": "clamp",
+      "file": "src/shared/Easing.ts",
+      "line": 195
+    },
+    {
+      "type": "export",
+      "name": "normalize",
+      "file": "src/shared/Easing.ts",
+      "line": 196
+    },
+    {
+      "type": "export",
+      "name": "remap",
+      "file": "src/shared/Easing.ts",
+      "line": 197
+    },
+    {
+      "type": "export",
+      "name": "smoothstep",
+      "file": "src/shared/Easing.ts",
+      "line": 198
+    },
+    {
+      "type": "export",
+      "name": "smootherstep",
+      "file": "src/shared/Easing.ts",
+      "line": 199
+    },
+    {
+      "type": "export",
+      "name": "isDoorGraphLoaded",
+      "file": "src/renderer/engine/map/DoorGraphLoader.ts",
+      "line": 54
+    },
+    {
+      "type": "export",
+      "name": "hasAreaDialogue",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 154
+    },
+    {
+      "type": "export",
+      "name": "getOriginalDialogue",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 201
+    },
+    {
+      "type": "export",
+      "name": "FLAGS",
+      "file": "src/renderer/engine/event/FlagManager.ts",
+      "line": 7
+    },
+    {
+      "type": "export",
+      "name": "ND_SCREEN_WIDTH",
+      "file": "src/renderer/engine/nd/ND.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "ND_SCREEN_HEIGHT",
+      "file": "src/renderer/engine/nd/ND.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
+      "name": "GameString",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "EventParameter",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "EventParameterType",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "EventCommandType",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "EventScriptCommand",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "EventScriptQualifier",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "EventType",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "Qualifiers",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "Commands",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "ALL_QUALIFIERS",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "ALL_COMMANDS",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "DialogueData",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "FlagData",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "SkillData",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "GameStringData",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "DefaultEvents",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 14
+    },
+    {
+      "type": "export",
+      "name": "BranchingDialogueSystem",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "SHOPKEEPER_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "MAYOR_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "MYSTERY_NPC_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/index.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "TypedTextWriter",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "TextWindow",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 2
+    },
+    {
+      "type": "export",
+      "name": "BitmapFont",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "TextManager",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "TextEngineState",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "CaptionManager",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "Caption",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "CaptionPosition",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "TypedTextWriterConfig",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "DialogueBoxConfig",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "TextWindowConfig",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 2
+    },
+    {
+      "type": "export",
+      "name": "BitmapFontGlyph",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "CaptionConfig",
+      "file": "src/renderer/engine/text/index.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "TILE_COLORS",
+      "file": "src/renderer/engine/map/MapLoader.ts",
+      "line": 60
+    },
+    {
+      "type": "export",
+      "name": "MapTile",
+      "file": "src/renderer/engine/map/MapLoader.ts",
+      "line": 36
+    },
+    {
+      "type": "export",
+      "name": "rgba",
+      "file": "src/renderer/graphics/Graphics.ts",
+      "line": 161
+    },
+    {
+      "type": "export",
+      "name": "rgbaInt",
+      "file": "src/renderer/graphics/Graphics.ts",
+      "line": 165
+    },
+    {
+      "type": "export",
+      "name": "DrawStyle",
+      "file": "src/renderer/graphics/Graphics.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "EventScriptCommand",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 26
+    },
+    {
+      "type": "export",
+      "name": "EventScriptQualifier",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 55
+    },
+    {
+      "type": "export",
+      "name": "Qualifiers",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 65
+    },
+    {
+      "type": "export",
+      "name": "Commands",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 150
+    },
+    {
+      "type": "export",
+      "name": "ALL_QUALIFIERS",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 312
+    },
+    {
+      "type": "export",
+      "name": "ALL_COMMANDS",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 317
+    },
+    {
+      "type": "export",
+      "name": "EventType",
+      "file": "src/renderer/engine/rpg/event/EventScript.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "DialogueData",
+      "file": "src/renderer/engine/rpg/event/EventDataTypes.ts",
+      "line": 5
+    },
+    {
+      "type": "export",
+      "name": "FlagData",
+      "file": "src/renderer/engine/rpg/event/EventDataTypes.ts",
+      "line": 38
+    },
+    {
+      "type": "export",
+      "name": "SkillData",
+      "file": "src/renderer/engine/rpg/event/EventDataTypes.ts",
+      "line": 65
+    },
+    {
+      "type": "export",
+      "name": "GameStringData",
+      "file": "src/renderer/engine/rpg/event/EventDataTypes.ts",
+      "line": 96
+    },
+    {
+      "type": "export",
+      "name": "BranchingDialogueSystem",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 63
+    },
+    {
+      "type": "export",
+      "name": "SHOPKEEPER_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 266
+    },
+    {
+      "type": "export",
+      "name": "MAYOR_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 337
+    },
+    {
+      "type": "export",
+      "name": "MYSTERY_NPC_DIALOGUE",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 398
+    },
+    {
+      "type": "export",
+      "name": "DialogueChoice",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 19
+    },
+    {
+      "type": "export",
+      "name": "DialogueNode",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 35
+    },
+    {
+      "type": "export",
+      "name": "DialogueTree",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 50
+    },
+    {
+      "type": "export",
+      "name": "DialogueState",
+      "file": "src/renderer/engine/rpg/event/BranchingDialogue.ts",
+      "line": 56
+    },
+    {
+      "type": "export",
+      "name": "TextWindow",
+      "file": "src/renderer/engine/text/TextWindow.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "TextWindowConfig",
+      "file": "src/renderer/engine/text/TextWindow.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "BitmapFont",
+      "file": "src/renderer/engine/text/BitmapFont.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "BitmapFontGlyph",
+      "file": "src/renderer/engine/text/BitmapFont.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "TextManager",
+      "file": "src/renderer/engine/text/TextManager.ts",
+      "line": 19
+    },
+    {
+      "type": "export",
+      "name": "TextEngineState",
+      "file": "src/renderer/engine/text/TextManager.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "Caption",
+      "file": "src/renderer/engine/text/CaptionManager.ts",
+      "line": 32
+    },
+    {
+      "type": "export",
+      "name": "CaptionManager",
+      "file": "src/renderer/engine/text/CaptionManager.ts",
+      "line": 135
+    },
+    {
+      "type": "export",
+      "name": "CaptionPosition",
+      "file": "src/renderer/engine/text/CaptionManager.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "CaptionConfig",
+      "file": "src/renderer/engine/text/CaptionManager.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "NetworkGameSequence",
+      "file": "src/shared/puzzle/GameSequence.ts",
+      "line": 31
+    },
+    {
+      "type": "export",
+      "name": "Door",
+      "file": "src/renderer/engine/map/Door.ts",
+      "line": 52
+    },
+    {
+      "type": "export",
+      "name": "Light",
+      "file": "src/renderer/engine/map/Light.ts",
+      "line": 65
+    },
+    {
+      "type": "export",
+      "name": "DEFAULT_ROOM_CONFIG",
+      "file": "src/renderer/engine/network/BobsGameRoom.ts",
+      "line": 62
+    },
+    {
+      "type": "export",
+      "name": "DropLockType",
+      "file": "src/shared/puzzle/GameType.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "CursorType",
+      "file": "src/shared/puzzle/GameType.ts",
+      "line": 54
+    },
+    {
+      "type": "export",
+      "name": "AudioEvents",
+      "file": "src/renderer/audio/AudioManager.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "AchievementCondition",
+      "file": "src/renderer/data/AchievementManager.ts",
+      "line": 32
+    },
+    {
+      "type": "export",
+      "name": "PlayerStats",
+      "file": "src/renderer/data/AchievementManager.ts",
+      "line": 115
+    },
+    {
+      "type": "export",
+      "name": "AchievementSnapshot",
+      "file": "src/renderer/data/AchievementManager.ts",
+      "line": 119
+    },
+    {
+      "type": "export",
+      "name": "AchievementUnlockCallback",
+      "file": "src/renderer/data/AchievementManager.ts",
+      "line": 130
+    },
+    {
+      "type": "export",
+      "name": "MouseButton",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 37
+    },
+    {
+      "type": "export",
+      "name": "GamepadButton",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 43
+    },
+    {
+      "type": "export",
+      "name": "GamepadAxis",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 62
+    },
+    {
+      "type": "export",
+      "name": "InputEvents",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 69
+    },
+    {
+      "type": "export",
+      "name": "GamepadState",
+      "file": "src/renderer/input/InputManager.ts",
+      "line": 81
+    },
+    {
+      "type": "export",
+      "name": "ToastConfig",
+      "file": "src/renderer/ui/ToastManager.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "RenderOrder",
+      "file": "src/shared/MapData.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "InteractionType",
+      "file": "src/renderer/engine/ecs/components/InteractionComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "QuestObjective",
+      "file": "src/renderer/scenes/QuestLogScene.ts",
+      "line": 16
+    },
+    {
+      "type": "export",
+      "name": "LegacyDoor",
+      "file": "src/renderer/engine/map/LegacyMapLoader.ts",
+      "line": 36
+    },
+    {
+      "type": "export",
+      "name": "EasingName",
+      "file": "src/shared/Tween.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "PartyMember",
+      "file": "src/renderer/engine/party/PartyManager.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "EventCondition",
+      "file": "src/renderer/engine/eventsheet/EventSheet.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "EventAction",
+      "file": "src/renderer/engine/eventsheet/EventSheet.ts",
+      "line": 6
+    }
+  ],
+  "unusedFiles": [
+    {
+      "type": "file",
+      "name": "generate_placeholder_maps.js",
+      "file": "generate_placeholder_maps.js"
+    },
+    {
+      "type": "file",
+      "name": "scripts/build-mobile.cjs",
+      "file": "scripts/build-mobile.cjs"
+    },
+    {
+      "type": "file",
+      "name": "scripts/convert_maps.js",
+      "file": "scripts/convert_maps.js"
+    },
+    {
+      "type": "file",
+      "name": "scripts/generate-audio.cjs",
+      "file": "scripts/generate-audio.cjs"
+    },
+    {
+      "type": "file",
+      "name": "scripts/generate-dummy-assets.cjs",
+      "file": "scripts/generate-dummy-assets.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
+    },
+    {
+      "type": "file",
+      "name": "src/main/index.ts",
+      "file": "src/main/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/main/preload.ts",
+      "file": "src/main/preload.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/AutoTiler.ts",
+      "file": "src/shared/AutoTiler.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/DefaultStrings.ts",
+      "file": "src/shared/DefaultStrings.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/index.ts",
+      "file": "src/shared/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/MapDataRegistry.ts",
+      "file": "src/shared/MapDataRegistry.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/platform.ts",
+      "file": "src/shared/platform.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/validation.ts",
+      "file": "src/shared/validation.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/achievement-quest.test.ts",
+      "file": "src/__tests__/achievement-quest.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/arena-cutscene.test.ts",
+      "file": "src/__tests__/arena-cutscene.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/bestiary-world.test.ts",
+      "file": "src/__tests__/bestiary-world.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/e2e-flow.test.ts",
+      "file": "src/__tests__/e2e-flow.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/enchant-rep.test.ts",
+      "file": "src/__tests__/enchant-rep.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/event-system.test.ts",
+      "file": "src/__tests__/event-system.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/fishing-guild.test.ts",
+      "file": "src/__tests__/fishing-guild.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/legacy-import.test.ts",
+      "file": "src/__tests__/legacy-import.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/loot-table.test.ts",
+      "file": "src/__tests__/loot-table.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/map-data.test.ts",
+      "file": "src/__tests__/map-data.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/networking.test.ts",
+      "file": "src/__tests__/networking.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/pet-bossrush.test.ts",
+      "file": "src/__tests__/pet-bossrush.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/puzzle-logic.test.ts",
+      "file": "src/__tests__/puzzle-logic.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-advanced.test.ts",
+      "file": "src/__tests__/rpg-advanced.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-expansion.test.ts",
+      "file": "src/__tests__/rpg-expansion.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-mechanics.test.ts",
+      "file": "src/__tests__/rpg-mechanics.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-meta.test.ts",
+      "file": "src/__tests__/rpg-meta.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-professions.test.ts",
+      "file": "src/__tests__/rpg-professions.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-social.test.ts",
+      "file": "src/__tests__/rpg-social.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-systems.test.ts",
+      "file": "src/__tests__/rpg-systems.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-v3.test.ts",
+      "file": "src/__tests__/rpg-v3.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/rpg-world.test.ts",
+      "file": "src/__tests__/rpg-world.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/status-effects.test.ts",
+      "file": "src/__tests__/status-effects.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/tileset.test.ts",
+      "file": "src/__tests__/tileset.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/trade-daynight.test.ts",
+      "file": "src/__tests__/trade-daynight.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/tutorial-leaderboard.test.ts",
+      "file": "src/__tests__/tutorial-leaderboard.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/validation.test.ts",
+      "file": "src/__tests__/validation.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/visual-systems.test.ts",
+      "file": "src/__tests__/visual-systems.test.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/__tests__/weather.test.ts",
+      "file": "src/__tests__/weather.test.ts"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-check-update.js",
+      "file": ".pi/gsd/hooks/gsd-check-update.js"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-context-monitor.js",
+      "file": ".pi/gsd/hooks/gsd-context-monitor.js"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-prompt-guard.js",
+      "file": ".pi/gsd/hooks/gsd-prompt-guard.js"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-statusline.js",
+      "file": ".pi/gsd/hooks/gsd-statusline.js"
+    },
+    {
+      "type": "file",
+      "name": ".pi/gsd/hooks/gsd-workflow-guard.js",
+      "file": ".pi/gsd/hooks/gsd-workflow-guard.js"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/assets/AssetLoader.ts",
+      "file": "src/renderer/assets/AssetLoader.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/assets/index.ts",
+      "file": "src/renderer/assets/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/audio/index.ts",
+      "file": "src/renderer/audio/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/GameWorker.ts",
+      "file": "src/renderer/engine/GameWorker.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/entity/index.ts",
+      "file": "src/renderer/entity/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/index.ts",
+      "file": "src/renderer/graphics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/Sprite.ts",
+      "file": "src/renderer/graphics/Sprite.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/SpriteSheet.ts",
+      "file": "src/renderer/graphics/SpriteSheet.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/Texture.ts",
+      "file": "src/renderer/graphics/Texture.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/graphics/TextureCache.ts",
+      "file": "src/renderer/graphics/TextureCache.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/MapEditor.ts",
+      "file": "src/renderer/editor/MapEditor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/input/index.ts",
+      "file": "src/renderer/input/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/AchievementPopup.ts",
+      "file": "src/renderer/ui/AchievementPopup.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/ComboCounter.ts",
+      "file": "src/renderer/ui/ComboCounter.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/index.ts",
+      "file": "src/renderer/ui/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/Label.ts",
+      "file": "src/renderer/ui/Label.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/MenuGamepadNavigator.ts",
+      "file": "src/renderer/ui/MenuGamepadNavigator.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/NotificationStack.ts",
+      "file": "src/renderer/ui/NotificationStack.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/OnlineNotificationManager.ts",
+      "file": "src/renderer/ui/OnlineNotificationManager.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/Panel.ts",
+      "file": "src/renderer/ui/Panel.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/ui/Tooltip.ts",
+      "file": "src/renderer/ui/Tooltip.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/scenes/index.ts",
+      "file": "src/renderer/scenes/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/scenes/TournamentResultsScene.ts",
+      "file": "src/renderer/scenes/TournamentResultsScene.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/audio/visualizer/ProjectM.ts",
+      "file": "src/renderer/audio/visualizer/ProjectM.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/audio/AudioManager.ts",
+      "file": "src/renderer/engine/audio/AudioManager.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/audio/index.ts",
+      "file": "src/renderer/engine/audio/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/audio/OggDecoder.ts",
+      "file": "src/renderer/engine/audio/OggDecoder.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/audio/WaveData.ts",
+      "file": "src/renderer/engine/audio/WaveData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/GlowTileBackground.ts",
+      "file": "src/renderer/engine/cinematics/GlowTileBackground.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/index.ts",
+      "file": "src/renderer/engine/cinematics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/TitleIntroAnimation.ts",
+      "file": "src/renderer/engine/cinematics/TitleIntroAnimation.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/core/MessageBatcher.ts",
+      "file": "src/renderer/engine/core/MessageBatcher.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/core/ObjectPool.ts",
+      "file": "src/renderer/engine/core/ObjectPool.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/debug/index.ts",
+      "file": "src/renderer/engine/debug/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/BobSprite.ts",
+      "file": "src/renderer/engine/entity/BobSprite.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/index.ts",
+      "file": "src/renderer/engine/entity/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/RandomCharacter.ts",
+      "file": "src/renderer/engine/entity/RandomCharacter.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/ScreenSprite.ts",
+      "file": "src/renderer/engine/entity/ScreenSprite.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/Sprite.ts",
+      "file": "src/renderer/engine/entity/Sprite.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/entity/SpriteAnimation.ts",
+      "file": "src/renderer/engine/entity/SpriteAnimation.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/event/EventScript.ts",
+      "file": "src/renderer/engine/event/EventScript.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/DayNightCycle.ts",
+      "file": "src/renderer/engine/graphics/DayNightCycle.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/FogOfWarMinimap.ts",
+      "file": "src/renderer/engine/graphics/FogOfWarMinimap.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/index.ts",
+      "file": "src/renderer/engine/graphics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/MapTransition.ts",
+      "file": "src/renderer/engine/graphics/MapTransition.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/ScreenEffects.ts",
+      "file": "src/renderer/engine/graphics/ScreenEffects.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/graphics/WorldMinimap.ts",
+      "file": "src/renderer/engine/graphics/WorldMinimap.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/AsepriteParser.ts",
+      "file": "src/renderer/engine/map/AsepriteParser.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/AutoTiler.ts",
+      "file": "src/renderer/engine/map/AutoTiler.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/CanvasTileRenderer.ts",
+      "file": "src/renderer/engine/map/CanvasTileRenderer.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/DoorGraph.ts",
+      "file": "src/renderer/engine/map/DoorGraph.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/EntityData.ts",
+      "file": "src/renderer/engine/map/EntityData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/index.ts",
+      "file": "src/renderer/engine/map/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/MapData.ts",
+      "file": "src/renderer/engine/map/MapData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/MapStateData.ts",
+      "file": "src/renderer/engine/map/MapStateData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/index.ts",
+      "file": "src/renderer/engine/nd/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/NDMenu.ts",
+      "file": "src/renderer/engine/nd/NDMenu.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/Ping.ts",
+      "file": "src/renderer/engine/nd/Ping.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/Ramio.ts",
+      "file": "src/renderer/engine/nd/Ramio.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/SnakeGame.ts",
+      "file": "src/renderer/engine/nd/SnakeGame.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/Wheel.ts",
+      "file": "src/renderer/engine/nd/Wheel.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/nd/WheelItem.ts",
+      "file": "src/renderer/engine/nd/WheelItem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/GameClientTCP.ts",
+      "file": "src/renderer/engine/network/GameClientTCP.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/index.ts",
+      "file": "src/renderer/engine/network/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/OKNet.ts",
+      "file": "src/renderer/engine/network/OKNet.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/PeerConnection.ts",
+      "file": "src/renderer/engine/network/PeerConnection.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/ServerConnection.ts",
+      "file": "src/renderer/engine/network/ServerConnection.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/input/index.ts",
+      "file": "src/renderer/engine/input/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/Block.ts",
+      "file": "src/renderer/engine/puzzle/Block.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/FrameState.ts",
+      "file": "src/renderer/engine/puzzle/FrameState.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/index.ts",
+      "file": "src/renderer/engine/puzzle/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/Piece.ts",
+      "file": "src/renderer/engine/puzzle/Piece.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/PuzzleRenderer.ts",
+      "file": "src/renderer/engine/puzzle/PuzzleRenderer.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/physics/index.ts",
+      "file": "src/renderer/engine/physics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/physics/Physics.ts",
+      "file": "src/renderer/engine/physics/Physics.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/AchievementEngine.ts",
+      "file": "src/renderer/engine/rpg/AchievementEngine.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/ActionManager.ts",
+      "file": "src/renderer/engine/rpg/ActionManager.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/AlchemySystem.ts",
+      "file": "src/renderer/engine/rpg/AlchemySystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/ArtifactSystem.ts",
+      "file": "src/renderer/engine/rpg/ArtifactSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/AuctionHouseSystem.ts",
+      "file": "src/renderer/engine/rpg/AuctionHouseSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/BountySystem.ts",
+      "file": "src/renderer/engine/rpg/BountySystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/CapeSystem.ts",
+      "file": "src/renderer/engine/rpg/CapeSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/CardGameSystem.ts",
+      "file": "src/renderer/engine/rpg/CardGameSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/CookingSystem.ts",
+      "file": "src/renderer/engine/rpg/CookingSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/CutsceneEngine.ts",
+      "file": "src/renderer/engine/rpg/CutsceneEngine.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/DayNightCycle.ts",
+      "file": "src/renderer/engine/rpg/DayNightCycle.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/DungeonSystem.ts",
+      "file": "src/renderer/engine/rpg/DungeonSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/EnchantmentSystem.ts",
+      "file": "src/renderer/engine/rpg/EnchantmentSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/FactionWarSystem.ts",
+      "file": "src/renderer/engine/rpg/FactionWarSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/FarmingSystem.ts",
+      "file": "src/renderer/engine/rpg/FarmingSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/GuildSystem.ts",
+      "file": "src/renderer/engine/rpg/GuildSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/HousingSystem.ts",
+      "file": "src/renderer/engine/rpg/HousingSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/index.ts",
+      "file": "src/renderer/engine/rpg/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/JobSystem.ts",
+      "file": "src/renderer/engine/rpg/JobSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/LootTable.ts",
+      "file": "src/renderer/engine/rpg/LootTable.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/MarriageSystem.ts",
+      "file": "src/renderer/engine/rpg/MarriageSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/MiningSystem.ts",
+      "file": "src/renderer/engine/rpg/MiningSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/MountCombatSystem.ts",
+      "file": "src/renderer/engine/rpg/MountCombatSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/MountSystem.ts",
+      "file": "src/renderer/engine/rpg/MountSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/NavalSystem.ts",
+      "file": "src/renderer/engine/rpg/NavalSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/PartySystem.ts",
+      "file": "src/renderer/engine/rpg/PartySystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/PetSystem.ts",
+      "file": "src/renderer/engine/rpg/PetSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/PlayerStatsEngine.ts",
+      "file": "src/renderer/engine/rpg/PlayerStatsEngine.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/QuestEngine.ts",
+      "file": "src/renderer/engine/rpg/QuestEngine.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/ReputationSystem.ts",
+      "file": "src/renderer/engine/rpg/ReputationSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/SiegeEngineSystem.ts",
+      "file": "src/renderer/engine/rpg/SiegeEngineSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/SkillTreeSystem.ts",
+      "file": "src/renderer/engine/rpg/SkillTreeSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/StatusEffectSystem.ts",
+      "file": "src/renderer/engine/rpg/StatusEffectSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/TalentSystem.ts",
+      "file": "src/renderer/engine/rpg/TalentSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/TitleSystem.ts",
+      "file": "src/renderer/engine/rpg/TitleSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/TradeSystem.ts",
+      "file": "src/renderer/engine/rpg/TradeSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/WeatherSystem.ts",
+      "file": "src/renderer/engine/rpg/WeatherSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/WorldBossSystem.ts",
+      "file": "src/renderer/engine/rpg/WorldBossSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/WorldEventSystem.ts",
+      "file": "src/renderer/engine/rpg/WorldEventSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/AssetData.ts",
+      "file": "src/renderer/engine/shared/AssetData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/Cache.ts",
+      "file": "src/renderer/engine/shared/Cache.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/FileUtils.ts",
+      "file": "src/renderer/engine/shared/FileUtils.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/HQ2X.ts",
+      "file": "src/renderer/engine/shared/HQ2X.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/index.ts",
+      "file": "src/renderer/engine/shared/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/ManifestLoader.ts",
+      "file": "src/renderer/engine/shared/ManifestLoader.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKMath.ts",
+      "file": "src/renderer/engine/shared/OKMath.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/index.ts",
+      "file": "src/renderer/engine/stadium/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
+      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
+      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/GameFlowStates.ts",
+      "file": "src/renderer/engine/state/GameFlowStates.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/index.ts",
+      "file": "src/renderer/engine/state/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/behaviors/Behavior.ts",
+      "file": "src/renderer/engine/ecs/behaviors/Behavior.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/behaviors/EightDirectionBehavior.ts",
+      "file": "src/renderer/engine/ecs/behaviors/EightDirectionBehavior.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/behaviors/index.ts",
+      "file": "src/renderer/engine/ecs/behaviors/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
+      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/index.ts",
+      "file": "src/renderer/engine/ecs/systems/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
+      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/stats/GameStats.ts",
+      "file": "src/renderer/engine/puzzle/stats/GameStats.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/stats/index.ts",
+      "file": "src/renderer/engine/puzzle/stats/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/stats/Leaderboard.ts",
+      "file": "src/renderer/engine/puzzle/stats/Leaderboard.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/puzzle/stats/UserStats.ts",
+      "file": "src/renderer/engine/puzzle/stats/UserStats.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/gui/GameItem.ts",
+      "file": "src/renderer/engine/rpg/gui/GameItem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/gui/index.ts",
+      "file": "src/renderer/engine/rpg/gui/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/save/index.ts",
+      "file": "src/renderer/engine/rpg/save/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/tiles/DefaultRPGTileset.ts",
+      "file": "src/renderer/engine/rpg/tiles/DefaultRPGTileset.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/tiles/index.ts",
+      "file": "src/renderer/engine/rpg/tiles/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/tiles/TileRenderer.ts",
+      "file": "src/renderer/engine/rpg/tiles/TileRenderer.ts"
+    }
+  ],
+  "unusedDeps": [
+    {
+      "type": "dependency",
+      "name": "@capacitor/android",
+      "file": "package.json",
+      "line": 41
+    },
+    {
+      "type": "dependency",
+      "name": "@capacitor/core",
+      "file": "package.json",
+      "line": 42
+    },
+    {
+      "type": "dependency",
+      "name": "@capacitor/ios",
+      "file": "package.json",
+      "line": 43
+    },
+    {
+      "type": "dependency",
+      "name": "@pixi/sound",
+      "file": "package.json",
+      "line": 44
+    },
+    {
+      "type": "dependency",
+      "name": "butterchurn",
+      "file": "package.json",
+      "line": 45
+    },
+    {
+      "type": "dependency",
+      "name": "butterchurn-presets",
+      "file": "package.json",
+      "line": 46
+    },
+    {
+      "type": "dependency",
+      "name": "chiptune3",
+      "file": "package.json",
+      "line": 47
+    },
+    {
+      "type": "dependency",
+      "name": "localforage",
+      "file": "package.json",
+      "line": 50
+    },
+    {
+      "type": "devDependency",
+      "name": "@typescript-eslint/eslint-plugin",
+      "file": "package.json",
+      "line": 29
+    },
+    {
+      "type": "devDependency",
+      "name": "@typescript-eslint/parser",
+      "file": "package.json",
+      "line": 30
+    }
+  ],
+  "unlistedDeps": [],
+  "summary": "Found 329 issues"
+}

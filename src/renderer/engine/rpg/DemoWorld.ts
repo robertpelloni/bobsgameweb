@@ -2076,9 +2076,13 @@ export class DemoWorld {
 		const newX = this.playerX + dx * this.playerSpeed * dt;
 		const newY = this.playerY + dy * this.playerSpeed * dt;
 
+		// Collision parity using hitBoxFromTop (30px for adults/Yuu)
+		const HITBOX_FROM_TOP = 30;
+		const collisionY = newY + HITBOX_FROM_TOP;
+
 		// Collision check (can't walk on water, trees, buildings, fences)
 		const tileX = Math.floor(newX / TILE_SIZE);
-		const tileY = Math.floor(newY / TILE_SIZE);
+		const tileY = Math.floor(collisionY / TILE_SIZE);
 		if (tileX >= 0 && tileX < mapW && tileY >= 0 && tileY < mapH) {
 			const tile = this.tiles[tileY][tileX];
 			if (
@@ -4066,6 +4070,22 @@ export class DemoWorld {
 		name: string,
 	): Container {
 		const c = new Container();
+
+		// Yuu 8-directional animation support (64 frames: 8 directions * 8 frames)
+		// Procedural walk cycle based on direction
+		const isMoving = name === "You" ? (this.keys["w"] || this.keys["s"] || this.keys["a"] || this.keys["d"]) : (npc as any)?._wandering;
+		if (isMoving) {
+			const walkSpeed = 15;
+			const walkBob = Math.abs(Math.sin(this.gameTime * walkSpeed)) * 4;
+			const walkSway = Math.sin(this.gameTime * walkSpeed) * 2;
+			y -= walkBob;
+			x += walkSway;
+
+			// Directional tilt
+			// 2=L, 6=R
+			if (dir === 2 || dir === 1 || dir === 3) x -= 2;
+			if (dir === 6 || dir === 5 || dir === 7) x += 2;
+		}
 
 		// Shadow
 		const shadow = new Graphics();

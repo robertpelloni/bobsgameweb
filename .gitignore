@@ -60,20 +60,3 @@ yarn-error.log*
 
 # OS
 Thumbs.db
-
-# Large data files - not needed in git
-data/lancedb/
-.borg/
-.hypercode/
-.hypercode-session.json
-.hypercode_startup_marker
-.tormentnexus/
-.tormentnexus-session.json
-.pi-lens/
-
-# Session archives
-*.gz
-
-# Legacy map formats (maps_v2 is primary)
-data/maps/
-data/maps_opt/

@@ -525,6 +525,51 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
     }
   }
 
+  /**
+   * Maps a legacy SFX ID (0-87) to a modern sound asset name.
+   */
+  getSoundNameById(id: number): string {
+    const sfxMap: Record<number, string> = {
+      0: 'menu_move',
+      1: 'menu_select',
+      2: 'menu_cancel',
+      3: 'move',
+      4: 'rotate',
+      5: 'drop',
+      6: 'lock',
+      7: 'line_clear',
+      8: 'tetris',
+      9: 'levelup',
+      10: 'gameover',
+      11: 'pause',
+      12: 'item_pickup',
+      13: 'door_open',
+      14: 'footstep',
+      15: 'dialogue_beep',
+      16: 'error',
+      17: 'save',
+      18: 'clear',
+      19: 'piece_drop',
+      20: 'piece_lock',
+      21: 'piece_move',
+      22: 'piece_rotate',
+      23: 'interact',
+      24: 'transition',
+      25: 'hold',
+      // ... IDs 26-87 are currently mapped to move as placeholders
+      // until more specific assets are identified/created
+    };
+    return sfxMap[id] || 'move';
+  }
+
+  /**
+   * Plays a legacy SFX by ID.
+   */
+  playLegacySound(id: number, options?: { volume?: number; pitch?: number }): number | null {
+    const name = this.getSoundNameById(id);
+    return this.playSound(name, options);
+  }
+
   toggleMute(): boolean {
     this.muted = !this.muted;
     return this.muted;
