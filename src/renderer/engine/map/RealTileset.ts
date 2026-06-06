@@ -14,7 +14,7 @@
 import { Texture, Assets, Rectangle } from "pixi.js";
 
 export class RealTileset {
-	static BUILD_VER = "3.6.1";
+	static BUILD_VER = "3.6.2";
 	private atlasTexture: Texture | null = null;
 	private shadowBlackAtlasTexture: Texture | null = null;
 	private shadowAtlasTexture: Texture | null = null;

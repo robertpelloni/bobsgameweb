@@ -142,9 +142,10 @@ export class GameMap {
 			this.renderLayerReal(l);
 		}
 
-		// Shadow layers: translucent black silhouettes
-		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.5;
-		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.75;
+		// Shadow layers: translucent black silhouettes (150/255 ≈ 0.59 from Java)
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.59;
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.59;
+		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.59;
 
 		const layerCounts: string[] = [];
 		for (let i = 0; i < MapData.layers; i++) {
@@ -162,13 +163,23 @@ export class GameMap {
 	private isShadowLayer(l: number): boolean {
 		return (
 			l === MapData.MAP_GROUND_SHADOW_LAYER ||
-			l === MapData.MAP_OBJECT_SHADOW_LAYER
+			l === MapData.MAP_OBJECT_SHADOW_LAYER ||
+			l === MapData.MAP_SPRITE_SHADOW_LAYER
 		);
 	}
 
 	private getTextureForLayer(l: number, tileId: number): Texture | null {
 		if (this.isShadowLayer(l)) {
-			return this.realTileset!.getShadowBlackTileTexture(tileId);
+			// Use the REAL atlas texture (not shadow-black) and tint it black.
+			// This avoids PixiJS v8 source-sharing issues with the shadow atlas
+			// and produces the same visual result: black silhouettes.
+			const tex = this.realTileset!.getTileTexture(tileId);
+			if (!tex) {
+				console.warn(
+					`[GameMap] Shadow L${l} tileId=${tileId}: NULL texture from real atlas!`,
+				);
+			}
+			return tex;
 		}
 		return this.realTileset!.getTileTexture(tileId);
 	}
@@ -242,6 +253,11 @@ export class GameMap {
 				if (l === MapData.MAP_LIGHT_LAYER) {
 					sprite.blendMode = "add";
 				}
+				// Shadow layers: tint pure black so the tile silhouette renders as
+				// a translucent darkening overlay (container alpha set after render)
+				if (this.isShadowLayer(l)) {
+					sprite.tint = 0x000000;
+				}
 
 				// objects2 → objectDetailContainer (z=3.5, above ALL objects)
 				if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
@@ -255,7 +271,7 @@ export class GameMap {
 			}
 		}
 
-		if (spriteCount > 0 || nullTextureCount > 0) {
+		if (spriteCount > 0 || nullTextureCount > 0 || this.isShadowLayer(l)) {
 			const tag = this.isShadowLayer(l) ? " [SHADOW-BLACK]" : "";
 			console.log(
 				`[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} sprites, ${nullTextureCount} null textures${tag}`,
@@ -404,6 +420,7 @@ export class GameMap {
 
 					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
 					if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";
+					if (this.isShadowLayer(l)) sprite.tint = 0x000000;
 
 					if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
 						(sprite as any)._isTileSprite = true;
@@ -416,7 +433,8 @@ export class GameMap {
 		}
 
 		// Shadow layers: translucent
-		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.5;
-		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.75;
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.59;
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.59;
+		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.59;
 	}
 }
