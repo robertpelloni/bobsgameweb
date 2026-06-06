@@ -77,14 +77,15 @@ console.log("\n🌳 Skill Tree Tests");
 	assert(res3.success, "Unlocked Power Strike (Prereq: Strike met)");
 
 	// Test Failed Prerequisite
+	tree.addSP(10);
 	const res4 = tree.unlockSkill("fireball");
 	assert(!res4.success, "Cannot unlock Fireball without Meditation");
-	assert(res4.msg.toLowerCase().includes("meditation"), "Error msg mentions missing prereq");
+	assertEqual(res4.msg, "Requires Meditation", "Error msg mentions missing prereq");
 
 	// Respec
 	tree.respec();
 	assertEqual(tree.getUnlocked().length, 0, "All skills cleared after respec");
-	assertEqual(tree.getSP(), 5, "All SP refunded");
+	assertEqual(tree.getSP(), 15, "All SP refunded");
 }
 
 console.log(`\n${"=".repeat(50)}`);
