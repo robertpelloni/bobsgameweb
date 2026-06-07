@@ -13,28 +13,31 @@ export interface CameraBounds {
 }
 
 /**
- * Shadow rendering — Java chunk-group compositing model.
+ * Shadow rendering — dedicated shadow layers model.
  *
- * The Java engine renders layers in two chunk groups:
- *   chunkLayer 0: L0 ground + L1 groundObjects + L2 groundShadow
- *                  + L3 objects + L4 objects2 + L5 objectShadow
- *   chunkLayer 1: L6 above + L7 above2 + L8 spriteShadow
+ * The original Java engine has two dedicated shadow layers:
+ *   Layer 2 (groundShadow): shadow silhouettes below objects
+ *   Layer 5 (objectShadow): shadow silhouettes above objects
  *
- * Each chunk is composited, then black pixels in the composite get
- * shadowAlpha = 150/255 ≈ 0.59. This means ALL black tiles across
- * ALL layers in a chunk group become translucent shadows — they are
- * NOT confined to specific "shadow" layers.
+ * In the Java binary data, groundShadow (_2) is empty across all
+ * 257 maps (the extraction is correct — it was never populated in
+ * the original game data either). ObjectShadow (_5) contains mixed
+ * content: shaped black tiles that form shadow silhouettes (tiles
+ * 8,9,10,24,26,35,36 etc.) plus colored furniture/decoration tiles.
  *
- * groundShadow (L2) is empty in ALL 257 maps (binary data is zero).
- * objectShadow (L5) has 98% colored furniture content (only 2% black).
- * The actual shadow shapes live on L3 (objects, 87% black by count)
- * and L6 (above, 89% black).
+ * Rendering approach:
+ *   - L2 (groundShadow): ALL tiles rendered translucently (alpha 0.59)
+ *     Currently empty in all maps, but the infrastructure is in place.
+ *   - L5 (objectShadow): BLACK tiles rendered translucently (alpha 0.59)
+ *     as shadow silhouettes; colored tiles rendered normally (opaque)
+ *     as furniture/decorations.
+ *   - ALL other layers (ground, objects, above, etc.): render normally
+ *     as opaque tiles. They are NOT shadow layers.
  *
- * Our approach: TWO shadow containers matching the Java chunk groups:
- *   groundGroupShadow: z=5, collects black tiles from L0–L5
- *   aboveGroupShadow:  z=102, collects black tiles from L6–L8
- * Each renders with alpha 0.59 using the shadow-black atlas.
- * All colored tiles render normally in their original layer containers.
+ * This replaces the previous chunk-group compositing approach which
+ * incorrectly treated black tiles on the objects and above layers as
+ * shadows. Those black tiles on objects/above are opaque structural
+ * geometry (walls, ceiling fills), not translucent shadows.
  */
 export class GameMap {
 	public data: MapData;
@@ -47,12 +50,15 @@ export class GameMap {
 	private realTileset: RealTileset | null = null;
 
 	/**
-	 * The two shadow containers matching Java chunk groups.
-	 * groundGroupShadow (z=5): all black tiles from layers 0-5
-	 * aboveGroupShadow (z=102): all black tiles from layers 6-8
+	 * Shadow overlay containers for the two dedicated shadow layers.
+	 * groundShadowOverlay (z=2.5): renders AFTER ground layers, BEFORE objects
+	 * objectShadowOverlay (z=5.5): renders AFTER objects, BEFORE above
+	 *
+	 * These sit between the normal layer containers so shadows from L2
+	 * overlay on ground content, and shadows from L5 overlay on objects.
 	 */
-	private groundGroupShadow!: Container;
-	private aboveGroupShadow!: Container;
+	private groundShadowOverlay!: Container;
+	private objectShadowOverlay!: Container;
 	private shadowTextureCache: Map<number, Texture> = new Map();
 
 	// Camera
@@ -98,25 +104,23 @@ export class GameMap {
 			this.container.addChild(layer);
 		}
 
-		// Ground-group shadow container: renders AFTER all ground-group layers (L0-L5)
-		// at z=5 (same as MAP_OBJECT_SHADOW_LAYER, which is the last ground-group layer).
-		// Black tiles from L0-L5 go here, rendered translucently.
-		this.groundGroupShadow = new Container();
-		this.groundGroupShadow.zIndex = 5;
-		this.groundGroupShadow.cullable = false;
-		this.groundGroupShadow.sortableChildren = false;
-		this.groundGroupShadow.alpha = 0.59; // Java shadowAlpha = 150/255
-		this.container.addChild(this.groundGroupShadow);
+		// Ground shadow overlay: renders between L2 (groundShadow) and L3 (objects)
+		// at z=2.5. All black tiles from L2 go here, rendered translucently.
+		this.groundShadowOverlay = new Container();
+		this.groundShadowOverlay.zIndex = 2.5;
+		this.groundShadowOverlay.cullable = false;
+		this.groundShadowOverlay.sortableChildren = false;
+		this.groundShadowOverlay.alpha = 0.59; // Java shadowAlpha = 150/255
+		this.container.addChild(this.groundShadowOverlay);
 
-		// Above-group shadow container: renders AFTER all above-group layers (L6-L8)
-		// at z=102 (same as MAP_SPRITE_SHADOW_LAYER, the last above-group layer).
-		// Black tiles from L6-L8 go here, rendered translucently.
-		this.aboveGroupShadow = new Container();
-		this.aboveGroupShadow.zIndex = 102;
-		this.aboveGroupShadow.cullable = false;
-		this.aboveGroupShadow.sortableChildren = false;
-		this.aboveGroupShadow.alpha = 0.59; // Java shadowAlpha = 150/255
-		this.container.addChild(this.aboveGroupShadow);
+		// Object shadow overlay: renders between L5 (objectShadow) and L6 (above)
+		// at z=5.5. Black tiles from L5 go here, rendered translucently.
+		this.objectShadowOverlay = new Container();
+		this.objectShadowOverlay.zIndex = 5.5;
+		this.objectShadowOverlay.cullable = false;
+		this.objectShadowOverlay.sortableChildren = false;
+		this.objectShadowOverlay.alpha = 0.59; // Java shadowAlpha = 150/255
+		this.container.addChild(this.objectShadowOverlay);
 
 		// objects2 container at z=3.5
 		this.objectDetailContainer = new Container();
@@ -159,31 +163,37 @@ export class GameMap {
 		}
 	}
 
-	/** Check if a layer index belongs to the ground chunk group (L0-L5) */
-	private isGroundGroup(l: number): boolean {
+	/** Check if a layer is a dedicated shadow layer */
+	private isShadowLayer(l: number): boolean {
 		return (
-			l >= MapData.MAP_GROUND_LAYER && l <= MapData.MAP_OBJECT_SHADOW_LAYER
+			l === MapData.MAP_GROUND_SHADOW_LAYER ||
+			l === MapData.MAP_OBJECT_SHADOW_LAYER
 		);
 	}
 
-	/** Check if a layer index belongs to the above chunk group (L6-L8) */
-	private isAboveGroup(l: number): boolean {
-		return l >= MapData.MAP_ABOVE_LAYER && l <= MapData.MAP_SPRITE_SHADOW_LAYER;
+	/**
+	 * Get the shadow overlay container for a shadow layer.
+	 * L2 (groundShadow) -> groundShadowOverlay
+	 * L5 (objectShadow) -> objectShadowOverlay
+	 */
+	private getShadowOverlay(l: number): Container | null {
+		if (l === MapData.MAP_GROUND_SHADOW_LAYER) return this.groundShadowOverlay;
+		if (l === MapData.MAP_OBJECT_SHADOW_LAYER) return this.objectShadowOverlay;
+		return null;
 	}
 
 	private renderWithRealTileset() {
 		this.objectDetailContainer.removeChildren();
 		this.shadowTextureCache.clear();
-		this.groundGroupShadow.removeChildren();
-		this.aboveGroupShadow.removeChildren();
+		this.groundShadowOverlay.removeChildren();
+		this.objectShadowOverlay.removeChildren();
 
 		// Reset all layer containers
 		for (let l = 0; l < MapData.layers; l++) {
 			this.layers[l].removeChildren();
 		}
 
-		// Render each layer: black tiles go to chunk-group shadow container,
-		// colored tiles go to normal layer container
+		// Render each layer
 		for (let l = 0; l < MapData.layers; l++) {
 			if (!MapData.isTileLayer(l)) continue;
 			if (
@@ -196,11 +206,13 @@ export class GameMap {
 		}
 
 		// Log shadow container sizes
-		const gsCount = this.groundGroupShadow.children.length;
-		const asCount = this.aboveGroupShadow.children.length;
-		console.log(
-			`[GameMap] Shadow layers for ${this.data.name}: ground-group=${gsCount}, above-group=${asCount}`,
-		);
+		const gsCount = this.groundShadowOverlay.children.length;
+		const osCount = this.objectShadowOverlay.children.length;
+		if (gsCount > 0 || osCount > 0) {
+			console.log(
+				`[GameMap] Shadow layers for ${this.data.name}: groundShadow=${gsCount}, objectShadow=${osCount}`,
+			);
+		}
 		this.container.sortChildren();
 	}
 
@@ -218,17 +230,12 @@ export class GameMap {
 
 	private renderLayerReal(l: number) {
 		const layer = this.layers[l];
+		const shadowOverlay = this.getShadowOverlay(l);
+		const isShadow = this.isShadowLayer(l);
 		let spriteCount = 0;
 		let shadowCount = 0;
 		let nullTextureCount = 0;
 		const totalTiles = this.data.widthTiles1X * this.data.heightTiles1X;
-
-		// Determine which shadow container this layer's black tiles go to
-		const shadowContainer = this.isGroundGroup(l)
-			? this.groundGroupShadow
-			: this.isAboveGroup(l)
-				? this.aboveGroupShadow
-				: null;
 
 		let startX = 0,
 			startY = 0,
@@ -274,13 +281,12 @@ export class GameMap {
 				const px = Math.round(x * 8);
 				const py = Math.round(y * 8);
 
-				// Black tiles on ground/above group layers → shadow container (alpha 0.59)
-				// All other tiles (including black tiles on non-group layers) → normal render
+				// On shadow layers (L2, L5): black tiles go to shadow overlay (alpha 0.59)
+				// All other tiles on any layer render normally (opaque)
 				if (
-					(shadowContainer &&
-						this.realTileset!.isBlackTile(tileId) &&
-						this.isGroundGroup(l)) ||
-					this.isAboveGroup(l)
+					isShadow &&
+					shadowOverlay &&
+					this.realTileset!.isBlackTile(tileId)
 				) {
 					const shadowTex = this.getShadowBlackTexture(tileId);
 					if (!shadowTex) {
@@ -290,7 +296,7 @@ export class GameMap {
 					const shadowSprite = new Sprite(shadowTex);
 					shadowSprite.x = px;
 					shadowSprite.y = py;
-					shadowContainer!.addChild(shadowSprite);
+					shadowOverlay.addChild(shadowSprite);
 					shadowCount++;
 				} else {
 					const texture = this.realTileset!.getTileTexture(tileId);
@@ -321,8 +327,9 @@ export class GameMap {
 		}
 
 		if (spriteCount > 0 || shadowCount > 0 || nullTextureCount > 0) {
+			const label = isShadow ? " [SHADOW]" : "";
 			console.log(
-				`[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} colored, ${shadowCount} shadow, ${nullTextureCount} null`,
+				`[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} colored, ${shadowCount} shadow, ${nullTextureCount} null${label}`,
 			);
 		}
 	}
@@ -445,20 +452,17 @@ export class GameMap {
 		}
 		for (const s of entityTiles) this.entitySpriteContainer.removeChild(s);
 
-		// Reset shadow containers for viewport re-render
-		this.groundGroupShadow.removeChildren();
-		this.aboveGroupShadow.removeChildren();
+		// Reset shadow overlay containers for viewport re-render
+		this.groundShadowOverlay.removeChildren();
+		this.objectShadowOverlay.removeChildren();
 
 		for (const l of renderableLayers) {
 			const layer = this.layers[l];
 			if (!layer) continue;
 			layer.removeChildren();
 
-			const shadowContainer = this.isGroundGroup(l)
-				? this.groundGroupShadow
-				: this.isAboveGroup(l)
-					? this.aboveGroupShadow
-					: null;
+			const shadowOverlay = this.getShadowOverlay(l);
+			const isShadow = this.isShadowLayer(l);
 
 			for (let y = startY; y < endY; y++) {
 				for (let x = startX; x < endX; x++) {
@@ -469,18 +473,19 @@ export class GameMap {
 					const px = Math.round(x * 8);
 					const py = Math.round(y * 8);
 
-					// Black tiles on ground/above group → shadow container
+					// Shadow layers: black tiles -> shadow overlay (alpha 0.59)
+					// All other layers: render normally (opaque)
 					if (
-						shadowContainer &&
-						this.realTileset!.isBlackTile(tileId) &&
-						(this.isGroundGroup(l) || this.isAboveGroup(l))
+						isShadow &&
+						shadowOverlay &&
+						this.realTileset!.isBlackTile(tileId)
 					) {
 						const shadowTex = this.getShadowBlackTexture(tileId);
 						if (!shadowTex) continue;
 						const shadowSprite = new Sprite(shadowTex);
 						shadowSprite.x = px;
 						shadowSprite.y = py;
-						shadowContainer.addChild(shadowSprite);
+						shadowOverlay.addChild(shadowSprite);
 					} else {
 						const texture = this.realTileset!.getTileTexture(tileId);
 						if (!texture) continue;
