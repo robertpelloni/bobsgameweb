@@ -52,7 +52,7 @@ export class GameMap {
 
 		this.container = new Container();
 		this.container.sortableChildren = true;
-		this.container.cullable = true;
+		this.container.cullable = false;
 
 		this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
 
@@ -142,8 +142,11 @@ export class GameMap {
 			this.renderLayerReal(l);
 		}
 
-// Shadow layers: alpha is baked into each sprite's texture pixels (A=150/255)
-// Container alpha stays at default 1.0 so per-pixel alpha is preserved exactly
+		// Shadow layers: shadow-black atlas tiles are opaque black (0,0,0,255).
+		// Container alpha 0.59 (150/255) makes them translucent, matching Java shadowAlpha.
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.59;
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.59;
+		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.59;
 
 		const layerCounts: string[] = [];
 		for (let i = 0; i < MapData.layers; i++) {
@@ -170,53 +173,24 @@ export class GameMap {
 
 	private getTextureForLayer(l: number, tileId: number): Texture | null {
 		if (this.isShadowLayer(l)) {
-			// Generate a black translucent shadow texture from the real atlas tile.
-			// We render the tile shape onto a canvas as solid black at ~59% alpha,
-			// then create a Texture from that canvas. This avoids any PixiJS v8
-			// tint/source-sharing issues.
+			// Use shadow-black atlas for ALL shadow layer tiles.
+			// Shadow-black atlas has every non-transparent pixel as solid black,
+			// which combined with container alpha 0.59 produces the correct
+			// translucent dark overlay effect matching Java's shadowAlpha.
+			// The shadow atlas (RGB 1,1,1 -> transparent) would make
+			// pure-black outline tiles invisible, which is wrong.
 			if (this.shadowTextureCache.has(tileId)) {
 				return this.shadowTextureCache.get(tileId)!;
 			}
-			const srcTex = this.realTileset!.getTileTexture(tileId);
-			if (!srcTex) {
+			const tex = this.realTileset!.getShadowBlackTileTexture(tileId);
+			if (tex) {
+				this.shadowTextureCache.set(tileId, tex);
+			} else {
 				console.warn(
-					`[GameMap] Shadow L${l} tileId=${tileId}: NULL texture from real atlas!`,
+					`[GameMap] Shadow L${l} tileId=${tileId}: NULL shadow-black texture!`,
 				);
-				return null;
 			}
-			// Extract the pixel data from the source texture
-			const canvas = document.createElement("canvas");
-			canvas.width = 8;
-			canvas.height = 8;
-			const ctx = canvas.getContext("2d")!;
-      
-			// Draw the tile from the atlas source image
-			const srcImg = (srcTex.source as any).resource || (srcTex.source as any).image;
-			if (!srcImg) {
-				console.warn(`[GameMap] Shadow tileId=${tileId}: no source resource, using raw atlas texture`);
-				// Fallback: just use the atlas texture with tint
-				this.shadowTextureCache.set(tileId, srcTex);
-				return srcTex;
-			}
-			ctx.drawImage(srcImg as any, 
-				srcTex.frame.x, srcTex.frame.y, 8, 8,
-				0, 0, 8, 8);
-			// Read the pixels, convert to black with shadow alpha
-			const imgData = ctx.getImageData(0, 0, 8, 8);
-			const d = imgData.data;
-			const shadowAlpha = 150; // 150/255 ≈ 0.59, matches Java
-			for (let i = 0; i < d.length; i += 4) {
-				if (d[i + 3] > 0) { // any non-transparent pixel → black shadow
-					d[i] = 0;     // R
-					d[i + 1] = 0; // G  
-					d[i + 2] = 0; // B
-					d[i + 3] = shadowAlpha; // A
-				}
-			}
-			ctx.putImageData(imgData, 0, 0);
-			const shadowTex = Texture.from(canvas);
-			this.shadowTextureCache.set(tileId, shadowTex);
-			return shadowTex;
+			return tex;
 		}
 		return this.realTileset!.getTileTexture(tileId);
 	}
@@ -305,20 +279,21 @@ export class GameMap {
 			}
 		}
 
-    if (spriteCount > 0 || nullTextureCount > 0 || this.isShadowLayer(l)) {
-      const tag = this.isShadowLayer(l) ? " [SHADOW]" : "";
-      // For shadow layers, also count how many non-zero tiles exist in the data
-      let dataNonZero = 0;
-      if (this.isShadowLayer(l)) {
-        for (let cy = 0; cy < this.data.heightTiles1X; cy++)
-          for (let cx = 0; cx < this.data.widthTiles1X; cx++)
-            if (this.data.getTileIndex(l, cx, cy) !== 0) dataNonZero++;
-      }
-      const dataTag = dataNonZero > 0 ? ` dataNonZero=${dataNonZero}` : " dataEmpty";
-      console.log(
-        `[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} sprites, ${nullTextureCount} null textures${tag}${this.isShadowLayer(l) ? dataTag : ""}`,
-      );
-    }
+		if (spriteCount > 0 || nullTextureCount > 0 || this.isShadowLayer(l)) {
+			const tag = this.isShadowLayer(l) ? " [SHADOW]" : "";
+			// For shadow layers, also count how many non-zero tiles exist in the data
+			let dataNonZero = 0;
+			if (this.isShadowLayer(l)) {
+				for (let cy = 0; cy < this.data.heightTiles1X; cy++)
+					for (let cx = 0; cx < this.data.widthTiles1X; cx++)
+						if (this.data.getTileIndex(l, cx, cy) !== 0) dataNonZero++;
+			}
+			const dataTag =
+				dataNonZero > 0 ? ` dataNonZero=${dataNonZero}` : " dataEmpty";
+			console.log(
+				`[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} sprites, ${nullTextureCount} null textures${tag}${this.isShadowLayer(l) ? dataTag : ""}`,
+			);
+		}
 	}
 
 	public renderLayer(l: number, tileset: Tileset, palette: Palette) {
@@ -462,7 +437,9 @@ export class GameMap {
 
 					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
 					if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";
-					if (this.isShadowLayer(l)) { /* shadow alpha baked into texture */ }
+					if (this.isShadowLayer(l)) {
+						/* shadow-black atlas, container alpha handles translucency */
+					}
 
 					if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
 						(sprite as any)._isTileSprite = true;
@@ -474,7 +451,9 @@ export class GameMap {
 			}
 		}
 
-		// Shadow layers: alpha baked into texture pixels
-		// Container alpha stays at default 1.0
+		// Shadow layers: shadow-black atlas = opaque black tiles, container alpha 0.59 (matches Java shadowAlpha)
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.59;
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.59;
+		this.layers[MapData.MAP_SPRITE_SHADOW_LAYER].alpha = 0.59;
 	}
 }
