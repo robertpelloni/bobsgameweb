@@ -13,21 +13,18 @@ export interface CameraBounds {
 }
 
 /**
- * Per-tile shadow rendering:
+ * Shadow rendering:
  *
- * In the Java engine, each "chunkLayer" was composited, then black pixels
- * within the composite were rendered translucently (shadowAlpha = 150/255).
- * This means shadow tiles (all-black shapes) appear on MANY layers, not
- * just the ones named "objectShadow" or "spriteShadow". For example, the
- * "objects" layer is 72% black tiles (shadow shapes of furniture).
+ * Only L2 (groundShadow), L5 (objectShadow), and L8 (spriteShadow)
+ * are shadow layers. Within these layers:
+ * - Black tiles (all pixels near-black): use shadow-black atlas,
+ *   render in a shadow container at alpha 0.59 (Java shadowAlpha)
+ * - Colored tiles (furniture/curtains that happen to be on shadow
+ *   layers): use real atlas, render normally at alpha 1.0
  *
- * Our approach: for EVERY tile on EVERY layer, check if it's an all-black
- * shape (via RealTileset.isBlackTile). If yes, render it with the
- * shadow-black atlas into a shared shadowOverlay container at alpha 0.59.
- * Colored tiles render normally with the real atlas.
- *
- * objects2 (L4): Rendered in objectDetailContainer ABOVE objects layer.
- * Uses real atlas for colored tiles, shadow-black for black tiles.
+ * ALL other layers render normally regardless of tile color.
+ * Tile 839 (solid black wall fill) on ground/objects/above layers
+ * is structural, NOT a shadow.
  */
 export class GameMap {
   public data: MapData;
@@ -39,7 +36,7 @@ export class GameMap {
   private tileTextures: globalThis.Map<number, Texture> = new globalThis.Map();
   private realTileset: RealTileset | null = null;
 
-  // Shadow overlay: all-black tiles from ANY layer go here at alpha 0.59
+  /** Shadow overlay container for black tiles from shadow layers only */
   private shadowOverlay!: Container;
   private shadowTextureCache: Map<number, Texture> = new Map();
 
@@ -52,6 +49,15 @@ export class GameMap {
   private initialSpawnX: number = -1;
   private initialSpawnY: number = -1;
 
+  /** Only these layers contain shadow tiles */
+  private isShadowLayer(l: number): boolean {
+    return (
+      l === MapData.MAP_GROUND_SHADOW_LAYER ||
+      l === MapData.MAP_OBJECT_SHADOW_LAYER ||
+      l === MapData.MAP_SPRITE_SHADOW_LAYER
+    );
+  }
+
   constructor(data: MapData, realTileset?: RealTileset) {
     this.data = data;
     this.realTileset = realTileset ?? null;
@@ -60,15 +66,11 @@ export class GameMap {
     this.container.cullable = false;
     this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
 
-    // Z-order: ground(0) < groundDetail(1) < groundShadow(2)
-    // < objects(3) < objects2(3.5) < objectShadow(4) < entities(50)
-    // < above(100) < aboveDetail(101) < spriteShadow(102)
     const Z_MAP: Record<number, number> = {
       [MapData.MAP_GROUND_LAYER]: 0,
       [MapData.MAP_GROUND_DETAIL_LAYER]: 1,
       [MapData.MAP_GROUND_SHADOW_LAYER]: 2,
       [MapData.MAP_OBJECT_LAYER]: 3,
-      // objects2 in objectDetailContainer at z=3.5
       [MapData.MAP_OBJECT_SHADOW_LAYER]: 4,
       [MapData.MAP_ABOVE_LAYER]: 100,
       [MapData.MAP_ABOVE_DETAIL_LAYER]: 101,
@@ -89,23 +91,22 @@ export class GameMap {
       this.container.addChild(layer);
     }
 
-    // objects2 container: z=3.5, ABOVE objects (z=3) so curtains/overlays
-    // always render on top of furniture.
+    // objects2 container at z=3.5
     this.objectDetailContainer = new Container();
     this.objectDetailContainer.sortableChildren = false;
     this.objectDetailContainer.cullable = false;
     this.objectDetailContainer.zIndex = 3.5;
     this.container.addChild(this.objectDetailContainer);
 
-    // Entity container: Y-sorted sprites
+    // Entity container at z=50
     this.entitySpriteContainer = new Container();
     this.entitySpriteContainer.sortableChildren = true;
     this.entitySpriteContainer.cullable = false;
     this.entitySpriteContainer.zIndex = 50;
     this.container.addChild(this.entitySpriteContainer);
 
-    // Shadow overlay: all-black tiles from ANY layer render here at alpha 0.59
-    // Matches Java shadowAlpha = 150/255
+    // Shadow overlay: black tiles from shadow layers L2/L5/L8 only.
+    // alpha = 0.59 = Java shadowAlpha (150/255)
     this.shadowOverlay = new Container();
     this.shadowOverlay.sortableChildren = true;
     this.shadowOverlay.cullable = false;
@@ -187,6 +188,7 @@ export class GameMap {
     let shadowCount = 0;
     let nullTextureCount = 0;
     const totalTiles = this.data.widthTiles1X * this.data.heightTiles1X;
+    const isShadow = this.isShadowLayer(l);
 
     let startX = 0,
       startY = 0,
@@ -221,41 +223,40 @@ export class GameMap {
           l === MapData.MAP_GROUND_DETAIL_LAYER &&
           (x + y) % skipFactor !== 0
         )
-        continue;
+          continue;
         if (
           skipFactor > 1 &&
           l === MapData.MAP_OBJECT_DETAIL_LAYER &&
           (x + y) % skipFactor !== 0
         )
-        continue;
+          continue;
 
-        // Per-tile shadow routing: black tiles -> shadowOverlay, colored -> normal layer
-        const isBlack = this.realTileset!.isBlackTile(tileId);
+        const px = Math.round(x * 8);
+        const py = Math.round(y * 8);
 
-        if (isBlack) {
-          // Shadow tile: use shadow-black atlas, add to shadowOverlay
+        // On shadow layers: black tiles -> shadowOverlay, colored -> normal layer
+        // On other layers: everything renders normally
+        if (isShadow && this.realTileset!.isBlackTile(tileId)) {
           const shadowTex = this.getShadowBlackTexture(tileId);
           if (!shadowTex) {
             nullTextureCount++;
             continue;
           }
           const shadowSprite = new Sprite(shadowTex);
-          shadowSprite.x = Math.round(x * 8);
-          shadowSprite.y = Math.round(y * 8);
-          // Preserve z-order relative to source layer
+          shadowSprite.x = px;
+          shadowSprite.y = py;
           shadowSprite.zIndex = layer.zIndex;
           this.shadowOverlay.addChild(shadowSprite);
           shadowCount++;
         } else {
-          // Colored tile: use real atlas, add to normal layer container
           const texture = this.realTileset!.getTileTexture(tileId);
           if (!texture) {
             nullTextureCount++;
             continue;
           }
           const sprite = new Sprite(texture);
-          sprite.x = Math.round(x * 8);
-          sprite.y = Math.round(y * 8);
+          sprite.x = px;
+          sprite.y = py;
 
           if (l === MapData.MAP_LIGHT_MASK_LAYER) {
             sprite.tint = 0x000000;
@@ -264,7 +265,6 @@ export class GameMap {
             sprite.blendMode = "add";
           }
 
-          // objects2 -> objectDetailContainer (z=3.5, above ALL objects)
           if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
             (sprite as any)._isTileSprite = true;
             this.objectDetailContainer.addChild(sprite);
@@ -365,10 +365,8 @@ export class GameMap {
     this.lastViewportCY = tileCY;
 
     const extraMargin = 16;
-    const halfW =
-      Math.ceil(screenW / (8 * zoom * 2)) + 8 + extraMargin;
-    const halfH =
-      Math.ceil(screenH / (8 * zoom * 2)) + 8 + extraMargin;
+    const halfW = Math.ceil(screenW / (8 * zoom * 2)) + 8 + extraMargin;
+    const halfH = Math.ceil(screenH / (8 * zoom * 2)) + 8 + extraMargin;
 
     const startX = Math.max(0, tileCX - halfW);
     const startY = Math.max(0, tileCY - halfH);
@@ -410,6 +408,7 @@ export class GameMap {
       const layer = this.layers[l];
       if (!layer) continue;
       layer.removeChildren();
+      const isShadow = this.isShadowLayer(l);
 
       for (let y = startY; y < endY; y++) {
         for (let x = startX; x < endX; x++) {
@@ -417,24 +416,23 @@ export class GameMap {
           if (tileId === 0) continue;
           if (tileId === 839) continue;
 
-          const isBlack = this.realTileset!.isBlackTile(tileId);
+          const px = Math.round(x * 8);
+          const py = Math.round(y * 8);
 
-          if (isBlack) {
-            // Shadow tile -> shadowOverlay
+          if (isShadow && this.realTileset!.isBlackTile(tileId)) {
             const shadowTex = this.getShadowBlackTexture(tileId);
             if (!shadowTex) continue;
             const shadowSprite = new Sprite(shadowTex);
-            shadowSprite.x = Math.round(x * 8);
-            shadowSprite.y = Math.round(y * 8);
+            shadowSprite.x = px;
+            shadowSprite.y = py;
             shadowSprite.zIndex = layer.zIndex;
             this.shadowOverlay.addChild(shadowSprite);
           } else {
-            // Colored tile -> normal layer
             const texture = this.realTileset!.getTileTexture(tileId);
             if (!texture) continue;
             const sprite = new Sprite(texture);
-            sprite.x = Math.round(x * 8);
-            sprite.y = Math.round(y * 8);
+            sprite.x = px;
+            sprite.y = py;
 
             if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
             if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";

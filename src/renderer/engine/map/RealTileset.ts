@@ -77,32 +77,32 @@ export class RealTileset {
 				for (const tid of atlasMap.tileIds) {
 					this.validTileIds.add(tid);
 				}
-      console.log(
-        `[RealTileset] Atlas map: ${this.validTileIds.size} valid tile IDs`,
-      );
-    } else {
-      console.warn(
-        "[RealTileset] Could not load atlas map — all tileIds assumed valid",
-      );
-    }
+				console.log(
+					`[RealTileset] Atlas map: ${this.validTileIds.size} valid tile IDs`,
+				);
+			} else {
+				console.warn(
+					"[RealTileset] Could not load atlas map — all tileIds assumed valid",
+				);
+			}
 
-    // Load black tile ID list (tiles whose pixels are ALL near-black)
-    try {
-      const blackResp = await this.fetchWithRetry(
-        `/tileset_atlas_black_ids.json${this.cacheBust}`,
-      );
-      if (blackResp.ok) {
-        const blackData = await blackResp.json();
-        for (const tid of blackData.blackTileIds) {
-          this.blackTileIds.add(tid);
-        }
-        console.log(
-          `[RealTileset] Black tile IDs: ${this.blackTileIds.size}`,
-        );
-      }
-    } catch (e) {
-      console.warn("[RealTileset] Could not load black tile IDs:", e);
-    }
+			// Load black tile ID list (tiles whose pixels are ALL near-black)
+			try {
+				const blackResp = await this.fetchWithRetry(
+					`/tileset_atlas_black_ids.json${this.cacheBust}`,
+				);
+				if (blackResp.ok) {
+					const blackData = await blackResp.json();
+					for (const tid of blackData.blackTileIds) {
+						this.blackTileIds.add(tid);
+					}
+					console.log(
+						`[RealTileset] Black tile IDs: ${this.blackTileIds.size}`,
+					);
+				}
+			} catch (e) {
+				console.warn("[RealTileset] Could not load black tile IDs:", e);
+			}
 
 			// Load real atlas with cache-bust
 			this.atlasTexture = await Assets.load(
@@ -256,18 +256,18 @@ export class RealTileset {
 		return tex;
 	}
 
-  hasTile(tileId: number): boolean {
-    return tileId > 0 && this.validTileIds.has(tileId) && !!this.atlasTexture;
-  }
+	hasTile(tileId: number): boolean {
+		return tileId > 0 && this.validTileIds.has(tileId) && !!this.atlasTexture;
+	}
 
-  /**
-   * Returns true if this tile's pixels are ALL near-black (max RGB ≤ 5).
-   * These are shadow tiles that should be rendered translucently
-   * with the shadow-black atlas, regardless of which layer they're on.
-   */
-  isBlackTile(tileId: number): boolean {
-    return this.blackTileIds.has(tileId);
-  }
+	/**
+	 * Returns true if this tile's pixels are ALL near-black (max RGB ≤ 5).
+	 * These are shadow tiles that should be rendered translucently
+	 * with the shadow-black atlas, regardless of which layer they're on.
+	 */
+	isBlackTile(tileId: number): boolean {
+		return this.blackTileIds.has(tileId);
+	}
 
 	destroy(): void {
 		for (const t of this.tileTextureCache.values()) t.destroy(true);
