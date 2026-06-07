@@ -110,7 +110,7 @@ export class GameMap {
 		this.groundShadowOverlay.zIndex = 2.5;
 		this.groundShadowOverlay.cullable = false;
 		this.groundShadowOverlay.sortableChildren = false;
-		this.groundShadowOverlay.alpha = 0.59; // Java shadowAlpha = 150/255
+		this.groundShadowOverlay.alpha = 1.0; // per-sprite alpha handles translucency
 		this.container.addChild(this.groundShadowOverlay);
 
 		// Object shadow overlay (z=5.5): renders between L5 and L6
@@ -119,7 +119,7 @@ export class GameMap {
 		this.objectShadowOverlay.zIndex = 5.5;
 		this.objectShadowOverlay.cullable = false;
 		this.objectShadowOverlay.sortableChildren = false;
-		this.objectShadowOverlay.alpha = 0.59; // Java shadowAlpha = 150/255
+		this.objectShadowOverlay.alpha = 1.0; // per-sprite alpha handles translucency
 		this.container.addChild(this.objectShadowOverlay);
 
 		// Above shadow overlay (z=102.5): renders after L8
@@ -128,7 +128,7 @@ export class GameMap {
 		this.aboveShadowOverlay.zIndex = 102.5;
 		this.aboveShadowOverlay.cullable = false;
 		this.aboveShadowOverlay.sortableChildren = false;
-		this.aboveShadowOverlay.alpha = 0.59; // Java shadowAlpha = 150/255
+		this.aboveShadowOverlay.alpha = 1.0; // per-sprite alpha handles translucency
 		this.container.addChild(this.aboveShadowOverlay);
 
 		// objects2 container at z=3.5
@@ -251,23 +251,23 @@ export class GameMap {
 		this.container.sortChildren();
 	}
 
-  /** Get regular atlas texture for a shadow tile (cached).
-   * We use the REAL atlas, NOT the shadow-black atlas, because the
-   * shadow-black atlas has fully transparent pixels (0,0,0,0) which
-   * makes shadow sprites invisible. The real atlas has the actual
-   * black silhouette pixels with alpha=255, which become translucent
-   * when rendered inside a container with alpha=0.59.
-   */
-  private getShadowTexture(tileId: number): Texture | null {
-    if (this.shadowTextureCache.has(tileId)) {
-      return this.shadowTextureCache.get(tileId)!;
-    }
-    const tex = this.realTileset!.getTileTexture(tileId);
-    if (tex) {
-      this.shadowTextureCache.set(tileId, tex);
-    }
-    return tex;
-  }
+	/** Get regular atlas texture for a shadow tile (cached).
+	 * We use the REAL atlas, NOT the shadow-black atlas, because the
+	 * shadow-black atlas has fully transparent pixels (0,0,0,0) which
+	 * makes shadow sprites invisible. The real atlas has the actual
+	 * black silhouette pixels with alpha=255, which become translucent
+	 * when rendered inside a container with alpha=0.59.
+	 */
+	private getShadowTexture(tileId: number): Texture | null {
+		if (this.shadowTextureCache.has(tileId)) {
+			return this.shadowTextureCache.get(tileId)!;
+		}
+		const tex = this.realTileset!.getTileTexture(tileId);
+		if (tex) {
+			this.shadowTextureCache.set(tileId, tex);
+		}
+		return tex;
+	}
 
 	private renderLayerReal(l: number) {
 		const layer = this.layers[l];
@@ -340,6 +340,7 @@ export class GameMap {
 					const shadowSprite = new Sprite(shadowTex);
 					shadowSprite.x = px;
 					shadowSprite.y = py;
+					shadowSprite.alpha = 0.59; // Java shadowAlpha = 150/255
 					shadowTarget.addChild(shadowSprite);
 					shadowCount++;
 				} else {
@@ -529,6 +530,7 @@ export class GameMap {
 						const shadowSprite = new Sprite(shadowTex);
 						shadowSprite.x = px;
 						shadowSprite.y = py;
+						shadowSprite.alpha = 0.59; // Java shadowAlpha = 150/255
 						shadowTarget.addChild(shadowSprite);
 					} else {
 						const texture = this.realTileset!.getTileTexture(tileId);
