@@ -13,18 +13,26 @@ export interface CameraBounds {
 }
 
 /**
- * Shadow rendering:
+ * Shadow rendering — per-map layer analysis:
  *
- * Only L2 (groundShadow), L5 (objectShadow), and L8 (spriteShadow)
- * are shadow layers. Within these layers:
- * - Black tiles (all pixels near-black): use shadow-black atlas,
- *   render in a shadow container at alpha 0.59 (Java shadowAlpha)
- * - Colored tiles (furniture/curtains that happen to be on shadow
- *   layers): use real atlas, render normally at alpha 1.0
+ * In the Java engine, each "chunkLayer" composite is drawn, then black
+ * pixels within the composite are rendered with shadowAlpha (150/255 ≈ 0.59).
+ * This means shadow tiles can exist on ANY layer, not just the ones
+ * named "shadow". For example, the "above" layer is 100% black in 84
+ * maps — those ARE the overhead shadows.
  *
- * ALL other layers render normally regardless of tile color.
- * Tile 839 (solid black wall fill) on ground/objects/above layers
- * is structural, NOT a shadow.
+ * Our approach: at render time, analyze each layer's content. If a layer
+ * is "shadow-dominant" (majority of its non-zero tile placements are
+ * all-black tiles), route its black tiles to the shadowOverlay container
+ * (alpha 0.59). Colored tiles on any layer always render normally.
+ * Non-shadow-dominant layers render all tiles normally.
+ *
+ * This correctly handles:
+ * - "above" layer: 83% of maps are all-black → shadow dominant → shadows
+ * - "objects" layer: 23% all-black → shadow dominant in those maps
+ * - "objectShadow" layer: only 27% all-black → shadow dominant only when true
+ * - "spriteShadow" layer: only 4% all-black → rarely shadow dominant
+ * - "ground" layer: <1% all-black → never shadow dominant → structural
  */
 export class GameMap {
   public data: MapData;
@@ -36,9 +44,12 @@ export class GameMap {
   private tileTextures: globalThis.Map<number, Texture> = new globalThis.Map();
   private realTileset: RealTileset | null = null;
 
-  /** Shadow overlay container for black tiles from shadow layers only */
+  /** Shadow overlay: black tiles from shadow-dominant layers at alpha 0.59 */
   private shadowOverlay!: Container;
   private shadowTextureCache: Map<number, Texture> = new Map();
+
+  /** Per-layer flag: true if this layer is shadow-dominant for this map */
+  private layerIsShadowDominant: boolean[] = [];
 
   // Camera
   public camX = 0;
@@ -48,15 +59,6 @@ export class GameMap {
   private isLargeMap: boolean = false;
   private initialSpawnX: number = -1;
   private initialSpawnY: number = -1;
-
-  /** Only these layers contain shadow tiles */
-  private isShadowLayer(l: number): boolean {
-    return (
-      l === MapData.MAP_GROUND_SHADOW_LAYER ||
-      l === MapData.MAP_OBJECT_SHADOW_LAYER ||
-      l === MapData.MAP_SPRITE_SHADOW_LAYER
-    );
-  }
 
   constructor(data: MapData, realTileset?: RealTileset) {
     this.data = data;
@@ -105,7 +107,7 @@ export class GameMap {
     this.entitySpriteContainer.zIndex = 50;
     this.container.addChild(this.entitySpriteContainer);
 
-    // Shadow overlay: black tiles from shadow layers L2/L5/L8 only.
+    // Shadow overlay: black tiles from shadow-dominant layers.
     // alpha = 0.59 = Java shadowAlpha (150/255)
     this.shadowOverlay = new Container();
     this.shadowOverlay.sortableChildren = true;
@@ -141,10 +143,79 @@ export class GameMap {
     }
   }
 
+  /**
+   * Analyze each layer's content to determine if it's shadow-dominant.
+   * A layer is shadow-dominant if >50% of its non-zero tile placements
+   * are all-black tiles (pixels all near-black, RGB <= 5).
+   * Hit, camera, entity layers are never shadow-dominant.
+   */
+  private analyzeLayerShadowDominance(): void {
+    this.layerIsShadowDominant = new Array(MapData.layers).fill(false);
+    if (!this.realTileset || !this.realTileset.loaded) return;
+
+    for (let l = 0; l < MapData.layers; l++) {
+      // Skip non-tile and utility layers
+      if (!MapData.isTileLayer(l)) continue;
+      if (
+        l === MapData.MAP_HIT_LAYER ||
+        l === MapData.MAP_CAMERA_BOUNDS_LAYER ||
+        l === MapData.MAP_ENTITY_LAYER
+      )
+        continue;
+
+      let blackCount = 0;
+      let totalCount = 0;
+      const totalTiles = this.data.widthTiles1X * this.data.heightTiles1X;
+
+      // Sample for large maps (same viewport logic as renderLayerReal)
+      let startX = 0, startY = 0;
+      let endX = this.data.widthTiles1X, endY = this.data.heightTiles1X;
+      if (totalTiles > 10000) {
+        const cx = this.initialSpawnX > 0
+          ? Math.floor(this.initialSpawnX / 8)
+          : Math.floor(this.data.widthTiles1X / 2);
+        const cy = this.initialSpawnY > 0
+          ? Math.floor(this.initialSpawnY / 8)
+          : Math.floor(this.data.heightTiles1X / 2);
+        const radius = totalTiles > 100000 ? 40 : 60;
+        startX = Math.max(0, cx - radius);
+        startY = Math.max(0, cy - radius);
+        endX = Math.min(this.data.widthTiles1X, cx + radius);
+        endY = Math.min(this.data.heightTiles1X, cy + radius);
+      }
+
+      for (let y = startY; y < endY; y++) {
+        for (let x = startX; x < endX; x++) {
+          const tileId = this.data.getTileIndex(l, x, y);
+          if (tileId === 0) continue;
+          if (tileId === 839) continue; // wall fill is never shadow
+          totalCount++;
+          if (this.realTileset.isBlackTile(tileId)) {
+            blackCount++;
+          }
+        }
+      }
+
+      if (totalCount > 0 && blackCount / totalCount > 0.5) {
+        this.layerIsShadowDominant[l] = true;
+      }
+    }
+
+    const dominantLayers = this.layerIsShadowDominant
+      .map((v, i) => v ? `${i}(${MapData.LAYER_NAMES[i] || "?"})` : null)
+      .filter(Boolean);
+    console.log(
+      `[GameMap] Shadow-dominant layers for ${this.data.name}: [${dominantLayers.join(", ")}]`,
+    );
+  }
+
   private renderWithRealTileset() {
     this.objectDetailContainer.removeChildren();
     this.shadowOverlay.removeChildren();
     this.shadowTextureCache.clear();
+
+    // Analyze which layers are shadow-dominant for THIS map
+    this.analyzeLayerShadowDominance();
 
     for (let l = 0; l < MapData.layers; l++) {
       if (!MapData.isTileLayer(l)) continue;
@@ -188,7 +259,7 @@ export class GameMap {
     let shadowCount = 0;
     let nullTextureCount = 0;
     const totalTiles = this.data.widthTiles1X * this.data.heightTiles1X;
-    const isShadow = this.isShadowLayer(l);
+    const isShadowDominant = this.layerIsShadowDominant[l];
 
     let startX = 0,
       startY = 0,
@@ -234,9 +305,9 @@ export class GameMap {
         const px = Math.round(x * 8);
         const py = Math.round(y * 8);
 
-        // On shadow layers: black tiles -> shadowOverlay, colored -> normal layer
-        // On other layers: everything renders normally
-        if (isShadow && this.realTileset!.isBlackTile(tileId)) {
+        // On shadow-dominant layers: black tiles -> shadowOverlay
+        // On all layers: colored tiles render normally
+        if (isShadowDominant && this.realTileset!.isBlackTile(tileId)) {
           const shadowTex = this.getShadowBlackTexture(tileId);
           if (!shadowTex) {
             nullTextureCount++;
@@ -278,7 +349,7 @@ export class GameMap {
 
     if (spriteCount > 0 || shadowCount > 0 || nullTextureCount > 0) {
       console.log(
-        `[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} colored, ${shadowCount} shadow, ${nullTextureCount} null`,
+        `[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} colored, ${shadowCount} shadow, ${nullTextureCount} null${isShadowDominant ? " [SHADOW-DOMINANT]" : ""}`,
       );
     }
   }
@@ -408,7 +479,7 @@ export class GameMap {
       const layer = this.layers[l];
       if (!layer) continue;
       layer.removeChildren();
-      const isShadow = this.isShadowLayer(l);
+      const isShadowDominant = this.layerIsShadowDominant[l] ?? false;
 
       for (let y = startY; y < endY; y++) {
         for (let x = startX; x < endX; x++) {
@@ -419,7 +490,7 @@ export class GameMap {
           const px = Math.round(x * 8);
           const py = Math.round(y * 8);
 
-          if (isShadow && this.realTileset!.isBlackTile(tileId)) {
+          if (isShadowDominant && this.realTileset!.isBlackTile(tileId)) {
             const shadowTex = this.getShadowBlackTexture(tileId);
             if (!shadowTex) continue;
             const shadowSprite = new Sprite(shadowTex);
