@@ -1,8 +1,0 @@
-🛡 YuuEntity Logic Tests
-  ✅ Initial state correct
-  ✅ Move direction update (Down)
-  ✅ Move direction update (UpRight)
-  ✅ Hitbox parity correct (30px offset)
-  ✅ Turning logic correct (Down -> DownRight -> Right)
-
-✅ ALL YUUENTITY TESTS PASSED

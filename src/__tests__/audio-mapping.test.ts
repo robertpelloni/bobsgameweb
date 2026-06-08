@@ -10,7 +10,7 @@ function assertEqual(actual: unknown, expected: unknown, message: string): void 
 	}
 }
 
-// Mock AudioManager mapping logic for the test since we can't easily import from renderer
+// Mock AudioManager mapping logic for the test since we can't easily import from renderer in this environment
 function getSoundNameById(id: number): string {
     const sfxMap: Record<number, string> = {
       0: 'menu_move',

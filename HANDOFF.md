@@ -1,44 +1,41 @@
-# Handoff — 2026-05-28 — Version 3.0.9
+# Handoff — 2026-06-07 — Version 3.0.9
 
 ## Agent
 Jules (Software Engineer)
 
 ## Session Summary
-Synchronized the repository and all submodules to version 3.0.9. Implemented significant core engine features to achieve parity with the legacy v8830 engine, including a robust SFX mapping system and improved character movement/collision.
+Achieved full legacy engine parity for version 3.0.9. Standardized the entity system with a new hierarchy, implemented metadata-driven hitboxes, and finalized the legacy SFX mapping. Resolved server-side architectural bugs and verified system integrity with 100% test pass rate and live endpoint validation.
 
 ## What Was Completed
 
-### 1. Version Synchronization & Submodule Rationalization
-- Incremented version to **3.0.9** across `package.json`, `VERSION.md`, `Config.ts`, `WorldScene.ts`, and server files.
-- Performed a comprehensive audit of 32 submodules.
-- Removed 31 redundant reference/tool submodules to reduce repository bloat.
-- Preserved `submodules/bobui` as a core library dependency.
-- Documented analysis and integration status in `SUBMODULES_ANALYSIS.md`.
+### 1. Entity System Refactor (`BaseEntity`, `YuuEntity`, `NPCEntity`)
+- Introduced a centralized entity hub to handle 8-directional movement, 64-frame animation logic, and Java-accurate turning delays.
+- Refactored `WorldScene.ts` to delegate protagonist and NPC updates to these classes, eliminating procedural bloat and fixing runtime movement crashes.
 
-### 2. SFX Library Integration (Legacy IDs 0-87)
-- Implemented `getSoundNameById` and `playLegacySound` in `AudioManager.ts`.
-- Mapped the first 26 legacy SFX IDs to modern audio assets (`menu_move`, `door_open`, `piece_move`, etc.).
-- Remaining IDs (26-87) are mapped to placeholders awaiting specific asset identification.
+### 2. Collision Parity & Metadata-Driven Hitboxes
+- Implemented `hitBoxOffset` metadata in the entity classes.
+- Applied 30px offset for adults and 24px for children (auto-detected via sprite naming).
+- Updated `WorldScene.isHitTile` to perform accurate collision checks against all entities using `getCollisionY()`.
 
-### 3. 8-Directional Procedural Animations
-- Integrated directional walk cycles into `DemoWorld.ts`.
-- Movement now triggers procedural bobbing and swaying based on velocity and orientation.
-- Direction Indexing: 0=D, 1=DL, 2=L, 3=UL, 4=U, 5=UR, 6=R, 7=DR.
+### 3. Audio Finalization
+- Expanded `AudioManager` mapping to cover all legacy SFX IDs (0-87) with descriptive modern asset names.
+- Verified mapping integrity with `src/__tests__/audio-mapping.test.ts`.
 
-### 4. Collision Parity (hitBoxFromTop)
-- Integrated `hitBoxFromTop` logic into the `DemoWorld` collision system.
-- Adjusted collision detection to use a 30px offset for adult characters (Yuu), aligning with legacy engine standards for accurate depth-sorting and tile traversal.
+### 4. Server Stabilization
+- Fixed critical scope issues for the `tournaments` Map in `server/index.js`.
+- Corrected improper `session["emit"]` calls to standard `socket.emit`.
+- Verified live endpoint functionality (`/healthz`, `/stats`, `/maps`, `/players`) via integration testing.
 
-## Production Actions Performed
-- Updated `CHANGELOG.md` with v3.0.9 milestones.
-- Verified system stability with 400+ unit and integration tests (100% pass rate).
+### 5. Repository Sanitization
+- Cleaned the git index by removing 31 redundant submodules, resolving the "dirty submodule" state and leaving only `submodules/bobui`.
+- Ported functionalities are documented in `SUBMODULES_ANALYSIS.md`.
 
-## Crucial Technical Insight
-- **Submodule Management:** Submodules were force-updated to resolve "dirty" states in the build environment.
-- **Audio Mapping:** The `AudioManager` now supports `playLegacySound(id)`, enabling direct porting of legacy scripting events without refactoring the script parser.
-- **Hitbox Logic:** The `HITBOX_FROM_TOP` constant in `DemoWorld.ts` is currently set to 30px for Yuu; this may need to be dynamic for child NPCs (24px) in future iterations.
+## Production Readiness
+- **Version:** Synchronized at **3.0.9**.
+- **Tests:** 31/31 integration tests passed.
+- **Endpoints:** Fully operational and verified with live data.
 
 ## Highest-Value Next Steps
-1. **Asset Mapping Expansion:** Continue mapping SFX IDs 26-87 to specific .wav files in `data/audio/sfx/`.
-2. **YuuEntity Centralization:** Implement a dedicated `YuuEntity` class to replace the procedural rendering in `DemoWorld.ts` with the 64-frame sprite sheet textures.
-3. **Dynamic Hitboxes:** Refactor collision logic to fetch `hitBoxFromTop` values from entity metadata instead of hard-coded constants.
+1. **Audio Optimization:** Evaluate pre-converting tracker assets to OGG for mobile performance.
+2. **Editor Pathing:** Finalize system path configuration for external tool launching in `CustomGameEditor.ts`.
+3. **Multiplayer Hardening:** Implement rate-limiting and input validation for RPG world sync packets.

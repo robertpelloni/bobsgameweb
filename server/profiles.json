@@ -1,0 +1,13 @@
+{
+  "test-uuid": {
+    "id": "test-uuid",
+    "name": "Tester",
+    "elo": 1200,
+    "wins": 0,
+    "losses": 0,
+    "gamesPlayed": 0,
+    "achievements": [],
+    "settings": {},
+    "lastSeen": 1780908725990
+  }
+}
