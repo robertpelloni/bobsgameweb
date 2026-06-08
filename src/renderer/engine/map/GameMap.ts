@@ -1,6 +1,6 @@
 import { MapData } from "../../../shared/MapData";
 import type { Entity } from "../../entity/Entity";
-import { Container, Graphics, Sprite, Texture } from "pixi.js";
+import { Container, Sprite, Texture } from "pixi.js";
 import { Tileset } from "../../../shared/Tileset";
 import type { Palette } from "../../../shared/Palette";
 import type { RealTileset } from "./RealTileset";
@@ -24,14 +24,14 @@ export interface CameraBounds {
  * and walls beneath furniture (beds, desks, tables, curtains).
  *
  * Rendering approach:
- * - L2 (groundShadow): ALL non-zero tiles → groundShadowGraphics (translucent)
- * - L3 (objects): non-839 black tiles → objectShadowGraphics (translucent),
+ * - L2 (groundShadow): ALL non-zero tiles → groundShadowOverlay (translucent)
+ * - L3 (objects): non-839 black tiles → objectShadowOverlay (translucent),
  *   colored tiles and 839 → normal layer (opaque)
- * - L5 (objectShadow): ALL non-zero tiles → objectShadowGraphics (translucent)
- * - L6 (above): non-839 black tiles → aboveShadowGraphics (translucent),
+ * - L5 (objectShadow): ALL non-zero tiles → objectShadowOverlay (translucent)
+ * - L6 (above): non-839 black tiles → aboveShadowOverlay (translucent),
  *   colored tiles and 839 → normal layer (opaque)
- * - All shadow tiles drawn as Graphics.rect().fill({color:0})
- * - Translucency via Container.alpha = 0.59 on each Graphics object
+ * - All shadow tiles drawn as Sprites with tint=0x000000 and alpha=0.59
+ * - Shadow Sprites are added to overlay Containers between normal layers
  */
 export class GameMap {
 	public data: MapData;
@@ -44,10 +44,10 @@ export class GameMap {
 	private realTileset: RealTileset | null = null;
 
 	/** Shadow overlay containers positioned between normal layers */
-	// Shadow overlay Graphics — single draw call per layer with baked-in alpha
-	private groundShadowGraphics!: Graphics;
-	private objectShadowGraphics!: Graphics;
-	private aboveShadowGraphics!: Graphics;
+	// Shadow overlay Containers — shadow sprites with tint=0x000000 + alpha=0.59
+	private groundShadowOverlay!: Container;
+	private objectShadowOverlay!: Container;
+	private aboveShadowOverlay!: Container;
 	/** Track shadow tile counts for logging */
 	private _shadowTileCounts = { ground: 0, object: 0, above: 0 };
 
@@ -104,24 +104,21 @@ export class GameMap {
 			this.container.addChild(layer);
 		}
 
-		// Shadow overlay Graphics — single draw call per layer with fill alpha
-		this.groundShadowGraphics = new Graphics();
-		this.groundShadowGraphics.zIndex = 2.5;
-		this.groundShadowGraphics.cullable = false;
-		this.groundShadowGraphics.alpha = 0.59;
-		this.container.addChild(this.groundShadowGraphics);
+		// Shadow overlay Containers — shadow sprites with tint=0x000000 + alpha=0.59
+		this.groundShadowOverlay = new Container();
+		this.groundShadowOverlay.zIndex = 2.5;
+		this.groundShadowOverlay.cullable = false;
+		this.container.addChild(this.groundShadowOverlay);
 
-		this.objectShadowGraphics = new Graphics();
-		this.objectShadowGraphics.zIndex = 5.5;
-		this.objectShadowGraphics.cullable = false;
-		this.objectShadowGraphics.alpha = 0.59;
-		this.container.addChild(this.objectShadowGraphics);
+		this.objectShadowOverlay = new Container();
+		this.objectShadowOverlay.zIndex = 5.5;
+		this.objectShadowOverlay.cullable = false;
+		this.container.addChild(this.objectShadowOverlay);
 
-		this.aboveShadowGraphics = new Graphics();
-		this.aboveShadowGraphics.zIndex = 102.5;
-		this.aboveShadowGraphics.cullable = false;
-		this.aboveShadowGraphics.alpha = 0.59;
-		this.container.addChild(this.aboveShadowGraphics);
+		this.aboveShadowOverlay = new Container();
+		this.aboveShadowOverlay.zIndex = 102.5;
+		this.aboveShadowOverlay.cullable = false;
+		this.container.addChild(this.aboveShadowOverlay);
 
 		// objects2 container at z=3.5
 		this.objectDetailContainer = new Container();
@@ -177,27 +174,31 @@ export class GameMap {
 	 * Determine which shadow overlay a tile should go to.
 	 * Returns null if the tile should render normally (opaque).
 	 */
-	private getShadowTarget(l: number, tileId: number, isBlack: boolean): Graphics | null {
+	private getShadowTarget(
+		l: number,
+		tileId: number,
+		isBlack: boolean,
+	): Container | null {
 		// L2 (groundShadow): all tiles are shadow
 		if (l === MapData.MAP_GROUND_SHADOW_LAYER) {
-			return tileId !== 0 ? this.groundShadowGraphics : null;
+			return tileId !== 0 ? this.groundShadowOverlay : null;
 		}
 		// L3 (objects): black tiles (curtains, desk edges, bed frames)
 		// are translucent shadow silhouettes. Colored tiles (furniture
 		// faces) and structural tile 839 render opaque.
 		if (l === MapData.MAP_OBJECT_LAYER) {
-			if (isBlack && tileId !== 839) return this.objectShadowGraphics;
+			if (isBlack && tileId !== 839) return this.objectShadowOverlay;
 			return null;
 		}
 		// L5 (objectShadow): ALL non-zero tiles are translucent shadows.
 		// Even "colored" tiles like 1833 are dark shadow shapes.
 		if (l === MapData.MAP_OBJECT_SHADOW_LAYER) {
-			return tileId !== 0 ? this.objectShadowGraphics : null;
+			return tileId !== 0 ? this.objectShadowOverlay : null;
 		}
 		// L6 (above): black tiles (door frames, roof edges) are
 		// translucent shadow silhouettes. Structural tile 839 renders opaque.
 		if (l === MapData.MAP_ABOVE_LAYER) {
-			if (isBlack && tileId !== 839) return this.aboveShadowGraphics;
+			if (isBlack && tileId !== 839) return this.aboveShadowOverlay;
 			return null;
 		}
 		return null;
@@ -207,9 +208,9 @@ export class GameMap {
 		this.objectDetailContainer.removeChildren();
 		this.shadowTextureCache.clear();
 		this._shadowTileCounts = { ground: 0, object: 0, above: 0 };
-		this.groundShadowGraphics.clear();
-		this.objectShadowGraphics.clear();
-		this.aboveShadowGraphics.clear();
+		this.groundShadowOverlay.removeChildren();
+		this.objectShadowOverlay.removeChildren();
+		this.aboveShadowOverlay.removeChildren();
 
 		for (let l = 0; l < MapData.layers; l++) {
 			this.layers[l].removeChildren();
@@ -235,21 +236,6 @@ export class GameMap {
 			);
 		}
 		this.container.sortChildren();
-
-		// Fill all shadow Graphics with semi-transparent black
-		// Java shadowAlpha = 150/255 ≈ 0.59
-		if (this._shadowTileCounts.ground > 0) {
-			this.groundShadowGraphics.fill({ color: 0x000000 });
-		}
-		if (this._shadowTileCounts.object > 0) {
-			console.log(
-				`[GameMap] Filling objectShadowGraphics with ${this._shadowTileCounts.object} rects, container.alpha=0.59`,
-			);
-			this.objectShadowGraphics.fill({ color: 0x000000 });
-		}
-		if (this._shadowTileCounts.above > 0) {
-			this.aboveShadowGraphics.fill({ color: 0x000000 });
-		}
 	}
 
 	/**
@@ -332,17 +318,24 @@ export class GameMap {
 				const isBlack = this.realTileset!.isBlackTile(tileId);
 				const shadowTarget = this.getShadowTarget(l, tileId, isBlack);
 
-				if (shadowTarget) {
-					// Shadow tile: draw semi-transparent black rect on Graphics
+if (shadowTarget) {
+					// Shadow tile: create semi-transparent black sprite
 					// Java engine composites shadows by drawing black at shadowAlpha=150/255
-					shadowTarget.rect(px, py, 8, 8);
+					const shadowSprite = new Sprite(Texture.WHITE);
+					shadowSprite.x = px;
+					shadowSprite.y = py;
+					shadowSprite.width = 8;
+					shadowSprite.height = 8;
+					shadowSprite.tint = 0x000000;
+					shadowSprite.alpha = 0.59;
+					shadowTarget.addChild(shadowSprite);
 					shadowCount++;
 					// Track which overlay layer this goes to
-					if (shadowTarget === this.groundShadowGraphics)
+					if (shadowTarget === this.groundShadowOverlay)
 						this._shadowTileCounts.ground++;
-					else if (shadowTarget === this.objectShadowGraphics)
+					else if (shadowTarget === this.objectShadowOverlay)
 						this._shadowTileCounts.object++;
-					else if (shadowTarget === this.aboveShadowGraphics)
+					else if (shadowTarget === this.aboveShadowOverlay)
 						this._shadowTileCounts.above++;
 				} else {
 					// Normal opaque render
@@ -499,9 +492,9 @@ export class GameMap {
 		for (const s of entityTiles) this.entitySpriteContainer.removeChild(s);
 
 		// Reset shadow overlay containers for viewport re-render
-		this.groundShadowGraphics.clear();
-		this.objectShadowGraphics.clear();
-		this.aboveShadowGraphics.clear();
+		this.groundShadowOverlay.removeChildren();
+		this.objectShadowOverlay.removeChildren();
+		this.aboveShadowOverlay.removeChildren();
 
 		for (const l of renderableLayers) {
 			const layer = this.layers[l];
@@ -525,9 +518,16 @@ export class GameMap {
 					const isBlack = this.realTileset!.isBlackTile(tileId);
 					const shadowTarget = this.getShadowTarget(l, tileId, isBlack);
 
-					if (shadowTarget) {
-						// Shadow tile: draw semi-transparent black rect on Graphics
-						shadowTarget.rect(px, py, 8, 8);
+if (shadowTarget) {
+						// Shadow tile: create semi-transparent black sprite
+						const shadowSprite = new Sprite(Texture.WHITE);
+						shadowSprite.x = px;
+						shadowSprite.y = py;
+						shadowSprite.width = 8;
+						shadowSprite.height = 8;
+						shadowSprite.tint = 0x000000;
+						shadowSprite.alpha = 0.59;
+						shadowTarget.addChild(shadowSprite);
 					} else {
 						const texture = this.realTileset!.getTileTexture(tileId);
 						if (!texture) continue;
@@ -548,10 +548,5 @@ export class GameMap {
 				}
 			}
 		}
-
-		// Fill shadow Graphics with semi-transparent black
-		this.groundShadowGraphics.fill({ color: 0x000000 });
-		this.objectShadowGraphics.fill({ color: 0x000000 });
-		this.aboveShadowGraphics.fill({ color: 0x000000 });
 	}
 }
