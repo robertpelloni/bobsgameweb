@@ -93,6 +93,11 @@
     },
     {
       "type": "file",
+      "name": "src/__tests__/audio-mapping.test.ts",
+      "file": "src/__tests__/audio-mapping.test.ts"
+    },
+    {
+      "type": "file",
       "name": "src/__tests__/bestiary-world.test.ts",
       "file": "src/__tests__/bestiary-world.test.ts"
     },
@@ -258,6 +263,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/assets/BehaviorComponent.ts",
+      "file": "src/renderer/assets/BehaviorComponent.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/assets/index.ts",
       "file": "src/renderer/assets/index.ts"
     },
@@ -273,8 +283,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/GameWorker.ts",
-      "file": "src/renderer/engine/GameWorker.ts"
+      "name": "src/renderer/editor/MapEditor.ts",
+      "file": "src/renderer/editor/MapEditor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/TimelineEditor.ts",
+      "file": "src/renderer/editor/TimelineEditor.ts"
     },
     {
       "type": "file",
@@ -313,13 +328,23 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/editor/MapEditor.ts",
-      "file": "src/renderer/editor/MapEditor.ts"
+      "name": "src/renderer/input/index.ts",
+      "file": "src/renderer/input/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/input/index.ts",
-      "file": "src/renderer/input/index.ts"
+      "name": "src/renderer/scenes/index.ts",
+      "file": "src/renderer/scenes/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/scenes/TournamentResultsScene.ts",
+      "file": "src/renderer/scenes/TournamentResultsScene.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -358,28 +383,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/ui/Panel.ts",
-      "file": "src/renderer/ui/Panel.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/ui/Tooltip.ts",
       "file": "src/renderer/ui/Tooltip.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/state/index.ts",
-      "file": "src/renderer/state/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/scenes/index.ts",
-      "file": "src/renderer/scenes/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/scenes/TournamentResultsScene.ts",
-      "file": "src/renderer/scenes/TournamentResultsScene.ts"
     },
     {
       "type": "file",
@@ -390,6 +395,21 @@
       "type": "file",
       "name": "src/renderer/audio/visualizer/ProjectM.ts",
       "file": "src/renderer/audio/visualizer/ProjectM.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/GlowTileBackground.ts",
+      "file": "src/renderer/engine/cinematics/GlowTileBackground.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/index.ts",
+      "file": "src/renderer/engine/cinematics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/TitleIntroAnimation.ts",
+      "file": "src/renderer/engine/cinematics/TitleIntroAnimation.ts"
     },
     {
       "type": "file",
@@ -410,21 +430,6 @@
       "type": "file",
       "name": "src/renderer/engine/audio/WaveData.ts",
       "file": "src/renderer/engine/audio/WaveData.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/cinematics/GlowTileBackground.ts",
-      "file": "src/renderer/engine/cinematics/GlowTileBackground.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/cinematics/index.ts",
-      "file": "src/renderer/engine/cinematics/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/cinematics/TitleIntroAnimation.ts",
-      "file": "src/renderer/engine/cinematics/TitleIntroAnimation.ts"
     },
     {
       "type": "file",
@@ -508,6 +513,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/input/index.ts",
+      "file": "src/renderer/engine/input/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/map/AsepriteParser.ts",
       "file": "src/renderer/engine/map/AsepriteParser.ts"
     },
@@ -538,13 +548,33 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/map/MapData.ts",
-      "file": "src/renderer/engine/map/MapData.ts"
+      "name": "src/renderer/engine/map/MapStateData.ts",
+      "file": "src/renderer/engine/map/MapStateData.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/map/MapStateData.ts",
-      "file": "src/renderer/engine/map/MapStateData.ts"
+      "name": "src/renderer/engine/network/GameClientTCP.ts",
+      "file": "src/renderer/engine/network/GameClientTCP.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/index.ts",
+      "file": "src/renderer/engine/network/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/OKNet.ts",
+      "file": "src/renderer/engine/network/OKNet.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/PeerConnection.ts",
+      "file": "src/renderer/engine/network/PeerConnection.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/ServerConnection.ts",
+      "file": "src/renderer/engine/network/ServerConnection.ts"
     },
     {
       "type": "file",
@@ -583,33 +613,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/network/GameClientTCP.ts",
-      "file": "src/renderer/engine/network/GameClientTCP.ts"
+      "name": "src/renderer/engine/physics/index.ts",
+      "file": "src/renderer/engine/physics/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/network/index.ts",
-      "file": "src/renderer/engine/network/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/network/OKNet.ts",
-      "file": "src/renderer/engine/network/OKNet.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/network/PeerConnection.ts",
-      "file": "src/renderer/engine/network/PeerConnection.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/network/ServerConnection.ts",
-      "file": "src/renderer/engine/network/ServerConnection.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/input/index.ts",
-      "file": "src/renderer/engine/input/index.ts"
+      "name": "src/renderer/engine/physics/Physics.ts",
+      "file": "src/renderer/engine/physics/Physics.ts"
     },
     {
       "type": "file",
@@ -635,16 +645,6 @@
       "type": "file",
       "name": "src/renderer/engine/puzzle/PuzzleRenderer.ts",
       "file": "src/renderer/engine/puzzle/PuzzleRenderer.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/physics/index.ts",
-      "file": "src/renderer/engine/physics/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/physics/Physics.ts",
-      "file": "src/renderer/engine/physics/Physics.ts"
     },
     {
       "type": "file",
@@ -873,6 +873,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/shared/OKColor.ts",
+      "file": "src/renderer/engine/shared/OKColor.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/shared/OKMath.ts",
       "file": "src/renderer/engine/shared/OKMath.ts"
     },
@@ -918,11 +923,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/ecs/systems/AISystem.ts",
       "file": "src/renderer/engine/ecs/systems/AISystem.ts"
     },
@@ -935,6 +935,11 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
       "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
@@ -968,11 +973,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/rpg/save/index.ts",
-      "file": "src/renderer/engine/rpg/save/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/rpg/tiles/DefaultRPGTileset.ts",
       "file": "src/renderer/engine/rpg/tiles/DefaultRPGTileset.ts"
     },
@@ -987,64 +987,105 @@
       "file": "src/renderer/engine/rpg/tiles/TileRenderer.ts"
     },
     {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/save/index.ts",
+      "file": "src/renderer/engine/rpg/save/index.ts"
+    },
+    {
       "type": "dependency",
       "name": "@capacitor/android",
-      "file": "package.json",
-      "line": 41
-    },
-    {
-      "type": "dependency",
-      "name": "@capacitor/core",
-      "file": "package.json",
-      "line": 42
-    },
-    {
-      "type": "dependency",
-      "name": "@capacitor/ios",
-      "file": "package.json",
-      "line": 43
-    },
-    {
-      "type": "dependency",
-      "name": "@pixi/sound",
-      "file": "package.json",
-      "line": 44
-    },
-    {
-      "type": "dependency",
-      "name": "butterchurn",
       "file": "package.json",
       "line": 45
     },
     {
       "type": "dependency",
-      "name": "butterchurn-presets",
+      "name": "@capacitor/core",
       "file": "package.json",
       "line": 46
     },
     {
       "type": "dependency",
-      "name": "chiptune3",
+      "name": "@capacitor/ios",
       "file": "package.json",
       "line": 47
     },
     {
       "type": "dependency",
-      "name": "localforage",
+      "name": "@pixi/sound",
+      "file": "package.json",
+      "line": 48
+    },
+    {
+      "type": "dependency",
+      "name": "butterchurn",
+      "file": "package.json",
+      "line": 49
+    },
+    {
+      "type": "dependency",
+      "name": "butterchurn-presets",
       "file": "package.json",
       "line": 50
+    },
+    {
+      "type": "dependency",
+      "name": "chiptune3",
+      "file": "package.json",
+      "line": 51
+    },
+    {
+      "type": "dependency",
+      "name": "localforage",
+      "file": "package.json",
+      "line": 54
     },
     {
       "type": "devDependency",
       "name": "@typescript-eslint/eslint-plugin",
       "file": "package.json",
-      "line": 29
+      "line": 31
     },
     {
       "type": "devDependency",
       "name": "@typescript-eslint/parser",
       "file": "package.json",
-      "line": 30
+      "line": 32
+    },
+    {
+      "type": "export",
+      "name": "Easing",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 26
+    },
+    {
+      "type": "export",
+      "name": "DIR",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 43
+    },
+    {
+      "type": "export",
+      "name": "DIR_NAMES",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 56
+    },
+    {
+      "type": "export",
+      "name": "Direction",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 54
+    },
+    {
+      "type": "export",
+      "name": "CameraConfig",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 68
+    },
+    {
+      "type": "export",
+      "name": "CameraTarget",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 76
     },
     {
       "type": "export",
@@ -1063,6 +1104,12 @@
       "name": "DEFAULT_SETTINGS",
       "file": "src/renderer/engine/shared/GlobalSettings.ts",
       "line": 54
+    },
+    {
+      "type": "export",
+      "name": "GlobalSettingsData",
+      "file": "src/renderer/engine/shared/GlobalSettings.ts",
+      "line": 8
     },
     {
       "type": "export",
@@ -1150,45 +1197,15 @@
     },
     {
       "type": "export",
+      "name": "PersistenceIdentity",
+      "file": "src/renderer/data/AchievementIdentity.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
       "name": "BIG_DATA_URL",
       "file": "src/shared/Config.ts",
       "line": 33
-    },
-    {
-      "type": "export",
-      "name": "lerp",
-      "file": "src/shared/Easing.ts",
-      "line": 194
-    },
-    {
-      "type": "export",
-      "name": "clamp",
-      "file": "src/shared/Easing.ts",
-      "line": 195
-    },
-    {
-      "type": "export",
-      "name": "normalize",
-      "file": "src/shared/Easing.ts",
-      "line": 196
-    },
-    {
-      "type": "export",
-      "name": "remap",
-      "file": "src/shared/Easing.ts",
-      "line": 197
-    },
-    {
-      "type": "export",
-      "name": "smoothstep",
-      "file": "src/shared/Easing.ts",
-      "line": 198
-    },
-    {
-      "type": "export",
-      "name": "smootherstep",
-      "file": "src/shared/Easing.ts",
-      "line": 199
     },
     {
       "type": "export",
@@ -1198,21 +1215,87 @@
     },
     {
       "type": "export",
-      "name": "hasAreaDialogue",
-      "file": "src/renderer/engine/map/NPCDialogue.ts",
-      "line": 154
+      "name": "DoorGraphEntry",
+      "file": "src/renderer/engine/map/DoorGraphLoader.ts",
+      "line": 8
     },
     {
       "type": "export",
-      "name": "getOriginalDialogue",
+      "name": "hasAreaDialogue",
       "file": "src/renderer/engine/map/NPCDialogue.ts",
-      "line": 201
+      "line": 155
+    },
+    {
+      "type": "export",
+      "name": "getAreaTriggersForMap",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 159
+    },
+    {
+      "type": "export",
+      "name": "ParsedDialogue",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "AreaTrigger",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 12
     },
     {
       "type": "export",
       "name": "FLAGS",
       "file": "src/renderer/engine/event/FlagManager.ts",
       "line": 7
+    },
+    {
+      "type": "export",
+      "name": "FrameState",
+      "file": "src/shared/puzzle/GameLogic.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "GameLogicEvents",
+      "file": "src/shared/puzzle/GameLogic.ts",
+      "line": 31
+    },
+    {
+      "type": "export",
+      "name": "Tween",
+      "file": "src/shared/Tween.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "TweenTarget",
+      "file": "src/shared/Tween.ts",
+      "line": 74
+    },
+    {
+      "type": "export",
+      "name": "EasingName",
+      "file": "src/shared/Tween.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "TweenConfig",
+      "file": "src/shared/Tween.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "TweenEvents",
+      "file": "src/shared/Tween.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "TweenTargetConfig",
+      "file": "src/shared/Tween.ts",
+      "line": 65
     },
     {
       "type": "export",
@@ -1426,6 +1509,42 @@
     },
     {
       "type": "export",
+      "name": "lerp",
+      "file": "src/shared/Easing.ts",
+      "line": 194
+    },
+    {
+      "type": "export",
+      "name": "clamp",
+      "file": "src/shared/Easing.ts",
+      "line": 195
+    },
+    {
+      "type": "export",
+      "name": "normalize",
+      "file": "src/shared/Easing.ts",
+      "line": 196
+    },
+    {
+      "type": "export",
+      "name": "remap",
+      "file": "src/shared/Easing.ts",
+      "line": 197
+    },
+    {
+      "type": "export",
+      "name": "smoothstep",
+      "file": "src/shared/Easing.ts",
+      "line": 198
+    },
+    {
+      "type": "export",
+      "name": "smootherstep",
+      "file": "src/shared/Easing.ts",
+      "line": 199
+    },
+    {
+      "type": "export",
       "name": "TILE_COLORS",
       "file": "src/renderer/engine/map/MapLoader.ts",
       "line": 60
@@ -1570,6 +1689,24 @@
     },
     {
       "type": "export",
+      "name": "TypedTextWriter",
+      "file": "src/renderer/engine/text/TextEngine.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "TypedTextWriterConfig",
+      "file": "src/renderer/engine/text/TextEngine.ts",
+      "line": 14
+    },
+    {
+      "type": "export",
+      "name": "DialogueBoxConfig",
+      "file": "src/renderer/engine/text/TextEngine.ts",
+      "line": 101
+    },
+    {
+      "type": "export",
       "name": "TextWindow",
       "file": "src/renderer/engine/text/TextWindow.ts",
       "line": 23
@@ -1654,6 +1791,24 @@
     },
     {
       "type": "export",
+      "name": "RoomConfig",
+      "file": "src/renderer/engine/network/BobsGameRoom.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "GameConfig",
+      "file": "src/renderer/Game.ts",
+      "line": 19
+    },
+    {
+      "type": "export",
+      "name": "GameEvents",
+      "file": "src/renderer/Game.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
       "name": "DropLockType",
       "file": "src/shared/puzzle/GameType.ts",
       "line": 22
@@ -1726,9 +1881,69 @@
     },
     {
       "type": "export",
+      "name": "MainMenuSceneConfig",
+      "file": "src/renderer/scenes/MainMenuScene.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
       "name": "ToastConfig",
       "file": "src/renderer/ui/ToastManager.ts",
       "line": 17
+    },
+    {
+      "type": "export",
+      "name": "RotationType",
+      "file": "src/shared/puzzle/Piece.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "PuzzleRendererConfig",
+      "file": "src/renderer/puzzle/PuzzleRenderer.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "GameOverSceneConfig",
+      "file": "src/renderer/scenes/GameOverScene.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "PauseOverlayConfig",
+      "file": "src/renderer/scenes/PauseOverlay.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "ReplayFrame",
+      "file": "src/shared/puzzle/Replay.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "ReplayData",
+      "file": "src/shared/puzzle/Replay.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "TransitionConfig",
+      "file": "src/renderer/state/SceneTransition.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "ButtonEvents",
+      "file": "src/renderer/ui/Button.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "WorldState",
+      "file": "src/renderer/engine/ecs/World.ts",
+      "line": 5
     },
     {
       "type": "export",
@@ -1738,9 +1953,57 @@
     },
     {
       "type": "export",
+      "name": "PathPoint",
+      "file": "src/renderer/engine/ecs/components/PathfindingComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "Quest",
+      "file": "src/renderer/engine/ecs/components/QuestComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "InventoryItem",
+      "file": "src/renderer/engine/ecs/components/InventoryComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "ShopItem",
+      "file": "src/renderer/engine/ecs/components/ShopComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "SkillNode",
+      "file": "src/renderer/engine/ecs/components/SkillTreeComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "GenType",
+      "file": "src/renderer/engine/ecs/components/MapGenComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "WeatherType",
+      "file": "src/renderer/engine/ecs/components/WeatherComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
       "name": "InteractionType",
       "file": "src/renderer/engine/ecs/components/InteractionComponent.ts",
       "line": 3
+    },
+    {
+      "type": "export",
+      "name": "Interaction",
+      "file": "src/renderer/engine/ecs/components/InteractionComponent.ts",
+      "line": 5
     },
     {
       "type": "export",
@@ -1750,21 +2013,297 @@
     },
     {
       "type": "export",
+      "name": "QuestData",
+      "file": "src/renderer/scenes/QuestLogScene.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "QuestLogConfig",
+      "file": "src/renderer/scenes/QuestLogScene.ts",
+      "line": 39
+    },
+    {
+      "type": "export",
+      "name": "InventoryItem",
+      "file": "src/renderer/scenes/InventoryScene.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "InventoryConfig",
+      "file": "src/renderer/scenes/InventoryScene.ts",
+      "line": 37
+    },
+    {
+      "type": "export",
+      "name": "ShopItem",
+      "file": "src/renderer/scenes/ShopScene.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "ShopConfig",
+      "file": "src/renderer/scenes/ShopScene.ts",
+      "line": 41
+    },
+    {
+      "type": "export",
+      "name": "SkillNode",
+      "file": "src/renderer/scenes/SkillTreeScene.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "SkillTreeConfig",
+      "file": "src/renderer/scenes/SkillTreeScene.ts",
+      "line": 37
+    },
+    {
+      "type": "export",
+      "name": "MapLightData",
+      "file": "src/renderer/engine/ecs/systems/LightingSystem.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "RealMapJSON",
+      "file": "src/renderer/engine/map/LegacyMapLoader.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "SparseLayer",
+      "file": "src/renderer/engine/map/LegacyMapLoader.ts",
+      "line": 30
+    },
+    {
+      "type": "export",
       "name": "LegacyDoor",
       "file": "src/renderer/engine/map/LegacyMapLoader.ts",
       "line": 36
     },
     {
       "type": "export",
-      "name": "EasingName",
-      "file": "src/shared/Tween.ts",
+      "name": "SpriteAtlasEntry",
+      "file": "src/renderer/engine/map/SpriteAtlas.ts",
+      "line": 7
+    },
+    {
+      "type": "export",
+      "name": "AnimationSequence",
+      "file": "src/renderer/engine/map/SpriteAtlas.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "RoomMood",
+      "file": "src/renderer/audio/AmbientMusicGenerator.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "TextInputStyle",
+      "file": "src/renderer/ui/TextInput.ts",
       "line": 4
+    },
+    {
+      "type": "export",
+      "name": "CheckboxEvents",
+      "file": "src/renderer/ui/Checkbox.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "CheckboxStyle",
+      "file": "src/renderer/ui/Checkbox.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "DropdownEvents",
+      "file": "src/renderer/ui/Dropdown.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "DropdownOption",
+      "file": "src/renderer/ui/Dropdown.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "DropdownStyle",
+      "file": "src/renderer/ui/Dropdown.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "PanelStyle",
+      "file": "src/renderer/ui/Panel.ts",
+      "line": 3
     },
     {
       "type": "export",
       "name": "PartyMember",
       "file": "src/renderer/engine/party/PartyManager.ts",
       "line": 15
+    },
+    {
+      "type": "export",
+      "name": "BobsGameMenuState",
+      "file": "src/renderer/engine/puzzle/BobsGame.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "InputBinding",
+      "file": "src/renderer/engine/input/ControlsManager.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "LogLevel",
+      "file": "src/renderer/engine/debug/Logger.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "VisualScriptComponent",
+      "file": "src/renderer/engine/ecs/systems/VisualScriptSystem.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "VisualScriptEvent",
+      "file": "src/renderer/engine/ecs/systems/VisualScriptSystem.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
+      "name": "RenderCallback",
+      "file": "src/renderer/engine/ecs/components/GraphicsComponent.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "ScriptFunction",
+      "file": "src/renderer/engine/ecs/components/ScriptComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "RenderLayer",
+      "file": "src/renderer/engine/cinematics/CinematicsManager.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "PathTile",
+      "file": "src/renderer/engine/entity/PathFinder.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "EntityEvents",
+      "file": "src/renderer/entity/Entity.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "Direction",
+      "file": "src/renderer/entity/Entity.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "EntityConfig",
+      "file": "src/renderer/entity/Entity.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "AIState",
+      "file": "src/renderer/engine/ecs/components/AIComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "Kick",
+      "file": "src/shared/puzzle/SRS.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "SkillData",
+      "file": "src/shared/database/RPGDatabase.ts",
+      "line": 14
+    },
+    {
+      "type": "export",
+      "name": "ItemData",
+      "file": "src/shared/database/RPGDatabase.ts",
+      "line": 24
+    },
+    {
+      "type": "export",
+      "name": "EnemyData",
+      "file": "src/shared/database/RPGDatabase.ts",
+      "line": 33
+    },
+    {
+      "type": "export",
+      "name": "GameStateType",
+      "file": "src/renderer/engine/state/StateManager.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "GameState",
+      "file": "src/renderer/engine/state/StateManager.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "DemoWorldConfig",
+      "file": "src/renderer/engine/rpg/DemoWorld.ts",
+      "line": 51
+    },
+    {
+      "type": "export",
+      "name": "PlayerConfig",
+      "file": "src/renderer/engine/rpg/Player.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "GameSaveData",
+      "file": "src/renderer/engine/rpg/save/NetworkGameSave.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "FrameState",
+      "file": "src/renderer/engine/puzzle/GameLogic.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
+      "name": "GameStats",
+      "file": "src/renderer/engine/puzzle/GameLogic.ts",
+      "line": 32
+    },
+    {
+      "type": "export",
+      "name": "RoomPlayer",
+      "file": "src/renderer/engine/puzzle/Room.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "RoomState",
+      "file": "src/renderer/engine/puzzle/Room.ts",
+      "line": 20
     },
     {
       "type": "export",
@@ -1777,11 +2316,137 @@
       "name": "EventAction",
       "file": "src/renderer/engine/eventsheet/EventSheet.ts",
       "line": 6
+    },
+    {
+      "type": "export",
+      "name": "EventBlock",
+      "file": "src/renderer/engine/eventsheet/EventSheet.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "RGBA",
+      "file": "src/renderer/engine/cinematics/ScreenOverlay.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "CameraBoundsProvider",
+      "file": "src/renderer/engine/entity/Cameraman.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
+      "name": "AssetManifest",
+      "file": "src/renderer/engine/shared/GameDataLoader.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "CutsceneCommand",
+      "file": "src/renderer/engine/cinematics/CutsceneEngine.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "CutsceneCharacter",
+      "file": "src/renderer/engine/cinematics/CutsceneEngine.ts",
+      "line": 28
+    },
+    {
+      "type": "export",
+      "name": "ParticleConfig",
+      "file": "src/renderer/engine/graphics/ParticleSystem.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "LobbyRoom",
+      "file": "src/renderer/engine/network/NetworkManager.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "EventCallback",
+      "file": "src/renderer/engine/network/NetworkManager.ts",
+      "line": 21
+    },
+    {
+      "type": "export",
+      "name": "StuffMenuTab",
+      "file": "src/renderer/engine/rpg/gui/StuffMenu.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "StoreItem",
+      "file": "src/renderer/engine/rpg/gui/GameStore.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "PlayerStatus",
+      "file": "src/renderer/engine/rpg/gui/StatusPanel.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "SettingOption",
+      "file": "src/renderer/engine/rpg/gui/SettingsPanel.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "LogEntry",
+      "file": "src/renderer/engine/rpg/gui/LogsPanel.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "SpriteAnimationSequenceData",
+      "file": "src/renderer/engine/entity/SpriteData.ts",
+      "line": 7
     }
   ],
   "unusedExports": [
     {
       "type": "export",
+      "name": "Easing",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 26
+    },
+    {
+      "type": "export",
+      "name": "DIR",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 43
+    },
+    {
+      "type": "export",
+      "name": "DIR_NAMES",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 56
+    },
+    {
+      "type": "export",
+      "name": "Direction",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 54
+    },
+    {
+      "type": "export",
+      "name": "CameraConfig",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 68
+    },
+    {
+      "type": "export",
+      "name": "CameraTarget",
+      "file": "src/renderer/graphics/Camera.ts",
+      "line": 76
+    },
+    {
+      "type": "export",
       "name": "CRT_VERTEX",
       "file": "src/renderer/graphics/Filters.ts",
       "line": 3
@@ -1797,6 +2462,12 @@
       "name": "DEFAULT_SETTINGS",
       "file": "src/renderer/engine/shared/GlobalSettings.ts",
       "line": 54
+    },
+    {
+      "type": "export",
+      "name": "GlobalSettingsData",
+      "file": "src/renderer/engine/shared/GlobalSettings.ts",
+      "line": 8
     },
     {
       "type": "export",
@@ -1884,45 +2555,15 @@
     },
     {
       "type": "export",
+      "name": "PersistenceIdentity",
+      "file": "src/renderer/data/AchievementIdentity.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
       "name": "BIG_DATA_URL",
       "file": "src/shared/Config.ts",
       "line": 33
-    },
-    {
-      "type": "export",
-      "name": "lerp",
-      "file": "src/shared/Easing.ts",
-      "line": 194
-    },
-    {
-      "type": "export",
-      "name": "clamp",
-      "file": "src/shared/Easing.ts",
-      "line": 195
-    },
-    {
-      "type": "export",
-      "name": "normalize",
-      "file": "src/shared/Easing.ts",
-      "line": 196
-    },
-    {
-      "type": "export",
-      "name": "remap",
-      "file": "src/shared/Easing.ts",
-      "line": 197
-    },
-    {
-      "type": "export",
-      "name": "smoothstep",
-      "file": "src/shared/Easing.ts",
-      "line": 198
-    },
-    {
-      "type": "export",
-      "name": "smootherstep",
-      "file": "src/shared/Easing.ts",
-      "line": 199
     },
     {
       "type": "export",
@@ -1932,21 +2573,87 @@
     },
     {
       "type": "export",
-      "name": "hasAreaDialogue",
-      "file": "src/renderer/engine/map/NPCDialogue.ts",
-      "line": 154
+      "name": "DoorGraphEntry",
+      "file": "src/renderer/engine/map/DoorGraphLoader.ts",
+      "line": 8
     },
     {
       "type": "export",
-      "name": "getOriginalDialogue",
+      "name": "hasAreaDialogue",
       "file": "src/renderer/engine/map/NPCDialogue.ts",
-      "line": 201
+      "line": 155
+    },
+    {
+      "type": "export",
+      "name": "getAreaTriggersForMap",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 159
+    },
+    {
+      "type": "export",
+      "name": "ParsedDialogue",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "AreaTrigger",
+      "file": "src/renderer/engine/map/NPCDialogue.ts",
+      "line": 12
     },
     {
       "type": "export",
       "name": "FLAGS",
       "file": "src/renderer/engine/event/FlagManager.ts",
       "line": 7
+    },
+    {
+      "type": "export",
+      "name": "FrameState",
+      "file": "src/shared/puzzle/GameLogic.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "GameLogicEvents",
+      "file": "src/shared/puzzle/GameLogic.ts",
+      "line": 31
+    },
+    {
+      "type": "export",
+      "name": "Tween",
+      "file": "src/shared/Tween.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "TweenTarget",
+      "file": "src/shared/Tween.ts",
+      "line": 74
+    },
+    {
+      "type": "export",
+      "name": "EasingName",
+      "file": "src/shared/Tween.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "TweenConfig",
+      "file": "src/shared/Tween.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "TweenEvents",
+      "file": "src/shared/Tween.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "TweenTargetConfig",
+      "file": "src/shared/Tween.ts",
+      "line": 65
     },
     {
       "type": "export",
@@ -2160,6 +2867,42 @@
     },
     {
       "type": "export",
+      "name": "lerp",
+      "file": "src/shared/Easing.ts",
+      "line": 194
+    },
+    {
+      "type": "export",
+      "name": "clamp",
+      "file": "src/shared/Easing.ts",
+      "line": 195
+    },
+    {
+      "type": "export",
+      "name": "normalize",
+      "file": "src/shared/Easing.ts",
+      "line": 196
+    },
+    {
+      "type": "export",
+      "name": "remap",
+      "file": "src/shared/Easing.ts",
+      "line": 197
+    },
+    {
+      "type": "export",
+      "name": "smoothstep",
+      "file": "src/shared/Easing.ts",
+      "line": 198
+    },
+    {
+      "type": "export",
+      "name": "smootherstep",
+      "file": "src/shared/Easing.ts",
+      "line": 199
+    },
+    {
+      "type": "export",
       "name": "TILE_COLORS",
       "file": "src/renderer/engine/map/MapLoader.ts",
       "line": 60
@@ -2304,6 +3047,24 @@
     },
     {
       "type": "export",
+      "name": "TypedTextWriter",
+      "file": "src/renderer/engine/text/TextEngine.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "TypedTextWriterConfig",
+      "file": "src/renderer/engine/text/TextEngine.ts",
+      "line": 14
+    },
+    {
+      "type": "export",
+      "name": "DialogueBoxConfig",
+      "file": "src/renderer/engine/text/TextEngine.ts",
+      "line": 101
+    },
+    {
+      "type": "export",
       "name": "TextWindow",
       "file": "src/renderer/engine/text/TextWindow.ts",
       "line": 23
@@ -2388,6 +3149,24 @@
     },
     {
       "type": "export",
+      "name": "RoomConfig",
+      "file": "src/renderer/engine/network/BobsGameRoom.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "GameConfig",
+      "file": "src/renderer/Game.ts",
+      "line": 19
+    },
+    {
+      "type": "export",
+      "name": "GameEvents",
+      "file": "src/renderer/Game.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
       "name": "DropLockType",
       "file": "src/shared/puzzle/GameType.ts",
       "line": 22
@@ -2460,9 +3239,69 @@
     },
     {
       "type": "export",
+      "name": "MainMenuSceneConfig",
+      "file": "src/renderer/scenes/MainMenuScene.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
       "name": "ToastConfig",
       "file": "src/renderer/ui/ToastManager.ts",
       "line": 17
+    },
+    {
+      "type": "export",
+      "name": "RotationType",
+      "file": "src/shared/puzzle/Piece.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "PuzzleRendererConfig",
+      "file": "src/renderer/puzzle/PuzzleRenderer.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "GameOverSceneConfig",
+      "file": "src/renderer/scenes/GameOverScene.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "PauseOverlayConfig",
+      "file": "src/renderer/scenes/PauseOverlay.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "ReplayFrame",
+      "file": "src/shared/puzzle/Replay.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "ReplayData",
+      "file": "src/shared/puzzle/Replay.ts",
+      "line": 6
+    },
+    {
+      "type": "export",
+      "name": "TransitionConfig",
+      "file": "src/renderer/state/SceneTransition.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "ButtonEvents",
+      "file": "src/renderer/ui/Button.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "WorldState",
+      "file": "src/renderer/engine/ecs/World.ts",
+      "line": 5
     },
     {
       "type": "export",
@@ -2472,9 +3311,57 @@
     },
     {
       "type": "export",
+      "name": "PathPoint",
+      "file": "src/renderer/engine/ecs/components/PathfindingComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "Quest",
+      "file": "src/renderer/engine/ecs/components/QuestComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "InventoryItem",
+      "file": "src/renderer/engine/ecs/components/InventoryComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "ShopItem",
+      "file": "src/renderer/engine/ecs/components/ShopComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "SkillNode",
+      "file": "src/renderer/engine/ecs/components/SkillTreeComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "GenType",
+      "file": "src/renderer/engine/ecs/components/MapGenComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "WeatherType",
+      "file": "src/renderer/engine/ecs/components/WeatherComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
       "name": "InteractionType",
       "file": "src/renderer/engine/ecs/components/InteractionComponent.ts",
       "line": 3
+    },
+    {
+      "type": "export",
+      "name": "Interaction",
+      "file": "src/renderer/engine/ecs/components/InteractionComponent.ts",
+      "line": 5
     },
     {
       "type": "export",
@@ -2484,21 +3371,297 @@
     },
     {
       "type": "export",
+      "name": "QuestData",
+      "file": "src/renderer/scenes/QuestLogScene.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "QuestLogConfig",
+      "file": "src/renderer/scenes/QuestLogScene.ts",
+      "line": 39
+    },
+    {
+      "type": "export",
+      "name": "InventoryItem",
+      "file": "src/renderer/scenes/InventoryScene.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "InventoryConfig",
+      "file": "src/renderer/scenes/InventoryScene.ts",
+      "line": 37
+    },
+    {
+      "type": "export",
+      "name": "ShopItem",
+      "file": "src/renderer/scenes/ShopScene.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "ShopConfig",
+      "file": "src/renderer/scenes/ShopScene.ts",
+      "line": 41
+    },
+    {
+      "type": "export",
+      "name": "SkillNode",
+      "file": "src/renderer/scenes/SkillTreeScene.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "SkillTreeConfig",
+      "file": "src/renderer/scenes/SkillTreeScene.ts",
+      "line": 37
+    },
+    {
+      "type": "export",
+      "name": "MapLightData",
+      "file": "src/renderer/engine/ecs/systems/LightingSystem.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "RealMapJSON",
+      "file": "src/renderer/engine/map/LegacyMapLoader.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "SparseLayer",
+      "file": "src/renderer/engine/map/LegacyMapLoader.ts",
+      "line": 30
+    },
+    {
+      "type": "export",
       "name": "LegacyDoor",
       "file": "src/renderer/engine/map/LegacyMapLoader.ts",
       "line": 36
     },
     {
       "type": "export",
-      "name": "EasingName",
-      "file": "src/shared/Tween.ts",
+      "name": "SpriteAtlasEntry",
+      "file": "src/renderer/engine/map/SpriteAtlas.ts",
+      "line": 7
+    },
+    {
+      "type": "export",
+      "name": "AnimationSequence",
+      "file": "src/renderer/engine/map/SpriteAtlas.ts",
+      "line": 17
+    },
+    {
+      "type": "export",
+      "name": "RoomMood",
+      "file": "src/renderer/audio/AmbientMusicGenerator.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "TextInputStyle",
+      "file": "src/renderer/ui/TextInput.ts",
       "line": 4
+    },
+    {
+      "type": "export",
+      "name": "CheckboxEvents",
+      "file": "src/renderer/ui/Checkbox.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "CheckboxStyle",
+      "file": "src/renderer/ui/Checkbox.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "DropdownEvents",
+      "file": "src/renderer/ui/Dropdown.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "DropdownOption",
+      "file": "src/renderer/ui/Dropdown.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "DropdownStyle",
+      "file": "src/renderer/ui/Dropdown.ts",
+      "line": 13
+    },
+    {
+      "type": "export",
+      "name": "PanelStyle",
+      "file": "src/renderer/ui/Panel.ts",
+      "line": 3
     },
     {
       "type": "export",
       "name": "PartyMember",
       "file": "src/renderer/engine/party/PartyManager.ts",
       "line": 15
+    },
+    {
+      "type": "export",
+      "name": "BobsGameMenuState",
+      "file": "src/renderer/engine/puzzle/BobsGame.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "InputBinding",
+      "file": "src/renderer/engine/input/ControlsManager.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "LogLevel",
+      "file": "src/renderer/engine/debug/Logger.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "VisualScriptComponent",
+      "file": "src/renderer/engine/ecs/systems/VisualScriptSystem.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "VisualScriptEvent",
+      "file": "src/renderer/engine/ecs/systems/VisualScriptSystem.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
+      "name": "RenderCallback",
+      "file": "src/renderer/engine/ecs/components/GraphicsComponent.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "ScriptFunction",
+      "file": "src/renderer/engine/ecs/components/ScriptComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "RenderLayer",
+      "file": "src/renderer/engine/cinematics/CinematicsManager.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "PathTile",
+      "file": "src/renderer/engine/entity/PathFinder.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "EntityEvents",
+      "file": "src/renderer/entity/Entity.ts",
+      "line": 4
+    },
+    {
+      "type": "export",
+      "name": "Direction",
+      "file": "src/renderer/entity/Entity.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "EntityConfig",
+      "file": "src/renderer/entity/Entity.ts",
+      "line": 22
+    },
+    {
+      "type": "export",
+      "name": "AIState",
+      "file": "src/renderer/engine/ecs/components/AIComponent.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "Kick",
+      "file": "src/shared/puzzle/SRS.ts",
+      "line": 1
+    },
+    {
+      "type": "export",
+      "name": "SkillData",
+      "file": "src/shared/database/RPGDatabase.ts",
+      "line": 14
+    },
+    {
+      "type": "export",
+      "name": "ItemData",
+      "file": "src/shared/database/RPGDatabase.ts",
+      "line": 24
+    },
+    {
+      "type": "export",
+      "name": "EnemyData",
+      "file": "src/shared/database/RPGDatabase.ts",
+      "line": 33
+    },
+    {
+      "type": "export",
+      "name": "GameStateType",
+      "file": "src/renderer/engine/state/StateManager.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "GameState",
+      "file": "src/renderer/engine/state/StateManager.ts",
+      "line": 23
+    },
+    {
+      "type": "export",
+      "name": "DemoWorldConfig",
+      "file": "src/renderer/engine/rpg/DemoWorld.ts",
+      "line": 51
+    },
+    {
+      "type": "export",
+      "name": "PlayerConfig",
+      "file": "src/renderer/engine/rpg/Player.ts",
+      "line": 3
+    },
+    {
+      "type": "export",
+      "name": "GameSaveData",
+      "file": "src/renderer/engine/rpg/save/NetworkGameSave.ts",
+      "line": 8
+    },
+    {
+      "type": "export",
+      "name": "FrameState",
+      "file": "src/renderer/engine/puzzle/GameLogic.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
+      "name": "GameStats",
+      "file": "src/renderer/engine/puzzle/GameLogic.ts",
+      "line": 32
+    },
+    {
+      "type": "export",
+      "name": "RoomPlayer",
+      "file": "src/renderer/engine/puzzle/Room.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "RoomState",
+      "file": "src/renderer/engine/puzzle/Room.ts",
+      "line": 20
     },
     {
       "type": "export",
@@ -2511,6 +3674,96 @@
       "name": "EventAction",
       "file": "src/renderer/engine/eventsheet/EventSheet.ts",
       "line": 6
+    },
+    {
+      "type": "export",
+      "name": "EventBlock",
+      "file": "src/renderer/engine/eventsheet/EventSheet.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "RGBA",
+      "file": "src/renderer/engine/cinematics/ScreenOverlay.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "CameraBoundsProvider",
+      "file": "src/renderer/engine/entity/Cameraman.ts",
+      "line": 18
+    },
+    {
+      "type": "export",
+      "name": "AssetManifest",
+      "file": "src/renderer/engine/shared/GameDataLoader.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "CutsceneCommand",
+      "file": "src/renderer/engine/cinematics/CutsceneEngine.ts",
+      "line": 20
+    },
+    {
+      "type": "export",
+      "name": "CutsceneCharacter",
+      "file": "src/renderer/engine/cinematics/CutsceneEngine.ts",
+      "line": 28
+    },
+    {
+      "type": "export",
+      "name": "ParticleConfig",
+      "file": "src/renderer/engine/graphics/ParticleSystem.ts",
+      "line": 15
+    },
+    {
+      "type": "export",
+      "name": "LobbyRoom",
+      "file": "src/renderer/engine/network/NetworkManager.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "EventCallback",
+      "file": "src/renderer/engine/network/NetworkManager.ts",
+      "line": 21
+    },
+    {
+      "type": "export",
+      "name": "StuffMenuTab",
+      "file": "src/renderer/engine/rpg/gui/StuffMenu.ts",
+      "line": 10
+    },
+    {
+      "type": "export",
+      "name": "StoreItem",
+      "file": "src/renderer/engine/rpg/gui/GameStore.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "PlayerStatus",
+      "file": "src/renderer/engine/rpg/gui/StatusPanel.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+      "name": "SettingOption",
+      "file": "src/renderer/engine/rpg/gui/SettingsPanel.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "LogEntry",
+      "file": "src/renderer/engine/rpg/gui/LogsPanel.ts",
+      "line": 9
+    },
+    {
+      "type": "export",
+      "name": "SpriteAnimationSequenceData",
+      "file": "src/renderer/engine/entity/SpriteData.ts",
+      "line": 7
     }
   ],
   "unusedFiles": [
@@ -2606,6 +3859,11 @@
     },
     {
       "type": "file",
+      "name": "src/__tests__/audio-mapping.test.ts",
+      "file": "src/__tests__/audio-mapping.test.ts"
+    },
+    {
+      "type": "file",
       "name": "src/__tests__/bestiary-world.test.ts",
       "file": "src/__tests__/bestiary-world.test.ts"
     },
@@ -2771,6 +4029,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/assets/BehaviorComponent.ts",
+      "file": "src/renderer/assets/BehaviorComponent.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/assets/index.ts",
       "file": "src/renderer/assets/index.ts"
     },
@@ -2786,8 +4049,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/GameWorker.ts",
-      "file": "src/renderer/engine/GameWorker.ts"
+      "name": "src/renderer/editor/MapEditor.ts",
+      "file": "src/renderer/editor/MapEditor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/TimelineEditor.ts",
+      "file": "src/renderer/editor/TimelineEditor.ts"
     },
     {
       "type": "file",
@@ -2826,13 +4094,23 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/editor/MapEditor.ts",
-      "file": "src/renderer/editor/MapEditor.ts"
+      "name": "src/renderer/input/index.ts",
+      "file": "src/renderer/input/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/input/index.ts",
-      "file": "src/renderer/input/index.ts"
+      "name": "src/renderer/scenes/index.ts",
+      "file": "src/renderer/scenes/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/scenes/TournamentResultsScene.ts",
+      "file": "src/renderer/scenes/TournamentResultsScene.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -2871,28 +4149,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/ui/Panel.ts",
-      "file": "src/renderer/ui/Panel.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/ui/Tooltip.ts",
       "file": "src/renderer/ui/Tooltip.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/state/index.ts",
-      "file": "src/renderer/state/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/scenes/index.ts",
-      "file": "src/renderer/scenes/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/scenes/TournamentResultsScene.ts",
-      "file": "src/renderer/scenes/TournamentResultsScene.ts"
     },
     {
       "type": "file",
@@ -2903,6 +4161,21 @@
       "type": "file",
       "name": "src/renderer/audio/visualizer/ProjectM.ts",
       "file": "src/renderer/audio/visualizer/ProjectM.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/GlowTileBackground.ts",
+      "file": "src/renderer/engine/cinematics/GlowTileBackground.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/index.ts",
+      "file": "src/renderer/engine/cinematics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/cinematics/TitleIntroAnimation.ts",
+      "file": "src/renderer/engine/cinematics/TitleIntroAnimation.ts"
     },
     {
       "type": "file",
@@ -2923,21 +4196,6 @@
       "type": "file",
       "name": "src/renderer/engine/audio/WaveData.ts",
       "file": "src/renderer/engine/audio/WaveData.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/cinematics/GlowTileBackground.ts",
-      "file": "src/renderer/engine/cinematics/GlowTileBackground.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/cinematics/index.ts",
-      "file": "src/renderer/engine/cinematics/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/cinematics/TitleIntroAnimation.ts",
-      "file": "src/renderer/engine/cinematics/TitleIntroAnimation.ts"
     },
     {
       "type": "file",
@@ -3021,6 +4279,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/input/index.ts",
+      "file": "src/renderer/engine/input/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/map/AsepriteParser.ts",
       "file": "src/renderer/engine/map/AsepriteParser.ts"
     },
@@ -3051,13 +4314,33 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/map/MapData.ts",
-      "file": "src/renderer/engine/map/MapData.ts"
+      "name": "src/renderer/engine/map/MapStateData.ts",
+      "file": "src/renderer/engine/map/MapStateData.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/map/MapStateData.ts",
-      "file": "src/renderer/engine/map/MapStateData.ts"
+      "name": "src/renderer/engine/network/GameClientTCP.ts",
+      "file": "src/renderer/engine/network/GameClientTCP.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/index.ts",
+      "file": "src/renderer/engine/network/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/OKNet.ts",
+      "file": "src/renderer/engine/network/OKNet.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/PeerConnection.ts",
+      "file": "src/renderer/engine/network/PeerConnection.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/network/ServerConnection.ts",
+      "file": "src/renderer/engine/network/ServerConnection.ts"
     },
     {
       "type": "file",
@@ -3096,33 +4379,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/network/GameClientTCP.ts",
-      "file": "src/renderer/engine/network/GameClientTCP.ts"
+      "name": "src/renderer/engine/physics/index.ts",
+      "file": "src/renderer/engine/physics/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/network/index.ts",
-      "file": "src/renderer/engine/network/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/network/OKNet.ts",
-      "file": "src/renderer/engine/network/OKNet.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/network/PeerConnection.ts",
-      "file": "src/renderer/engine/network/PeerConnection.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/network/ServerConnection.ts",
-      "file": "src/renderer/engine/network/ServerConnection.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/input/index.ts",
-      "file": "src/renderer/engine/input/index.ts"
+      "name": "src/renderer/engine/physics/Physics.ts",
+      "file": "src/renderer/engine/physics/Physics.ts"
     },
     {
       "type": "file",
@@ -3148,16 +4411,6 @@
       "type": "file",
       "name": "src/renderer/engine/puzzle/PuzzleRenderer.ts",
       "file": "src/renderer/engine/puzzle/PuzzleRenderer.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/physics/index.ts",
-      "file": "src/renderer/engine/physics/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/physics/Physics.ts",
-      "file": "src/renderer/engine/physics/Physics.ts"
     },
     {
       "type": "file",
@@ -3386,6 +4639,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/shared/OKColor.ts",
+      "file": "src/renderer/engine/shared/OKColor.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/shared/OKMath.ts",
       "file": "src/renderer/engine/shared/OKMath.ts"
     },
@@ -3431,11 +4689,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/ecs/systems/AISystem.ts",
       "file": "src/renderer/engine/ecs/systems/AISystem.ts"
     },
@@ -3448,6 +4701,11 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
       "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
@@ -3481,11 +4739,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/rpg/save/index.ts",
-      "file": "src/renderer/engine/rpg/save/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/rpg/tiles/DefaultRPGTileset.ts",
       "file": "src/renderer/engine/rpg/tiles/DefaultRPGTileset.ts"
     },
@@ -3498,6 +4751,11 @@
       "type": "file",
       "name": "src/renderer/engine/rpg/tiles/TileRenderer.ts",
       "file": "src/renderer/engine/rpg/tiles/TileRenderer.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/rpg/save/index.ts",
+      "file": "src/renderer/engine/rpg/save/index.ts"
     }
   ],
   "unusedDeps": [
@@ -3505,63 +4763,63 @@
       "type": "dependency",
       "name": "@capacitor/android",
       "file": "package.json",
-      "line": 41
+      "line": 45
     },
     {
       "type": "dependency",
       "name": "@capacitor/core",
       "file": "package.json",
-      "line": 42
+      "line": 46
     },
     {
       "type": "dependency",
       "name": "@capacitor/ios",
       "file": "package.json",
-      "line": 43
+      "line": 47
     },
     {
       "type": "dependency",
       "name": "@pixi/sound",
       "file": "package.json",
-      "line": 44
+      "line": 48
     },
     {
       "type": "dependency",
       "name": "butterchurn",
       "file": "package.json",
-      "line": 45
+      "line": 49
     },
     {
       "type": "dependency",
       "name": "butterchurn-presets",
       "file": "package.json",
-      "line": 46
+      "line": 50
     },
     {
       "type": "dependency",
       "name": "chiptune3",
       "file": "package.json",
-      "line": 47
+      "line": 51
     },
     {
       "type": "dependency",
       "name": "localforage",
       "file": "package.json",
-      "line": 50
+      "line": 54
     },
     {
       "type": "devDependency",
       "name": "@typescript-eslint/eslint-plugin",
       "file": "package.json",
-      "line": 29
+      "line": 31
     },
     {
       "type": "devDependency",
       "name": "@typescript-eslint/parser",
       "file": "package.json",
-      "line": 30
+      "line": 32
     }
   ],
   "unlistedDeps": [],
-  "summary": "Found 329 issues"
+  "summary": "Found 434 issues"
 }

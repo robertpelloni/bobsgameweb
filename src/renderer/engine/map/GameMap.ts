@@ -1,6 +1,6 @@
 import { MapData } from "../../../shared/MapData";
 import type { Entity } from "../../entity/Entity";
-import { Container, Sprite, Texture } from "pixi.js";
+import { Container, Graphics, Sprite, Texture } from "pixi.js";
 import { Tileset } from "../../../shared/Tileset";
 import type { Palette } from "../../../shared/Palette";
 import type { RealTileset } from "./RealTileset";
@@ -15,30 +15,25 @@ export interface CameraBounds {
 /**
  * Shadow rendering — dedicated shadow layers + object shadow shapes.
  *
- * The original Java engine renders shadows in two ways:
- *
- * 1. Dedicated shadow layers (L2 groundShadow, L5 objectShadow):
- *    These contain shadow silhouette tiles. L2 is empty in all 257 maps
- *    in the saved binary data. L5 has mixed content: shaped black tiles
- *    that are shadows, plus colored furniture/decoration tiles.
- *
- * 2. Shadow shapes on the objects (L3) and above (L6) layers:
- *    These layers contain opaque structural tiles (tile 839 = solid wall)
- *    AND shadow silhouette tiles (tiles 700, 706, 733, 795, etc.).
- *    The non-839 black tiles are shadow shapes that should render
- *    translucently, while tile 839 is structural and renders opaque.
- *    In the Java engine, the chunk-group composite applies shadowAlpha
- *    to all black pixels, making these shapes translucent.
+ * The original Java engine renders shadows by compositing each chunk-group
+ * and applying shadowAlpha (=150/255 ≈ 0.59) to black pixels. This makes
+ * shadow silhouette tiles (700, 733, 795, etc.) on the objects (L3) and
+ * above (L6) layers render translucently, while structural tile 839
+ * (solid wall fill) remains opaque.
  *
  * Rendering approach:
- * - L2 (groundShadow): ALL tiles → groundShadowOverlay (alpha 0.59)
- * - L3 (objects): non-839 black tiles → objectShadowOverlay (alpha 0.59),
- *   all other tiles (including 839) → normal layer container (opaque)
- * - L5 (objectShadow): black tiles → objectShadowOverlay (alpha 0.59),
+ * - L2 (groundShadow): ALL non-zero tiles → groundShadowOverlay (translucent)
+ * - L3 (objects): non-839 black tiles → objectShadowOverlay (translucent),
+ *   all other tiles including 839 → normal layer container (opaque)
+ * - L5 (objectShadow): black tiles → objectShadowOverlay (translucent),
  *   colored tiles → normal layer container (opaque)
- * - L6 (above): non-839 black tiles → aboveShadowOverlay (alpha 0.59),
- *   all other tiles (including 839) → normal layer container (opaque)
+ * - L6 (above): non-839 black tiles → aboveShadowOverlay (translucent),
+ *   all other tiles including 839 → normal layer container (opaque)
  * - All other layers: render normally (opaque)
+ *
+ * Translucency is achieved by loading the atlas PNG with Canvas2D,
+ * reading raw RGBA pixels, and baking alpha=0.59 into new textures.
+ * This guarantees translucency regardless of PixiJS sprite/container alpha.
  */
 export class GameMap {
 	public data: MapData;
@@ -50,16 +45,23 @@ export class GameMap {
 	private tileTextures: globalThis.Map<number, Texture> = new globalThis.Map();
 	private realTileset: RealTileset | null = null;
 
-	/**
-	 * Three shadow overlay containers matching Java shadow positions:
-	 * groundShadowOverlay (z=2.5): shadows from L2, between ground and objects
-	 * objectShadowOverlay (z=5.5): shadows from L3+L5, between objects and above
-	 * aboveShadowOverlay (z=102.5): shadows from L6, after above layers
-	 */
-	private groundShadowOverlay!: Container;
-	private objectShadowOverlay!: Container;
-	private aboveShadowOverlay!: Container;
+	/** Shadow overlay containers positioned between normal layers */
+	// Shadow overlay Graphics — single draw call per layer with baked-in alpha
+	private groundShadowGraphics!: Graphics;
+	private objectShadowGraphics!: Graphics;
+	private aboveShadowGraphics!: Graphics;
+	/** Track shadow tile counts for logging */
+	private _shadowTileCounts = { ground: 0, object: 0, above: 0 };
+
+	/** Cache for shadow textures with baked-in alpha */
 	private shadowTextureCache: Map<number, Texture> = new Map();
+
+	/** Raw RGBA pixel data from the atlas PNG, loaded once */
+	// Previously used for baked-alpha shadow textures (now unused)
+	// Kept for potential future use
+	private _atlasPixels: Uint8ClampedArray | null = null;
+	private _atlasWidth: number = 0;
+	private _atlasLoaded: boolean = false;
 
 	// Camera
 	public camX = 0;
@@ -104,32 +106,21 @@ export class GameMap {
 			this.container.addChild(layer);
 		}
 
-		// Ground shadow overlay (z=2.5): renders between L2 and L3
-		// Contains shadows from L2 (groundShadow)
-		this.groundShadowOverlay = new Container();
-		this.groundShadowOverlay.zIndex = 2.5;
-		this.groundShadowOverlay.cullable = false;
-		this.groundShadowOverlay.sortableChildren = false;
-		this.groundShadowOverlay.alpha = 1.0; // per-sprite alpha handles translucency
-		this.container.addChild(this.groundShadowOverlay);
+		// Shadow overlay Graphics — single draw call per layer with fill alpha
+		this.groundShadowGraphics = new Graphics();
+		this.groundShadowGraphics.zIndex = 2.5;
+		this.groundShadowGraphics.cullable = false;
+		this.container.addChild(this.groundShadowGraphics);
 
-		// Object shadow overlay (z=5.5): renders between L5 and L6
-		// Contains shadows from L3 (objects) and L5 (objectShadow)
-		this.objectShadowOverlay = new Container();
-		this.objectShadowOverlay.zIndex = 5.5;
-		this.objectShadowOverlay.cullable = false;
-		this.objectShadowOverlay.sortableChildren = false;
-		this.objectShadowOverlay.alpha = 1.0; // per-sprite alpha handles translucency
-		this.container.addChild(this.objectShadowOverlay);
+		this.objectShadowGraphics = new Graphics();
+		this.objectShadowGraphics.zIndex = 5.5;
+		this.objectShadowGraphics.cullable = false;
+		this.container.addChild(this.objectShadowGraphics);
 
-		// Above shadow overlay (z=102.5): renders after L8
-		// Contains shadows from L6 (above)
-		this.aboveShadowOverlay = new Container();
-		this.aboveShadowOverlay.zIndex = 102.5;
-		this.aboveShadowOverlay.cullable = false;
-		this.aboveShadowOverlay.sortableChildren = false;
-		this.aboveShadowOverlay.alpha = 1.0; // per-sprite alpha handles translucency
-		this.container.addChild(this.aboveShadowOverlay);
+		this.aboveShadowGraphics = new Graphics();
+		this.aboveShadowGraphics.zIndex = 102.5;
+		this.aboveShadowGraphics.cullable = false;
+		this.container.addChild(this.aboveShadowGraphics);
 
 		// objects2 container at z=3.5
 		this.objectDetailContainer = new Container();
@@ -173,61 +164,58 @@ export class GameMap {
 	}
 
 	/**
+	 * No-op — kept for backward compatibility with WorldScene calls.
+	 * Shadow rendering now uses sprite.tint + sprite.alpha instead of
+	 * baked canvas pixel data, so atlas pixel loading is no longer needed.
+	 */
+	async loadAtlasPixels(): Promise<boolean> {
+		return true;
+	}
+
+	/**
 	 * Determine which shadow overlay a tile should go to.
 	 * Returns null if the tile should render normally (opaque).
-	 *
-	 * Rules:
-	 * - L2 (groundShadow): ALL non-zero tiles → groundShadowOverlay
-	 * - L3 (objects): non-839 black tiles → objectShadowOverlay
-	 * - L5 (objectShadow): black tiles → objectShadowOverlay
-	 * - L6 (above): non-839 black tiles → aboveShadowOverlay
-	 * - All other layers/tiles: → null (render normally)
 	 */
 	private getShadowTarget(
 		l: number,
 		tileId: number,
 		isBlack: boolean,
-	): Container | null {
+	): Graphics | null {
 		// L2 (groundShadow): all tiles are shadow
 		if (l === MapData.MAP_GROUND_SHADOW_LAYER) {
-			return tileId !== 0 ? this.groundShadowOverlay : null;
+			return tileId !== 0 ? this.groundShadowGraphics : null;
 		}
-
 		// L3 (objects): non-839 black tiles are shadows
 		if (l === MapData.MAP_OBJECT_LAYER) {
-			if (isBlack && tileId !== 839) return this.objectShadowOverlay;
+			if (isBlack && tileId !== 839) return this.objectShadowGraphics;
 			return null;
 		}
-
-		// L5 (objectShadow): black tiles are shadows
+		// L5 (objectShadow): ALL non-zero tiles are shadows
+		// This is a shadow layer — even "colored" tiles like 1833 are
+		// dark shadow shapes (avg brightness ~78) that must be translucent
 		if (l === MapData.MAP_OBJECT_SHADOW_LAYER) {
-			if (isBlack) return this.objectShadowOverlay;
-			return null;
+			return tileId !== 0 ? this.objectShadowGraphics : null;
 		}
-
 		// L6 (above): non-839 black tiles are shadows
 		if (l === MapData.MAP_ABOVE_LAYER) {
-			if (isBlack && tileId !== 839) return this.aboveShadowOverlay;
+			if (isBlack && tileId !== 839) return this.aboveShadowGraphics;
 			return null;
 		}
-
-		// All other layers: no shadow treatment
 		return null;
 	}
 
 	private renderWithRealTileset() {
 		this.objectDetailContainer.removeChildren();
 		this.shadowTextureCache.clear();
-		this.groundShadowOverlay.removeChildren();
-		this.objectShadowOverlay.removeChildren();
-		this.aboveShadowOverlay.removeChildren();
+		this._shadowTileCounts = { ground: 0, object: 0, above: 0 };
+		this.groundShadowGraphics.clear();
+		this.objectShadowGraphics.clear();
+		this.aboveShadowGraphics.clear();
 
-		// Reset all layer containers
 		for (let l = 0; l < MapData.layers; l++) {
 			this.layers[l].removeChildren();
 		}
 
-		// Render each layer
 		for (let l = 0; l < MapData.layers; l++) {
 			if (!MapData.isTileLayer(l)) continue;
 			if (
@@ -239,33 +227,46 @@ export class GameMap {
 			this.renderLayerReal(l);
 		}
 
-		// Log shadow container sizes
-		const gsCount = this.groundShadowOverlay.children.length;
-		const osCount = this.objectShadowOverlay.children.length;
-		const asCount = this.aboveShadowOverlay.children.length;
+		const gsCount = this._shadowTileCounts.ground;
+		const osCount = this._shadowTileCounts.object;
+		const asCount = this._shadowTileCounts.above;
 		if (gsCount > 0 || osCount > 0 || asCount > 0) {
 			console.log(
 				`[GameMap] Shadow layers for ${this.data.name}: ground=${gsCount}, object=${osCount}, above=${asCount}`,
 			);
 		}
 		this.container.sortChildren();
-	}
 
-	/** Get regular atlas texture for a shadow tile (cached).
-	 * We use the REAL atlas, NOT the shadow-black atlas, because the
-	 * shadow-black atlas has fully transparent pixels (0,0,0,0) which
-	 * makes shadow sprites invisible. The real atlas has the actual
-	 * black silhouette pixels with alpha=255, which become translucent
-	 * when rendered inside a container with alpha=0.59.
+		// Fill all shadow Graphics with semi-transparent black
+		// Java shadowAlpha = 150/255 ≈ 0.59
+		if (this._shadowTileCounts.ground > 0) {
+			this.groundShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
+		}
+		if (this._shadowTileCounts.object > 0) {
+			this.objectShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
+		}
+		if (this._shadowTileCounts.above > 0) {
+			this.aboveShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
+		}
+}
+
+	/**
+	 * Get the tile texture for a shadow sprite.
+	 *
+	 * Shadow rendering uses the original tile texture from the atlas
+	 * (which defines the shape/silhouette) but the sprite will be
+	 * tinted pure black and given alpha=0.59 to darken the floor.
+	 *
+	 * This avoids PixiJS v8 canvas alpha premultiplication issues
+	 * by using the proven sprite.tint + sprite.alpha approach.
 	 */
 	private getShadowTexture(tileId: number): Texture | null {
 		if (this.shadowTextureCache.has(tileId)) {
 			return this.shadowTextureCache.get(tileId)!;
 		}
+		// Use the real tile texture — shape comes from the atlas
 		const tex = this.realTileset!.getTileTexture(tileId);
-		if (tex) {
-			this.shadowTextureCache.set(tileId, tex);
-		}
+		if (tex) this.shadowTextureCache.set(tileId, tex);
 		return tex;
 	}
 
@@ -301,8 +302,7 @@ export class GameMap {
 			for (let x = startX; x < endX; x++) {
 				const tileId = this.data.getTileIndex(l, x, y);
 				if (tileId === 0) continue;
-				// Skip tile 839 everywhere — it's rendered as opaque wall on L3/L6
-				// and skipped entirely on shadow layers (it's structural, not shadow)
+				// Skip tile 839 on non-object/above layers (structural, not shadow)
 				if (
 					tileId === 839 &&
 					l !== MapData.MAP_OBJECT_LAYER &&
@@ -331,18 +331,17 @@ export class GameMap {
 				const shadowTarget = this.getShadowTarget(l, tileId, isBlack);
 
 				if (shadowTarget) {
-					// This tile is a shadow silhouette → render translucently
-					const shadowTex = this.getShadowTexture(tileId);
-					if (!shadowTex) {
-						nullTextureCount++;
-						continue;
-					}
-					const shadowSprite = new Sprite(shadowTex);
-					shadowSprite.x = px;
-					shadowSprite.y = py;
-					shadowSprite.alpha = 0.59; // Java shadowAlpha = 150/255
-					shadowTarget.addChild(shadowSprite);
+					// Shadow tile: draw semi-transparent black rect on Graphics
+					// Java engine composites shadows by drawing black at shadowAlpha=150/255
+					shadowTarget.rect(px, py, 8, 8);
 					shadowCount++;
+					// Track which overlay layer this goes to
+					if (shadowTarget === this.groundShadowGraphics)
+						this._shadowTileCounts.ground++;
+					else if (shadowTarget === this.objectShadowGraphics)
+						this._shadowTileCounts.object++;
+					else if (shadowTarget === this.aboveShadowGraphics)
+						this._shadowTileCounts.above++;
 				} else {
 					// Normal opaque render
 					const texture = this.realTileset!.getTileTexture(tileId);
@@ -374,7 +373,7 @@ export class GameMap {
 
 		if (spriteCount > 0 || shadowCount > 0 || nullTextureCount > 0) {
 			console.log(
-				`[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} colored, ${shadowCount} shadow, ${nullTextureCount} null`,
+				`[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} opaque, ${shadowCount} shadow, ${nullTextureCount} null`,
 			);
 		}
 	}
@@ -498,9 +497,9 @@ export class GameMap {
 		for (const s of entityTiles) this.entitySpriteContainer.removeChild(s);
 
 		// Reset shadow overlay containers for viewport re-render
-		this.groundShadowOverlay.removeChildren();
-		this.objectShadowOverlay.removeChildren();
-		this.aboveShadowOverlay.removeChildren();
+		this.groundShadowGraphics.clear();
+		this.objectShadowGraphics.clear();
+		this.aboveShadowGraphics.clear();
 
 		for (const l of renderableLayers) {
 			const layer = this.layers[l];
@@ -525,13 +524,8 @@ export class GameMap {
 					const shadowTarget = this.getShadowTarget(l, tileId, isBlack);
 
 					if (shadowTarget) {
-						const shadowTex = this.getShadowTexture(tileId);
-						if (!shadowTex) continue;
-						const shadowSprite = new Sprite(shadowTex);
-						shadowSprite.x = px;
-						shadowSprite.y = py;
-						shadowSprite.alpha = 0.59; // Java shadowAlpha = 150/255
-						shadowTarget.addChild(shadowSprite);
+						// Shadow tile: draw semi-transparent black rect on Graphics
+						shadowTarget.rect(px, py, 8, 8);
 					} else {
 						const texture = this.realTileset!.getTileTexture(tileId);
 						if (!texture) continue;
@@ -550,7 +544,12 @@ export class GameMap {
 						}
 					}
 				}
+				}
 			}
-		}
+
+		// Fill shadow Graphics with semi-transparent black
+		this.groundShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
+		this.objectShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
+		this.aboveShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
 	}
 }

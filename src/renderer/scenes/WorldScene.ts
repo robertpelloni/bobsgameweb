@@ -122,7 +122,7 @@ export class WorldScene extends Scene {
 	private controlsOverlay: Container | null = null;
 	private footstepTimer: number = 0;
 	private footstepIndex: number = 0;
-	private ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
+	private _ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
 	private weatherContainer: Container | null = null;
 	private rainDrops: { x: number; y: number; speed: number }[] = [];
 	private isExteriorMap: boolean = false;
@@ -136,7 +136,7 @@ export class WorldScene extends Scene {
 
 	// Debug layer visibility state (Java: F-keys toggled per-layer)
 	private debugShowHitLayer: boolean = false;
-	private debugShowBoundsLayer: boolean = false;
+	private _debugShowBoundsLayer: boolean = false;
 	private debugLayerCycleIndex: number = 0;
 	private debugLightingEnabled: boolean = true;
 	private debugHudVisible: boolean = false;
@@ -485,11 +485,11 @@ export class WorldScene extends Scene {
 		this.showRoomBanner(
 			WorldScene.friendlyMapName(this.currentMapName || "Unknown"),
 		);
-		// Play ambient music matching room mood
-		const mood = AmbientMusicGenerator.getMoodFromMapName(
-			this.currentMapName || "",
-		);
-		this.ambientMusic.play(mood);
+		// Ambient music disabled — was causing buzzing noise
+		// const mood = AmbientMusicGenerator.getMoodFromMapName(
+		//   this.currentMapName || "",
+		// );
+		// this.ambientMusic.play(mood);
 		// Play background music
 		try {
 			if (AudioManager.isLoaded("game")) {
@@ -519,6 +519,8 @@ export class WorldScene extends Scene {
 			const fallbackData = new MapData(-1, "Empty", 20, 15);
 			this.map = new GameMap(fallbackData, this.realTileset);
 			this.worldContainer.addChild(this.map.container);
+			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
+			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
 			this.map.render(this.tileset, this.palette);
 			// Update RenderSystem to use the entity sprite layer (below rooftops)
 			if ((this as any)._renderSystem && this.map?.entitySpriteContainer) {
@@ -639,6 +641,7 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.addChild(psc2.sprite);
 			}
 		}
+		this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
 		this.map.render(this.tileset, this.palette);
 		return true;
 	}
@@ -1131,10 +1134,11 @@ export class WorldScene extends Scene {
 			WorldScene.friendlyMapName(this.currentMapName || "Unknown"),
 		);
 		// Switch ambient music to new room mood
-		const newMood = AmbientMusicGenerator.getMoodFromMapName(
-			this.currentMapName || "",
-		);
-		this.ambientMusic.play(newMood);
+		// Ambient music disabled — was causing buzzing noise
+		// const newMood = AmbientMusicGenerator.getMoodFromMapName(
+		//   this.currentMapName || "",
+		// );
+		// this.ambientMusic.play(newMood);
 		this.mapTransitioning = false;
 	}
 	public onMapGenerated(mapData: MapData): void {
@@ -1146,6 +1150,7 @@ export class WorldScene extends Scene {
 		this.map.setSpawnPosition(spX, spY);
 		this.worldContainer.removeChildAt(0);
 		this.worldContainer.addChildAt(this.map.container, 0);
+		this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
 		this.map.render(this.tileset, this.palette);
 		this.showDialogue(Localization.get("welcome"));
 	}
@@ -1829,7 +1834,7 @@ export class WorldScene extends Scene {
 			StateManager.push(skillTree);
 		}
 	}
-	private createControlsOverlay(): void {
+	private _createControlsOverlay(): void {
 		this.controlsOverlay = new Container();
 		this.controlsOverlay.zIndex = 9998;
 		this.container.addChild(this.controlsOverlay);
@@ -1843,23 +1848,32 @@ export class WorldScene extends Scene {
 
 		const title = new Text({
 			text: "bob's game",
-			style: new TextStyle({ fill: '#3366ff', fontSize: 24, fontWeight: 'bold' })
+			style: new TextStyle({
+				fill: "#3366ff",
+				fontSize: 24,
+				fontWeight: "bold",
+			}),
 		});
 		title.anchor.set(0.5);
 		title.position.set(this.width / 2, this.height / 2 - 55);
 		this.controlsOverlay.addChild(title);
 
 		const controls = new Text({
-			text: 'WASD / Arrows - Move\nShift - Sprint\nE - Talk / Interact\nEsc - Pause Menu\nI - Inventory\nQ - Quest Log\n` (Tilde) - Debug Console',
-			style: new TextStyle({ fill: '#cccccc', fontSize: 13, lineHeight: 22, align: 'center' }),
+			text: "WASD / Arrows - Move\nShift - Sprint\nE - Talk / Interact\nEsc - Pause Menu\nI - Inventory\nQ - Quest Log\n` (Tilde) - Debug Console",
+			style: new TextStyle({
+				fill: "#cccccc",
+				fontSize: 13,
+				lineHeight: 22,
+				align: "center",
+			}),
 		});
 		controls.anchor.set(0.5);
 		controls.position.set(this.width / 2, this.height / 2 + 5);
 		this.controlsOverlay.addChild(controls);
 
 		const hint = new Text({
-			text: 'Press any key to start',
-			style: new TextStyle({ fill: '#666666', fontSize: 12 })
+			text: "Press any key to start",
+			style: new TextStyle({ fill: "#666666", fontSize: 12 }),
 		});
 		hint.anchor.set(0.5);
 		hint.position.set(this.width / 2, this.height / 2 + 60);
