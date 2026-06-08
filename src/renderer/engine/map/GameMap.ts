@@ -19,18 +19,19 @@ export interface CameraBounds {
  * and applying shadowAlpha (=150/255 ≈ 0.59) to black pixels. This makes
  * Shadow overlay rendering for the Java engine's composite model.
  *
- * In the Java engine, only L5 (objectShadow) tiles are translucent
- * shadows — they darken the floor/walls underneath them. L3 (objects)
- * and L6 (above) black tiles are solid furniture silhouettes
- * (curtains, desk edges, bed frames, door frames) and render OPAQUE.
+ * In the Java engine, black tiles on L3/L5/L6 that are NOT structural
+ * tile 839 are translucent shadow silhouettes. They darken the floor
+ * and walls beneath furniture (beds, desks, tables, curtains).
  *
  * Rendering approach:
  * - L2 (groundShadow): ALL non-zero tiles → groundShadowGraphics (translucent)
+ * - L3 (objects): non-839 black tiles → objectShadowGraphics (translucent),
+ *   colored tiles and 839 → normal layer (opaque)
  * - L5 (objectShadow): ALL non-zero tiles → objectShadowGraphics (translucent)
- * - L3, L6, and all other layers: render normally (opaque)
- * - All shadow tiles drawn as Graphics.rect().fill({color:0, alpha:0.59})
- * reading raw RGBA pixels, and baking alpha=0.59 into new textures.
- * This guarantees translucency regardless of PixiJS sprite/container alpha.
+ * - L6 (above): non-839 black tiles → aboveShadowGraphics (translucent),
+ *   colored tiles and 839 → normal layer (opaque)
+ * - All shadow tiles drawn as Graphics.rect().fill({color:0})
+ * - Translucency via Container.alpha = 0.59 on each Graphics object
  */
 export class GameMap {
 	public data: MapData;
@@ -107,16 +108,19 @@ export class GameMap {
 		this.groundShadowGraphics = new Graphics();
 		this.groundShadowGraphics.zIndex = 2.5;
 		this.groundShadowGraphics.cullable = false;
+		this.groundShadowGraphics.alpha = 0.59;
 		this.container.addChild(this.groundShadowGraphics);
 
 		this.objectShadowGraphics = new Graphics();
 		this.objectShadowGraphics.zIndex = 5.5;
 		this.objectShadowGraphics.cullable = false;
+		this.objectShadowGraphics.alpha = 0.59;
 		this.container.addChild(this.objectShadowGraphics);
 
 		this.aboveShadowGraphics = new Graphics();
 		this.aboveShadowGraphics.zIndex = 102.5;
 		this.aboveShadowGraphics.cullable = false;
+		this.aboveShadowGraphics.alpha = 0.59;
 		this.container.addChild(this.aboveShadowGraphics);
 
 		// objects2 container at z=3.5
@@ -173,26 +177,27 @@ export class GameMap {
 	 * Determine which shadow overlay a tile should go to.
 	 * Returns null if the tile should render normally (opaque).
 	 */
-	private getShadowTarget(l: number, tileId: number): Graphics | null {
+	private getShadowTarget(l: number, tileId: number, isBlack: boolean): Graphics | null {
 		// L2 (groundShadow): all tiles are shadow
 		if (l === MapData.MAP_GROUND_SHADOW_LAYER) {
 			return tileId !== 0 ? this.groundShadowGraphics : null;
 		}
-		// L3 (objects): render OPAQUE — black tiles are solid furniture
-		// silhouettes (curtains, desk edges, bed frames), NOT shadows.
-		// The actual shadow overlays live on L5.
+		// L3 (objects): black tiles (curtains, desk edges, bed frames)
+		// are translucent shadow silhouettes. Colored tiles (furniture
+		// faces) and structural tile 839 render opaque.
 		if (l === MapData.MAP_OBJECT_LAYER) {
+			if (isBlack && tileId !== 839) return this.objectShadowGraphics;
 			return null;
 		}
-		// L5 (objectShadow): ALL non-zero tiles are shadows
-		// These are the translucent shadow overlays cast by furniture.
+		// L5 (objectShadow): ALL non-zero tiles are translucent shadows.
 		// Even "colored" tiles like 1833 are dark shadow shapes.
 		if (l === MapData.MAP_OBJECT_SHADOW_LAYER) {
 			return tileId !== 0 ? this.objectShadowGraphics : null;
 		}
-		// L6 (above): render OPAQUE — black tiles are solid structures
-		// (door frames, roof edges), NOT shadows.
+		// L6 (above): black tiles (door frames, roof edges) are
+		// translucent shadow silhouettes. Structural tile 839 renders opaque.
 		if (l === MapData.MAP_ABOVE_LAYER) {
+			if (isBlack && tileId !== 839) return this.aboveShadowGraphics;
 			return null;
 		}
 		return null;
@@ -234,13 +239,16 @@ export class GameMap {
 		// Fill all shadow Graphics with semi-transparent black
 		// Java shadowAlpha = 150/255 ≈ 0.59
 		if (this._shadowTileCounts.ground > 0) {
-			this.groundShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
+			this.groundShadowGraphics.fill({ color: 0x000000 });
 		}
 		if (this._shadowTileCounts.object > 0) {
-			this.objectShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
+			console.log(
+				`[GameMap] Filling objectShadowGraphics with ${this._shadowTileCounts.object} rects, container.alpha=0.59`,
+			);
+			this.objectShadowGraphics.fill({ color: 0x000000 });
 		}
 		if (this._shadowTileCounts.above > 0) {
-			this.aboveShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
+			this.aboveShadowGraphics.fill({ color: 0x000000 });
 		}
 	}
 
@@ -322,7 +330,7 @@ export class GameMap {
 				const py = Math.round(y * 8);
 
 				const isBlack = this.realTileset!.isBlackTile(tileId);
-				const shadowTarget = this.getShadowTarget(l, tileId);
+				const shadowTarget = this.getShadowTarget(l, tileId, isBlack);
 
 				if (shadowTarget) {
 					// Shadow tile: draw semi-transparent black rect on Graphics
@@ -515,7 +523,7 @@ export class GameMap {
 					const py = Math.round(y * 8);
 
 					const isBlack = this.realTileset!.isBlackTile(tileId);
-					const shadowTarget = this.getShadowTarget(l, tileId);
+					const shadowTarget = this.getShadowTarget(l, tileId, isBlack);
 
 					if (shadowTarget) {
 						// Shadow tile: draw semi-transparent black rect on Graphics
@@ -542,8 +550,8 @@ export class GameMap {
 		}
 
 		// Fill shadow Graphics with semi-transparent black
-		this.groundShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
-		this.objectShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
-		this.aboveShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
+		this.groundShadowGraphics.fill({ color: 0x000000 });
+		this.objectShadowGraphics.fill({ color: 0x000000 });
+		this.aboveShadowGraphics.fill({ color: 0x000000 });
 	}
 }
