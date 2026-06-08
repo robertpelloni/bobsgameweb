@@ -17,21 +17,18 @@ export interface CameraBounds {
  *
  * The original Java engine renders shadows by compositing each chunk-group
  * and applying shadowAlpha (=150/255 ≈ 0.59) to black pixels. This makes
- * shadow silhouette tiles (700, 733, 795, etc.) on the objects (L3) and
- * above (L6) layers render translucently, while structural tile 839
- * (solid wall fill) remains opaque.
+ * Shadow overlay rendering for the Java engine's composite model.
+ *
+ * In the Java engine, only L5 (objectShadow) tiles are translucent
+ * shadows — they darken the floor/walls underneath them. L3 (objects)
+ * and L6 (above) black tiles are solid furniture silhouettes
+ * (curtains, desk edges, bed frames, door frames) and render OPAQUE.
  *
  * Rendering approach:
- * - L2 (groundShadow): ALL non-zero tiles → groundShadowOverlay (translucent)
- * - L3 (objects): non-839 black tiles → objectShadowOverlay (translucent),
- *   all other tiles including 839 → normal layer container (opaque)
- * - L5 (objectShadow): black tiles → objectShadowOverlay (translucent),
- *   colored tiles → normal layer container (opaque)
- * - L6 (above): non-839 black tiles → aboveShadowOverlay (translucent),
- *   all other tiles including 839 → normal layer container (opaque)
- * - All other layers: render normally (opaque)
- *
- * Translucency is achieved by loading the atlas PNG with Canvas2D,
+ * - L2 (groundShadow): ALL non-zero tiles → groundShadowGraphics (translucent)
+ * - L5 (objectShadow): ALL non-zero tiles → objectShadowGraphics (translucent)
+ * - L3, L6, and all other layers: render normally (opaque)
+ * - All shadow tiles drawn as Graphics.rect().fill({color:0, alpha:0.59})
  * reading raw RGBA pixels, and baking alpha=0.59 into new textures.
  * This guarantees translucency regardless of PixiJS sprite/container alpha.
  */
@@ -176,29 +173,26 @@ export class GameMap {
 	 * Determine which shadow overlay a tile should go to.
 	 * Returns null if the tile should render normally (opaque).
 	 */
-	private getShadowTarget(
-		l: number,
-		tileId: number,
-		isBlack: boolean,
-	): Graphics | null {
+	private getShadowTarget(l: number, tileId: number): Graphics | null {
 		// L2 (groundShadow): all tiles are shadow
 		if (l === MapData.MAP_GROUND_SHADOW_LAYER) {
 			return tileId !== 0 ? this.groundShadowGraphics : null;
 		}
-		// L3 (objects): non-839 black tiles are shadows
+		// L3 (objects): render OPAQUE — black tiles are solid furniture
+		// silhouettes (curtains, desk edges, bed frames), NOT shadows.
+		// The actual shadow overlays live on L5.
 		if (l === MapData.MAP_OBJECT_LAYER) {
-			if (isBlack && tileId !== 839) return this.objectShadowGraphics;
 			return null;
 		}
 		// L5 (objectShadow): ALL non-zero tiles are shadows
-		// This is a shadow layer — even "colored" tiles like 1833 are
-		// dark shadow shapes (avg brightness ~78) that must be translucent
+		// These are the translucent shadow overlays cast by furniture.
+		// Even "colored" tiles like 1833 are dark shadow shapes.
 		if (l === MapData.MAP_OBJECT_SHADOW_LAYER) {
 			return tileId !== 0 ? this.objectShadowGraphics : null;
 		}
-		// L6 (above): non-839 black tiles are shadows
+		// L6 (above): render OPAQUE — black tiles are solid structures
+		// (door frames, roof edges), NOT shadows.
 		if (l === MapData.MAP_ABOVE_LAYER) {
-			if (isBlack && tileId !== 839) return this.aboveShadowGraphics;
 			return null;
 		}
 		return null;
@@ -248,7 +242,7 @@ export class GameMap {
 		if (this._shadowTileCounts.above > 0) {
 			this.aboveShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
 		}
-}
+	}
 
 	/**
 	 * Get the tile texture for a shadow sprite.
@@ -328,7 +322,7 @@ export class GameMap {
 				const py = Math.round(y * 8);
 
 				const isBlack = this.realTileset!.isBlackTile(tileId);
-				const shadowTarget = this.getShadowTarget(l, tileId, isBlack);
+				const shadowTarget = this.getShadowTarget(l, tileId);
 
 				if (shadowTarget) {
 					// Shadow tile: draw semi-transparent black rect on Graphics
@@ -521,7 +515,7 @@ export class GameMap {
 					const py = Math.round(y * 8);
 
 					const isBlack = this.realTileset!.isBlackTile(tileId);
-					const shadowTarget = this.getShadowTarget(l, tileId, isBlack);
+					const shadowTarget = this.getShadowTarget(l, tileId);
 
 					if (shadowTarget) {
 						// Shadow tile: draw semi-transparent black rect on Graphics
@@ -544,8 +538,8 @@ export class GameMap {
 						}
 					}
 				}
-				}
 			}
+		}
 
 		// Fill shadow Graphics with semi-transparent black
 		this.groundShadowGraphics.fill({ color: 0x000000, alpha: 0.59 });
