@@ -47,7 +47,7 @@ import { TouchControls } from "../ui/TouchControls";
 import { Localization, type Language } from "../../shared/Localization";
 // Easing - reserved for future use
 import { networkManager } from "../puzzle";
-import { SERVER_URL, APP_VERSION } from "../../shared/Config";
+import { SERVER_URL } from "../../shared/Config";
 import { AchievementManager } from "../data/AchievementManager";
 import { getPersistenceIdentity } from "../data/AchievementIdentity";
 import { LegacyMapLoader } from "../engine/map/LegacyMapLoader";
@@ -1408,7 +1408,7 @@ export class WorldScene extends Scene {
 		// Show version in corner
 		if (!this.versionText && this.hudContainer) {
 			const style = new TextStyle({ fill: "#888888", fontSize: 10 });
-			this.versionText = new Text({ text: "v" + APP_VERSION, style });
+			this.versionText = new Text({ text: "v3.3.5", style });
 			this.versionText.position.set(4, this.height - 16);
 			this.container.addChild(this.versionText);
 		}
@@ -2245,7 +2245,7 @@ export class WorldScene extends Scene {
 			this.playerIsMoving = dx !== 0 || dy !== 0;
 
 			// Delegate movement state and animation to YuuEntity
-			this.yuu.updateEntity(dt, dx, dy, this.playerIsSprinting);
+			this.yuu.updateYuu(dt, dx, dy, this.playerIsSprinting);
 			this.animDirection = this.yuu.animDirection;
 			this.moveDirection = this.yuu.moveDirection;
 			this.isTurning = this.yuu.isTurning;
