@@ -652,56 +652,96 @@ export class WorldScene extends Scene {
 	private createDoorEntities(): void {
 		if (!this.map) return;
 		const doorList = this.map.data.doorDataList;
+		const W = this.map.data.widthTiles1X;
+		const H = this.map.data.heightTiles1X;
+
+		// Known door frame tile IDs (from LegacyMapLoader.DOOR_TILE_IDS + 832/1132)
+		const DOOR_FRAME_IDS = new Set([
+			732, 733, 734, 735, 736, 737, 741, 742,
+			1316, 1495, 1503, 1511, 14144, 15440,
+			755, 756, 832, 1132,
+		]);
+
 		for (const door of doorList) {
 			const entity = this.world.createEntity();
 			const transform = new TransformComponent();
-			const doorX: number = door.x ?? 0;
-			const doorY: number = door.y ?? 0;
+
+			// The door graph coordinates often point at a wall tile (839)
+			// rather than the walkable walkway below/through the door.
+			// Scan nearby tiles to find the actual walkable passage.
+			let doorX: number = door.x ?? 0;
+			let doorY: number = door.y ?? 0;
+			let walkwayFound = false;
+
+			// Check if the door graph position itself is walkable (empty on objects layer)
+			const objTile = this.map.data.getTileIndex(
+				MapData.MAP_OBJECT_LAYER, doorX, doorY,
+			);
+			if (objTile === 0) {
+				walkwayFound = true;
+			} else {
+				// Search nearby for the walkway: empty tile adjacent to
+				// door frame tiles that forms the passage through the wall.
+				const offsets = [
+					[0, 1], [1, 0], [-1, 0], [0, -1],
+					[0, 2], [2, 0], [-2, 0], [0, -2],
+					[1, 1], [-1, 1], [1, -1], [-1, -1],
+				];
+				for (const [ox, oy] of offsets) {
+					const tx = doorX + ox;
+					const ty = doorY + oy;
+					if (tx < 0 || tx >= W || ty < 0 || ty >= H) continue;
+					const tile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
+					if (tile === 0) {
+						// Verify it's near a door frame tile
+						let nearFrame = false;
+						for (const [fx, fy] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+							const nx = tx + fx;
+							const ny = ty + fy;
+							if (nx < 0 || nx >= W || ny < 0 || ny >= H) continue;
+							const neighborTile = this.map.data.getTileIndex(
+								MapData.MAP_OBJECT_LAYER, nx, ny,
+							);
+							if (DOOR_FRAME_IDS.has(neighborTile)) {
+								nearFrame = true;
+								break;
+							}
+						}
+						// Also accept if the original door graph position was a frame tile
+						if (nearFrame || DOOR_FRAME_IDS.has(objTile)) {
+							doorX = tx;
+							doorY = ty;
+							walkwayFound = true;
+							break;
+						}
+					}
+				}
+			}
+
 			transform.x = doorX * WorldScene.TILE_PX;
 			transform.y = doorY * WorldScene.TILE_PX;
 			this.world.addComponent(entity, transform);
-			// Door sprite: render door frame tiles from the real tileset if available
-			const sprite = new SpriteComponent();
-			const doorWidth = (door.width ?? 2) * WorldScene.TILE_PX;
-			const doorHeight = (door.height ?? 2) * WorldScene.TILE_PX;
 
-			// Try to render door frame using real tileset textures
-			const doorContainer = new Container();
-			const realTileset = (this.map as any).realTileset;
-			if (realTileset && realTileset.loaded) {
-				// Door frame tiles: 742 (left frame), 743 (right frame), 744/745 (top corners)
-				const leftTex = realTileset.getTileTexture(742);
-				const rightTex = realTileset.getTileTexture(743);
-				const topTex = realTileset.getTileTexture(744);
-				if (leftTex && rightTex) {
-					// Top row of door frame
-					if (topTex) {
-						const topSprite = new Sprite(topTex);
-						topSprite.x = 0;
-						topSprite.y = 0;
-						doorContainer.addChild(topSprite);
-					}
-					// Bottom row: left + right frame
-					const leftSprite = new Sprite(leftTex);
-					leftSprite.x = 0;
-					leftSprite.y = 8;
-					doorContainer.addChild(leftSprite);
-					const rightSprite = new Sprite(rightTex);
-					rightSprite.x = 8;
-					rightSprite.y = 8;
-					doorContainer.addChild(rightSprite);
-				}
-			}
-			const tex = this.app.renderer.generateTexture(doorContainer);
-			sprite.sprite = new Sprite(tex);
+			// Door indicator sprite: small colored rectangle so the
+			// door passage is visually identifiable. The actual door
+			// frame graphics are already rendered by GameMap on the
+			// objects layer; this just marks the walkable trigger zone.
+			const sprite = new SpriteComponent();
+			const indicator = new Graphics();
+			indicator.rect(0, 0, 16, 8);
+			indicator.fill({ color: 0x4488ff, alpha: 0.35 });
+			sprite.sprite = new Sprite(this.app.renderer.generateTexture(indicator));
 			this.world.addComponent(entity, sprite);
+
 			const teleport = new TeleportComponent();
 			teleport.targetMapId = door.destinationMapName ?? "";
 			teleport.targetX = (door.destinationX ?? 0) * WorldScene.TILE_PX;
 			teleport.targetY = (door.destinationY ?? 0) * WorldScene.TILE_PX;
-			teleport.width = doorWidth;
-			teleport.height = doorHeight;
+			// Walkway is typically 2 tiles wide, 1 tile tall
+			teleport.width = 16;
+			teleport.height = 8;
 			this.world.addComponent(entity, teleport);
+
 			// Also add interaction for "press A to enter" feedback
 			const inter = new InteractionComponent();
 			inter.interactions.push({
@@ -709,7 +749,8 @@ export class WorldScene extends Scene {
 				params: { text: [`Door: ${door.name}`] },
 			});
 			this.world.addComponent(entity, inter);
-			// Clear wall collision at door position so player can walk through
+
+			// Clear wall collision at door walkway so player can walk through
 			if (this.map) {
 				// Ensure the door area is walkable (EXTRA=1 = interior)
 				// Clear a wider area (3x2) so the player can approach the door
@@ -733,16 +774,17 @@ export class WorldScene extends Scene {
 					}
 				}
 			}
+
 			console.log(
-				`[WorldScene] Created door entity: "${door.name}" at (${doorX},${doorY}) px(${doorX * 8},${doorY * 8}) -> ${door.destinationMapName} dest(${door.destinationX},${door.destinationY})`,
+				`[WorldScene] Created door entity: "${door.name}" at (${doorX},${doorY}) px(${doorX * 8},${doorY * 8}) walkway=${walkwayFound} -> ${door.destinationMapName} dest(${door.destinationX},${door.destinationY})`,
 			);
 		}
 	}
+
 	/**
-  /**
-   * Spawn NPCs from game_script.json (primary) or npc_placements.json (fallback).
-   */
-	private async createNPCs(): Promise<void> {
+	 * Spawn NPCs from game_script.json (primary) or npc_placements.json (fallback).
+	 */
+		private async createNPCs(): Promise<void> {
 		if (!this.map || !this.spriteAtlas.loaded) return;
 
 		// Primary: use entities from game_script.json (loaded via NPCDialogue)

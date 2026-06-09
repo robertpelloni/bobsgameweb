@@ -623,8 +623,8 @@
     },
     "src\\renderer\\engine\\ecs\\systems\\RenderSystem.ts": {
       "latest": {
-        "commit": "5e5e65cc",
-        "timestamp": "2026-06-07T17:43:17.676Z",
+        "commit": "aa39494b",
+        "timestamp": "2026-06-09T19:23:01.622Z",
         "mi": 54,
         "cognitive": 14,
         "nesting": 5,
@@ -646,6 +646,16 @@
         {
           "commit": "5e5e65cc",
           "timestamp": "2026-06-07T17:43:17.676Z",
+          "mi": 54,
+          "cognitive": 14,
+          "nesting": 5,
+          "lines": 37,
+          "maxCyclomatic": 11,
+          "entropy": 5.49
+        },
+        {
+          "commit": "aa39494b",
+          "timestamp": "2026-06-09T19:23:01.622Z",
           "mi": 54,
           "cognitive": 14,
           "nesting": 5,
@@ -773,8 +783,8 @@
     },
     "src\\renderer\\engine\\map\\LegacyMapLoader.ts": {
       "latest": {
-        "commit": "d76d01ce",
-        "timestamp": "2026-06-07T10:59:45.255Z",
+        "commit": "aa39494b",
+        "timestamp": "2026-06-09T19:29:58.835Z",
         "mi": 22.1,
         "cognitive": 233,
         "nesting": 8,
@@ -786,6 +796,16 @@
         {
           "commit": "d76d01ce",
           "timestamp": "2026-06-07T10:59:45.255Z",
+          "mi": 22.1,
+          "cognitive": 233,
+          "nesting": 8,
+          "lines": 364,
+          "maxCyclomatic": 105,
+          "entropy": 6.77
+        },
+        {
+          "commit": "aa39494b",
+          "timestamp": "2026-06-09T19:29:58.835Z",
           "mi": 22.1,
           "cognitive": 233,
           "nesting": 8,
@@ -945,7 +965,32 @@
         }
       ],
       "trend": "stable"
+    },
+    "src\\renderer\\engine\\ecs\\systems\\TeleportSystem.ts": {
+      "latest": {
+        "commit": "aa39494b",
+        "timestamp": "2026-06-09T19:44:13.852Z",
+        "mi": 43.4,
+        "cognitive": 39,
+        "nesting": 5,
+        "lines": 54,
+        "maxCyclomatic": 40,
+        "entropy": 5.66
+      },
+      "history": [
+        {
+          "commit": "aa39494b",
+          "timestamp": "2026-06-09T19:44:13.852Z",
+          "mi": 43.4,
+          "cognitive": 39,
+          "nesting": 5,
+          "lines": 54,
+          "maxCyclomatic": 40,
+          "entropy": 5.66
+        }
+      ],
+      "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-09T17:05:59.054Z"
+  "capturedAt": "2026-06-09T19:44:18.917Z"
 }

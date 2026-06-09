@@ -226,10 +226,7 @@ export class GameMap {
 				// On L3/L6: black tiles (walls, door frames, etc.) render translucent
 				// at shadowAlpha=0.59; color tiles (furniture, rails) render opaque.
 				// Uses RealTileset.isBlackTile() which checks tileset_atlas_black_ids.json.
-				if (
-					isShadowCompositeLayer &&
-					this.realTileset?.isBlackTile(tileId)
-				) {
+				if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId)) {
 					sprite.alpha = 0.59;
 				}
 
@@ -406,12 +403,9 @@ export class GameMap {
 					sprite.x = px;
 					sprite.y = py;
 
-            // L3/L6: black tiles render translucent at shadowAlpha
-            if (
-              isShadowCompositeLayer &&
-              this.realTileset?.isBlackTile(tileId)
-            )
-              sprite.alpha = 0.59;
+					// L3/L6: black tiles render translucent at shadowAlpha
+					if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId))
+						sprite.alpha = 0.59;
 
 					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
 					if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";

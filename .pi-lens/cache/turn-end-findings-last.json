@@ -1,6 +1,6 @@
 {
-  "signature": "src/renderer/engine/map/GameMap.ts::ℹ️ Advisory — no action required this turn:\n⚠️ Newly unused exports in modified files — check if callers need updating (Knip):\n  src/renderer/engine/map/GameMap.ts:8 — CameraBounds\n",
+  "signature": "src/renderer/scenes/WorldScene.ts::Unresolved from this turn — src/renderer/scenes/WorldScene.ts:\n🔴 STOP — 240 issue(s) must be fixed:\n  L787: Expected a semicolon or an implicit semicolon after a statement, but found none (unknown)\n    💡 Fix: Try inserting a semicolon here\n  L125: This private class member is defined but never used.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L139: This private class member is defined but never used.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L1839: Illegal use of reserved keyword `public` as an identifier in strict mode\n  L3178: The function should not return a value because its return type is void.\n  L3379: Expected a semicolon or an implicit semicolon after a statement, but found none\n  L3185: The function should not return a value because its return type is void.\n  L3197: The function should not return a value because its return type is void.\n  L3200: The function should not ret\n... (truncated)",
   "sessionId": "lens-mq6t5q3m-579f22e0",
-  "projectSeqStart": 311,
-  "projectSeqEnd": 312
+  "projectSeqStart": 313,
+  "projectSeqEnd": 315
 }
