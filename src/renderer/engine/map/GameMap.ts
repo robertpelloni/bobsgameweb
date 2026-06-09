@@ -196,6 +196,17 @@ export class GameMap {
 				)
 					continue;
 
+				// On L6 (above): skip 839 if L3 (objects) already has 839 at
+				// the same position. These are wall columns already rendered
+				// translucently on L3; duplicating them on L6 creates a
+				// double-alpha dark square (the "black squares" bug).
+				if (
+					l === MapData.MAP_ABOVE_LAYER &&
+					tileId === 839 &&
+					this.data.getTileIndex(MapData.MAP_OBJECT_LAYER, x, y) === 839
+				)
+					continue;
+
 				const skipFactor = totalTiles > 50000 ? 2 : 1;
 				if (
 					skipFactor > 1 &&
@@ -390,6 +401,14 @@ export class GameMap {
 						tileId === 839 &&
 						l !== MapData.MAP_OBJECT_LAYER &&
 						l !== MapData.MAP_ABOVE_LAYER
+					)
+						continue;
+
+					// On L6 (above): skip 839 if L3 already has 839 at same position
+					if (
+						l === MapData.MAP_ABOVE_LAYER &&
+						tileId === 839 &&
+						this.data.getTileIndex(MapData.MAP_OBJECT_LAYER, x, y) === 839
 					)
 						continue;
 

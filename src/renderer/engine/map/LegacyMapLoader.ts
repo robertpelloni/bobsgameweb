@@ -337,71 +337,96 @@ export class LegacyMapLoader {
 		const dense = LegacyMapLoader.expandLayer(objectsLayer, w * h);
 		const WALL_TILE = 839;
 
-		// Collect positions of KNOWN door tiles between walls
+		// Collect positions of KNOWN door frame tiles between walls
+		// (e.g. 742/743 door frames flanked by 839 walls)
 		const doorPositions: { x: number; y: number; tileId: number }[] = [];
 		for (let y = 1; y < h - 1; y++) {
 			for (let x = 1; x < w - 1; x++) {
 				const tileId = dense[y * w + x];
 				if (!LegacyMapLoader.DOOR_TILE_IDS.has(tileId)) continue;
-
 				const left = dense[y * w + (x - 1)];
 				const right = dense[y * w + (x + 1)];
 				const above = dense[(y - 1) * w + x];
 				const below = dense[(y + 1) * w + x];
-
 				const isHOpening = left === WALL_TILE && right === WALL_TILE;
 				const isVOpening = above === WALL_TILE && below === WALL_TILE;
-
 				if (isHOpening || isVOpening) {
 					doorPositions.push({ x, y, tileId });
 				}
 			}
 		}
 
-		// Assign positions: for each door, find the closest scanned wall-opening
+		// Also find wall gaps: empty tiles (0) on the objects layer that
+		// are flanked by 839 walls. These are door walkways — the actual
+		// passage the player walks through. A door walkway is a gap in
+		// the wall where the player enters/exits a room.
+		const wallGaps: { x: number; y: number }[] = [];
+		for (let y = 1; y < h - 1; y++) {
+			for (let x = 1; x < w - 1; x++) {
+				const tileId = dense[y * w + x];
+				if (tileId !== 0) continue; // Must be empty
+				const left = dense[y * w + (x - 1)];
+				const right = dense[y * w + (x + 1)];
+				const above = dense[(y - 1) * w + x];
+				const below = dense[(y + 1) * w + x];
+				// Horizontal gap: 839 on both sides
+				const isHGap = left === WALL_TILE && right === WALL_TILE;
+				// Vertical gap: 839 above and below
+				const isVGap = above === WALL_TILE && below === WALL_TILE;
+				if (isHGap || isVGap) {
+					wallGaps.push({ x, y });
+				}
+			}
+		}
+
+		// Combine: door frame positions + wall gaps
+		// Prefer door frame positions (more specific), use wall gaps as fallback
+		const allPositions: { x: number; y: number; priority: number }[] = [
+			...doorPositions.map((d) => ({ x: d.x, y: d.y, priority: 0 })),
+			...wallGaps.map((g) => ({ x: g.x, y: g.y, priority: 1 })),
+		];
+
+		// Assign positions: for each door, find the closest position
 		const assigned = new Set<number>();
 		for (let i = 0; i < mapData.doorDataList.length; i++) {
 			const door = mapData.doorDataList[i];
 			const gx = door.x ?? 0;
 			const gy = door.y ?? 0;
 
-			const curTile = mapData.getTileIndex(MapData.MAP_OBJECT_LAYER, gx, gy);
-			if (LegacyMapLoader.DOOR_TILE_IDS.has(curTile)) {
-				console.log(
-					`[LegacyMapLoader] Door "${door.name}" already on valid tile ${curTile} at (${gx},${gy})`,
-				);
-				continue;
-			}
-
 			let bestIdx = -1;
 			let bestDist = Infinity;
-			for (let j = 0; j < doorPositions.length; j++) {
+			let bestPriority = Infinity;
+
+			for (let j = 0; j < allPositions.length; j++) {
 				if (assigned.has(j)) continue;
-				const dx = Math.abs(doorPositions[j].x - gx);
-				const dy = Math.abs(doorPositions[j].y - gy);
+				const dx = Math.abs(allPositions[j].x - gx);
+				const dy = Math.abs(allPositions[j].y - gy);
 				const dist = dx + dy;
-				if (dist < bestDist) {
+				// Prefer closer positions, break ties by priority (door frames first)
+				if (dist < bestDist || (dist === bestDist && allPositions[j].priority < bestPriority)) {
 					bestDist = dist;
 					bestIdx = j;
+					bestPriority = allPositions[j].priority;
 				}
 			}
 
-			if (bestIdx >= 0 && bestDist <= 3) {
+			// Allow larger snap distance (20 tiles) since door graph coords
+			// can be far from the actual door on the map
+			if (bestIdx >= 0 && bestDist <= 20) {
 				console.log(
-					`[LegacyMapLoader] Snapping door "${door.name}" from (${gx},${gy}) to opening at (${doorPositions[bestIdx].x},${doorPositions[bestIdx].y}) tile=${doorPositions[bestIdx].tileId}`,
+					`[LegacyMapLoader] Snapping door "${door.name}" from (${gx},${gy}) to ${allPositions[bestIdx].priority === 0 ? 'frame' : 'gap'} at (${allPositions[bestIdx].x},${allPositions[bestIdx].y}) dist=${bestDist}`,
 				);
-				door.x = doorPositions[bestIdx].x;
-				door.y = doorPositions[bestIdx].y;
+				door.x = allPositions[bestIdx].x;
+				door.y = allPositions[bestIdx].y;
 				assigned.add(bestIdx);
 			} else {
 				console.log(
-					`[LegacyMapLoader] Door "${door.name}" at (${gx},${gy}) dist to nearest opening: ${bestDist}`,
+					`[LegacyMapLoader] Door "${door.name}" at (${gx},${gy}) dist to nearest: ${bestDist}`,
 				);
 			}
 		}
-
 		console.log(
-			`[LegacyMapLoader] scanForDoors: ${doorPositions.length} wall-openings, assigned ${assigned.size}/${mapData.doorDataList.length} doors`,
+			`[LegacyMapLoader] scanForDoors: ${doorPositions.length} frame-openings, ${wallGaps.length} wall-gaps, assigned ${assigned.size}/${mapData.doorDataList.length} doors`,
 		);
 	}
 
