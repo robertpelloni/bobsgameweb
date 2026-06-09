@@ -16,20 +16,18 @@ export interface CameraBounds {
  * Shadow rendering — Java engine composite model.
  *
  * L3 (objects) and L6 (above) contain shadow composites in the Java
- * engine — massive amounts of solid-black tile 839 forming walls and
- * overhead structures that composite translucently over the layers
- * below them. The Java engine draws these with shadowAlpha
- * (=150/255 ≈ 0.59), making the black wall fills appear as dark
- * translucent shadows rather than solid opaque blocks.
+ * engine — black tiles (walls, door frames, overhead structures) that
+ * composite translucently over the layers below them. The Java engine
+ * draws these with shadowAlpha (=150/255 ≈ 0.59), making the black
+ * fills appear as dark translucent shadows.
  *
- * However, L3 and L6 also contain non-shadow content: door frames
- * (832, 1132), furniture (792, 800, 707-709), and other opaque tiles
- * that must render at full alpha. Only tile 839 (solid black wall fill)
- * is the shadow composite.
+ * Non-black content on L3/L6 (furniture, stair rails, etc.) renders
+ * at full opacity. The RealTileset.isBlackTile() method checks the
+ * pre-computed black tile ID list (tileset_atlas_black_ids.json).
  *
  * Rendering approach:
- * - L3 (objects): tile 839 → alpha=0.59, all other tiles → opaque
- * - L6 (above): tile 839 → alpha=0.59, all other tiles → opaque
+ * - L3 (objects): black tiles → alpha=0.59, color tiles → opaque
+ * - L6 (above): black tiles → alpha=0.59, color tiles → opaque
  * - All other layers: render normally (opaque)
  */
 export class GameMap {
@@ -225,9 +223,13 @@ export class GameMap {
 				sprite.x = px;
 				sprite.y = py;
 
-				// On L3/L6: only tile 839 (solid black wall fill) is translucent;
-				// door frames (832, 1132), furniture (792, 800), etc. render opaque
-				if (isShadowCompositeLayer && tileId === 839) {
+				// On L3/L6: black tiles (walls, door frames, etc.) render translucent
+				// at shadowAlpha=0.59; color tiles (furniture, rails) render opaque.
+				// Uses RealTileset.isBlackTile() which checks tileset_atlas_black_ids.json.
+				if (
+					isShadowCompositeLayer &&
+					this.realTileset?.isBlackTile(tileId)
+				) {
 					sprite.alpha = 0.59;
 				}
 
@@ -404,8 +406,12 @@ export class GameMap {
 					sprite.x = px;
 					sprite.y = py;
 
-					// L3/L6: only tile 839 (solid black wall fill) renders translucent
-					if (isShadowCompositeLayer && tileId === 839) sprite.alpha = 0.59;
+            // L3/L6: black tiles render translucent at shadowAlpha
+            if (
+              isShadowCompositeLayer &&
+              this.realTileset?.isBlackTile(tileId)
+            )
+              sprite.alpha = 0.59;
 
 					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
 					if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";

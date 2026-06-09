@@ -2442,7 +2442,7 @@ export class WorldScene extends Scene {
 					shadow.texture = playerSprite.texture;
 				}
 				shadow.x = this.playerTransform.x;
-				shadow.y = this.playerTransform.y - 3; // lift shadow 3 pixels to sit at player feet
+				shadow.y = this.playerTransform.y - 5; // lift shadow 5 pixels to sit at player feet
 				shadow.zIndex = this.playerTransform.y - 0.1;
 				if (!shadow.parent) {
 					this.map.entitySpriteContainer.addChild(shadow);
@@ -2597,6 +2597,20 @@ export class WorldScene extends Scene {
 		if (InputManager.isKeyPressed(Key.K)) this.openSkillTree();
 		if (InputManager.isKeyPressed(Key.Escape)) {
 			this.togglePause();
+		}
+
+		// +/- zoom keys
+		if (
+			InputManager.isKeyPressed(Key.Plus) ||
+			InputManager.isKeyPressed("NumpadAdd")
+		) {
+			this.camera?.zoomIn();
+		}
+		if (
+			InputManager.isKeyPressed(Key.Minus) ||
+			InputManager.isKeyPressed("NumpadSubtract")
+		) {
+			this.camera?.zoomOut();
 		}
 
 		// === Debug Keys (from original Java game) ===

@@ -553,12 +553,12 @@
     },
     "src\\renderer\\scenes\\WorldScene.ts": {
       "latest": {
-        "commit": "cf0c17b9",
-        "timestamp": "2026-06-07T00:52:54.300Z",
+        "commit": "3a015d43",
+        "timestamp": "2026-06-09T17:05:53.998Z",
         "mi": 0,
-        "cognitive": 1967,
+        "cognitive": 1965,
         "nesting": 12,
-        "lines": 3146,
+        "lines": 3142,
         "maxCyclomatic": 365,
         "entropy": 8.44
       },
@@ -580,6 +580,16 @@
           "cognitive": 1967,
           "nesting": 12,
           "lines": 3146,
+          "maxCyclomatic": 365,
+          "entropy": 8.44
+        },
+        {
+          "commit": "3a015d43",
+          "timestamp": "2026-06-09T17:05:53.998Z",
+          "mi": 0,
+          "cognitive": 1965,
+          "nesting": 12,
+          "lines": 3142,
           "maxCyclomatic": 365,
           "entropy": 8.44
         }
@@ -937,5 +947,5 @@
       "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-09T16:21:05.170Z"
+  "capturedAt": "2026-06-09T17:05:59.054Z"
 }

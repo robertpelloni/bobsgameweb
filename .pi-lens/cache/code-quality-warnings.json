@@ -1,130 +1,15 @@
 {
-  "generatedAt": "2026-06-09T16:22:55.212Z",
+  "generatedAt": "2026-06-09T18:40:36.494Z",
   "scope": "turn_delta",
   "sessionId": "lens-mq6t5q3m-579f22e0",
-  "turnIndex": 29,
-  "projectSeqStart": 306,
-  "projectSeqEnd": 307,
+  "turnIndex": 147,
+  "projectSeqStart": 311,
+  "projectSeqEnd": 312,
   "deltaOnly": true,
-  "files": [
-    {
-      "filePath": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\GameMap.ts",
-      "displayPath": "src/renderer/engine/map/GameMap.ts",
-      "fileSeq": 192,
-      "warnings": [
-        {
-          "id": "cq:0560076bc6",
-          "filePath": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\GameMap.ts",
-          "displayPath": "src/renderer/engine/map/GameMap.ts",
-          "line": 155,
-          "column": 2,
-          "severity": "warning",
-          "tool": "high-complexity",
-          "rule": "high-complexity",
-          "message": "'renderLayerReal' has cyclomatic complexity 28 — consider breaking it up",
-          "category": "maintainability",
-          "origin": "dispatch"
-        },
-        {
-          "id": "cq:d3522871b5",
-          "filePath": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\GameMap.ts",
-          "displayPath": "src/renderer/engine/map/GameMap.ts",
-          "line": 241,
-          "severity": "warning",
-          "tool": "type-safety",
-          "rule": "no-any-type",
-          "message": "Avoid 'any' type — use 'unknown' or define a proper interface",
-          "category": "type-safety",
-          "origin": "dispatch"
-        },
-        {
-          "id": "cq:6410fa3f7e",
-          "filePath": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\GameMap.ts",
-          "displayPath": "src/renderer/engine/map/GameMap.ts",
-          "line": 318,
-          "column": 2,
-          "severity": "warning",
-          "tool": "high-complexity",
-          "rule": "high-complexity",
-          "message": "'renderViewportAround' has cyclomatic complexity 26 — consider breaking it up",
-          "category": "maintainability",
-          "origin": "dispatch"
-        },
-        {
-          "id": "cq:e31283229e",
-          "filePath": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\GameMap.ts",
-          "displayPath": "src/renderer/engine/map/GameMap.ts",
-          "line": 364,
-          "severity": "warning",
-          "tool": "type-safety",
-          "rule": "no-any-type",
-          "message": "Avoid 'any' type — use 'unknown' or define a proper interface",
-          "category": "type-safety",
-          "origin": "dispatch"
-        },
-        {
-          "id": "cq:8845e00a05",
-          "filePath": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\GameMap.ts",
-          "displayPath": "src/renderer/engine/map/GameMap.ts",
-          "line": 366,
-          "severity": "warning",
-          "tool": "type-safety",
-          "rule": "no-any-type",
-          "message": "Avoid 'any' type — use 'unknown' or define a proper interface",
-          "category": "type-safety",
-          "origin": "dispatch"
-        },
-        {
-          "id": "cq:26732050c3",
-          "filePath": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\GameMap.ts",
-          "displayPath": "src/renderer/engine/map/GameMap.ts",
-          "line": 370,
-          "severity": "warning",
-          "tool": "type-safety",
-          "rule": "no-any-type",
-          "message": "Avoid 'any' type — use 'unknown' or define a proper interface",
-          "category": "type-safety",
-          "origin": "dispatch"
-        },
-        {
-          "id": "cq:330ef2740b",
-          "filePath": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\GameMap.ts",
-          "displayPath": "src/renderer/engine/map/GameMap.ts",
-          "line": 372,
-          "severity": "warning",
-          "tool": "type-safety",
-          "rule": "no-any-type",
-          "message": "Avoid 'any' type — use 'unknown' or define a proper interface",
-          "category": "type-safety",
-          "origin": "dispatch"
-        },
-        {
-          "id": "cq:db5b4f689d",
-          "filePath": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\GameMap.ts",
-          "displayPath": "src/renderer/engine/map/GameMap.ts",
-          "line": 414,
-          "severity": "warning",
-          "tool": "type-safety",
-          "rule": "no-any-type",
-          "message": "Avoid 'any' type — use 'unknown' or define a proper interface",
-          "category": "type-safety",
-          "origin": "dispatch"
-        }
-      ]
-    }
-  ],
+  "files": [],
   "summary": {
-    "warnings": 8,
-    "files": 1,
-    "topRules": [
-      {
-        "rule": "no-any-type",
-        "count": 6
-      },
-      {
-        "rule": "high-complexity",
-        "count": 2
-      }
-    ]
+    "warnings": 0,
+    "files": 0,
+    "topRules": []
   }
 }
