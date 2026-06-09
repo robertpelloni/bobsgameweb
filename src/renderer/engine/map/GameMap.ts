@@ -15,19 +15,21 @@ export interface CameraBounds {
 /**
  * Shadow rendering — Java engine composite model.
  *
- * L3 (objects) and L6 (above) contain the shadow composites in the
- * Java engine — massive amounts of solid-black tile 839 forming walls
- * and overhead structures that composite translucently over the layers
- * below them. The Java engine draws these layers with shadowAlpha
+ * L3 (objects) and L6 (above) contain shadow composites in the Java
+ * engine — massive amounts of solid-black tile 839 forming walls and
+ * overhead structures that composite translucently over the layers
+ * below them. The Java engine draws these with shadowAlpha
  * (=150/255 ≈ 0.59), making the black wall fills appear as dark
  * translucent shadows rather than solid opaque blocks.
  *
- * L2 (groundShadow) and L5 (objectShadow) are largely empty in the
- * extracted data — the real shadow content lives on L3 and L6.
+ * However, L3 and L6 also contain non-shadow content: door frames
+ * (832, 1132), furniture (792, 800, 707-709), and other opaque tiles
+ * that must render at full alpha. Only tile 839 (solid black wall fill)
+ * is the shadow composite.
  *
  * Rendering approach:
- * - L3 (objects): sprite.alpha = 0.59 — wall shadows over ground
- * - L6 (above): sprite.alpha = 0.59 — overhead shadows over objects
+ * - L3 (objects): tile 839 → alpha=0.59, all other tiles → opaque
+ * - L6 (above): tile 839 → alpha=0.59, all other tiles → opaque
  * - All other layers: render normally (opaque)
  */
 export class GameMap {
@@ -159,9 +161,8 @@ export class GameMap {
 		// L3 (objects) and L6 (above) are the shadow composite layers —
 		// they contain huge amounts of solid-black tile 839 (walls, overhead)
 		// that the Java engine renders translucently with shadowAlpha ≈ 0.59
-		const isShadowLayer =
-			l === MapData.MAP_OBJECT_LAYER ||
-			l === MapData.MAP_ABOVE_LAYER;
+		const isShadowCompositeLayer =
+			l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER;
 
 		let startX = 0,
 			startY = 0,
@@ -224,9 +225,9 @@ export class GameMap {
 				sprite.x = px;
 				sprite.y = py;
 
-				// L3/L6 shadow composite layers: render translucent
-				// (Java shadowAlpha = 150/255 ≈ 0.59)
-				if (isShadowLayer) {
+				// On L3/L6: only tile 839 (solid black wall fill) is translucent;
+				// door frames (832, 1132), furniture (792, 800), etc. render opaque
+				if (isShadowCompositeLayer && tileId === 839) {
 					sprite.alpha = 0.59;
 				}
 
@@ -378,9 +379,8 @@ export class GameMap {
 			layer.removeChildren();
 
 			// L3 (objects) and L6 (above) are the shadow composite layers
-			const isShadowLayer =
-				l === MapData.MAP_OBJECT_LAYER ||
-				l === MapData.MAP_ABOVE_LAYER;
+			const isShadowCompositeLayer =
+				l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER;
 
 			for (let y = startY; y < endY; y++) {
 				for (let x = startX; x < endX; x++) {
@@ -404,8 +404,8 @@ export class GameMap {
 					sprite.x = px;
 					sprite.y = py;
 
-					// L3/L6 shadow composite layers: render translucent
-					if (isShadowLayer) sprite.alpha = 0.59;
+					// L3/L6: only tile 839 (solid black wall fill) renders translucent
+					if (isShadowCompositeLayer && tileId === 839) sprite.alpha = 0.59;
 
 					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
 					if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";

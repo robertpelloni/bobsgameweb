@@ -693,14 +693,14 @@
     },
     "src\\renderer\\engine\\map\\GameMap.ts": {
       "latest": {
-        "commit": "cf0c17b9",
-        "timestamp": "2026-06-07T00:49:48.560Z",
-        "mi": 18.4,
-        "cognitive": 307,
-        "nesting": 7,
-        "lines": 424,
-        "maxCyclomatic": 87,
-        "entropy": 6.82
+        "commit": "b8131d79",
+        "timestamp": "2026-06-09T16:21:00.127Z",
+        "mi": 19.2,
+        "cognitive": 244,
+        "nesting": 6,
+        "lines": 355,
+        "maxCyclomatic": 84,
+        "entropy": 6.74
       },
       "history": [
         {
@@ -722,9 +722,19 @@
           "lines": 424,
           "maxCyclomatic": 87,
           "entropy": 6.82
+        },
+        {
+          "commit": "b8131d79",
+          "timestamp": "2026-06-09T16:21:00.127Z",
+          "mi": 19.2,
+          "cognitive": 244,
+          "nesting": 6,
+          "lines": 355,
+          "maxCyclomatic": 84,
+          "entropy": 6.74
         }
       ],
-      "trend": "stable"
+      "trend": "improving"
     },
     "src\\renderer\\engine\\map\\RealTileset.ts": {
       "latest": {
@@ -927,5 +937,5 @@
       "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-08T14:01:31.569Z"
+  "capturedAt": "2026-06-09T16:21:05.170Z"
 }

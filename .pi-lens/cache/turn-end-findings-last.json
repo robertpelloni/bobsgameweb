@@ -1,6 +1,6 @@
 {
-  "signature": "src/renderer/engine/map/GameMap.ts::ℹ️ Advisory — no action required this turn:\n⚠️ Newly unused exports in modified files — check if callers need updating (Knip):\n  src/renderer/engine/map/GameMap.ts:8 — CameraBounds\n",
-  "sessionId": "lens-mq2zystv-8c50498c",
-  "projectSeqStart": 304,
-  "projectSeqEnd": 305
+  "signature": "src/renderer/engine/map/GameMap.ts::ℹ️ Advisory — no action required this turn:\n⚠️ Newly unused exports in modified files — check if callers need updating (Knip):\n  src/renderer/engine/map/GameMap.ts:8 — CameraBounds\n\n\nℹ️ Advisory — no action required this turn:\nCode-quality warnings introduced/touched this turn: 8 across 1 file(s).\nTop rules: no-any-type×6, high-complexity×2\nDetails written to .pi-lens/cache/code-quality-warnings.json\nNo action required unless you are already refactoring these areas.",
+  "sessionId": "lens-mq6t5q3m-579f22e0",
+  "projectSeqStart": 306,
+  "projectSeqEnd": 307
 }

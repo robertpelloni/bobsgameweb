@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "createdAt": "2026-06-06T22:17:32.130Z",
+  "createdAt": "2026-06-09T15:44:11.744Z",
   "entries": [
     [
       "src\\main\\index.ts:createWindow",
@@ -144042,9 +144042,9 @@
           ]
         ],
         "transitionCount": 26,
-        "lastModified": 1780755718611.3826,
+        "lastModified": 1780868740554.0396,
         "exports": [],
-        "line": 2739
+        "line": 2744
       }
     ],
     [

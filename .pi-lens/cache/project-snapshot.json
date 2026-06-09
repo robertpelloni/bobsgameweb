@@ -1,8 +1,8 @@
 {
   "version": 1,
   "projectRoot": "C:/Users/hyper/workspace/bg/bobsgameweb",
-  "generatedAt": "2026-06-09T04:52:42.440Z",
-  "seq": 201,
+  "generatedAt": "2026-06-09T16:22:47.885Z",
+  "seq": 306,
   "files": {
     "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts": {
       "path": "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts",
@@ -5264,7 +5264,7 @@
     ],
     [
       "advance",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\tutorial-leaderboard.test.ts"
     ],
     [
       "advanceDay",
@@ -5280,11 +5280,11 @@
     ],
     [
       "assert",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\rpg-systems.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\e2e-flow.test.ts"
     ],
     [
       "assertEqual",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\rpg-systems.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\legacy-import.test.ts"
     ],
     [
       "assertThrows",
@@ -5468,7 +5468,7 @@
     ],
     [
       "generateBracket",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\arena-cutscene.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\networking.test.ts"
     ],
     [
       "get",
@@ -5592,7 +5592,7 @@
     ],
     [
       "getPhase",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\rpg-systems.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
     ],
     [
       "getPlatform",
@@ -5616,7 +5616,7 @@
     ],
     [
       "getVisible",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\bestiary-world.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\visual-systems.test.ts"
     ],
     [
       "getVisibleText",
@@ -5712,7 +5712,7 @@
     ],
     [
       "nextState",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\fishing-guild.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
     ],
     [
       "onClear",
