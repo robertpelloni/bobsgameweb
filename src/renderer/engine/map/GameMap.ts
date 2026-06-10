@@ -156,11 +156,11 @@ export class GameMap {
 		let nullTextureCount = 0;
 		const totalTiles = this.data.widthTiles1X * this.data.heightTiles1X;
 
-		// L3 (objects) and L6 (above) are the shadow composite layers —
-		// they contain huge amounts of solid-black tile 839 (walls, overhead)
-		// that the Java engine renders translucently with shadowAlpha ≈ 0.59
+		// L3 (objects), L6 (above), and L7 (above2) are the shadow composite layers —
+		// they contain solid-black and dark tile overlays that the Java engine
+		// renders translucently with shadowAlpha ≈ 0.59
 		const isShadowCompositeLayer =
-			l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER;
+			l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER;
 
 		let startX = 0,
 			startY = 0,
@@ -234,10 +234,11 @@ export class GameMap {
 				sprite.x = px;
 				sprite.y = py;
 
-				// On L3/L6: black tiles (walls, door frames, etc.) render translucent
-				// at shadowAlpha=0.59; color tiles (furniture, rails) render opaque.
-				// Uses RealTileset.isBlackTile() which checks tileset_atlas_black_ids.json.
-				if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId)) {
+				// On L3/L6/L7: all tiles render translucent at shadowAlpha=0.59.
+				// The Java engine applies shadowAlpha to the entire layer, not just
+				// black tiles. This makes walls, door frames, furniture details, and
+				// dark shelf overlays appear as translucent shadows.
+				if (isShadowCompositeLayer) {
 					sprite.alpha = 0.59;
 				}
 
@@ -388,9 +389,9 @@ export class GameMap {
 			if (!layer) continue;
 			layer.removeChildren();
 
-			// L3 (objects) and L6 (above) are the shadow composite layers
+			// L3 (objects), L6 (above), and L7 (above2) are the shadow composite layers
 			const isShadowCompositeLayer =
-				l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER;
+				l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER || l === MapData.MAP_ABOVE_DETAIL_LAYER;
 
 			for (let y = startY; y < endY; y++) {
 				for (let x = startX; x < endX; x++) {
@@ -422,8 +423,8 @@ export class GameMap {
 					sprite.x = px;
 					sprite.y = py;
 
-					// L3/L6: black tiles render translucent at shadowAlpha
-					if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId))
+					// L3/L6/L7: all tiles render translucent at shadowAlpha
+					if (isShadowCompositeLayer)
 						sprite.alpha = 0.59;
 
 					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
