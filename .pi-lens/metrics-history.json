@@ -793,8 +793,8 @@
     },
     "src\\renderer\\engine\\map\\LegacyMapLoader.ts": {
       "latest": {
-        "commit": "e0f32d1f",
-        "timestamp": "2026-06-10T12:41:52.517Z",
+        "commit": "11c61d7d",
+        "timestamp": "2026-06-10T19:35:50.245Z",
         "mi": 22.8,
         "cognitive": 256,
         "nesting": 8,
@@ -826,6 +826,16 @@
         {
           "commit": "e0f32d1f",
           "timestamp": "2026-06-10T12:41:52.517Z",
+          "mi": 22.8,
+          "cognitive": 256,
+          "nesting": 8,
+          "lines": 379,
+          "maxCyclomatic": 105,
+          "entropy": 6.75
+        },
+        {
+          "commit": "11c61d7d",
+          "timestamp": "2026-06-10T19:35:50.245Z",
           "mi": 22.8,
           "cognitive": 256,
           "nesting": 8,
@@ -1010,7 +1020,32 @@
         }
       ],
       "trend": "stable"
+    },
+    "src\\renderer\\engine\\map\\DoorGraphLoader.ts": {
+      "latest": {
+        "commit": "11c61d7d",
+        "timestamp": "2026-06-10T19:39:49.398Z",
+        "mi": 54.3,
+        "cognitive": 11,
+        "nesting": 4,
+        "lines": 50,
+        "maxCyclomatic": 6,
+        "entropy": 5.29
+      },
+      "history": [
+        {
+          "commit": "11c61d7d",
+          "timestamp": "2026-06-10T19:39:49.398Z",
+          "mi": 54.3,
+          "cognitive": 11,
+          "nesting": 4,
+          "lines": 50,
+          "maxCyclomatic": 6,
+          "entropy": 5.29
+        }
+      ],
+      "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-10T12:43:45.828Z"
+  "capturedAt": "2026-06-10T19:39:54.510Z"
 }

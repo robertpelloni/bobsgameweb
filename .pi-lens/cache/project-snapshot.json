@@ -1,7 +1,7 @@
 {
   "version": 1,
   "projectRoot": "C:/Users/hyper/workspace/bg/bobsgameweb",
-  "generatedAt": "2026-06-10T11:31:37.004Z",
+  "generatedAt": "2026-06-10T19:43:11.266Z",
   "seq": 318,
   "files": {
     "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts": {
@@ -5280,11 +5280,11 @@
     ],
     [
       "assert",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\rpg-expansion.test.ts"
     ],
     [
       "assertEqual",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\rpg-expansion.test.ts"
     ],
     [
       "assertThrows",
@@ -5312,7 +5312,7 @@
     ],
     [
       "calculateScore",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\puzzle-logic.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\tutorial-leaderboard.test.ts"
     ],
     [
       "calculateShakeDecay",
@@ -5592,7 +5592,7 @@
     ],
     [
       "getPhase",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\rpg-systems.test.ts"
     ],
     [
       "getPlatform",
@@ -5616,7 +5616,7 @@
     ],
     [
       "getVisible",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\visual-systems.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\bestiary-world.test.ts"
     ],
     [
       "getVisibleText",
@@ -5712,7 +5712,7 @@
     ],
     [
       "nextState",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\fishing-guild.test.ts"
     ],
     [
       "onClear",

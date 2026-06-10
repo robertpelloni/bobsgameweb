@@ -24,7 +24,9 @@ let doorGraphCache: Record<string, DoorGraphEntry[]> | null = null;
 export async function loadDoorGraph(): Promise<void> {
   if (doorGraphCache) return;
   try {
-    const resp = await fetch('/door_graph.json');
+    // Cache-bust: append app version so browser fetches fresh JSON after deploys
+    const { APP_VERSION } = await import('../../../shared/Config');
+    const resp = await fetch(`/door_graph.json?v=${APP_VERSION}`);
     if (resp.ok) {
       doorGraphCache = await resp.json();
       const mapCount = Object.keys(doorGraphCache!).length;
