@@ -761,7 +761,15 @@ export class WorldScene extends Scene {
 			indicator.closePath();
 			indicator.fill({ color: 0xffffff, alpha: 0.9 });
 			sprite.sprite = new Sprite(this.app.renderer.generateTexture(indicator));
-			console.log(`[WorldScene] Door sprite created: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) sprite=${sprite.sprite ? 'ok' : 'null'} parent=${sprite.sprite?.parent}`);
+			sprite.sprite.x = transform.x;
+			sprite.sprite.y = transform.y;
+			// Add directly to entity sprite container (bypass RenderSystem)
+			if (this.map?.entitySpriteContainer) {
+				this.map.entitySpriteContainer.addChild(sprite.sprite);
+			}
+			console.log(
+				`[WorldScene] Door sprite: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) added=${!!this.map?.entitySpriteContainer}`,
+			);
 			this.world.addComponent(entity, sprite);
 
 			const teleport = new TeleportComponent();
