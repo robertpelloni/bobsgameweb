@@ -553,8 +553,8 @@
     },
     "src\\renderer\\scenes\\WorldScene.ts": {
       "latest": {
-        "commit": "e0f32d1f",
-        "timestamp": "2026-06-10T12:43:40.733Z",
+        "commit": "cd52c1c0",
+        "timestamp": "2026-06-10T19:49:48.163Z",
         "mi": 0,
         "cognitive": 2014,
         "nesting": 12,
@@ -602,6 +602,16 @@
           "lines": 3177,
           "maxCyclomatic": 371,
           "entropy": 8.39
+        },
+        {
+          "commit": "cd52c1c0",
+          "timestamp": "2026-06-10T19:49:48.163Z",
+          "mi": 0,
+          "cognitive": 2014,
+          "nesting": 12,
+          "lines": 3177,
+          "maxCyclomatic": 371,
+          "entropy": 8.39
         }
       ],
       "trend": "regressing"
@@ -633,8 +643,8 @@
     },
     "src\\renderer\\engine\\ecs\\systems\\RenderSystem.ts": {
       "latest": {
-        "commit": "aa39494b",
-        "timestamp": "2026-06-09T19:23:01.622Z",
+        "commit": "cd52c1c0",
+        "timestamp": "2026-06-10T19:51:31.544Z",
         "mi": 54,
         "cognitive": 14,
         "nesting": 5,
@@ -666,6 +676,16 @@
         {
           "commit": "aa39494b",
           "timestamp": "2026-06-09T19:23:01.622Z",
+          "mi": 54,
+          "cognitive": 14,
+          "nesting": 5,
+          "lines": 37,
+          "maxCyclomatic": 11,
+          "entropy": 5.49
+        },
+        {
+          "commit": "cd52c1c0",
+          "timestamp": "2026-06-10T19:51:31.544Z",
           "mi": 54,
           "cognitive": 14,
           "nesting": 5,
@@ -1045,7 +1065,32 @@
         }
       ],
       "trend": "stable"
+    },
+    "src\\renderer\\engine\\ecs\\components\\SpriteComponent.ts": {
+      "latest": {
+        "commit": "cd52c1c0",
+        "timestamp": "2026-06-10T19:51:46.377Z",
+        "mi": 67.2,
+        "cognitive": 0,
+        "nesting": 1,
+        "lines": 11,
+        "maxCyclomatic": 1,
+        "entropy": 4.5
+      },
+      "history": [
+        {
+          "commit": "cd52c1c0",
+          "timestamp": "2026-06-10T19:51:46.377Z",
+          "mi": 67.2,
+          "cognitive": 0,
+          "nesting": 1,
+          "lines": 11,
+          "maxCyclomatic": 1,
+          "entropy": 4.5
+        }
+      ],
+      "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-10T19:39:54.510Z"
+  "capturedAt": "2026-06-10T19:51:51.490Z"
 }

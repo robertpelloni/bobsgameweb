@@ -722,14 +722,23 @@ export class WorldScene extends Scene {
 			transform.y = doorY * WorldScene.TILE_PX;
 			this.world.addComponent(entity, transform);
 
-			// Door indicator sprite: small colored rectangle so the
-			// door passage is visually identifiable. The actual door
-			// frame graphics are already rendered by GameMap on the
-			// objects layer; this just marks the walkable trigger zone.
+			// Door indicator sprite: bright visible rectangle marking the
+			// walkable trigger zone. Draw a door-shaped graphic so the
+			// passage is visually identifiable on the map.
 			const sprite = new SpriteComponent();
 			const indicator = new Graphics();
-			indicator.rect(0, 0, 16, 8);
-			indicator.fill({ color: 0x4488ff, alpha: 0.35 });
+			// Door frame outline (brown)
+			indicator.rect(0, 0, 16, 16);
+			indicator.fill({ color: 0x4488ff, alpha: 0.7 });
+			// Inner door area (lighter blue)
+			indicator.rect(2, 2, 12, 12);
+			indicator.fill({ color: 0x88bbff, alpha: 0.8 });
+			// Arrow pointing down to indicate passage
+			indicator.moveTo(8, 4);
+			indicator.lineTo(4, 10);
+			indicator.lineTo(12, 10);
+			indicator.closePath();
+			indicator.fill({ color: 0xffffff, alpha: 0.9 });
 			sprite.sprite = new Sprite(this.app.renderer.generateTexture(indicator));
 			this.world.addComponent(entity, sprite);
 
@@ -739,7 +748,7 @@ export class WorldScene extends Scene {
 			teleport.targetY = (door.destinationY ?? 0) * WorldScene.TILE_PX;
 			// Walkway is typically 2 tiles wide, 1 tile tall
 			teleport.width = 16;
-			teleport.height = 8;
+			teleport.height = 16;
 			this.world.addComponent(entity, teleport);
 
 			// Also add interaction for "press A to enter" feedback
