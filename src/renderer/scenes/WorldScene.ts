@@ -743,33 +743,37 @@ export class WorldScene extends Scene {
 			transform.y = doorY * WorldScene.TILE_PX;
 			this.world.addComponent(entity, transform);
 
-			// Door indicator sprite: bright visible rectangle marking the
-			// walkable trigger zone. Draw a door-shaped graphic so the
-			// passage is visually identifiable on the map.
+			// Door indicator: draw a visible marker on a canvas texture
 			const sprite = new SpriteComponent();
-			const indicator = new Graphics();
-			// Door frame outline (brown)
-			indicator.rect(0, 0, 16, 16);
-			indicator.fill({ color: 0x4488ff, alpha: 0.7 });
-			// Inner door area (lighter blue)
-			indicator.rect(2, 2, 12, 12);
-			indicator.fill({ color: 0x88bbff, alpha: 0.8 });
-			// Arrow pointing down to indicate passage
-			indicator.moveTo(8, 4);
-			indicator.lineTo(4, 10);
-			indicator.lineTo(12, 10);
-			indicator.closePath();
-			indicator.fill({ color: 0xffffff, alpha: 0.9 });
-			sprite.sprite = new Sprite(this.app.renderer.generateTexture(indicator));
+			const canvas = document.createElement("canvas");
+			canvas.width = 16;
+			canvas.height = 16;
+			const ctx = canvas.getContext("2d")!;
+			// Blue background
+			ctx.fillStyle = "rgba(68, 136, 255, 0.7)";
+			ctx.fillRect(0, 0, 16, 16);
+			// Lighter inner area
+			ctx.fillStyle = "rgba(136, 187, 255, 0.8)";
+			ctx.fillRect(2, 2, 12, 12);
+			// White arrow pointing down
+			ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+			ctx.beginPath();
+			ctx.moveTo(8, 4);
+			ctx.lineTo(4, 10);
+			ctx.lineTo(12, 10);
+			ctx.closePath();
+			ctx.fill();
+			const doorTexture = Texture.from(canvas);
+			doorTexture.source.scaleMode = "nearest";
+			sprite.sprite = new Sprite(doorTexture);
 			sprite.sprite.x = transform.x;
 			sprite.sprite.y = transform.y;
-			// Add directly to entity sprite container (bypass RenderSystem)
+			sprite.sprite.zIndex = 9999;
+			// Add directly to entity sprite container
 			if (this.map?.entitySpriteContainer) {
 				this.map.entitySpriteContainer.addChild(sprite.sprite);
 			}
-			console.log(
-				`[WorldScene] Door sprite: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) added=${!!this.map?.entitySpriteContainer}`,
-			);
+			console.log(`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) texSize=${doorTexture.width}x${doorTexture.height}`);
 			this.world.addComponent(entity, sprite);
 
 			const teleport = new TeleportComponent();

@@ -258,6 +258,11 @@
     },
     {
       "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -273,13 +278,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/audio/index.ts",
-      "file": "src/renderer/audio/index.ts"
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -293,8 +298,18 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/audio/index.ts",
+      "file": "src/renderer/audio/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/entity/index.ts",
       "file": "src/renderer/entity/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/input/index.ts",
+      "file": "src/renderer/input/index.ts"
     },
     {
       "type": "file",
@@ -320,16 +335,6 @@
       "type": "file",
       "name": "src/renderer/graphics/TextureCache.ts",
       "file": "src/renderer/graphics/TextureCache.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/input/index.ts",
-      "file": "src/renderer/input/index.ts"
     },
     {
       "type": "file",
@@ -385,16 +390,6 @@
       "type": "file",
       "name": "src/renderer/ui/Tooltip.ts",
       "file": "src/renderer/ui/Tooltip.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/audio/visualizer/ProjectM.ts",
-      "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
     {
       "type": "file",
@@ -905,6 +900,11 @@
       "type": "file",
       "name": "src/renderer/engine/state/index.ts",
       "file": "src/renderer/engine/state/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/audio/visualizer/ProjectM.ts",
+      "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
     {
       "type": "file",
@@ -4036,6 +4036,11 @@
     },
     {
       "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -4051,13 +4056,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/audio/index.ts",
-      "file": "src/renderer/audio/index.ts"
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -4071,8 +4076,18 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/audio/index.ts",
+      "file": "src/renderer/audio/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/entity/index.ts",
       "file": "src/renderer/entity/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/input/index.ts",
+      "file": "src/renderer/input/index.ts"
     },
     {
       "type": "file",
@@ -4098,16 +4113,6 @@
       "type": "file",
       "name": "src/renderer/graphics/TextureCache.ts",
       "file": "src/renderer/graphics/TextureCache.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/input/index.ts",
-      "file": "src/renderer/input/index.ts"
     },
     {
       "type": "file",
@@ -4163,16 +4168,6 @@
       "type": "file",
       "name": "src/renderer/ui/Tooltip.ts",
       "file": "src/renderer/ui/Tooltip.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/audio/visualizer/ProjectM.ts",
-      "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
     {
       "type": "file",
@@ -4683,6 +4678,11 @@
       "type": "file",
       "name": "src/renderer/engine/state/index.ts",
       "file": "src/renderer/engine/state/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/audio/visualizer/ProjectM.ts",
+      "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
     {
       "type": "file",
