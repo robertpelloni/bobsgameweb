@@ -1,6 +1,6 @@
 {
-  "signature": "src/renderer/engine/map/GameMap.ts::ℹ️ Advisory — no action required this turn:\n⚠️ Newly unused exports in modified files — check if callers need updating (Knip):\n  src/renderer/engine/map/GameMap.ts:8 — CameraBounds\n",
+  "signature": "src/renderer/scenes/WorldScene.ts::Unresolved from this turn — src/renderer/scenes/WorldScene.ts:\n🔴 STOP — 3 issue(s) must be fixed:\n  L125: '_ambientMusic' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L139: '_debugShowBoundsLayer' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L1910: '_createControlsOverlay' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.",
   "sessionId": "lens-mq8gsd9h-185d173c",
-  "projectSeqStart": 322,
-  "projectSeqEnd": 323
+  "projectSeqStart": 329,
+  "projectSeqEnd": 330
 }

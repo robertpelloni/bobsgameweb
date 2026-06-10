@@ -657,9 +657,8 @@ export class WorldScene extends Scene {
 
 		// Known door frame tile IDs (from LegacyMapLoader.DOOR_TILE_IDS + 832/1132)
 		const DOOR_FRAME_IDS = new Set([
-			732, 733, 734, 735, 736, 737, 741, 742,
-			1316, 1495, 1503, 1511, 14144, 15440,
-			755, 756, 832, 1132,
+			732, 733, 734, 735, 736, 737, 741, 742, 1316, 1495, 1503, 1511, 14144,
+			15440, 755, 756, 832, 1132,
 		]);
 
 		for (const door of doorList) {
@@ -675,7 +674,9 @@ export class WorldScene extends Scene {
 
 			// Check if the door graph position itself is walkable (empty on objects layer)
 			const objTile = this.map.data.getTileIndex(
-				MapData.MAP_OBJECT_LAYER, doorX, doorY,
+				MapData.MAP_OBJECT_LAYER,
+				doorX,
+				doorY,
 			);
 			if (objTile === 0) {
 				walkwayFound = true;
@@ -683,24 +684,44 @@ export class WorldScene extends Scene {
 				// Search nearby for the walkway: empty tile adjacent to
 				// door frame tiles that forms the passage through the wall.
 				const offsets = [
-					[0, 1], [1, 0], [-1, 0], [0, -1],
-					[0, 2], [2, 0], [-2, 0], [0, -2],
-					[1, 1], [-1, 1], [1, -1], [-1, -1],
+					[0, 1],
+					[1, 0],
+					[-1, 0],
+					[0, -1],
+					[0, 2],
+					[2, 0],
+					[-2, 0],
+					[0, -2],
+					[1, 1],
+					[-1, 1],
+					[1, -1],
+					[-1, -1],
 				];
 				for (const [ox, oy] of offsets) {
 					const tx = doorX + ox;
 					const ty = doorY + oy;
 					if (tx < 0 || tx >= W || ty < 0 || ty >= H) continue;
-					const tile = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, tx, ty);
+					const tile = this.map.data.getTileIndex(
+						MapData.MAP_OBJECT_LAYER,
+						tx,
+						ty,
+					);
 					if (tile === 0) {
 						// Verify it's near a door frame tile
 						let nearFrame = false;
-						for (const [fx, fy] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+						for (const [fx, fy] of [
+							[-1, 0],
+							[1, 0],
+							[0, -1],
+							[0, 1],
+						]) {
 							const nx = tx + fx;
 							const ny = ty + fy;
 							if (nx < 0 || nx >= W || ny < 0 || ny >= H) continue;
 							const neighborTile = this.map.data.getTileIndex(
-								MapData.MAP_OBJECT_LAYER, nx, ny,
+								MapData.MAP_OBJECT_LAYER,
+								nx,
+								ny,
 							);
 							if (DOOR_FRAME_IDS.has(neighborTile)) {
 								nearFrame = true;
@@ -740,6 +761,7 @@ export class WorldScene extends Scene {
 			indicator.closePath();
 			indicator.fill({ color: 0xffffff, alpha: 0.9 });
 			sprite.sprite = new Sprite(this.app.renderer.generateTexture(indicator));
+			console.log(`[WorldScene] Door sprite created: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) sprite=${sprite.sprite ? 'ok' : 'null'} parent=${sprite.sprite?.parent}`);
 			this.world.addComponent(entity, sprite);
 
 			const teleport = new TeleportComponent();
@@ -793,7 +815,7 @@ export class WorldScene extends Scene {
 	/**
 	 * Spawn NPCs from game_script.json (primary) or npc_placements.json (fallback).
 	 */
-		private async createNPCs(): Promise<void> {
+	private async createNPCs(): Promise<void> {
 		if (!this.map || !this.spriteAtlas.loaded) return;
 
 		// Primary: use entities from game_script.json (loaded via NPCDialogue)

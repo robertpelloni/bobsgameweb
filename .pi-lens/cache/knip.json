@@ -8,21 +8,6 @@
     },
     {
       "type": "file",
-      "name": "server/app.js",
-      "file": "server/app.js"
-    },
-    {
-      "type": "file",
-      "name": "server/ecosystem.config.cjs",
-      "file": "server/ecosystem.config.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/index.js",
-      "file": "server/index.js"
-    },
-    {
-      "type": "file",
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -40,6 +25,21 @@
       "type": "file",
       "name": "scripts/generate-dummy-assets.cjs",
       "file": "scripts/generate-dummy-assets.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
     },
     {
       "type": "file",
@@ -273,18 +273,23 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/audio/index.ts",
       "file": "src/renderer/audio/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/MapEditor.ts",
+      "file": "src/renderer/editor/MapEditor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/TimelineEditor.ts",
+      "file": "src/renderer/editor/TimelineEditor.ts"
     },
     {
       "type": "file",
@@ -318,13 +323,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/editor/MapEditor.ts",
-      "file": "src/renderer/editor/MapEditor.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/editor/TimelineEditor.ts",
-      "file": "src/renderer/editor/TimelineEditor.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -340,6 +340,11 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -383,13 +388,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/state/index.ts",
-      "file": "src/renderer/state/index.ts"
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
+      "name": "src/renderer/audio/visualizer/ProjectM.ts",
+      "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
     {
       "type": "file",
@@ -410,11 +415,6 @@
       "type": "file",
       "name": "src/renderer/engine/audio/WaveData.ts",
       "file": "src/renderer/engine/audio/WaveData.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/audio/visualizer/ProjectM.ts",
-      "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
     {
       "type": "file",
@@ -648,43 +648,18 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/shared/AssetData.ts",
-      "file": "src/renderer/engine/shared/AssetData.ts"
+      "name": "src/renderer/engine/stadium/index.ts",
+      "file": "src/renderer/engine/stadium/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/shared/Cache.ts",
-      "file": "src/renderer/engine/shared/Cache.ts"
+      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
+      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/shared/FileUtils.ts",
-      "file": "src/renderer/engine/shared/FileUtils.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/HQ2X.ts",
-      "file": "src/renderer/engine/shared/HQ2X.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/index.ts",
-      "file": "src/renderer/engine/shared/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/ManifestLoader.ts",
-      "file": "src/renderer/engine/shared/ManifestLoader.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/OKColor.ts",
-      "file": "src/renderer/engine/shared/OKColor.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/OKMath.ts",
-      "file": "src/renderer/engine/shared/OKMath.ts"
+      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
+      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
     },
     {
       "type": "file",
@@ -883,21 +858,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/stadium/index.ts",
-      "file": "src/renderer/engine/stadium/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
-      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
-      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/state/GameFlowStates.ts",
       "file": "src/renderer/engine/state/GameFlowStates.ts"
     },
@@ -905,6 +865,51 @@
       "type": "file",
       "name": "src/renderer/engine/state/index.ts",
       "file": "src/renderer/engine/state/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/AssetData.ts",
+      "file": "src/renderer/engine/shared/AssetData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/Cache.ts",
+      "file": "src/renderer/engine/shared/Cache.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/FileUtils.ts",
+      "file": "src/renderer/engine/shared/FileUtils.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/HQ2X.ts",
+      "file": "src/renderer/engine/shared/HQ2X.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/index.ts",
+      "file": "src/renderer/engine/shared/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/ManifestLoader.ts",
+      "file": "src/renderer/engine/shared/ManifestLoader.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKColor.ts",
+      "file": "src/renderer/engine/shared/OKColor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKMath.ts",
+      "file": "src/renderer/engine/shared/OKMath.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
@@ -935,11 +940,6 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/behaviors/index.ts",
       "file": "src/renderer/engine/ecs/behaviors/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
@@ -3786,21 +3786,6 @@
     },
     {
       "type": "file",
-      "name": "server/app.js",
-      "file": "server/app.js"
-    },
-    {
-      "type": "file",
-      "name": "server/ecosystem.config.cjs",
-      "file": "server/ecosystem.config.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/index.js",
-      "file": "server/index.js"
-    },
-    {
-      "type": "file",
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -3818,6 +3803,21 @@
       "type": "file",
       "name": "scripts/generate-dummy-assets.cjs",
       "file": "scripts/generate-dummy-assets.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
     },
     {
       "type": "file",
@@ -4051,18 +4051,23 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/audio/index.ts",
       "file": "src/renderer/audio/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/MapEditor.ts",
+      "file": "src/renderer/editor/MapEditor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/TimelineEditor.ts",
+      "file": "src/renderer/editor/TimelineEditor.ts"
     },
     {
       "type": "file",
@@ -4096,13 +4101,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/editor/MapEditor.ts",
-      "file": "src/renderer/editor/MapEditor.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/editor/TimelineEditor.ts",
-      "file": "src/renderer/editor/TimelineEditor.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -4118,6 +4118,11 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -4161,13 +4166,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/state/index.ts",
-      "file": "src/renderer/state/index.ts"
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
+      "name": "src/renderer/audio/visualizer/ProjectM.ts",
+      "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
     {
       "type": "file",
@@ -4188,11 +4193,6 @@
       "type": "file",
       "name": "src/renderer/engine/audio/WaveData.ts",
       "file": "src/renderer/engine/audio/WaveData.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/audio/visualizer/ProjectM.ts",
-      "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
     {
       "type": "file",
@@ -4426,43 +4426,18 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/shared/AssetData.ts",
-      "file": "src/renderer/engine/shared/AssetData.ts"
+      "name": "src/renderer/engine/stadium/index.ts",
+      "file": "src/renderer/engine/stadium/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/shared/Cache.ts",
-      "file": "src/renderer/engine/shared/Cache.ts"
+      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
+      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/shared/FileUtils.ts",
-      "file": "src/renderer/engine/shared/FileUtils.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/HQ2X.ts",
-      "file": "src/renderer/engine/shared/HQ2X.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/index.ts",
-      "file": "src/renderer/engine/shared/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/ManifestLoader.ts",
-      "file": "src/renderer/engine/shared/ManifestLoader.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/OKColor.ts",
-      "file": "src/renderer/engine/shared/OKColor.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/shared/OKMath.ts",
-      "file": "src/renderer/engine/shared/OKMath.ts"
+      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
+      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
     },
     {
       "type": "file",
@@ -4661,21 +4636,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/stadium/index.ts",
-      "file": "src/renderer/engine/stadium/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
-      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
-      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/state/GameFlowStates.ts",
       "file": "src/renderer/engine/state/GameFlowStates.ts"
     },
@@ -4683,6 +4643,51 @@
       "type": "file",
       "name": "src/renderer/engine/state/index.ts",
       "file": "src/renderer/engine/state/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/AssetData.ts",
+      "file": "src/renderer/engine/shared/AssetData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/Cache.ts",
+      "file": "src/renderer/engine/shared/Cache.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/FileUtils.ts",
+      "file": "src/renderer/engine/shared/FileUtils.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/HQ2X.ts",
+      "file": "src/renderer/engine/shared/HQ2X.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/index.ts",
+      "file": "src/renderer/engine/shared/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/ManifestLoader.ts",
+      "file": "src/renderer/engine/shared/ManifestLoader.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKColor.ts",
+      "file": "src/renderer/engine/shared/OKColor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKMath.ts",
+      "file": "src/renderer/engine/shared/OKMath.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
@@ -4713,11 +4718,6 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/behaviors/index.ts",
       "file": "src/renderer/engine/ecs/behaviors/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
