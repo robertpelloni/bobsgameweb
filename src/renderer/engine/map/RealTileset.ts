@@ -12,9 +12,10 @@
  */
 
 import { Texture, Assets, Rectangle } from "pixi.js";
+import { APP_VERSION } from "../../../shared/Config";
 
 export class RealTileset {
-	static BUILD_VER = "3.6.1";
+	static BUILD_VER = APP_VERSION;
 	private atlasTexture: Texture | null = null;
 	private shadowBlackAtlasTexture: Texture | null = null;
 	private shadowAtlasTexture: Texture | null = null;
