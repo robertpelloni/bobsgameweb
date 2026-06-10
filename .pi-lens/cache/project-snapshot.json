@@ -1,8 +1,8 @@
 {
   "version": 1,
   "projectRoot": "C:/Users/hyper/workspace/bg/bobsgameweb",
-  "generatedAt": "2026-06-09T22:23:03.697Z",
-  "seq": 306,
+  "generatedAt": "2026-06-10T11:31:37.004Z",
+  "seq": 318,
   "files": {
     "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts": {
       "path": "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts",
@@ -5264,7 +5264,7 @@
     ],
     [
       "advance",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\tutorial-leaderboard.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
     ],
     [
       "advanceDay",
@@ -5280,11 +5280,11 @@
     ],
     [
       "assert",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\e2e-flow.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
     ],
     [
       "assertEqual",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\legacy-import.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
     ],
     [
       "assertThrows",
@@ -5312,7 +5312,7 @@
     ],
     [
       "calculateScore",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\tutorial-leaderboard.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\puzzle-logic.test.ts"
     ],
     [
       "calculateShakeDecay",

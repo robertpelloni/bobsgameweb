@@ -283,13 +283,23 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
+      "name": "src/renderer/editor/MapEditor.ts",
+      "file": "src/renderer/editor/MapEditor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/TimelineEditor.ts",
+      "file": "src/renderer/editor/TimelineEditor.ts"
     },
     {
       "type": "file",
       "name": "src/renderer/entity/index.ts",
       "file": "src/renderer/entity/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -315,16 +325,6 @@
       "type": "file",
       "name": "src/renderer/graphics/TextureCache.ts",
       "file": "src/renderer/graphics/TextureCache.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/editor/MapEditor.ts",
-      "file": "src/renderer/editor/MapEditor.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/editor/TimelineEditor.ts",
-      "file": "src/renderer/editor/TimelineEditor.ts"
     },
     {
       "type": "file",
@@ -448,6 +448,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/event/EventScript.ts",
+      "file": "src/renderer/engine/event/EventScript.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/entity/BobSprite.ts",
       "file": "src/renderer/engine/entity/BobSprite.ts"
     },
@@ -475,11 +480,6 @@
       "type": "file",
       "name": "src/renderer/engine/entity/SpriteAnimation.ts",
       "file": "src/renderer/engine/entity/SpriteAnimation.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/event/EventScript.ts",
-      "file": "src/renderer/engine/event/EventScript.ts"
     },
     {
       "type": "file",
@@ -613,16 +613,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/physics/index.ts",
-      "file": "src/renderer/engine/physics/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/physics/Physics.ts",
-      "file": "src/renderer/engine/physics/Physics.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/puzzle/Block.ts",
       "file": "src/renderer/engine/puzzle/Block.ts"
     },
@@ -645,6 +635,16 @@
       "type": "file",
       "name": "src/renderer/engine/puzzle/PuzzleRenderer.ts",
       "file": "src/renderer/engine/puzzle/PuzzleRenderer.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/physics/index.ts",
+      "file": "src/renderer/engine/physics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/physics/Physics.ts",
+      "file": "src/renderer/engine/physics/Physics.ts"
     },
     {
       "type": "file",
@@ -883,16 +883,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/state/GameFlowStates.ts",
-      "file": "src/renderer/engine/state/GameFlowStates.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/state/index.ts",
-      "file": "src/renderer/engine/state/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/stadium/index.ts",
       "file": "src/renderer/engine/stadium/index.ts"
     },
@@ -905,6 +895,16 @@
       "type": "file",
       "name": "src/renderer/engine/stadium/StadiumScreen.ts",
       "file": "src/renderer/engine/stadium/StadiumScreen.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/GameFlowStates.ts",
+      "file": "src/renderer/engine/state/GameFlowStates.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/index.ts",
+      "file": "src/renderer/engine/state/index.ts"
     },
     {
       "type": "file",
@@ -923,6 +923,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/ecs/systems/AISystem.ts",
       "file": "src/renderer/engine/ecs/systems/AISystem.ts"
     },
@@ -935,11 +940,6 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
       "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
@@ -4061,13 +4061,23 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
+      "name": "src/renderer/editor/MapEditor.ts",
+      "file": "src/renderer/editor/MapEditor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/editor/TimelineEditor.ts",
+      "file": "src/renderer/editor/TimelineEditor.ts"
     },
     {
       "type": "file",
       "name": "src/renderer/entity/index.ts",
       "file": "src/renderer/entity/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -4093,16 +4103,6 @@
       "type": "file",
       "name": "src/renderer/graphics/TextureCache.ts",
       "file": "src/renderer/graphics/TextureCache.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/editor/MapEditor.ts",
-      "file": "src/renderer/editor/MapEditor.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/editor/TimelineEditor.ts",
-      "file": "src/renderer/editor/TimelineEditor.ts"
     },
     {
       "type": "file",
@@ -4226,6 +4226,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/event/EventScript.ts",
+      "file": "src/renderer/engine/event/EventScript.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/entity/BobSprite.ts",
       "file": "src/renderer/engine/entity/BobSprite.ts"
     },
@@ -4253,11 +4258,6 @@
       "type": "file",
       "name": "src/renderer/engine/entity/SpriteAnimation.ts",
       "file": "src/renderer/engine/entity/SpriteAnimation.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/event/EventScript.ts",
-      "file": "src/renderer/engine/event/EventScript.ts"
     },
     {
       "type": "file",
@@ -4391,16 +4391,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/physics/index.ts",
-      "file": "src/renderer/engine/physics/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/physics/Physics.ts",
-      "file": "src/renderer/engine/physics/Physics.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/puzzle/Block.ts",
       "file": "src/renderer/engine/puzzle/Block.ts"
     },
@@ -4423,6 +4413,16 @@
       "type": "file",
       "name": "src/renderer/engine/puzzle/PuzzleRenderer.ts",
       "file": "src/renderer/engine/puzzle/PuzzleRenderer.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/physics/index.ts",
+      "file": "src/renderer/engine/physics/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/physics/Physics.ts",
+      "file": "src/renderer/engine/physics/Physics.ts"
     },
     {
       "type": "file",
@@ -4661,16 +4661,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/state/GameFlowStates.ts",
-      "file": "src/renderer/engine/state/GameFlowStates.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/state/index.ts",
-      "file": "src/renderer/engine/state/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/stadium/index.ts",
       "file": "src/renderer/engine/stadium/index.ts"
     },
@@ -4683,6 +4673,16 @@
       "type": "file",
       "name": "src/renderer/engine/stadium/StadiumScreen.ts",
       "file": "src/renderer/engine/stadium/StadiumScreen.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/GameFlowStates.ts",
+      "file": "src/renderer/engine/state/GameFlowStates.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/index.ts",
+      "file": "src/renderer/engine/state/index.ts"
     },
     {
       "type": "file",
@@ -4701,6 +4701,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/ecs/systems/AISystem.ts",
       "file": "src/renderer/engine/ecs/systems/AISystem.ts"
     },
@@ -4713,11 +4718,6 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
       "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
