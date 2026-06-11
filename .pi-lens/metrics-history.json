@@ -1110,7 +1110,32 @@
         }
       ],
       "trend": "stable"
+    },
+    "src\\renderer\\engine\\ecs\\behaviors\\NPCBehavior.ts": {
+      "latest": {
+        "commit": "50849b36",
+        "timestamp": "2026-06-11T18:09:26.642Z",
+        "mi": 29.5,
+        "cognitive": 176,
+        "nesting": 7,
+        "lines": 146,
+        "maxCyclomatic": 99,
+        "entropy": 6.12
+      },
+      "history": [
+        {
+          "commit": "50849b36",
+          "timestamp": "2026-06-11T18:09:26.642Z",
+          "mi": 29.5,
+          "cognitive": 176,
+          "nesting": 7,
+          "lines": 146,
+          "maxCyclomatic": 99,
+          "entropy": 6.12
+        }
+      ],
+      "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-11T16:45:39.926Z"
+  "capturedAt": "2026-06-11T18:09:31.779Z"
 }

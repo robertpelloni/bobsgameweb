@@ -550,6 +550,11 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
 				this.worldContainer.addChild(playerSpriteComp.sprite);
 			}
+			// Save shadow sprite before map destruction
+			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
+			if (shadowSave?.parent === this.map.entitySpriteContainer) {
+				this.map.entitySpriteContainer.removeChild(shadowSave);
+			}
 			this.worldContainer.removeChild(this.map.container);
 			this.map.container.destroy({ children: true });
 		}
@@ -596,16 +601,15 @@ export class WorldScene extends Scene {
 			console.warn(`[WorldScene] Cannot find map named: "${mapName}"`);
 			return false;
 		}
-
-		// Add player shadow sprite to entitySpriteContainer
-		const shadow = (this as any).playerShadowSprite as Sprite | null;
-		if (shadow && !shadow.parent && this.map?.entitySpriteContainer) {
-			this.map.entitySpriteContainer.addChild(shadow);
-		}
 		// Find the filename to use the normal load path
 		const filename = LegacyMapLoader.getFilenameForMap(mapName);
 		if (filename) {
 			await this.loadLegacyMap(filename);
+			// Re-add shadow to NEW map's entitySpriteContainer after load
+			const shadow2 = (this as any).playerShadowSprite as Sprite | null;
+			if (shadow2 && this.map?.entitySpriteContainer) {
+				if (!shadow2.parent) this.map.entitySpriteContainer.addChild(shadow2);
+			}
 			return true;
 		}
 		// Direct conversion if no filename mapping
@@ -620,6 +624,11 @@ export class WorldScene extends Scene {
 			if (playerSpriteComp?.sprite?.parent === this.map.entitySpriteContainer) {
 				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
 				this.worldContainer.addChild(playerSpriteComp.sprite);
+			}
+			// Save shadow sprite before map destruction
+			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
+			if (shadowSave?.parent === this.map.entitySpriteContainer) {
+				this.map.entitySpriteContainer.removeChild(shadowSave);
 			}
 			this.worldContainer.removeChild(this.map.container);
 			this.map.container.destroy({ children: true });
