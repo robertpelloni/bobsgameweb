@@ -743,21 +743,15 @@ export class WorldScene extends Scene {
 			transform.y = doorY * WorldScene.TILE_PX;
 			this.world.addComponent(entity, transform);
 
-			// Door indicator: draw directly on a Graphics object added to the map.
-			// This bypasses ECS/RenderSystem for guaranteed visibility.
+			// Door indicator: add directly to worldContainer for guaranteed visibility.
 			const doorGfx = new Graphics();
-			doorGfx.rect(0, 0, 16, 16);
-			doorGfx.fill({ color: 0x4488ff, alpha: 0.8 });
-			doorGfx.rect(2, 2, 12, 12);
-			doorGfx.fill({ color: 0xffffff, alpha: 0.9 });
-			doorGfx.x = transform.x;
-			doorGfx.y = transform.y;
-			doorGfx.zIndex = 9999;
-			if (this.map?.container) {
-				this.map.container.addChild(doorGfx);
-				this.map.container.sortChildren();
-			}
-			console.log(`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) gfxParent=${doorGfx.parent?.constructor.name}`);
+			doorGfx.rect(0, 0, 24, 24);
+			doorGfx.fill({ color: 0xff0000 });
+			doorGfx.x = transform.x - 4;
+			doorGfx.y = transform.y - 4;
+			doorGfx.zIndex = 99999;
+			this.worldContainer.addChild(doorGfx);
+			console.log(`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) worldChildren=${this.worldContainer.children.length}`);
 
 			const sprite = new SpriteComponent();
 			this.world.addComponent(entity, sprite);
@@ -3200,6 +3194,12 @@ export class WorldScene extends Scene {
 		// 2. Extra Layer Override (Original game walkable zone)
 		// 1 = interior/walkable, 0 = void/blocked
 		if (extraTile === 1) return false;
+
+		// 2b. Boundary wall exception: 839 tiles at extra=0 are structural
+		// boundary markers at the room edges, not actual walls. If the
+		// ground is a walkable floor tile, treat as walkable.
+		if (extraTile === 0 && objTile === 839 && MapData.FLOOR_IDS.has(gndTile))
+			return false;
 
 		// 3. Strict Wall ID Blocking (if no extra override)
 		if (objTile === 839 || objTile === 8280) return true;
