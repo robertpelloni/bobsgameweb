@@ -743,17 +743,18 @@ export class WorldScene extends Scene {
 			transform.y = doorY * WorldScene.TILE_PX;
 			this.world.addComponent(entity, transform);
 
-			// Door indicator: add directly to worldContainer for guaranteed visibility.
+			// Door indicator: add to map container so it's cleaned up on map change.
 			const doorGfx = new Graphics();
 			doorGfx.rect(0, 0, 24, 24);
 			doorGfx.fill({ color: 0xff0000 });
 			doorGfx.x = transform.x - 4;
 			doorGfx.y = transform.y - 4;
 			doorGfx.zIndex = 99999;
-			this.worldContainer.addChild(doorGfx);
-			console.log(
-				`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) worldChildren=${this.worldContainer.children.length}`,
-			);
+			if (this.map?.container) {
+				this.map.container.addChild(doorGfx);
+				this.map.container.sortChildren();
+			}
+			console.log(`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`);
 
 			const sprite = new SpriteComponent();
 			this.world.addComponent(entity, sprite);
@@ -3202,6 +3203,9 @@ export class WorldScene extends Scene {
 		if (MapData.FLOOR_IDS.has(gndTile)) {
 			return false;
 		}
+
+		// DEBUG: log blocking positions
+		console.log(`[BLOCKED] (${tx},${ty}) obj=${objTile} gnd=${gndTile} extra=${extraTile} hit=${hitTile}`);
 
 		// 4. Strict Wall ID Blocking (non-floor ground with wall object)
 		if (objTile === 839 || objTile === 8280) return true;
