@@ -80,7 +80,7 @@ export class MapData extends AssetData {
 	 */
 	public static readonly FLOOR_IDS = new Set([
 		1327, 1322, 1305, 1316, 14168, 1415, 1752, 15640, 15672, 15624, 15656,
-		15856,
+		15856, 1407, 1444, 15680,
 	]);
 
 	public mapNote: string = "";

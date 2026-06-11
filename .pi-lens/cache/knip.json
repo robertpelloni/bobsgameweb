@@ -8,6 +8,21 @@
     },
     {
       "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
+    },
+    {
+      "type": "file",
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -25,21 +40,6 @@
       "type": "file",
       "name": "scripts/generate-dummy-assets.cjs",
       "file": "scripts/generate-dummy-assets.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/app.js",
-      "file": "server/app.js"
-    },
-    {
-      "type": "file",
-      "name": "server/ecosystem.config.cjs",
-      "file": "server/ecosystem.config.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/index.js",
-      "file": "server/index.js"
     },
     {
       "type": "file",
@@ -293,13 +293,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/entity/index.ts",
-      "file": "src/renderer/entity/index.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
+      "name": "src/renderer/entity/index.ts",
+      "file": "src/renderer/entity/index.ts"
     },
     {
       "type": "file",
@@ -333,6 +333,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/scenes/index.ts",
       "file": "src/renderer/scenes/index.ts"
     },
@@ -340,11 +345,6 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/state/index.ts",
-      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -483,6 +483,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/input/index.ts",
+      "file": "src/renderer/engine/input/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/graphics/DayNightCycle.ts",
       "file": "src/renderer/engine/graphics/DayNightCycle.ts"
     },
@@ -510,11 +515,6 @@
       "type": "file",
       "name": "src/renderer/engine/graphics/WorldMinimap.ts",
       "file": "src/renderer/engine/graphics/WorldMinimap.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/input/index.ts",
-      "file": "src/renderer/engine/input/index.ts"
     },
     {
       "type": "file",
@@ -883,16 +883,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/state/GameFlowStates.ts",
-      "file": "src/renderer/engine/state/GameFlowStates.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/state/index.ts",
-      "file": "src/renderer/engine/state/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/stadium/index.ts",
       "file": "src/renderer/engine/stadium/index.ts"
     },
@@ -908,18 +898,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
-      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
+      "name": "src/renderer/engine/state/GameFlowStates.ts",
+      "file": "src/renderer/engine/state/GameFlowStates.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/systems/index.ts",
-      "file": "src/renderer/engine/ecs/systems/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
-      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
+      "name": "src/renderer/engine/state/index.ts",
+      "file": "src/renderer/engine/state/index.ts"
     },
     {
       "type": "file",
@@ -940,6 +925,21 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
       "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
+      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/index.ts",
+      "file": "src/renderer/engine/ecs/systems/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
+      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
     },
     {
       "type": "file",
@@ -3786,6 +3786,21 @@
     },
     {
       "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
+    },
+    {
+      "type": "file",
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -3803,21 +3818,6 @@
       "type": "file",
       "name": "scripts/generate-dummy-assets.cjs",
       "file": "scripts/generate-dummy-assets.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/app.js",
-      "file": "server/app.js"
-    },
-    {
-      "type": "file",
-      "name": "server/ecosystem.config.cjs",
-      "file": "server/ecosystem.config.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/index.js",
-      "file": "server/index.js"
     },
     {
       "type": "file",
@@ -4071,13 +4071,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/entity/index.ts",
-      "file": "src/renderer/entity/index.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
+      "name": "src/renderer/entity/index.ts",
+      "file": "src/renderer/entity/index.ts"
     },
     {
       "type": "file",
@@ -4111,6 +4111,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/scenes/index.ts",
       "file": "src/renderer/scenes/index.ts"
     },
@@ -4118,11 +4123,6 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/state/index.ts",
-      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -4261,6 +4261,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/input/index.ts",
+      "file": "src/renderer/engine/input/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/graphics/DayNightCycle.ts",
       "file": "src/renderer/engine/graphics/DayNightCycle.ts"
     },
@@ -4288,11 +4293,6 @@
       "type": "file",
       "name": "src/renderer/engine/graphics/WorldMinimap.ts",
       "file": "src/renderer/engine/graphics/WorldMinimap.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/input/index.ts",
-      "file": "src/renderer/engine/input/index.ts"
     },
     {
       "type": "file",
@@ -4661,16 +4661,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/state/GameFlowStates.ts",
-      "file": "src/renderer/engine/state/GameFlowStates.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/state/index.ts",
-      "file": "src/renderer/engine/state/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/stadium/index.ts",
       "file": "src/renderer/engine/stadium/index.ts"
     },
@@ -4686,18 +4676,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
-      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
+      "name": "src/renderer/engine/state/GameFlowStates.ts",
+      "file": "src/renderer/engine/state/GameFlowStates.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/systems/index.ts",
-      "file": "src/renderer/engine/ecs/systems/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
-      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
+      "name": "src/renderer/engine/state/index.ts",
+      "file": "src/renderer/engine/state/index.ts"
     },
     {
       "type": "file",
@@ -4718,6 +4703,21 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
       "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
+      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/index.ts",
+      "file": "src/renderer/engine/ecs/systems/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
+      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
     },
     {
       "type": "file",

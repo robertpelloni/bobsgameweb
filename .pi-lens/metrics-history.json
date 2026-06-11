@@ -698,8 +698,8 @@
     },
     "src\\shared\\MapData.ts": {
       "latest": {
-        "commit": "d76d01ce",
-        "timestamp": "2026-06-07T10:59:10.179Z",
+        "commit": "a404749a",
+        "timestamp": "2026-06-11T16:45:34.671Z",
         "mi": 23.6,
         "cognitive": 90,
         "nesting": 5,
@@ -737,9 +737,19 @@
           "lines": 226,
           "maxCyclomatic": 26,
           "entropy": 6.01
+        },
+        {
+          "commit": "a404749a",
+          "timestamp": "2026-06-11T16:45:34.671Z",
+          "mi": 23.6,
+          "cognitive": 90,
+          "nesting": 5,
+          "lines": 226,
+          "maxCyclomatic": 26,
+          "entropy": 6.01
         }
       ],
-      "trend": "stable"
+      "trend": "regressing"
     },
     "src\\renderer\\engine\\map\\GameMap.ts": {
       "latest": {
@@ -1102,5 +1112,5 @@
       "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-10T20:02:48.495Z"
+  "capturedAt": "2026-06-11T16:45:39.926Z"
 }
