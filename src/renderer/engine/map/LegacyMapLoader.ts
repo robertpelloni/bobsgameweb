@@ -393,6 +393,14 @@ export class LegacyMapLoader {
 			const gx = door.x ?? 0;
 			const gy = door.y ?? 0;
 
+			// If the door is already on a walkable tile (obj=0), don't snap it.
+			// The door_graph coordinates are already correct.
+			const currentObj = dense[gy * w + gx];
+			if (currentObj === 0) {
+				console.log(`[LegacyMapLoader] Door "${door.name}" already on walkable tile (${gx},${gy}), keeping`);
+				continue;
+			}
+
 			let bestIdx = -1;
 			let bestDist = Infinity;
 			let bestPriority = Infinity;

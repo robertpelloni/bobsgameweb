@@ -751,7 +751,9 @@ export class WorldScene extends Scene {
 			doorGfx.y = transform.y - 4;
 			doorGfx.zIndex = 99999;
 			this.worldContainer.addChild(doorGfx);
-			console.log(`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) worldChildren=${this.worldContainer.children.length}`);
+			console.log(
+				`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) worldChildren=${this.worldContainer.children.length}`,
+			);
 
 			const sprite = new SpriteComponent();
 			this.world.addComponent(entity, sprite);
@@ -3194,12 +3196,6 @@ export class WorldScene extends Scene {
 		// 2. Extra Layer Override (Original game walkable zone)
 		// 1 = interior/walkable, 0 = void/blocked
 		if (extraTile === 1) return false;
-
-		// 2b. Boundary wall exception: 839 tiles at extra=0 are structural
-		// boundary markers at the room edges, not actual walls. If the
-		// ground is a walkable floor tile, treat as walkable.
-		if (extraTile === 0 && objTile === 839 && MapData.FLOOR_IDS.has(gndTile))
-			return false;
 
 		// 3. Strict Wall ID Blocking (if no extra override)
 		if (objTile === 839 || objTile === 8280) return true;

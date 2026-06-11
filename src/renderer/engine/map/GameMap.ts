@@ -196,16 +196,6 @@ export class GameMap {
 				)
 					continue;
 
-				// Skip 839 on objects layer (L3) when outside camera bounds (extra=0).
-				// These are structural boundary walls that should be invisible —
-				// they mark the edge of the walkable room area.
-				if (
-					l === MapData.MAP_OBJECT_LAYER &&
-					tileId === 839 &&
-					this.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, x, y) === 0
-				)
-					continue;
-
 				// On L6 (above): skip 839 if L3 (objects) already has 839 at
 				// the same position. These are wall columns already rendered
 				// translucently on L3; duplicating them on L6 creates a
@@ -244,11 +234,9 @@ export class GameMap {
 				sprite.x = px;
 				sprite.y = py;
 
-				// On L3/L6: all tiles render translucent at shadowAlpha=0.59.
-				// The Java engine applies shadowAlpha to the entire layer, not just
-				// black tiles. This makes walls, door frames, and furniture details
-				// appear as translucent shadows.
-				if (isShadowCompositeLayer) {
+				// On L3/L6: black tiles render translucent at shadowAlpha=0.59;
+				// color tiles (furniture, rails) render opaque.
+				if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId)) {
 					sprite.alpha = 0.59;
 				}
 
@@ -415,14 +403,6 @@ export class GameMap {
 					)
 						continue;
 
-					// Skip 839 on objects layer when outside camera bounds
-					if (
-						l === MapData.MAP_OBJECT_LAYER &&
-						tileId === 839 &&
-						this.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, x, y) === 0
-					)
-						continue;
-
 					// On L6 (above): skip 839 if L3 already has 839 at same position
 					if (
 						l === MapData.MAP_ABOVE_LAYER &&
@@ -441,8 +421,9 @@ export class GameMap {
 					sprite.x = px;
 					sprite.y = py;
 
-					// L3/L6: all tiles render translucent at shadowAlpha
-					if (isShadowCompositeLayer) sprite.alpha = 0.59;
+					// L3/L6: black tiles render translucent at shadowAlpha
+					if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId))
+						sprite.alpha = 0.59;
 
 					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
 					if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";

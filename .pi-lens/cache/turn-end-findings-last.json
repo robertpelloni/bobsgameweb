@@ -1,6 +1,6 @@
 {
-  "signature": "src/renderer/scenes/WorldScene.ts::Unresolved from this turn — src/renderer/scenes/WorldScene.ts:\n🔴 STOP — 3 issue(s) must be fixed:\n  L125: '_ambientMusic' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L139: '_debugShowBoundsLayer' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L1910: '_createControlsOverlay' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.",
+  "signature": "src/renderer/scenes/WorldScene.ts::Unresolved from this turn — src/renderer/scenes/WorldScene.ts:\n🔴 STOP — 3 issue(s) must be fixed:\n  L125: '_ambientMusic' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L139: '_debugShowBoundsLayer' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L1904: '_createControlsOverlay' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.",
   "sessionId": "lens-mq8gsd9h-185d173c",
-  "projectSeqStart": 329,
-  "projectSeqEnd": 330
+  "projectSeqStart": 345,
+  "projectSeqEnd": 346
 }
