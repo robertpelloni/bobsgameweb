@@ -142,10 +142,11 @@ export abstract class BaseEntity extends Character {
 
         if ((current === 0 && target === 1) || (current === 1 && target === 0) ||
             (current === 2 && target === 3) || (current === 3 && target === 2)) {
-            if (Math.random() < 0.5) {
-                if (current === 0 || current === 1) next = (Math.random() < 0.5) ? 2 : 3;
-                else next = (Math.random() < 0.5) ? 0 : 1;
-            }
+            const goLeft = Math.random() < 0.5;
+            if (current === 1 && target === 0) next = goLeft ? 6 : 7; // Down->Up: via DownLeft or DownRight
+            else if (current === 0 && target === 1) next = goLeft ? 4 : 5; // Up->Down: via UpLeft or UpRight
+            else if (current === 2 && target === 3) next = goLeft ? 4 : 6; // Left->Right: via UpLeft or DownLeft
+            else if (current === 3 && target === 2) next = goLeft ? 5 : 7; // Right->Left: via UpRight or DownRight
         }
         return next;
     }

@@ -2203,7 +2203,7 @@ export class WorldScene extends Scene {
 			this.updateDialogue(dt);
 			// Still update NPC idle animations while dialogue is active
 			for (const npc of this.npcEntities.values()) {
-				npc.updateEntity(dt, 0, 0, false);
+				npc.updateEntity(dt / 1000, 0, 0, false);
 			}
 			if (InputManager.isKeyPressed(Key.Tilde)) this.toggleConsole();
 			return;
@@ -2216,7 +2216,7 @@ export class WorldScene extends Scene {
 			if (transform) {
 				// For now NPCs are mostly static, but we update their Hub for animations
 				npc.setPosition(transform.x, transform.y);
-				npc.updateEntity(dt, 0, 0, false);
+				npc.updateEntity(dt / 1000, 0, 0, false);
 
 				// Sync back to SpriteComponent
 				const spriteComp = this.world.getComponent(entityId, "Sprite") as any;
@@ -2245,7 +2245,7 @@ export class WorldScene extends Scene {
 			this.playerIsMoving = dx !== 0 || dy !== 0;
 
 			// Delegate movement state and animation to YuuEntity
-			this.yuu.updateYuu(dt, dx, dy, this.playerIsSprinting);
+			this.yuu.updateEntity(dt / 1000, dx, dy, this.playerIsSprinting);
 			this.animDirection = this.yuu.animDirection;
 			this.moveDirection = this.yuu.moveDirection;
 			this.isTurning = this.yuu.isTurning;
