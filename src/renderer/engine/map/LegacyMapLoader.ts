@@ -397,7 +397,9 @@ export class LegacyMapLoader {
 			// The door_graph coordinates are already correct.
 			const currentObj = dense[gy * w + gx];
 			if (currentObj === 0) {
-				console.log(`[LegacyMapLoader] Door "${door.name}" already on walkable tile (${gx},${gy}), keeping`);
+				console.log(
+					`[LegacyMapLoader] Door "${door.name}" already on walkable tile (${gx},${gy}), keeping`,
+				);
 				continue;
 			}
 
@@ -411,7 +413,10 @@ export class LegacyMapLoader {
 				const dy = Math.abs(allPositions[j].y - gy);
 				const dist = dx + dy;
 				// Prefer closer positions, break ties by priority (door frames first)
-				if (dist < bestDist || (dist === bestDist && allPositions[j].priority < bestPriority)) {
+				if (
+					dist < bestDist ||
+					(dist === bestDist && allPositions[j].priority < bestPriority)
+				) {
 					bestDist = dist;
 					bestIdx = j;
 					bestPriority = allPositions[j].priority;
@@ -422,7 +427,7 @@ export class LegacyMapLoader {
 			// can be far from the actual door on the map
 			if (bestIdx >= 0 && bestDist <= 20) {
 				console.log(
-					`[LegacyMapLoader] Snapping door "${door.name}" from (${gx},${gy}) to ${allPositions[bestIdx].priority === 0 ? 'frame' : 'gap'} at (${allPositions[bestIdx].x},${allPositions[bestIdx].y}) dist=${bestDist}`,
+					`[LegacyMapLoader] Snapping door "${door.name}" from (${gx},${gy}) to ${allPositions[bestIdx].priority === 0 ? "frame" : "gap"} at (${allPositions[bestIdx].x},${allPositions[bestIdx].y}) dist=${bestDist}`,
 				);
 				door.x = allPositions[bestIdx].x;
 				door.y = allPositions[bestIdx].y;

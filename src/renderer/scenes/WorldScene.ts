@@ -3197,16 +3197,16 @@ export class WorldScene extends Scene {
 		// 1 = interior/walkable, 0 = void/blocked
 		if (extraTile === 1) return false;
 
-		// 3. Strict Wall ID Blocking (if no extra override)
+		// 3. Floor Exception: 839 on a floor tile is a SHADOW, not a wall.
+		// Shadows overlay furniture/floor areas and should be walkable.
+		if (MapData.FLOOR_IDS.has(gndTile)) {
+			return false;
+		}
+
+		// 4. Strict Wall ID Blocking (non-floor ground with wall object)
 		if (objTile === 839 || objTile === 8280) return true;
 		if (MapData.WALL_IDS.has(objTile)) return true;
 		if (MapData.WALL_IDS.has(gndTile)) return true;
-
-		// 4. Floor Exception (Walkable floor IDs)
-		if (MapData.FLOOR_IDS.has(gndTile)) {
-			if (objTile !== 0 && MapData.WALL_IDS.has(objTile)) return true;
-			return false;
-		}
 
 		// 5. Void check (if not a floor and no extra marker, empty is blocked)
 		if (gndTile === 0 && objTile === 0) return true;
