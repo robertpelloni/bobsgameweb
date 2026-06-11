@@ -754,10 +754,9 @@ export class WorldScene extends Scene {
 				this.map.container.addChild(doorGfx);
 				this.map.container.sortChildren();
 			}
-			console.log(`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`);
-
-			const sprite = new SpriteComponent();
-			this.world.addComponent(entity, sprite);
+			console.log(
+				`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
+			);
 
 			const teleport = new TeleportComponent();
 			teleport.targetMapId = door.destinationMapName ?? "";
@@ -3203,9 +3202,6 @@ export class WorldScene extends Scene {
 		if (MapData.FLOOR_IDS.has(gndTile)) {
 			return false;
 		}
-
-		// DEBUG: log blocking positions
-		console.log(`[BLOCKED] (${tx},${ty}) obj=${objTile} gnd=${gndTile} extra=${extraTile} hit=${hitTile}`);
 
 		// 4. Strict Wall ID Blocking (non-floor ground with wall object)
 		if (objTile === 839 || objTile === 8280) return true;
