@@ -196,6 +196,16 @@ export class GameMap {
 				)
 					continue;
 
+				// Skip 839 on objects layer (L3) when outside camera bounds (extra=0).
+				// These are structural boundary walls that should be invisible —
+				// they mark the edge of the walkable room area.
+				if (
+					l === MapData.MAP_OBJECT_LAYER &&
+					tileId === 839 &&
+					this.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, x, y) === 0
+				)
+					continue;
+
 				// On L6 (above): skip 839 if L3 (objects) already has 839 at
 				// the same position. These are wall columns already rendered
 				// translucently on L3; duplicating them on L6 creates a
@@ -402,6 +412,14 @@ export class GameMap {
 						tileId === 839 &&
 						l !== MapData.MAP_OBJECT_LAYER &&
 						l !== MapData.MAP_ABOVE_LAYER
+					)
+						continue;
+
+					// Skip 839 on objects layer when outside camera bounds
+					if (
+						l === MapData.MAP_OBJECT_LAYER &&
+						tileId === 839 &&
+						this.data.getTileIndex(MapData.MAP_CAMERA_BOUNDS_LAYER, x, y) === 0
 					)
 						continue;
 

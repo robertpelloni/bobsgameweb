@@ -743,37 +743,23 @@ export class WorldScene extends Scene {
 			transform.y = doorY * WorldScene.TILE_PX;
 			this.world.addComponent(entity, transform);
 
-			// Door indicator: draw a visible marker on a canvas texture
-			const sprite = new SpriteComponent();
-			const canvas = document.createElement("canvas");
-			canvas.width = 16;
-			canvas.height = 16;
-			const ctx = canvas.getContext("2d")!;
-			// Blue background
-			ctx.fillStyle = "rgba(68, 136, 255, 0.7)";
-			ctx.fillRect(0, 0, 16, 16);
-			// Lighter inner area
-			ctx.fillStyle = "rgba(136, 187, 255, 0.8)";
-			ctx.fillRect(2, 2, 12, 12);
-			// White arrow pointing down
-			ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-			ctx.beginPath();
-			ctx.moveTo(8, 4);
-			ctx.lineTo(4, 10);
-			ctx.lineTo(12, 10);
-			ctx.closePath();
-			ctx.fill();
-			const doorTexture = Texture.from(canvas);
-			doorTexture.source.scaleMode = "nearest";
-			sprite.sprite = new Sprite(doorTexture);
-			sprite.sprite.x = transform.x;
-			sprite.sprite.y = transform.y;
-			sprite.sprite.zIndex = 9999;
-			// Add directly to entity sprite container
-			if (this.map?.entitySpriteContainer) {
-				this.map.entitySpriteContainer.addChild(sprite.sprite);
+			// Door indicator: draw directly on a Graphics object added to the map.
+			// This bypasses ECS/RenderSystem for guaranteed visibility.
+			const doorGfx = new Graphics();
+			doorGfx.rect(0, 0, 16, 16);
+			doorGfx.fill({ color: 0x4488ff, alpha: 0.8 });
+			doorGfx.rect(2, 2, 12, 12);
+			doorGfx.fill({ color: 0xffffff, alpha: 0.9 });
+			doorGfx.x = transform.x;
+			doorGfx.y = transform.y;
+			doorGfx.zIndex = 9999;
+			if (this.map?.container) {
+				this.map.container.addChild(doorGfx);
+				this.map.container.sortChildren();
 			}
-			console.log(`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) texSize=${doorTexture.width}x${doorTexture.height}`);
+			console.log(`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y}) gfxParent=${doorGfx.parent?.constructor.name}`);
+
+			const sprite = new SpriteComponent();
 			this.world.addComponent(entity, sprite);
 
 			const teleport = new TeleportComponent();
