@@ -3199,6 +3199,11 @@ export class WorldScene extends Scene {
 			ty,
 		);
 
+		// DEBUG: log shadow tile collision values
+		if (objTile === 839) {
+			console.log(`[COLLISION] (${tx},${ty}) obj=${objTile} gnd=${gndTile} hit=${hitTile} extra=${extraTile} floor=${MapData.FLOOR_IDS.has(gndTile)}`);
+		}
+
 		// 1. Explicit Hit Markers (Highest Priority)
 		if (hitTile !== 0) return true;
 
