@@ -258,6 +258,16 @@
     },
     {
       "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/audio/index.ts",
+      "file": "src/renderer/audio/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -270,11 +280,6 @@
       "type": "file",
       "name": "src/renderer/assets/index.ts",
       "file": "src/renderer/assets/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/audio/index.ts",
-      "file": "src/renderer/audio/index.ts"
     },
     {
       "type": "file",
@@ -388,11 +393,6 @@
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/audio/visualizer/ProjectM.ts",
       "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
@@ -483,6 +483,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/input/index.ts",
+      "file": "src/renderer/engine/input/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/graphics/DayNightCycle.ts",
       "file": "src/renderer/engine/graphics/DayNightCycle.ts"
     },
@@ -510,46 +515,6 @@
       "type": "file",
       "name": "src/renderer/engine/graphics/WorldMinimap.ts",
       "file": "src/renderer/engine/graphics/WorldMinimap.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/input/index.ts",
-      "file": "src/renderer/engine/input/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/AsepriteParser.ts",
-      "file": "src/renderer/engine/map/AsepriteParser.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/AutoTiler.ts",
-      "file": "src/renderer/engine/map/AutoTiler.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/CanvasTileRenderer.ts",
-      "file": "src/renderer/engine/map/CanvasTileRenderer.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/DoorGraph.ts",
-      "file": "src/renderer/engine/map/DoorGraph.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/EntityData.ts",
-      "file": "src/renderer/engine/map/EntityData.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/index.ts",
-      "file": "src/renderer/engine/map/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/MapStateData.ts",
-      "file": "src/renderer/engine/map/MapStateData.ts"
     },
     {
       "type": "file",
@@ -585,6 +550,41 @@
       "type": "file",
       "name": "src/renderer/engine/nd/WheelItem.ts",
       "file": "src/renderer/engine/nd/WheelItem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/AsepriteParser.ts",
+      "file": "src/renderer/engine/map/AsepriteParser.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/AutoTiler.ts",
+      "file": "src/renderer/engine/map/AutoTiler.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/CanvasTileRenderer.ts",
+      "file": "src/renderer/engine/map/CanvasTileRenderer.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/DoorGraph.ts",
+      "file": "src/renderer/engine/map/DoorGraph.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/EntityData.ts",
+      "file": "src/renderer/engine/map/EntityData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/index.ts",
+      "file": "src/renderer/engine/map/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/MapStateData.ts",
+      "file": "src/renderer/engine/map/MapStateData.ts"
     },
     {
       "type": "file",
@@ -685,6 +685,21 @@
       "type": "file",
       "name": "src/renderer/engine/shared/OKMath.ts",
       "file": "src/renderer/engine/shared/OKMath.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/index.ts",
+      "file": "src/renderer/engine/stadium/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
+      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
+      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
     },
     {
       "type": "file",
@@ -883,21 +898,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/stadium/index.ts",
-      "file": "src/renderer/engine/stadium/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
-      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
-      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/state/GameFlowStates.ts",
       "file": "src/renderer/engine/state/GameFlowStates.ts"
     },
@@ -923,6 +923,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/ecs/systems/AISystem.ts",
       "file": "src/renderer/engine/ecs/systems/AISystem.ts"
     },
@@ -935,11 +940,6 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
       "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
@@ -4036,6 +4036,16 @@
     },
     {
       "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/audio/index.ts",
+      "file": "src/renderer/audio/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -4048,11 +4058,6 @@
       "type": "file",
       "name": "src/renderer/assets/index.ts",
       "file": "src/renderer/assets/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/audio/index.ts",
-      "file": "src/renderer/audio/index.ts"
     },
     {
       "type": "file",
@@ -4166,11 +4171,6 @@
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/audio/visualizer/ProjectM.ts",
       "file": "src/renderer/audio/visualizer/ProjectM.ts"
     },
@@ -4261,6 +4261,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/input/index.ts",
+      "file": "src/renderer/engine/input/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/graphics/DayNightCycle.ts",
       "file": "src/renderer/engine/graphics/DayNightCycle.ts"
     },
@@ -4288,46 +4293,6 @@
       "type": "file",
       "name": "src/renderer/engine/graphics/WorldMinimap.ts",
       "file": "src/renderer/engine/graphics/WorldMinimap.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/input/index.ts",
-      "file": "src/renderer/engine/input/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/AsepriteParser.ts",
-      "file": "src/renderer/engine/map/AsepriteParser.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/AutoTiler.ts",
-      "file": "src/renderer/engine/map/AutoTiler.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/CanvasTileRenderer.ts",
-      "file": "src/renderer/engine/map/CanvasTileRenderer.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/DoorGraph.ts",
-      "file": "src/renderer/engine/map/DoorGraph.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/EntityData.ts",
-      "file": "src/renderer/engine/map/EntityData.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/index.ts",
-      "file": "src/renderer/engine/map/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/map/MapStateData.ts",
-      "file": "src/renderer/engine/map/MapStateData.ts"
     },
     {
       "type": "file",
@@ -4363,6 +4328,41 @@
       "type": "file",
       "name": "src/renderer/engine/nd/WheelItem.ts",
       "file": "src/renderer/engine/nd/WheelItem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/AsepriteParser.ts",
+      "file": "src/renderer/engine/map/AsepriteParser.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/AutoTiler.ts",
+      "file": "src/renderer/engine/map/AutoTiler.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/CanvasTileRenderer.ts",
+      "file": "src/renderer/engine/map/CanvasTileRenderer.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/DoorGraph.ts",
+      "file": "src/renderer/engine/map/DoorGraph.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/EntityData.ts",
+      "file": "src/renderer/engine/map/EntityData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/index.ts",
+      "file": "src/renderer/engine/map/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/map/MapStateData.ts",
+      "file": "src/renderer/engine/map/MapStateData.ts"
     },
     {
       "type": "file",
@@ -4463,6 +4463,21 @@
       "type": "file",
       "name": "src/renderer/engine/shared/OKMath.ts",
       "file": "src/renderer/engine/shared/OKMath.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/index.ts",
+      "file": "src/renderer/engine/stadium/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
+      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
+      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
     },
     {
       "type": "file",
@@ -4661,21 +4676,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/stadium/index.ts",
-      "file": "src/renderer/engine/stadium/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/stadium/OKGameStadium.ts",
-      "file": "src/renderer/engine/stadium/OKGameStadium.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/stadium/StadiumScreen.ts",
-      "file": "src/renderer/engine/stadium/StadiumScreen.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/state/GameFlowStates.ts",
       "file": "src/renderer/engine/state/GameFlowStates.ts"
     },
@@ -4701,6 +4701,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/ecs/systems/AISystem.ts",
       "file": "src/renderer/engine/ecs/systems/AISystem.ts"
     },
@@ -4713,11 +4718,6 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
       "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",

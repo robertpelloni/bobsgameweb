@@ -1,8 +1,8 @@
 {
   "version": 1,
   "projectRoot": "C:/Users/hyper/workspace/bg/bobsgameweb",
-  "generatedAt": "2026-06-11T17:45:26.841Z",
-  "seq": 318,
+  "generatedAt": "2026-06-12T02:03:38.848Z",
+  "seq": 365,
   "files": {
     "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts": {
       "path": "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts",
@@ -5280,11 +5280,11 @@
     ],
     [
       "assert",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\rpg-expansion.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
     ],
     [
       "assertEqual",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\rpg-expansion.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
     ],
     [
       "assertThrows",
@@ -5592,7 +5592,7 @@
     ],
     [
       "getPhase",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\rpg-systems.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
     ],
     [
       "getPlatform",
@@ -5712,7 +5712,7 @@
     ],
     [
       "nextState",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\fishing-guild.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
     ],
     [
       "onClear",
