@@ -107,8 +107,8 @@
       "destDoor": "",
       "x": 30,
       "y": 9,
-      "arrivalX": 2,
-      "arrivalY": 10
+      "arrivalX": 7,
+      "arrivalY": 19
     }
   ],
   "TOWNYUUUpstairsYuusRoom": [
@@ -116,8 +116,8 @@
       "name": "door_6",
       "destMap": "TOWNYUUUpstairs",
       "destDoor": "",
-      "x": 2,
-      "y": 9,
+      "x": 19,
+      "y": 20,
       "arrivalX": 30,
       "arrivalY": 10
     }

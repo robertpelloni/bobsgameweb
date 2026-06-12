@@ -1,3 +1,18 @@
 {
-  "items": []
+  "items": [
+    {
+      "type": "TODO",
+      "message": "Process data.imageUrl or data.base64 into the sprite editor canvas",
+      "file": "src\\renderer\\editor\\GenerativeAIManager.ts",
+      "line": 29,
+      "column": 15
+    },
+    {
+      "type": "TODO",
+      "message": "Process data into the tilemap editor",
+      "file": "src\\renderer\\editor\\GenerativeAIManager.ts",
+      "line": 57,
+      "column": 15
+    }
+  ]
 }

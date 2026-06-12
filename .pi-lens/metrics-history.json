@@ -358,8 +358,8 @@
     },
     "src\\renderer\\graphics\\Camera.ts": {
       "latest": {
-        "commit": "af0c82e",
-        "timestamp": "2026-05-12T19:47:10.823Z",
+        "commit": "07023612",
+        "timestamp": "2026-06-06T14:41:23.095Z",
         "mi": 24.5,
         "cognitive": 34,
         "nesting": 4,
@@ -381,6 +381,16 @@
         {
           "commit": "af0c82e",
           "timestamp": "2026-05-12T19:47:10.823Z",
+          "mi": 24.5,
+          "cognitive": 34,
+          "nesting": 4,
+          "lines": 204,
+          "maxCyclomatic": 62,
+          "entropy": 6.08
+        },
+        {
+          "commit": "07023612",
+          "timestamp": "2026-06-06T14:41:23.095Z",
           "mi": 24.5,
           "cognitive": 34,
           "nesting": 4,
@@ -543,14 +553,14 @@
     },
     "src\\renderer\\scenes\\WorldScene.ts": {
       "latest": {
-        "commit": "af0c82e",
-        "timestamp": "2026-05-12T17:06:11.488Z",
+        "commit": "16d0dce2",
+        "timestamp": "2026-06-12T13:10:51.687Z",
         "mi": 0,
-        "cognitive": 1340,
+        "cognitive": 2026,
         "nesting": 12,
-        "lines": 1839,
-        "maxCyclomatic": 302,
-        "entropy": 7.91
+        "lines": 3212,
+        "maxCyclomatic": 371,
+        "entropy": 8.39
       },
       "history": [
         {
@@ -562,9 +572,59 @@
           "lines": 1839,
           "maxCyclomatic": 302,
           "entropy": 7.91
+        },
+        {
+          "commit": "cf0c17b9",
+          "timestamp": "2026-06-07T00:52:54.300Z",
+          "mi": 0,
+          "cognitive": 1967,
+          "nesting": 12,
+          "lines": 3146,
+          "maxCyclomatic": 365,
+          "entropy": 8.44
+        },
+        {
+          "commit": "3a015d43",
+          "timestamp": "2026-06-09T17:05:53.998Z",
+          "mi": 0,
+          "cognitive": 1965,
+          "nesting": 12,
+          "lines": 3142,
+          "maxCyclomatic": 365,
+          "entropy": 8.44
+        },
+        {
+          "commit": "e0f32d1f",
+          "timestamp": "2026-06-10T12:43:40.733Z",
+          "mi": 0,
+          "cognitive": 2014,
+          "nesting": 12,
+          "lines": 3177,
+          "maxCyclomatic": 371,
+          "entropy": 8.39
+        },
+        {
+          "commit": "cd52c1c0",
+          "timestamp": "2026-06-10T19:49:48.163Z",
+          "mi": 0,
+          "cognitive": 2014,
+          "nesting": 12,
+          "lines": 3177,
+          "maxCyclomatic": 371,
+          "entropy": 8.39
+        },
+        {
+          "commit": "16d0dce2",
+          "timestamp": "2026-06-12T13:10:51.687Z",
+          "mi": 0,
+          "cognitive": 2026,
+          "nesting": 12,
+          "lines": 3212,
+          "maxCyclomatic": 371,
+          "entropy": 8.39
         }
       ],
-      "trend": "stable"
+      "trend": "regressing"
     },
     "src\\renderer\\engine\\map\\NPCDialogue.ts": {
       "latest": {
@@ -593,14 +653,14 @@
     },
     "src\\renderer\\engine\\ecs\\systems\\RenderSystem.ts": {
       "latest": {
-        "commit": "af0c82e",
-        "timestamp": "2026-05-12T19:32:25.717Z",
-        "mi": 54.6,
+        "commit": "cd52c1c0",
+        "timestamp": "2026-06-10T19:51:31.544Z",
+        "mi": 54,
         "cognitive": 14,
         "nesting": 5,
-        "lines": 33,
+        "lines": 37,
         "maxCyclomatic": 11,
-        "entropy": 5.47
+        "entropy": 5.49
       },
       "history": [
         {
@@ -612,20 +672,50 @@
           "lines": 33,
           "maxCyclomatic": 11,
           "entropy": 5.47
+        },
+        {
+          "commit": "5e5e65cc",
+          "timestamp": "2026-06-07T17:43:17.676Z",
+          "mi": 54,
+          "cognitive": 14,
+          "nesting": 5,
+          "lines": 37,
+          "maxCyclomatic": 11,
+          "entropy": 5.49
+        },
+        {
+          "commit": "aa39494b",
+          "timestamp": "2026-06-09T19:23:01.622Z",
+          "mi": 54,
+          "cognitive": 14,
+          "nesting": 5,
+          "lines": 37,
+          "maxCyclomatic": 11,
+          "entropy": 5.49
+        },
+        {
+          "commit": "cd52c1c0",
+          "timestamp": "2026-06-10T19:51:31.544Z",
+          "mi": 54,
+          "cognitive": 14,
+          "nesting": 5,
+          "lines": 37,
+          "maxCyclomatic": 11,
+          "entropy": 5.49
         }
       ],
       "trend": "stable"
     },
     "src\\shared\\MapData.ts": {
       "latest": {
-        "commit": "af0c82e",
-        "timestamp": "2026-05-12T19:38:30.923Z",
-        "mi": 25,
-        "cognitive": 96,
+        "commit": "596b332d",
+        "timestamp": "2026-06-12T13:16:09.323Z",
+        "mi": 23.6,
+        "cognitive": 90,
         "nesting": 5,
-        "lines": 170,
+        "lines": 226,
         "maxCyclomatic": 26,
-        "entropy": 6.01
+        "entropy": 6
       },
       "history": [
         {
@@ -637,10 +727,445 @@
           "lines": 170,
           "maxCyclomatic": 26,
           "entropy": 6.01
+        },
+        {
+          "commit": "98b869d4",
+          "timestamp": "2026-06-06T14:06:59.575Z",
+          "mi": 26.5,
+          "cognitive": 90,
+          "nesting": 5,
+          "lines": 182,
+          "maxCyclomatic": 26,
+          "entropy": 5.91
+        },
+        {
+          "commit": "d76d01ce",
+          "timestamp": "2026-06-07T10:59:10.179Z",
+          "mi": 23.6,
+          "cognitive": 90,
+          "nesting": 5,
+          "lines": 226,
+          "maxCyclomatic": 26,
+          "entropy": 6.01
+        },
+        {
+          "commit": "a404749a",
+          "timestamp": "2026-06-11T16:45:34.671Z",
+          "mi": 23.6,
+          "cognitive": 90,
+          "nesting": 5,
+          "lines": 226,
+          "maxCyclomatic": 26,
+          "entropy": 6.01
+        },
+        {
+          "commit": "596b332d",
+          "timestamp": "2026-06-12T13:16:09.323Z",
+          "mi": 23.6,
+          "cognitive": 90,
+          "nesting": 5,
+          "lines": 226,
+          "maxCyclomatic": 26,
+          "entropy": 6
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\map\\GameMap.ts": {
+      "latest": {
+        "commit": "4eff28a4",
+        "timestamp": "2026-06-10T20:02:43.381Z",
+        "mi": 19.1,
+        "cognitive": 261,
+        "nesting": 6,
+        "lines": 368,
+        "maxCyclomatic": 94,
+        "entropy": 6.72
+      },
+      "history": [
+        {
+          "commit": "cf0c17b9",
+          "timestamp": "2026-06-06T23:26:35.188Z",
+          "mi": 19,
+          "cognitive": 300,
+          "nesting": 7,
+          "lines": 408,
+          "maxCyclomatic": 87,
+          "entropy": 6.79
+        },
+        {
+          "commit": "cf0c17b9",
+          "timestamp": "2026-06-07T00:49:48.560Z",
+          "mi": 18.4,
+          "cognitive": 307,
+          "nesting": 7,
+          "lines": 424,
+          "maxCyclomatic": 87,
+          "entropy": 6.82
+        },
+        {
+          "commit": "b8131d79",
+          "timestamp": "2026-06-09T16:21:00.127Z",
+          "mi": 19.2,
+          "cognitive": 244,
+          "nesting": 6,
+          "lines": 355,
+          "maxCyclomatic": 84,
+          "entropy": 6.74
+        },
+        {
+          "commit": "4eff28a4",
+          "timestamp": "2026-06-10T20:02:43.381Z",
+          "mi": 19.1,
+          "cognitive": 261,
+          "nesting": 6,
+          "lines": 368,
+          "maxCyclomatic": 94,
+          "entropy": 6.72
+        }
+      ],
+      "trend": "improving"
+    },
+    "src\\renderer\\engine\\map\\RealTileset.ts": {
+      "latest": {
+        "commit": "cf0c17b9",
+        "timestamp": "2026-06-06T23:28:56.593Z",
+        "mi": 30.4,
+        "cognitive": 129,
+        "nesting": 7,
+        "lines": 222,
+        "maxCyclomatic": 20,
+        "entropy": 6.09
+      },
+      "history": [
+        {
+          "commit": "cf0c17b9",
+          "timestamp": "2026-06-06T23:28:56.593Z",
+          "mi": 30.4,
+          "cognitive": 129,
+          "nesting": 7,
+          "lines": 222,
+          "maxCyclomatic": 20,
+          "entropy": 6.09
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\map\\LegacyMapLoader.ts": {
+      "latest": {
+        "commit": "596b332d",
+        "timestamp": "2026-06-12T13:17:46.009Z",
+        "mi": 22.5,
+        "cognitive": 260,
+        "nesting": 8,
+        "lines": 389,
+        "maxCyclomatic": 105,
+        "entropy": 6.76
+      },
+      "history": [
+        {
+          "commit": "d76d01ce",
+          "timestamp": "2026-06-07T10:59:45.255Z",
+          "mi": 22.1,
+          "cognitive": 233,
+          "nesting": 8,
+          "lines": 364,
+          "maxCyclomatic": 105,
+          "entropy": 6.77
+        },
+        {
+          "commit": "aa39494b",
+          "timestamp": "2026-06-09T19:29:58.835Z",
+          "mi": 22.1,
+          "cognitive": 233,
+          "nesting": 8,
+          "lines": 364,
+          "maxCyclomatic": 105,
+          "entropy": 6.77
+        },
+        {
+          "commit": "e0f32d1f",
+          "timestamp": "2026-06-10T12:41:52.517Z",
+          "mi": 22.8,
+          "cognitive": 256,
+          "nesting": 8,
+          "lines": 379,
+          "maxCyclomatic": 105,
+          "entropy": 6.75
+        },
+        {
+          "commit": "11c61d7d",
+          "timestamp": "2026-06-10T19:35:50.245Z",
+          "mi": 22.8,
+          "cognitive": 256,
+          "nesting": 8,
+          "lines": 379,
+          "maxCyclomatic": 105,
+          "entropy": 6.75
+        },
+        {
+          "commit": "596b332d",
+          "timestamp": "2026-06-12T13:17:46.009Z",
+          "mi": 22.5,
+          "cognitive": 260,
+          "nesting": 8,
+          "lines": 389,
+          "maxCyclomatic": 105,
+          "entropy": 6.76
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\map\\MapLoader.ts": {
+      "latest": {
+        "commit": "d76d01ce",
+        "timestamp": "2026-06-07T11:00:42.750Z",
+        "mi": 21,
+        "cognitive": 219,
+        "nesting": 8,
+        "lines": 479,
+        "maxCyclomatic": 121,
+        "entropy": 6.11
+      },
+      "history": [
+        {
+          "commit": "d76d01ce",
+          "timestamp": "2026-06-07T11:00:42.750Z",
+          "mi": 21,
+          "cognitive": 219,
+          "nesting": 8,
+          "lines": 479,
+          "maxCyclomatic": 121,
+          "entropy": 6.11
+        }
+      ],
+      "trend": "stable"
+    },
+    "scripts\\convert_maps.js": {
+      "latest": {
+        "commit": "1314057c",
+        "timestamp": "2026-06-07T12:16:30.488Z",
+        "mi": 12.9,
+        "cognitive": 231,
+        "nesting": 5,
+        "lines": 437,
+        "maxCyclomatic": 35,
+        "entropy": 6.89
+      },
+      "history": [
+        {
+          "commit": "1314057c",
+          "timestamp": "2026-06-07T12:16:30.488Z",
+          "mi": 12.9,
+          "cognitive": 231,
+          "nesting": 5,
+          "lines": 437,
+          "maxCyclomatic": 35,
+          "entropy": 6.89
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\shared\\MapDataRegistry.ts": {
+      "latest": {
+        "commit": "eb2a5abe",
+        "timestamp": "2026-06-07T14:22:49.536Z",
+        "mi": 21.3,
+        "cognitive": 318,
+        "nesting": 7,
+        "lines": 365,
+        "maxCyclomatic": 142,
+        "entropy": 5.88
+      },
+      "history": [
+        {
+          "commit": "eb2a5abe",
+          "timestamp": "2026-06-07T14:22:49.536Z",
+          "mi": 21.3,
+          "cognitive": 318,
+          "nesting": 7,
+          "lines": 365,
+          "maxCyclomatic": 142,
+          "entropy": 5.88
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\audio\\AmbientMusicGenerator.ts": {
+      "latest": {
+        "commit": "5e5e65cc",
+        "timestamp": "2026-06-07T18:41:47.825Z",
+        "mi": 40.8,
+        "cognitive": 51,
+        "nesting": 6,
+        "lines": 116,
+        "maxCyclomatic": 17,
+        "entropy": 5.62
+      },
+      "history": [
+        {
+          "commit": "5e5e65cc",
+          "timestamp": "2026-06-07T18:41:47.825Z",
+          "mi": 40.8,
+          "cognitive": 51,
+          "nesting": 6,
+          "lines": 116,
+          "maxCyclomatic": 17,
+          "entropy": 5.62
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\shared\\Tileset.ts": {
+      "latest": {
+        "commit": "5e5e65cc",
+        "timestamp": "2026-06-08T00:14:32.668Z",
+        "mi": 45.2,
+        "cognitive": 20,
+        "nesting": 4,
+        "lines": 42,
+        "maxCyclomatic": 16,
+        "entropy": 5.03
+      },
+      "history": [
+        {
+          "commit": "5e5e65cc",
+          "timestamp": "2026-06-08T00:14:32.668Z",
+          "mi": 45.2,
+          "cognitive": 20,
+          "nesting": 4,
+          "lines": 42,
+          "maxCyclomatic": 16,
+          "entropy": 5.03
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\index.ts": {
+      "latest": {
+        "commit": "5e5e65cc",
+        "timestamp": "2026-06-08T14:01:26.433Z",
+        "mi": 48.2,
+        "cognitive": 7,
+        "nesting": 2,
+        "lines": 32,
+        "maxCyclomatic": 4,
+        "entropy": 4.43
+      },
+      "history": [
+        {
+          "commit": "5e5e65cc",
+          "timestamp": "2026-06-08T14:01:26.433Z",
+          "mi": 48.2,
+          "cognitive": 7,
+          "nesting": 2,
+          "lines": 32,
+          "maxCyclomatic": 4,
+          "entropy": 4.43
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\ecs\\systems\\TeleportSystem.ts": {
+      "latest": {
+        "commit": "aa39494b",
+        "timestamp": "2026-06-09T19:44:13.852Z",
+        "mi": 43.4,
+        "cognitive": 39,
+        "nesting": 5,
+        "lines": 54,
+        "maxCyclomatic": 40,
+        "entropy": 5.66
+      },
+      "history": [
+        {
+          "commit": "aa39494b",
+          "timestamp": "2026-06-09T19:44:13.852Z",
+          "mi": 43.4,
+          "cognitive": 39,
+          "nesting": 5,
+          "lines": 54,
+          "maxCyclomatic": 40,
+          "entropy": 5.66
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\map\\DoorGraphLoader.ts": {
+      "latest": {
+        "commit": "11c61d7d",
+        "timestamp": "2026-06-10T19:39:49.398Z",
+        "mi": 54.3,
+        "cognitive": 11,
+        "nesting": 4,
+        "lines": 50,
+        "maxCyclomatic": 6,
+        "entropy": 5.29
+      },
+      "history": [
+        {
+          "commit": "11c61d7d",
+          "timestamp": "2026-06-10T19:39:49.398Z",
+          "mi": 54.3,
+          "cognitive": 11,
+          "nesting": 4,
+          "lines": 50,
+          "maxCyclomatic": 6,
+          "entropy": 5.29
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\ecs\\components\\SpriteComponent.ts": {
+      "latest": {
+        "commit": "cd52c1c0",
+        "timestamp": "2026-06-10T19:51:46.377Z",
+        "mi": 67.2,
+        "cognitive": 0,
+        "nesting": 1,
+        "lines": 11,
+        "maxCyclomatic": 1,
+        "entropy": 4.5
+      },
+      "history": [
+        {
+          "commit": "cd52c1c0",
+          "timestamp": "2026-06-10T19:51:46.377Z",
+          "mi": 67.2,
+          "cognitive": 0,
+          "nesting": 1,
+          "lines": 11,
+          "maxCyclomatic": 1,
+          "entropy": 4.5
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\ecs\\behaviors\\NPCBehavior.ts": {
+      "latest": {
+        "commit": "50849b36",
+        "timestamp": "2026-06-11T18:09:26.642Z",
+        "mi": 29.5,
+        "cognitive": 176,
+        "nesting": 7,
+        "lines": 146,
+        "maxCyclomatic": 99,
+        "entropy": 6.12
+      },
+      "history": [
+        {
+          "commit": "50849b36",
+          "timestamp": "2026-06-11T18:09:26.642Z",
+          "mi": 29.5,
+          "cognitive": 176,
+          "nesting": 7,
+          "lines": 146,
+          "maxCyclomatic": 99,
+          "entropy": 6.12
         }
       ],
       "trend": "stable"
     }
   },
-  "capturedAt": "2026-05-12T19:47:15.838Z"
+  "capturedAt": "2026-06-12T13:17:51.061Z"
 }

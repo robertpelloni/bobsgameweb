@@ -122,7 +122,7 @@ export class WorldScene extends Scene {
 	private controlsOverlay: Container | null = null;
 	private footstepTimer: number = 0;
 	private footstepIndex: number = 0;
-	private ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
+	private _ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
 	private weatherContainer: Container | null = null;
 	private rainDrops: { x: number; y: number; speed: number }[] = [];
 	private isExteriorMap: boolean = false;
@@ -136,7 +136,7 @@ export class WorldScene extends Scene {
 
 	// Debug layer visibility state (Java: F-keys toggled per-layer)
 	private debugShowHitLayer: boolean = false;
-	private debugShowBoundsLayer: boolean = false;
+	private _debugShowBoundsLayer: boolean = false;
 	private debugLayerCycleIndex: number = 0;
 	private debugLightingEnabled: boolean = true;
 	private debugHudVisible: boolean = false;
@@ -485,11 +485,11 @@ export class WorldScene extends Scene {
 		this.showRoomBanner(
 			WorldScene.friendlyMapName(this.currentMapName || "Unknown"),
 		);
-		// Play ambient music matching room mood
-		const mood = AmbientMusicGenerator.getMoodFromMapName(
-			this.currentMapName || "",
-		);
-		this.ambientMusic.play(mood);
+		// Ambient music disabled — was causing buzzing noise
+		// const mood = AmbientMusicGenerator.getMoodFromMapName(
+		//   this.currentMapName || "",
+		// );
+		// this.ambientMusic.play(mood);
 		// Play background music
 		try {
 			if (AudioManager.isLoaded("game")) {
@@ -519,6 +519,8 @@ export class WorldScene extends Scene {
 			const fallbackData = new MapData(-1, "Empty", 20, 15);
 			this.map = new GameMap(fallbackData, this.realTileset);
 			this.worldContainer.addChild(this.map.container);
+			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
+			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
 			this.map.render(this.tileset, this.palette);
 			// Update RenderSystem to use the entity sprite layer (below rooftops)
 			if ((this as any)._renderSystem && this.map?.entitySpriteContainer) {
@@ -547,6 +549,11 @@ export class WorldScene extends Scene {
 			if (playerSpriteComp?.sprite?.parent === this.map.entitySpriteContainer) {
 				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
 				this.worldContainer.addChild(playerSpriteComp.sprite);
+			}
+			// Save shadow sprite before map destruction
+			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
+			if (shadowSave?.parent === this.map.entitySpriteContainer) {
+				this.map.entitySpriteContainer.removeChild(shadowSave);
 			}
 			this.worldContainer.removeChild(this.map.container);
 			this.map.container.destroy({ children: true });
@@ -594,16 +601,15 @@ export class WorldScene extends Scene {
 			console.warn(`[WorldScene] Cannot find map named: "${mapName}"`);
 			return false;
 		}
-
-		// Add player shadow sprite to entitySpriteContainer
-		const shadow = (this as any).playerShadowSprite as Sprite | null;
-		if (shadow && !shadow.parent && this.map?.entitySpriteContainer) {
-			this.map.entitySpriteContainer.addChild(shadow);
-		}
 		// Find the filename to use the normal load path
 		const filename = LegacyMapLoader.getFilenameForMap(mapName);
 		if (filename) {
 			await this.loadLegacyMap(filename);
+			// Re-add shadow to NEW map's entitySpriteContainer after load
+			const shadow2 = (this as any).playerShadowSprite as Sprite | null;
+			if (shadow2 && this.map?.entitySpriteContainer) {
+				if (!shadow2.parent) this.map.entitySpriteContainer.addChild(shadow2);
+			}
 			return true;
 		}
 		// Direct conversion if no filename mapping
@@ -618,6 +624,11 @@ export class WorldScene extends Scene {
 			if (playerSpriteComp?.sprite?.parent === this.map.entitySpriteContainer) {
 				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
 				this.worldContainer.addChild(playerSpriteComp.sprite);
+			}
+			// Save shadow sprite before map destruction
+			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
+			if (shadowSave?.parent === this.map.entitySpriteContainer) {
+				this.map.entitySpriteContainer.removeChild(shadowSave);
 			}
 			this.worldContainer.removeChild(this.map.container);
 			this.map.container.destroy({ children: true });
@@ -639,6 +650,7 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.addChild(psc2.sprite);
 			}
 		}
+		this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
 		this.map.render(this.tileset, this.palette);
 		return true;
 	}
@@ -649,56 +661,121 @@ export class WorldScene extends Scene {
 	private createDoorEntities(): void {
 		if (!this.map) return;
 		const doorList = this.map.data.doorDataList;
+		const W = this.map.data.widthTiles1X;
+		const H = this.map.data.heightTiles1X;
+
+		// Known door frame tile IDs (from LegacyMapLoader.DOOR_TILE_IDS + 832/1132)
+		const DOOR_FRAME_IDS = new Set([
+			732, 733, 734, 735, 736, 737, 741, 742, 1316, 1495, 1503, 1511, 14144,
+			15440, 755, 756, 832, 1132,
+		]);
+
 		for (const door of doorList) {
 			const entity = this.world.createEntity();
 			const transform = new TransformComponent();
-			const doorX: number = door.x ?? 0;
-			const doorY: number = door.y ?? 0;
+
+			// The door graph coordinates often point at a wall tile (839)
+			// rather than the walkable walkway below/through the door.
+			// Scan nearby tiles to find the actual walkable passage.
+			let doorX: number = door.x ?? 0;
+			let doorY: number = door.y ?? 0;
+			let walkwayFound = false;
+
+			// Check if the door graph position itself is walkable (empty on objects layer)
+			const objTile = this.map.data.getTileIndex(
+				MapData.MAP_OBJECT_LAYER,
+				doorX,
+				doorY,
+			);
+			if (objTile === 0) {
+				walkwayFound = true;
+			} else {
+				// Search nearby for the walkway: empty tile adjacent to
+				// door frame tiles that forms the passage through the wall.
+				const offsets = [
+					[0, 1],
+					[1, 0],
+					[-1, 0],
+					[0, -1],
+					[0, 2],
+					[2, 0],
+					[-2, 0],
+					[0, -2],
+					[1, 1],
+					[-1, 1],
+					[1, -1],
+					[-1, -1],
+				];
+				for (const [ox, oy] of offsets) {
+					const tx = doorX + ox;
+					const ty = doorY + oy;
+					if (tx < 0 || tx >= W || ty < 0 || ty >= H) continue;
+					const tile = this.map.data.getTileIndex(
+						MapData.MAP_OBJECT_LAYER,
+						tx,
+						ty,
+					);
+					if (tile === 0) {
+						// Verify it's near a door frame tile
+						let nearFrame = false;
+						for (const [fx, fy] of [
+							[-1, 0],
+							[1, 0],
+							[0, -1],
+							[0, 1],
+						]) {
+							const nx = tx + fx;
+							const ny = ty + fy;
+							if (nx < 0 || nx >= W || ny < 0 || ny >= H) continue;
+							const neighborTile = this.map.data.getTileIndex(
+								MapData.MAP_OBJECT_LAYER,
+								nx,
+								ny,
+							);
+							if (DOOR_FRAME_IDS.has(neighborTile)) {
+								nearFrame = true;
+								break;
+							}
+						}
+						// Also accept if the original door graph position was a frame tile
+						if (nearFrame || DOOR_FRAME_IDS.has(objTile)) {
+							doorX = tx;
+							doorY = ty;
+							walkwayFound = true;
+							break;
+						}
+					}
+				}
+			}
+
 			transform.x = doorX * WorldScene.TILE_PX;
 			transform.y = doorY * WorldScene.TILE_PX;
 			this.world.addComponent(entity, transform);
-			// Door sprite: render door frame tiles from the real tileset if available
-			const sprite = new SpriteComponent();
-			const doorWidth = (door.width ?? 2) * WorldScene.TILE_PX;
-			const doorHeight = (door.height ?? 2) * WorldScene.TILE_PX;
 
-			// Try to render door frame using real tileset textures
-			const doorContainer = new Container();
-			const realTileset = (this.map as any).realTileset;
-			if (realTileset && realTileset.loaded) {
-				// Door frame tiles: 742 (left frame), 743 (right frame), 744/745 (top corners)
-				const leftTex = realTileset.getTileTexture(742);
-				const rightTex = realTileset.getTileTexture(743);
-				const topTex = realTileset.getTileTexture(744);
-				if (leftTex && rightTex) {
-					// Top row of door frame
-					if (topTex) {
-						const topSprite = new Sprite(topTex);
-						topSprite.x = 0;
-						topSprite.y = 0;
-						doorContainer.addChild(topSprite);
-					}
-					// Bottom row: left + right frame
-					const leftSprite = new Sprite(leftTex);
-					leftSprite.x = 0;
-					leftSprite.y = 8;
-					doorContainer.addChild(leftSprite);
-					const rightSprite = new Sprite(rightTex);
-					rightSprite.x = 8;
-					rightSprite.y = 8;
-					doorContainer.addChild(rightSprite);
-				}
+			// Door indicator: add to map container so it's cleaned up on map change.
+			const doorGfx = new Graphics();
+			doorGfx.rect(0, 0, 24, 24);
+			doorGfx.fill({ color: 0xff0000 });
+			doorGfx.x = transform.x - 4;
+			doorGfx.y = transform.y - 4;
+			doorGfx.zIndex = 99999;
+			if (this.map?.container) {
+				this.map.container.addChild(doorGfx);
+				this.map.container.sortChildren();
 			}
-			const tex = this.app.renderer.generateTexture(doorContainer);
-			sprite.sprite = new Sprite(tex);
-			this.world.addComponent(entity, sprite);
+			console.log(
+				`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
+			);
+
 			const teleport = new TeleportComponent();
 			teleport.targetMapId = door.destinationMapName ?? "";
 			teleport.targetX = (door.destinationX ?? 0) * WorldScene.TILE_PX;
 			teleport.targetY = (door.destinationY ?? 0) * WorldScene.TILE_PX;
-			teleport.width = doorWidth;
-			teleport.height = doorHeight;
+			// Walkway is typically 2 tiles wide, 1 tile tall
+			teleport.width = 16;
+			teleport.height = 16;
 			this.world.addComponent(entity, teleport);
+
 			// Also add interaction for "press A to enter" feedback
 			const inter = new InteractionComponent();
 			inter.interactions.push({
@@ -706,7 +783,8 @@ export class WorldScene extends Scene {
 				params: { text: [`Door: ${door.name}`] },
 			});
 			this.world.addComponent(entity, inter);
-			// Clear wall collision at door position so player can walk through
+
+			// Clear wall collision at door walkway so player can walk through
 			if (this.map) {
 				// Ensure the door area is walkable (EXTRA=1 = interior)
 				// Clear a wider area (3x2) so the player can approach the door
@@ -730,15 +808,16 @@ export class WorldScene extends Scene {
 					}
 				}
 			}
+
 			console.log(
-				`[WorldScene] Created door entity: "${door.name}" at (${doorX},${doorY}) px(${doorX * 8},${doorY * 8}) -> ${door.destinationMapName} dest(${door.destinationX},${door.destinationY})`,
+				`[WorldScene] Created door entity: "${door.name}" at (${doorX},${doorY}) px(${doorX * 8},${doorY * 8}) walkway=${walkwayFound} -> ${door.destinationMapName} dest(${door.destinationX},${door.destinationY})`,
 			);
 		}
 	}
+
 	/**
-  /**
-   * Spawn NPCs from game_script.json (primary) or npc_placements.json (fallback).
-   */
+	 * Spawn NPCs from game_script.json (primary) or npc_placements.json (fallback).
+	 */
 	private async createNPCs(): Promise<void> {
 		if (!this.map || !this.spriteAtlas.loaded) return;
 
@@ -1131,10 +1210,11 @@ export class WorldScene extends Scene {
 			WorldScene.friendlyMapName(this.currentMapName || "Unknown"),
 		);
 		// Switch ambient music to new room mood
-		const newMood = AmbientMusicGenerator.getMoodFromMapName(
-			this.currentMapName || "",
-		);
-		this.ambientMusic.play(newMood);
+		// Ambient music disabled — was causing buzzing noise
+		// const newMood = AmbientMusicGenerator.getMoodFromMapName(
+		//   this.currentMapName || "",
+		// );
+		// this.ambientMusic.play(newMood);
 		this.mapTransitioning = false;
 	}
 	public onMapGenerated(mapData: MapData): void {
@@ -1146,6 +1226,7 @@ export class WorldScene extends Scene {
 		this.map.setSpawnPosition(spX, spY);
 		this.worldContainer.removeChildAt(0);
 		this.worldContainer.addChildAt(this.map.container, 0);
+		this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
 		this.map.render(this.tileset, this.palette);
 		this.showDialogue(Localization.get("welcome"));
 	}
@@ -1829,7 +1910,7 @@ export class WorldScene extends Scene {
 			StateManager.push(skillTree);
 		}
 	}
-	private createControlsOverlay(): void {
+	private _createControlsOverlay(): void {
 		this.controlsOverlay = new Container();
 		this.controlsOverlay.zIndex = 9998;
 		this.container.addChild(this.controlsOverlay);
@@ -1843,23 +1924,32 @@ export class WorldScene extends Scene {
 
 		const title = new Text({
 			text: "bob's game",
-			style: new TextStyle({ fill: '#3366ff', fontSize: 24, fontWeight: 'bold' })
+			style: new TextStyle({
+				fill: "#3366ff",
+				fontSize: 24,
+				fontWeight: "bold",
+			}),
 		});
 		title.anchor.set(0.5);
 		title.position.set(this.width / 2, this.height / 2 - 55);
 		this.controlsOverlay.addChild(title);
 
 		const controls = new Text({
-			text: 'WASD / Arrows - Move\nShift - Sprint\nE - Talk / Interact\nEsc - Pause Menu\nI - Inventory\nQ - Quest Log\n` (Tilde) - Debug Console',
-			style: new TextStyle({ fill: '#cccccc', fontSize: 13, lineHeight: 22, align: 'center' }),
+			text: "WASD / Arrows - Move\nShift - Sprint\nE - Talk / Interact\nEsc - Pause Menu\nI - Inventory\nQ - Quest Log\n` (Tilde) - Debug Console",
+			style: new TextStyle({
+				fill: "#cccccc",
+				fontSize: 13,
+				lineHeight: 22,
+				align: "center",
+			}),
 		});
 		controls.anchor.set(0.5);
 		controls.position.set(this.width / 2, this.height / 2 + 5);
 		this.controlsOverlay.addChild(controls);
 
 		const hint = new Text({
-			text: 'Press any key to start',
-			style: new TextStyle({ fill: '#666666', fontSize: 12 })
+			text: "Press any key to start",
+			style: new TextStyle({ fill: "#666666", fontSize: 12 }),
 		});
 		hint.anchor.set(0.5);
 		hint.position.set(this.width / 2, this.height / 2 + 60);
@@ -2428,7 +2518,7 @@ export class WorldScene extends Scene {
 					shadow.texture = playerSprite.texture;
 				}
 				shadow.x = this.playerTransform.x;
-				shadow.y = this.playerTransform.y - 3; // lift shadow 3 pixels to sit at player feet
+				shadow.y = this.playerTransform.y - 5; // lift shadow 5 pixels to sit at player feet
 				shadow.zIndex = this.playerTransform.y - 0.1;
 				if (!shadow.parent) {
 					this.map.entitySpriteContainer.addChild(shadow);
@@ -2583,6 +2673,20 @@ export class WorldScene extends Scene {
 		if (InputManager.isKeyPressed(Key.K)) this.openSkillTree();
 		if (InputManager.isKeyPressed(Key.Escape)) {
 			this.togglePause();
+		}
+
+		// +/- zoom keys
+		if (
+			InputManager.isKeyPressed(Key.Plus) ||
+			InputManager.isKeyPressed("NumpadAdd")
+		) {
+			this.camera?.zoomIn();
+		}
+		if (
+			InputManager.isKeyPressed(Key.Minus) ||
+			InputManager.isKeyPressed("NumpadSubtract")
+		) {
+			this.camera?.zoomOut();
 		}
 
 		// === Debug Keys (from original Java game) ===
@@ -3095,6 +3199,13 @@ export class WorldScene extends Scene {
 			ty,
 		);
 
+		// DEBUG: log shadow tile collision values
+		if (objTile === 839) {
+			console.log(
+				`[COLLISION] (${tx},${ty}) obj=${objTile} gnd=${gndTile} hit=${hitTile} extra=${extraTile} floor=${MapData.FLOOR_IDS.has(gndTile)}`,
+			);
+		}
+
 		// 1. Explicit Hit Markers (Highest Priority)
 		if (hitTile !== 0) return true;
 
@@ -3102,16 +3213,16 @@ export class WorldScene extends Scene {
 		// 1 = interior/walkable, 0 = void/blocked
 		if (extraTile === 1) return false;
 
-		// 3. Strict Wall ID Blocking (if no extra override)
+		// 3. Floor Exception: 839 on a floor tile is a SHADOW, not a wall.
+		// Shadows overlay furniture/floor areas and should be walkable.
+		if (MapData.FLOOR_IDS.has(gndTile)) {
+			return false;
+		}
+
+		// 4. Strict Wall ID Blocking (non-floor ground with wall object)
 		if (objTile === 839 || objTile === 8280) return true;
 		if (MapData.WALL_IDS.has(objTile)) return true;
 		if (MapData.WALL_IDS.has(gndTile)) return true;
-
-		// 4. Floor Exception (Walkable floor IDs)
-		if (MapData.FLOOR_IDS.has(gndTile)) {
-			if (objTile !== 0 && MapData.WALL_IDS.has(objTile)) return true;
-			return false;
-		}
 
 		// 5. Void check (if not a floor and no extra marker, empty is blocked)
 		if (gndTile === 0 && objTile === 0) return true;
