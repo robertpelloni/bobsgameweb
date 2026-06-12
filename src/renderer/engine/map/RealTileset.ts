@@ -12,13 +12,14 @@
  */
 
 import { Texture, Assets, Rectangle } from "pixi.js";
-import { APP_VERSION } from "../../../shared/Config";
 
 export class RealTileset {
-	static BUILD_VER = APP_VERSION;
+	static BUILD_VER = "3.6.2";
 	private atlasTexture: Texture | null = null;
 	private shadowBlackAtlasTexture: Texture | null = null;
 	private shadowAtlasTexture: Texture | null = null;
+	/** Set of tile IDs whose pixels are ALL near-black (RGB ≤ 5). */
+	private blackTileIds: Set<number> = new Set();
 	private tileTextureCache: Map<number, Texture> = new Map();
 	private shadowBlackTileTextureCache: Map<number, Texture> = new Map();
 	private shadowTileTextureCache: Map<number, Texture> = new Map();
@@ -83,6 +84,24 @@ export class RealTileset {
 				console.warn(
 					"[RealTileset] Could not load atlas map — all tileIds assumed valid",
 				);
+			}
+
+			// Load black tile ID list (tiles whose pixels are ALL near-black)
+			try {
+				const blackResp = await this.fetchWithRetry(
+					`/tileset_atlas_black_ids.json${this.cacheBust}`,
+				);
+				if (blackResp.ok) {
+					const blackData = await blackResp.json();
+					for (const tid of blackData.blackTileIds) {
+						this.blackTileIds.add(tid);
+					}
+					console.log(
+						`[RealTileset] Black tile IDs: ${this.blackTileIds.size}`,
+					);
+				}
+			} catch (e) {
+				console.warn("[RealTileset] Could not load black tile IDs:", e);
 			}
 
 			// Load real atlas with cache-bust
@@ -239,6 +258,15 @@ export class RealTileset {
 
 	hasTile(tileId: number): boolean {
 		return tileId > 0 && this.validTileIds.has(tileId) && !!this.atlasTexture;
+	}
+
+	/**
+	 * Returns true if this tile's pixels are ALL near-black (max RGB ≤ 5).
+	 * These are shadow tiles that should be rendered translucently
+	 * with the shadow-black atlas, regardless of which layer they're on.
+	 */
+	isBlackTile(tileId: number): boolean {
+		return this.blackTileIds.has(tileId);
 	}
 
 	destroy(): void {

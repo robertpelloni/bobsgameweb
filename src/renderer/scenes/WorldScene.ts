@@ -72,12 +72,8 @@ import {
 import { DialogueTracker } from "../engine/event/DialogueTracker";
 import { FlagManager } from "../engine/event/FlagManager";
 import { AmbientMusicGenerator } from "../audio/AmbientMusicGenerator";
-import { YuuEntity, NPCEntity } from "../engine/entity";
-
 export class WorldScene extends Scene {
 	private world: World;
-	private yuu: YuuEntity | null = null;
-	private npcEntities: Map<number, NPCEntity> = new Map();
 	private map: GameMap | null = null;
 	private tileset: Tileset;
 	private palette: Palette;
@@ -181,7 +177,6 @@ export class WorldScene extends Scene {
 		this.worldContainer.sortableChildren = true;
 		this.container.addChild(this.worldContainer);
 		this.world = new World();
-		this.yuu = new YuuEntity(this.spriteAtlas);
 		// Build the interpretive legacy tileset with proper palette
 		const built = TilesetBuilder.build();
 		this.tileset = built.tileset;
@@ -451,9 +446,6 @@ export class WorldScene extends Scene {
 		this.world.addComponent(playerEntity, new ParticleComponent());
 		// Spawn tween removed
 		this.playerTransform = transform;
-		if (this.yuu) {
-			this.yuu.setPosition(transform.x, transform.y);
-		}
 		if (this.camera) {
 			this.camera.setContainer(this.worldContainer);
 			this.camera.clearTargets();
@@ -791,15 +783,6 @@ export class WorldScene extends Scene {
 			const atlasEntry = this.spriteAtlas.getEntry(npc.sprite);
 			const fw = atlasEntry?.frameWidth ?? 16;
 			const fh = atlasEntry?.frameHeight ?? 40;
-
-			// Create NPCEntity hub
-			const npcEnt = new NPCEntity(this.spriteAtlas, npc.sprite, { height: fh });
-			// Metadata-driven hitbox: children (identified by sprite name containing 'Child' or 'Kid') get 24px offset
-			if (npc.sprite.toLowerCase().includes('child') || npc.sprite.toLowerCase().includes('kid')) {
-				npcEnt.hitBoxOffset = 24;
-			}
-			this.npcEntities.set(entity, npcEnt);
-
 			// Adjust NPC position to nearest walkable tile
 			let npcX = npc.x;
 			let npcY = npc.y;
@@ -1035,7 +1018,6 @@ export class WorldScene extends Scene {
 				}
 			}
 			this.map.entities = [];
-			this.npcEntities.clear();
 		}
 		// Show loading text for large maps
 		const loadingText = new Text({
@@ -1408,7 +1390,7 @@ export class WorldScene extends Scene {
 		// Show version in corner
 		if (!this.versionText && this.hudContainer) {
 			const style = new TextStyle({ fill: "#888888", fontSize: 10 });
-			this.versionText = new Text({ text: "v" + APP_VERSION, style });
+			this.versionText = new Text({ text: "v3.3.5", style });
 			this.versionText.position.set(4, this.height - 16);
 			this.container.addChild(this.versionText);
 		}
@@ -2201,70 +2183,150 @@ export class WorldScene extends Scene {
 		}
 		if (this.isDialogueActive) {
 			this.updateDialogue(dt);
-			// Still update NPC idle animations while dialogue is active
-			for (const npc of this.npcEntities.values()) {
-				npc.updateEntity(dt / 1000, 0, 0, false);
-			}
 			if (InputManager.isKeyPressed(Key.Tilde)) this.toggleConsole();
 			return;
 		}
 		this.world.update(dt);
-
-		// Update NPCs
-		for (const [entityId, npc] of this.npcEntities.entries()) {
-			const transform = this.world.getComponent(entityId, "Transform") as TransformComponent | undefined;
-			if (transform) {
-				// For now NPCs are mostly static, but we update their Hub for animations
-				npc.setPosition(transform.x, transform.y);
-				npc.updateEntity(dt / 1000, 0, 0, false);
-
-				// Sync back to SpriteComponent
-				const spriteComp = this.world.getComponent(entityId, "Sprite") as any;
-				const npcSprite = npc.getSprite();
-				if (spriteComp?.sprite && npcSprite) {
-					spriteComp.sprite.textures = npcSprite.textures;
-					spriteComp.sprite.currentFrame = npcSprite.currentFrame;
-					if (npcSprite.playing) spriteComp.sprite.play();
-					else spriteComp.sprite.stop();
-				}
-			}
-		}
-
 		// === Player Movement with hit-collision ===
-		if (this.playerTransform && this.map && !this.isDialogueActive && this.yuu) {
+		if (this.playerTransform && this.map && !this.isDialogueActive) {
 			const PLAYER_SPEED = (this as any)._customSpeed ?? 80; // pixels per second at 1X
-			const SPRINT_MULT = InputManager.isKeyHeld("Shift") ? 1.8 : 1.0;
+			const SPRINT_MULT = this.playerIsSprinting ? 1.8 : 1.0;
 			let dx = 0,
 				dy = 0;
 			if (InputManager.isUpHeld()) dy -= 1;
 			if (InputManager.isDownHeld()) dy += 1;
 			if (InputManager.isLeftHeld()) dx -= 1;
 			if (InputManager.isRightHeld()) dx += 1;
+			// === 8-Direction Animation System (from original game) ===
+			// Direction constants: 0=Up, 1=Down, 2=Left, 3=Right, 4=UpLeft, 5=UpRight, 6=DownLeft, 7=DownRight
+			const DIR_NAMES = [
+				"Up",
+				"Down",
+				"Left",
+				"Right",
+				"UpLeft",
+				"UpRight",
+				"DownLeft",
+				"DownRight",
+			] as const;
+
+			// Calculate movement direction from input (8 directions + diagonal)
+			let targetDir = this.animDirection;
+			if (dx !== 0 || dy !== 0) {
+				if (dx === 0 && dy > 0)
+					targetDir = 1; // Down
+				else if (dx === 0 && dy < 0)
+					targetDir = 0; // Up
+				else if (dx < 0 && dy === 0)
+					targetDir = 2; // Left
+				else if (dx > 0 && dy === 0)
+					targetDir = 3; // Right
+				else if (dx < 0 && dy < 0)
+					targetDir = 4; // UpLeft
+				else if (dx > 0 && dy < 0)
+					targetDir = 5; // UpRight
+				else if (dx < 0 && dy > 0)
+					targetDir = 6; // DownLeft
+				else if (dx > 0 && dy > 0) targetDir = 7; // DownRight
+				this.moveDirection = targetDir;
+			}
 
 			this.playerIsSprinting = InputManager.isKeyHeld("Shift");
 			this.playerIsMoving = dx !== 0 || dy !== 0;
-
-			// Delegate movement state and animation to YuuEntity
-			this.yuu.updateEntity(dt / 1000, dx, dy, this.playerIsSprinting);
-			this.animDirection = this.yuu.animDirection;
-			this.moveDirection = this.yuu.moveDirection;
-			this.isTurning = this.yuu.isTurning;
 
 			const playerSpriteComp = this.world.getComponent(
 				(this.world as any).playerEntityId,
 				"Sprite",
 			) as any;
 
-			if (playerSpriteComp?.sprite && this.yuu.getSprite()) {
-				const yuuSprite = this.yuu.getSprite()!;
-				playerSpriteComp.sprite.textures = yuuSprite.textures;
-				playerSpriteComp.sprite.currentFrame = yuuSprite.currentFrame;
-				playerSpriteComp.sprite.animationSpeed = yuuSprite.animationSpeed;
-				if (yuuSprite.playing) playerSpriteComp.sprite.play();
-				else playerSpriteComp.sprite.stop();
+			if (playerSpriteComp?.sprite) {
+				const has8Dir = this.spriteAtlas.has8Directions("yuu");
+				let displayDir = this.animDirection;
 
-				// Sync position and jitter
-				playerSpriteComp.sprite.x = yuuSprite.x;
+				// === Turning System ===
+				// When direction changes, turn through intermediate directions
+				if (this.playerIsMoving && this.animDirection !== this.moveDirection) {
+					if (!this.isTurning) {
+						this.isTurning = true;
+						this.turnTimer = 0;
+					}
+					this.turnTimer -= dt;
+					if (this.turnTimer <= 0) {
+						this.turnTimer = this.turnDelay;
+						displayDir = this.getNextTurnDirection(
+							this.animDirection,
+							this.moveDirection,
+							has8Dir,
+						);
+						this.animDirection = displayDir;
+						if (displayDir === this.moveDirection) this.isTurning = false;
+					} else {
+						displayDir = this.animDirection;
+					}
+				} else if (this.playerIsMoving) {
+					this.isTurning = false;
+					displayDir = this.animDirection;
+				} else {
+					this.isTurning = false;
+					displayDir = this.animDirection;
+				}
+
+				// Map direction index to animation name
+				let animName = DIR_NAMES[displayDir] || "Down";
+				if (!has8Dir && displayDir >= 4) {
+					if (displayDir === 4 || displayDir === 5) animName = "Up";
+					else animName = "Down";
+				}
+
+				// Apply animation direction
+				if (playerSpriteComp.currentAnimation !== animName) {
+					const frames = this.spriteAtlas.getAnimationFrames("yuu", animName);
+					if (frames.length > 0) {
+						playerSpriteComp.sprite.textures = frames;
+						playerSpriteComp.currentAnimation = animName;
+					}
+				}
+
+				// === Walk/Run Animation ===
+				if (this.playerIsMoving && !this.isTurning) {
+					// Reset idle state when starting to move
+					this.idleFrame = 0;
+					this.idleTimer = 0;
+					playerSpriteComp.sprite.animationSpeed = this.playerIsSprinting
+						? 0.4
+						: 0.2; // Match Java: normal=80ms/frame, sprint=30ms/frame
+					playerSpriteComp.sprite.play();
+				}
+				// === Idle Animation (from original game's doStandingAnimation) ===
+				else if (!this.playerIsMoving) {
+					this.idleTimer -= dt;
+					if (this.idleTimer <= 0) {
+						// Random delay between idle frames (~0.5-1.5 seconds)
+						this.idleTimer = 0.5 + Math.random() * 1.0;
+						// Idle: alternate between standing (0) and breathing (3)
+						// Frame 0 = neutral stand, Frame 3 = breathing pose
+						// Skip frame 7 which is a walk-cycle extreme, not an idle pose
+						if (this.idleFrame === 0) {
+							this.idleFrame = 3;
+						} else {
+							this.idleFrame = 0;
+						}
+						// Subtle pixel jitter (1px, matching original game)
+						if (Math.random() < 0.3) {
+							playerSpriteComp.sprite.x =
+								this.playerTransform.x + (Math.random() < 0.5 ? -0.5 : 0.5);
+						} else {
+							playerSpriteComp.sprite.x = this.playerTransform.x;
+						}
+					}
+					playerSpriteComp.sprite.gotoAndStop(this.idleFrame);
+					playerSpriteComp.sprite.stop();
+				}
+				// === Turning Animation ===
+				else if (this.isTurning) {
+					playerSpriteComp.sprite.gotoAndStop(0);
+					playerSpriteComp.sprite.stop();
+				}
 			}
 
 			// Footstep sounds
@@ -2291,23 +2353,26 @@ export class WorldScene extends Scene {
 			const newY =
 				this.playerTransform.y + dy * PLAYER_SPEED * SPRINT_MULT * dt;
 			// Hit-collision check using the map's hitBounds layer
-			// OX: offset from transform origin (center-bottom) to left edge of 8px collider
-			const OX = -4;
-
+			const PW = 8; // player half-width (collision box)
+			const PH = 8; // player collision height (feet only)
+			const OX = -4; // offset from transform origin
 			// Check X movement
 			if (dx !== 0) {
 				const testX = newX + OX;
-				const collisionY = this.yuu.getCollisionY();
+				const feetY = this.playerTransform.y; // feet position
 				const tileL = Math.floor(testX / WorldScene.TILE_PX);
-				const tileR = Math.floor((testX + 8 - 1) / WorldScene.TILE_PX);
-				const tileY = Math.floor(collisionY / WorldScene.TILE_PX);
-
+				const tileR = Math.floor((testX + PW - 1) / WorldScene.TILE_PX);
+				const tileT = Math.floor(feetY / WorldScene.TILE_PX);
+				const tileB = Math.floor((feetY + PH - 1) / WorldScene.TILE_PX);
 				let blocked = false;
-				for (let tx = tileL; tx <= tileR; tx++) {
-					if (!this.godMode && this.isHitTile(tx, tileY)) {
-						blocked = true;
-						break;
+				for (let ty = tileT; ty <= tileB; ty++) {
+					for (let tx = tileL; tx <= tileR; tx++) {
+						if (!this.godMode && this.isHitTile(tx, ty)) {
+							blocked = true;
+							break;
+						}
 					}
+					if (blocked) break;
 				}
 				if (!blocked) {
 					this.playerTransform.x = newX;
@@ -2317,25 +2382,23 @@ export class WorldScene extends Scene {
 			if (dy !== 0) {
 				const feetX = this.playerTransform.x + OX;
 				const testY = newY;
-				this.yuu.setPosition(this.playerTransform.x, testY);
-				const collisionY = this.yuu.getCollisionY();
-
 				const tileL = Math.floor(feetX / WorldScene.TILE_PX);
-				const tileR = Math.floor((feetX + 8 - 1) / WorldScene.TILE_PX);
-				const tileY = Math.floor(collisionY / WorldScene.TILE_PX);
-
+				const tileR = Math.floor((feetX + PW - 1) / WorldScene.TILE_PX);
+				const tileT = Math.floor(testY / WorldScene.TILE_PX);
+				const tileB = Math.floor((testY + PH - 1) / WorldScene.TILE_PX);
 				let blocked = false;
-				for (let tx = tileL; tx <= tileR; tx++) {
-					if (!this.godMode && this.isHitTile(tx, tileY)) {
-						blocked = true;
-						break;
+				for (let ty = tileT; ty <= tileB; ty++) {
+					for (let tx = tileL; tx <= tileR; tx++) {
+						if (!this.godMode && this.isHitTile(tx, ty)) {
+							blocked = true;
+							break;
+						}
 					}
+					if (blocked) break;
 				}
 				if (!blocked) {
 					this.playerTransform.y = newY;
 				}
-				// Revert Yuu position to actual player position for next check
-				this.yuu.setPosition(this.playerTransform.x, this.playerTransform.y);
 			}
 			// Clamp player to map bounds
 			if (this.map) {
@@ -2352,12 +2415,7 @@ export class WorldScene extends Scene {
 			}
 			// Sync sprite position
 			if (playerSpriteComp?.sprite) {
-				// Use position from YuuEntity to preserve idle jitter/turning offsets
-				if (this.yuu.getSprite()) {
-					playerSpriteComp.sprite.x = this.yuu.getSprite()!.x;
-				} else {
-					playerSpriteComp.sprite.x = this.playerTransform.x;
-				}
+				playerSpriteComp.sprite.x = this.playerTransform.x;
 				playerSpriteComp.sprite.y = this.playerTransform.y;
 				playerSpriteComp.sprite.zIndex = this.playerTransform.y;
 			}
@@ -3079,16 +3137,6 @@ export class WorldScene extends Scene {
 				return true; // inside entity bounding box = blocked
 			}
 		}
-
-		// 8. NPC Collision
-		for (const npc of this.npcEntities.values()) {
-			const ntx = Math.floor(npc.x / WorldScene.TILE_PX);
-			const nty = Math.floor(npc.getCollisionY() / WorldScene.TILE_PX);
-			if (tx === ntx && ty === nty) {
-				return true;
-			}
-		}
-
 		return false; // walkable
 	}
 
