@@ -708,14 +708,14 @@
     },
     "src\\shared\\MapData.ts": {
       "latest": {
-        "commit": "a404749a",
-        "timestamp": "2026-06-11T16:45:34.671Z",
+        "commit": "596b332d",
+        "timestamp": "2026-06-12T13:16:09.323Z",
         "mi": 23.6,
         "cognitive": 90,
         "nesting": 5,
         "lines": 226,
         "maxCyclomatic": 26,
-        "entropy": 6.01
+        "entropy": 6
       },
       "history": [
         {
@@ -757,9 +757,19 @@
           "lines": 226,
           "maxCyclomatic": 26,
           "entropy": 6.01
+        },
+        {
+          "commit": "596b332d",
+          "timestamp": "2026-06-12T13:16:09.323Z",
+          "mi": 23.6,
+          "cognitive": 90,
+          "nesting": 5,
+          "lines": 226,
+          "maxCyclomatic": 26,
+          "entropy": 6
         }
       ],
-      "trend": "regressing"
+      "trend": "stable"
     },
     "src\\renderer\\engine\\map\\GameMap.ts": {
       "latest": {
@@ -843,14 +853,14 @@
     },
     "src\\renderer\\engine\\map\\LegacyMapLoader.ts": {
       "latest": {
-        "commit": "11c61d7d",
-        "timestamp": "2026-06-10T19:35:50.245Z",
-        "mi": 22.8,
-        "cognitive": 256,
+        "commit": "596b332d",
+        "timestamp": "2026-06-12T13:17:46.009Z",
+        "mi": 22.5,
+        "cognitive": 260,
         "nesting": 8,
-        "lines": 379,
+        "lines": 389,
         "maxCyclomatic": 105,
-        "entropy": 6.75
+        "entropy": 6.76
       },
       "history": [
         {
@@ -892,9 +902,19 @@
           "lines": 379,
           "maxCyclomatic": 105,
           "entropy": 6.75
+        },
+        {
+          "commit": "596b332d",
+          "timestamp": "2026-06-12T13:17:46.009Z",
+          "mi": 22.5,
+          "cognitive": 260,
+          "nesting": 8,
+          "lines": 389,
+          "maxCyclomatic": 105,
+          "entropy": 6.76
         }
       ],
-      "trend": "regressing"
+      "trend": "stable"
     },
     "src\\renderer\\engine\\map\\MapLoader.ts": {
       "latest": {
@@ -1147,5 +1167,5 @@
       "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-12T13:10:56.784Z"
+  "capturedAt": "2026-06-12T13:17:51.061Z"
 }

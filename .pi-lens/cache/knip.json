@@ -8,21 +8,6 @@
     },
     {
       "type": "file",
-      "name": "server/app.js",
-      "file": "server/app.js"
-    },
-    {
-      "type": "file",
-      "name": "server/ecosystem.config.cjs",
-      "file": "server/ecosystem.config.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/index.js",
-      "file": "server/index.js"
-    },
-    {
-      "type": "file",
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -40,6 +25,21 @@
       "type": "file",
       "name": "scripts/generate-dummy-assets.cjs",
       "file": "scripts/generate-dummy-assets.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
     },
     {
       "type": "file",
@@ -258,11 +258,6 @@
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -283,6 +278,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/editor/MapEditor.ts",
       "file": "src/renderer/editor/MapEditor.ts"
     },
@@ -293,8 +293,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -328,13 +328,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
+      "name": "src/renderer/input/index.ts",
+      "file": "src/renderer/input/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/input/index.ts",
-      "file": "src/renderer/input/index.ts"
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -345,11 +345,6 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/state/index.ts",
-      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -390,6 +385,11 @@
       "type": "file",
       "name": "src/renderer/ui/Tooltip.ts",
       "file": "src/renderer/ui/Tooltip.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
     },
     {
       "type": "file",
@@ -908,21 +908,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
-      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/systems/index.ts",
-      "file": "src/renderer/engine/ecs/systems/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
-      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/ecs/behaviors/Behavior.ts",
       "file": "src/renderer/engine/ecs/behaviors/Behavior.ts"
     },
@@ -940,6 +925,21 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
       "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
+      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/index.ts",
+      "file": "src/renderer/engine/ecs/systems/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
+      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
     },
     {
       "type": "file",
@@ -3786,21 +3786,6 @@
     },
     {
       "type": "file",
-      "name": "server/app.js",
-      "file": "server/app.js"
-    },
-    {
-      "type": "file",
-      "name": "server/ecosystem.config.cjs",
-      "file": "server/ecosystem.config.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/index.js",
-      "file": "server/index.js"
-    },
-    {
-      "type": "file",
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -3818,6 +3803,21 @@
       "type": "file",
       "name": "scripts/generate-dummy-assets.cjs",
       "file": "scripts/generate-dummy-assets.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
     },
     {
       "type": "file",
@@ -4036,11 +4036,6 @@
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -4061,6 +4056,11 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/editor/MapEditor.ts",
       "file": "src/renderer/editor/MapEditor.ts"
     },
@@ -4071,8 +4071,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -4106,13 +4106,13 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
+      "name": "src/renderer/input/index.ts",
+      "file": "src/renderer/input/index.ts"
     },
     {
       "type": "file",
-      "name": "src/renderer/input/index.ts",
-      "file": "src/renderer/input/index.ts"
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -4123,11 +4123,6 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/state/index.ts",
-      "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
@@ -4168,6 +4163,11 @@
       "type": "file",
       "name": "src/renderer/ui/Tooltip.ts",
       "file": "src/renderer/ui/Tooltip.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
     },
     {
       "type": "file",
@@ -4686,21 +4686,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
-      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/systems/index.ts",
-      "file": "src/renderer/engine/ecs/systems/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
-      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/ecs/behaviors/Behavior.ts",
       "file": "src/renderer/engine/ecs/behaviors/Behavior.ts"
     },
@@ -4718,6 +4703,21 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
       "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/AISystem.ts",
+      "file": "src/renderer/engine/ecs/systems/AISystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/index.ts",
+      "file": "src/renderer/engine/ecs/systems/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
+      "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
     },
     {
       "type": "file",
