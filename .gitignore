@@ -60,3 +60,4 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+server/profiles.json
