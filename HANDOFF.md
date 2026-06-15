@@ -1,34 +1,30 @@
-# Handoff — 2026-06-08 — Version 3.0.14
+# Handoff — 2026-06-08 — Version 3.0.15
 
 ## Agent
 Jules (Software Engineer)
 
 ## Session Summary
-Unified the particle engine architecture and refactored RPG world environmental effects (Weather, Footsteps) to use the centralized system. Integrated the new engine into the ECS layer. Bumped project version to 3.0.14.
+Implemented an audio performance optimization strategy. Created a `PerformanceManager` to detect low-end or mobile environments and updated the `AudioManager` to prioritize compressed OGG variants of audio assets when appropriate. Bumped project version to 3.0.15.
 
 ## What Was Completed
 
-### 1. Unified Particle System
-- Centralized `ParticleEmitter` and `ParticlePresets` in `src/renderer/engine/graphics/ParticleSystem.ts`.
-- Supports physics (gravity, drag), property interpolation (size, alpha, color), and multiple emission shapes.
+### 1. Audio Performance Optimization
+- Developed `src/renderer/audio/PerformanceManager.ts` to detect performance constraints at runtime (User Agent and device memory).
+- Enhanced `AudioManager.ts` to prioritize OGG source variants for tracks in low-end environments, reducing CPU/memory pressure.
+- Maintained fallback support for standard WAV/Tracker assets.
 
-### 2. Environmental Effect Refactor
-- Refactored `WeatherRenderer.ts` to use `ParticleEmitter` for Rain and Snow effects.
-- Updated `WorldScene.ts` to remove manual rain logic and implement "Dust" particles for player footsteps.
-- Updated the ECS `WeatherSystem.ts` to leverage the unified `WeatherRenderer`.
+### 2. Particle System Unification (Previous Step)
+- Centralized particle logic into `ParticleEmitter` and refactored environmental effects (Weather, Footsteps).
 
-### 3. ECS System Refactor
-- Updated the `ParticleSystem` ECS system to use the new `ParticleEmitter` architecture for component-based particle effects.
-
-### 4. Versioning & Documentation
-- Bumped version to **3.0.14** across all metadata files.
+### 3. Versioning & Documentation
+- Bumped version to **3.0.15** across all metadata files.
 - Updated `CHANGELOG.md`, `TODO.md`, `MEMORY.md`, and created this `HANDOFF.md`.
 
 ## Production Readiness
-- **Version:** 3.0.14
-- **Architecture:** Particles are unified and decoupled from scene logic.
+- **Version:** 3.0.15
+- **Performance:** Dynamic audio asset selection based on environment is now active.
 
 ## Highest-Value Next Steps
-1. **Audio Optimization:** Evaluate pre-converting tracker assets to OGG for mobile performance.
-2. **C++ Porting Layer:** Evaluate `bobui` C++ integration with `cpp_port/` as the engine matures.
-3. **World Editor Enhancements:** Implement visual particle tuning tools in the editor.
+1. **C++ Porting Layer:** Evaluate `bobui` C++ integration with `cpp_port/` as the engine matures.
+2. **WebGPU Sandbox:** Begin exploration of WebGPU-based particle visualizers as per ROADMAP Phase 3.
+3. **Multiplayer Expansion:** Hardening of regional clusters and further validation of world sync packets.

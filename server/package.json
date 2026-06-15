@@ -1,6 +1,6 @@
 {
   "name": "okgame-server",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "type": "module",
   "main": "index.js",
   "scripts": {

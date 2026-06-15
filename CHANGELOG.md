@@ -5,6 +5,12 @@
 - **Enhanced Visual Effects**: Replaced procedural rain and footstep logic in `WorldScene` and `WeatherRenderer` with the new particle system.
 - **Particle Editor UI**: Added a "Particle Testing" panel to the `WorldEditor`.
 
+## v3.0.15 — 2026-06-08
+
+### Added
+- **Audio Performance Optimization**: Introduced `PerformanceManager` for runtime environment detection (mobile/low-end).
+- **Prioritized Compressed Audio**: Updated `AudioManager` to prioritize OGG variants of audio assets in performance-constrained environments to reduce CPU and memory overhead.
+
 ## v3.0.14 — 2026-06-08
 
 ### Added

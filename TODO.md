@@ -5,7 +5,7 @@
 - [x] Implement `YuuEntity` class to centralize player logic and animations.
 - [x] Standardize NPC logic with `NPCEntity` hub.
 - [x] Fix server-side scoping and emit bugs in `server/index.js`.
-- [ ] Optimize Tracker playback or pre-convert to OGG.
+- [x] Optimize audio by prioritizing OGG variants in performance-constrained environments.
 - [x] Implement system path configuration for external tool launching (Aseprite, Tilemap Studio) in `CustomGameEditor.ts`.
 - [x] Implement AI sprite/tileset processing and wiring in `GenerativeAIManager.ts` and `CustomGameEditor.ts`.
 - [x] Implement rate-limiting and input validation for RPG world sync packets.
