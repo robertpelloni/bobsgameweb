@@ -1,8 +1,8 @@
 {
   "version": 1,
   "projectRoot": "C:/Users/hyper/workspace/bg/bobsgameweb",
-  "generatedAt": "2026-06-12T13:11:57.624Z",
-  "seq": 365,
+  "generatedAt": "2026-06-15T00:04:24.299Z",
+  "seq": 384,
   "files": {
     "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts": {
       "path": "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts",
@@ -1413,7 +1413,9 @@
       "path": "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/DoorGraphLoader.ts",
       "mtimeMs": 1778089649680.4414,
       "size": 1575,
-      "imports": [],
+      "imports": [
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/shared/Config.ts"
+      ],
       "lastSeq": 0
     },
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/EntityData.ts": {
@@ -2732,7 +2734,10 @@
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/input/InputManager.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/BobNet.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/PuzzleScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LoginScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SplashScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/StateManager.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/ui/ToastManager.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/shared/puzzle/GameType.ts"
@@ -3021,6 +3026,7 @@
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/input/InputManager.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/BobNet.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/PuzzleScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/Scene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/SceneTransition.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/StateManager.ts"
@@ -3124,6 +3130,7 @@
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/data/AchievementIdentity.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/shared/GlobalSettings.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/input/InputManager.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/Scene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/SceneTransition.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/shared/Config.ts"
@@ -3141,6 +3148,35 @@
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/BobNet.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/PuzzleScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/AchievementsScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/ArenaScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BestiaryScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BossRushScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CraftingScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CustomGameEditorScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EngineDemoScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EngineScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EventSheetEditorScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/FishingScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/GameSequenceEditorScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HelpScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HighScoresScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/JournalScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LeaderboardScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LoginScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/NDDemoScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/OptionsScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/PartyScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/RankingsScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SaveSlotScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SettingsScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SpriteEditorScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TournamentScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TutorialScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldEditorScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldMapScene.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/Scene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/SceneTransition.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/ui/Button.ts",
@@ -3922,6 +3958,80 @@
       "size": 1704,
       "imports": [],
       "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts",
+      "mtimeMs": 1781454649780.186,
+      "size": 6786,
+      "imports": [
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/audio/AudioManager.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/SpriteAtlas.ts",
+        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/entity/Entity.ts"
+      ],
+      "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/ArenaScene.ts": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/ArenaScene.ts",
+      "mtimeMs": 1778174053159.2305,
+      "size": 19058,
+      "imports": [],
+      "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CraftingScene.ts": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CraftingScene.ts",
+      "mtimeMs": 1778174226903.698,
+      "size": 10018,
+      "imports": [],
+      "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/NDDemoScene.ts": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/NDDemoScene.ts",
+      "mtimeMs": 1778174226461.448,
+      "size": 2718,
+      "imports": [],
+      "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SpriteEditorScene.ts": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SpriteEditorScene.ts",
+      "mtimeMs": 1778174052938.2654,
+      "size": 10906,
+      "imports": [],
+      "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_doors.py": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_doors.py",
+      "mtimeMs": 1781471442707.8752,
+      "size": 923,
+      "imports": [],
+      "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_hallway_doors.py": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_hallway_doors.py",
+      "mtimeMs": 1781471925183.2852,
+      "size": 2100,
+      "imports": [],
+      "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_all_doors.py": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_all_doors.py",
+      "mtimeMs": 1781472186893.9683,
+      "size": 2650,
+      "imports": [],
+      "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_arrival_positions.py": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_arrival_positions.py",
+      "mtimeMs": 1781474857422.0583,
+      "size": 2644,
+      "imports": [],
+      "lastSeq": 0
+    },
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_room_arrivals.py": {
+      "path": "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_room_arrivals.py",
+      "mtimeMs": 1781478002622.6472,
+      "size": 2551,
+      "imports": [],
+      "lastSeq": 0
     }
   },
   "symbols": {},
@@ -3930,6 +4040,11 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/generate_placeholder_maps.js": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/build-mobile.cjs": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/convert_maps.js": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_all_doors.py": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_arrival_positions.py": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_doors.py": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_hallway_doors.py": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_room_arrivals.py": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/generate-audio.cjs": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/generate-dummy-assets.cjs": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/server/ai_proxy.js": [],
@@ -3968,6 +4083,7 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/__tests__/validation.test.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/__tests__/visual-systems.test.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/__tests__/weather.test.ts": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/main/index.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/main/preload.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/assets/AssetLoader.ts": [],
@@ -3977,6 +4093,7 @@
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/audio/AudioManager.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/audio/visualizer/ProjectM.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/ecs/behaviors/NPCBehavior.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/ecs/systems/AudioReactiveSystem.ts",
@@ -4427,6 +4544,7 @@
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/SpriteAtlas.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/TilesetBuilder.ts": [
@@ -4801,6 +4919,7 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/text/TextManager.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/text/TextWindow.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/entity/Entity.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/GameMap.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/entity/index.ts": [],
@@ -4894,58 +5013,126 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/PuzzleScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/Game.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CustomGameEditorScene.ts",
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/GameSequenceEditorScene.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/RankingsScene.ts"
     ],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/AchievementsScene.ts": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/AchievementsScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/ArenaScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BattleScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BestiaryScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BossRushScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CustomGameEditorScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EngineDemoScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EngineScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EventSheetEditorScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/FishingScene.ts": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BestiaryScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BossRushScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CraftingScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CustomGameEditorScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EngineDemoScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EngineScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EventSheetEditorScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/FishingScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/GameOverScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/GameSequenceEditorScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HelpScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HighScoresScene.ts": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/GameSequenceEditorScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HelpScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HighScoresScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/index.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/InventoryScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/JournalScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LeaderboardScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LoginScene.ts": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/JournalScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LeaderboardScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LoginScene.ts",
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LoginScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/Game.ts",
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/Game.ts"
     ],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/OptionsScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/PartyScene.ts": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/NDDemoScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/OptionsScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/PartyScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/PauseOverlay.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/QuestLogScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/RankingsScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SaveSlotScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SettingsScene.ts": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/RankingsScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SaveSlotScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SettingsScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/ShopScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SkillTreeScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SplashScene.ts": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SplashScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/Game.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SpriteEditorScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TournamentResultsScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TournamentScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TutorialScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldEditorScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldMapScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts": [],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TournamentScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TutorialScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldEditorScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldMapScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
+    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts": [
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/Game.ts",
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
+    ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/index.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/Scene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/AchievementsScene.ts",
@@ -5108,6 +5295,7 @@
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/assets/AssetLoader.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/editor/MapEditor.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/editor/WorldEditor.ts",
+      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/DoorGraphLoader.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HighScoresScene.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LoginScene.ts",
@@ -5280,11 +5468,11 @@
     ],
     [
       "assert",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
     ],
     [
       "assertEqual",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
     ],
     [
       "assertThrows",
@@ -5312,7 +5500,7 @@
     ],
     [
       "calculateScore",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\tutorial-leaderboard.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\puzzle-logic.test.ts"
     ],
     [
       "calculateShakeDecay",
@@ -5396,7 +5584,7 @@
     ],
     [
       "decay",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\arena-cutscene.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\pet-bossrush.test.ts"
     ],
     [
       "detectTSpin",
@@ -5468,7 +5656,7 @@
     ],
     [
       "generateBracket",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\networking.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\arena-cutscene.test.ts"
     ],
     [
       "get",
@@ -5712,7 +5900,7 @@
     ],
     [
       "nextState",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
+      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\fishing-guild.test.ts"
     ],
     [
       "onClear",
@@ -5904,15 +6092,12 @@
     ],
     "hasCustomRules": true
   },
-  "projectIndex": {
-    "entryCount": 80
-  },
   "startupScan": {
     "cwd": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb",
     "scanRoot": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb",
     "projectRoot": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb",
     "canWarmCaches": true,
-    "sourceFileCount": 429
+    "sourceFileCount": 430
   },
   "languageProfile": {
     "present": {
@@ -5956,7 +6141,7 @@
       "jsts": true
     },
     "counts": {
-      "jsts": 415
+      "jsts": 416
     },
     "detectedKinds": [
       "jsts"

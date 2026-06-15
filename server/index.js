@@ -410,7 +410,7 @@ io.on("connection", (socket) => {
 		);
 
 		// Send profile back to client
-		session["emit"]("profile", profiles[safeName]);
+		socket.emit("profile", profiles[safeName]);
 	});
 
 	// ----------------------------------------------------------
@@ -442,7 +442,7 @@ io.on("connection", (socket) => {
 		// Require authentication
 		const player = players.get(socket.id);
 		if (!player || !player.name) {
-			session["emit"]("error", {
+			socket.emit("error", {
 				message: "You must set a name before creating rooms",
 			});
 			return;
@@ -514,7 +514,7 @@ io.on("connection", (socket) => {
 		// Require authentication
 		const joiner = players.get(socket.id);
 		if (!joiner || !joiner.name) {
-			session["emit"]("error", {
+			socket.emit("error", {
 				message: "You must set a name before joining rooms",
 			});
 			return;
@@ -1215,7 +1215,7 @@ io.on("connection", (socket) => {
 		console.log(
 			`Tournament created: ${tournamentId} (${name}, max ${maxPlayers} players)`,
 		);
-		session["emit"]("tournamentCreated", {
+		socket.emit("tournamentCreated", {
 			tournamentId,
 			name,
 			maxPlayers,
@@ -1233,7 +1233,7 @@ io.on("connection", (socket) => {
 				maxPlayers: t.maxPlayers,
 				state: t.state,
 			}));
-		session["emit"]("tournamentList", list);
+		socket.emit("tournamentList", list);
 	});
 
 	// Enhanced joinTournament that supports full brackets

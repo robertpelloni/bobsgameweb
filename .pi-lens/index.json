@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "createdAt": "2026-06-12T01:09:21.574Z",
+  "createdAt": "2026-06-13T12:13:41.456Z",
   "entries": [
     [
       "src\\main\\index.ts:createWindow",
@@ -71990,7 +71990,7 @@
           ]
         ],
         "transitionCount": 33,
-        "lastModified": 1781191470150.4893,
+        "lastModified": 1781281959420.0212,
         "exports": [],
         "line": 53
       }
@@ -76223,9 +76223,9 @@
           ]
         ],
         "transitionCount": 22,
-        "lastModified": 1781191470150.4893,
+        "lastModified": 1781281959420.0212,
         "exports": [],
-        "line": 218
+        "line": 233
       }
     ],
     [
@@ -144042,7 +144042,7 @@
           ]
         ],
         "transitionCount": 26,
-        "lastModified": 1781202412847.3909,
+        "lastModified": 1781270031906.727,
         "exports": [],
         "line": 2834
       }
