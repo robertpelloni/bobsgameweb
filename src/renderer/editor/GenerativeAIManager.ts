@@ -74,4 +74,46 @@ export class GenerativeAIManager {
             ToastManager.showInfo("AI Tileset generation complete! (Mock Fallback)");
         }
     }
+
+    public static async generateDialogue(characterName: string, prompt: string): Promise<void> {
+        console.log(`[GenAI] Starting Text-to-Dialogue generation for "${characterName}": "${prompt}"`);
+        ToastManager.showInfo(`Generating AI Dialogue for ${characterName}...`);
+
+        try {
+            const response = await fetch(`${this.AI_ENDPOINT}/dialogue`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ characterName, prompt })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            ToastManager.showInfo("AI Dialogue generation complete!");
+
+            document.dispatchEvent(new CustomEvent("ai-asset-generated", {
+                detail: {
+                    type: "dialogue",
+                    characterName,
+                    prompt,
+                    data: data.lines
+                }
+            }));
+        } catch (e) {
+            console.warn(`[GenAI] Failed to connect to AI backend (${(e as Error).message}). Falling back to mock delay.`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            ToastManager.showInfo("AI Dialogue generation complete! (Mock Fallback)");
+
+            document.dispatchEvent(new CustomEvent("ai-asset-generated", {
+                detail: {
+                    type: "dialogue",
+                    characterName,
+                    prompt,
+                    data: [`I am ${characterName}.`, `I don't know what to say about "${prompt}".`, "I'm just a mock."]
+                }
+            }));
+        }
+    }
 }

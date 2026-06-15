@@ -125,28 +125,31 @@ export class WorldEditor {
     private generateAiSprite() {
         const userInput = window.prompt("Enter prompt for NPC sprite (e.g. 'Old wizard with a blue robe'):");
         if (userInput) {
-            networkManager.emit('generateAsset', { type: 'npc_sprite', prompt: userInput });
-            ToastManager.showInfo("AI sprite generation started...");
+            GenerativeAIManager.generateSpriteFromText(userInput);
             
-            networkManager.once('assetGenerated', (data: any) => {
-                if (data.success) {
+            const onGenerated = (ev: any) => {
+                const { type, data } = ev.detail;
+                if (type === 'sprite') {
                     AchievementManager.incrementStat('aiSpritesGenerated');
-                    ToastManager.showInfo(`AI Sprite generated: ${data.assetId}`);
+                    ToastManager.showInfo(`AI Sprite generated from: ${userInput}`);
                     this.saveAchievementSnapshot();
+
                     // Automatically add an actor with this sprite
                     const actor: ActorData = {
                         id: this.db.actors.length + 1,
-                        name: "AI Generated NPC",
+                        name: "AI NPC",
                         classId: 1,
                         initialLevel: 1,
-                        faceName: data.url,
-                        characterName: data.url,
+                        faceName: data,
+                        characterName: data,
                         description: userInput
                     };
                     this.db.actors.push(actor);
                     this.renderActors();
+                    document.removeEventListener('ai-asset-generated', onGenerated);
                 }
-            });
+            };
+            document.addEventListener('ai-asset-generated', onGenerated);
         }
     }
 
@@ -220,10 +223,32 @@ export class WorldEditor {
 
         list.querySelectorAll('.btn-edit-interaction').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = (e.target as HTMLElement).dataset.id;
-                const text = prompt("Enter NPC Dialogue:");
-                if (text) {
-                    alert(`Interaction saved for NPC ${id}: "${text}"`);
+                const id = parseInt((e.target as HTMLElement).dataset.id!);
+                const actor = this.db.actors.find(a => a.id === id);
+                if (!actor) return;
+
+                const choice = confirm("Use AI to generate dialogue? (Cancel for manual entry)");
+                if (choice) {
+                    const prompt = window.prompt(`Enter a persona/context for ${actor.name}:`, "A grumpy old man who hates kids.");
+                    if (prompt) {
+                        GenerativeAIManager.generateDialogue(actor.name, prompt);
+
+                        const onGenerated = (ev: any) => {
+                            const { type, characterName, data } = ev.detail;
+                            if (type === 'dialogue' && characterName === actor.name) {
+                                actor.description = data.join(" ");
+                                ToastManager.showInfo(`Dialogue generated for ${actor.name}`);
+                                document.removeEventListener('ai-asset-generated', onGenerated);
+                            }
+                        };
+                        document.addEventListener('ai-asset-generated', onGenerated);
+                    }
+                } else {
+                    const text = prompt("Enter NPC Dialogue:");
+                    if (text) {
+                        actor.description = text;
+                        ToastManager.showInfo(`Dialogue updated for ${actor.name}`);
+                    }
                 }
             });
         });

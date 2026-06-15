@@ -110,6 +110,50 @@ app.post('/api/generate/tileset', async (req, res) => {
     });
 });
 
+app.post('/api/generate/dialogue', async (req, res) => {
+    const { prompt, characterName } = req.body;
+    console.log(`[AI Proxy] Received Text-to-Dialogue request for "${characterName}": "${prompt}"`);
+
+    if (openai) {
+        try {
+            const response = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    { role: "system", content: `You are an NPC named ${characterName} in a 2D RPG called 'bob's game'. Provide 3-5 short lines of dialogue based on the player's prompt. Format as a JSON array of strings.` },
+                    { role: "user", content: prompt }
+                ],
+                response_format: { type: "json_object" }
+            });
+
+            const content = JSON.parse(response.choices[0].message.content);
+            const lines = content.lines || content.dialogue || Object.values(content)[0];
+
+            res.json({
+                success: true,
+                type: 'dialogue',
+                characterName,
+                lines: Array.isArray(lines) ? lines : [lines]
+            });
+            return;
+        } catch (e) {
+            console.error("[AI Proxy] OpenAI Chat API error:", e);
+        }
+    }
+
+    // Mock
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    res.json({
+        success: true,
+        type: 'dialogue',
+        characterName,
+        lines: [
+            `Hello! I am ${characterName}.`,
+            `You asked about: ${prompt}`,
+            "I don't have much to say, I'm just a mock NPC."
+        ]
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`[AI Proxy] Server running on http://localhost:${PORT}`);
 });

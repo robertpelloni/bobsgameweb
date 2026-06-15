@@ -10,6 +10,7 @@ import { Scene, type SceneConfig } from "../state/Scene";
 import { SceneTransition } from "../state/SceneTransition";
 import { Button, type ButtonStyle } from "../ui/Button";
 import { APP_VERSION } from "../../shared/Config";
+import { FFTVisualizer } from "../ui/FFTVisualizer";
 
 // ============================================================
 // Types
@@ -44,6 +45,7 @@ export class MainMenuScene extends Scene {
 	private background!: Graphics;
 	private particles: Particle[] = [];
 	private particleContainer!: Container;
+	private visualizer!: FFTVisualizer;
 
 	private titleBounce = 0;
 	private menuItems: MenuItem[] = [];
@@ -67,6 +69,7 @@ export class MainMenuScene extends Scene {
 	public create(): void {
 		this.createBackground();
 		this.createParticles();
+		this.createVisualizer();
 		this.createTitle();
 		this.createCategorySelector();
 		this.createMenu();
@@ -122,12 +125,15 @@ export class MainMenuScene extends Scene {
 
 	public onUpdate(dt: number): void {
 		this.updateParticles(dt);
+		this.visualizer?.update();
 		this.updateTitleAnimation(dt);
 		this.handleInput();
 	}
 
 	public onResize(width: number, height: number): void {
 		this.drawBackground();
+		this.visualizer?.resize(width, 100);
+		this.visualizer.container.y = height - 100;
 		this.titleText.x = this.centerX;
 		this.titleText.y = height * 0.2;
 		this.subtitleText.x = this.centerX;
@@ -202,6 +208,13 @@ export class MainMenuScene extends Scene {
 		for (const particle of this.particles) {
 			particle.update(dt, this.height);
 		}
+	}
+
+	private createVisualizer(): void {
+		this.visualizer = new FFTVisualizer(this.width, 100);
+		this.visualizer.container.position.set(0, this.height - 100);
+		this.visualizer.container.alpha = 0.5;
+		this.container.addChild(this.visualizer.container);
 	}
 
 	// ============================================================
