@@ -14,6 +14,7 @@ import { Container, Graphics, Text, TextStyle, Texture, Sprite, RenderTexture } 
 import { Scene, type SceneConfig } from "../state/Scene";
 import { StateManager } from "../state/StateManager";
 import { InputManager, Key } from "../input/InputManager";
+import { HQ2X } from "../engine/shared/HQ2X";
 
 const CANVAS_SIZE = 16;
 const PIXEL_SCALE = 24;
@@ -187,6 +188,7 @@ export class SpriteEditorScene extends Scene {
 			{ label: "Grid (G)", tool: null },
 			{ label: "Undo (Z)", tool: null },
 			{ label: "Export (X)", tool: null },
+			{ label: "HQ2X (H)", tool: null },
 		];
 
 		for (let i = 0; i < tools.length; i++) {
@@ -299,7 +301,23 @@ export class SpriteEditorScene extends Scene {
 	}
 
 	private exportPNG(): void {
-		// Create a canvas and draw pixels at 1:1 scale
+		const canvas = this.createInternalCanvas();
+		const link = document.createElement("a");
+		link.download = "sprite.png";
+		link.href = canvas.toDataURL("image/png");
+		link.click();
+	}
+
+	private exportHQ2X(): void {
+		const canvas = this.createInternalCanvas();
+		const hqCanvas = HQ2X.upscaleCanvas(canvas);
+		const link = document.createElement("a");
+		link.download = "sprite_hq2x.png";
+		link.href = hqCanvas.toDataURL("image/png");
+		link.click();
+	}
+
+	private createInternalCanvas(): HTMLCanvasElement {
 		const canvas = document.createElement("canvas");
 		canvas.width = CANVAS_SIZE;
 		canvas.height = CANVAS_SIZE;
@@ -316,11 +334,7 @@ export class SpriteEditorScene extends Scene {
 				}
 			}
 		}
-		// Download
-		const link = document.createElement("a");
-		link.download = "sprite.png";
-		link.href = canvas.toDataURL("image/png");
-		link.click();
+		return canvas;
 	}
 
 	// ============================================================
@@ -369,6 +383,7 @@ export class SpriteEditorScene extends Scene {
 		}
 		if (InputManager.isKeyPressed(Key.Z)) this.undo();
 		if (InputManager.isKeyPressed(Key.X)) this.exportPNG();
+		if (InputManager.isKeyPressed(Key.H)) this.exportHQ2X();
 
 		// Color cycling with [ and ]
 		if (InputManager.isKeyPressed(Key.BracketLeft)) {

@@ -12,6 +12,7 @@ import { AchievementManager } from '../data/AchievementManager';
 import { getAchievementIdentity } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
 import { ImageUtils } from '../utils/ImageUtils';
+import { GenerativeAIManager } from './GenerativeAIManager';
 
 export class MapEditor {
     private app: Application;
@@ -140,6 +141,7 @@ export class MapEditor {
                 <button class="tab-btn" data-tab="sprites">SPRITES</button>
                 <button class="tab-btn" data-tab="entities">ENTITIES</button>
                 <button class="tab-btn" data-tab="assets">ASSETS</button>
+                <button class="tab-btn" data-tab="genai">AI GEN</button>
             </div>
             <div class="editor-main-area">
                 <div id="panel-map" class="editor-panel">
@@ -157,6 +159,14 @@ export class MapEditor {
                             <button id="btn-shift-left">←</button><div></div><button id="btn-shift-right">→</button>
                             <div></div><button id="btn-shift-down">↓</button><div></div>
                         </div>
+                    </div>
+                </div>
+                <div id="panel-genai" class="editor-panel hidden">
+                    <div class="panel-section">
+                        <h3>AI Tile Generation</h3>
+                        <input type="text" id="ai-tile-prompt" placeholder="lava, dungeon floor, etc." style="width:100%; margin-bottom:10px; background:#111; color:#fff; border:1px solid #444;">
+                        <button id="btn-gen-tiles" style="width:100%; background:#4400aa;">GENERATE TILES</button>
+                        <p style="font-size:10px; color:#888; margin-top:5px;">Generates a tileset sheet and auto-slices into 8x8 tiles starting from ID 200.</p>
                     </div>
                 </div>
                 <div id="panel-sprites" class="editor-panel hidden">
@@ -284,6 +294,20 @@ export class MapEditor {
             this.spriteTool = 'fill';
             this.container.querySelectorAll('#sprite-tool-pencil, #sprite-tool-fill').forEach(btn => btn.classList.remove('selected'));
             (e.target as HTMLElement).classList.add('selected');
+        });
+
+        this.container.querySelector('#btn-gen-tiles')?.addEventListener('click', () => {
+            const promptInput = this.container.querySelector('#ai-tile-prompt') as HTMLInputElement;
+            const prompt = promptInput.value;
+            if (prompt) GenerativeAIManager.generateTilesetFromText(prompt);
+        });
+
+        document.addEventListener('ai-asset-generated', (e: any) => {
+            const { type, data } = e.detail;
+            if (type === 'tileset') {
+                this.loadAITileset(data);
+                this.switchTab('map');
+            }
         });
 
         networkManager.connect(SERVER_URL);

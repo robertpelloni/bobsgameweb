@@ -4,6 +4,7 @@ import { Component } from '../Component';
 import { LightComponent } from '../components/LightComponent';
 import { TransformComponent } from '../components/TransformComponent';
 import { Application, Container, Graphics, RenderTexture, Sprite, Texture, BLEND_MODES } from 'pixi.js';
+import { AudioManager } from '../../../audio/AudioManager';
 
 /** Light data from map_lights.json (extracted from _Project.txt) */
 export interface MapLightData {
@@ -114,10 +115,23 @@ export class LightingSystem extends System {
     }
   }
 
+  private fftData: Uint8Array = new Uint8Array(128);
+
   public update(dt: number, entities: Map<EntityId, Map<string, Component>>): void {
     if (this.enableDayNightCycle) {
       this.timeOfDay = (this.timeOfDay + (dt / (this.dayDuration * 1000))) % 1.0;
       this.updateAmbientColor();
+    }
+
+    // 0. Process FFT for audio-reactive lighting
+    let audioPulse = 0;
+    const analyzer = (AudioManager as any).analyzer as AnalyserNode;
+    if (analyzer) {
+        analyzer.getByteFrequencyData(this.fftData);
+        // Use sub-bass / bass frequencies (bins 0-10)
+        let sum = 0;
+        for (let i = 0; i < 10; i++) sum += this.fftData[i];
+        audioPulse = sum / 2550; // normalized 0-1 pulse
     }
 
     // 1. Draw background ambient darkness
@@ -183,6 +197,12 @@ export class LightingSystem extends System {
       const transform = components.get('Transform') as TransformComponent;
       if (light && transform) {
         let currentRadius = light.radius;
+
+        // Apply audio pulse to radius if enabled (defaulting to minor impact for immersion)
+        if (audioPulse > 0.5) {
+            currentRadius *= (1.0 + (audioPulse - 0.5) * 0.2);
+        }
+
         if (light.flicker) {
           currentRadius = light.baseRadius + Math.sin(Date.now() / 200 * light.flickerSpeed) * (light.baseRadius * 0.1);
         }
