@@ -3,6 +3,7 @@ import { EntityId } from '../Entity';
 import { Component } from '../Component';
 import { AudioReactiveComponent } from '../components/AudioReactiveComponent';
 import { TransformComponent } from '../components/TransformComponent';
+import { SpriteComponent } from '../components/SpriteComponent';
 import { AudioManager } from '../../../audio/AudioManager';
 
 export class AudioReactiveSystem extends System {
@@ -28,7 +29,10 @@ export class AudioReactiveSystem extends System {
                 } else if (reactive.property === 'rotation') {
                     transform.rotation += impact * dt;
                 } else if (reactive.property === 'alpha') {
-                    // Update sprite alpha if we had access to it here
+                    const spriteComp = components.get('Sprite') as SpriteComponent;
+                    if (spriteComp?.sprite) {
+                        spriteComp.sprite.alpha = 0.5 + impact * 0.5;
+                    }
                 }
             }
         }

@@ -15,4 +15,5 @@
 - [x] Implement AI-driven NPC Dialogue generation in `WorldEditor`.
 - [x] Implement FFT-driven Audio Visualizer (FFTVisualizer & ProjectM/Butterchurn).
 - [x] Implement real-time AI NPC chat in `WorldScene`.
-- [ ] Implement WebGPU-based particle visualizer tech demo.
+- [x] Implement WebGPU-Ready Particle System skeleton and hardware detection.
+- [ ] Implement full WebGPU-based compute-shader particle demo.

@@ -498,6 +498,13 @@ export class MainMenuScene extends Scene {
 					void import("./VisualizerScene");
 				},
 			},
+			{
+				label: "WebGPU Demo",
+				action: () => this.openWebGPUDemo(),
+				prefetch: () => {
+					void import("./WebGPUDemoScene");
+				},
+			},
 		];
 
 		const buttonStyle: ButtonStyle = {
@@ -1042,6 +1049,16 @@ export class MainMenuScene extends Scene {
 			camera: this.camera ?? undefined,
 		});
 		SceneTransition.pushWithFade(this.app, visualizerScene);
+	}
+
+	private async openWebGPUDemo(): Promise<void> {
+		const { WebGPUDemoScene } = await import("./WebGPUDemoScene");
+		const demoScene = new WebGPUDemoScene({
+			name: "webgpu-demo",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, demoScene);
 	}
 
 	// ============================================================

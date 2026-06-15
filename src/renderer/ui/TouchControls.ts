@@ -95,6 +95,9 @@ export class TouchControls extends Container {
 	}
 
 	private simulateKey(key: string, down: boolean): void {
+		if (down && "vibrate" in navigator) {
+			navigator.vibrate(10);
+		}
 		window.dispatchEvent(new KeyboardEvent(down ? "keydown" : "keyup", { key }));
 	}
 

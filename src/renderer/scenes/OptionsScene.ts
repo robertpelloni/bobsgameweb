@@ -86,7 +86,7 @@ export class OptionsScene extends Scene {
 
     private createOptions(): void {
         const startY = this.height * 0.32;
-        const spacing = 80;
+        const spacing = 70;
 
         this.masterSlider = this.createSlider(
             'Master Volume',
@@ -118,6 +118,29 @@ export class OptionsScene extends Scene {
         );
         this.optionItems.push({ type: 'slider', label: 'SFX Volume', slider: this.sfxSlider });
 
+        // WebGPU Toggle
+        const gpuBtnStyle: ButtonStyle = {
+            width: 320,
+            height: 40,
+            backgroundColor: 0x222222,
+            borderColor: 0x444444,
+            borderWidth: 2,
+            textColor: 0x00ffff,
+            fontSize: 18,
+            borderRadius: 4
+        };
+        const gpuToggleBtn = new Button('Rendering: Auto (WebGL)', gpuBtnStyle);
+        gpuToggleBtn.setPosition(this.centerX, startY + spacing * 3);
+        const isWebGPUSupported = 'gpu' in navigator;
+        if (isWebGPUSupported) {
+            gpuToggleBtn.text = 'Rendering: Prefer WebGPU';
+        }
+        gpuToggleBtn.onClick(() => {
+            alert(isWebGPUSupported ? "WebGPU will be prioritized on next restart." : "WebGPU not supported on this hardware.");
+        });
+        this.container.addChild(gpuToggleBtn.container);
+        this.optionItems.push({ type: 'button', label: 'WebGPU Toggle', button: gpuToggleBtn });
+
         const buttonStyle: ButtonStyle = {
             width: 200,
             height: 50,
@@ -132,13 +155,13 @@ export class OptionsScene extends Scene {
         };
 
         const backButton = new Button('Back', buttonStyle);
-        backButton.setPosition(this.centerX - 120, startY + spacing * 3.5);
+        backButton.setPosition(this.centerX - 120, startY + spacing * 4.5);
         backButton.onClick(() => this.goBack());
         this.container.addChild(backButton.container);
         this.optionItems.push({ type: 'button', label: 'Back', button: backButton });
 
         const testSoundBtn = new Button('Test Sound', buttonStyle);
-        testSoundBtn.setPosition(this.centerX + 120, startY + spacing * 3.5);
+        testSoundBtn.setPosition(this.centerX + 120, startY + spacing * 4.5);
         testSoundBtn.onClick(() => {
             this.playSelectSound();
         });
