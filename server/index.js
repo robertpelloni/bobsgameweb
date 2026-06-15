@@ -351,12 +351,37 @@ const players = new Map();
 /** Active tournaments keyed by tournamentId */
 const tournaments = new Map();
 
+/** Per-socket rate limiting tracking */
+const lastMessageTimes = new Map();
+
+/**
+ * Basic rate limiting helper
+ * @param {string} socketId
+ * @param {string} type
+ * @param {number} minIntervalMs
+ * @returns {boolean} true if allowed, false if limited
+ */
+function checkRateLimit(socketId, type, minIntervalMs) {
+	const now = Date.now();
+	if (!lastMessageTimes.has(socketId)) {
+		lastMessageTimes.set(socketId, {});
+	}
+	const socketTimes = lastMessageTimes.get(socketId);
+	const lastTime = socketTimes[type] || 0;
+	if (now - lastTime < minIntervalMs) {
+		return false;
+	}
+	socketTimes[type] = now;
+	return true;
+}
+
 // ============================================================
 // Connection Handler
 // ============================================================
 
 io.on("connection", (socket) => {
 	console.log("Player connected:", socket.id);
+	lastMessageTimes.set(socket.id, {});
 
 	// ----------------------------------------------------------
 	// Player Identity
@@ -569,7 +594,12 @@ io.on("connection", (socket) => {
 	// ----------------------------------------------------------
 
 	socket.on("chatMessage", (data) => {
-		const { channel, message, to } = data;
+		if (!checkRateLimit(socket.id, "chat", 500)) return;
+
+		let { channel, message, to } = data;
+		if (typeof message !== "string") return;
+		message = message.replace(/<[^>]*>?/gm, "").substring(0, 500); // Basic HTML strip and length limit
+
 		const playerName = players.get(socket.id)?.name || "Unknown";
 
 		if (channel === "global") {
@@ -605,6 +635,8 @@ io.on("connection", (socket) => {
 	// ----------------------------------------------------------
 
 	socket.on("frame", (state) => {
+		if (!checkRateLimit(socket.id, "frame", 16)) return; // ~60fps
+
 		const room = Array.from(socket.rooms).find((r) => rooms.has(r));
 		if (room) {
 			socket.to(room).emit("opponentFrame", { id: socket.id, state });
@@ -613,8 +645,23 @@ io.on("connection", (socket) => {
 
 	// RPG world position broadcast
 	socket.on("game_frame", (data) => {
+		if (!checkRateLimit(socket.id, "game_frame", 33)) return; // ~30fps
+
 		const room = Array.from(socket.rooms).find((r) => rooms.has(r));
 		if (room) {
+			// Store position first
+			const p = players.get(socket.id);
+			if (p && data.state) {
+				try {
+					const state = typeof data.state === "string" ? JSON.parse(data.state) : data.state;
+					if (typeof state.x === "number" && isFinite(state.x)) p.rpgX = state.x;
+					if (typeof state.y === "number" && isFinite(state.y)) p.rpgY = state.y;
+					if (typeof state.dir === "number") p.rpgDir = state.dir;
+				} catch {
+					/* ignore */
+				}
+			}
+
 			socket.to(room).emit("game_state", {
 				players: Array.from(players.entries()).map(([id, p]) => ({
 					id,
@@ -625,18 +672,6 @@ io.on("connection", (socket) => {
 					dir: p.rpgDir ?? 0,
 				})),
 			});
-			// Store position
-			const p = players.get(socket.id);
-			if (p && data.state) {
-				try {
-					const state = JSON.parse(data.state);
-					p.rpgX = state.x;
-					p.rpgY = state.y;
-					p.rpgDir = state.dir;
-				} catch {
-					/* ignore */
-				}
-			}
 		}
 	});
 
@@ -669,7 +704,7 @@ io.on("connection", (socket) => {
 	// ----------------------------------------------------------
 
 	socket.on("reportScore", (data) => {
-		if (!data || !data.mode || typeof data.score !== "number") return;
+		if (!data || !data.mode || typeof data.score !== "number" || !isFinite(data.score)) return;
 
 		const mode = String(data.mode);
 		if (!leaderboards[mode]) {
@@ -720,6 +755,9 @@ io.on("connection", (socket) => {
 	// ----------------------------------------------------------
 
 	socket.on("playerMove", (pos) => {
+		if (!checkRateLimit(socket.id, "move", 50)) return; // ~30fps
+		if (typeof pos.x !== "number" || !isFinite(pos.x) || typeof pos.y !== "number" || !isFinite(pos.y)) return;
+
 		// Broadcast player position to everyone in the world
 		socket.broadcast.emit("remotePlayerMove", {
 			id: socket.id,
@@ -1374,6 +1412,7 @@ io.on("connection", (socket) => {
 
 	socket.on("disconnect", () => {
 		players.delete(socket.id);
+		lastMessageTimes.delete(socket.id);
 		console.log("Player disconnected:", socket.id);
 	});
 });

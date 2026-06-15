@@ -1,3 +1,9 @@
+## v3.0.12 — 2026-06-08
+
+### Added
+- **Multiplayer Hardening**: Implemented server-side rate-limiting for high-frequency events (`frame`, `game_frame`, `playerMove`, `chatMessage`).
+- **Input Validation**: Added payload validation and HTML sanitization to server-side event handlers to prevent malformed data or XSS.
+
 ## v3.0.11 — 2026-06-08
 
 ### Added
