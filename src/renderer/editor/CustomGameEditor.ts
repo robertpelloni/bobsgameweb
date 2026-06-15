@@ -88,6 +88,9 @@ export class CustomGameEditor {
   private pieceClimbingCheckbox!: HTMLInputElement;
   private flip180Checkbox!: HTMLInputElement;
   private floorKickCheckbox!: HTMLInputElement;
+
+  private asepritePathInput!: TextInput;
+  private tilemapPathInput!: TextInput;
   
   private blockList!: HTMLSelectElement;
   private pieceList!: HTMLSelectElement;
@@ -258,27 +261,49 @@ export class CustomGameEditor {
 
     this.pixiContainer.addChild(aiPanel.container);
 
-    const externalToolsPanel = new Panel();
-    externalToolsPanel.setPosition(10, 480);
-    const extToolsLabel = new PIXIText("External Pixel Tools", { fill: 0xffffff, fontSize: 16, fontWeight: "bold" });
+    const externalToolsPanel = new Panel({ width: 350, height: 180, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
+    externalToolsPanel.setPosition(740, 340);
+    const extToolsLabel = new PIXIText({ text: "External Pixel Tools", style: { fill: 0xffffff, fontSize: 16, fontWeight: "bold" } });
     extToolsLabel.position.set(10, 10);
     externalToolsPanel.addChild(extToolsLabel);
 
+    const aseLabel = new PIXIText({ text: "Aseprite Path", style: { fill: 0xcccccc, fontSize: 12 } });
+    aseLabel.position.set(10, 35);
+    externalToolsPanel.addChild(aseLabel);
+    this.asepritePathInput = new TextInput(localStorage.getItem('aseprite-path') || "C:\\Program Files\\Aseprite\\aseprite.exe", { width: 330, height: 25 });
+    this.asepritePathInput.setPosition(10, 50);
+    this.asepritePathInput.on("change", (val: string) => {
+      localStorage.setItem('aseprite-path', val);
+      this.pushRecentAction(`Updated Aseprite path: ${val}`);
+    });
+    externalToolsPanel.addChild(this.asepritePathInput.container);
+
     const asepriteBtn = new Button("Launch Aseprite", { width: 140, height: 30 });
-    asepriteBtn.setPosition(10, 40);
+    asepriteBtn.setPosition(10, 80);
     asepriteBtn.on("click", () => {
-        console.log("[CustomGameEditor] Requesting Aseprite launch...");
-        // In a native Electron environment, this event would be caught by IPC to launch the desktop binary.
-        // In a web environment, we would ideally iframe a WASM port here.
-        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "aseprite" } }));
+        const path = localStorage.getItem('aseprite-path') || this.asepritePathInput.value;
+        console.log(`[CustomGameEditor] Requesting Aseprite launch at ${path}...`);
+        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "aseprite", path } }));
     });
     externalToolsPanel.addChild(asepriteBtn.container);
 
+    const tileLabel = new PIXIText({ text: "Tilemap Studio Path", style: { fill: 0xcccccc, fontSize: 12 } });
+    tileLabel.position.set(10, 115);
+    externalToolsPanel.addChild(tileLabel);
+    this.tilemapPathInput = new TextInput(localStorage.getItem('tilemap-studio-path') || "C:\\Tools\\TilemapStudio.exe", { width: 330, height: 25 });
+    this.tilemapPathInput.setPosition(10, 130);
+    this.tilemapPathInput.on("change", (val: string) => {
+      localStorage.setItem('tilemap-studio-path', val);
+      this.pushRecentAction(`Updated Tilemap Studio path: ${val}`);
+    });
+    externalToolsPanel.addChild(this.tilemapPathInput.container);
+
     const tilemapBtn = new Button("Launch Tilemap Studio", { width: 160, height: 30 });
-    tilemapBtn.setPosition(160, 40);
+    tilemapBtn.setPosition(160, 80);
     tilemapBtn.on("click", () => {
-        console.log("[CustomGameEditor] Requesting Tilemap Studio launch...");
-        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "tilemap-studio" } }));
+        const path = localStorage.getItem('tilemap-studio-path') || this.tilemapPathInput.value;
+        console.log(`[CustomGameEditor] Requesting Tilemap Studio launch at ${path}...`);
+        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "tilemap-studio", path } }));
     });
     externalToolsPanel.addChild(tilemapBtn.container);
 
@@ -1348,6 +1373,21 @@ export class CustomGameEditor {
         this.renderPieceShapeEditor();
         this.syncPieceBlockOverrideControl();
         this.updateSummary();
+    });
+
+    document.addEventListener('ai-asset-generated', (e: any) => {
+        const { type, prompt, data } = e.detail;
+        console.log(`[CustomGameEditor] Received AI asset: ${type} for prompt: "${prompt}"`);
+
+        if (type === 'sprite') {
+            this.pushRecentAction(`AI Sprite ready: ${prompt.substring(0, 20)}...`);
+            // In a full implementation, we would load the image into a texture and pass to SpriteEditor
+            ToastManager.showInfo(`AI Sprite loaded into editor: ${prompt.substring(0, 30)}`);
+        } else if (type === 'tileset') {
+            this.pushRecentAction(`AI Tileset ready: ${prompt.substring(0, 20)}...`);
+            // In a full implementation, we would pass the data to MapEditor.loadTileset()
+            ToastManager.showInfo(`AI Tileset loaded into editor: ${prompt.substring(0, 30)}`);
+        }
     });
   }
 

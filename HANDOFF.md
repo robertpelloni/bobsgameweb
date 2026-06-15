@@ -1,41 +1,34 @@
-# Handoff — 2026-06-07 — Version 3.0.9
+# Handoff — 2026-06-08 — Version 3.0.10
 
 ## Agent
 Jules (Software Engineer)
 
 ## Session Summary
-Achieved full legacy engine parity for version 3.0.9. Standardized the entity system with a new hierarchy, implemented metadata-driven hitboxes, and finalized the legacy SFX mapping. Resolved server-side architectural bugs and verified system integrity with 100% test pass rate and live endpoint validation.
+Sanitized the repository by removing 31 redundant submodules from the git index. Implemented external tool path configuration and AI asset wiring in the `CustomGameEditor`. Bumped project version to 3.0.10.
 
 ## What Was Completed
 
-### 1. Entity System Refactor (`BaseEntity`, `YuuEntity`, `NPCEntity`)
-- Introduced a centralized entity hub to handle 8-directional movement, 64-frame animation logic, and Java-accurate turning delays.
-- Refactored `WorldScene.ts` to delegate protagonist and NPC updates to these classes, eliminating procedural bloat and fixing runtime movement crashes.
+### 1. Repository Sanitization
+- Cleaned the git index by removing 31 redundant reference submodules as documented in `SUBMODULES_ANALYSIS.md`.
+- Only `submodules/bobui` remains in the index.
 
-### 2. Collision Parity & Metadata-Driven Hitboxes
-- Implemented `hitBoxOffset` metadata in the entity classes.
-- Applied 30px offset for adults and 24px for children (auto-detected via sprite naming).
-- Updated `WorldScene.isHitTile` to perform accurate collision checks against all entities using `getCollisionY()`.
+### 2. External Tool Configuration
+- Added PIXI-based UI in `CustomGameEditor.ts` to allow users to configure absolute paths for Aseprite and Tilemap Studio.
+- Paths are persisted via `localStorage` and passed to the "launch-external-tool" event.
 
-### 3. Audio Finalization
-- Expanded `AudioManager` mapping to cover all legacy SFX IDs (0-87) with descriptive modern asset names.
-- Verified mapping integrity with `src/__tests__/audio-mapping.test.ts`.
+### 3. AI Asset Integration
+- Refactored `GenerativeAIManager.ts` to dispatch `ai-asset-generated` events upon successful asset generation.
+- Implemented event listeners in `CustomGameEditor.ts` to handle generated sprites and tilesets, providing UI feedback and history tracking.
 
-### 4. Server Stabilization
-- Fixed critical scope issues for the `tournaments` Map in `server/index.js`.
-- Corrected improper `session["emit"]` calls to standard `socket.emit`.
-- Verified live endpoint functionality (`/healthz`, `/stats`, `/maps`, `/players`) via integration testing.
-
-### 5. Repository Sanitization
-- Cleaned the git index by removing 31 redundant submodules, resolving the "dirty submodule" state and leaving only `submodules/bobui`.
-- Ported functionalities are documented in `SUBMODULES_ANALYSIS.md`.
+### 4. Versioning & Documentation
+- Bumped version to **3.0.10** across `VERSION.md`, `package.json`, `server/package.json`, and `MEMORY.md`.
+- Updated `CHANGELOG.md`, `TODO.md`, and created this `HANDOFF.md`.
 
 ## Production Readiness
-- **Version:** Synchronized at **3.0.9**.
-- **Tests:** 31/31 integration tests passed.
-- **Endpoints:** Fully operational and verified with live data.
+- **Version:** 3.0.10
+- **Sanitization:** Git index is clean of redundant submodules.
 
 ## Highest-Value Next Steps
-1. **Audio Optimization:** Evaluate pre-converting tracker assets to OGG for mobile performance.
-2. **Editor Pathing:** Finalize system path configuration for external tool launching in `CustomGameEditor.ts`.
-3. **Multiplayer Hardening:** Implement rate-limiting and input validation for RPG world sync packets.
+1. **AI Asset Loading:** Finalize the logic to actually load the AI-generated textures into the `SpriteEditor` and `MapEditor` canvases.
+2. **Multiplayer Hardening:** Implement rate-limiting and input validation for RPG world sync packets.
+3. **Audio Optimization:** Evaluate pre-converting tracker assets to OGG for mobile performance.

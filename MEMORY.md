@@ -4,3 +4,4 @@
 - **Legacy Recovery:** Current focus is on the "Great Recovery" phase, indexing Java metadata and importing assets via a dedicated pipeline.
 - **Entity System:** Yuu (main character) supports 8-directional movement (64 frames), while standard NPCs are 4-directional (32 frames).
 - **Blah System:** NPCs use pitching 'blah' sounds to simulate speech during dialogue.
+- **Global Project Version:** 3.0.10

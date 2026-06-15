@@ -26,7 +26,13 @@ export class GenerativeAIManager {
             ToastManager.showInfo("AI Sprite generation complete!");
             console.log(`[GenAI] Sprite generation finished:`, data);
 
-            // TODO: Process data.imageUrl or data.base64 into the sprite editor canvas
+            document.dispatchEvent(new CustomEvent("ai-asset-generated", {
+                detail: {
+                    type: "sprite",
+                    prompt,
+                    data: data.imageUrl || data.base64
+                }
+            }));
         } catch (e) {
             console.warn(`[GenAI] Failed to connect to AI backend (${(e as Error).message}). Falling back to mock delay.`);
             ToastManager.showInfo(`AI Connection Failed. Simulating generation...`);
@@ -54,7 +60,13 @@ export class GenerativeAIManager {
             ToastManager.showInfo("AI Tileset generation complete!");
             console.log(`[GenAI] Tileset generation finished:`, data);
 
-            // TODO: Process data into the tilemap editor
+            document.dispatchEvent(new CustomEvent("ai-asset-generated", {
+                detail: {
+                    type: "tileset",
+                    prompt,
+                    data: data.imageUrl || data.base64 || data
+                }
+            }));
         } catch (e) {
             console.warn(`[GenAI] Failed to connect to AI backend (${(e as Error).message}). Falling back to mock delay.`);
             ToastManager.showInfo(`AI Connection Failed. Simulating generation...`);

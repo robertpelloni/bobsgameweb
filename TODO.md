@@ -6,5 +6,6 @@
 - [x] Standardize NPC logic with `NPCEntity` hub.
 - [x] Fix server-side scoping and emit bugs in `server/index.js`.
 - [ ] Optimize Tracker playback or pre-convert to OGG.
-- [ ] Implement system path configuration for external tool launching (Aseprite, Tilemap Studio) in `CustomGameEditor.ts`.
+- [x] Implement system path configuration for external tool launching (Aseprite, Tilemap Studio) in `CustomGameEditor.ts`.
+- [ ] Implement AI sprite/tileset processing and wiring in `GenerativeAIManager.ts` and `CustomGameEditor.ts`.
 - [ ] Evaluate `bobui` C++ integration with `cpp_port/` as the engine matures.

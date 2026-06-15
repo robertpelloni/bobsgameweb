@@ -1,3 +1,9 @@
+## v3.0.10 — 2026-06-08
+
+### Added
+- **External Tool Configuration**: Implemented persistent path configuration for Aseprite and Tilemap Studio in `CustomGameEditor`.
+- **AI Asset Integration**: Wired `GenerativeAIManager` to dispatch events for AI-generated sprites and tilesets, with corresponding UI feedback and history tracking in the editor.
+
 ## v3.0.9 — 2026-05-28
 
 ### Added
