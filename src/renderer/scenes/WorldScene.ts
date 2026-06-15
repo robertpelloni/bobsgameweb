@@ -136,6 +136,7 @@ export class WorldScene extends Scene {
 	private currentChatNPC: string | null = null;
 	private currentChatPersona: string | null = null;
 	private chatHistory: { role: string; content: string }[] = [];
+	private chatUIContainer: Container | null = null;
 	private pauseContainer: Container | null = null;
 	private static readonly TILE_PX = 8; // pixels per tile at 1X (matches Tileset.TILE_SIZE)
 	private playerIsMoving: boolean = false;
@@ -1701,6 +1702,12 @@ export class WorldScene extends Scene {
 		this.dialogueContainer.visible = false;
 		this.container.addChild(this.dialogueContainer);
 
+		// AI Chat UI
+		this.chatUIContainer = new Container();
+		this.chatUIContainer.visible = false;
+		this.chatUIContainer.zIndex = 10005;
+		this.container.addChild(this.chatUIContainer);
+
 		this.chatInput = document.createElement("input");
 		this.chatInput.type = "text";
 		this.chatInput.placeholder = "Type your message to NPC... (Enter to send)";
@@ -1735,6 +1742,17 @@ export class WorldScene extends Scene {
 				this.showDialogue(response, false, this.currentChatNPC!, true);
 			}
 		};
+
+		const chatBg = new Graphics();
+		chatBg.rect(20, this.height - 220, 200, 40);
+		chatBg.fill({ color: 0x111111, alpha: 0.9 });
+		chatBg.stroke({ color: 0x00ffff, width: 2 });
+		this.chatUIContainer.addChild(chatBg);
+
+		const chatTitle = new Text({ text: "AI CHAT MODE", style: { fill: 0x00ffff, fontSize: 14, fontWeight: "bold" } });
+		chatTitle.position.set(30, this.height - 210);
+		this.chatUIContainer.addChild(chatTitle);
+
 		const bg = new Graphics();
 		bg.rect(50, this.height - 150, this.width - 100, 100);
 		bg.fill({ color: 0x0a0a2e, alpha: 0.92 });
@@ -1795,8 +1813,10 @@ export class WorldScene extends Scene {
 		if (isAIChat) {
 			this.chatInput!.style.display = "block";
 			this.chatInput!.focus();
+			if (this.chatUIContainer) this.chatUIContainer.visible = true;
 		} else {
 			this.chatInput!.style.display = "none";
+			if (this.chatUIContainer) this.chatUIContainer.visible = false;
 		}
 
 		if (this.dialogueCaption) {
@@ -3339,16 +3359,25 @@ export class WorldScene extends Scene {
 						);
 						if (dialogue && dialogue.lines && dialogue.lines.length > 0) {
 							const persona = dialogue.lines.join(" ");
-							const useAIChat = confirm(`Talk to ${dialogue.caption} using AI Chat?\n(Cancel for standard dialogue)`);
+							this.currentChatNPC = dialogue.caption;
+							this.currentChatPersona = persona;
+							this.chatHistory = [];
 
-							if (useAIChat) {
-								this.currentChatNPC = dialogue.caption;
-								this.currentChatPersona = persona;
-								this.chatHistory = [];
-								this.showDialogue(`Hello there! What would you like to talk about?`, true, dialogue.caption, true);
-							} else {
-								this.showDialogue(dialogue.lines, true, dialogue.caption);
-							}
+							this.showDialogue(`[AI] Would you like to chat with ${dialogue.caption}? (Press C to Chat, E for Normal)`, true, dialogue.caption);
+
+							const onKey = (ev: KeyboardEvent) => {
+								if (ev.key.toLowerCase() === 'c') {
+									window.removeEventListener('keydown', onKey);
+									this.chatUIContainer!.visible = true;
+									this.showDialogue(`Hello there! What would you like to talk about?`, true, dialogue.caption, true);
+								} else if (ev.key.toLowerCase() === 'e') {
+									window.removeEventListener('keydown', onKey);
+									this.showDialogue(dialogue.lines, true, dialogue.caption);
+								}
+							};
+							window.addEventListener('keydown', onKey);
+							setTimeout(() => window.removeEventListener('keydown', onKey), 5000);
+
 							return true;
 						}
 					}

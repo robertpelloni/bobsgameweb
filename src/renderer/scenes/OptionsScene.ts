@@ -155,18 +155,44 @@ export class OptionsScene extends Scene {
         };
 
         const backButton = new Button('Back', buttonStyle);
-        backButton.setPosition(this.centerX - 120, startY + spacing * 4.5);
+        backButton.setPosition(this.centerX - 120, startY + spacing * 5.2);
         backButton.onClick(() => this.goBack());
         this.container.addChild(backButton.container);
         this.optionItems.push({ type: 'button', label: 'Back', button: backButton });
 
         const testSoundBtn = new Button('Test Sound', buttonStyle);
-        testSoundBtn.setPosition(this.centerX + 120, startY + spacing * 4.5);
+        testSoundBtn.setPosition(this.centerX + 120, startY + spacing * 5.2);
         testSoundBtn.onClick(() => {
             this.playSelectSound();
         });
         this.container.addChild(testSoundBtn.container);
         this.optionItems.push({ type: 'button', label: 'Test Sound', button: testSoundBtn });
+
+        // HD Sprites Toggle
+        const hdBtnStyle: ButtonStyle = {
+            width: 320,
+            height: 40,
+            backgroundColor: 0x1a2a4a,
+            borderColor: 0x4a6a8a,
+            borderWidth: 2,
+            textColor: 0xffffff,
+            fontSize: 18,
+            borderRadius: 4
+        };
+        const hdToggleBtn = new Button('HD Sprites (HQ2X): OFF', hdBtnStyle);
+        hdToggleBtn.setPosition(this.centerX, startY + spacing * 3.8);
+        hdToggleBtn.onClick(() => {
+            const worldScene = StateManager.getScene('world') as any;
+            if (worldScene?.spriteAtlas) {
+                worldScene.spriteAtlas.useHQ2X = !worldScene.spriteAtlas.useHQ2X;
+                hdToggleBtn.text = `HD Sprites (HQ2X): ${worldScene.spriteAtlas.useHQ2X ? 'ON' : 'OFF'}`;
+                this.playSelectSound();
+            } else {
+                alert("HD mode only available while in the RPG world.");
+            }
+        });
+        this.container.addChild(hdToggleBtn.container);
+        this.optionItems.push({ type: 'button', label: 'HD Toggle', button: hdToggleBtn });
     }
 
     private createSlider(label: string, initialValue: number, y: number, onChange: (value: number) => void): Slider {

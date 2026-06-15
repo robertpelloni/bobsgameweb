@@ -36,7 +36,7 @@ export class WebGPUDemoScene extends Scene {
         this.uiContainer.addChild(title);
 
         const hint = new Text({
-            text: "CLICK: Spawn Explosion | ESC: Back",
+            text: "CLICK: Spawn Explosion | W/S: Vortex Force | ESC: Back",
             style: { ...style, fill: "#ffffff", fontSize: 14 }
         });
         hint.position.set(20, 50);
@@ -50,6 +50,8 @@ export class WebGPUDemoScene extends Scene {
         this.uiContainer.addChild(this.statusText);
     }
 
+    private vortexStrength = 0.5;
+
     protected onUpdate(dt: number): void {
         if (this.particleSystem) {
             this.particleSystem.update();
@@ -57,9 +59,18 @@ export class WebGPUDemoScene extends Scene {
             // Check support status and update UI
             const isWebGPU = (this.particleSystem as any).useWebGPU;
             if (this.statusText) {
-                this.statusText.text = `Hardware Support: ${isWebGPU ? "WebGPU (ACTIVE)" : "WebGL Fallback"}`;
+                this.statusText.text = `Hardware Support: ${isWebGPU ? "WebGPU (ACTIVE)" : "WebGL Fallback"} | Vortex: ${this.vortexStrength.toFixed(2)}`;
                 this.statusText.style.fill = isWebGPU ? "#00ff00" : "#ff4444";
             }
+        }
+
+        if (InputManager.isKeyPressed(Key.W)) {
+            this.vortexStrength += 0.05;
+            this.particleSystem?.setVortex(this.vortexStrength);
+        }
+        if (InputManager.isKeyPressed(Key.S)) {
+            this.vortexStrength -= 0.05;
+            this.particleSystem?.setVortex(this.vortexStrength);
         }
 
         if (InputManager.isActionPressed()) {

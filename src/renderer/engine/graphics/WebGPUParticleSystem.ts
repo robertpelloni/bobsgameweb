@@ -16,7 +16,7 @@ export class WebGPUParticleSystem {
     private computePipeline: any = null;
     private bindGroup: any = null;
 
-    private readonly numParticles = 10000;
+    private numParticles = 10000;
     private readonly particleSize = 16; // 4 float32s (x, y, vx, vy)
 
     constructor(app: Application, container: Container) {
@@ -48,7 +48,14 @@ export class WebGPUParticleSystem {
                 vel: vec2<f32>,
             };
 
+            struct Params {
+                center: vec2<f32>,
+                vortexStrength: f32,
+                dt: f32,
+            };
+
             @group(0) @binding(0) var<storage, read_write> particles: array<Particle>;
+            @group(0) @binding(1) var<uniform> params: Params;
 
             @compute @workgroup_size(64)
             fn main(@builtin(global_invocation_id) id: vec3<u32>) {
@@ -57,12 +64,25 @@ export class WebGPUParticleSystem {
 
                 var p = particles[idx];
 
+                // Vortex effect
+                let diff = p.pos - params.center;
+                let dist = length(diff);
+                if (dist > 0.1) {
+                    let force = normalize(vec2<f32>(-diff.y, diff.x)) * params.vortexStrength / (dist * 0.1);
+                    p.vel += force * params.dt;
+                }
+
+                // Drag
+                p.vel *= 0.99;
+
                 // Physics update
                 p.pos += p.vel;
 
-                // Bounce logic
-                if (p.pos.x < 0.0 || p.pos.x > 800.0) { p.vel.x *= -1.0; }
-                if (p.pos.y < 0.0 || p.pos.y > 600.0) { p.vel.y *= -1.0; }
+                // Wrap logic
+                if (p.pos.x < -100.0) { p.pos.x = 900.0; }
+                if (p.pos.x > 900.0) { p.pos.x = -100.0; }
+                if (p.pos.y < -100.0) { p.pos.y = 700.0; }
+                if (p.pos.y > 700.0) { p.pos.y = -100.0; }
 
                 particles[idx] = p;
             }
@@ -93,14 +113,33 @@ export class WebGPUParticleSystem {
             },
         });
 
+        this.paramsBuffer = this.device.createBuffer({
+            size: 16, // 2x vec2 (8 bytes) + 2x f32 (8 bytes)
+            usage: (window as any).GPUBufferUsage.UNIFORM | (window as any).GPUBufferUsage.COPY_DST,
+        });
+
         this.bindGroup = this.device.createBindGroup({
             layout: this.computePipeline.getBindGroupLayout(0),
-            entries: [{ binding: 0, resource: { buffer: this.particleBuffer } }],
+            entries: [
+                { binding: 0, resource: { buffer: this.particleBuffer } },
+                { binding: 1, resource: { buffer: this.paramsBuffer } }
+            ],
         });
+    }
+
+    private paramsBuffer: any = null;
+    private vortexStrength: number = 0.5;
+
+    public setVortex(strength: number): void {
+        this.vortexStrength = strength;
     }
 
     public update(): void {
         if (!this.initialized || !this.useWebGPU) return;
+
+        // Update uniforms
+        const paramsData = new Float32Array([400, 300, this.vortexStrength, 0.016]);
+        this.device.queue.writeBuffer(this.paramsBuffer, 0, paramsData);
 
         const commandEncoder = this.device.createCommandEncoder();
         const passEncoder = commandEncoder.beginComputePass();
