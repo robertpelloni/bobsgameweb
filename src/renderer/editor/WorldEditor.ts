@@ -9,6 +9,7 @@ import { Container, Text as PIXIText } from "pixi.js";
 import { EventSheetEditor } from "./EventSheetEditor";
 import { Panel } from "../ui/Panel";
 import { Button } from "../ui/Button";
+import { ParticlePresets } from "../engine/graphics/ParticleSystem";
 
 export class WorldEditor {
     public pixiContainer: Container = new Container();
@@ -61,6 +62,23 @@ export class WorldEditor {
         eventSheetPanel.addChild(openSheetBtn.container);
 
         this.pixiContainer.addChild(eventSheetPanel.container);
+
+        const particlePanel = new Panel({ width: 400, height: 120, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x00aa00 });
+        particlePanel.setPosition(420, 240);
+        const pTitle = new PIXIText({ text: "Particle Testing", style: { fill: 0x88ff88, fontSize: 18, fontWeight: "bold" } });
+        pTitle.position.set(10, 10);
+        particlePanel.addChild(pTitle);
+
+        const testRainBtn = new Button("Test Rain", { width: 150, height: 30, backgroundColor: 0x004400 });
+        testRainBtn.setPosition(10, 45);
+        testRainBtn.on("click", () => {
+            const rain = ParticlePresets.rain(400, 0, 800);
+            this.pixiContainer.addChild(rain.container);
+            // In a real editor this would be managed by a system
+        });
+        particlePanel.addChild(testRainBtn.container);
+
+        this.pixiContainer.addChild(particlePanel.container);
 
         this.loadAchievementSnapshot();
     }

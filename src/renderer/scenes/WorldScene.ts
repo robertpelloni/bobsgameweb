@@ -43,6 +43,8 @@ import { LightingSystem } from "../engine/ecs/systems/LightingSystem";
 import { LightComponent } from "../engine/ecs/components/LightComponent";
 import { ParticleSystem } from "../engine/ecs/systems/ParticleSystem";
 import { ParticleComponent } from "../engine/ecs/components/ParticleComponent";
+import { ParticlePresets } from "../engine/graphics/ParticleSystem";
+import { WeatherRenderer } from "../engine/graphics/WeatherRenderer";
 import { TouchControls } from "../ui/TouchControls";
 import { Localization, type Language } from "../../shared/Localization";
 // Easing - reserved for future use
@@ -124,7 +126,8 @@ export class WorldScene extends Scene {
 	private footstepIndex: number = 0;
 	private _ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
 	private weatherContainer: Container | null = null;
-	private rainDrops: { x: number; y: number; speed: number }[] = [];
+	private weatherRenderer: WeatherRenderer | null = null;
+
 	private isExteriorMap: boolean = false;
 	private isPaused: boolean = false;
 	private _autoSaveTimer: number = 0;
@@ -1601,33 +1604,6 @@ export class WorldScene extends Scene {
 		this.pauseContainer!.visible = true;
 		AudioManager.playSound("menu_select", { volume: 0.2 });
 	}
-	private updateWeather(dt: number): void {
-		if (!this.isExteriorMap || !this.weatherContainer) return;
-		// Create rain drops if needed
-		if (this.rainDrops.length === 0) {
-			for (let i = 0; i < 80; i++) {
-				this.rainDrops.push({
-					x: Math.random() * this.width,
-					y: Math.random() * this.height,
-					speed: 300 + Math.random() * 200,
-				});
-			}
-		}
-		const g = this.weatherContainer.children[0] as any;
-		if (!g) return;
-		g.clear();
-		// Update and draw rain
-		for (const drop of this.rainDrops) {
-			drop.y += drop.speed * dt;
-			drop.x -= 30 * dt; // Slight wind
-			if (drop.y > this.height) {
-				drop.y = -10;
-				drop.x = Math.random() * this.width;
-			}
-			if (drop.x < 0) drop.x = this.width;
-			g.moveTo(drop.x, drop.y);
-			g.lineTo(drop.x - 1, drop.y + 8);
-			g.stroke({ color: 0x8899bb, width: 1, alpha: 0.4 });
 		}
 	}
 	private createWeatherOverlay(): void {
@@ -1636,9 +1612,9 @@ export class WorldScene extends Scene {
 		}
 		this.weatherContainer = new Container();
 		this.weatherContainer.zIndex = 9990;
-		const g = new Graphics();
-		this.weatherContainer.addChild(g);
 		this.container.addChild(this.weatherContainer);
+		this.weatherRenderer = new WeatherRenderer(this.weatherContainer, this.width, this.height);
+		this.weatherRenderer.setWeather("rain", 0.5);
 	}
 	private updateMinimap(): void {
 		if (!this.minimapGraphics || !this.playerTransform || !this.map) return;
@@ -2428,6 +2404,25 @@ export class WorldScene extends Scene {
 					AudioManager.playSound(`footstep_${this.footstepIndex}`, {
 						volume: 0.15,
 					});
+
+					// Emit footstep dust particles
+					const dust = ParticlePresets.footstep(this.playerTransform.x, this.playerTransform.y);
+					if (this.map?.entitySpriteContainer) {
+						this.map.entitySpriteContainer.addChild(dust.container);
+					} else {
+						this.worldContainer.addChild(dust.container);
+					}
+
+					// Standalone emitter lifecycle for one-shot burst
+					const updateDust = (ticker: any) => {
+						dust.update(ticker.deltaTime / 60);
+						dust.render();
+						if (dust.count === 0) {
+							dust.destroy();
+							this.app.ticker.remove(updateDust);
+						}
+					};
+					this.app.ticker.add(updateDust);
 				}
 			} else {
 				this.footstepTimer = 0;
@@ -2639,7 +2634,10 @@ export class WorldScene extends Scene {
 				}, 2000);
 			}
 		}
-		this.updateWeather(dt);
+
+		if (this.isExteriorMap && this.weatherRenderer) {
+			this.weatherRenderer.update(dt / 1000);
+		}
 		this.updateHud();
 		this.updateDebugHud();
 		this.saveTimer += dt;

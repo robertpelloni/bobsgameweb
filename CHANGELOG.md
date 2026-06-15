@@ -1,3 +1,22 @@
+## v3.0.13 — 2026-06-08
+
+### Added
+- **Unified Particle Engine**: Unified the ECS and standalone graphics particle implementations. Created a feature-rich `ParticleEmitter` and `ParticlePresets` hub.
+- **Enhanced Visual Effects**: Replaced procedural rain and footstep logic in `WorldScene` and `WeatherRenderer` with the new particle system.
+- **Particle Editor UI**: Added a "Particle Testing" panel to the `WorldEditor`.
+
+## v3.0.14 — 2026-06-08
+
+### Added
+- **Unified Particle Architecture**: Centralized particle logic into a reusable `ParticleEmitter` and `ParticlePresets` system.
+- **Refactored Environmental Effects**: Updated `WorldScene` and `WeatherRenderer` to use the unified particle system for rain, snow, and footstep "dust" effects.
+- **ECS Integration**: Refactored the `ParticleSystem` ECS system to leverage the unified emitter engine.
+
+## v3.0.13 — 2026-06-08
+
+### Added
+- **AI Asset loading Implementation**: Initialized logic for loading AI-generated assets in editors.
+
 ## v3.0.12 — 2026-06-08
 
 ### Added

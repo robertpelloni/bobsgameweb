@@ -9,4 +9,6 @@
 - [x] Implement system path configuration for external tool launching (Aseprite, Tilemap Studio) in `CustomGameEditor.ts`.
 - [x] Implement AI sprite/tileset processing and wiring in `GenerativeAIManager.ts` and `CustomGameEditor.ts`.
 - [x] Implement rate-limiting and input validation for RPG world sync packets.
+- [x] Implement unified particle system and integrate into `WorldScene`.
+- [x] Refactor weather and footstep effects to use a unified particle system.
 - [ ] Evaluate `bobui` C++ integration with `cpp_port/` as the engine matures.
