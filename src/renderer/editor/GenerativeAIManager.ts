@@ -116,4 +116,26 @@ export class GenerativeAIManager {
             }));
         }
     }
+
+    public static async chatWithNPC(characterName: string, prompt: string, persona?: string, history?: any[]): Promise<string> {
+        console.log(`[GenAI] Conversing with "${characterName}": "${prompt}"`);
+
+        try {
+            const response = await fetch(`${this.AI_ENDPOINT}/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ characterName, prompt, persona, history })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.response;
+        } catch (e) {
+            console.warn(`[GenAI] Chat failed: ${(e as Error).message}`);
+            return `[Connection Error] ${characterName} is speechless.`;
+        }
+    }
 }

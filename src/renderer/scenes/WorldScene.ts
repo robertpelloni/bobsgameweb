@@ -74,6 +74,7 @@ import {
 import { DialogueTracker } from "../engine/event/DialogueTracker";
 import { FlagManager } from "../engine/event/FlagManager";
 import { AmbientMusicGenerator } from "../audio/AmbientMusicGenerator";
+import { GenerativeAIManager } from "../editor/GenerativeAIManager";
 export class WorldScene extends Scene {
 	private world: World;
 	private map: GameMap | null = null;
@@ -131,6 +132,10 @@ export class WorldScene extends Scene {
 	private isExteriorMap: boolean = false;
 	private isPaused: boolean = false;
 	private _autoSaveTimer: number = 0;
+	private chatInput: HTMLInputElement | null = null;
+	private currentChatNPC: string | null = null;
+	private currentChatPersona: string | null = null;
+	private chatHistory: { role: string; content: string }[] = [];
 	private pauseContainer: Container | null = null;
 	private static readonly TILE_PX = 8; // pixels per tile at 1X (matches Tileset.TILE_SIZE)
 	private playerIsMoving: boolean = false;
@@ -1695,6 +1700,41 @@ export class WorldScene extends Scene {
 		this.dialogueContainer = new Container();
 		this.dialogueContainer.visible = false;
 		this.container.addChild(this.dialogueContainer);
+
+		this.chatInput = document.createElement("input");
+		this.chatInput.type = "text";
+		this.chatInput.placeholder = "Type your message to NPC... (Enter to send)";
+		this.chatInput.style.position = "absolute";
+		this.chatInput.style.left = "70px";
+		this.chatInput.style.bottom = "160px";
+		this.chatInput.style.width = this.width - 140 + "px";
+		this.chatInput.style.background = "rgba(0,0,0,0.8)";
+		this.chatInput.style.color = "#fff";
+		this.chatInput.style.border = "1px solid #66aaff";
+		this.chatInput.style.padding = "10px";
+		this.chatInput.style.borderRadius = "5px";
+		this.chatInput.style.outline = "none";
+		this.chatInput.style.display = "none";
+		this.chatInput.style.zIndex = "10001";
+		document.body.appendChild(this.chatInput);
+
+		this.chatInput.onkeydown = async (e) => {
+			if (e.key === "Enter" && this.chatInput!.value.trim()) {
+				const msg = this.chatInput!.value.trim();
+				this.chatInput!.value = "";
+				this.chatInput!.disabled = true;
+				this.chatHistory.push({ role: "user", content: msg });
+
+				this.showDialogue(`Talking to ${this.currentChatNPC}...`, false, "AI CHAT", true);
+
+				const response = await GenerativeAIManager.chatWithNPC(this.currentChatNPC!, msg, this.currentChatPersona!, this.chatHistory);
+				this.chatHistory.push({ role: "assistant", content: response });
+
+				this.chatInput!.disabled = false;
+				this.chatInput!.focus();
+				this.showDialogue(response, false, this.currentChatNPC!, true);
+			}
+		};
 		const bg = new Graphics();
 		bg.rect(50, this.height - 150, this.width - 100, 100);
 		bg.fill({ color: 0x0a0a2e, alpha: 0.92 });
@@ -1738,6 +1778,7 @@ export class WorldScene extends Scene {
 		messages: string | string[],
 		countAsNpcInteraction: boolean = false,
 		caption?: string,
+		isAIChat: boolean = false,
 	): void {
 		if (!this.dialogueText || !this.dialogueContainer) return;
 		if (countAsNpcInteraction) {
@@ -1750,6 +1791,14 @@ export class WorldScene extends Scene {
 		this.isDialogueActive = true;
 		this.dialogueContainer.visible = true;
 		this.dialogueText.text = "";
+
+		if (isAIChat) {
+			this.chatInput!.style.display = "block";
+			this.chatInput!.focus();
+		} else {
+			this.chatInput!.style.display = "none";
+		}
+
 		if (this.dialogueCaption) {
 			this.dialogueCaption.text = caption || "";
 		}
@@ -1780,9 +1829,16 @@ export class WorldScene extends Scene {
 			if (this.isActionJustPressed) {
 				this.currentDialoguePage++;
 				if (this.currentDialoguePage >= this.dialoguePages.length) {
-					this.isDialogueActive = false;
-					this.dialogueContainer.visible = false;
-					AudioManager.playSound("menu_cancel", { volume: 0.1 });
+					if (this.chatInput!.style.display === "block") {
+						this.dialogueTypingIndex = 0;
+						this.dialogueText.text = this.dialoguePages[this.currentDialoguePage - 1];
+						this.currentDialoguePage = this.dialoguePages.length;
+					} else {
+						this.isDialogueActive = false;
+						this.dialogueContainer.visible = false;
+						this.chatInput!.style.display = "none";
+						AudioManager.playSound("menu_cancel", { volume: 0.1 });
+					}
 				} else {
 					this.dialogueTypingIndex = 0;
 					this.dialogueText.text = "";
@@ -3282,7 +3338,17 @@ export class WorldScene extends Scene {
 							"lines",
 						);
 						if (dialogue && dialogue.lines && dialogue.lines.length > 0) {
-							this.showDialogue(dialogue.lines, true, dialogue.caption);
+							const persona = dialogue.lines.join(" ");
+							const useAIChat = confirm(`Talk to ${dialogue.caption} using AI Chat?\n(Cancel for standard dialogue)`);
+
+							if (useAIChat) {
+								this.currentChatNPC = dialogue.caption;
+								this.currentChatPersona = persona;
+								this.chatHistory = [];
+								this.showDialogue(`Hello there! What would you like to talk about?`, true, dialogue.caption, true);
+							} else {
+								this.showDialogue(dialogue.lines, true, dialogue.caption);
+							}
 							return true;
 						}
 					}
@@ -3601,6 +3667,7 @@ export class WorldScene extends Scene {
 	protected async destroy(): Promise<void> {
 		if (this.worker) this.worker.terminate();
 		if (this.consoleInput) this.consoleInput.remove();
+		if (this.chatInput) this.chatInput.remove();
 		await super.destroy();
 	}
 }

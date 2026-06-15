@@ -154,6 +154,44 @@ app.post('/api/generate/dialogue', async (req, res) => {
     });
 });
 
+app.post('/api/chat', async (req, res) => {
+    const { prompt, characterName, persona, history } = req.body;
+    console.log(`[AI Proxy] Chat request for "${characterName}": "${prompt}"`);
+
+    if (openai) {
+        try {
+            const messages = [
+                { role: "system", content: `You are ${characterName}. ${persona || "A character in the game 'bob's game'."} Keep responses brief (1-2 sentences).` },
+                ...(history || []).map(h => ({ role: h.role, content: h.content })),
+                { role: "user", content: prompt }
+            ];
+
+            const response = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: messages,
+                max_tokens: 100
+            });
+
+            res.json({
+                success: true,
+                characterName,
+                response: response.choices[0].message.content
+            });
+            return;
+        } catch (e) {
+            console.error("[AI Proxy] Chat API error:", e);
+        }
+    }
+
+    // Mock
+    await new Promise(resolve => setTimeout(resolve, 800));
+    res.json({
+        success: true,
+        characterName,
+        response: `[Mock] ${characterName} says: "I heard you say ${prompt}. That's interesting!"`
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`[AI Proxy] Server running on http://localhost:${PORT}`);
 });

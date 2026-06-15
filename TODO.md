@@ -12,3 +12,7 @@
 - [x] Implement unified particle system and integrate into `WorldScene`.
 - [x] Refactor weather and footstep effects to use a unified particle system.
 - [x] Evaluate `bobui` C++ integration with `cpp_port/` and implement Wasm bridge skeleton.
+- [x] Implement AI-driven NPC Dialogue generation in `WorldEditor`.
+- [x] Implement FFT-driven Audio Visualizer (FFTVisualizer & ProjectM/Butterchurn).
+- [ ] Implement WebGPU-based particle visualizer tech demo.
+- [ ] Implement real-time AI NPC chat in `WorldScene`.

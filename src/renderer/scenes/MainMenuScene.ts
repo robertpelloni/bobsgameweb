@@ -491,6 +491,13 @@ export class MainMenuScene extends Scene {
 					void import("./GameSequenceEditorScene");
 				},
 			},
+			{
+				label: "Audio Visualizer",
+				action: () => this.openVisualizer(),
+				prefetch: () => {
+					void import("./VisualizerScene");
+				},
+			},
 		];
 
 		const buttonStyle: ButtonStyle = {
@@ -543,6 +550,11 @@ export class MainMenuScene extends Scene {
 	// ============================================================
 
 	private handleInput(): void {
+		if (InputManager.isKeyPressed(Key.V)) {
+			this.visualizer?.toggleMode();
+			this.playMoveSound();
+		}
+
 		if (InputManager.isUpPressed()) {
 			this.moveSelection(-2);
 		} else if (InputManager.isDownPressed()) {
@@ -1020,6 +1032,16 @@ export class MainMenuScene extends Scene {
 			camera: this.camera ?? undefined,
 		});
 		SceneTransition.pushWithFade(this.app, seqEditorScene);
+	}
+
+	private async openVisualizer(): Promise<void> {
+		const { VisualizerScene } = await import("./VisualizerScene");
+		const visualizerScene = new VisualizerScene({
+			name: "visualizer",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, visualizerScene);
 	}
 
 	// ============================================================
