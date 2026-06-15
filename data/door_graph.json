@@ -71,8 +71,8 @@
       "destDoor": "",
       "x": 33,
       "y": 10,
-      "arrivalX": 13,
-      "arrivalY": 14
+      "arrivalX": 11,
+      "arrivalY": 9
     },
     {
       "name": "door_5",
@@ -80,8 +80,8 @@
       "destDoor": "",
       "x": 51,
       "y": 10,
-      "arrivalX": 4,
-      "arrivalY": 1
+      "arrivalX": 7,
+      "arrivalY": 19
     },
     {
       "name": "door_6",
@@ -89,8 +89,8 @@
       "destDoor": "",
       "x": 23,
       "y": 4,
-      "arrivalX": 6,
-      "arrivalY": 1
+      "arrivalX": 7,
+      "arrivalY": 9
     },
     {
       "name": "door_7",
@@ -98,7 +98,7 @@
       "destDoor": "",
       "x": 46,
       "y": 4,
-      "arrivalX": 26,
+      "arrivalX": 12,
       "arrivalY": 9
     },
     {
@@ -107,8 +107,8 @@
       "destDoor": "",
       "x": 30,
       "y": 9,
-      "arrivalX": 7,
-      "arrivalY": 19
+      "arrivalX": 19,
+      "arrivalY": 20
     }
   ],
   "TOWNYUUUpstairsYuusRoom": [

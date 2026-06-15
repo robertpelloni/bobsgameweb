@@ -3216,6 +3216,7 @@ export class WorldScene extends Scene {
 		// 3. Floor Exception: 839 on a floor tile is a SHADOW, not a wall.
 		// Shadows overlay furniture/floor areas and should be walkable.
 		if (MapData.FLOOR_IDS.has(gndTile)) {
+			console.log(`[COLLISION] (${tx},${ty}) FLOOR CHECK PASSED - walkable`);
 			return false;
 		}
 

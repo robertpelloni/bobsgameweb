@@ -169,6 +169,21 @@ export class LegacyMapLoader {
 			const layerIdx = LAYER_MAP[layerName];
 			if (layerIdx === undefined) continue;
 			const dense = LegacyMapLoader.expandLayer(layerData, totalTiles);
+			// DEBUG: log hitBounds layer stats
+			if (layerName === "hitBounds") {
+				const nonZeroCount = dense.filter((t) => t !== 0).length;
+				const nonZeroPositions = dense
+					.map((t, i) =>
+						t !== 0
+							? { pos: i, x: i % w, y: Math.floor(i / w), tile: t }
+							: null,
+					)
+					.filter((p) => p !== null);
+				console.log(
+					`[LegacyMapLoader] ${legacy.name} hitBounds: ${dense.length} entries, ${nonZeroCount} non-zero at positions:`,
+					nonZeroPositions,
+				);
+			}
 			let shadowNonZero = 0;
 			for (let i = 0; i < dense.length && i < totalTiles; i++) {
 				const tileId = dense[i];

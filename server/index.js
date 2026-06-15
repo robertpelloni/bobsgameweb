@@ -17,7 +17,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const SERVER_VERSION = "3.0.9";
+const SERVER_VERSION = "3.0.10";
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = parseInt(process.env.PORT || "6065", 10);
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
@@ -254,7 +254,9 @@ const httpServer = createServer((req, res) => {
 
 		if (req.method === "PUT") {
 			let body = "";
-			req.on("data", (chunk) => { body += chunk; });
+			req.on("data", (chunk) => {
+				body += chunk;
+			});
 			req.on("end", () => {
 				try {
 					const parsed = JSON.parse(body);
@@ -290,10 +292,17 @@ const httpServer = createServer((req, res) => {
 	// ---- Leaderboard API ----
 	if (url === "/leaderboards" || url.startsWith("/leaderboards?")) {
 		if (req.method === "GET") {
-			const mode = new URL(url, `http://${req.headers.host}`).searchParams.get("mode");
+			const mode = new URL(url, `http://${req.headers.host}`).searchParams.get(
+				"mode",
+			);
 			if (mode && leaderboards[mode]) {
 				res.writeHead(200, { "Content-Type": "application/json" });
-				res.end(JSON.stringify({ ok: true, entries: leaderboards[mode].slice(0, 50) }));
+				res.end(
+					JSON.stringify({
+						ok: true,
+						entries: leaderboards[mode].slice(0, 50),
+					}),
+				);
 			} else {
 				res.writeHead(200, { "Content-Type": "application/json" });
 				res.end(JSON.stringify({ ok: true, leaderboards }));
@@ -324,7 +333,14 @@ const httpServer = createServer((req, res) => {
 				sprint: (leaderboards.sprint || []).length,
 				ultra: (leaderboards.ultra || []).length,
 			},
-			maps: (() => { try { return fs.readdirSync(MAPS_DIR).filter(function(f) { return f.endsWith(".json"); }).length; } catch(e) { return 0; } })(),
+			maps: (() => {
+				try {
+					return fs.readdirSync(MAPS_DIR).filter((f) => f.endsWith(".json"))
+						.length;
+				} catch (e) {
+					return 0;
+				}
+			})(),
 		};
 		res.writeHead(200, { "Content-Type": "application/json" });
 		res.end(JSON.stringify(stats, null, 2));
@@ -426,7 +442,9 @@ io.on("connection", (socket) => {
 		// Require authentication
 		const player = players.get(socket.id);
 		if (!player || !player.name) {
-			session["emit"]("error", { message: "You must set a name before creating rooms" });
+			session["emit"]("error", {
+				message: "You must set a name before creating rooms",
+			});
 			return;
 		}
 
@@ -496,7 +514,9 @@ io.on("connection", (socket) => {
 		// Require authentication
 		const joiner = players.get(socket.id);
 		if (!joiner || !joiner.name) {
-			session["emit"]("error", { message: "You must set a name before joining rooms" });
+			session["emit"]("error", {
+				message: "You must set a name before joining rooms",
+			});
 			return;
 		}
 
