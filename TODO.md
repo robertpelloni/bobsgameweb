@@ -11,4 +11,4 @@
 - [x] Implement rate-limiting and input validation for RPG world sync packets.
 - [x] Implement unified particle system and integrate into `WorldScene`.
 - [x] Refactor weather and footstep effects to use a unified particle system.
-- [ ] Evaluate `bobui` C++ integration with `cpp_port/` as the engine matures.
+- [x] Evaluate `bobui` C++ integration with `cpp_port/` and implement Wasm bridge skeleton.

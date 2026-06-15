@@ -5,6 +5,12 @@
 - **Enhanced Visual Effects**: Replaced procedural rain and footstep logic in `WorldScene` and `WeatherRenderer` with the new particle system.
 - **Particle Editor UI**: Added a "Particle Testing" panel to the `WorldEditor`.
 
+## v3.0.16 — 2026-06-08
+
+### Added
+- **C++ Porting Evaluation**: Analyzed `cpp_port/` and `submodules/bobui` for Wasm integration.
+- **Wasm Physics Bridge**: Implemented a architectural singleton `WasmPhysicsBridge` to facilitate future porting of heavy engine logic (physics, collision) to C++.
+
 ## v3.0.15 — 2026-06-08
 
 ### Added

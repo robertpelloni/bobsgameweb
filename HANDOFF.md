@@ -1,30 +1,31 @@
-# Handoff — 2026-06-08 — Version 3.0.15
+# Handoff — 2026-06-08 — Version 3.0.16
 
 ## Agent
 Jules (Software Engineer)
 
 ## Session Summary
-Implemented an audio performance optimization strategy. Created a `PerformanceManager` to detect low-end or mobile environments and updated the `AudioManager` to prioritize compressed OGG variants of audio assets when appropriate. Bumped project version to 3.0.15.
+Evaluated the C++ porting layer and established a WebAssembly bridge architecture. Analyzed `cpp_port/` and the `bobui` framework. Bumped project version to 3.0.16.
 
 ## What Was Completed
 
-### 1. Audio Performance Optimization
-- Developed `src/renderer/audio/PerformanceManager.ts` to detect performance constraints at runtime (User Agent and device memory).
-- Enhanced `AudioManager.ts` to prioritize OGG source variants for tracks in low-end environments, reducing CPU/memory pressure.
-- Maintained fallback support for standard WAV/Tracker assets.
+### 1. C++ Porting Evaluation
+- Analyzed `cpp_port/` (Qt-based editor skeleton) and `submodules/bobui` (extensive C++ UI and engine framework).
+- Confirmed `bobui` supports Wasm via Emscripten, though the toolchain is not currently present in the development environment.
 
-### 2. Particle System Unification (Previous Step)
-- Centralized particle logic into `ParticleEmitter` and refactored environmental effects (Weather, Footsteps).
+### 2. Wasm Physics Bridge
+- Implemented `src/renderer/engine/physics/WasmPhysicsBridge.ts` as a singleton architectural placeholder.
+- Updated the physics barrel export to include the new bridge.
+- This bridge provides the interface for future high-performance C++ logic integration.
 
 ### 3. Versioning & Documentation
-- Bumped version to **3.0.15** across all metadata files.
+- Bumped version to **3.0.16** across all metadata files.
 - Updated `CHANGELOG.md`, `TODO.md`, `MEMORY.md`, and created this `HANDOFF.md`.
 
 ## Production Readiness
-- **Version:** 3.0.15
-- **Performance:** Dynamic audio asset selection based on environment is now active.
+- **Version:** 3.0.16
+- **Architecture:** Bridge pattern established for Wasm migration.
 
 ## Highest-Value Next Steps
-1. **C++ Porting Layer:** Evaluate `bobui` C++ integration with `cpp_port/` as the engine matures.
-2. **WebGPU Sandbox:** Begin exploration of WebGPU-based particle visualizers as per ROADMAP Phase 3.
-3. **Multiplayer Expansion:** Hardening of regional clusters and further validation of world sync packets.
+1. **Toolchain Provisioning:** Install Emscripten in the development environment to begin actual Wasm compilation of core logic.
+2. **WebGPU Particle visualizer:** Begin implementation of FFT-driven visualizers as per ROADMAP Phase 3.
+3. **Advanced AI Dialogue:** Implement LLM-driven NPC interactions using the established GenAI pipeline.
