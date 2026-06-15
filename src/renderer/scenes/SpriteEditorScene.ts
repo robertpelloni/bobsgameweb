@@ -157,6 +157,13 @@ export class SpriteEditorScene extends Scene {
 		});
 		this.paletteContainer.addChild(title);
 
+		document.addEventListener('ai-asset-generated', (e: any) => {
+			const { type, data } = e.detail;
+			if (type === 'sprite' && data) {
+				this.loadAIImage(data);
+			}
+		});
+
 		const swatchSize = 24;
 		const cols = 4;
 		for (let i = 0; i < this.paletteColors.length; i++) {
@@ -250,6 +257,45 @@ export class SpriteEditorScene extends Scene {
 		this.redoStack.push(this.canvas.map(row => [...row]));
 		this.canvas = this.undoStack.pop()!;
 		this.renderCanvas();
+	}
+
+	private async loadAIImage(url: string): Promise<void> {
+		try {
+			const img = new Image();
+			img.crossOrigin = "anonymous";
+			await new Promise((resolve, reject) => {
+				img.onload = resolve;
+				img.onerror = reject;
+				img.src = url;
+			});
+
+			const canvas = document.createElement('canvas');
+			canvas.width = CANVAS_SIZE;
+			canvas.height = CANVAS_SIZE;
+			const ctx = canvas.getContext('2d')!;
+			ctx.drawImage(img, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
+			const imageData = ctx.getImageData(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+			this.saveUndoState();
+			for (let y = 0; y < CANVAS_SIZE; y++) {
+				for (let x = 0; x < CANVAS_SIZE; x++) {
+					const idx = (y * CANVAS_SIZE + x) * 4;
+					const r = imageData.data[idx];
+					const g = imageData.data[idx + 1];
+					const b = imageData.data[idx + 2];
+					const a = imageData.data[idx + 3];
+
+					if (a < 128) {
+						this.canvas[y][x] = 0;
+					} else {
+						this.canvas[y][x] = (r << 16) | (g << 8) | b;
+					}
+				}
+			}
+			this.renderCanvas();
+		} catch (e) {
+			console.error("Failed to load AI image into SpriteEditor", e);
+		}
 	}
 
 	private exportPNG(): void {

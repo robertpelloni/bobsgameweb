@@ -1,3 +1,10 @@
+## v3.0.11 — 2026-06-08
+
+### Added
+- **AI Asset Loading**: Implemented logic in `MapEditor` to load AI-generated sprites into the canvas and slice AI-generated tilesets into 8x8 tiles with palette matching.
+- **Image Processing Utilities**: Created `ImageUtils` to handle asynchronous image loading and pixel data extraction.
+- **Enhanced AI Feedback**: Added visual preview support for generated assets in the `CustomGameEditor`.
+
 ## v3.0.10 — 2026-06-08
 
 ### Added

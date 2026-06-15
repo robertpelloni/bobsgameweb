@@ -11,6 +11,7 @@ import { AutoTiler } from '../../shared/AutoTiler';
 import { AchievementManager } from '../data/AchievementManager';
 import { getAchievementIdentity } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
+import { ImageUtils } from '../utils/ImageUtils';
 
 export class MapEditor {
     private app: Application;
@@ -688,6 +689,60 @@ export class MapEditor {
         if (!networkManager.connected) return;
         const identity = getAchievementIdentity();
         networkManager.saveAchievementData(identity, AchievementManager.exportSnapshot());
+    }
+
+    public async loadAISprite(url: string): Promise<void> {
+        try {
+            const imageData = await ImageUtils.getImageData(url, 128, 128);
+            const frame = this.spriteFrames[this.currentFrameIndex];
+            frame.set(imageData.data);
+            this.renderSpriteCanvas();
+            ToastManager.showInfo("AI Sprite loaded into MapEditor canvas.");
+        } catch (e) {
+            console.error("Failed to load AI sprite", e);
+            ToastManager.showError("Failed to load AI sprite data.");
+        }
+    }
+
+    public async loadAITileset(url: string): Promise<void> {
+        try {
+            const imageData = await ImageUtils.getImageData(url);
+            // Slicing into 8x8 tiles
+            const tilesX = Math.floor(imageData.width / 8);
+            const tilesY = Math.floor(imageData.height / 8);
+            let tilesAdded = 0;
+
+            for (let ty = 0; ty < tilesY; ty++) {
+                for (let tx = 0; ty < tilesX; tx++) {
+                    const tileId = 200 + tilesAdded; // Start from 200 for AI tiles
+                    if (tileId >= this.tileset.numTiles) break;
+
+                    for (let py = 0; py < 8; py++) {
+                        for (let px = 0; px < 8; px++) {
+                            const sourceX = tx * 8 + px;
+                            const sourceY = ty * 8 + py;
+                            const idx = (sourceY * imageData.width + sourceX) * 4;
+
+                            const r = imageData.data[idx];
+                            const g = imageData.data[idx + 1];
+                            const b = imageData.data[idx + 2];
+
+                            // Simple palette matching or direct color injection?
+                            // For now, we inject into palette dynamically if needed
+                            // In a real system, we'd quantize.
+                            let colorIndex = this.palette.findNearestColor(new BobColor(r, g, b));
+                            this.tileset.setPixel(tileId, px, py, colorIndex);
+                        }
+                    }
+                    tilesAdded++;
+                }
+            }
+            this.renderTileList();
+            ToastManager.showInfo(`Loaded ${tilesAdded} AI tiles into tileset.`);
+        } catch (e) {
+            console.error("Failed to load AI tileset", e);
+            ToastManager.showError("Failed to load AI tileset data.");
+        }
     }
 
     public destroy(): void {
