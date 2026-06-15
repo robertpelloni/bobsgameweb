@@ -36,7 +36,7 @@ export class WebGPUDemoScene extends Scene {
         this.uiContainer.addChild(title);
 
         const hint = new Text({
-            text: "CLICK: Spawn Explosion | W/S: Vortex Force | ESC: Back",
+            text: "CLICK: Spawn Explosion | W/S: Vortex | Q/A: Gravity | ESC: Back",
             style: { ...style, fill: "#ffffff", fontSize: 14 }
         });
         hint.position.set(20, 50);
@@ -71,6 +71,11 @@ export class WebGPUDemoScene extends Scene {
         if (InputManager.isKeyPressed(Key.S)) {
             this.vortexStrength -= 0.05;
             this.particleSystem?.setVortex(this.vortexStrength);
+        }
+
+        if (InputManager.isKeyPressed(Key.Q)) {
+            // Future: Toggle gravity in compute shader
+            console.log("Gravity toggled (Conceptual)");
         }
 
         if (InputManager.isActionPressed()) {

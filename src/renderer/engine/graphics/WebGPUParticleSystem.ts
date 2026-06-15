@@ -14,7 +14,9 @@ export class WebGPUParticleSystem {
     private device: any = null;
     private particleBuffer: any = null;
     private computePipeline: any = null;
-    private bindGroup: any = null;
+    private computeBindGroup: any = null;
+    private renderPipeline: any = null;
+    private renderBindGroup: any = null;
 
     private numParticles = 10000;
     private readonly particleSize = 16; // 4 float32s (x, y, vx, vy)
@@ -118,12 +120,85 @@ export class WebGPUParticleSystem {
             usage: (window as any).GPUBufferUsage.UNIFORM | (window as any).GPUBufferUsage.COPY_DST,
         });
 
-        this.bindGroup = this.device.createBindGroup({
+        this.computeBindGroup = this.device.createBindGroup({
             layout: this.computePipeline.getBindGroupLayout(0),
             entries: [
                 { binding: 0, resource: { buffer: this.particleBuffer } },
                 { binding: 1, resource: { buffer: this.paramsBuffer } }
             ],
+        });
+
+        await this.setupRenderPipeline();
+    }
+
+    private async setupRenderPipeline(): Promise<void> {
+        const vertexShaderCode = `
+            struct Particle {
+                pos: vec2<f32>,
+                vel: vec2<f32>,
+            };
+
+            @group(0) @binding(0) var<storage, read> particles: array<Particle>;
+
+            struct VertexOutput {
+                @builtin(position) pos: vec4<f32>,
+                @location(0) color: vec4<f32>,
+            };
+
+            @vertex
+            fn main(@builtin(vertex_index) vertexIdx: u32, @builtin(instance_index) instanceIdx: u32) -> VertexOutput {
+                let p = particles[instanceIdx];
+
+                // Quad vertices (-1 to 1)
+                var pos = array<vec2<f32>, 4>(
+                    vec2<f32>(-1.0, -1.0),
+                    vec2<f32>(1.0, -1.0),
+                    vec2<f32>(-1.0, 1.0),
+                    vec2<f32>(1.0, 1.0)
+                );
+
+                let vPos = pos[vertexIdx];
+                let worldPos = p.pos + vPos * 2.0;
+
+                var out: VertexOutput;
+                // Simple ortho projection (0-800, 0-600 to -1,1)
+                out.pos = vec4<f32>(
+                    (worldPos.x / 400.0) - 1.0,
+                    1.0 - (worldPos.y / 300.0),
+                    0.0,
+                    1.0
+                );
+                out.color = vec4<f32>(0.0, 1.0, 1.0, 1.0);
+                return out;
+            }
+        `;
+
+        const fragmentShaderCode = `
+            @fragment
+            fn main(@location(0) color: vec4<f32>) -> @location(0) vec4<f32> {
+                return color;
+            }
+        `;
+
+        this.renderPipeline = this.device.createRenderPipeline({
+            layout: 'auto',
+            vertex: {
+                module: this.device.createShaderModule({ code: vertexShaderCode }),
+                entryPoint: 'main',
+            },
+            fragment: {
+                module: this.device.createShaderModule({ code: fragmentShaderCode }),
+                entryPoint: 'main',
+                targets: [{ format: 'bgra8unorm' }], // Standard format
+            },
+            primitive: {
+                topology: 'triangle-strip',
+            },
+        });
+
+        this.renderBindGroup = this.device.createBindGroup({
+            layout: this.renderPipeline.getBindGroupLayout(0),
+            entries: [{ binding: 0, resource: { buffer: this.particleBuffer } }],
         });
     }
 
@@ -142,11 +217,18 @@ export class WebGPUParticleSystem {
         this.device.queue.writeBuffer(this.paramsBuffer, 0, paramsData);
 
         const commandEncoder = this.device.createCommandEncoder();
-        const passEncoder = commandEncoder.beginComputePass();
-        passEncoder.setPipeline(this.computePipeline);
-        passEncoder.setBindGroup(0, this.bindGroup);
-        passEncoder.dispatchWorkgroups(Math.ceil(this.numParticles / 64));
-        passEncoder.end();
+
+        // 1. Compute Pass
+        const computePass = commandEncoder.beginComputePass();
+        computePass.setPipeline(this.computePipeline);
+        computePass.setBindGroup(0, this.computeBindGroup);
+        computePass.dispatchWorkgroups(Math.ceil(this.numParticles / 64));
+        computePass.end();
+
+        // 2. Render Pass (Conceptual - in a real implementation we'd need the canvas texture)
+        // Since we're integrated with PixiJS, we usually want Pixi to handle the render pass.
+        // For this demo, we just perform the compute.
+        // Rendering the storage buffer directly to a texture would require more setup.
 
         this.device.queue.submit([commandEncoder.finish()]);
     }

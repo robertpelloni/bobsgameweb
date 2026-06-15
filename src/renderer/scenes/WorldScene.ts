@@ -1715,11 +1715,13 @@ export class WorldScene extends Scene {
 		this.chatInput.style.left = "70px";
 		this.chatInput.style.bottom = "160px";
 		this.chatInput.style.width = this.width - 140 + "px";
-		this.chatInput.style.background = "rgba(0,0,0,0.8)";
-		this.chatInput.style.color = "#fff";
-		this.chatInput.style.border = "1px solid #66aaff";
-		this.chatInput.style.padding = "10px";
-		this.chatInput.style.borderRadius = "5px";
+		this.chatInput.style.background = "rgba(5, 5, 20, 0.85)";
+		this.chatInput.style.color = "#00ffff";
+		this.chatInput.style.border = "2px solid #66aaff";
+		this.chatInput.style.padding = "12px";
+		this.chatInput.style.borderRadius = "0px";
+		this.chatInput.style.fontFamily = "'Courier New', monospace";
+		this.chatInput.style.boxShadow = "0 0 15px rgba(102, 170, 255, 0.4)";
 		this.chatInput.style.outline = "none";
 		this.chatInput.style.display = "none";
 		this.chatInput.style.zIndex = "10001";
@@ -1732,7 +1734,7 @@ export class WorldScene extends Scene {
 				this.chatInput!.disabled = true;
 				this.chatHistory.push({ role: "user", content: msg });
 
-				this.showDialogue(`Talking to ${this.currentChatNPC}...`, false, "AI CHAT", true);
+				this.showDialogue(`${this.currentChatNPC} is thinking...`, false, "AI CHAT", true);
 
 				const response = await GenerativeAIManager.chatWithNPC(this.currentChatNPC!, msg, this.currentChatPersona!, this.chatHistory);
 				this.chatHistory.push({ role: "assistant", content: response });
