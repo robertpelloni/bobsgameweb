@@ -1604,8 +1604,7 @@ export class WorldScene extends Scene {
 		this.pauseContainer!.visible = true;
 		AudioManager.playSound("menu_select", { volume: 0.2 });
 	}
-		}
-	}
+
 	private createWeatherOverlay(): void {
 		if (this.weatherContainer) {
 			this.weatherContainer.destroy({ children: true });

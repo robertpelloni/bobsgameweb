@@ -9,13 +9,14 @@ import { Container, Text as PIXIText } from "pixi.js";
 import { EventSheetEditor } from "./EventSheetEditor";
 import { Panel } from "../ui/Panel";
 import { Button } from "../ui/Button";
-import { ParticlePresets } from "../engine/graphics/ParticleSystem";
+import { ParticleEmitter, ParticlePresets } from "../engine/graphics/ParticleSystem";
 
 export class WorldEditor {
     public pixiContainer: Container = new Container();
 
     private container: HTMLElement;
     private db: RPGDatabase = new RPGDatabase();
+    private particlePanel: Panel | null = null;
 
     constructor(parent: HTMLElement | string) {
         let parentElement: HTMLElement | null;
@@ -63,22 +64,33 @@ export class WorldEditor {
 
         this.pixiContainer.addChild(eventSheetPanel.container);
 
-        const particlePanel = new Panel({ width: 400, height: 120, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x00aa00 });
-        particlePanel.setPosition(420, 240);
-        const pTitle = new PIXIText({ text: "Particle Testing", style: { fill: 0x88ff88, fontSize: 18, fontWeight: "bold" } });
+        // Particle Testing Panel
+        this.particlePanel = new Panel({ width: 400, height: 200, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x00ffff });
+        this.particlePanel.setPosition(420, 240);
+        const pTitle = new PIXIText({ text: "Particle Testing", style: { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" } });
         pTitle.position.set(10, 10);
-        particlePanel.addChild(pTitle);
+        this.particlePanel.addChild(pTitle);
 
-        const testRainBtn = new Button("Test Rain", { width: 150, height: 30, backgroundColor: 0x004400 });
-        testRainBtn.setPosition(10, 45);
-        testRainBtn.on("click", () => {
-            const rain = ParticlePresets.rain(400, 0, 800);
-            this.pixiContainer.addChild(rain.container);
-            // In a real editor this would be managed by a system
+        const spawnFireBtn = new Button("Burst Fire", { width: 120, height: 30, backgroundColor: 0x440000 });
+        spawnFireBtn.setPosition(10, 45);
+        spawnFireBtn.on("click", () => {
+            const fire = ParticlePresets.fire(200, 100);
+            this.particlePanel!.addChild(fire.container);
+            let interval: any;
+            const update = () => {
+                fire.update(0.016);
+                fire.render();
+                if (fire.count === 0) {
+                    fire.destroy();
+                    clearInterval(interval);
+                }
+            };
+            // Simplification for editor testing
+            interval = setInterval(update, 16);
         });
-        particlePanel.addChild(testRainBtn.container);
+        this.particlePanel.addChild(spawnFireBtn.container);
 
-        this.pixiContainer.addChild(particlePanel.container);
+        this.pixiContainer.addChild(this.particlePanel.container);
 
         this.loadAchievementSnapshot();
     }

@@ -713,7 +713,7 @@ export class MapEditor {
             let tilesAdded = 0;
 
             for (let ty = 0; ty < tilesY; ty++) {
-                for (let tx = 0; ty < tilesX; tx++) {
+                for (let tx = 0; tx < tilesX; tx++) {
                     const tileId = 200 + tilesAdded; // Start from 200 for AI tiles
                     if (tileId >= this.tileset.numTiles) break;
 
