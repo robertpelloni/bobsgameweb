@@ -8,7 +8,10 @@ async function main(): Promise<void> {
 
   const app = new Application();
   
+  const preferWebGPU = localStorage.getItem('prefer-webgpu') === 'true';
+
   await app.init({
+    preference: preferWebGPU ? 'webgpu' : 'webgl',
     width: window.innerWidth,
     height: window.innerHeight,
     backgroundColor: 0x000000,

@@ -75,6 +75,7 @@ import { DialogueTracker } from "../engine/event/DialogueTracker";
 import { FlagManager } from "../engine/event/FlagManager";
 import { AmbientMusicGenerator } from "../audio/AmbientMusicGenerator";
 import { GenerativeAIManager } from "../editor/GenerativeAIManager";
+import { WebGPUParticleSystem } from "../engine/graphics/WebGPUParticleSystem";
 export class WorldScene extends Scene {
 	private world: World;
 	private map: GameMap | null = null;
@@ -128,6 +129,7 @@ export class WorldScene extends Scene {
 	private _ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
 	private weatherContainer: Container | null = null;
 	private weatherRenderer: WeatherRenderer | null = null;
+	private stormVortex: WebGPUParticleSystem | null = null;
 
 	private isExteriorMap: boolean = false;
 	private isPaused: boolean = false;
@@ -1611,7 +1613,7 @@ export class WorldScene extends Scene {
 		AudioManager.playSound("menu_select", { volume: 0.2 });
 	}
 
-	private createWeatherOverlay(): void {
+	private async createWeatherOverlay(): Promise<void> {
 		if (this.weatherContainer) {
 			this.weatherContainer.destroy({ children: true });
 		}
@@ -1620,6 +1622,9 @@ export class WorldScene extends Scene {
 		this.container.addChild(this.weatherContainer);
 		this.weatherRenderer = new WeatherRenderer(this.weatherContainer, this.width, this.height);
 		this.weatherRenderer.setWeather("rain", 0.5);
+
+		this.stormVortex = new WebGPUParticleSystem(this.app, this.weatherContainer);
+		await this.stormVortex.init();
 	}
 	private updateMinimap(): void {
 		if (!this.minimapGraphics || !this.playerTransform || !this.map) return;
@@ -2714,6 +2719,9 @@ export class WorldScene extends Scene {
 
 		if (this.isExteriorMap && this.weatherRenderer) {
 			this.weatherRenderer.update(dt / 1000);
+			if (this.weatherRenderer.getWeather() === 'rain' && this.stormVortex) {
+				this.stormVortex.update();
+			}
 		}
 		this.updateHud();
 		this.updateDebugHud();
@@ -2730,10 +2738,21 @@ export class WorldScene extends Scene {
 			);
 		}
 		// NPC interaction works in both online and offline mode
-		if (InputManager.isKeyPressed(Key.E) && !this.isDialogueActive) {
-			const npcTalked = this.tryInteractWithNearbyNPC();
-			if (!npcTalked) {
-				this.showEmoteBubble((this.world as any).playerEntityId, "Hello!");
+		if (this.interactionMode === 'normal') {
+			if (InputManager.isKeyPressed(Key.E)) {
+				const npcTalked = this.tryInteractWithNearbyNPC();
+				if (!npcTalked) {
+					this.showEmoteBubble((this.world as any).playerEntityId, "Hello!");
+				}
+			}
+		} else if (this.interactionMode === 'chat_choice') {
+			if (InputManager.isKeyPressed(Key.C)) {
+				this.showDialogue(`Hello again! What's on your mind?`, true, this.currentChatNPC!, true);
+			} else if (InputManager.isKeyPressed(Key.E)) {
+				const dialogue = getNPCDialogue(this.currentChatNPC!);
+				if (dialogue) {
+					this.showDialogue(dialogue.lines, true, dialogue.caption);
+				}
 			}
 		}
 		if (this.playerTransform && networkManager.connected) {
@@ -3641,6 +3660,7 @@ export class WorldScene extends Scene {
 				timestamp: Date.now(),
 				flags: FlagManager.serialize(),
 				dialogues: DialogueTracker.serialize(),
+				aiChatHistory: Array.from(this.chatHistoryCache.entries()),
 			};
 			try {
 				localStorage.setItem("bobsgame_save", JSON.stringify(saveData));
@@ -3668,6 +3688,9 @@ export class WorldScene extends Scene {
 					console.log("[WorldScene] Found local save:", s.map);
 					if (s.flags) FlagManager.deserialize(s.flags);
 					if (s.dialogues) DialogueTracker.deserialize(s.dialogues);
+					if (s.aiChatHistory) {
+						this.chatHistoryCache = new Map(s.aiChatHistory);
+					}
 					return s;
 				}
 			}

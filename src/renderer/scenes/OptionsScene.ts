@@ -136,7 +136,14 @@ export class OptionsScene extends Scene {
             gpuToggleBtn.text = 'Rendering: Prefer WebGPU';
         }
         gpuToggleBtn.onClick(() => {
-            alert(isWebGPUSupported ? "WebGPU will be prioritized on next restart." : "WebGPU not supported on this hardware.");
+            if (isWebGPUSupported) {
+                const current = localStorage.getItem('prefer-webgpu') === 'true';
+                localStorage.setItem('prefer-webgpu', (!current).toString());
+                gpuToggleBtn.text = `Rendering: Prefer ${!current ? 'WebGPU' : 'WebGL'}`;
+                alert("Rendering preference updated. Restart game to apply.");
+            } else {
+                alert("WebGPU not supported on this hardware.");
+            }
         });
         this.container.addChild(gpuToggleBtn.container);
         this.optionItems.push({ type: 'button', label: 'WebGPU Toggle', button: gpuToggleBtn });
