@@ -87,7 +87,7 @@ export class WorldScene extends Scene {
 	public playerTransform: TransformComponent | null = null;
 	private remotePlayers: Map<
 		string,
-		{ entityId: number; transform: TransformComponent }
+		{ entityId: number; transform: TransformComponent; targetX: number; targetY: number }
 	> = new Map();
 	private dialogueContainer: Container | null = null;
 	private dialogueText: Text | null = null;
@@ -130,6 +130,7 @@ export class WorldScene extends Scene {
 	private weatherRenderer: WeatherRenderer | null = null;
 
 	private isExteriorMap: boolean = false;
+	private interactionMode: "normal" | "dialogue" | "chat_choice" | "chatting" = "normal";
 	private isPaused: boolean = false;
 	private _autoSaveTimer: number = 0;
 	private chatInput: HTMLInputElement | null = null;
@@ -1863,6 +1864,7 @@ export class WorldScene extends Scene {
 						this.currentDialoguePage = this.dialoguePages.length;
 					} else {
 						this.isDialogueActive = false;
+						this.interactionMode = "normal";
 						this.dialogueContainer.visible = false;
 						this.chatInput!.style.display = "none";
 						AudioManager.playSound("menu_cancel", { volume: 0.1 });
@@ -2076,11 +2078,11 @@ export class WorldScene extends Scene {
 			const tex = this.app.renderer.generateTexture(g);
 			sprite.sprite = new Sprite(tex);
 			this.world.addComponent(entity, sprite);
-			this.remotePlayers.set(data.id, { entityId: entity, transform });
+			this.remotePlayers.set(data.id, { entityId: entity, transform, targetX: data.x, targetY: data.y });
 		} else {
 			const p = this.remotePlayers.get(data.id)!;
-			p.transform.x = data.x;
-			p.transform.y = data.y;
+			p.targetX = data.x;
+			p.targetY = data.y;
 		}
 	}
 	private handleRemotePlayerAction(data: any): void {
@@ -2331,11 +2333,43 @@ export class WorldScene extends Scene {
 			return; // Don't process game input while overlay is visible
 		}
 		if (this.isDialogueActive) {
+			// Handle Chat Choice Mode (C to chat, E for normal)
+			if (this.interactionMode === "chat_choice") {
+				if (InputManager.isKeyPressed(Key.C)) {
+					this.interactionMode = "chatting";
+					this.chatUIContainer!.visible = true;
+					this.showDialogue(`Hello there! What would you like to talk about?`, true, this.currentChatNPC!, true);
+				} else if (InputManager.isKeyPressed(Key.E)) {
+					this.interactionMode = "dialogue";
+					// Find the dialogue again - or we should have stored it.
+					// For now, assume it's stored in persona as lines join.
+					this.showDialogue(this.currentChatPersona || "...", true, this.currentChatNPC!);
+				}
+			}
+
 			this.updateDialogue(dt);
 			if (InputManager.isKeyPressed(Key.Tilde)) this.toggleConsole();
 			return;
 		}
 		this.world.update(dt);
+
+		// Interpolate remote players (frame-rate independent lerp)
+		for (const p of this.remotePlayers.values()) {
+			const dx = p.targetX - p.transform.x;
+			const dy = p.targetY - p.transform.y;
+			const dist = Math.sqrt(dx * dx + dy * dy);
+
+			if (dist > 0.1) {
+				// lerpFactor is adjusted by dt (assumed in seconds)
+				const lerpFactor = 1.0 - Math.exp(-15 * dt);
+				p.transform.x += dx * lerpFactor;
+				p.transform.y += dy * lerpFactor;
+			} else {
+				p.transform.x = p.targetX;
+				p.transform.y = p.targetY;
+			}
+		}
+
 		// === Player Movement with hit-collision ===
 		if (this.playerTransform && this.map && !this.isDialogueActive) {
 			const PLAYER_SPEED = (this as any)._customSpeed ?? 80; // pixels per second at 1X
@@ -3372,19 +3406,7 @@ export class WorldScene extends Scene {
 							this.chatHistory = [];
 
 							this.showDialogue(`[AI] Would you like to chat with ${dialogue.caption}? (Press C to Chat, E for Normal)`, true, dialogue.caption);
-
-							const onKey = (ev: KeyboardEvent) => {
-								if (ev.key.toLowerCase() === 'c') {
-									window.removeEventListener('keydown', onKey);
-									this.chatUIContainer!.visible = true;
-									this.showDialogue(`Hello there! What would you like to talk about?`, true, dialogue.caption, true);
-								} else if (ev.key.toLowerCase() === 'e') {
-									window.removeEventListener('keydown', onKey);
-									this.showDialogue(dialogue.lines, true, dialogue.caption);
-								}
-							};
-							window.addEventListener('keydown', onKey);
-							setTimeout(() => window.removeEventListener('keydown', onKey), 5000);
+							this.interactionMode = "chat_choice";
 
 							return true;
 						}

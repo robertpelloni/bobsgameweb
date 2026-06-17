@@ -1,3 +1,13 @@
+## v3.0.21 — 2026-06-08
+
+### Added
+- **Remote Interpolation**: Implemented client-side smooth lerping for remote players, eliminating movement jitter in regional clusters.
+- **Persona Context**: Enhanced Actor metadata with `persona` and `mood` fields, wired to the World Editor and AI pipeline.
+- **Interaction State Machine**: Centralized interaction logic into a robust state machine, consolidating 'Chat' (C) and 'Interact' (E) inputs.
+
+### Changed
+- **Architectural Cleanup**: Removed redundant global window input listeners in favor of scene-managed update loops.
+
 ## v3.0.20 — 2026-06-08
 
 ### Added
