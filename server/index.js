@@ -369,6 +369,11 @@ function checkRateLimit(socketId, type, minIntervalMs) {
 	const socketTimes = lastMessageTimes.get(socketId);
 	const lastTime = socketTimes[type] || 0;
 	if (now - lastTime < minIntervalMs) {
+		const player = players.get(socketId);
+		if (now - (socketTimes.lastLog || 0) > 5000) { // Throttle logging
+			console.warn(`[RateLimit] Player ${player?.name || socketId} limited on ${type} (${now - lastTime}ms < ${minIntervalMs}ms)`);
+			socketTimes.lastLog = now;
+		}
 		return false;
 	}
 	socketTimes[type] = now;

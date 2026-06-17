@@ -1,3 +1,14 @@
+## v3.0.18 — 2026-06-08
+
+### Added
+- **Wasm Physics Foundation**: Created C++ `PhysicsBridge` with AABB collision logic and Emscripten bindings.
+- **Enhanced Wasm Bridge**: Updated `WasmPhysicsBridge.ts` with Rect interface, batch collision support, and improved JS fallback.
+- **Server Health Monitoring**: Added real-time server status polling to the World Database Editor.
+- **Improved Rate-Limit Logging**: Enhanced server logs with throttled per-player rate-limit warnings.
+
+### Fixed
+- **Chiptune3 Worklet**: Corrected `getSongs()` return type to array for consistent subsong metadata extraction.
+
 ## v3.0.13 — 2026-06-08
 
 ### Added

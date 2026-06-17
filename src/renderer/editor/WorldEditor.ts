@@ -105,7 +105,10 @@ export class WorldEditor {
                 input { background: #333; border: 1px solid #555; color: #fff; padding: 5px; border-radius: 3px; }
             </style>
             <div class="editor-header">
-                <h2>RPG World Database Editor</h2>
+                <div>
+                    <h2>RPG World Database Editor</h2>
+                    <div id="server-status" style="font-size: 12px; color: #888;">Server: Polling...</div>
+                </div>
                 <div>
                     <button id="btn-ai-gen" style="background:#4400aa; color:#fff;">AI GEN SPRITE</button>
                     <button id="btn-add-actor">+ Actor</button>
@@ -120,6 +123,28 @@ export class WorldEditor {
         this.container.querySelector('#btn-save-db')?.addEventListener('click', () => this.saveToServer());
         this.container.querySelector('#btn-add-actor')?.addEventListener('click', () => this.addActor());
         this.container.querySelector('#btn-ai-gen')?.addEventListener('click', () => this.generateAiSprite());
+
+        // Polling for server stats
+        setInterval(() => this.pollServerStatus(), 5000);
+        this.pollServerStatus();
+    }
+
+    private async pollServerStatus() {
+        try {
+            const resp = await fetch(\`\${SERVER_URL}/stats\`);
+            const stats = await resp.json();
+            const el = this.container.querySelector('#server-status');
+            if (el) {
+                el.textContent = \`Server: Online | Players: \${stats.players} | Rooms: \${stats.rooms} | Uptime: \${stats.uptime}s\`;
+                el.style.color = '#00ff00';
+            }
+        } catch (e) {
+            const el = this.container.querySelector('#server-status');
+            if (el) {
+                el.textContent = 'Server: Offline';
+                el.style.color = '#ff0000';
+            }
+        }
     }
 
     private generateAiSprite() {

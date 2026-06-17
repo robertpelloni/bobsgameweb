@@ -17,5 +17,5 @@
 - [x] Implement real-time AI NPC chat in `WorldScene`.
 - [x] Implement WebGPU-Ready Particle System skeleton and hardware detection.
 - [x] Implement full WebGPU-based compute-shader particle demo.
-- [ ] Finalize `chiptune3.worklet.js` UTF8 string handling (todo: ?? marker).
+- [x] Finalize `chiptune3.worklet.js` UTF8 string handling (v3.0.18).
 - [ ] Connect `WasmPhysicsBridge` to actual physics loop for performance.
