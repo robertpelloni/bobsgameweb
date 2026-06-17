@@ -1,4 +1,4 @@
-import { Container, Graphics, Application, Mesh, Shader, Geometry, Buffer, BufferUsage } from 'pixi.js';
+import { Container, Graphics, Application } from 'pixi.js';
 
 /**
  * WebGPUParticleSystem
@@ -17,7 +17,6 @@ export class WebGPUParticleSystem {
     private computeBindGroup: any = null;
     private renderPipeline: any = null;
     private renderBindGroup: any = null;
-    private mesh: any = null;
 
     private numParticles = 10000;
     private readonly particleSize = 16; // 4 float32s (x, y, vx, vy)
@@ -201,35 +200,6 @@ export class WebGPUParticleSystem {
             layout: this.renderPipeline.getBindGroupLayout(0),
             entries: [{ binding: 0, resource: { buffer: this.particleBuffer } }],
         });
-
-        this.setupPixiMesh();
-    }
-
-    private setupPixiMesh(): void {
-        const geometry = new Geometry({
-            attributes: {
-                aVertex: {
-                    buffer: new Buffer({
-                        data: new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
-                        usage: BufferUsage.VERTEX,
-                    }),
-                    size: 2,
-                },
-            },
-            instanceCount: this.numParticles,
-            topology: 'triangle-strip',
-        });
-
-        // Link compute-managed storage buffer to vertex shader inputs conceptually
-        // In Pixi v8, we'd add this buffer to the Geometry attributes.
-        (geometry.attributes as any).aParticlePos = {
-            buffer: new Buffer({
-                data: this.particleBuffer, // Directly use the WebGPU buffer object if possible
-                usage: BufferUsage.VERTEX | BufferUsage.STORAGE,
-            }),
-            size: 4, // vec4 (pos.xy, vel.xy)
-            stepMode: 'instance',
-        };
     }
 
     private paramsBuffer: any = null;
