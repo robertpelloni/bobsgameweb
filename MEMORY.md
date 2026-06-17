@@ -1,12 +1,45 @@
-# MEMORY: okgame Architectural Observations
-- **Technology Stack:** TypeScript, PixiJS (rendering), Howler.js (audio), Vite (build tool), Electron/Capacitor (deployment).
-- **Audio:** `AudioManager` handles SFX and music, including support for Tracker modules (MOD, XM, S3M) via `chiptune3`.
-- **Legacy Recovery:** Current focus is on the "Great Recovery" phase, indexing Java metadata and importing assets via a dedicated pipeline.
-- **Entity System:** Yuu (main character) supports 8-directional movement (64 frames), while standard NPCs are 4-directional (32 frames).
-- **Blah System:** NPCs use pitching 'blah' sounds to simulate speech during dialogue.
-- **Global Project Version:** 3.0.16
-- **AI Asset Ingestion:** `MapEditor` supports direct loading of AI-generated assets. Sprites are scaled to 128x128. Tilesets are sliced into 8x8 tiles with nearest-neighbor palette matching against the current project palette.
-- **Server Hardening:** The WebSocket server implements per-socket rate-limiting for high-frequency gameplay and chat events. Input validation and HTML stripping are applied to all incoming event payloads.
-- **Unified Particle System:** A centralized particle engine (`ParticleEmitter`) is shared by the ECS `ParticleSystem` and the standalone `WeatherRenderer`. It supports complex configurations including physics, lerped appearance properties, and custom emission shapes.
-- **Audio Performance Strategy:** `PerformanceManager` detects low-end/mobile environments at runtime. `AudioManager` leverages this to prioritize compressed (OGG) audio assets, optimizing for CPU and memory usage while maintaining fallback support for WAV/Tracker files.
-- **C++ Porting Layer:** The engine includes a `WasmPhysicsBridge` as a foundation for porting heavy computation (collision, physics) to C++ via WebAssembly. `submodules/bobui` serves as the primary C++ framework reference for this integration.
+# PROJECT_MEMORY
+
+## Overview
+`bobsgameweb` (okgame) is a high-performance TypeScript/PIXI.js reimplementation of the "bob's game" engine. It bridges retro 2D gameplay with modern web tech (WebGPU, Wasm, AI) to support massive regional clustering (MMO) and high-fidelity effects while maintaining 1:1 legacy parity.
+
+## Architectural Patterns
+### 1. Entity Component System (ECS)
+- **Centralized Logic**: `src/renderer/engine/ecs/` decouples data (`Components`) from logic (`Systems`).
+- **Core Systems**: `RenderSystem`, `BehaviorSystem`, `Physics`, `PathfindingSystem`, and `WeatherSystem`.
+- **Standard Components**: `Transform`, `Sprite`, `Combat`, `Interaction`, `Quest`, `Inventory`.
+
+### 2. Scene Management
+- **StateManager**: A self-contained scene stack (e.g., `WorldScene`, `BattleScene`, `MenuScene`).
+- **Transition Layer**: `SceneTransition` provides visual effects (fades) during scene shifts.
+
+### 3. Rendering Pipeline (PIXI.js v8)
+- **Dual Pipeline**: Automatic WebGL/WebGPU switching.
+- **WebGPU Particles**: WGSL compute shaders for 100k+ particles with direct storage buffer rendering.
+- **HQ2X Upscaling**: Edge-aware upscaling for character sprites and assets.
+- **Depth Sorting**: Metadata-driven `hitBoxFromTop` (30px/24px) ensures correct Y-sorting for living entities.
+
+### 4. Physics & Movement
+- **Broad-phase**: Spatial Grid partitioning (128px cells) for $O(N)$ efficiency.
+- **Narrow-phase**: AABB collision detection with a **Wasm Physics Bridge** (C++ backend) for high-density scenarios.
+- **8-Directional Movement**: Includes "parity turning" (transitions through diagonals) to match legacy visual behavior.
+- **Collision Rules**: Tile-based collision using `WALL_IDS`, `FLOOR_IDS`, and `extra` layer markers.
+
+### 5. AI-Driven Ecosystem
+- **Generative Assets**: Text-to-sprite and text-to-dialogue generation integrated into the World Editor.
+- **Conversational NPCs**: Persistent chat history using `persona` and `mood` metadata.
+
+### 6. Network & Scaling
+- **Spatial Partitioning**: Map-specific Socket.io rooms to minimize global bandwidth.
+- **Binary Compression**: `pako` (zlib) compression for world sync packets > 512 bytes.
+- **Interpolation**: Client-side exponential decay lerping for remote players.
+
+## Technical Decisions
+- **Submodule Assimilation**: Removed 31 redundant submodules (Aseprite, Ogmo, etc.) and ported their core logic to TypeScript to reduce технический долг (technical debt).
+- **Environment Detection**: `PerformanceManager` optimizes assets (prioritizing OGG) for mobile or low-end hardware.
+- **Wasm Migration**: Strategic migration of CPU-heavy logic (physics, pathfinding) to C++ via Emscripten.
+
+## Implementation Details (v3.0.22)
+- Standardized character interaction via an `interactionMode` state machine.
+- Integrated high-performance particle effects (dust, rain, fire) into `WorldScene`.
+- Full integration test suite (32+ files) verified at 100% pass rate.

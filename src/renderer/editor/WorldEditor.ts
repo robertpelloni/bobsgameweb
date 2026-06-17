@@ -131,7 +131,7 @@ export class WorldEditor {
 
     private async pollServerStatus() {
         try {
-            const resp = await fetch(`${SERVER_URL}/stats`);
+            const resp = await fetch(\`\${SERVER_URL}/stats\`);
             const stats = await resp.json();
             const el = this.container.querySelector('#server-status');
             if (el) {
@@ -246,48 +246,14 @@ export class WorldEditor {
             const row = document.createElement('div');
             row.className = 'actor-row';
             row.innerHTML = `
-                <div class="actor-row" style="flex-wrap: wrap;">
+                <div class="actor-row">
                     <span>ID: ${actor.id}</span>
-                    <input type="text" value="${actor.name}" class="actor-name-input" title="Name">
-                    <input type="text" placeholder="Sprite" value="${actor.characterName}" class="actor-sprite-input" title="Sprite">
-                    <input type="text" placeholder="Persona" value="${actor.persona || ''}" class="actor-persona-input" title="AI Persona Context" style="width: 150px;">
-                    <input type="text" placeholder="Mood" value="${actor.mood || ''}" class="actor-mood-input" title="Current Mood" style="width: 80px;">
+                    <input type="text" value="${actor.name}" class="actor-name-input">
+                    <input type="text" placeholder="Character Sprite" value="${actor.characterName}" class="actor-sprite-input">
                     <button class="btn-edit-interaction" data-id="${actor.id}">INTERACTIONS</button>
                 </div>
             `;
             list.appendChild(row);
-        });
-
-        list.querySelectorAll('.actor-name-input').forEach(input => {
-            input.addEventListener('change', (e) => {
-                const id = parseInt(((e.target as HTMLElement).parentElement!.querySelector('span')!.textContent!).replace('ID: ', ''));
-                const actor = this.db.actors.find(a => a.id === id);
-                if (actor) actor.name = (e.target as HTMLInputElement).value;
-            });
-        });
-
-        list.querySelectorAll('.actor-sprite-input').forEach(input => {
-            input.addEventListener('change', (e) => {
-                const id = parseInt(((e.target as HTMLElement).parentElement!.querySelector('span')!.textContent!).replace('ID: ', ''));
-                const actor = this.db.actors.find(a => a.id === id);
-                if (actor) actor.characterName = (e.target as HTMLInputElement).value;
-            });
-        });
-
-        list.querySelectorAll('.actor-persona-input').forEach(input => {
-            input.addEventListener('change', (e) => {
-                const id = parseInt(((e.target as HTMLElement).parentElement!.querySelector('span')!.textContent!).replace('ID: ', ''));
-                const actor = this.db.actors.find(a => a.id === id);
-                if (actor) actor.persona = (e.target as HTMLInputElement).value;
-            });
-        });
-
-        list.querySelectorAll('.actor-mood-input').forEach(input => {
-            input.addEventListener('change', (e) => {
-                const id = parseInt(((e.target as HTMLElement).parentElement!.querySelector('span')!.textContent!).replace('ID: ', ''));
-                const actor = this.db.actors.find(a => a.id === id);
-                if (actor) actor.mood = (e.target as HTMLInputElement).value;
-            });
         });
 
         list.querySelectorAll('.btn-edit-interaction').forEach(btn => {

@@ -9,8 +9,6 @@ export interface ActorData {
     faceName: string;
     characterName: string;
     description: string;
-    persona?: string;   // For AI conversational context
-    mood?: string;      // Current emotional state
 }
 
 export interface SkillData {

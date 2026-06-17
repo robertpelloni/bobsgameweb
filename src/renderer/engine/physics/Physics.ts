@@ -115,9 +115,8 @@ export class Physics {
         this.updateGrid();
 
         // Detect and resolve collisions (multiple iterations for stability)
-        const checkedPairs = new Set<string>();
-
         for (let iter = 0; iter < this.iterations; iter++) {
+            const checkedPairs = new Set<string>();
             for (const bodiesInCell of this.grid.values()) {
                 if (bodiesInCell.length < 2) continue;
 
@@ -129,9 +128,13 @@ export class Physics {
                         if (a.isStatic && b.isStatic) continue;
 
                         // Ensure we only check each pair once per iteration
-                        const pairKey = a.mass < b.mass ? `${(a as any).id || i},${(b as any).id || j}` : `${(b as any).id || j},${(a as any).id || i}`;
-                        // Since we don't have unique numeric IDs reliably on interfaces,
-                        // we'll use a simpler check for this lightweight engine iteration
+                        // Since we don't have unique numeric IDs on interfaces, we use a combined hash of coordinates and dimensions as a temporary ID
+                        const idA = `${a.x},${a.y},${a.width},${a.height},${a.tag}`;
+                        const idB = `${b.x},${b.y},${b.width},${b.height},${b.tag}`;
+                        const pairKey = idA < idB ? `${idA}|${idB}` : `${idB}|${idA}`;
+
+                        if (checkedPairs.has(pairKey)) continue;
+                        checkedPairs.add(pairKey);
 
                         // Narrow-phase boolean check via Wasm Bridge
                         const mightCollide = this.wasmBridge.checkCollision(
