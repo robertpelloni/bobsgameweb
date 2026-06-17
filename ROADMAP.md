@@ -6,7 +6,7 @@
     - [x] SFX library (IDs 0-87) full mapping.
     - [x] 8-directional animation for Yuu (64 frames implemented in `YuuEntity`).
     - [x] Collision parity with metadata-driven hitboxes (30px/24px).
-- [ ] **Phase 3: Modernization** - Implementing WebGPU rendering, advanced particle systems, and FFT-driven visualizers.
+- [x] **Phase 3: Modernization** - Implementing WebGPU rendering, advanced particle systems, and FFT-driven visualizers.
 - [ ] **Phase 4: Expansion** - Developing new regional clusters, multiplayer hardening, and mobile optimization.
     - [x] Server-side spatial partitioning (Regional Clusters).
     - [x] Mobile UI Refinement (Virtual Joystick).

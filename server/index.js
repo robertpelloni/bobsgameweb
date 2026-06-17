@@ -13,6 +13,7 @@ import { createServer } from "http";
 import path from "path";
 import { Server } from "socket.io";
 import { fileURLToPath } from "url";
+import pako from "pako";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -812,21 +813,22 @@ io.on("connection", (socket) => {
 			player.lastY = pos.y;
 
 			// Broadcast only to players in the same map cluster
-			if (player.currentMap) {
-				socket.to(`map_${player.currentMap}`).emit("remotePlayerMove", {
-					id: socket.id,
-					name: player.name,
-					x: pos.x,
-					y: pos.y,
-				});
+			const payload = {
+				id: socket.id,
+				name: player.name,
+				x: pos.x,
+				y: pos.y,
+			};
+
+			const target = player.currentMap ? socket.to(`map_${player.currentMap}`) : socket.broadcast;
+
+			// Dynamic Compression for high-frequency world sync
+			const json = JSON.stringify(payload);
+			if (json.length > 512) {
+				const compressed = pako.deflate(json);
+				target.emit("remotePlayerMove", { c: true, d: compressed });
 			} else {
-				// Fallback to global broadcast
-				socket.broadcast.emit("remotePlayerMove", {
-					id: socket.id,
-					name: player.name,
-					x: pos.x,
-					y: pos.y,
-				});
+				target.emit("remotePlayerMove", payload);
 			}
 		}
 	});

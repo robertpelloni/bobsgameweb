@@ -1,3 +1,13 @@
+## v3.0.20 — 2026-06-08
+
+### Added
+- **Optimized Physics Engine**: Integrated `WasmPhysicsBridge` into `Physics.ts` for accelerated narrow-phase checks.
+- **Spatial Grid Broad-phase**: Implemented O(N) collision detection using a 128px spatial grid to support massive entity counts.
+- **Packet Compression**: Integrated `pako` (zlib) for dynamic compression of high-frequency MMO world sync traffic.
+
+### Changed
+- **Performance Architecture**: Refactored the core physics loop to utilize spatial partitioning, significantly reducing CPU overhead in dense regional clusters.
+
 ## v3.0.19 — 2026-06-08
 
 ### Added
