@@ -304,6 +304,14 @@ const httpServer = createServer((req, res) => {
 
 	// ---- Stats / Monitoring ----
 	if (url === "/stats" || url.startsWith("/stats?")) {
+		// Calculate map population
+		const mapPop = {};
+		for (const p of players.values()) {
+			if (p.currentMap) {
+				mapPop[p.currentMap] = (mapPop[p.currentMap] || 0) + 1;
+			}
+		}
+
 		const stats = {
 			ok: true,
 			service: "bobsgameweb-socket-server",
@@ -319,6 +327,7 @@ const httpServer = createServer((req, res) => {
 			rooms: rooms.size,
 			tournaments: tournaments.size,
 			profiles: Object.keys(profiles).length,
+			mapPopulation: mapPop,
 			leaderboardEntries: {
 				marathon: (leaderboards.marathon || []).length,
 				sprint: (leaderboards.sprint || []).length,
@@ -406,6 +415,9 @@ io.on("connection", (socket) => {
 			elo,
 			wins,
 			losses,
+			currentMap: null,
+			lastX: undefined,
+			lastY: undefined
 		});
 
 		// Update profile last seen
@@ -759,25 +771,81 @@ io.on("connection", (socket) => {
 	// MMORPG World Sync
 	// ----------------------------------------------------------
 
+	// MMORPG Map/Region Management
+	socket.on("joinMap", (mapId) => {
+		const player = players.get(socket.id);
+		if (!player) return;
+
+		// Leave previous map room if any
+		if (player.currentMap) {
+			socket.leave(`map_${player.currentMap}`);
+		}
+
+		player.currentMap = mapId;
+		socket.join(`map_${mapId}`);
+		console.log(`[MMO] Player ${player.name} joined map: ${mapId}`);
+
+		// Notify others in the map
+		socket.to(`map_${mapId}`).emit("chatMessage", {
+			message: `${player.name} entered the area`,
+			name: "System",
+			timestamp: Date.now()
+		});
+	});
+
 	socket.on("playerMove", (pos) => {
 		if (!checkRateLimit(socket.id, "move", 50)) return; // ~30fps
 		if (typeof pos.x !== "number" || !isFinite(pos.x) || typeof pos.y !== "number" || !isFinite(pos.y)) return;
 
-		// Broadcast player position to everyone in the world
-		socket.broadcast.emit("remotePlayerMove", {
-			id: socket.id,
-			name: players.get(socket.id)?.name || "Unknown",
-			x: pos.x,
-			y: pos.y,
-		});
+		const player = players.get(socket.id);
+		if (player) {
+			// Basic speed-hack detection
+			if (player.lastX !== undefined) {
+				const dx = pos.x - player.lastX;
+				const dy = pos.y - player.lastY;
+				const distSq = dx * dx + dy * dy;
+				if (distSq > 10000) {
+					console.warn(`[Anti-Cheat] Player ${player.name} moved too fast!`);
+				}
+			}
+			player.lastX = pos.x;
+			player.lastY = pos.y;
+
+			// Broadcast only to players in the same map cluster
+			if (player.currentMap) {
+				socket.to(`map_${player.currentMap}`).emit("remotePlayerMove", {
+					id: socket.id,
+					name: player.name,
+					x: pos.x,
+					y: pos.y,
+				});
+			} else {
+				// Fallback to global broadcast
+				socket.broadcast.emit("remotePlayerMove", {
+					id: socket.id,
+					name: player.name,
+					x: pos.x,
+					y: pos.y,
+				});
+			}
+		}
 	});
 
 	socket.on("playerAction", (action) => {
-		socket.broadcast.emit("remotePlayerAction", {
-			id: socket.id,
-			type: action.type, // e.g. 'jump', 'emote', 'interact'
-			data: action.data,
-		});
+		const player = players.get(socket.id);
+		if (player && player.currentMap) {
+			socket.to(`map_${player.currentMap}`).emit("remotePlayerAction", {
+				id: socket.id,
+				type: action.type,
+				data: action.data,
+			});
+		} else {
+			socket.broadcast.emit("remotePlayerAction", {
+				id: socket.id,
+				type: action.type,
+				data: action.data,
+			});
+		}
 	});
 
 	// ----------------------------------------------------------

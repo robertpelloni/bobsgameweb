@@ -168,6 +168,20 @@ export class OptionsScene extends Scene {
         this.container.addChild(testSoundBtn.container);
         this.optionItems.push({ type: 'button', label: 'Test Sound', button: testSoundBtn });
 
+        // Haptic Feedback Slider
+        const hapticValue = parseInt(localStorage.getItem('haptic-intensity') || '10') / 50;
+        const hapticSlider = this.createSlider(
+            'Haptic Intensity',
+            hapticValue,
+            startY + spacing * 4.6,
+            (v) => {
+                const intensity = Math.round(v * 50);
+                localStorage.setItem('haptic-intensity', intensity.toString());
+                if (intensity > 0 && "vibrate" in navigator) navigator.vibrate(intensity);
+            }
+        );
+        this.optionItems.push({ type: 'slider', label: 'Haptic Intensity', slider: hapticSlider });
+
         // HD Sprites Toggle
         const hdBtnStyle: ButtonStyle = {
             width: 320,

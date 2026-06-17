@@ -8,3 +8,6 @@
     - [x] Collision parity with metadata-driven hitboxes (30px/24px).
 - [ ] **Phase 3: Modernization** - Implementing WebGPU rendering, advanced particle systems, and FFT-driven visualizers.
 - [ ] **Phase 4: Expansion** - Developing new regional clusters, multiplayer hardening, and mobile optimization.
+    - [x] Server-side spatial partitioning (Regional Clusters).
+    - [x] Mobile UI Refinement (Virtual Joystick).
+    - [x] Hardened map transition protocol.

@@ -135,7 +135,17 @@ export class WorldEditor {
             const stats = await resp.json();
             const el = this.container.querySelector('#server-status');
             if (el) {
-                el.textContent = \`Server: Online | Players: \${stats.players} | Rooms: \${stats.rooms} | Uptime: \${stats.uptime}s\`;
+                let statusText = `Server: Online | Players: ${stats.players} | Rooms: ${stats.rooms} | Uptime: ${stats.uptime}s`;
+
+                // Show regional breakdown if available
+                if (stats.mapPopulation) {
+                    const maps = Object.keys(stats.mapPopulation);
+                    if (maps.length > 0) {
+                        statusText += ` | Clusters: ${maps.length}`;
+                    }
+                }
+
+                el.textContent = statusText;
                 el.style.color = '#00ff00';
             }
         } catch (e) {

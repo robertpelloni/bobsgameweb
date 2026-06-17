@@ -1117,6 +1117,12 @@ export class WorldScene extends Scene {
 		this.container.addChild(loadingText);
 		// Try to load the map by name
 		const loaded = await this.loadLegacyMapByName(mapId);
+
+		// Notify server of map change for regional clustering
+		if (loaded && networkManager.connected) {
+			networkManager.emit("joinMap", mapId);
+		}
+
 		// Remove loading text
 		loadingText.destroy();
 		if (!loaded) {

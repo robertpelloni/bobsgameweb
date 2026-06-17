@@ -1,3 +1,14 @@
+## v3.0.19 — 2026-06-08
+
+### Added
+- **Regional Clusters**: Implemented server-side spatial partitioning using Socket.io rooms to optimize MMO traffic.
+- **Virtual Joystick**: Replaced legacy mobile D-pad with a fluid Analog Joystick supporting 8-directional input.
+- **Haptic Intensity Control**: Added customizable vibration feedback settings for mobile devices in the Options menu.
+- **Population Metrics**: Updated the `/stats` endpoint and World Editor to display regional cluster population.
+
+### Changed
+- **Hardened Transitions**: Upgraded `WorldScene` map transition protocol to include explicit map-room synchronization with the server.
+
 ## v3.0.18 — 2026-06-08
 
 ### Added
