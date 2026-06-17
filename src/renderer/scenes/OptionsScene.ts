@@ -207,6 +207,29 @@ export class OptionsScene extends Scene {
         });
         this.container.addChild(hdToggleBtn.container);
         this.optionItems.push({ type: 'button', label: 'HD Toggle', button: hdToggleBtn });
+
+        // Mobile Mode Toggle
+        const mobileBtnStyle: ButtonStyle = {
+            width: 320,
+            height: 40,
+            backgroundColor: 0x1a2a4a,
+            borderColor: 0x4a6a8a,
+            borderWidth: 2,
+            textColor: 0xffffff,
+            fontSize: 18,
+            borderRadius: 4
+        };
+        const mobileMode = localStorage.getItem('mobile-mode-override') === 'true';
+        const mobileToggleBtn = new Button(`Mobile Mode: ${mobileMode ? 'ON' : 'OFF'}`, mobileBtnStyle);
+        mobileToggleBtn.setPosition(this.centerX, startY + spacing * 0.6);
+        mobileToggleBtn.onClick(() => {
+            const current = localStorage.getItem('mobile-mode-override') === 'true';
+            localStorage.setItem('mobile-mode-override', (!current).toString());
+            mobileToggleBtn.text = `Mobile Mode: ${!current ? 'ON' : 'OFF'}`;
+            this.playSelectSound();
+        });
+        this.container.addChild(mobileToggleBtn.container);
+        this.optionItems.push({ type: 'button', label: 'Mobile Mode', button: mobileToggleBtn });
     }
 
     private createSlider(label: string, initialValue: number, y: number, onChange: (value: number) => void): Slider {

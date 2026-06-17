@@ -127,22 +127,26 @@ export class TouchControls extends Container {
 
 	private createActionButtons(): void {
 		const actions = [
-			{ key: " ", x: 0, y: -40, color: 0x44ff44, label: "A" },
-			{ key: "Escape", x: -45, y: 0, color: 0xff4444, label: "B" },
-			{ key: "e", x: 45, y: 0, color: 0x4488ff, label: "E" },
+			{ key: " ", x: 0, y: -45, color: 0x44ff44, label: "A" },
+			{ key: "Escape", x: -50, y: 0, color: 0xff4444, label: "B" },
+			{ key: "e", x: 50, y: 0, color: 0x4488ff, label: "E" },
+			{ key: "i", x: -40, y: -65, color: 0xffff44, label: "INV", small: true },
+			{ key: "q", x: 40, y: -65, color: 0xff88ff, label: "QST", small: true },
+			{ key: "Shift", x: 0, y: 45, color: 0x888888, label: "RUN", small: true },
 		];
 
 		for (const act of actions) {
 			const btn = new Graphics();
-			btn.circle(0, 0, 26);
-			btn.fill({ color: act.color, alpha: 0.2 });
-			btn.stroke({ color: 0xffffff, width: 1.5, alpha: 0.4 });
+			const radius = act.small ? 20 : 26;
+			btn.circle(0, 0, radius);
+			btn.fill({ color: act.color, alpha: 0.25 });
+			btn.stroke({ color: 0xffffff, width: 1.5, alpha: 0.5 });
 			btn.position.set(act.x, act.y);
 			btn.eventMode = "static";
 
 			const label = new Text({
 				text: act.label,
-				style: new TextStyle({ fill: 0xffffff, fontSize: 13, fontWeight: "bold" }),
+				style: new TextStyle({ fill: 0xffffff, fontSize: act.small ? 9 : 13, fontWeight: "bold" }),
 			});
 			label.anchor.set(0.5);
 			btn.addChild(label);

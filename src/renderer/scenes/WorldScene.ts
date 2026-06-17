@@ -486,9 +486,22 @@ export class WorldScene extends Scene {
 		this.createConsoleUI();
 		this.createMinimapUI();
 		this.createHudUI();
-		if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+
+		const mobileMode = localStorage.getItem('mobile-mode-override') === 'true' ||
+						  "ontouchstart" in window ||
+						  navigator.maxTouchPoints > 0;
+
+		if (mobileMode) {
 			this.touchControls = new TouchControls(this.width, this.height);
 			this.container.addChild(this.touchControls as any);
+
+			// Reposition HUD for mobile to avoid overlap with controls
+			if (this.hudContainer) {
+				this.hudContainer.position.set(20, 110); // Move down below top buttons if any
+			}
+			if (this.minimapContainer) {
+				this.minimapContainer.position.set(this.width - 160, 110);
+			}
 		}
 		// Show the room name
 		this.showRoomBanner(
