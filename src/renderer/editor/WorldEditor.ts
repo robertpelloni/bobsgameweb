@@ -131,7 +131,7 @@ export class WorldEditor {
 
     private async pollServerStatus() {
         try {
-            const resp = await fetch(\`\${SERVER_URL}/stats\`);
+            const resp = await fetch(`${SERVER_URL}/stats`);
             const stats = await resp.json();
             const el = this.container.querySelector('#server-status');
             if (el) {

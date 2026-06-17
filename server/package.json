@@ -12,6 +12,9 @@
     "node": ">=20"
   },
   "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "openai": "^6.35.0",
     "pako": "^2.1.0",
     "socket.io": "^4.7.2"
   }

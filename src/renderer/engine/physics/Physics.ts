@@ -121,28 +121,29 @@ export class Physics {
                 if (bodiesInCell.length < 2) continue;
 
                 for (let i = 0; i < bodiesInCell.length; i++) {
-                    for (let j = i + 1; j < bodiesInCell.length; j++) {
-                        const a = bodiesInCell[i];
-                        const b = bodiesInCell[j];
+                    const a = bodiesInCell[i];
+
+                    // Slice the remaining bodies in the cell for batch processing
+                    const remaining = bodiesInCell.slice(i + 1);
+                    if (remaining.length === 0) continue;
+
+                    const othersRects = remaining.map(b => ({ x: b.x, y: b.y, w: b.width, h: b.height }));
+                    const collisionIndices = this.wasmBridge.checkBatchCollisions(
+                        { x: a.x, y: a.y, w: a.width, h: a.height },
+                        othersRects
+                    );
+
+                    for (const idx of collisionIndices) {
+                        const b = remaining[idx];
 
                         if (a.isStatic && b.isStatic) continue;
 
-                        // Ensure we only check each pair once per iteration
-                        // Since we don't have unique numeric IDs on interfaces, we use a combined hash of coordinates and dimensions as a temporary ID
                         const idA = `${a.x},${a.y},${a.width},${a.height},${a.tag}`;
                         const idB = `${b.x},${b.y},${b.width},${b.height},${b.tag}`;
                         const pairKey = idA < idB ? `${idA}|${idB}` : `${idB}|${idA}`;
 
                         if (checkedPairs.has(pairKey)) continue;
                         checkedPairs.add(pairKey);
-
-                        // Narrow-phase boolean check via Wasm Bridge
-                        const mightCollide = this.wasmBridge.checkCollision(
-                            { x: a.x, y: a.y, w: a.width, h: a.height },
-                            { x: b.x, y: b.y, w: b.width, h: b.height }
-                        );
-
-                        if (!mightCollide) continue;
 
                         const collision = this.checkAABB(a, b);
                         if (collision) {
