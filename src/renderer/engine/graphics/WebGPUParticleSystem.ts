@@ -37,6 +37,8 @@ export class WebGPUParticleSystem {
         console.log(`[WebGPU] Particle system initialized with ${maxParticles} particles.`);
     }
 
+    private paramsBuffer: GPUBuffer | null = null;
+
     private createBuffers() {
         if (!this.device) return;
 
@@ -45,6 +47,12 @@ export class WebGPUParticleSystem {
         this.particleBuffer = this.device.createBuffer({
             size: bufferSize,
             usage: GPUBufferUsage.STORAGE | GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST
+        });
+
+        // Params buffer: dt(f32), vortexStrength(f32), vortexCenter(vec2<f32>) = 4 floats = 16 bytes
+        this.paramsBuffer = this.device.createBuffer({
+            size: 16,
+            usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
         });
     }
 
@@ -102,16 +110,28 @@ export class WebGPUParticleSystem {
             layout: 'auto',
             compute: { module: shaderModule, entryPoint: 'main' }
         });
+
+        this.bindGroup = this.device.createBindGroup({
+            layout: this.computePipeline.getBindGroupLayout(0),
+            entries: [
+                { binding: 0, resource: { buffer: this.particleBuffer! } },
+                { binding: 1, resource: { buffer: this.paramsBuffer! } }
+            ]
+        });
     }
 
     public update(dt: number) {
-        if (!this.initialized || !this.device || !this.computePipeline) return;
+        if (!this.initialized || !this.device || !this.computePipeline || !this.bindGroup) return;
+
+        // Update uniforms
+        const params = new Float32Array([dt, 50.0, 500.0, 500.0]); // dt, strength, centerX, centerY
+        this.device.queue.writeBuffer(this.paramsBuffer!, 0, params);
 
         // Dispatch compute shader
         const commandEncoder = this.device.createCommandEncoder();
         const passEncoder = commandEncoder.beginComputePass();
         passEncoder.setPipeline(this.computePipeline);
-        // passEncoder.setBindGroup(0, this.bindGroup);
+        passEncoder.setBindGroup(0, this.bindGroup);
         passEncoder.dispatchWorkgroups(Math.ceil(this.particleCount / 64));
         passEncoder.end();
 

@@ -3,8 +3,12 @@
  * 
  * Offloads heavy pathfinding and logic from the main thread.
  */
+import { WasmPhysicsBridge } from './physics/WasmPhysicsBridge';
 
 interface Point { x: number, y: number }
+
+const wasmBridge = WasmPhysicsBridge.getInstance();
+wasmBridge.init();
 
 self.onmessage = (e) => {
     const { type, data } = e.data;
@@ -12,14 +16,29 @@ self.onmessage = (e) => {
     switch (type) {
         case 'findPath':
             const { start, end, grid, width, height } = data;
-            const path = findPath(start, end, grid, width, height);
-            self.postMessage({ type: 'pathResult', data: { entityId: data.entityId, path } });
+
+            // Try Wasm pathfinding first
+            const wasmPath = wasmBridge.findPath(
+                start.x, start.y,
+                end.x, end.y,
+                width, height,
+                Array.from(grid),
+                true
+            );
+
+            if (wasmPath && wasmPath.length > 0) {
+                self.postMessage({ type: 'pathResult', data: { entityId: data.entityId, path: wasmPath } });
+            } else {
+                // Fallback to JS A*
+                const path = findPath(start, end, grid, width, height);
+                self.postMessage({ type: 'pathResult', data: { entityId: data.entityId, path } });
+            }
             break;
     }
 };
 
 /**
- * Simple A* Implementation for grid pathfinding
+ * Simple A* Implementation for grid pathfinding (JS Fallback)
  */
 function findPath(start: Point, end: Point, grid: Int32Array, width: number, height: number): Point[] {
     const openSet: Point[] = [start];

@@ -48,8 +48,16 @@ export class TouchControls extends Container {
 
 		this.joystickBase.eventMode = "static";
 		this.joystickBase.on("pointerdown", this.onJoystickDown, this);
-		window.addEventListener("pointermove", this.onJoystickMove.bind(this));
-		window.addEventListener("pointerup", this.onJoystickUp.bind(this));
+		this._onPointerMove = this.onJoystickMove.bind(this);
+		this._onPointerUp = this.onJoystickUp.bind(this);
+		window.addEventListener("pointermove", this._onPointerMove);
+		window.addEventListener("pointerup", this._onPointerUp);
+	}
+
+	public destroy(options?: any): void {
+		window.removeEventListener("pointermove", this._onPointerMove);
+		window.removeEventListener("pointerup", this._onPointerUp);
+		super.destroy(options);
 	}
 
 	private onJoystickDown(e: FederatedPointerEvent): void {

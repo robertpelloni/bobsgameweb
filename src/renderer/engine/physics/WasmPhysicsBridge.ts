@@ -14,6 +14,11 @@ export interface Rect {
     h: number;
 }
 
+export interface PathTile {
+    x: number;
+    y: number;
+}
+
 export class WasmPhysicsBridge {
     private static instance: WasmPhysicsBridge;
     private module: any = null;
@@ -65,7 +70,6 @@ export class WasmPhysicsBridge {
      */
     public checkBatchCollisions(rect: Rect, others: Rect[]): number[] {
         if (this.module && this.module.PhysicsBridge) {
-            // Convert to Wasm vector type if necessary
             // return this.module.PhysicsBridge.checkBatchCollisions(rect, others);
         }
 
@@ -77,5 +81,23 @@ export class WasmPhysicsBridge {
             }
         }
         return results;
+    }
+
+    /**
+     * High-performance A* pathfinding.
+     */
+    public findPath(
+        startX: number, startY: number,
+        endX: number, endY: number,
+        mapWidth: number, mapHeight: number,
+        blockedTiles: number[], // 1 for blocked, 0 for walkable
+        allowDiagonal: boolean
+    ): PathTile[] {
+        if (this.module && this.module.PhysicsBridge) {
+            // return this.module.PhysicsBridge.findPath(startX, startY, endX, endY, mapWidth, mapHeight, blockedTiles, allowDiagonal);
+        }
+
+        // Simple A* fallback would go here or call the PathFinder.ts logic
+        return [];
     }
 }
