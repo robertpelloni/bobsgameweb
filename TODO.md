@@ -1,10 +1,3 @@
-# TODO: okgame Granular Tasks
-- [x] Hook SFX library (IDs 0-87) into `AudioManager`.
-- [x] Implement 8-directional animations for Yuu (64 frames) using `data/sprites/yuu.json`.
-- [x] Fix depth-sorting and collision bugs using extracted `hitBoxFromTop` values (24px for kids, 30px for adults).
-- [x] Implement `YuuEntity` class to centralize player logic and animations.
-- [x] Standardize NPC logic with `NPCEntity` hub.
-- [x] Fix server-side scoping and emit bugs in `server/index.js`.
-- [ ] Optimize Tracker playback or pre-convert to OGG.
-- [ ] Implement system path configuration for external tool launching (Aseprite, Tilemap Studio) in `CustomGameEditor.ts`.
-- [ ] Evaluate `bobui` C++ integration with `cpp_port/` as the engine matures.
+# SHORT TERM TODO
+1. Fix type errors caused by index.ts re-exports in src/renderer/puzzle.
+2. Create placeholder PerformanceMonitor.ts.
