@@ -8,21 +8,6 @@
     },
     {
       "type": "file",
-      "name": "server/app.js",
-      "file": "server/app.js"
-    },
-    {
-      "type": "file",
-      "name": "server/ecosystem.config.cjs",
-      "file": "server/ecosystem.config.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/index.js",
-      "file": "server/index.js"
-    },
-    {
-      "type": "file",
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -40,6 +25,21 @@
       "type": "file",
       "name": "scripts/generate-dummy-assets.cjs",
       "file": "scripts/generate-dummy-assets.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
     },
     {
       "type": "file",
@@ -268,6 +268,11 @@
     },
     {
       "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -288,16 +293,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/editor/MapEditor.ts",
       "file": "src/renderer/editor/MapEditor.ts"
     },
@@ -308,8 +303,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/entity/index.ts",
-      "file": "src/renderer/entity/index.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -350,6 +345,11 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/entity/index.ts",
+      "file": "src/renderer/entity/index.ts"
     },
     {
       "type": "file",
@@ -398,8 +398,8 @@
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
     },
     {
       "type": "file",
@@ -450,11 +450,6 @@
       "type": "file",
       "name": "src/renderer/engine/core/ObjectPool.ts",
       "file": "src/renderer/engine/core/ObjectPool.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/debug/index.ts",
-      "file": "src/renderer/engine/debug/index.ts"
     },
     {
       "type": "file",
@@ -948,11 +943,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/ecs/systems/AISystem.ts",
       "file": "src/renderer/engine/ecs/systems/AISystem.ts"
     },
@@ -965,6 +955,11 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
       "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
@@ -1075,6 +1070,30 @@
       "name": "@typescript-eslint/parser",
       "file": "package.json",
       "line": 32
+    },
+    {
+      "type": "devDependency",
+      "name": "concurrently",
+      "file": "package.json",
+      "line": 33
+    },
+    {
+      "type": "devDependency",
+      "name": "electron",
+      "file": "package.json",
+      "line": 35
+    },
+    {
+      "type": "devDependency",
+      "name": "electron-builder",
+      "file": "package.json",
+      "line": 36
+    },
+    {
+      "type": "devDependency",
+      "name": "eslint",
+      "file": "package.json",
+      "line": 37
     },
     {
       "type": "export",
@@ -3799,21 +3818,6 @@
     },
     {
       "type": "file",
-      "name": "server/app.js",
-      "file": "server/app.js"
-    },
-    {
-      "type": "file",
-      "name": "server/ecosystem.config.cjs",
-      "file": "server/ecosystem.config.cjs"
-    },
-    {
-      "type": "file",
-      "name": "server/index.js",
-      "file": "server/index.js"
-    },
-    {
-      "type": "file",
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -3831,6 +3835,21 @@
       "type": "file",
       "name": "scripts/generate-dummy-assets.cjs",
       "file": "scripts/generate-dummy-assets.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
     },
     {
       "type": "file",
@@ -4059,6 +4078,11 @@
     },
     {
       "type": "file",
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -4079,16 +4103,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/index.ts",
-      "file": "src/renderer/engine/index.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/editor/MapEditor.ts",
       "file": "src/renderer/editor/MapEditor.ts"
     },
@@ -4099,8 +4113,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/entity/index.ts",
-      "file": "src/renderer/entity/index.ts"
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
@@ -4141,6 +4155,11 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/entity/index.ts",
+      "file": "src/renderer/entity/index.ts"
     },
     {
       "type": "file",
@@ -4189,8 +4208,8 @@
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
     },
     {
       "type": "file",
@@ -4241,11 +4260,6 @@
       "type": "file",
       "name": "src/renderer/engine/core/ObjectPool.ts",
       "file": "src/renderer/engine/core/ObjectPool.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/debug/index.ts",
-      "file": "src/renderer/engine/debug/index.ts"
     },
     {
       "type": "file",
@@ -4739,11 +4753,6 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
-      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/engine/ecs/systems/AISystem.ts",
       "file": "src/renderer/engine/ecs/systems/AISystem.ts"
     },
@@ -4756,6 +4765,11 @@
       "type": "file",
       "name": "src/renderer/engine/ecs/systems/LocalizationSystem.ts",
       "file": "src/renderer/engine/ecs/systems/LocalizationSystem.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/ecs/components/LocalizationComponent.ts",
+      "file": "src/renderer/engine/ecs/components/LocalizationComponent.ts"
     },
     {
       "type": "file",
@@ -4868,8 +4882,32 @@
       "name": "@typescript-eslint/parser",
       "file": "package.json",
       "line": 32
+    },
+    {
+      "type": "devDependency",
+      "name": "concurrently",
+      "file": "package.json",
+      "line": 33
+    },
+    {
+      "type": "devDependency",
+      "name": "electron",
+      "file": "package.json",
+      "line": 35
+    },
+    {
+      "type": "devDependency",
+      "name": "electron-builder",
+      "file": "package.json",
+      "line": 36
+    },
+    {
+      "type": "devDependency",
+      "name": "eslint",
+      "file": "package.json",
+      "line": 37
     }
   ],
   "unlistedDeps": [],
-  "summary": "Found 439 issues"
+  "summary": "Found 442 issues"
 }
