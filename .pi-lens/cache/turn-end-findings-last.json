@@ -1,6 +1,6 @@
 {
-  "signature": "server/index.js::Unresolved from this turn — server/index.js:\n🔴 STOP — 1 issue(s) must be fixed:\n  L1305: 'tournamentId' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.",
-  "sessionId": "lens-mqe2a5e3-eaf47727",
-  "projectSeqStart": 410,
-  "projectSeqEnd": 411
+  "signature": "src/renderer/scenes/WorldScene.ts::Unresolved from this turn — src/renderer/scenes/WorldScene.ts:\n🔴 STOP — 6 issue(s) must be fixed:\n  L77: 'HitDir' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L78: 'Collider' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L87: 'hitDetectionSystem' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L131: '_ambientMusic' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L145: '_debugShowBoundsLayer' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L1921: '_createControlsOverlay' is declared but its value is never read.\n    💡 Fix: Remove the unused declarat\n... (truncated)",
+  "sessionId": "019dda83-38a1-7229-b5fc-92b210bd30bd",
+  "projectSeqStart": 6,
+  "projectSeqEnd": 7
 }

@@ -268,11 +268,6 @@
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -303,8 +298,18 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/index.ts",
       "file": "src/renderer/engine/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/entity/index.ts",
+      "file": "src/renderer/entity/index.ts"
     },
     {
       "type": "file",
@@ -345,11 +350,6 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/entity/index.ts",
-      "file": "src/renderer/entity/index.ts"
     },
     {
       "type": "file",
@@ -398,8 +398,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
     },
     {
       "type": "file",
@@ -903,6 +903,16 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/state/GameFlowStates.ts",
+      "file": "src/renderer/engine/state/GameFlowStates.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/index.ts",
+      "file": "src/renderer/engine/state/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/stadium/index.ts",
       "file": "src/renderer/engine/stadium/index.ts"
     },
@@ -915,16 +925,6 @@
       "type": "file",
       "name": "src/renderer/engine/stadium/StadiumScreen.ts",
       "file": "src/renderer/engine/stadium/StadiumScreen.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/state/GameFlowStates.ts",
-      "file": "src/renderer/engine/state/GameFlowStates.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/state/index.ts",
-      "file": "src/renderer/engine/state/index.ts"
     },
     {
       "type": "file",
@@ -1070,30 +1070,6 @@
       "name": "@typescript-eslint/parser",
       "file": "package.json",
       "line": 32
-    },
-    {
-      "type": "devDependency",
-      "name": "concurrently",
-      "file": "package.json",
-      "line": 33
-    },
-    {
-      "type": "devDependency",
-      "name": "electron",
-      "file": "package.json",
-      "line": 35
-    },
-    {
-      "type": "devDependency",
-      "name": "electron-builder",
-      "file": "package.json",
-      "line": 36
-    },
-    {
-      "type": "devDependency",
-      "name": "eslint",
-      "file": "package.json",
-      "line": 37
     },
     {
       "type": "export",
@@ -4078,11 +4054,6 @@
     },
     {
       "type": "file",
-      "name": "src/shared/puzzle/DifficultyType.ts",
-      "file": "src/shared/puzzle/DifficultyType.ts"
-    },
-    {
-      "type": "file",
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -4113,8 +4084,18 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/data/index.ts",
+      "file": "src/renderer/data/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/index.ts",
       "file": "src/renderer/engine/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/entity/index.ts",
+      "file": "src/renderer/entity/index.ts"
     },
     {
       "type": "file",
@@ -4155,11 +4136,6 @@
       "type": "file",
       "name": "src/renderer/scenes/TournamentResultsScene.ts",
       "file": "src/renderer/scenes/TournamentResultsScene.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/entity/index.ts",
-      "file": "src/renderer/entity/index.ts"
     },
     {
       "type": "file",
@@ -4208,8 +4184,8 @@
     },
     {
       "type": "file",
-      "name": "src/renderer/data/index.ts",
-      "file": "src/renderer/data/index.ts"
+      "name": "src/shared/puzzle/DifficultyType.ts",
+      "file": "src/shared/puzzle/DifficultyType.ts"
     },
     {
       "type": "file",
@@ -4713,6 +4689,16 @@
     },
     {
       "type": "file",
+      "name": "src/renderer/engine/state/GameFlowStates.ts",
+      "file": "src/renderer/engine/state/GameFlowStates.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/state/index.ts",
+      "file": "src/renderer/engine/state/index.ts"
+    },
+    {
+      "type": "file",
       "name": "src/renderer/engine/stadium/index.ts",
       "file": "src/renderer/engine/stadium/index.ts"
     },
@@ -4725,16 +4711,6 @@
       "type": "file",
       "name": "src/renderer/engine/stadium/StadiumScreen.ts",
       "file": "src/renderer/engine/stadium/StadiumScreen.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/state/GameFlowStates.ts",
-      "file": "src/renderer/engine/state/GameFlowStates.ts"
-    },
-    {
-      "type": "file",
-      "name": "src/renderer/engine/state/index.ts",
-      "file": "src/renderer/engine/state/index.ts"
     },
     {
       "type": "file",
@@ -4882,32 +4858,8 @@
       "name": "@typescript-eslint/parser",
       "file": "package.json",
       "line": 32
-    },
-    {
-      "type": "devDependency",
-      "name": "concurrently",
-      "file": "package.json",
-      "line": 33
-    },
-    {
-      "type": "devDependency",
-      "name": "electron",
-      "file": "package.json",
-      "line": 35
-    },
-    {
-      "type": "devDependency",
-      "name": "electron-builder",
-      "file": "package.json",
-      "line": 36
-    },
-    {
-      "type": "devDependency",
-      "name": "eslint",
-      "file": "package.json",
-      "line": 37
     }
   ],
   "unlistedDeps": [],
-  "summary": "Found 442 issues"
+  "summary": "Found 438 issues"
 }
