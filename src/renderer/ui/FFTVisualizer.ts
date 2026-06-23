@@ -5,6 +5,7 @@ export class FFTVisualizer {
     public container: Container = new Container();
     private graphics: Graphics = new Graphics();
     private dataArray: Uint8Array = new Uint8Array(128);
+    private dataArrayBuffer: Uint8Array<ArrayBuffer> = new Uint8Array<ArrayBuffer>(new ArrayBuffer(128));
     private width: number;
     private height: number;
 
@@ -24,15 +25,15 @@ export class FFTVisualizer {
         const analyzer = (AudioManager as any).analyzer as AnalyserNode;
         if (!analyzer) return;
 
-        analyzer.getByteFrequencyData(this.dataArray);
+        analyzer.getByteFrequencyData(this.dataArrayBuffer);
         this.graphics.clear();
 
         if (this.mode === 'bars') {
-            const barWidth = (this.width / this.dataArray.length) * 2.5;
+            const barWidth = (this.width / this.dataArrayBuffer.length) * 2.5;
             let x = 0;
 
-            for (let i = 0; i < this.dataArray.length; i++) {
-                const barHeight = (this.dataArray[i] / 255) * this.height;
+            for (let i = 0; i < this.dataArrayBuffer.length; i++) {
+                const barHeight = (this.dataArrayBuffer[i] / 255) * this.height;
                 const r = (i * 2) % 255;
                 const g = (i * 5) % 255;
                 const b = (i * 10) % 255;

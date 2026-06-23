@@ -253,7 +253,7 @@ export class WorldScene extends Scene {
 		const mapGenSystem = new MapGenSystem();
 		(mapGenSystem as any).scene = this;
 		this.world.addSystem(mapGenSystem);
-		this.world.addSystem(new WeatherSystem(this.app, this.worldContainer));
+		this.world.addSystem(new WeatherSystem(this.worldContainer));
 		this.world.addSystem(new AudioReactiveSystem());
 		this.world.addSystem(new ParticleSystem(this.worldContainer));
 		const renderSystem = new RenderSystem(this.worldContainer);

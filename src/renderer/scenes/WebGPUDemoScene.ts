@@ -1,4 +1,4 @@
-import { Container, Graphics, Text, TextStyle } from "pixi.js";
+import { Container, Text, TextStyle } from "pixi.js";
 import { Scene, type SceneConfig } from "../state/Scene";
 import { StateManager } from "../state/StateManager";
 import { InputManager, Key } from "../input/InputManager";
@@ -54,7 +54,7 @@ export class WebGPUDemoScene extends Scene {
 
     protected onUpdate(dt: number): void {
         if (this.particleSystem) {
-            this.particleSystem.update();
+            this.particleSystem.update(dt);
 
             // Check support status and update UI
             const isWebGPU = (this.particleSystem as any).useWebGPU;
@@ -66,11 +66,15 @@ export class WebGPUDemoScene extends Scene {
 
         if (InputManager.isKeyPressed(Key.W)) {
             this.vortexStrength += 0.05;
-            this.particleSystem?.setVortex(this.vortexStrength);
+            if (typeof (this.particleSystem as any).setVortex === 'function') {
+                (this.particleSystem as any).setVortex(this.vortexStrength);
+            }
         }
         if (InputManager.isKeyPressed(Key.S)) {
             this.vortexStrength -= 0.05;
-            this.particleSystem?.setVortex(this.vortexStrength);
+            if (typeof (this.particleSystem as any).setVortex === 'function') {
+                (this.particleSystem as any).setVortex(this.vortexStrength);
+            }
         }
 
         if (InputManager.isKeyPressed(Key.Q)) {
@@ -81,7 +85,9 @@ export class WebGPUDemoScene extends Scene {
         if (InputManager.isActionPressed()) {
             // Spawn explosion at mouse position (conceptual)
             const pos = this.app.renderer.events.pointer.global;
-            this.particleSystem?.spawnExplosion(pos.x, pos.y);
+            if (typeof (this.particleSystem as any).spawnExplosion === 'function') {
+                (this.particleSystem as any).spawnExplosion(pos.x, pos.y);
+            }
         }
 
         if (InputManager.isCancelPressed()) {
