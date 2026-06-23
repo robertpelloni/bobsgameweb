@@ -75,6 +75,7 @@ import { DialogueTracker } from "../engine/event/DialogueTracker";
 import { FlagManager } from "../engine/event/FlagManager";
 import { AmbientMusicGenerator } from "../audio/AmbientMusicGenerator";
 import { GenerativeAIManager } from "../editor/GenerativeAIManager";
+import { HitDetectionSystem } from "../engine/map/HitDetectionSystem";
 export class WorldScene extends Scene {
 	private world: World;
 	private map: GameMap | null = null;
@@ -82,6 +83,7 @@ export class WorldScene extends Scene {
 	private palette: Palette;
 	private realTileset: RealTileset = new RealTileset();
 	private spriteAtlas: SpriteAtlas = new SpriteAtlas();
+	private hitDetectionSystem: HitDetectionSystem;
 	private entityColliders: { x: number; y: number; w: number; h: number }[] =
 		[];
 	public playerTransform: TransformComponent | null = null;
@@ -190,6 +192,8 @@ export class WorldScene extends Scene {
 		const built = TilesetBuilder.build();
 		this.tileset = built.tileset;
 		this.palette = built.palette;
+		// Initialize hit detection system (dimensions set when map loads)
+		this.hitDetectionSystem = new HitDetectionSystem(1, 1);
 	}
 	public async create(): Promise<void> {
 		console.log("[WorldScene] create() started");
@@ -3276,73 +3280,100 @@ export class WorldScene extends Scene {
 			return true;
 		if (this.godMode) return false;
 
-		const gndTile = this.map.data.getTileIndex(
-			MapData.MAP_GROUND_LAYER,
-			tx,
-			ty,
-		);
-		const objTile = this.map.data.getTileIndex(
-			MapData.MAP_OBJECT_LAYER,
-			tx,
-			ty,
-		);
-		const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
-		const extraTile = this.map.data.getTileIndex(
-			MapData.MAP_CAMERA_BOUNDS_LAYER,
-			tx,
-			ty,
-		);
-
-		// DEBUG: log shadow tile collision values
-		if (objTile === 839) {
-			console.log(
-				`[COLLISION] (${tx},${ty}) obj=${objTile} gnd=${gndTile} hit=${hitTile} extra=${extraTile} floor=${MapData.FLOOR_IDS.has(gndTile)}`,
+		// ---- Legacy fallback for maps without loaded hit layer ----
+		// IMPORTANT: This must run FIRST because HitDetectionSystem.getHitLayerValueAtPixels()
+		// returns `true` (blocked) when utilityLayersLoaded is false, which would make this
+		// fallback unreachable if we checked the HitDetectionSystem first.
+		if (!this.hitDetectionSystem.utilityLayersLoaded) {
+			const gndTile = this.map.data.getTileIndex(
+				MapData.MAP_GROUND_LAYER,
+				tx,
+				ty,
 			);
-		}
+			const objTile = this.map.data.getTileIndex(
+				MapData.MAP_OBJECT_LAYER,
+				tx,
+				ty,
+			);
+			const hitTileResult = this.map.data.getTileIndex(
+				MapData.MAP_HIT_LAYER,
+				tx,
+				ty,
+			);
+			const extraTile = this.map.data.getTileIndex(
+				MapData.MAP_CAMERA_BOUNDS_LAYER,
+				tx,
+				ty,
+			);
 
-		// 1. Explicit Hit Markers (Highest Priority)
-		if (hitTile !== 0) return true;
+			// 1. Explicit Hit Markers (highest priority)
+			if (hitTileResult !== 0) return true;
 
-		// 2. Extra Layer Override (Original game walkable zone)
-		// 1 = interior/walkable, 0 = void/blocked
-		if (extraTile === 1) return false;
+			// 2. Extra Layer Override (1 = interior/walkable zone)
+			if (extraTile === 1) return false;
 
-		// 3. Floor Exception: 839 on a floor tile is a SHADOW, not a wall.
-		// Shadows overlay furniture/floor areas and should be walkable.
-		if (MapData.FLOOR_IDS.has(gndTile)) {
+			// 3. WALL on OBJECT layer blocks regardless of ground layer.
+			// Must check BEFORE floor exception, because walls sit on top of
+			// floor tiles in the real tileset (e.g. wall object on floor ground).
+			if (objTile === 839 || objTile === 8280) return true;
+			if (MapData.WALL_IDS.has(objTile)) return true;
+
+			// 4. Floor Exception: known floor IDs are walkable.
+			// Only applies when there's no blocking wall on the object layer above.
+			if (MapData.FLOOR_IDS.has(gndTile)) {
+				return false;
+			}
+
+			// 5. Wall on GROUND layer blocks (for tiles where wall IS the ground)
+			if (MapData.WALL_IDS.has(gndTile)) return true;
+
+			// 6. Void check
+			if (gndTile === 0 && objTile === 0) return true;
+			if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
+
+			// 7. Doors (Passage Zone)
+			const isDoor = this.map.data.doorDataList.some(
+				(d) =>
+					tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height,
+			);
+			if (isDoor) return false;
+
+			// 8. Entity collision (furniture bounding boxes) - legacy fallback
+			const px = tx * WorldScene.TILE_PX;
+			const py = ty * WorldScene.TILE_PX;
+			for (const ec of this.entityColliders) {
+				if (
+					px + WorldScene.TILE_PX > ec.x &&
+					px < ec.x + ec.w &&
+					py + WorldScene.TILE_PX > ec.y &&
+					py < ec.y + ec.h
+				) {
+					return true;
+				}
+			}
 			return false;
 		}
 
-		// 4. Strict Wall ID Blocking (non-floor ground with wall object)
-		if (objTile === 839 || objTile === 8280) return true;
-		if (MapData.WALL_IDS.has(objTile)) return true;
-		if (MapData.WALL_IDS.has(gndTile)) return true;
+		// ---- Pixel-level hit detection via Java-accurate HitDetectionSystem ----
+		// Convert tile center to pixel position (Java uses 16px/tile at 1X)
+		const pixelX = tx * 16 + 8;
+		const pixelY = ty * 16 + 8;
 
-		// 5. Void check (if not a floor and no extra marker, empty is blocked)
-		if (gndTile === 0 && objTile === 0) return true;
-		if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
-
-		// 6. Doors (Passage Zone)
-		const isDoor = this.map.data.doorDataList.some(
-			(d) =>
-				tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height,
+		// 1. Hit layer check (Java: Map.getHitLayerValueAtXYPixels)
+		const hitLayerBlocked = this.hitDetectionSystem.getHitLayerValueAtPixels(
+			pixelX,
+			pixelY,
 		);
-		if (isDoor) return false;
 
-		// 7. Entity collision (furniture bounding boxes)
-		const px = tx * WorldScene.TILE_PX;
-		const py = ty * WorldScene.TILE_PX;
-		for (const ec of this.entityColliders) {
-			if (
-				px + WorldScene.TILE_PX > ec.x &&
-				px < ec.x + ec.w &&
-				py + WorldScene.TILE_PX > ec.y &&
-				py < ec.y + ec.h
-			) {
-				return true; // inside entity bounding box = blocked
-			}
+		// 2. Non-walkable entity check (Java: checkXYAgainstNonWalkableEntities)
+		const entityBlocked =
+			this.hitDetectionSystem.checkAgainstNonWalkableEntities(pixelX, pixelY);
+
+		if (hitLayerBlocked || entityBlocked) {
+			return true; // blocked by hit layer or entity
 		}
-		return false; // walkable
+
+		return false; // walkable (hit layer says clear and no entity blocks)
 	}
 
 	/**

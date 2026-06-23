@@ -3,14 +3,14 @@
   "files": {
     "server\\index.js": {
       "latest": {
-        "commit": "48a3e5b2",
-        "timestamp": "2026-04-29T23:11:38.457Z",
-        "mi": 10.9,
-        "cognitive": 388,
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T23:44:25.386Z",
+        "mi": 7.1,
+        "cognitive": 520,
         "nesting": 6,
-        "lines": 846,
-        "maxCyclomatic": 289,
-        "entropy": 6.66
+        "lines": 1115,
+        "maxCyclomatic": 384,
+        "entropy": 7.42
       },
       "history": [
         {
@@ -32,6 +32,16 @@
           "lines": 846,
           "maxCyclomatic": 289,
           "entropy": 6.66
+        },
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T23:44:25.386Z",
+          "mi": 7.1,
+          "cognitive": 520,
+          "nesting": 6,
+          "lines": 1115,
+          "maxCyclomatic": 384,
+          "entropy": 7.42
         }
       ],
       "trend": "regressing"
@@ -73,8 +83,8 @@
     },
     "src\\renderer\\engine\\audio\\AudioManager.ts": {
       "latest": {
-        "commit": "48a3e5b2",
-        "timestamp": "2026-04-29T18:46:18.014Z",
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T16:26:05.198Z",
         "mi": 31.7,
         "cognitive": 77,
         "nesting": 5,
@@ -92,20 +102,30 @@
           "lines": 197,
           "maxCyclomatic": 15,
           "entropy": 6.54
+        },
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T16:26:05.198Z",
+          "mi": 31.7,
+          "cognitive": 77,
+          "nesting": 5,
+          "lines": 197,
+          "maxCyclomatic": 15,
+          "entropy": 6.54
         }
       ],
       "trend": "stable"
     },
     "src\\renderer\\audio\\AudioManager.ts": {
       "latest": {
-        "commit": "48a3e5b2",
-        "timestamp": "2026-04-29T18:46:25.044Z",
-        "mi": 16.8,
-        "cognitive": 305,
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T16:30:11.595Z",
+        "mi": 16.2,
+        "cognitive": 306,
         "nesting": 5,
-        "lines": 509,
+        "lines": 566,
         "maxCyclomatic": 26,
-        "entropy": 6.59
+        "entropy": 6.53
       },
       "history": [
         {
@@ -117,6 +137,16 @@
           "lines": 509,
           "maxCyclomatic": 26,
           "entropy": 6.59
+        },
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T16:30:11.595Z",
+          "mi": 16.2,
+          "cognitive": 306,
+          "nesting": 5,
+          "lines": 566,
+          "maxCyclomatic": 26,
+          "entropy": 6.53
         }
       ],
       "trend": "stable"
@@ -308,14 +338,14 @@
     },
     "src\\renderer\\engine\\rpg\\DemoWorld.ts": {
       "latest": {
-        "commit": "48a3e5b2",
-        "timestamp": "2026-04-29T19:58:50.268Z",
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T16:26:44.344Z",
         "mi": 0,
-        "cognitive": 1574,
-        "nesting": 12,
-        "lines": 2728,
-        "maxCyclomatic": 520,
-        "entropy": 7.57
+        "cognitive": 1856,
+        "nesting": 11,
+        "lines": 4156,
+        "maxCyclomatic": 740,
+        "entropy": 7.66
       },
       "history": [
         {
@@ -327,9 +357,19 @@
           "lines": 2728,
           "maxCyclomatic": 520,
           "entropy": 7.57
+        },
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T16:26:44.344Z",
+          "mi": 0,
+          "cognitive": 1856,
+          "nesting": 11,
+          "lines": 4156,
+          "maxCyclomatic": 740,
+          "entropy": 7.66
         }
       ],
-      "trend": "stable"
+      "trend": "regressing"
     },
     "src\\renderer\\scenes\\OptionsScene.ts": {
       "latest": {
@@ -553,14 +593,14 @@
     },
     "src\\renderer\\scenes\\WorldScene.ts": {
       "latest": {
-        "commit": "16d0dce2",
-        "timestamp": "2026-06-12T13:10:51.687Z",
+        "commit": "unknown",
+        "timestamp": "2026-06-22T12:34:12.849Z",
         "mi": 0,
-        "cognitive": 2026,
+        "cognitive": 2029,
         "nesting": 12,
-        "lines": 3212,
+        "lines": 3218,
         "maxCyclomatic": 371,
-        "entropy": 8.39
+        "entropy": 8.4
       },
       "history": [
         {
@@ -622,9 +662,29 @@
           "lines": 3212,
           "maxCyclomatic": 371,
           "entropy": 8.39
+        },
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-13T12:42:53.387Z",
+          "mi": 0,
+          "cognitive": 2029,
+          "nesting": 12,
+          "lines": 3217,
+          "maxCyclomatic": 371,
+          "entropy": 8.4
+        },
+        {
+          "commit": "unknown",
+          "timestamp": "2026-06-22T12:34:12.849Z",
+          "mi": 0,
+          "cognitive": 2029,
+          "nesting": 12,
+          "lines": 3218,
+          "maxCyclomatic": 371,
+          "entropy": 8.4
         }
       ],
-      "trend": "regressing"
+      "trend": "stable"
     },
     "src\\renderer\\engine\\map\\NPCDialogue.ts": {
       "latest": {
@@ -773,9 +833,9 @@
     },
     "src\\renderer\\engine\\map\\GameMap.ts": {
       "latest": {
-        "commit": "4eff28a4",
-        "timestamp": "2026-06-10T20:02:43.381Z",
-        "mi": 19.1,
+        "commit": "unknown",
+        "timestamp": "2026-06-22T12:35:23.408Z",
+        "mi": 19,
         "cognitive": 261,
         "nesting": 6,
         "lines": 368,
@@ -822,9 +882,29 @@
           "lines": 368,
           "maxCyclomatic": 94,
           "entropy": 6.72
+        },
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-12T14:32:17.124Z",
+          "mi": 19,
+          "cognitive": 261,
+          "nesting": 6,
+          "lines": 368,
+          "maxCyclomatic": 94,
+          "entropy": 6.72
+        },
+        {
+          "commit": "unknown",
+          "timestamp": "2026-06-22T12:35:23.408Z",
+          "mi": 19,
+          "cognitive": 261,
+          "nesting": 6,
+          "lines": 368,
+          "maxCyclomatic": 94,
+          "entropy": 6.72
         }
       ],
-      "trend": "improving"
+      "trend": "stable"
     },
     "src\\renderer\\engine\\map\\RealTileset.ts": {
       "latest": {
@@ -853,14 +933,14 @@
     },
     "src\\renderer\\engine\\map\\LegacyMapLoader.ts": {
       "latest": {
-        "commit": "596b332d",
-        "timestamp": "2026-06-12T13:17:46.009Z",
-        "mi": 22.5,
-        "cognitive": 260,
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T21:04:38.059Z",
+        "mi": 22.3,
+        "cognitive": 270,
         "nesting": 8,
-        "lines": 389,
-        "maxCyclomatic": 105,
-        "entropy": 6.76
+        "lines": 403,
+        "maxCyclomatic": 113,
+        "entropy": 6.79
       },
       "history": [
         {
@@ -912,9 +992,19 @@
           "lines": 389,
           "maxCyclomatic": 105,
           "entropy": 6.76
+        },
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T21:04:38.059Z",
+          "mi": 22.3,
+          "cognitive": 270,
+          "nesting": 8,
+          "lines": 403,
+          "maxCyclomatic": 113,
+          "entropy": 6.79
         }
       ],
-      "trend": "stable"
+      "trend": "regressing"
     },
     "src\\renderer\\engine\\map\\MapLoader.ts": {
       "latest": {
@@ -1165,7 +1255,167 @@
         }
       ],
       "trend": "stable"
+    },
+    "src\\renderer\\entity\\Entity.ts": {
+      "latest": {
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T16:25:51.997Z",
+        "mi": 26.6,
+        "cognitive": 86,
+        "nesting": 9,
+        "lines": 260,
+        "maxCyclomatic": 49,
+        "entropy": 6.31
+      },
+      "history": [
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T16:25:51.997Z",
+          "mi": 26.6,
+          "cognitive": 86,
+          "nesting": 9,
+          "lines": 260,
+          "maxCyclomatic": 49,
+          "entropy": 6.31
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\map\\SpriteAtlas.ts": {
+      "latest": {
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T16:27:46.209Z",
+        "mi": 33.7,
+        "cognitive": 85,
+        "nesting": 5,
+        "lines": 146,
+        "maxCyclomatic": 15,
+        "entropy": 6.35
+      },
+      "history": [
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T16:27:46.209Z",
+          "mi": 33.7,
+          "cognitive": 85,
+          "nesting": 5,
+          "lines": 146,
+          "maxCyclomatic": 15,
+          "entropy": 6.35
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\entity\\Character.ts": {
+      "latest": {
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T16:28:29.035Z",
+        "mi": 28.3,
+        "cognitive": 115,
+        "nesting": 4,
+        "lines": 225,
+        "maxCyclomatic": 27,
+        "entropy": 6.27
+      },
+      "history": [
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T16:28:29.035Z",
+          "mi": 28.3,
+          "cognitive": 115,
+          "nesting": 4,
+          "lines": 225,
+          "maxCyclomatic": 27,
+          "entropy": 6.27
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\game\\entities\\YuuEntity.ts": {
+      "latest": {
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T17:38:15.350Z",
+        "mi": 35.7,
+        "cognitive": 87,
+        "nesting": 5,
+        "lines": 178,
+        "maxCyclomatic": 33,
+        "entropy": 6.41
+      },
+      "history": [
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T16:36:54.681Z",
+          "mi": 37.4,
+          "cognitive": 87,
+          "nesting": 5,
+          "lines": 152,
+          "maxCyclomatic": 33,
+          "entropy": 6.37
+        },
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T17:38:15.350Z",
+          "mi": 35.7,
+          "cognitive": 87,
+          "nesting": 5,
+          "lines": 178,
+          "maxCyclomatic": 33,
+          "entropy": 6.41
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\shared\\Config.ts": {
+      "latest": {
+        "commit": "4163c449",
+        "timestamp": "2026-06-14T23:49:55.827Z",
+        "mi": 60.7,
+        "cognitive": 7,
+        "nesting": 0,
+        "lines": 31,
+        "maxCyclomatic": 1,
+        "entropy": 4.01
+      },
+      "history": [
+        {
+          "commit": "4163c449",
+          "timestamp": "2026-06-14T23:49:55.827Z",
+          "mi": 60.7,
+          "cognitive": 7,
+          "nesting": 0,
+          "lines": 31,
+          "maxCyclomatic": 1,
+          "entropy": 4.01
+        }
+      ],
+      "trend": "stable"
+    },
+    "src\\renderer\\engine\\map\\HitDetectionSystem.ts": {
+      "latest": {
+        "commit": "unknown",
+        "timestamp": "2026-06-22T12:38:31.851Z",
+        "mi": 28.7,
+        "cognitive": 103,
+        "nesting": 4,
+        "lines": 355,
+        "maxCyclomatic": 53,
+        "entropy": 6
+      },
+      "history": [
+        {
+          "commit": "unknown",
+          "timestamp": "2026-06-22T12:38:31.851Z",
+          "mi": 28.7,
+          "cognitive": 103,
+          "nesting": 4,
+          "lines": 355,
+          "maxCyclomatic": 53,
+          "entropy": 6
+        }
+      ],
+      "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-12T13:17:51.061Z"
+  "capturedAt": "2026-06-22T12:38:36.871Z"
 }

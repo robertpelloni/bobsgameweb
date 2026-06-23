@@ -24,7 +24,7 @@
   "author": "Robert Pelloni",
   "license": "SEE LICENSE",
   "devDependencies": {
-    "@capacitor/cli": "^6.0.0",
+    "@capacitor/cli": "^8.4.1",
     "@types/howler": "^2.2.11",
     "@types/node": "^20.10.0",
     "@types/pako": "^2.0.4",
@@ -32,7 +32,7 @@
     "@typescript-eslint/parser": "^6.13.0",
     "concurrently": "^8.2.2",
     "cors": "^2.8.6",
-    "electron": "^35.7.5",
+    "electron": "^42.4.1",
     "electron-builder": "^26.8.1",
     "eslint": "^8.55.0",
     "express": "^5.2.1",
