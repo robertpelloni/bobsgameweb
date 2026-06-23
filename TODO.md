@@ -1,4 +1,5 @@
 # TODO: okgame Granular Tasks
+
 - [x] Hook SFX library (IDs 0-87) into `AudioManager`.
 - [x] Implement 8-directional animations for Yuu (64 frames) using `data/sprites/yuu.json`.
 - [x] Fix depth-sorting and collision bugs using extracted `hitBoxFromTop` values (24px for kids, 30px for adults).
@@ -18,4 +19,13 @@
 - [x] Implement WebGPU-Ready Particle System skeleton and hardware detection.
 - [x] Implement full WebGPU-based compute-shader particle demo.
 - [x] Finalize `chiptune3.worklet.js` UTF8 string handling (v3.0.18).
-- [ ] Connect `WasmPhysicsBridge` to actual physics loop for performance.
+- [x] CRITICAL: Fix `isHitTile()` — HitDetectionSystem called before legacy fallback, blocking all movement
+- [x] CRITICAL: Fix `isHitTile()` — FLOOR_IDS checked before WALL_IDS, walls didn't block
+- [x] Repository sync: forward-merge feature branch (v3.0.25) into master
+- [x] Repository sync: reverse-merge master collision fixes into feature branch
+- [x] Repository sync: merge dependabot security update
+- [x] Production deploy: collision fix build + deploy to Hetzner
+- [x] Server: fix profiles.json permissions (EACCES)
+- [x] Cleanup: remove 220+ stale JS files from Hetzner server
+- [ ] Connect `WasmPhysicsBridge` to actual physics loop for performance
+- [ ] Build and deploy v3.0.25 stable to Hetzner production

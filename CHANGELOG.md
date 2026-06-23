@@ -1,3 +1,23 @@
+## v3.0.25 — 2026-06-22
+
+### Fixed
+- **CRITICAL: Player movement completely blocked**: `isHitTile()` checked HitDetectionSystem before legacy fallback. `getHitLayerValueAtPixels()` returned `true` (blocked) when utility layers were not loaded, making the legacy fallback unreachable. Every tile treated as wall.
+- **CRITICAL: Walls not blocking movement**: FLOOR_IDS check on ground layer ran before WALL_IDS check on objects layer. Walls sitting on floor tiles were skipped as "walkable". Reordered: walls checked before floors.
+
+### Added
+- **Wasm Physics Bridge**: C++ port of collision detection with Wasm compilation pipeline (`cpp_port/src/PhysicsBridge.cpp`)
+- **WebGPU Particle System**: Compute-shader based particle system with vortex effects (`WebGPUParticleSystem.ts`, `WebGPUDemoScene.ts`)
+- **Generative AI Manager**: AI-powered NPC dialogue generation and tile in-painting
+- **Performance Manager**: Audio performance monitoring with adaptive quality
+- **FFT Visualizer**: Real-time spectrum analyzer for audio visualization
+- **Mobile UX**: Enhanced TouchControls with direct manipulation and haptic feedback
+- **Pathfinding Benchmarks**: Wasm-backed pathfinding stress tests
+
+### Merged
+- Feature branch `jules-3-0-10-sanitization-and-editor-updates` forward-merged into master
+- Dependabot security update (npm_and_yarn group)
+- Reverse-merge of master collision fixes into feature branch
+
 ## v3.0.20 — 2026-06-08
 
 ### Added

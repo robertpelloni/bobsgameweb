@@ -60,3 +60,5 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+
+.memory/branches/*/log.md

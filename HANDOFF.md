@@ -1,30 +1,70 @@
-# HANDOFF: okgame Phase 3 Completion (v3.0.17)
+# Handoff — 2026-06-22 — Version 3.0.25
+
+## Agent
+Pi (AI Coding Agent)
 
 ## Session Summary
-This session finalized Phase 3 (Modernization) of the okgame engine, focusing on WebGPU-accelerated graphics, AI NPC conversational persistence, and a major repository sanitization.
-
-### Key Accomplishments
-- **WebGPU Particle Engine:** Implemented `WebGPUParticleSystem.ts` with WGSL compute shaders and direct storage buffer rendering. Stress-tested with 100,000 particles in `WebGPUDemoScene.ts`.
-- **AI NPC Chat:** Extended the conversational pipeline to support interaction states (dialogue vs thinking) and persistent memory stored in save files.
-- **Visual & Audio Modernization:** Integrated full-screen FFT visualizers and a unified particle emitter system. Added "HD Sprites" mode using HQ2X upscaling.
-- **Repository Sanitization:** Removed 31 redundant reference submodules. Logic for Tiled, Aseprite, and GrafX2 has been assimilated into native TypeScript.
-- **Technical Debt:** Conducted a comprehensive code scan and updated `TODO.md` with granular tasks (chiptune3 worklet fixes, Wasm physics bridge).
-
-### Critical Findings & Fixes
-- **Vite Config:** Reverted a regression that broke Electron support; added watcher exclusions to prevent `ENOSPC` errors.
-- **Missing Shims:** Restored `PerformanceMonitor.ts` to resolve build errors in `Game.ts`.
-- **Server Hardening:** Implemented per-socket rate-limiting and basic anti-cheat movement validation.
-
-### Next Steps for Successor
-1. **Wasm Physics:** Begin porting the `AABB` collision logic from `Physics.ts` to the `WasmPhysicsBridge`.
-2. **Phase 4 Expansion:** Start planning for regional clusters and massive multiplayer regional cluster hardening.
-3. **Mobile Optimization:** Further refine the `PerformanceManager` to handle aggressive asset downsampling for lower-end mobile devices.
-
-## Environment State
-- **Version:** 3.0.17
-- **Tests:** 32 integration test files passing (100%).
-- **Server:** Running on port 6065 (Socket.io) and 3000 (Vite).
-- **Submodules:** `submodules/bobui` is correctly initialized.
+Full repository synchronization protocol executed: multi-branch intelligent merge (forward + reverse), two critical collision bug fixes, production deployment, and workspace cleanup.
 
 ---
-*Autonomous Execution Protocol: Proceeding to submit.*
+
+## What Was Completed
+
+### 1. REPOSITORY SYNCHRONIZATION (Step 1)
+- **Fetch all**: `git fetch --all --tags` on root repo
+- **Submodule update**: `submodules/bobui` updated (tracking `github.com/robertpelloni/bqt.git`)
+- **Master up to date** with `origin/master`
+
+### 2. INTELLIGENT MERGE ENGINE (Step 2)
+
+#### Branches analyzed:
+| Branch | State | Action |
+|---|---|---|
+| `jules-3-0-10-sanitization-and-editor-updates` | Active — v3.0.25 with Wasm, WebGPU, AI NPCs | Reverse-merged master into it, then forward-merged into master |
+| `jules-3-0-9-engine-sync` | Stale — all features already in feature branch | Ignored |
+| `jules-port-legacy-engines` | Stale — submodule additions later removed | Ignored |
+| `dependabot/npm_and_yarn/npm_and_yarn-2b7950959a` | Single security fix | Forward-merged into master |
+
+#### Reverse Merge (master → feature branch):
+- Created `merge-master-into-feature` branch tracking the big feature branch
+- Merged master with collision fixes into it
+- Conflicts resolved in: `VERSION.md` (kept 3.0.25), `package.json` (kept 3.0.25), `WorldScene.ts` (kept both GenerativeAIManager + HitDetectionSystem imports, applied collision fix ordering)
+- Restored `HitDetectionSystem.ts` from master (was deleted in feature branch)
+
+#### Forward Merge (feature branch → master):
+- Merged `merge-master-into-feature` into `master`
+- 50 files changed, 2625 insertions, 571 deletions
+- No conflicts (already resolved in reverse-merge)
+
+### 3. CRITICAL BUG FIXES (Applied in both branches)
+
+#### Bug #1 — Player Could Not Move
+- **Root Cause**: `isHitTile()` checked HitDetectionSystem BEFORE legacy fallback. `getHitLayerValueAtPixels()` returns `true` (blocked) when `utilityLayersLoaded` is `false` (which it always is — `markUtilityLayersLoaded()` never called).
+- **Fix**: Moved legacy fallback check to run FIRST.
+
+#### Bug #2 — Walls Don't Block / Walk Through Objects
+- **Root Cause**: `FLOOR_IDS` check on ground layer ran BEFORE `WALL_IDS` check on objects layer. Walls on floor tiles were skipped as "walkable".
+- **Fix**: Reordered: wall on object layer checked before floor exception.
+
+### 4. PRODUCTION DEPLOYMENT
+- Rebuilt: `VITE_SERVER_URL=https://ws.bobsgame.com npm run build`
+- Deployed to Hetzner `/srv/www/bobsgame.com`
+- **Re-deployed twice**: first fix (movement), then second fix (walls)
+- Verified with full production stack check (all 4 checks passed)
+- Cleaned 220+ stale JS files from server
+
+### 5. BACKEND MAINTENANCE
+- Fixed `profiles.json` permissions (EACCES fix)
+- Restarted `bobsgameweb-server` systemd service
+
+## Production Readiness
+- **Version**: **3.0.25** merged, deployed frontend at v3.0.10 (latest stable build)
+- **Frontend**: https://bobsgame.com — collision fixes live
+- **Backend**: https://ws.bobsgame.com — clean, healthy
+- **Feature branch**: Fully merged into master with collision fixes
+
+## Next Steps
+1. Build and deploy the v3.0.25 feature set (Wasm, WebGPU, AI NPCs) to production
+2. Verify collision system works with the new physics bridge
+3. Test WebGPU particle system on target hardware
+4. Update audio performance manager for mobile targets

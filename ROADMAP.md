@@ -7,7 +7,14 @@
     - [x] 8-directional animation for Yuu (64 frames implemented in `YuuEntity`).
     - [x] Collision parity with metadata-driven hitboxes (30px/24px).
 - [x] **Phase 3: Modernization** - Implementing WebGPU rendering, advanced particle systems, and FFT-driven visualizers.
-- [ ] **Phase 4: Expansion** - Developing new regional clusters, multiplayer hardening, and mobile optimization.
+- [x] **Phase 4: Expansion** - Regional clusters, multiplayer hardening, mobile optimization, Wasm physics, WebGPU particles.
     - [x] Server-side spatial partitioning (Regional Clusters).
     - [x] Mobile UI Refinement (Virtual Joystick).
     - [x] Hardened map transition protocol.
+    - [x] Wasm Physics Bridge (C++ → Wasm compilation)
+    - [x] WebGPU Particle System (compute-shader based)
+    - [x] FFT Audio Visualizer
+    - [x] AI NPC Dialogue Generation
+    - [x] AI Sprite/Tileset Processing
+    - [x] Collision fix: HitDetectionSystem legacy fallback ordering
+    - [x] Collision fix: Wall check before floor check
