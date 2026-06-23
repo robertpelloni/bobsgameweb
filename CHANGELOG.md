@@ -1,4 +1,10 @@
+## v3.0.26 — 2026-06-23
+
+### Changed
+- Production deployment to Hetzner VPS with code formatting updates and README status notice.
+
 ## v3.0.25 — 2026-06-22
+
 
 ### Fixed
 - **CRITICAL: Player movement completely blocked**: `isHitTile()` checked HitDetectionSystem before legacy fallback. `getHitLayerValueAtPixels()` returned `true` (blocked) when utility layers were not loaded, making the legacy fallback unreachable. Every tile treated as wall.

@@ -491,9 +491,10 @@ export class WorldScene extends Scene {
 		this.createMinimapUI();
 		this.createHudUI();
 
-		const mobileMode = localStorage.getItem('mobile-mode-override') === 'true' ||
-						  "ontouchstart" in window ||
-						  navigator.maxTouchPoints > 0;
+		const mobileMode =
+			localStorage.getItem("mobile-mode-override") === "true" ||
+			"ontouchstart" in window ||
+			navigator.maxTouchPoints > 0;
 
 		if (mobileMode) {
 			this.touchControls = new TouchControls(this.width, this.height);
@@ -1641,7 +1642,11 @@ export class WorldScene extends Scene {
 		this.weatherContainer = new Container();
 		this.weatherContainer.zIndex = 9990;
 		this.container.addChild(this.weatherContainer);
-		this.weatherRenderer = new WeatherRenderer(this.weatherContainer, this.width, this.height);
+		this.weatherRenderer = new WeatherRenderer(
+			this.weatherContainer,
+			this.width,
+			this.height,
+		);
 		this.weatherRenderer.setWeather("rain", 0.5);
 	}
 	private updateMinimap(): void {
@@ -1757,9 +1762,19 @@ export class WorldScene extends Scene {
 				this.chatInput!.disabled = true;
 				this.chatHistory.push({ role: "user", content: msg });
 
-				this.showDialogue(`${this.currentChatNPC} is thinking...`, false, "AI CHAT", true);
+				this.showDialogue(
+					`${this.currentChatNPC} is thinking...`,
+					false,
+					"AI CHAT",
+					true,
+				);
 
-				const response = await GenerativeAIManager.chatWithNPC(this.currentChatNPC!, msg, this.currentChatPersona!, this.chatHistory);
+				const response = await GenerativeAIManager.chatWithNPC(
+					this.currentChatNPC!,
+					msg,
+					this.currentChatPersona!,
+					this.chatHistory,
+				);
 				this.chatHistory.push({ role: "assistant", content: response });
 
 				this.chatInput!.disabled = false;
@@ -1774,7 +1789,10 @@ export class WorldScene extends Scene {
 		chatBg.stroke({ color: 0x00ffff, width: 2 });
 		this.chatUIContainer.addChild(chatBg);
 
-		const chatTitle = new Text({ text: "AI CHAT MODE", style: { fill: 0x00ffff, fontSize: 14, fontWeight: "bold" } });
+		const chatTitle = new Text({
+			text: "AI CHAT MODE",
+			style: { fill: 0x00ffff, fontSize: 14, fontWeight: "bold" },
+		});
 		chatTitle.position.set(30, this.height - 210);
 		this.chatUIContainer.addChild(chatTitle);
 
@@ -1876,7 +1894,8 @@ export class WorldScene extends Scene {
 				if (this.currentDialoguePage >= this.dialoguePages.length) {
 					if (this.chatInput!.style.display === "block") {
 						this.dialogueTypingIndex = 0;
-						this.dialogueText.text = this.dialoguePages[this.currentDialoguePage - 1];
+						this.dialogueText.text =
+							this.dialoguePages[this.currentDialoguePage - 1];
 						this.currentDialoguePage = this.dialoguePages.length;
 					} else {
 						this.isDialogueActive = false;
@@ -2506,7 +2525,10 @@ export class WorldScene extends Scene {
 					});
 
 					// Emit footstep dust particles
-					const dust = ParticlePresets.footstep(this.playerTransform.x, this.playerTransform.y);
+					const dust = ParticlePresets.footstep(
+						this.playerTransform.x,
+						this.playerTransform.y,
+					);
 					if (this.map?.entitySpriteContainer) {
 						this.map.entitySpriteContainer.addChild(dust.container);
 					} else {
@@ -3415,20 +3437,32 @@ export class WorldScene extends Scene {
 							this.currentChatPersona = persona;
 							this.chatHistory = [];
 
-							this.showDialogue(`[AI] Would you like to chat with ${dialogue.caption}? (Press C to Chat, E for Normal)`, true, dialogue.caption);
+							this.showDialogue(
+								`[AI] Would you like to chat with ${dialogue.caption}? (Press C to Chat, E for Normal)`,
+								true,
+								dialogue.caption,
+							);
 
 							const onKey = (ev: KeyboardEvent) => {
-								if (ev.key.toLowerCase() === 'c') {
-									window.removeEventListener('keydown', onKey);
+								if (ev.key.toLowerCase() === "c") {
+									window.removeEventListener("keydown", onKey);
 									this.chatUIContainer!.visible = true;
-									this.showDialogue(`Hello there! What would you like to talk about?`, true, dialogue.caption, true);
-								} else if (ev.key.toLowerCase() === 'e') {
-									window.removeEventListener('keydown', onKey);
+									this.showDialogue(
+										`Hello there! What would you like to talk about?`,
+										true,
+										dialogue.caption,
+										true,
+									);
+								} else if (ev.key.toLowerCase() === "e") {
+									window.removeEventListener("keydown", onKey);
 									this.showDialogue(dialogue.lines, true, dialogue.caption);
 								}
 							};
-							window.addEventListener('keydown', onKey);
-							setTimeout(() => window.removeEventListener('keydown', onKey), 5000);
+							window.addEventListener("keydown", onKey);
+							setTimeout(
+								() => window.removeEventListener("keydown", onKey),
+								5000,
+							);
 
 							return true;
 						}

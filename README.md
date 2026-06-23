@@ -1,3 +1,5 @@
+🛠️ ALPHA SOFTWARE UNDER CONSTRUCTION — Use at your own risk. Backwards compatibility not guaranteed.
+
 # bob's game (okgame) - puzzle game engine
 
 Restoring the legacy Java engine (v8830) into a modern TypeScript/PixiJS puzzle game engine.
