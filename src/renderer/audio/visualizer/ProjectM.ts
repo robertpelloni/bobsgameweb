@@ -57,6 +57,14 @@ export class ProjectMVisualizer {
         this.visualizer.loadPreset(this.presets[name], 2.0); // 2 second blend
     }
 
+    public loadRandomPreset(): string {
+        if (!this.initialized) return "";
+        const keys = Object.keys(this.presets);
+        const randomKey = keys[Math.floor(Math.random() * keys.length)];
+        this.visualizer.loadPreset(this.presets[randomKey], 2.0);
+        return randomKey;
+    }
+
     public destroy(): void {
         if (this.initialized) {
             Howler.masterGain.disconnect(this.visualizer.destination);

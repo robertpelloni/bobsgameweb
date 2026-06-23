@@ -9,12 +9,14 @@ import { Container, Text as PIXIText } from "pixi.js";
 import { EventSheetEditor } from "./EventSheetEditor";
 import { Panel } from "../ui/Panel";
 import { Button } from "../ui/Button";
+import { ParticleEmitter, ParticlePresets } from "../engine/graphics/ParticleSystem";
 
 export class WorldEditor {
     public pixiContainer: Container = new Container();
 
     private container: HTMLElement;
     private db: RPGDatabase = new RPGDatabase();
+    private particlePanel: Panel | null = null;
 
     constructor(parent: HTMLElement | string) {
         let parentElement: HTMLElement | null;
@@ -62,6 +64,34 @@ export class WorldEditor {
 
         this.pixiContainer.addChild(eventSheetPanel.container);
 
+        // Particle Testing Panel
+        this.particlePanel = new Panel({ width: 400, height: 200, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x00ffff });
+        this.particlePanel.setPosition(420, 240);
+        const pTitle = new PIXIText({ text: "Particle Testing", style: { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" } });
+        pTitle.position.set(10, 10);
+        this.particlePanel.addChild(pTitle);
+
+        const spawnFireBtn = new Button("Burst Fire", { width: 120, height: 30, backgroundColor: 0x440000 });
+        spawnFireBtn.setPosition(10, 45);
+        spawnFireBtn.on("click", () => {
+            const fire = ParticlePresets.fire(200, 100);
+            this.particlePanel!.addChild(fire.container);
+            let interval: any;
+            const update = () => {
+                fire.update(0.016);
+                fire.render();
+                if (fire.count === 0) {
+                    fire.destroy();
+                    clearInterval(interval);
+                }
+            };
+            // Simplification for editor testing
+            interval = setInterval(update, 16);
+        });
+        this.particlePanel.addChild(spawnFireBtn.container);
+
+        this.pixiContainer.addChild(this.particlePanel.container);
+
         this.loadAchievementSnapshot();
     }
 
@@ -75,7 +105,10 @@ export class WorldEditor {
                 input { background: #333; border: 1px solid #555; color: #fff; padding: 5px; border-radius: 3px; }
             </style>
             <div class="editor-header">
-                <h2>RPG World Database Editor</h2>
+                <div>
+                    <h2>RPG World Database Editor</h2>
+                    <div id="server-status" style="font-size: 12px; color: #888;">Server: Polling...</div>
+                </div>
                 <div>
                     <button id="btn-ai-gen" style="background:#4400aa; color:#fff;">AI GEN SPRITE</button>
                     <button id="btn-add-actor">+ Actor</button>
@@ -90,33 +123,68 @@ export class WorldEditor {
         this.container.querySelector('#btn-save-db')?.addEventListener('click', () => this.saveToServer());
         this.container.querySelector('#btn-add-actor')?.addEventListener('click', () => this.addActor());
         this.container.querySelector('#btn-ai-gen')?.addEventListener('click', () => this.generateAiSprite());
+
+        // Polling for server stats
+        setInterval(() => this.pollServerStatus(), 5000);
+        this.pollServerStatus();
+    }
+
+    private async pollServerStatus() {
+        try {
+            const resp = await fetch(`${SERVER_URL}/stats`);
+            const stats = await resp.json();
+            const el = this.container.querySelector('#server-status');
+            if (el) {
+                let statusText = `Server: Online | Players: ${stats.players} | Rooms: ${stats.rooms} | Uptime: ${stats.uptime}s`;
+
+                // Show regional breakdown if available
+                if (stats.mapPopulation) {
+                    const maps = Object.keys(stats.mapPopulation);
+                    if (maps.length > 0) {
+                        statusText += ` | Clusters: ${maps.length}`;
+                    }
+                }
+
+                el.textContent = statusText;
+                el.style.color = '#00ff00';
+            }
+        } catch (e) {
+            const el = this.container.querySelector('#server-status');
+            if (el) {
+                el.textContent = 'Server: Offline';
+                el.style.color = '#ff0000';
+            }
+        }
     }
 
     private generateAiSprite() {
         const userInput = window.prompt("Enter prompt for NPC sprite (e.g. 'Old wizard with a blue robe'):");
         if (userInput) {
-            networkManager.emit('generateAsset', { type: 'npc_sprite', prompt: userInput });
-            ToastManager.showInfo("AI sprite generation started...");
+            GenerativeAIManager.generateSpriteFromText(userInput);
             
-            networkManager.once('assetGenerated', (data: any) => {
-                if (data.success) {
+            const onGenerated = (ev: any) => {
+                const { type, data } = ev.detail;
+                if (type === 'sprite') {
                     AchievementManager.incrementStat('aiSpritesGenerated');
-                    ToastManager.showInfo(`AI Sprite generated: ${data.assetId}`);
+                    ToastManager.showInfo(`AI Sprite generated from: ${userInput}`);
                     this.saveAchievementSnapshot();
+
                     // Automatically add an actor with this sprite
                     const actor: ActorData = {
                         id: this.db.actors.length + 1,
-                        name: "AI Generated NPC",
+                        name: "AI NPC",
                         classId: 1,
                         initialLevel: 1,
-                        faceName: data.url,
-                        characterName: data.url,
+                        faceName: data,
+                        characterName: data,
                         description: userInput
                     };
                     this.db.actors.push(actor);
                     this.renderActors();
+                    document.removeEventListener('ai-asset-generated', onGenerated);
                 }
-            });
+            };
+            document.addEventListener('ai-asset-generated', onGenerated);
         }
     }
 
@@ -190,10 +258,32 @@ export class WorldEditor {
 
         list.querySelectorAll('.btn-edit-interaction').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = (e.target as HTMLElement).dataset.id;
-                const text = prompt("Enter NPC Dialogue:");
-                if (text) {
-                    alert(`Interaction saved for NPC ${id}: "${text}"`);
+                const id = parseInt((e.target as HTMLElement).dataset.id!);
+                const actor = this.db.actors.find(a => a.id === id);
+                if (!actor) return;
+
+                const choice = confirm("Use AI to generate dialogue? (Cancel for manual entry)");
+                if (choice) {
+                    const prompt = window.prompt(`Enter a persona/context for ${actor.name}:`, "A grumpy old man who hates kids.");
+                    if (prompt) {
+                        GenerativeAIManager.generateDialogue(actor.name, prompt);
+
+                        const onGenerated = (ev: any) => {
+                            const { type, characterName, data } = ev.detail;
+                            if (type === 'dialogue' && characterName === actor.name) {
+                                actor.description = data.join(" ");
+                                ToastManager.showInfo(`Dialogue generated for ${actor.name}`);
+                                document.removeEventListener('ai-asset-generated', onGenerated);
+                            }
+                        };
+                        document.addEventListener('ai-asset-generated', onGenerated);
+                    }
+                } else {
+                    const text = prompt("Enter NPC Dialogue:");
+                    if (text) {
+                        actor.description = text;
+                        ToastManager.showInfo(`Dialogue updated for ${actor.name}`);
+                    }
                 }
             });
         });

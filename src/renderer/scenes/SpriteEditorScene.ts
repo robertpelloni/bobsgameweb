@@ -14,6 +14,7 @@ import { Container, Graphics, Text, TextStyle, Texture, Sprite, RenderTexture } 
 import { Scene, type SceneConfig } from "../state/Scene";
 import { StateManager } from "../state/StateManager";
 import { InputManager, Key } from "../input/InputManager";
+import { HQ2X } from "../engine/shared/HQ2X";
 
 const CANVAS_SIZE = 16;
 const PIXEL_SCALE = 24;
@@ -157,6 +158,13 @@ export class SpriteEditorScene extends Scene {
 		});
 		this.paletteContainer.addChild(title);
 
+		document.addEventListener('ai-asset-generated', (e: any) => {
+			const { type, data } = e.detail;
+			if (type === 'sprite' && data) {
+				this.loadAIImage(data);
+			}
+		});
+
 		const swatchSize = 24;
 		const cols = 4;
 		for (let i = 0; i < this.paletteColors.length; i++) {
@@ -180,6 +188,7 @@ export class SpriteEditorScene extends Scene {
 			{ label: "Grid (G)", tool: null },
 			{ label: "Undo (Z)", tool: null },
 			{ label: "Export (X)", tool: null },
+			{ label: "HQ2X (H)", tool: null },
 		];
 
 		for (let i = 0; i < tools.length; i++) {
@@ -252,8 +261,63 @@ export class SpriteEditorScene extends Scene {
 		this.renderCanvas();
 	}
 
+	private async loadAIImage(url: string): Promise<void> {
+		try {
+			const img = new Image();
+			img.crossOrigin = "anonymous";
+			await new Promise((resolve, reject) => {
+				img.onload = resolve;
+				img.onerror = reject;
+				img.src = url;
+			});
+
+			const canvas = document.createElement('canvas');
+			canvas.width = CANVAS_SIZE;
+			canvas.height = CANVAS_SIZE;
+			const ctx = canvas.getContext('2d')!;
+			ctx.drawImage(img, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
+			const imageData = ctx.getImageData(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+			this.saveUndoState();
+			for (let y = 0; y < CANVAS_SIZE; y++) {
+				for (let x = 0; x < CANVAS_SIZE; x++) {
+					const idx = (y * CANVAS_SIZE + x) * 4;
+					const r = imageData.data[idx];
+					const g = imageData.data[idx + 1];
+					const b = imageData.data[idx + 2];
+					const a = imageData.data[idx + 3];
+
+					if (a < 128) {
+						this.canvas[y][x] = 0;
+					} else {
+						this.canvas[y][x] = (r << 16) | (g << 8) | b;
+					}
+				}
+			}
+			this.renderCanvas();
+		} catch (e) {
+			console.error("Failed to load AI image into SpriteEditor", e);
+		}
+	}
+
 	private exportPNG(): void {
-		// Create a canvas and draw pixels at 1:1 scale
+		const canvas = this.createInternalCanvas();
+		const link = document.createElement("a");
+		link.download = "sprite.png";
+		link.href = canvas.toDataURL("image/png");
+		link.click();
+	}
+
+	private exportHQ2X(): void {
+		const canvas = this.createInternalCanvas();
+		const hqCanvas = HQ2X.upscaleCanvas(canvas);
+		const link = document.createElement("a");
+		link.download = "sprite_hq2x.png";
+		link.href = hqCanvas.toDataURL("image/png");
+		link.click();
+	}
+
+	private createInternalCanvas(): HTMLCanvasElement {
 		const canvas = document.createElement("canvas");
 		canvas.width = CANVAS_SIZE;
 		canvas.height = CANVAS_SIZE;
@@ -270,11 +334,7 @@ export class SpriteEditorScene extends Scene {
 				}
 			}
 		}
-		// Download
-		const link = document.createElement("a");
-		link.download = "sprite.png";
-		link.href = canvas.toDataURL("image/png");
-		link.click();
+		return canvas;
 	}
 
 	// ============================================================
@@ -323,6 +383,7 @@ export class SpriteEditorScene extends Scene {
 		}
 		if (InputManager.isKeyPressed(Key.Z)) this.undo();
 		if (InputManager.isKeyPressed(Key.X)) this.exportPNG();
+		if (InputManager.isKeyPressed(Key.H)) this.exportHQ2X();
 
 		// Color cycling with [ and ]
 		if (InputManager.isKeyPressed(Key.BracketLeft)) {

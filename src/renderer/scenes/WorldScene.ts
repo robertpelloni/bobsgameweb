@@ -43,6 +43,8 @@ import { LightingSystem } from "../engine/ecs/systems/LightingSystem";
 import { LightComponent } from "../engine/ecs/components/LightComponent";
 import { ParticleSystem } from "../engine/ecs/systems/ParticleSystem";
 import { ParticleComponent } from "../engine/ecs/components/ParticleComponent";
+import { ParticlePresets } from "../engine/graphics/ParticleSystem";
+import { WeatherRenderer } from "../engine/graphics/WeatherRenderer";
 import { TouchControls } from "../ui/TouchControls";
 import { Localization, type Language } from "../../shared/Localization";
 // Easing - reserved for future use
@@ -72,11 +74,8 @@ import {
 import { DialogueTracker } from "../engine/event/DialogueTracker";
 import { FlagManager } from "../engine/event/FlagManager";
 import { AmbientMusicGenerator } from "../audio/AmbientMusicGenerator";
-import {
-	HitDetectionSystem,
-	HitDir,
-	type Collider,
-} from "../engine/map/HitDetectionSystem";
+import { GenerativeAIManager } from "../editor/GenerativeAIManager";
+import { HitDetectionSystem } from "../engine/map/HitDetectionSystem";
 export class WorldScene extends Scene {
 	private world: World;
 	private map: GameMap | null = null;
@@ -130,10 +129,16 @@ export class WorldScene extends Scene {
 	private footstepIndex: number = 0;
 	private _ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
 	private weatherContainer: Container | null = null;
-	private rainDrops: { x: number; y: number; speed: number }[] = [];
+	private weatherRenderer: WeatherRenderer | null = null;
+
 	private isExteriorMap: boolean = false;
 	private isPaused: boolean = false;
 	private _autoSaveTimer: number = 0;
+	private chatInput: HTMLInputElement | null = null;
+	private currentChatNPC: string | null = null;
+	private currentChatPersona: string | null = null;
+	private chatHistory: { role: string; content: string }[] = [];
+	private chatUIContainer: Container | null = null;
 	private pauseContainer: Container | null = null;
 	private static readonly TILE_PX = 8; // pixels per tile at 1X (matches Tileset.TILE_SIZE)
 	private playerIsMoving: boolean = false;
@@ -485,9 +490,22 @@ export class WorldScene extends Scene {
 		this.createConsoleUI();
 		this.createMinimapUI();
 		this.createHudUI();
-		if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+
+		const mobileMode = localStorage.getItem('mobile-mode-override') === 'true' ||
+						  "ontouchstart" in window ||
+						  navigator.maxTouchPoints > 0;
+
+		if (mobileMode) {
 			this.touchControls = new TouchControls(this.width, this.height);
 			this.container.addChild(this.touchControls as any);
+
+			// Reposition HUD for mobile to avoid overlap with controls
+			if (this.hudContainer) {
+				this.hudContainer.position.set(20, 110); // Move down below top buttons if any
+			}
+			if (this.minimapContainer) {
+				this.minimapContainer.position.set(this.width - 160, 110);
+			}
 		}
 		// Show the room name
 		this.showRoomBanner(
@@ -1116,6 +1134,12 @@ export class WorldScene extends Scene {
 		this.container.addChild(loadingText);
 		// Try to load the map by name
 		const loaded = await this.loadLegacyMapByName(mapId);
+
+		// Notify server of map change for regional clustering
+		if (loaded && networkManager.connected) {
+			networkManager.emit("joinMap", mapId);
+		}
+
 		// Remove loading text
 		loadingText.destroy();
 		if (!loaded) {
@@ -1609,44 +1633,16 @@ export class WorldScene extends Scene {
 		this.pauseContainer!.visible = true;
 		AudioManager.playSound("menu_select", { volume: 0.2 });
 	}
-	private updateWeather(dt: number): void {
-		if (!this.isExteriorMap || !this.weatherContainer) return;
-		// Create rain drops if needed
-		if (this.rainDrops.length === 0) {
-			for (let i = 0; i < 80; i++) {
-				this.rainDrops.push({
-					x: Math.random() * this.width,
-					y: Math.random() * this.height,
-					speed: 300 + Math.random() * 200,
-				});
-			}
-		}
-		const g = this.weatherContainer.children[0] as any;
-		if (!g) return;
-		g.clear();
-		// Update and draw rain
-		for (const drop of this.rainDrops) {
-			drop.y += drop.speed * dt;
-			drop.x -= 30 * dt; // Slight wind
-			if (drop.y > this.height) {
-				drop.y = -10;
-				drop.x = Math.random() * this.width;
-			}
-			if (drop.x < 0) drop.x = this.width;
-			g.moveTo(drop.x, drop.y);
-			g.lineTo(drop.x - 1, drop.y + 8);
-			g.stroke({ color: 0x8899bb, width: 1, alpha: 0.4 });
-		}
-	}
+
 	private createWeatherOverlay(): void {
 		if (this.weatherContainer) {
 			this.weatherContainer.destroy({ children: true });
 		}
 		this.weatherContainer = new Container();
 		this.weatherContainer.zIndex = 9990;
-		const g = new Graphics();
-		this.weatherContainer.addChild(g);
 		this.container.addChild(this.weatherContainer);
+		this.weatherRenderer = new WeatherRenderer(this.weatherContainer, this.width, this.height);
+		this.weatherRenderer.setWeather("rain", 0.5);
 	}
 	private updateMinimap(): void {
 		if (!this.minimapGraphics || !this.playerTransform || !this.map) return;
@@ -1728,6 +1724,60 @@ export class WorldScene extends Scene {
 		this.dialogueContainer = new Container();
 		this.dialogueContainer.visible = false;
 		this.container.addChild(this.dialogueContainer);
+
+		// AI Chat UI
+		this.chatUIContainer = new Container();
+		this.chatUIContainer.visible = false;
+		this.chatUIContainer.zIndex = 10005;
+		this.container.addChild(this.chatUIContainer);
+
+		this.chatInput = document.createElement("input");
+		this.chatInput.type = "text";
+		this.chatInput.placeholder = "Type your message to NPC... (Enter to send)";
+		this.chatInput.style.position = "absolute";
+		this.chatInput.style.left = "70px";
+		this.chatInput.style.bottom = "160px";
+		this.chatInput.style.width = this.width - 140 + "px";
+		this.chatInput.style.background = "rgba(5, 5, 20, 0.85)";
+		this.chatInput.style.color = "#00ffff";
+		this.chatInput.style.border = "2px solid #66aaff";
+		this.chatInput.style.padding = "12px";
+		this.chatInput.style.borderRadius = "0px";
+		this.chatInput.style.fontFamily = "'Courier New', monospace";
+		this.chatInput.style.boxShadow = "0 0 15px rgba(102, 170, 255, 0.4)";
+		this.chatInput.style.outline = "none";
+		this.chatInput.style.display = "none";
+		this.chatInput.style.zIndex = "10001";
+		document.body.appendChild(this.chatInput);
+
+		this.chatInput.onkeydown = async (e) => {
+			if (e.key === "Enter" && this.chatInput!.value.trim()) {
+				const msg = this.chatInput!.value.trim();
+				this.chatInput!.value = "";
+				this.chatInput!.disabled = true;
+				this.chatHistory.push({ role: "user", content: msg });
+
+				this.showDialogue(`${this.currentChatNPC} is thinking...`, false, "AI CHAT", true);
+
+				const response = await GenerativeAIManager.chatWithNPC(this.currentChatNPC!, msg, this.currentChatPersona!, this.chatHistory);
+				this.chatHistory.push({ role: "assistant", content: response });
+
+				this.chatInput!.disabled = false;
+				this.chatInput!.focus();
+				this.showDialogue(response, false, this.currentChatNPC!, true);
+			}
+		};
+
+		const chatBg = new Graphics();
+		chatBg.rect(20, this.height - 220, 200, 40);
+		chatBg.fill({ color: 0x111111, alpha: 0.9 });
+		chatBg.stroke({ color: 0x00ffff, width: 2 });
+		this.chatUIContainer.addChild(chatBg);
+
+		const chatTitle = new Text({ text: "AI CHAT MODE", style: { fill: 0x00ffff, fontSize: 14, fontWeight: "bold" } });
+		chatTitle.position.set(30, this.height - 210);
+		this.chatUIContainer.addChild(chatTitle);
+
 		const bg = new Graphics();
 		bg.rect(50, this.height - 150, this.width - 100, 100);
 		bg.fill({ color: 0x0a0a2e, alpha: 0.92 });
@@ -1771,6 +1821,7 @@ export class WorldScene extends Scene {
 		messages: string | string[],
 		countAsNpcInteraction: boolean = false,
 		caption?: string,
+		isAIChat: boolean = false,
 	): void {
 		if (!this.dialogueText || !this.dialogueContainer) return;
 		if (countAsNpcInteraction) {
@@ -1783,6 +1834,16 @@ export class WorldScene extends Scene {
 		this.isDialogueActive = true;
 		this.dialogueContainer.visible = true;
 		this.dialogueText.text = "";
+
+		if (isAIChat) {
+			this.chatInput!.style.display = "block";
+			this.chatInput!.focus();
+			if (this.chatUIContainer) this.chatUIContainer.visible = true;
+		} else {
+			this.chatInput!.style.display = "none";
+			if (this.chatUIContainer) this.chatUIContainer.visible = false;
+		}
+
 		if (this.dialogueCaption) {
 			this.dialogueCaption.text = caption || "";
 		}
@@ -1813,9 +1874,16 @@ export class WorldScene extends Scene {
 			if (this.isActionJustPressed) {
 				this.currentDialoguePage++;
 				if (this.currentDialoguePage >= this.dialoguePages.length) {
-					this.isDialogueActive = false;
-					this.dialogueContainer.visible = false;
-					AudioManager.playSound("menu_cancel", { volume: 0.1 });
+					if (this.chatInput!.style.display === "block") {
+						this.dialogueTypingIndex = 0;
+						this.dialogueText.text = this.dialoguePages[this.currentDialoguePage - 1];
+						this.currentDialoguePage = this.dialoguePages.length;
+					} else {
+						this.isDialogueActive = false;
+						this.dialogueContainer.visible = false;
+						this.chatInput!.style.display = "none";
+						AudioManager.playSound("menu_cancel", { volume: 0.1 });
+					}
 				} else {
 					this.dialogueTypingIndex = 0;
 					this.dialogueText.text = "";
@@ -2436,6 +2504,25 @@ export class WorldScene extends Scene {
 					AudioManager.playSound(`footstep_${this.footstepIndex}`, {
 						volume: 0.15,
 					});
+
+					// Emit footstep dust particles
+					const dust = ParticlePresets.footstep(this.playerTransform.x, this.playerTransform.y);
+					if (this.map?.entitySpriteContainer) {
+						this.map.entitySpriteContainer.addChild(dust.container);
+					} else {
+						this.worldContainer.addChild(dust.container);
+					}
+
+					// Standalone emitter lifecycle for one-shot burst
+					const updateDust = (ticker: any) => {
+						dust.update(ticker.deltaTime / 60);
+						dust.render();
+						if (dust.count === 0) {
+							dust.destroy();
+							this.app.ticker.remove(updateDust);
+						}
+					};
+					this.app.ticker.add(updateDust);
 				}
 			} else {
 				this.footstepTimer = 0;
@@ -2647,7 +2734,10 @@ export class WorldScene extends Scene {
 				}, 2000);
 			}
 		}
-		this.updateWeather(dt);
+
+		if (this.isExteriorMap && this.weatherRenderer) {
+			this.weatherRenderer.update(dt / 1000);
+		}
 		this.updateHud();
 		this.updateDebugHud();
 		this.saveTimer += dt;
@@ -3190,26 +3280,10 @@ export class WorldScene extends Scene {
 			return true;
 		if (this.godMode) return false;
 
-		// ---- Pixel-level hit detection via Java-accurate HitDetectionSystem ----
-		// Convert tile center to pixel position (Java uses 16px/tile at 1X)
-		const pixelX = tx * 16 + 8;
-		const pixelY = ty * 16 + 8;
-
-		// 1. Hit layer check (Java: Map.getHitLayerValueAtXYPixels)
-		const hitLayerBlocked = this.hitDetectionSystem.getHitLayerValueAtPixels(
-			pixelX,
-			pixelY,
-		);
-
-		// 2. Non-walkable entity check (Java: checkXYAgainstNonWalkableEntities)
-		const entityBlocked =
-			this.hitDetectionSystem.checkAgainstNonWalkableEntities(pixelX, pixelY);
-
-		if (hitLayerBlocked || entityBlocked) {
-			return true; // blocked by hit layer or entity
-		}
-
 		// ---- Legacy fallback for maps without loaded hit layer ----
+		// IMPORTANT: This must run FIRST because HitDetectionSystem.getHitLayerValueAtPixels()
+		// returns `true` (blocked) when utilityLayersLoaded is false, which would make this
+		// fallback unreachable if we checked the HitDetectionSystem first.
 		if (!this.hitDetectionSystem.utilityLayersLoaded) {
 			const gndTile = this.map.data.getTileIndex(
 				MapData.MAP_GROUND_LAYER,
@@ -3232,34 +3306,39 @@ export class WorldScene extends Scene {
 				ty,
 			);
 
-			// 1. Explicit Hit Markers
+			// 1. Explicit Hit Markers (highest priority)
 			if (hitTileResult !== 0) return true;
 
-			// 2. Extra Layer Override
+			// 2. Extra Layer Override (1 = interior/walkable zone)
 			if (extraTile === 1) return false;
 
-			// 3. Floor Exception
+			// 3. WALL on OBJECT layer blocks regardless of ground layer.
+			// Must check BEFORE floor exception, because walls sit on top of
+			// floor tiles in the real tileset (e.g. wall object on floor ground).
+			if (objTile === 839 || objTile === 8280) return true;
+			if (MapData.WALL_IDS.has(objTile)) return true;
+
+			// 4. Floor Exception: known floor IDs are walkable.
+			// Only applies when there's no blocking wall on the object layer above.
 			if (MapData.FLOOR_IDS.has(gndTile)) {
 				return false;
 			}
 
-			// 4. Strict Wall ID Blocking
-			if (objTile === 839 || objTile === 8280) return true;
-			if (MapData.WALL_IDS.has(objTile)) return true;
+			// 5. Wall on GROUND layer blocks (for tiles where wall IS the ground)
 			if (MapData.WALL_IDS.has(gndTile)) return true;
 
-			// 5. Void check
+			// 6. Void check
 			if (gndTile === 0 && objTile === 0) return true;
 			if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
 
-			// 6. Doors (Passage Zone)
+			// 7. Doors (Passage Zone)
 			const isDoor = this.map.data.doorDataList.some(
 				(d) =>
 					tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height,
 			);
 			if (isDoor) return false;
 
-			// 7. Entity collision (furniture bounding boxes) - legacy fallback
+			// 8. Entity collision (furniture bounding boxes) - legacy fallback
 			const px = tx * WorldScene.TILE_PX;
 			const py = ty * WorldScene.TILE_PX;
 			for (const ec of this.entityColliders) {
@@ -3273,6 +3352,25 @@ export class WorldScene extends Scene {
 				}
 			}
 			return false;
+		}
+
+		// ---- Pixel-level hit detection via Java-accurate HitDetectionSystem ----
+		// Convert tile center to pixel position (Java uses 16px/tile at 1X)
+		const pixelX = tx * 16 + 8;
+		const pixelY = ty * 16 + 8;
+
+		// 1. Hit layer check (Java: Map.getHitLayerValueAtXYPixels)
+		const hitLayerBlocked = this.hitDetectionSystem.getHitLayerValueAtPixels(
+			pixelX,
+			pixelY,
+		);
+
+		// 2. Non-walkable entity check (Java: checkXYAgainstNonWalkableEntities)
+		const entityBlocked =
+			this.hitDetectionSystem.checkAgainstNonWalkableEntities(pixelX, pixelY);
+
+		if (hitLayerBlocked || entityBlocked) {
+			return true; // blocked by hit layer or entity
 		}
 
 		return false; // walkable (hit layer says clear and no entity blocks)
@@ -3312,7 +3410,26 @@ export class WorldScene extends Scene {
 							"lines",
 						);
 						if (dialogue && dialogue.lines && dialogue.lines.length > 0) {
-							this.showDialogue(dialogue.lines, true, dialogue.caption);
+							const persona = dialogue.lines.join(" ");
+							this.currentChatNPC = dialogue.caption;
+							this.currentChatPersona = persona;
+							this.chatHistory = [];
+
+							this.showDialogue(`[AI] Would you like to chat with ${dialogue.caption}? (Press C to Chat, E for Normal)`, true, dialogue.caption);
+
+							const onKey = (ev: KeyboardEvent) => {
+								if (ev.key.toLowerCase() === 'c') {
+									window.removeEventListener('keydown', onKey);
+									this.chatUIContainer!.visible = true;
+									this.showDialogue(`Hello there! What would you like to talk about?`, true, dialogue.caption, true);
+								} else if (ev.key.toLowerCase() === 'e') {
+									window.removeEventListener('keydown', onKey);
+									this.showDialogue(dialogue.lines, true, dialogue.caption);
+								}
+							};
+							window.addEventListener('keydown', onKey);
+							setTimeout(() => window.removeEventListener('keydown', onKey), 5000);
+
 							return true;
 						}
 					}
@@ -3631,6 +3748,7 @@ export class WorldScene extends Scene {
 	protected async destroy(): Promise<void> {
 		if (this.worker) this.worker.terminate();
 		if (this.consoleInput) this.consoleInput.remove();
+		if (this.chatInput) this.chatInput.remove();
 		await super.destroy();
 	}
 }

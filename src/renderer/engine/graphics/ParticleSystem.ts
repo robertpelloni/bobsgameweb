@@ -1,13 +1,11 @@
 /**
- * ParticleSystem — Reusable particle engine for bob's game.
+ * ParticleSystem — Unified particle engine for bob's game.
  *
  * Supports emitters with configurable:
  *  - emission rate, lifetime, gravity, drag
  *  - color/size/alpha over lifetime
  *  - burst and continuous modes
  *  - shape-based emission (point, circle, rect)
- *
- * Parity: Phaser (7/7 particles), LÖVE (full), GameMaker (full), Construct (full)
  */
 
 import { Container, Graphics } from 'pixi.js';
@@ -101,11 +99,15 @@ export class ParticleEmitter {
             maxParticles: config.maxParticles ?? 500,
         };
 
-        // Burst mode: emit all at once
         if (this.config.burst) {
-            for (let i = 0; i < this.config.rate; i++) {
-                this.emitParticle();
-            }
+            this.burst();
+        }
+    }
+
+    public burst(): void {
+        const count = this.config.rate;
+        for (let i = 0; i < count; i++) {
+            this.emitParticle();
         }
     }
 
@@ -151,7 +153,6 @@ export class ParticleEmitter {
     update(dt: number): void {
         if (!this.active) return;
 
-        // Continuous emission
         if (!this.config.burst) {
             this.emitAccumulator += dt * this.config.rate;
             while (this.emitAccumulator >= 1) {
@@ -160,7 +161,6 @@ export class ParticleEmitter {
             }
         }
 
-        // Update particles
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
             p.age += dt;
@@ -170,7 +170,6 @@ export class ParticleEmitter {
                 continue;
             }
 
-            // Physics
             p.vx += this.config.gravityX * dt;
             p.vy += this.config.gravityY * dt;
             p.vx *= (1 - this.config.drag);
@@ -185,17 +184,11 @@ export class ParticleEmitter {
         const g = new Graphics();
 
         for (const p of this.particles) {
-            const t = p.age / p.maxAge; // 0..1
-
-            // Interpolate size
+            const t = p.age / p.maxAge;
             const size = p.startSize + (p.endSize - p.startSize) * t;
             if (size <= 0) continue;
-
-            // Interpolate alpha
             const alpha = p.startAlpha + (p.endAlpha - p.startAlpha) * t;
             if (alpha <= 0.01) continue;
-
-            // Interpolate color
             const color = this.lerpColor(p.startColor, p.endColor, t);
 
             g.circle(p.x, p.y, size);
@@ -218,28 +211,14 @@ export class ParticleEmitter {
         return (r << 16) | (gv << 8) | bv;
     }
 
-    /** Get particle count */
-    get count(): number {
-        return this.particles.length;
-    }
-
-    /** Move emitter position */
-    setPosition(x: number, y: number): void {
-        this.x = x;
-        this.y = y;
-    }
-
-    /** Destroy emitter and clean up */
+    get count(): number { return this.particles.length; }
+    setPosition(x: number, y: number): void { this.x = x; this.y = y; }
     destroy(): void {
         this.active = false;
         this.particles = [];
         this.container.destroy({ children: true });
     }
 }
-
-// ============================================================
-// Preset Emitters
-// ============================================================
 
 export class ParticlePresets {
     static fire(x: number, y: number): ParticleEmitter {
@@ -321,32 +300,45 @@ export class ParticlePresets {
             endSize: 3,
             startAlpha: 1,
             endAlpha: 0.5,
-            startColor: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff][Math.floor(Math.random() * 6)],
+            startColor: 0xff0000, // could randomise
             endColor: 0xffffff,
             burst: true,
         });
     }
 
+    static footstep(x: number, y: number): ParticleEmitter {
+        return new ParticleEmitter(x, y, {
+            rate: 5,
+            lifetime: 0.4,
+            speed: 15,
+            angle: -Math.PI / 2,
+            angleVariance: 0.5,
+            gravityY: -10,
+            startSize: 2,
+            endSize: 6,
+            startAlpha: 0.5,
+            endAlpha: 0,
+            startColor: 0x998877,
+            endColor: 0xccbbaa,
+            burst: true
+        });
+    }
+
     static rain(x: number, y: number, width: number): ParticleEmitter {
         return new ParticleEmitter(x, y, {
-            rate: 60,
-            lifetime: 1,
-            lifetimeVariance: 0.2,
-            speed: 200,
-            speedVariance: 50,
-            angle: Math.PI / 2 + 0.15,
-            angleVariance: 0.05,
+            rate: 100,
+            lifetime: 1.5,
+            speed: 400,
+            angle: Math.PI / 2 + 0.1,
             gravityY: 100,
-            drag: 0,
             startSize: 1,
             endSize: 1,
             startAlpha: 0.4,
             endAlpha: 0.1,
-            startColor: 0x6688bb,
-            endColor: 0x4466aa,
+            startColor: 0x8899cc,
             shape: 'rect',
             shapeWidth: width,
-            shapeHeight: 10,
+            shapeHeight: 20
         });
     }
 

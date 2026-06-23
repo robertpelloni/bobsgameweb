@@ -2,10 +2,7 @@
  * Physics — Lightweight 2D physics engine for bob's game.
  *
  * Provides AABB collision detection, raycasting, and simple rigid body dynamics.
- * Can be swapped for Matter.js integration for full physics.
- *
- * Parity: Phaser (Arcade + Matter.js), LÖVE (Box2D), GameMaker (built-in),
- *         Construct (multiple), Defold (Box2D), RPG Maker (basic)
+ * Utilizes a spatial grid broad-phase and Wasm-accelerated narrow-phase checks.
  */
 
 export interface PhysicsBody {
@@ -40,11 +37,23 @@ export interface CollisionPair {
     overlapY: number;
 }
 
+import { WasmPhysicsBridge } from './WasmPhysicsBridge';
+
 export class Physics {
     private bodies: PhysicsBody[] = [];
     private gravityX = 0;
     private gravityY = 400; // pixels/sec² downward
     private iterations = 4;
+    private wasmBridge: WasmPhysicsBridge;
+
+    // Spatial Grid Broad-phase
+    private readonly cellSize = 128;
+    private grid: Map<string, PhysicsBody[]> = new Map();
+
+    constructor() {
+        this.wasmBridge = WasmPhysicsBridge.getInstance();
+        this.wasmBridge.init();
+    }
 
     /** Set gravity vector */
     setGravity(x: number, y: number): void {
@@ -69,41 +78,78 @@ export class Physics {
         return this.bodies;
     }
 
+    private updateGrid(): void {
+        this.grid.clear();
+        for (const body of this.bodies) {
+            const startX = Math.floor(body.x / this.cellSize);
+            const startY = Math.floor(body.y / this.cellSize);
+            const endX = Math.floor((body.x + body.width) / this.cellSize);
+            const endY = Math.floor((body.y + body.height) / this.cellSize);
+
+            for (let gx = startX; gx <= endX; gx++) {
+                for (let gy = startY; gy <= endY; gy++) {
+                    const key = `${gx},${gy}`;
+                    if (!this.grid.has(key)) this.grid.set(key, []);
+                    this.grid.get(key)!.push(body);
+                }
+            }
+        }
+    }
+
     /** Step the physics simulation */
     step(dt: number): CollisionPair[] {
         const pairs: CollisionPair[] = [];
         const cappedDt = Math.min(dt, 1 / 30); // Cap at 30fps equivalent
 
-        // Apply gravity to dynamic bodies
+        // Apply gravity and integrate positions
         for (const body of this.bodies) {
             if (!body.isStatic) {
                 body.vx += this.gravityX * cappedDt;
                 body.vy += this.gravityY * cappedDt;
-            }
-        }
-
-        // Integrate positions
-        for (const body of this.bodies) {
-            if (!body.isStatic) {
                 body.x += body.vx * cappedDt;
                 body.y += body.vy * cappedDt;
             }
         }
 
+        // Broad-phase: Update spatial grid
+        this.updateGrid();
+
         // Detect and resolve collisions (multiple iterations for stability)
         for (let iter = 0; iter < this.iterations; iter++) {
-            for (let i = 0; i < this.bodies.length; i++) {
-                for (let j = i + 1; j < this.bodies.length; j++) {
-                    const a = this.bodies[i];
-                    const b = this.bodies[j];
+            const checkedPairs = new Set<string>();
+            for (const bodiesInCell of this.grid.values()) {
+                if (bodiesInCell.length < 2) continue;
 
-                    // Skip static-static pairs
-                    if (a.isStatic && b.isStatic) continue;
+                for (let i = 0; i < bodiesInCell.length; i++) {
+                    const a = bodiesInCell[i];
 
-                    const collision = this.checkAABB(a, b);
-                    if (collision) {
-                        pairs.push(collision);
-                        this.resolveCollision(a, b, collision);
+                    // Slice the remaining bodies in the cell for batch processing
+                    const remaining = bodiesInCell.slice(i + 1);
+                    if (remaining.length === 0) continue;
+
+                    const othersRects = remaining.map(b => ({ x: b.x, y: b.y, w: b.width, h: b.height }));
+                    const collisionIndices = this.wasmBridge.checkBatchCollisions(
+                        { x: a.x, y: a.y, w: a.width, h: a.height },
+                        othersRects
+                    );
+
+                    for (const idx of collisionIndices) {
+                        const b = remaining[idx];
+
+                        if (a.isStatic && b.isStatic) continue;
+
+                        const idA = `${a.x},${a.y},${a.width},${a.height},${a.tag}`;
+                        const idB = `${b.x},${b.y},${b.width},${b.height},${b.tag}`;
+                        const pairKey = idA < idB ? `${idA}|${idB}` : `${idB}|${idA}`;
+
+                        if (checkedPairs.has(pairKey)) continue;
+                        checkedPairs.add(pairKey);
+
+                        const collision = this.checkAABB(a, b);
+                        if (collision) {
+                            if (iter === 0) pairs.push(collision);
+                            this.resolveCollision(a, b, collision);
+                        }
                     }
                 }
             }
@@ -131,18 +177,15 @@ export class Physics {
 
     /** Resolve collision between two bodies */
     private resolveCollision(a: PhysicsBody, b: PhysicsBody, col: CollisionPair): void {
-        // Triggers don't get physical response
         if (a.isTrigger || b.isTrigger) return;
 
         const totalMass = a.mass + b.mass;
 
         if (col.overlapX < col.overlapY) {
-            // Resolve on X axis
             const sign = (a.x + a.width / 2) < (b.x + b.width / 2) ? -1 : 1;
             if (!a.isStatic) a.x += sign * col.overlapX * (b.mass / totalMass);
             if (!b.isStatic) b.x -= sign * col.overlapX * (a.mass / totalMass);
 
-            // Velocity exchange with restitution
             const restitution = Math.min(a.restitution, b.restitution);
             if (!a.isStatic && !b.isStatic) {
                 const newVxA = ((a.vx * (a.mass - b.mass) + 2 * b.mass * b.vx) / totalMass) * (1 - restitution);
@@ -155,11 +198,9 @@ export class Physics {
                 a.vx *= -(restitution);
             }
 
-            // Friction
             if (!a.isStatic) a.vy *= (1 - b.friction * 0.1);
             if (!b.isStatic) b.vy *= (1 - a.friction * 0.1);
         } else {
-            // Resolve on Y axis
             const sign = (a.y + a.height / 2) < (b.y + b.height / 2) ? -1 : 1;
             if (!a.isStatic) a.y += sign * col.overlapY * (b.mass / totalMass);
             if (!b.isStatic) b.y -= sign * col.overlapY * (a.mass / totalMass);
@@ -193,7 +234,6 @@ export class Physics {
         let closest: RaycastResult | null = null;
         let closestDist = maxDistance;
 
-        // Normalize direction
         const len = Math.sqrt(dirX * dirX + dirY * dirY);
         if (len === 0) return null;
         const ndx = dirX / len;
@@ -202,11 +242,9 @@ export class Physics {
         for (const body of this.bodies) {
             if (excludeTags.includes(body.tag)) continue;
 
-            // Slab method for AABB
             let tmin = 0;
             let tmax = closestDist;
 
-            // X slab
             if (ndx !== 0) {
                 const t1 = (body.x - originX) / ndx;
                 const t2 = (body.x + body.width - originX) / ndx;
@@ -216,7 +254,6 @@ export class Physics {
                 if (originX < body.x || originX > body.x + body.width) continue;
             }
 
-            // Y slab
             if (ndy !== 0) {
                 const t1 = (body.y - originY) / ndy;
                 const t2 = (body.y + body.height - originY) / ndy;
@@ -230,7 +267,6 @@ export class Physics {
                 const hitX = originX + ndx * tmin;
                 const hitY = originY + ndy * tmin;
 
-                // Determine normal
                 const cx = body.x + body.width / 2;
                 const cy = body.y + body.height / 2;
                 const dx = hitX - cx;
@@ -294,10 +330,13 @@ export class Physics {
     /** Get all collision pairs for this frame (no resolution) */
     overlapCheck(): CollisionPair[] {
         const pairs: CollisionPair[] = [];
-        for (let i = 0; i < this.bodies.length; i++) {
-            for (let j = i + 1; j < this.bodies.length; j++) {
-                const col = this.checkAABB(this.bodies[i], this.bodies[j]);
-                if (col) pairs.push(col);
+        this.updateGrid();
+        for (const bodiesInCell of this.grid.values()) {
+            for (let i = 0; i < bodiesInCell.length; i++) {
+                for (let j = i + 1; j < bodiesInCell.length; j++) {
+                    const col = this.checkAABB(bodiesInCell[i], bodiesInCell[j]);
+                    if (col) pairs.push(col);
+                }
             }
         }
         return pairs;
@@ -306,6 +345,7 @@ export class Physics {
     /** Clear all bodies */
     clear(): void {
         this.bodies = [];
+        this.grid.clear();
     }
 
     /** Get body count */

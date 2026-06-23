@@ -340,7 +340,7 @@ class MPT extends AudioWorkletProcessor {
 		return data
 	}
 	getSongs() {
-		if (!libopenmpt.UTF8ToString) return ''	// todo: ?? why string here
+		if (!libopenmpt.UTF8ToString) return []
 
 		const subsongs = libopenmpt._openmpt_module_get_num_subsongs(this.modulePtr)
 		const names = []

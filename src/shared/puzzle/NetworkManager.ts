@@ -1,5 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import { EventEmitter } from 'eventemitter3';
+import pako from 'pako';
 import { GameLogic } from './GameLogic';
 import type { AchievementIdentity } from '../../renderer/data/AchievementIdentity';
 
@@ -104,6 +105,20 @@ export class NetworkManager extends EventEmitter {
 
         this.socket.on('roomUpdated', (data: any) => {
             this.emit('roomUpdated', data);
+        });
+
+        this.socket.on("remotePlayerMove", (data: any) => {
+            // Handle compressed payloads
+            if (data && data.c && data.d) {
+                try {
+                    const decompressed = pako.inflate(data.d, { to: 'string' });
+                    data = JSON.parse(decompressed);
+                } catch (e) {
+                    console.error("Failed to decompress playerMove", e);
+                    return;
+                }
+            }
+            this.emit("remotePlayerMove", data);
         });
 
         this.socket.on('gameStart', (data: any) => {

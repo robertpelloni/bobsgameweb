@@ -11,6 +11,8 @@ import { AutoTiler } from '../../shared/AutoTiler';
 import { AchievementManager } from '../data/AchievementManager';
 import { getAchievementIdentity } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
+import { ImageUtils } from '../utils/ImageUtils';
+import { GenerativeAIManager } from './GenerativeAIManager';
 
 export class MapEditor {
     private app: Application;
@@ -139,6 +141,7 @@ export class MapEditor {
                 <button class="tab-btn" data-tab="sprites">SPRITES</button>
                 <button class="tab-btn" data-tab="entities">ENTITIES</button>
                 <button class="tab-btn" data-tab="assets">ASSETS</button>
+                <button class="tab-btn" data-tab="genai">AI GEN</button>
             </div>
             <div class="editor-main-area">
                 <div id="panel-map" class="editor-panel">
@@ -156,6 +159,14 @@ export class MapEditor {
                             <button id="btn-shift-left">←</button><div></div><button id="btn-shift-right">→</button>
                             <div></div><button id="btn-shift-down">↓</button><div></div>
                         </div>
+                    </div>
+                </div>
+                <div id="panel-genai" class="editor-panel hidden">
+                    <div class="panel-section">
+                        <h3>AI Tile Generation</h3>
+                        <input type="text" id="ai-tile-prompt" placeholder="lava, dungeon floor, etc." style="width:100%; margin-bottom:10px; background:#111; color:#fff; border:1px solid #444;">
+                        <button id="btn-gen-tiles" style="width:100%; background:#4400aa;">GENERATE TILES</button>
+                        <p style="font-size:10px; color:#888; margin-top:5px;">Generates a tileset sheet and auto-slices into 8x8 tiles starting from ID 200.</p>
                     </div>
                 </div>
                 <div id="panel-sprites" class="editor-panel hidden">
@@ -283,6 +294,20 @@ export class MapEditor {
             this.spriteTool = 'fill';
             this.container.querySelectorAll('#sprite-tool-pencil, #sprite-tool-fill').forEach(btn => btn.classList.remove('selected'));
             (e.target as HTMLElement).classList.add('selected');
+        });
+
+        this.container.querySelector('#btn-gen-tiles')?.addEventListener('click', () => {
+            const promptInput = this.container.querySelector('#ai-tile-prompt') as HTMLInputElement;
+            const prompt = promptInput.value;
+            if (prompt) GenerativeAIManager.generateTilesetFromText(prompt);
+        });
+
+        document.addEventListener('ai-asset-generated', (e: any) => {
+            const { type, data } = e.detail;
+            if (type === 'tileset') {
+                this.loadAITileset(data);
+                this.switchTab('map');
+            }
         });
 
         networkManager.connect(SERVER_URL);
@@ -688,6 +713,60 @@ export class MapEditor {
         if (!networkManager.connected) return;
         const identity = getAchievementIdentity();
         networkManager.saveAchievementData(identity, AchievementManager.exportSnapshot());
+    }
+
+    public async loadAISprite(url: string): Promise<void> {
+        try {
+            const imageData = await ImageUtils.getImageData(url, 128, 128);
+            const frame = this.spriteFrames[this.currentFrameIndex];
+            frame.set(imageData.data);
+            this.renderSpriteCanvas();
+            ToastManager.showInfo("AI Sprite loaded into MapEditor canvas.");
+        } catch (e) {
+            console.error("Failed to load AI sprite", e);
+            ToastManager.showError("Failed to load AI sprite data.");
+        }
+    }
+
+    public async loadAITileset(url: string): Promise<void> {
+        try {
+            const imageData = await ImageUtils.getImageData(url);
+            // Slicing into 8x8 tiles
+            const tilesX = Math.floor(imageData.width / 8);
+            const tilesY = Math.floor(imageData.height / 8);
+            let tilesAdded = 0;
+
+            for (let ty = 0; ty < tilesY; ty++) {
+                for (let tx = 0; tx < tilesX; tx++) {
+                    const tileId = 200 + tilesAdded; // Start from 200 for AI tiles
+                    if (tileId >= this.tileset.numTiles) break;
+
+                    for (let py = 0; py < 8; py++) {
+                        for (let px = 0; px < 8; px++) {
+                            const sourceX = tx * 8 + px;
+                            const sourceY = ty * 8 + py;
+                            const idx = (sourceY * imageData.width + sourceX) * 4;
+
+                            const r = imageData.data[idx];
+                            const g = imageData.data[idx + 1];
+                            const b = imageData.data[idx + 2];
+
+                            // Simple palette matching or direct color injection?
+                            // For now, we inject into palette dynamically if needed
+                            // In a real system, we'd quantize.
+                            let colorIndex = this.palette.findNearestColor(new BobColor(r, g, b));
+                            this.tileset.setPixel(tileId, px, py, colorIndex);
+                        }
+                    }
+                    tilesAdded++;
+                }
+            }
+            this.renderTileList();
+            ToastManager.showInfo(`Loaded ${tilesAdded} AI tiles into tileset.`);
+        } catch (e) {
+            console.error("Failed to load AI tileset", e);
+            ToastManager.showError("Failed to load AI tileset data.");
+        }
     }
 
     public destroy(): void {
