@@ -1,5 +1,12 @@
 import { io, Socket } from 'socket.io-client';
 import { EventEmitter } from 'eventemitter3';
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import pako from 'pako';
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 import { GameLogic } from './GameLogic';
 import type { AchievementIdentity } from '../../renderer/data/AchievementIdentity';
 
@@ -106,6 +113,26 @@ export class NetworkManager extends EventEmitter {
             this.emit('roomUpdated', data);
         });
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        this.socket.on("remotePlayerMove", (data: any) => {
+            // Handle compressed payloads
+            if (data && data.c && data.d) {
+                try {
+                    const decompressed = pako.inflate(data.d, { to: 'string' });
+                    data = JSON.parse(decompressed);
+                } catch (e) {
+                    console.error("Failed to decompress playerMove", e);
+                    return;
+                }
+            }
+            this.emit("remotePlayerMove", data);
+        });
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         this.socket.on('gameStart', (data: any) => {
             this.emit('gameStart', data);
         });

@@ -1,6 +1,10 @@
 {
   "version": "1.0",
+<<<<<<< HEAD
   "createdAt": "2026-06-13T12:13:41.456Z",
+=======
+  "createdAt": "2026-06-12T01:09:21.574Z",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
   "entries": [
     [
       "src\\main\\index.ts:createWindow",
@@ -71990,7 +71994,11 @@
           ]
         ],
         "transitionCount": 33,
+<<<<<<< HEAD
         "lastModified": 1781281959420.0212,
+=======
+        "lastModified": 1781191470150.4893,
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         "exports": [],
         "line": 53
       }
@@ -76223,9 +76231,15 @@
           ]
         ],
         "transitionCount": 22,
+<<<<<<< HEAD
         "lastModified": 1781281959420.0212,
         "exports": [],
         "line": 233
+=======
+        "lastModified": 1781191470150.4893,
+        "exports": [],
+        "line": 218
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       }
     ],
     [
@@ -144042,7 +144056,11 @@
           ]
         ],
         "transitionCount": 26,
+<<<<<<< HEAD
         "lastModified": 1781270031906.727,
+=======
+        "lastModified": 1781202412847.3909,
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         "exports": [],
         "line": 2834
       }

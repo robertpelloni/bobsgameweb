@@ -8,6 +8,7 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "server/app.js",
       "file": "server/app.js"
     },
@@ -23,6 +24,8 @@
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -43,6 +46,24 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
+=======
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
+    },
+    {
+      "type": "file",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/main/index.ts",
       "file": "src/main/index.ts"
     },
@@ -233,11 +254,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/__tests__/yuu-entity.test.ts",
       "file": "src/__tests__/yuu-entity.test.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": ".pi/gsd/hooks/gsd-check-update.js",
       "file": ".pi/gsd/hooks/gsd-check-update.js"
     },
@@ -263,11 +287,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/game/entities/YuuEntity.ts",
       "file": "src/game/entities/YuuEntity.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -293,11 +320,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/index.ts",
       "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/editor/MapEditor.ts",
       "file": "src/renderer/editor/MapEditor.ts"
     },
@@ -308,6 +338,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
+=======
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
+    },
+    {
+      "type": "file",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/entity/index.ts",
       "file": "src/renderer/entity/index.ts"
     },
@@ -343,6 +381,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
+=======
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
+    },
+    {
+      "type": "file",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/scenes/index.ts",
       "file": "src/renderer/scenes/index.ts"
     },
@@ -353,11 +399,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/state/index.ts",
       "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/ui/AchievementPopup.ts",
       "file": "src/renderer/ui/AchievementPopup.ts"
     },
@@ -458,11 +507,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/entity/BaseEntity.ts",
       "file": "src/renderer/engine/entity/BaseEntity.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/entity/BobSprite.ts",
       "file": "src/renderer/engine/entity/BobSprite.ts"
     },
@@ -473,11 +525,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/entity/NPCEntity.ts",
       "file": "src/renderer/engine/entity/NPCEntity.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/entity/RandomCharacter.ts",
       "file": "src/renderer/engine/entity/RandomCharacter.ts"
     },
@@ -498,11 +553,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/entity/YuuEntity.ts",
       "file": "src/renderer/engine/entity/YuuEntity.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/event/EventScript.ts",
       "file": "src/renderer/engine/event/EventScript.ts"
     },
@@ -673,6 +731,49 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
+=======
+      "name": "src/renderer/engine/shared/AssetData.ts",
+      "file": "src/renderer/engine/shared/AssetData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/Cache.ts",
+      "file": "src/renderer/engine/shared/Cache.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/FileUtils.ts",
+      "file": "src/renderer/engine/shared/FileUtils.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/HQ2X.ts",
+      "file": "src/renderer/engine/shared/HQ2X.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/index.ts",
+      "file": "src/renderer/engine/shared/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/ManifestLoader.ts",
+      "file": "src/renderer/engine/shared/ManifestLoader.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKColor.ts",
+      "file": "src/renderer/engine/shared/OKColor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKMath.ts",
+      "file": "src/renderer/engine/shared/OKMath.ts"
+    },
+    {
+      "type": "file",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/rpg/AchievementEngine.ts",
       "file": "src/renderer/engine/rpg/AchievementEngine.ts"
     },
@@ -868,6 +969,7 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/shared/AssetData.ts",
       "file": "src/renderer/engine/shared/AssetData.ts"
     },
@@ -908,6 +1010,8 @@
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/stadium/index.ts",
       "file": "src/renderer/engine/stadium/index.ts"
     },
@@ -1230,7 +1334,11 @@
       "type": "export",
       "name": "BIG_DATA_URL",
       "file": "src/shared/Config.ts",
+<<<<<<< HEAD
       "line": 37
+=======
+      "line": 33
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     {
       "type": "export",
@@ -2242,6 +2350,15 @@
     },
     {
       "type": "export",
+<<<<<<< HEAD
+=======
+      "name": "Direction",
+      "file": "src/renderer/entity/Entity.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "EntityConfig",
       "file": "src/renderer/entity/Entity.ts",
       "line": 22
@@ -2292,7 +2409,11 @@
       "type": "export",
       "name": "DemoWorldConfig",
       "file": "src/renderer/engine/rpg/DemoWorld.ts",
+<<<<<<< HEAD
       "line": 53
+=======
+      "line": 51
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     {
       "type": "export",
@@ -2588,7 +2709,11 @@
       "type": "export",
       "name": "BIG_DATA_URL",
       "file": "src/shared/Config.ts",
+<<<<<<< HEAD
       "line": 37
+=======
+      "line": 33
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     {
       "type": "export",
@@ -3600,6 +3725,15 @@
     },
     {
       "type": "export",
+<<<<<<< HEAD
+=======
+      "name": "Direction",
+      "file": "src/renderer/entity/Entity.ts",
+      "line": 11
+    },
+    {
+      "type": "export",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "EntityConfig",
       "file": "src/renderer/entity/Entity.ts",
       "line": 22
@@ -3650,7 +3784,11 @@
       "type": "export",
       "name": "DemoWorldConfig",
       "file": "src/renderer/engine/rpg/DemoWorld.ts",
+<<<<<<< HEAD
       "line": 53
+=======
+      "line": 51
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     {
       "type": "export",
@@ -3799,6 +3937,7 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "server/app.js",
       "file": "server/app.js"
     },
@@ -3814,6 +3953,8 @@
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "scripts/build-mobile.cjs",
       "file": "scripts/build-mobile.cjs"
     },
@@ -3834,6 +3975,24 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
+=======
+      "name": "server/app.js",
+      "file": "server/app.js"
+    },
+    {
+      "type": "file",
+      "name": "server/ecosystem.config.cjs",
+      "file": "server/ecosystem.config.cjs"
+    },
+    {
+      "type": "file",
+      "name": "server/index.js",
+      "file": "server/index.js"
+    },
+    {
+      "type": "file",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/main/index.ts",
       "file": "src/main/index.ts"
     },
@@ -4024,11 +4183,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/__tests__/yuu-entity.test.ts",
       "file": "src/__tests__/yuu-entity.test.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": ".pi/gsd/hooks/gsd-check-update.js",
       "file": ".pi/gsd/hooks/gsd-check-update.js"
     },
@@ -4054,11 +4216,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/game/entities/YuuEntity.ts",
       "file": "src/game/entities/YuuEntity.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/assets/AssetLoader.ts",
       "file": "src/renderer/assets/AssetLoader.ts"
     },
@@ -4084,11 +4249,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/index.ts",
       "file": "src/renderer/engine/index.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/editor/MapEditor.ts",
       "file": "src/renderer/editor/MapEditor.ts"
     },
@@ -4099,6 +4267,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
+=======
+      "name": "src/renderer/engine/index.ts",
+      "file": "src/renderer/engine/index.ts"
+    },
+    {
+      "type": "file",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/entity/index.ts",
       "file": "src/renderer/entity/index.ts"
     },
@@ -4134,6 +4310,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
+=======
+      "name": "src/renderer/state/index.ts",
+      "file": "src/renderer/state/index.ts"
+    },
+    {
+      "type": "file",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/scenes/index.ts",
       "file": "src/renderer/scenes/index.ts"
     },
@@ -4144,11 +4328,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/state/index.ts",
       "file": "src/renderer/state/index.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/ui/AchievementPopup.ts",
       "file": "src/renderer/ui/AchievementPopup.ts"
     },
@@ -4249,11 +4436,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/entity/BaseEntity.ts",
       "file": "src/renderer/engine/entity/BaseEntity.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/entity/BobSprite.ts",
       "file": "src/renderer/engine/entity/BobSprite.ts"
     },
@@ -4264,11 +4454,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/entity/NPCEntity.ts",
       "file": "src/renderer/engine/entity/NPCEntity.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/entity/RandomCharacter.ts",
       "file": "src/renderer/engine/entity/RandomCharacter.ts"
     },
@@ -4289,11 +4482,14 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/entity/YuuEntity.ts",
       "file": "src/renderer/engine/entity/YuuEntity.ts"
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/event/EventScript.ts",
       "file": "src/renderer/engine/event/EventScript.ts"
     },
@@ -4464,6 +4660,49 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
+=======
+      "name": "src/renderer/engine/shared/AssetData.ts",
+      "file": "src/renderer/engine/shared/AssetData.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/Cache.ts",
+      "file": "src/renderer/engine/shared/Cache.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/FileUtils.ts",
+      "file": "src/renderer/engine/shared/FileUtils.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/HQ2X.ts",
+      "file": "src/renderer/engine/shared/HQ2X.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/index.ts",
+      "file": "src/renderer/engine/shared/index.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/ManifestLoader.ts",
+      "file": "src/renderer/engine/shared/ManifestLoader.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKColor.ts",
+      "file": "src/renderer/engine/shared/OKColor.ts"
+    },
+    {
+      "type": "file",
+      "name": "src/renderer/engine/shared/OKMath.ts",
+      "file": "src/renderer/engine/shared/OKMath.ts"
+    },
+    {
+      "type": "file",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/rpg/AchievementEngine.ts",
       "file": "src/renderer/engine/rpg/AchievementEngine.ts"
     },
@@ -4659,6 +4898,7 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "name": "src/renderer/engine/shared/AssetData.ts",
       "file": "src/renderer/engine/shared/AssetData.ts"
     },
@@ -4699,6 +4939,8 @@
     },
     {
       "type": "file",
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "name": "src/renderer/engine/stadium/index.ts",
       "file": "src/renderer/engine/stadium/index.ts"
     },
@@ -4871,5 +5113,9 @@
     }
   ],
   "unlistedDeps": [],
+<<<<<<< HEAD
   "summary": "Found 439 issues"
+=======
+  "summary": "Found 435 issues"
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
 }

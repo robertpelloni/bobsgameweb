@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "files": {
     "server/index.js": {
       "modifiedRanges": [
@@ -14,4 +15,10 @@
   "turnCycles": 0,
   "maxCycles": 3,
   "lastUpdated": "2026-06-15T00:51:46.873Z"
+=======
+  "files": {},
+  "turnCycles": 0,
+  "maxCycles": 3,
+  "lastUpdated": "2026-06-12T13:15:36.614Z"
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
 }

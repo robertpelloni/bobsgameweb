@@ -2,10 +2,20 @@
  * Physics — Lightweight 2D physics engine for bob's game.
  *
  * Provides AABB collision detection, raycasting, and simple rigid body dynamics.
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
  * Can be swapped for Matter.js integration for full physics.
  *
  * Parity: Phaser (Arcade + Matter.js), LÖVE (Box2D), GameMaker (built-in),
  *         Construct (multiple), Defold (Box2D), RPG Maker (basic)
+<<<<<<< HEAD
+=======
+ * Utilizes a spatial grid broad-phase and Wasm-accelerated narrow-phase checks.
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
  */
 
 export interface PhysicsBody {
@@ -40,11 +50,35 @@ export interface CollisionPair {
     overlapY: number;
 }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import { WasmPhysicsBridge } from './WasmPhysicsBridge';
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 export class Physics {
     private bodies: PhysicsBody[] = [];
     private gravityX = 0;
     private gravityY = 400; // pixels/sec² downward
     private iterations = 4;
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    private wasmBridge: WasmPhysicsBridge;
+
+    // Spatial Grid Broad-phase
+    private readonly cellSize = 128;
+    private grid: Map<string, PhysicsBody[]> = new Map();
+
+    constructor() {
+        this.wasmBridge = WasmPhysicsBridge.getInstance();
+        this.wasmBridge.init();
+    }
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
     /** Set gravity vector */
     setGravity(x: number, y: number): void {
@@ -69,27 +103,72 @@ export class Physics {
         return this.bodies;
     }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    private updateGrid(): void {
+        this.grid.clear();
+        for (const body of this.bodies) {
+            const startX = Math.floor(body.x / this.cellSize);
+            const startY = Math.floor(body.y / this.cellSize);
+            const endX = Math.floor((body.x + body.width) / this.cellSize);
+            const endY = Math.floor((body.y + body.height) / this.cellSize);
+
+            for (let gx = startX; gx <= endX; gx++) {
+                for (let gy = startY; gy <= endY; gy++) {
+                    const key = `${gx},${gy}`;
+                    if (!this.grid.has(key)) this.grid.set(key, []);
+                    this.grid.get(key)!.push(body);
+                }
+            }
+        }
+    }
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     /** Step the physics simulation */
     step(dt: number): CollisionPair[] {
         const pairs: CollisionPair[] = [];
         const cappedDt = Math.min(dt, 1 / 30); // Cap at 30fps equivalent
 
+<<<<<<< HEAD
+<<<<<<< HEAD
         // Apply gravity to dynamic bodies
+=======
+        // Apply gravity and integrate positions
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+        // Apply gravity to dynamic bodies
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         for (const body of this.bodies) {
             if (!body.isStatic) {
                 body.vx += this.gravityX * cappedDt;
                 body.vy += this.gravityY * cappedDt;
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             }
         }
 
         // Integrate positions
         for (const body of this.bodies) {
             if (!body.isStatic) {
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
                 body.x += body.vx * cappedDt;
                 body.y += body.vy * cappedDt;
             }
         }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         // Detect and resolve collisions (multiple iterations for stability)
         for (let iter = 0; iter < this.iterations; iter++) {
             for (let i = 0; i < this.bodies.length; i++) {
@@ -104,6 +183,50 @@ export class Physics {
                     if (collision) {
                         pairs.push(collision);
                         this.resolveCollision(a, b, collision);
+<<<<<<< HEAD
+=======
+        // Broad-phase: Update spatial grid
+        this.updateGrid();
+
+        // Detect and resolve collisions (multiple iterations for stability)
+        for (let iter = 0; iter < this.iterations; iter++) {
+            const checkedPairs = new Set<string>();
+            for (const bodiesInCell of this.grid.values()) {
+                if (bodiesInCell.length < 2) continue;
+
+                for (let i = 0; i < bodiesInCell.length; i++) {
+                    const a = bodiesInCell[i];
+
+                    // Slice the remaining bodies in the cell for batch processing
+                    const remaining = bodiesInCell.slice(i + 1);
+                    if (remaining.length === 0) continue;
+
+                    const othersRects = remaining.map(b => ({ x: b.x, y: b.y, w: b.width, h: b.height }));
+                    const collisionIndices = this.wasmBridge.checkBatchCollisions(
+                        { x: a.x, y: a.y, w: a.width, h: a.height },
+                        othersRects
+                    );
+
+                    for (const idx of collisionIndices) {
+                        const b = remaining[idx];
+
+                        if (a.isStatic && b.isStatic) continue;
+
+                        const idA = `${a.x},${a.y},${a.width},${a.height},${a.tag}`;
+                        const idB = `${b.x},${b.y},${b.width},${b.height},${b.tag}`;
+                        const pairKey = idA < idB ? `${idA}|${idB}` : `${idB}|${idA}`;
+
+                        if (checkedPairs.has(pairKey)) continue;
+                        checkedPairs.add(pairKey);
+
+                        const collision = this.checkAABB(a, b);
+                        if (collision) {
+                            if (iter === 0) pairs.push(collision);
+                            this.resolveCollision(a, b, collision);
+                        }
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
                     }
                 }
             }
@@ -131,18 +254,39 @@ export class Physics {
 
     /** Resolve collision between two bodies */
     private resolveCollision(a: PhysicsBody, b: PhysicsBody, col: CollisionPair): void {
+<<<<<<< HEAD
+<<<<<<< HEAD
         // Triggers don't get physical response
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+        // Triggers don't get physical response
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         if (a.isTrigger || b.isTrigger) return;
 
         const totalMass = a.mass + b.mass;
 
         if (col.overlapX < col.overlapY) {
+<<<<<<< HEAD
+<<<<<<< HEAD
             // Resolve on X axis
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+            // Resolve on X axis
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             const sign = (a.x + a.width / 2) < (b.x + b.width / 2) ? -1 : 1;
             if (!a.isStatic) a.x += sign * col.overlapX * (b.mass / totalMass);
             if (!b.isStatic) b.x -= sign * col.overlapX * (a.mass / totalMass);
 
+<<<<<<< HEAD
+<<<<<<< HEAD
             // Velocity exchange with restitution
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+            // Velocity exchange with restitution
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             const restitution = Math.min(a.restitution, b.restitution);
             if (!a.isStatic && !b.isStatic) {
                 const newVxA = ((a.vx * (a.mass - b.mass) + 2 * b.mass * b.vx) / totalMass) * (1 - restitution);
@@ -155,11 +299,23 @@ export class Physics {
                 a.vx *= -(restitution);
             }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             // Friction
             if (!a.isStatic) a.vy *= (1 - b.friction * 0.1);
             if (!b.isStatic) b.vy *= (1 - a.friction * 0.1);
         } else {
             // Resolve on Y axis
+<<<<<<< HEAD
+=======
+            if (!a.isStatic) a.vy *= (1 - b.friction * 0.1);
+            if (!b.isStatic) b.vy *= (1 - a.friction * 0.1);
+        } else {
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             const sign = (a.y + a.height / 2) < (b.y + b.height / 2) ? -1 : 1;
             if (!a.isStatic) a.y += sign * col.overlapY * (b.mass / totalMass);
             if (!b.isStatic) b.y -= sign * col.overlapY * (a.mass / totalMass);
@@ -193,7 +349,14 @@ export class Physics {
         let closest: RaycastResult | null = null;
         let closestDist = maxDistance;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
         // Normalize direction
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+        // Normalize direction
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         const len = Math.sqrt(dirX * dirX + dirY * dirY);
         if (len === 0) return null;
         const ndx = dirX / len;
@@ -202,11 +365,23 @@ export class Physics {
         for (const body of this.bodies) {
             if (excludeTags.includes(body.tag)) continue;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             // Slab method for AABB
             let tmin = 0;
             let tmax = closestDist;
 
             // X slab
+<<<<<<< HEAD
+=======
+            let tmin = 0;
+            let tmax = closestDist;
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             if (ndx !== 0) {
                 const t1 = (body.x - originX) / ndx;
                 const t2 = (body.x + body.width - originX) / ndx;
@@ -216,7 +391,14 @@ export class Physics {
                 if (originX < body.x || originX > body.x + body.width) continue;
             }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
             // Y slab
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+            // Y slab
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             if (ndy !== 0) {
                 const t1 = (body.y - originY) / ndy;
                 const t2 = (body.y + body.height - originY) / ndy;
@@ -230,7 +412,14 @@ export class Physics {
                 const hitX = originX + ndx * tmin;
                 const hitY = originY + ndy * tmin;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
                 // Determine normal
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+                // Determine normal
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
                 const cx = body.x + body.width / 2;
                 const cy = body.y + body.height / 2;
                 const dx = hitX - cx;
@@ -294,10 +483,26 @@ export class Physics {
     /** Get all collision pairs for this frame (no resolution) */
     overlapCheck(): CollisionPair[] {
         const pairs: CollisionPair[] = [];
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         for (let i = 0; i < this.bodies.length; i++) {
             for (let j = i + 1; j < this.bodies.length; j++) {
                 const col = this.checkAABB(this.bodies[i], this.bodies[j]);
                 if (col) pairs.push(col);
+<<<<<<< HEAD
+=======
+        this.updateGrid();
+        for (const bodiesInCell of this.grid.values()) {
+            for (let i = 0; i < bodiesInCell.length; i++) {
+                for (let j = i + 1; j < bodiesInCell.length; j++) {
+                    const col = this.checkAABB(bodiesInCell[i], bodiesInCell[j]);
+                    if (col) pairs.push(col);
+                }
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             }
         }
         return pairs;
@@ -306,6 +511,13 @@ export class Physics {
     /** Clear all bodies */
     clear(): void {
         this.bodies = [];
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        this.grid.clear();
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     }
 
     /** Get body count */

@@ -1,6 +1,10 @@
 /**
  * WeatherRenderer — standalone weather effect renderer for the RPG world.
  *
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
  * Supports:
  * - Rain (diagonal streaks with splash effects)
  * - Snow (drifting flakes with wind)
@@ -28,11 +32,27 @@ interface Particle {
 	alpha: number;
 }
 
+<<<<<<< HEAD
+=======
+ * Now uses the unified ParticleSystem for rain, snow, and sandstorms.
+ */
+import { Container, Graphics } from "pixi.js";
+import { ParticleEmitter, ParticlePresets } from "./ParticleSystem";
+
+export type WeatherType = "clear" | "rain" | "snow" | "fog" | "sandstorm";
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 export class WeatherRenderer {
 	private container: Container;
 	private width: number;
 	private height: number;
 	private graphics: Graphics;
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private particles: Particle[] = [];
 	private weatherType: WeatherType = "clear";
 	private intensity = 1.0;
@@ -42,6 +62,16 @@ export class WeatherRenderer {
 	// Limits
 	private maxParticles = 300;
 
+<<<<<<< HEAD
+=======
+	private emitter: ParticleEmitter | null = null;
+	private weatherType: WeatherType = "clear";
+	private intensity = 1.0;
+	private time = 0;
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	constructor(container: Container, width: number, height: number) {
 		this.container = container;
 		this.width = width;
@@ -52,6 +82,10 @@ export class WeatherRenderer {
 
 	/** Set weather type and intensity (0-1) */
 	setWeather(type: WeatherType, intensity = 1.0): void {
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.weatherType = type;
 		this.intensity = Math.max(0, Math.min(1, intensity));
 		this.particles = [];
@@ -76,6 +110,31 @@ export class WeatherRenderer {
 			default:
 				this.maxParticles = 0;
 				break;
+<<<<<<< HEAD
+=======
+		if (this.weatherType === type && this.intensity === intensity) return;
+
+		this.weatherType = type;
+		this.intensity = Math.max(0, Math.min(1, intensity));
+
+		if (this.emitter) {
+			this.emitter.destroy();
+			this.emitter = null;
+		}
+
+		switch (type) {
+			case "rain":
+				this.emitter = ParticlePresets.rain(this.width / 2, -10, this.width + 100);
+				this.container.addChild(this.emitter.container);
+				break;
+			case "snow":
+				this.emitter = ParticlePresets.snow(this.width / 2, -10, this.width + 100);
+				this.container.addChild(this.emitter.container);
+				break;
+			// Sandstorm and Fog could use specific presets or overlays
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		}
 	}
 
@@ -89,6 +148,10 @@ export class WeatherRenderer {
 		this.time += dt;
 		this.graphics.clear();
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (this.weatherType === "clear") return;
 
 		// Spawn new particles
@@ -99,10 +162,24 @@ export class WeatherRenderer {
 		this.renderParticles();
 
 		// Overlay effects
+<<<<<<< HEAD
+=======
+		if (this.emitter) {
+			this.emitter.update(dt);
+			this.emitter.render();
+		}
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (this.weatherType === "fog") {
 			this.renderFog();
 		}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		// Screen tint for weather
 		this.renderTint();
 	}
@@ -208,6 +285,15 @@ export class WeatherRenderer {
 
 	private renderFog(): void {
 		// Layered fog overlay with moving bands
+<<<<<<< HEAD
+=======
+		this.renderTint();
+	}
+
+	private renderFog(): void {
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		for (let i = 0; i < 3; i++) {
 			const yOffset = Math.sin(this.time * 0.2 + i * 2) * 30;
 			const xOffset = Math.cos(this.time * 0.15 + i * 3) * 50;
@@ -256,13 +342,28 @@ export class WeatherRenderer {
 
 	/** Transition weather over time */
 	transitionTo(type: WeatherType, duration = 2): void {
+<<<<<<< HEAD
+<<<<<<< HEAD
 		// Simple: just set immediately (could lerp intensity for smooth transition)
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+		// Simple: just set immediately (could lerp intensity for smooth transition)
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.setWeather(type, this.intensity);
 	}
 
 	/** Destroy and cleanup */
 	destroy(): void {
 		this.graphics.destroy();
+<<<<<<< HEAD
+<<<<<<< HEAD
 		this.particles = [];
+=======
+		if (this.emitter) this.emitter.destroy();
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+		this.particles = [];
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	}
 }

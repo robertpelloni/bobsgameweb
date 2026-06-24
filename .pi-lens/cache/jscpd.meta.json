@@ -1,4 +1,9 @@
 {
+<<<<<<< HEAD
   "timestamp": "2026-06-13T12:13:40.403Z",
   "scanDurationMs": 33705
+=======
+  "timestamp": "2026-06-12T02:04:06.208Z",
+  "scanDurationMs": 30573
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
 }

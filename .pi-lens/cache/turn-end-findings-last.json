@@ -1,6 +1,13 @@
 {
+<<<<<<< HEAD
   "signature": "server/index.js::Unresolved from this turn — server/index.js:\n🔴 STOP — 1 issue(s) must be fixed:\n  L1305: 'tournamentId' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.",
   "sessionId": "lens-mqe2a5e3-eaf47727",
   "projectSeqStart": 410,
   "projectSeqEnd": 411
+=======
+  "signature": "src/renderer/scenes/WorldScene.ts::Unresolved from this turn — src/renderer/scenes/WorldScene.ts:\n🔴 STOP — 3 issue(s) must be fixed:\n  L125: '_ambientMusic' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L139: '_debugShowBoundsLayer' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n  L1913: '_createControlsOverlay' is declared but its value is never read.\n    💡 Fix: Remove the unused declaration or rename with '_' prefix if intentionally unused.\n\nℹ️ Advisory — no action required this turn:\nCode-quality warnings introduced/touched this turn: 1 across 1 file(s).\nTop rules: no-any-type×1\nDetails written to .pi-lens/cache/code-quality-warnings.json\nNo action required unless you are already refactoring these areas.",
+  "sessionId": "lens-mq8gsd9h-185d173c",
+  "projectSeqStart": 363,
+  "projectSeqEnd": 364
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
 }

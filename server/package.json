@@ -1,6 +1,10 @@
 {
   "name": "okgame-server",
+<<<<<<< HEAD
   "version": "3.0.9",
+=======
+  "version": "3.0.16",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -12,6 +16,16 @@
     "node": ">=20"
   },
   "dependencies": {
+<<<<<<< HEAD
     "socket.io": "^4.7.2"
   }
 }
+=======
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "openai": "^6.35.0",
+    "pako": "^2.1.0",
+    "socket.io": "^4.7.2"
+  }
+}
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788

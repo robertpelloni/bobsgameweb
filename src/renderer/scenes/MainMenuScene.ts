@@ -10,6 +10,13 @@ import { Scene, type SceneConfig } from "../state/Scene";
 import { SceneTransition } from "../state/SceneTransition";
 import { Button, type ButtonStyle } from "../ui/Button";
 import { APP_VERSION } from "../../shared/Config";
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import { FFTVisualizer } from "../ui/FFTVisualizer";
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 // ============================================================
 // Types
@@ -44,6 +51,13 @@ export class MainMenuScene extends Scene {
 	private background!: Graphics;
 	private particles: Particle[] = [];
 	private particleContainer!: Container;
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	private visualizer!: FFTVisualizer;
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 	private titleBounce = 0;
 	private menuItems: MenuItem[] = [];
@@ -67,6 +81,13 @@ export class MainMenuScene extends Scene {
 	public create(): void {
 		this.createBackground();
 		this.createParticles();
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		this.createVisualizer();
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.createTitle();
 		this.createCategorySelector();
 		this.createMenu();
@@ -122,12 +143,27 @@ export class MainMenuScene extends Scene {
 
 	public onUpdate(dt: number): void {
 		this.updateParticles(dt);
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		this.visualizer?.update();
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.updateTitleAnimation(dt);
 		this.handleInput();
 	}
 
 	public onResize(width: number, height: number): void {
 		this.drawBackground();
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		this.visualizer?.resize(width, 100);
+		this.visualizer.container.y = height - 100;
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.titleText.x = this.centerX;
 		this.titleText.y = height * 0.2;
 		this.subtitleText.x = this.centerX;
@@ -204,6 +240,19 @@ export class MainMenuScene extends Scene {
 		}
 	}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	private createVisualizer(): void {
+		this.visualizer = new FFTVisualizer(this.width, 100);
+		this.visualizer.container.position.set(0, this.height - 100);
+		this.visualizer.container.alpha = 0.5;
+		this.container.addChild(this.visualizer.container);
+	}
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	// ============================================================
 	// Title
 	// ============================================================
@@ -478,6 +527,26 @@ export class MainMenuScene extends Scene {
 					void import("./GameSequenceEditorScene");
 				},
 			},
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+			{
+				label: "Audio Visualizer",
+				action: () => this.openVisualizer(),
+				prefetch: () => {
+					void import("./VisualizerScene");
+				},
+			},
+			{
+				label: "WebGPU Demo",
+				action: () => this.openWebGPUDemo(),
+				prefetch: () => {
+					void import("./WebGPUDemoScene");
+				},
+			},
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		];
 
 		const buttonStyle: ButtonStyle = {
@@ -530,6 +599,17 @@ export class MainMenuScene extends Scene {
 	// ============================================================
 
 	private handleInput(): void {
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		if (InputManager.isKeyPressed(Key.V)) {
+			this.visualizer?.toggleMode();
+			this.playMoveSound();
+		}
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (InputManager.isUpPressed()) {
 			this.moveSelection(-2);
 		} else if (InputManager.isDownPressed()) {
@@ -1009,6 +1089,32 @@ export class MainMenuScene extends Scene {
 		SceneTransition.pushWithFade(this.app, seqEditorScene);
 	}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	private async openVisualizer(): Promise<void> {
+		const { VisualizerScene } = await import("./VisualizerScene");
+		const visualizerScene = new VisualizerScene({
+			name: "visualizer",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, visualizerScene);
+	}
+
+	private async openWebGPUDemo(): Promise<void> {
+		const { WebGPUDemoScene } = await import("./WebGPUDemoScene");
+		const demoScene = new WebGPUDemoScene({
+			name: "webgpu-demo",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, demoScene);
+	}
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	// ============================================================
 	// Audio
 	// ============================================================

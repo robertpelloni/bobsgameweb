@@ -3,6 +3,7 @@
   "files": {
     "server\\index.js": {
       "latest": {
+<<<<<<< HEAD
         "commit": "4163c449",
         "timestamp": "2026-06-14T23:44:25.386Z",
         "mi": 7.1,
@@ -11,6 +12,16 @@
         "lines": 1115,
         "maxCyclomatic": 384,
         "entropy": 7.42
+=======
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T23:11:38.457Z",
+        "mi": 10.9,
+        "cognitive": 388,
+        "nesting": 6,
+        "lines": 846,
+        "maxCyclomatic": 289,
+        "entropy": 6.66
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       },
       "history": [
         {
@@ -32,6 +43,7 @@
           "lines": 846,
           "maxCyclomatic": 289,
           "entropy": 6.66
+<<<<<<< HEAD
         },
         {
           "commit": "4163c449",
@@ -42,6 +54,8 @@
           "lines": 1115,
           "maxCyclomatic": 384,
           "entropy": 7.42
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         }
       ],
       "trend": "regressing"
@@ -83,8 +97,13 @@
     },
     "src\\renderer\\engine\\audio\\AudioManager.ts": {
       "latest": {
+<<<<<<< HEAD
         "commit": "4163c449",
         "timestamp": "2026-06-14T16:26:05.198Z",
+=======
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T18:46:18.014Z",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         "mi": 31.7,
         "cognitive": 77,
         "nesting": 5,
@@ -102,6 +121,7 @@
           "lines": 197,
           "maxCyclomatic": 15,
           "entropy": 6.54
+<<<<<<< HEAD
         },
         {
           "commit": "4163c449",
@@ -112,12 +132,15 @@
           "lines": 197,
           "maxCyclomatic": 15,
           "entropy": 6.54
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         }
       ],
       "trend": "stable"
     },
     "src\\renderer\\audio\\AudioManager.ts": {
       "latest": {
+<<<<<<< HEAD
         "commit": "4163c449",
         "timestamp": "2026-06-14T16:30:11.595Z",
         "mi": 16.2,
@@ -126,6 +149,16 @@
         "lines": 566,
         "maxCyclomatic": 26,
         "entropy": 6.53
+=======
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T18:46:25.044Z",
+        "mi": 16.8,
+        "cognitive": 305,
+        "nesting": 5,
+        "lines": 509,
+        "maxCyclomatic": 26,
+        "entropy": 6.59
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       },
       "history": [
         {
@@ -137,6 +170,7 @@
           "lines": 509,
           "maxCyclomatic": 26,
           "entropy": 6.59
+<<<<<<< HEAD
         },
         {
           "commit": "4163c449",
@@ -147,6 +181,8 @@
           "lines": 566,
           "maxCyclomatic": 26,
           "entropy": 6.53
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         }
       ],
       "trend": "stable"
@@ -338,6 +374,7 @@
     },
     "src\\renderer\\engine\\rpg\\DemoWorld.ts": {
       "latest": {
+<<<<<<< HEAD
         "commit": "4163c449",
         "timestamp": "2026-06-14T16:26:44.344Z",
         "mi": 0,
@@ -346,6 +383,16 @@
         "lines": 4156,
         "maxCyclomatic": 740,
         "entropy": 7.66
+=======
+        "commit": "48a3e5b2",
+        "timestamp": "2026-04-29T19:58:50.268Z",
+        "mi": 0,
+        "cognitive": 1574,
+        "nesting": 12,
+        "lines": 2728,
+        "maxCyclomatic": 520,
+        "entropy": 7.57
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       },
       "history": [
         {
@@ -357,6 +404,7 @@
           "lines": 2728,
           "maxCyclomatic": 520,
           "entropy": 7.57
+<<<<<<< HEAD
         },
         {
           "commit": "4163c449",
@@ -370,6 +418,11 @@
         }
       ],
       "trend": "regressing"
+=======
+        }
+      ],
+      "trend": "stable"
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     "src\\renderer\\scenes\\OptionsScene.ts": {
       "latest": {
@@ -593,6 +646,7 @@
     },
     "src\\renderer\\scenes\\WorldScene.ts": {
       "latest": {
+<<<<<<< HEAD
         "commit": "4163c449",
         "timestamp": "2026-06-13T12:42:53.387Z",
         "mi": 0,
@@ -601,6 +655,16 @@
         "lines": 3217,
         "maxCyclomatic": 371,
         "entropy": 8.4
+=======
+        "commit": "16d0dce2",
+        "timestamp": "2026-06-12T13:10:51.687Z",
+        "mi": 0,
+        "cognitive": 2026,
+        "nesting": 12,
+        "lines": 3212,
+        "maxCyclomatic": 371,
+        "entropy": 8.39
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       },
       "history": [
         {
@@ -662,6 +726,7 @@
           "lines": 3212,
           "maxCyclomatic": 371,
           "entropy": 8.39
+<<<<<<< HEAD
         },
         {
           "commit": "4163c449",
@@ -672,6 +737,8 @@
           "lines": 3217,
           "maxCyclomatic": 371,
           "entropy": 8.4
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         }
       ],
       "trend": "regressing"
@@ -823,9 +890,15 @@
     },
     "src\\renderer\\engine\\map\\GameMap.ts": {
       "latest": {
+<<<<<<< HEAD
         "commit": "4163c449",
         "timestamp": "2026-06-12T14:32:17.124Z",
         "mi": 19,
+=======
+        "commit": "4eff28a4",
+        "timestamp": "2026-06-10T20:02:43.381Z",
+        "mi": 19.1,
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         "cognitive": 261,
         "nesting": 6,
         "lines": 368,
@@ -872,6 +945,7 @@
           "lines": 368,
           "maxCyclomatic": 94,
           "entropy": 6.72
+<<<<<<< HEAD
         },
         {
           "commit": "4163c449",
@@ -885,6 +959,11 @@
         }
       ],
       "trend": "regressing"
+=======
+        }
+      ],
+      "trend": "improving"
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     "src\\renderer\\engine\\map\\RealTileset.ts": {
       "latest": {
@@ -913,6 +992,7 @@
     },
     "src\\renderer\\engine\\map\\LegacyMapLoader.ts": {
       "latest": {
+<<<<<<< HEAD
         "commit": "4163c449",
         "timestamp": "2026-06-14T21:04:38.059Z",
         "mi": 22.3,
@@ -921,6 +1001,16 @@
         "lines": 403,
         "maxCyclomatic": 113,
         "entropy": 6.79
+=======
+        "commit": "596b332d",
+        "timestamp": "2026-06-12T13:17:46.009Z",
+        "mi": 22.5,
+        "cognitive": 260,
+        "nesting": 8,
+        "lines": 389,
+        "maxCyclomatic": 105,
+        "entropy": 6.76
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       },
       "history": [
         {
@@ -972,6 +1062,7 @@
           "lines": 389,
           "maxCyclomatic": 105,
           "entropy": 6.76
+<<<<<<< HEAD
         },
         {
           "commit": "4163c449",
@@ -985,6 +1076,11 @@
         }
       ],
       "trend": "regressing"
+=======
+        }
+      ],
+      "trend": "stable"
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     "src\\renderer\\engine\\map\\MapLoader.ts": {
       "latest": {
@@ -1235,6 +1331,7 @@
         }
       ],
       "trend": "stable"
+<<<<<<< HEAD
     },
     "src\\renderer\\entity\\Entity.ts": {
       "latest": {
@@ -1373,4 +1470,9 @@
     }
   },
   "capturedAt": "2026-06-14T23:50:00.895Z"
+=======
+    }
+  },
+  "capturedAt": "2026-06-12T13:17:51.061Z"
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
 }

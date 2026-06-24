@@ -60,3 +60,7 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+<<<<<<< HEAD
+=======
+server/profiles.json
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677

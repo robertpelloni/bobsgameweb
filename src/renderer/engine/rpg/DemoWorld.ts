@@ -25,8 +25,14 @@ import { TileBatcher } from "../core/TileBatcher";
 import { WeatherRenderer, type WeatherType } from "../graphics/WeatherRenderer";
 import { EventTrigger } from "./event/BobEvent";
 import { AudioManager } from "../../audio/AudioManager";
+<<<<<<< HEAD
+<<<<<<< HEAD
 import type { YuuEntity } from "../../game/entities/YuuEntity";
 import { Direction } from "../../entity/Entity";
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 const log = new Logger("DemoWorld");
 
@@ -54,11 +60,19 @@ export interface DemoWorldConfig {
 	width: number;
 	height: number;
 	eventManager?: import("./event/EventManager").EventManager;
+<<<<<<< HEAD
+<<<<<<< HEAD
 	onMapTransitionRequest?: (
 		mapName: string,
 		spawnX: number,
 		spawnY: number,
 	) => void;
+=======
+	onMapTransitionRequest?: (mapName: string, spawnX: number, spawnY: number) => void;
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+	onMapTransitionRequest?: (mapName: string, spawnX: number, spawnY: number) => void;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 }
 
 interface LoadedMapDoor {
@@ -90,8 +104,16 @@ export class DemoWorld {
 	private currentWeather: WeatherType = "clear";
 	private entityContainer: Container;
 	private hudContainer: Container;
+<<<<<<< HEAD
+<<<<<<< HEAD
 	private touchControls: import("../../ui/TouchControls").TouchControls | null =
 		null;
+=======
+	private touchControls: import("../../ui/TouchControls").TouchControls | null = null;
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+	private touchControls: import("../../ui/TouchControls").TouchControls | null = null;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 	// Smooth camera (lerped toward player)
 	private camX = 0;
@@ -99,11 +121,21 @@ export class DemoWorld {
 	private camTargetX = 0;
 	private camTargetY = 0;
 	private readonly CAM_LERP = 0.08;
+<<<<<<< HEAD
+<<<<<<< HEAD
 	private eventManager: import("./event/EventManager").EventManager | null =
 		null;
 	private onMapTransitionRequest:
 		| ((mapName: string, spawnX: number, spawnY: number) => void)
 		| null = null;
+=======
+	private eventManager: import("./event/EventManager").EventManager | null = null;
+	private onMapTransitionRequest: ((mapName: string, spawnX: number, spawnY: number) => void) | null = null;
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+	private eventManager: import("./event/EventManager").EventManager | null = null;
+	private onMapTransitionRequest: ((mapName: string, spawnX: number, spawnY: number) => void) | null = null;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private loadedMapDoors: LoadedMapDoor[] = [];
 	private loadedMapWarps: LoadedMapWarp[] = [];
 	private usingLoadedMapData = false;
@@ -130,7 +162,13 @@ export class DemoWorld {
 	 * playerDir: 0=D, 1=DL, 2=L, 3=UL, 4=U, 5=UR, 6=R, 7=DR
 	 */
 	playerDir = 0;
+<<<<<<< HEAD
+<<<<<<< HEAD
 	private yuuEntity!: YuuEntity;
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 	// NPCs
 	private npcs: {
@@ -541,11 +579,19 @@ export class DemoWorld {
 		this.container = new Container();
 		this.mapContainer = new Container();
 		this.tileBatcher = new TileBatcher(TILE_SIZE);
+<<<<<<< HEAD
+<<<<<<< HEAD
 		this.weatherRenderer = new WeatherRenderer(
 			this.container,
 			this.width,
 			this.height,
 		);
+=======
+		this.weatherRenderer = new WeatherRenderer(this.container, this.width, this.height);
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+		this.weatherRenderer = new WeatherRenderer(this.container, this.width, this.height);
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.entityContainer = new Container();
 		this.hudContainer = new Container();
 
@@ -560,6 +606,8 @@ export class DemoWorld {
 		});
 
 		this.generateMap();
+<<<<<<< HEAD
+<<<<<<< HEAD
 		// Initialize YuuEntity (player character)
 		this.yuuEntity = new YuuEntity({
 			x: this.playerX,
@@ -584,6 +632,10 @@ export class DemoWorld {
 				);
 			},
 		});
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.setupInput();
 		this.placeNPCs();
 		this.placeChests();
@@ -1523,6 +1575,8 @@ export class DemoWorld {
 	 * Replaces the procedural DemoWorld map with server/loaded map data.
 	 * Resizes the tile grid to match the map dimensions.
 	 */
+<<<<<<< HEAD
+<<<<<<< HEAD
 	loadFromMapData(
 		mapData: {
 			name?: string;
@@ -1536,6 +1590,23 @@ export class DemoWorld {
 		},
 		options?: { spawnX?: number; spawnY?: number },
 	): void {
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+	loadFromMapData(mapData: {
+		name?: string;
+		width: number;
+		height: number;
+		tiles: number[][];
+		defaultSpawnX?: number;
+		defaultSpawnY?: number;
+		doors?: Array<Record<string, unknown>>;
+		warps?: Array<Record<string, unknown>>;
+	}, options?: { spawnX?: number; spawnY?: number }): void {
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		const mapW = Math.min(mapData.width, 200); // Safety cap
 		const mapH = Math.min(mapData.height, 200);
 
@@ -1551,6 +1622,8 @@ export class DemoWorld {
 		(this as any)._mapW = mapW;
 		(this as any)._mapH = mapH;
 		this.usingLoadedMapData = true;
+<<<<<<< HEAD
+<<<<<<< HEAD
 		this.loadedMapDoors = (mapData.doors ?? [])
 			.map((door) => ({
 				name: String(door.name ?? door.id ?? "door"),
@@ -1574,6 +1647,32 @@ export class DemoWorld {
 				destinationY: Number(warp.destinationY ?? 0),
 			}))
 			.filter((warp) => warp.destinationMapName.length > 0);
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+		this.loadedMapDoors = (mapData.doors ?? []).map((door) => ({
+			name: String(door.name ?? door.id ?? 'door'),
+			x: Number(door.x ?? 0),
+			y: Number(door.y ?? 0),
+			destinationMapName: String(door.destinationMapName ?? ''),
+			destinationX: Number(door.destinationX ?? 0),
+			destinationY: Number(door.destinationY ?? 0),
+		})).filter((door) => door.destinationMapName.length > 0);
+		this.loadedMapWarps = (mapData.warps ?? []).map((warp) => ({
+			name: String(warp.name ?? warp.id ?? 'warp'),
+			comment: typeof warp.comment === 'string' ? warp.comment : undefined,
+			x: Number(warp.x ?? 0),
+			y: Number(warp.y ?? 0),
+			width: Math.max(1, Number(warp.width ?? 1)),
+			height: Math.max(1, Number(warp.height ?? 1)),
+			destinationMapName: String(warp.destinationMapName ?? ''),
+			destinationX: Number(warp.destinationX ?? 0),
+			destinationY: Number(warp.destinationY ?? 0),
+		})).filter((warp) => warp.destinationMapName.length > 0);
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.currentMapName = mapData.name ?? this.currentMapName;
 		this.mapEntered = false;
 		this.loadedMapTransitionCooldown = 0.35;
@@ -1592,6 +1691,8 @@ export class DemoWorld {
 			this.playerY = Number(spawnY) * TILE_SIZE;
 		}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 		log.info(
 			`Loaded map data: ${this.currentMapName} (${mapW}x${mapH} tiles, doors=${this.loadedMapDoors.length}, warps=${this.loadedMapWarps.length})`,
 		);
@@ -1610,6 +1711,22 @@ export class DemoWorld {
 		const door = this.loadedMapDoors.find(
 			(entry) => entry.x === playerTileX && entry.y === playerTileY,
 		);
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+		log.info(`Loaded map data: ${this.currentMapName} (${mapW}x${mapH} tiles, doors=${this.loadedMapDoors.length}, warps=${this.loadedMapWarps.length})`);
+	}
+
+	private tryUseLoadedMapDoor(): boolean {
+		if (!this.usingLoadedMapData || !this.onMapTransitionRequest || this.loadedMapTransitionCooldown > 0) return false;
+
+		const playerTileX = Math.floor(this.playerX / TILE_SIZE);
+		const playerTileY = Math.floor(this.playerY / TILE_SIZE);
+		const door = this.loadedMapDoors.find((entry) => entry.x === playerTileX && entry.y === playerTileY);
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (!door) return false;
 
 		// Play door sound
@@ -1626,15 +1743,25 @@ export class DemoWorld {
 			color: 0xffaa44,
 		});
 		this.loadedMapTransitionCooldown = 0.35;
+<<<<<<< HEAD
+<<<<<<< HEAD
 		this.onMapTransitionRequest(
 			door.destinationMapName,
 			door.destinationX,
 			door.destinationY,
 		);
+=======
+		this.onMapTransitionRequest(door.destinationMapName, door.destinationX, door.destinationY);
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+		this.onMapTransitionRequest(door.destinationMapName, door.destinationX, door.destinationY);
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		return true;
 	}
 
 	private checkLoadedMapWarpTransition(): void {
+<<<<<<< HEAD
+<<<<<<< HEAD
 		if (
 			!this.usingLoadedMapData ||
 			!this.onMapTransitionRequest ||
@@ -1651,6 +1778,23 @@ export class DemoWorld {
 				playerTileY >= entry.y &&
 				playerTileY < entry.y + entry.height,
 		);
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+		if (!this.usingLoadedMapData || !this.onMapTransitionRequest || this.loadedMapTransitionCooldown > 0) return;
+
+		const playerTileX = Math.floor(this.playerX / TILE_SIZE);
+		const playerTileY = Math.floor(this.playerY / TILE_SIZE);
+		const warp = this.loadedMapWarps.find((entry) => (
+			playerTileX >= entry.x &&
+			playerTileX < entry.x + entry.width &&
+			playerTileY >= entry.y &&
+			playerTileY < entry.y + entry.height
+		));
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (!warp) return;
 
 		this.notifications.push({
@@ -1662,11 +1806,19 @@ export class DemoWorld {
 			color: 0x88aaff,
 		});
 		this.loadedMapTransitionCooldown = 0.35;
+<<<<<<< HEAD
+<<<<<<< HEAD
 		this.onMapTransitionRequest(
 			warp.destinationMapName,
 			warp.destinationX,
 			warp.destinationY,
 		);
+=======
+		this.onMapTransitionRequest(warp.destinationMapName, warp.destinationX, warp.destinationY);
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+		this.onMapTransitionRequest(warp.destinationMapName, warp.destinationX, warp.destinationY);
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	}
 
 	/** Get the dynamic map width (may differ from const MAP_W after loadFromMapData) */
@@ -1772,10 +1924,18 @@ export class DemoWorld {
 	update(dt: number): void {
 		this.gameTime += dt;
 		if (this.loadedMapTransitionCooldown > 0) {
+<<<<<<< HEAD
+<<<<<<< HEAD
 			this.loadedMapTransitionCooldown = Math.max(
 				0,
 				this.loadedMapTransitionCooldown - dt,
 			);
+=======
+			this.loadedMapTransitionCooldown = Math.max(0, this.loadedMapTransitionCooldown - dt);
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+			this.loadedMapTransitionCooldown = Math.max(0, this.loadedMapTransitionCooldown - dt);
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		}
 
 		// Weather cycling — changes based on game time
@@ -1841,10 +2001,18 @@ export class DemoWorld {
 					if (AudioManager.isLoaded("piece_move")) {
 						// Randomize pitch slightly to simulate the 14 different "blah" sounds
 						// Note: We use the 'pitch' option which AudioManager supports
+<<<<<<< HEAD
+<<<<<<< HEAD
 						AudioManager.playSound("piece_move", {
 							volume: 0.1,
 							pitch: 0.8 + Math.random() * 0.4,
 						});
+=======
+						AudioManager.playSound("piece_move", { volume: 0.1, pitch: 0.8 + Math.random() * 0.4 });
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+						AudioManager.playSound("piece_move", { volume: 0.1, pitch: 0.8 + Math.random() * 0.4 });
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 					}
 				}
 			}
@@ -2039,6 +2207,8 @@ export class DemoWorld {
 
 		// Update player direction (8-way)
 		if (dx !== 0 || dy !== 0) {
+<<<<<<< HEAD
+<<<<<<< HEAD
 			if (dx === 0 && dy > 0)
 				this.playerDir = 0; // Down
 			else if (dx < 0 && dy > 0)
@@ -2053,6 +2223,20 @@ export class DemoWorld {
 				this.playerDir = 5; // Up-Right
 			else if (dx > 0 && dy === 0)
 				this.playerDir = 6; // Right
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+			if (dx === 0 && dy > 0) this.playerDir = 0; // Down
+			else if (dx < 0 && dy > 0) this.playerDir = 1; // Down-Left
+			else if (dx < 0 && dy === 0) this.playerDir = 2; // Left
+			else if (dx < 0 && dy < 0) this.playerDir = 3; // Up-Left
+			else if (dx === 0 && dy < 0) this.playerDir = 4; // Up
+			else if (dx > 0 && dy < 0) this.playerDir = 5; // Up-Right
+			else if (dx > 0 && dy === 0) this.playerDir = 6; // Right
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			else if (dx > 0 && dy > 0) this.playerDir = 7; // Down-Right
 		}
 
@@ -2180,6 +2364,8 @@ export class DemoWorld {
 			}
 		}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 		// Sync YuuEntity position and animation state with legacy player state
 		const DEMO_DIR_TO_ENUM: Record<number, Direction> = {
 			0: Direction.DOWN,
@@ -2198,6 +2384,10 @@ export class DemoWorld {
 			this.yuuEntity.stop();
 		}
 
+=======
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (this.usingLoadedMapData) {
 			if (this.playerX <= 0 && dx < 0) this.playerX = 1;
 			if (this.playerX >= (mapW - 1) * TILE_SIZE && dx > 0) {
@@ -2719,6 +2909,8 @@ export class DemoWorld {
 
 		// Launch turn-based BattleScene
 		import("../../scenes/BattleScene").then(({ BattleScene }) => {
+<<<<<<< HEAD
+<<<<<<< HEAD
 			import("../ecs/components/CombatComponent").then(
 				({ CombatComponent }) => {
 					const app = (this as any).app;
@@ -2774,6 +2966,63 @@ export class DemoWorld {
 	}
 
 	private startLegacyEncounter(template: (typeof this.ENEMY_TYPES)[0]): void {
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+			import("../ecs/components/CombatComponent").then(({ CombatComponent }) => {
+				const app = (this as any).app;
+				if (!app) {
+					// Fallback to auto-combat if no app reference
+					this.startLegacyEncounter(template);
+					return;
+				}
+
+				const playerCombat = new CombatComponent({
+					hp: this.playerHp,
+					maxHp: this.playerMaxHp,
+					atk: this.playerAttack,
+					def: this.defense,
+					level: this.playerLevel,
+				});
+
+				const enemyCombat = new CombatComponent({
+					hp: template.hp,
+					maxHp: template.hp,
+					atk: template.attack,
+					def: Math.floor(template.attack * 0.3),
+					level: Math.max(1, this.playerLevel - 1 + Math.floor(Math.random() * 3)),
+				});
+
+				const battleScene = new BattleScene({
+					name: "battle",
+					app,
+					player: playerCombat,
+					enemy: enemyCombat,
+				});
+
+				// Push battle scene
+				const { StateManager } = require("../../state/StateManager");
+				StateManager.push(battleScene);
+
+				// Track encounter
+				this.currentEnemy = { ...template, maxHp: template.hp };
+				this.notifications.push({
+					text: `Enemy: ${template.name}!`,
+					x: this.playerX,
+					y: this.playerY - 40,
+					age: 0,
+					maxAge: 1.5,
+					color: 0xff4444,
+				});
+			});
+		});
+	}
+
+	private startLegacyEncounter(template: typeof this.ENEMY_TYPES[0]): void {
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.currentEnemy = { ...template, maxHp: template.hp };
 		this.showCombat = true;
 		this.combatLog = [`A wild ${template.name} appeared!`];
@@ -3387,12 +3636,20 @@ export class DemoWorld {
 				const tile = this.tiles[ty][tx];
 				this.tileBatcher?.addTile(tx, ty, tile);
 				// Collect tiles that need extra detail
+<<<<<<< HEAD
+<<<<<<< HEAD
 				if (
 					tile === Tile.WATER ||
 					tile === Tile.TREE ||
 					tile === Tile.FLOWER ||
 					tile === Tile.CHEST
 				) {
+=======
+				if (tile === Tile.WATER || tile === Tile.TREE || tile === Tile.FLOWER || tile === Tile.CHEST) {
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+				if (tile === Tile.WATER || tile === Tile.TREE || tile === Tile.FLOWER || tile === Tile.CHEST) {
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 					detailTiles.push({ tx, ty, tile });
 				}
 			}
@@ -3412,6 +3669,8 @@ export class DemoWorld {
 				const flow = Math.sin(this.gameTime * 1.5 + tx * 0.8 + ty * 0.4) * 0.2;
 				detailG.rect(px, py, TILE_SIZE, TILE_SIZE);
 				detailG.fill({ color: 0x3366cc, alpha: 0.25 + flow });
+<<<<<<< HEAD
+<<<<<<< HEAD
 				const waveY1 =
 					py + TILE_SIZE * 0.3 + Math.sin(this.gameTime * 2 + tx) * 3;
 				const waveY2 =
@@ -3431,6 +3690,20 @@ export class DemoWorld {
 					px + TILE_SIZE,
 					waveY2,
 				);
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+				const waveY1 = py + TILE_SIZE * 0.3 + Math.sin(this.gameTime * 2 + tx) * 3;
+				const waveY2 = py + TILE_SIZE * 0.65 + Math.sin(this.gameTime * 2.5 + tx + 1) * 3;
+				detailG.moveTo(px, waveY1);
+				detailG.quadraticCurveTo(px + TILE_SIZE / 2, waveY1 + 4, px + TILE_SIZE, waveY1);
+				detailG.stroke({ color: 0x5588dd, width: 1, alpha: 0.3 + flow });
+				detailG.moveTo(px, waveY2);
+				detailG.quadraticCurveTo(px + TILE_SIZE / 2, waveY2 - 3, px + TILE_SIZE, waveY2);
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				detailG.stroke({ color: 0x5588dd, width: 1, alpha: 0.25 + flow });
 				const sparkle = Math.sin(this.gameTime * 3 + tx * 2.1 + ty * 1.7);
 				if (sparkle > 0.85) {
@@ -3438,6 +3711,8 @@ export class DemoWorld {
 					detailG.fill({ color: 0xffffff, alpha: sparkle - 0.7 });
 				}
 			} else if (tile === Tile.TREE) {
+<<<<<<< HEAD
+<<<<<<< HEAD
 				detailG.rect(
 					px + TILE_SIZE * 0.3,
 					py + TILE_SIZE * 0.6,
@@ -3456,21 +3731,43 @@ export class DemoWorld {
 					py + TILE_SIZE * 0.3,
 					TILE_SIZE * 0.25,
 				);
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+				detailG.rect(px + TILE_SIZE * 0.3, py + TILE_SIZE * 0.6, TILE_SIZE * 0.4, TILE_SIZE * 0.4);
+				detailG.fill(0x8b4513);
+				detailG.circle(px + TILE_SIZE * 0.5, py + TILE_SIZE * 0.35, TILE_SIZE * 0.45);
+				detailG.fill(0x228b22);
+				detailG.circle(px + TILE_SIZE * 0.35, py + TILE_SIZE * 0.3, TILE_SIZE * 0.25);
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				detailG.fill(0x2ea22e);
 			} else if (tile === Tile.FLOWER) {
 				const sway = Math.sin(this.gameTime * 2 + tx * 1.3) * 2;
 				detailG.circle(px + TILE_SIZE * 0.5 + sway, py + TILE_SIZE * 0.4, 3);
 				detailG.fill(0xff6688);
+<<<<<<< HEAD
+<<<<<<< HEAD
 				detailG.rect(
 					px + TILE_SIZE * 0.48,
 					py + TILE_SIZE * 0.5,
 					2,
 					TILE_SIZE * 0.3,
 				);
+=======
+				detailG.rect(px + TILE_SIZE * 0.48, py + TILE_SIZE * 0.5, 2, TILE_SIZE * 0.3);
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+				detailG.rect(px + TILE_SIZE * 0.48, py + TILE_SIZE * 0.5, 2, TILE_SIZE * 0.3);
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				detailG.fill(0x44aa44);
 			} else if (tile === Tile.CHEST) {
 				detailG.rect(px + 2, py + 4, TILE_SIZE - 4, TILE_SIZE - 6);
 				detailG.fill(0x8b6914);
+<<<<<<< HEAD
+<<<<<<< HEAD
 				detailG.rect(
 					px + TILE_SIZE * 0.3,
 					py + TILE_SIZE * 0.3,
@@ -3487,6 +3784,24 @@ export class DemoWorld {
 				TILE_SIZE * 0.4,
 			);
 		}
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+				detailG.rect(px + TILE_SIZE * 0.3, py + TILE_SIZE * 0.3, TILE_SIZE * 0.4, TILE_SIZE * 0.3);
+				detailG.fill(0xffd700);
+			}
+					// Tree trunk
+					g.rect(
+						TILE_SIZE * 0.3,
+						TILE_SIZE * 0.6,
+						TILE_SIZE * 0.4,
+						TILE_SIZE * 0.4,
+					);
+							}
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		detailG.position.set(-camX, -camY);
 		this.mapContainer.addChild(detailG);
 
@@ -3521,11 +3836,19 @@ export class DemoWorld {
 		// Player (always rendered)
 		entities.push({
 			y: this.playerY,
+<<<<<<< HEAD
+<<<<<<< HEAD
 			render: () => {
 				const c = this.yuuEntity.getContainer();
 				c.position.set(this.playerX - camX, this.playerY - camY);
 				return c;
 			},
+=======
+			render: () => this.renderPlayer(this.playerX - camX, this.playerY - camY),
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+			render: () => this.renderPlayer(this.playerX - camX, this.playerY - camY),
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		});
 
 		// Other players from network
@@ -4222,10 +4545,18 @@ export class DemoWorld {
 
 		// Yuu 8-directional animation support (64 frames: 8 directions * 8 frames)
 		// Procedural walk cycle based on direction
+<<<<<<< HEAD
+<<<<<<< HEAD
 		const isMoving =
 			name === "You"
 				? this.keys["w"] || this.keys["s"] || this.keys["a"] || this.keys["d"]
 				: (npc as any)?._wandering;
+=======
+		const isMoving = name === "You" ? (this.keys["w"] || this.keys["s"] || this.keys["a"] || this.keys["d"]) : (npc as any)?._wandering;
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+		const isMoving = name === "You" ? (this.keys["w"] || this.keys["s"] || this.keys["a"] || this.keys["d"]) : (npc as any)?._wandering;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (isMoving) {
 			const walkSpeed = 15;
 			const walkBob = Math.abs(Math.sin(this.gameTime * walkSpeed)) * 4;
@@ -4262,6 +4593,8 @@ export class DemoWorld {
 		// Eyes (direction-based)
 		// playerDir: 0=D, 1=DL, 2=L, 3=UL, 4=U, 5=UR, 6=R, 7=DR
 		const eyeOffsets: Record<number, { ex: number; ey: number }[]> = {
+<<<<<<< HEAD
+<<<<<<< HEAD
 			0: [
 				{ ex: -3, ey: -25 },
 				{ ex: 3, ey: -25 },
@@ -4270,15 +4603,31 @@ export class DemoWorld {
 				{ ex: -4, ey: -25 },
 				{ ex: 1, ey: -25 },
 			], // down-left
+=======
+			0: [{ ex: -3, ey: -25 }, { ex: 3, ey: -25 }], // down
+			1: [{ ex: -4, ey: -25 }, { ex: 1, ey: -25 }], // down-left
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+			0: [{ ex: -3, ey: -25 }, { ex: 3, ey: -25 }], // down
+			1: [{ ex: -4, ey: -25 }, { ex: 1, ey: -25 }], // down-left
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			2: [{ ex: -4, ey: -25 }], // left
 			3: [{ ex: -3, ey: -25 }], // up-left
 			4: [], // up (no eyes visible)
 			5: [{ ex: 3, ey: -25 }], // up-right
 			6: [{ ex: 4, ey: -25 }], // right
+<<<<<<< HEAD
+<<<<<<< HEAD
 			7: [
 				{ ex: -1, ey: -25 },
 				{ ex: 4, ey: -25 },
 			], // down-right
+=======
+			7: [{ ex: -1, ey: -25 }, { ex: 4, ey: -25 }], // down-right
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+			7: [{ ex: -1, ey: -25 }, { ex: 4, ey: -25 }], // down-right
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		};
 		const eyes = eyeOffsets[dir] ?? eyeOffsets[0];
 		for (const eye of eyes) {
@@ -5137,6 +5486,8 @@ export class DemoWorld {
 		if (!app) return;
 
 		import("../../state/StateManager").then(({ StateManager }) => {
+<<<<<<< HEAD
+<<<<<<< HEAD
 			import("../../scenes/" + sceneName)
 				.then((mod) => {
 					const SceneClass = Object.values(mod)[0] as any;
@@ -5150,6 +5501,24 @@ export class DemoWorld {
 				.catch(() => {
 					log.warn(`Failed to open scene: ${sceneName}`);
 				});
+=======
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
+			import("../../scenes/" + sceneName).then((mod) => {
+				const SceneClass = Object.values(mod)[0] as any;
+				if (!SceneClass) return;
+				const scene = new SceneClass({
+					name: sceneName.replace("Scene", "").toLowerCase(),
+					app,
+				});
+				StateManager.push(scene);
+			}).catch(() => {
+				log.warn(`Failed to open scene: ${sceneName}`);
+			});
+<<<<<<< HEAD
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		});
 	}
 }

@@ -1,5 +1,12 @@
 import { EventEmitter } from 'eventemitter3';
 import { Howl, Howler } from 'howler';
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import { PerformanceManager } from './PerformanceManager';
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 // @ts-ignore - chiptune3 lacks official types
 import { ChiptuneJsPlayer } from './tracker/chiptune3';
 
@@ -106,7 +113,25 @@ class AudioManagerClass extends EventEmitter<AudioEvents> {
   // ============================================================
 
   load(name: string, src: string | string[], options?: { preload?: boolean }): any {
+<<<<<<< HEAD
+<<<<<<< HEAD
     let mainSrc = Array.isArray(src) ? src[0] : src;
+=======
+    let sources = Array.isArray(src) ? src : [src];
+
+    // Prefer OGG if available and performance demands it
+    if (PerformanceManager.shouldPreferCompressed) {
+        const oggVariant = sources.find(s => s.endsWith('.ogg'));
+        if (oggVariant) {
+            sources = [oggVariant, ...sources.filter(s => s !== oggVariant)];
+        }
+    }
+
+    let mainSrc = sources[0];
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+    let mainSrc = Array.isArray(src) ? src[0] : src;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     
     // Audio files are served as static assets from the same domain.
     // Only rewrite paths for tracker files or external references.

@@ -1,3 +1,91 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+## v3.0.20 — 2026-06-08
+
+### Added
+- **Optimized Physics Engine**: Integrated `WasmPhysicsBridge` into `Physics.ts` for accelerated narrow-phase checks.
+- **Spatial Grid Broad-phase**: Implemented O(N) collision detection using a 128px spatial grid to support massive entity counts.
+- **Packet Compression**: Integrated `pako` (zlib) for dynamic compression of high-frequency MMO world sync traffic.
+
+### Changed
+- **Performance Architecture**: Refactored the core physics loop to utilize spatial partitioning, significantly reducing CPU overhead in dense regional clusters.
+
+## v3.0.19 — 2026-06-08
+
+### Added
+- **Regional Clusters**: Implemented server-side spatial partitioning using Socket.io rooms to optimize MMO traffic.
+- **Virtual Joystick**: Replaced legacy mobile D-pad with a fluid Analog Joystick supporting 8-directional input.
+- **Haptic Intensity Control**: Added customizable vibration feedback settings for mobile devices in the Options menu.
+- **Population Metrics**: Updated the `/stats` endpoint and World Editor to display regional cluster population.
+
+### Changed
+- **Hardened Transitions**: Upgraded `WorldScene` map transition protocol to include explicit map-room synchronization with the server.
+
+## v3.0.18 — 2026-06-08
+
+### Added
+- **Wasm Physics Foundation**: Created C++ `PhysicsBridge` with AABB collision logic and Emscripten bindings.
+- **Enhanced Wasm Bridge**: Updated `WasmPhysicsBridge.ts` with Rect interface, batch collision support, and improved JS fallback.
+- **Server Health Monitoring**: Added real-time server status polling to the World Database Editor.
+- **Improved Rate-Limit Logging**: Enhanced server logs with throttled per-player rate-limit warnings.
+
+### Fixed
+- **Chiptune3 Worklet**: Corrected `getSongs()` return type to array for consistent subsong metadata extraction.
+
+## v3.0.13 — 2026-06-08
+
+### Added
+- **Unified Particle Engine**: Unified the ECS and standalone graphics particle implementations. Created a feature-rich `ParticleEmitter` and `ParticlePresets` hub.
+- **Enhanced Visual Effects**: Replaced procedural rain and footstep logic in `WorldScene` and `WeatherRenderer` with the new particle system.
+- **Particle Editor UI**: Added a "Particle Testing" panel to the `WorldEditor`.
+
+## v3.0.16 — 2026-06-08
+
+### Added
+- **C++ Porting Evaluation**: Analyzed `cpp_port/` and `submodules/bobui` for Wasm integration.
+- **Wasm Physics Bridge**: Implemented a architectural singleton `WasmPhysicsBridge` to facilitate future porting of heavy engine logic (physics, collision) to C++.
+
+## v3.0.15 — 2026-06-08
+
+### Added
+- **Audio Performance Optimization**: Introduced `PerformanceManager` for runtime environment detection (mobile/low-end).
+- **Prioritized Compressed Audio**: Updated `AudioManager` to prioritize OGG variants of audio assets in performance-constrained environments to reduce CPU and memory overhead.
+
+## v3.0.14 — 2026-06-08
+
+### Added
+- **Unified Particle Architecture**: Centralized particle logic into a reusable `ParticleEmitter` and `ParticlePresets` system.
+- **Refactored Environmental Effects**: Updated `WorldScene` and `WeatherRenderer` to use the unified particle system for rain, snow, and footstep "dust" effects.
+- **ECS Integration**: Refactored the `ParticleSystem` ECS system to leverage the unified emitter engine.
+
+## v3.0.13 — 2026-06-08
+
+### Added
+- **AI Asset loading Implementation**: Initialized logic for loading AI-generated assets in editors.
+
+## v3.0.12 — 2026-06-08
+
+### Added
+- **Multiplayer Hardening**: Implemented server-side rate-limiting for high-frequency events (`frame`, `game_frame`, `playerMove`, `chatMessage`).
+- **Input Validation**: Added payload validation and HTML sanitization to server-side event handlers to prevent malformed data or XSS.
+
+## v3.0.11 — 2026-06-08
+
+### Added
+- **AI Asset Loading**: Implemented logic in `MapEditor` to load AI-generated sprites into the canvas and slice AI-generated tilesets into 8x8 tiles with palette matching.
+- **Image Processing Utilities**: Created `ImageUtils` to handle asynchronous image loading and pixel data extraction.
+- **Enhanced AI Feedback**: Added visual preview support for generated assets in the `CustomGameEditor`.
+
+## v3.0.10 — 2026-06-08
+
+### Added
+- **External Tool Configuration**: Implemented persistent path configuration for Aseprite and Tilemap Studio in `CustomGameEditor`.
+- **AI Asset Integration**: Wired `GenerativeAIManager` to dispatch events for AI-generated sprites and tilesets, with corresponding UI feedback and history tracking in the editor.
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 ## v3.0.9 — 2026-05-28
 
 ### Added

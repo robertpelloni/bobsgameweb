@@ -27,10 +27,25 @@ export class HelpScene extends Scene {
 				"WASD / Arrow Keys — Move character",
 				"Space / E — Interact / Confirm",
 				"Escape / Backspace — Cancel / Back",
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				"F5 — Quick Save",
 				"F9 — Quick Load",
 				"Tab — Toggle Minimap",
 				"1-9 — Hotbar items",
+<<<<<<< HEAD
+=======
+				"Shift — Sprint",
+				"V — Toggle Menu Visualizer",
+				"C — AI NPC Chat (when near NPC)",
+				"F5 — Quick Save",
+				"F9 — Quick Load",
+				"Tab — Toggle Minimap",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			],
 		},
 		{
@@ -91,6 +106,14 @@ export class HelpScene extends Scene {
 				"Press F5 to save anywhere, anytime.",
 				"Fish near water by pressing F.",
 				"Talk to NPCs multiple times — they may have new dialogue.",
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+				"Try the AI Chat for deep character interactions!",
+				"Enable 'HD Sprites' in Options for HQ2X upscaling.",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				"Check the achievements screen for goals.",
 				"Use the Settings menu to adjust audio volumes.",
 				"The nD Handheld plays mini-games within the game!",

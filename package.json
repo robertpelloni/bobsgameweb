@@ -1,6 +1,10 @@
 {
   "name": "okgame",
+<<<<<<< HEAD
   "version": "3.0.10",
+=======
+  "version": "3.0.25",
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
   "description": "bob's game - puzzle game engine",
   "main": "dist/main/index.js",
   "type": "module",

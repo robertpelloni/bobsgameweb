@@ -2,7 +2,16 @@
  * SpriteAtlas — Loads the extracted sprite atlas for character rendering.
  * Uses the original game's animation sequence data for proper direction mapping.
  */
+<<<<<<< HEAD
+<<<<<<< HEAD
 import { Texture, Sprite, Assets, AnimatedSprite } from 'pixi.js';
+=======
+import { Texture, Sprite, Assets, AnimatedSprite, BaseTexture, Rectangle } from 'pixi.js';
+import { HQ2X } from '../shared/HQ2X';
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+import { Texture, Sprite, Assets, AnimatedSprite } from 'pixi.js';
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 export interface SpriteAtlasEntry {
   name: string;
@@ -25,6 +34,14 @@ export class SpriteAtlas {
   private entries: Map<string, SpriteAtlasEntry> = new Map();
   private animations: Map<string, Map<string, AnimationSequence>> = new Map();
   private frameCache: Map<string, Texture> = new Map();
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  private hqCache: Map<string, Texture> = new Map();
+  public useHQ2X: boolean = false;
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
   get loaded(): boolean { return !!this.atlasTexture && this.entries.size > 0; }
 
@@ -76,11 +93,24 @@ export class SpriteAtlas {
     const f = Math.max(0, Math.min(frameIndex, maxFrame));
 
     const cacheKey = `${spriteName}_${f}`;
+<<<<<<< HEAD
+<<<<<<< HEAD
     if (this.frameCache.has(cacheKey)) return this.frameCache.get(cacheKey)!;
+=======
+    if (this.useHQ2X && this.hqCache.has(cacheKey)) return this.hqCache.get(cacheKey)!;
+    if (!this.useHQ2X && this.frameCache.has(cacheKey)) return this.frameCache.get(cacheKey)!;
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+    if (this.frameCache.has(cacheKey)) return this.frameCache.get(cacheKey)!;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
     const col = f % entry.atlasFrames;
     const row = Math.floor(f / entry.atlasFrames);
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     const tex = new Texture({
       source: this.atlasTexture.source,
       frame: {
@@ -91,10 +121,55 @@ export class SpriteAtlas {
       } as any,
     });
 
+<<<<<<< HEAD
+=======
+    const frameRect = {
+      x: entry.x + col * entry.frameWidth,
+      y: entry.y + row * entry.frameHeight,
+      width: entry.frameWidth,
+      height: entry.frameHeight,
+    };
+
+    const tex = new Texture({
+      source: this.atlasTexture.source,
+      frame: frameRect as any,
+    });
+
+    if (this.useHQ2X) {
+        const hqTex = this.generateHQFrame(tex);
+        this.hqCache.set(cacheKey, hqTex);
+        return hqTex;
+    }
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     this.frameCache.set(cacheKey, tex);
     return tex;
   }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  private generateHQFrame(tex: Texture): Texture {
+    // Conceptual: In a real app we'd use a shared canvas to avoid GC pressure
+    const canvas = document.createElement('canvas');
+    canvas.width = tex.frame.width;
+    canvas.height = tex.frame.height;
+
+    // PixiJS v8 Texture to Canvas is complex without renderer,
+    // so we'll use the source image and crop manually
+    const source = this.atlasTexture.source.resource as HTMLImageElement;
+    const ctx = canvas.getContext('2d')!;
+    ctx.drawImage(source, tex.frame.x, tex.frame.y, tex.frame.width, tex.frame.height, 0, 0, tex.frame.width, tex.frame.height);
+
+    const hqCanvas = HQ2X.upscaleCanvas(canvas);
+    return Texture.from(hqCanvas);
+  }
+
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
   /** Get animation sequence by name */
   getAnimation(spriteName: string, animName: string): AnimationSequence | null {
     const anims = this.animations.get(spriteName);

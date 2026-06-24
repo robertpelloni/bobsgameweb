@@ -1,6 +1,10 @@
 import { System } from '../System';
 import { EntityId } from '../Entity';
 import { Component } from '../Component';
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 import { ParticleComponent, ParticleConfig } from '../components/ParticleComponent';
 import { TransformComponent } from '../components/TransformComponent';
 import { Container, Graphics } from 'pixi.js';
@@ -17,6 +21,19 @@ interface ActiveParticle {
 export class ParticleSystem extends System {
     private container: Container;
     private particles: Map<EntityId, ActiveParticle[]> = new Map();
+<<<<<<< HEAD
+=======
+import { ParticleComponent } from '../components/ParticleComponent';
+import { TransformComponent } from '../components/TransformComponent';
+import { Container } from 'pixi.js';
+import { ParticleEmitter } from '../../graphics/ParticleSystem';
+
+export class ParticleSystem extends System {
+    private container: Container;
+    private emitters: Map<EntityId, ParticleEmitter[]> = new Map();
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
     constructor(container: Container) {
         super();
@@ -29,6 +46,10 @@ export class ParticleSystem extends System {
             const transform = components.get('Transform') as TransformComponent;
 
             if (partComp && transform) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
                 // Emit new particles
                 if (!this.particles.has(entityId)) this.particles.set(entityId, []);
                 const active = this.particles.get(entityId)!;
@@ -37,10 +58,32 @@ export class ParticleSystem extends System {
                     if (Math.random() < 0.3) { // Emission rate
                         this.spawnParticle(active, transform, config);
                     }
+<<<<<<< HEAD
+=======
+                if (!this.emitters.has(entityId)) {
+                    this.emitters.set(entityId, partComp.emitters.map(config => {
+                        const emitter = new ParticleEmitter(transform.x, transform.y, config);
+                        this.container.addChild(emitter.container);
+                        return emitter;
+                    }));
+                }
+
+                const entityEmitters = this.emitters.get(entityId)!;
+                entityEmitters.forEach(emitter => {
+                    emitter.setPosition(transform.x, transform.y);
+                    emitter.update(dt / 1000);
+                    emitter.render();
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
                 });
             }
         }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         // Update active particles
         for (const [entityId, active] of this.particles) {
             for (let i = active.length - 1; i >= 0; i--) {
@@ -80,4 +123,17 @@ export class ParticleSystem extends System {
             gravity: config.gravity
         });
     }
+<<<<<<< HEAD
+=======
+        // Clean up emitters for removed entities
+        for (const entityId of this.emitters.keys()) {
+            if (!entities.has(entityId)) {
+                this.emitters.get(entityId)?.forEach(e => e.destroy());
+                this.emitters.delete(entityId);
+            }
+        }
+    }
+>>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 }

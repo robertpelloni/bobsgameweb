@@ -13,6 +13,7 @@ export interface CameraBounds {
 }
 
 /**
+<<<<<<< HEAD
  * Shadow rendering — Java engine composite model.
  *
  * L3 (objects) and L6 (above) contain shadow composites in the Java
@@ -30,6 +31,19 @@ export interface CameraBounds {
  * - L6 (above): black tiles → alpha=0.59, color tiles → opaque
  * - All other layers: render normally (opaque)
  */
+=======
+ * Layer rendering rules:
+ *
+ * SHADOW layers (L2 groundShadow, L5 objectShadow):
+ *   - Use shadow-black atlas: same tile shapes but RGB(1,1,1) → solid black.
+ *   - Rendered TRANSLUCENT (container alpha 0.5 / 0.75).
+ *   - Result: translucent black silhouettes.
+ *
+ * ALL OTHER layers (ground, objects, objects2, spriteShadow, above, etc.):
+ *   - Use real atlas. Opaque. Never strip outlines.
+ */
+
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 export class GameMap {
 	public data: MapData;
 	public container: Container;
@@ -52,14 +66,23 @@ export class GameMap {
 	constructor(data: MapData, realTileset?: RealTileset) {
 		this.data = data;
 		this.realTileset = realTileset ?? null;
+<<<<<<< HEAD
 		this.container = new Container();
 		this.container.sortableChildren = true;
 		this.container.cullable = false;
+=======
+
+		this.container = new Container();
+		this.container.sortableChildren = true;
+		this.container.cullable = true;
+
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.isLargeMap = data.widthTiles1X * data.heightTiles1X > 50000;
 
 		const Z_MAP: Record<number, number> = {
 			[MapData.MAP_GROUND_LAYER]: 0,
 			[MapData.MAP_GROUND_DETAIL_LAYER]: 1,
+<<<<<<< HEAD
 			[MapData.MAP_GROUND_SHADOW_LAYER]: 2,
 			[MapData.MAP_OBJECT_LAYER]: 3,
 			[MapData.MAP_OBJECT_DETAIL_LAYER]: 4,
@@ -67,6 +90,15 @@ export class GameMap {
 			[MapData.MAP_ABOVE_LAYER]: 100,
 			[MapData.MAP_ABOVE_DETAIL_LAYER]: 101,
 			[MapData.MAP_SPRITE_SHADOW_LAYER]: 102,
+=======
+			[MapData.MAP_SPRITE_SHADOW_LAYER]: 1.5,
+			[MapData.MAP_GROUND_SHADOW_LAYER]: 2,
+			[MapData.MAP_OBJECT_LAYER]: 3,
+			// objects2 in objectDetailContainer at z=3.5
+			[MapData.MAP_OBJECT_SHADOW_LAYER]: 4,
+			[MapData.MAP_ABOVE_LAYER]: 100,
+			[MapData.MAP_ABOVE_DETAIL_LAYER]: 101,
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			[MapData.MAP_HIT_LAYER]: 200,
 			[MapData.MAP_LIGHT_MASK_LAYER]: 150,
 			[MapData.MAP_CAMERA_BOUNDS_LAYER]: 201,
@@ -83,14 +115,24 @@ export class GameMap {
 			this.container.addChild(layer);
 		}
 
+<<<<<<< HEAD
 		// objects2 container at z=3.5
 		this.objectDetailContainer = new Container();
 		this.objectDetailContainer.sortableChildren = false;
+=======
+		// objects2: ABOVE objects so overlay tiles draw on top of furniture
+		this.objectDetailContainer = new Container();
+		this.objectDetailContainer.sortableChildren = true;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.objectDetailContainer.cullable = false;
 		this.objectDetailContainer.zIndex = 3.5;
 		this.container.addChild(this.objectDetailContainer);
 
+<<<<<<< HEAD
 		// Entity container at z=50
+=======
+		// Entity container: Y-sorted sprites above objectShadow
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.entitySpriteContainer = new Container();
 		this.entitySpriteContainer.sortableChildren = true;
 		this.entitySpriteContainer.cullable = false;
@@ -124,19 +166,25 @@ export class GameMap {
 		}
 	}
 
+<<<<<<< HEAD
 	/** No-op — kept for backward compatibility with WorldScene calls. */
 	async loadAtlasPixels(): Promise<boolean> {
 		return true;
 	}
 
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private renderWithRealTileset() {
 		this.objectDetailContainer.removeChildren();
 
 		for (let l = 0; l < MapData.layers; l++) {
+<<<<<<< HEAD
 			this.layers[l].removeChildren();
 		}
 
 		for (let l = 0; l < MapData.layers; l++) {
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			if (!MapData.isTileLayer(l)) continue;
 			if (
 				l === MapData.MAP_HIT_LAYER ||
@@ -147,21 +195,62 @@ export class GameMap {
 			this.renderLayerReal(l);
 		}
 
+<<<<<<< HEAD
 		this.container.sortChildren();
 	}
 
 	private renderLayerReal(l: number) {
 		const layer = this.layers[l];
+=======
+		// Shadow layers: translucent
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.5;
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.75;
+
+		const layerCounts: string[] = [];
+		for (let i = 0; i < MapData.layers; i++) {
+			if (this.layers[i] && this.layers[i].children.length > 0) {
+				layerCounts.push(`L${i}=${this.layers[i].children.length}`);
+			}
+		}
+		console.log(
+			`[GameMap] Rendered ${this.data.name}: BUILD=${(this.realTileset as any)?.constructor?.BUILD_VER} layers=[${layerCounts.join(", ")}] objDetail=${this.objectDetailContainer.children.length}`,
+		);
+		this.container.sortChildren();
+	}
+
+	/** Shadow layers use shadow-black atlas; all others use real atlas */
+	private isShadowLayer(l: number): boolean {
+		return (
+			l === MapData.MAP_GROUND_SHADOW_LAYER ||
+			l === MapData.MAP_OBJECT_SHADOW_LAYER
+		);
+	}
+
+	/** Pick correct atlas texture for a layer */
+	private getTextureForLayer(l: number, tileId: number): Texture | null {
+		if (this.isShadowLayer(l)) {
+			return this.realTileset!.getShadowBlackTileTexture(tileId);
+		}
+		return this.realTileset!.getTileTexture(tileId);
+	}
+
+	private renderLayerReal(l: number) {
+		const layer = this.layers[l];
+		layer.removeChildren();
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		let spriteCount = 0;
 		let nullTextureCount = 0;
 		const totalTiles = this.data.widthTiles1X * this.data.heightTiles1X;
 
+<<<<<<< HEAD
 		// L3 (objects) and L6 (above) are the shadow composite layers —
 		// they contain solid-black tile 839 (walls, overhead)
 		// that the Java engine renders translucently with shadowAlpha ≈ 0.59
 		const isShadowCompositeLayer =
 			l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER;
 
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		let startX = 0,
 			startY = 0,
 			endX = this.data.widthTiles1X,
@@ -187,6 +276,7 @@ export class GameMap {
 			for (let x = startX; x < endX; x++) {
 				const tileId = this.data.getTileIndex(l, x, y);
 				if (tileId === 0) continue;
+<<<<<<< HEAD
 
 				// Skip tile 839 on non-object/above layers (structural, not shadow)
 				if (
@@ -206,6 +296,9 @@ export class GameMap {
 					this.data.getTileIndex(MapData.MAP_OBJECT_LAYER, x, y) === 839
 				)
 					continue;
+=======
+				if (tileId === 839) continue;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 				const skipFactor = totalTiles > 50000 ? 2 : 1;
 				if (
@@ -221,16 +314,22 @@ export class GameMap {
 				)
 					continue;
 
+<<<<<<< HEAD
 				const px = Math.round(x * 8);
 				const py = Math.round(y * 8);
 
 				const texture = this.realTileset!.getTileTexture(tileId);
+=======
+				const texture = this.getTextureForLayer(l, tileId);
+
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				if (!texture) {
 					nullTextureCount++;
 					continue;
 				}
 
 				const sprite = new Sprite(texture);
+<<<<<<< HEAD
 				sprite.x = px;
 				sprite.y = py;
 
@@ -239,6 +338,10 @@ export class GameMap {
 				if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId)) {
 					sprite.alpha = 0.59;
 				}
+=======
+				sprite.x = x * 8;
+				sprite.y = y * 8;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 				if (l === MapData.MAP_LIGHT_MASK_LAYER) {
 					sprite.tint = 0x000000;
@@ -246,6 +349,7 @@ export class GameMap {
 				if (l === MapData.MAP_LIGHT_LAYER) {
 					sprite.blendMode = "add";
 				}
+<<<<<<< HEAD
 				if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
 					(sprite as any)._isTileSprite = true;
 					this.objectDetailContainer.addChild(sprite);
@@ -253,12 +357,31 @@ export class GameMap {
 					layer.addChild(sprite);
 				}
 				spriteCount++;
+=======
+
+				// objects2 → objectDetailContainer (z=3.5, above objects)
+				if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
+					sprite.zIndex = sprite.y;
+					(sprite as any)._isTileSprite = true;
+					this.objectDetailContainer.addChild(sprite);
+					spriteCount++;
+				} else {
+					layer.addChild(sprite);
+					spriteCount++;
+				}
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			}
 		}
 
 		if (spriteCount > 0 || nullTextureCount > 0) {
+<<<<<<< HEAD
 			console.log(
 				`[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} sprites, ${nullTextureCount} null`,
+=======
+			const tag = this.isShadowLayer(l) ? " [SHADOW-BLACK]" : "";
+			console.log(
+				`[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} sprites, ${nullTextureCount} null textures${tag}`,
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			);
 		}
 	}
@@ -266,6 +389,10 @@ export class GameMap {
 	public renderLayer(l: number, tileset: Tileset, palette: Palette) {
 		const layer = this.layers[l];
 		layer.removeChildren();
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		for (let y = 0; y < this.data.heightTiles1X; y++) {
 			for (let x = 0; x < this.data.widthTiles1X; x++) {
 				const tileIndex = this.data.getTileIndex(l, x, y);
@@ -289,6 +416,10 @@ export class GameMap {
 			tileIndex + (MapData.isTransparentLayer(layer) ? 1000000 : 0);
 		if (this.tileTextures.has(cacheKey))
 			return this.tileTextures.get(cacheKey)!;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		const alpha = MapData.isTransparentLayer(layer) ? 150 : 255;
 		const rgba = tileset.getTileRGBA(tileIndex, palette, alpha);
 		const canvas = document.createElement("canvas");
@@ -387,14 +518,18 @@ export class GameMap {
 			if (!layer) continue;
 			layer.removeChildren();
 
+<<<<<<< HEAD
 			// L3 (objects) and L6 (above) are the shadow composite layers
 			const isShadowCompositeLayer =
 				l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER;
 
+=======
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			for (let y = startY; y < endY; y++) {
 				for (let x = startX; x < endX; x++) {
 					const tileId = this.data.getTileIndex(l, x, y);
 					if (tileId === 0) continue;
+<<<<<<< HEAD
 
 					if (
 						tileId === 839 &&
@@ -424,11 +559,25 @@ export class GameMap {
 					// L3/L6: black tiles render translucent at shadowAlpha
 					if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId))
 						sprite.alpha = 0.59;
+=======
+					if (tileId === 839) continue;
+
+					const texture = this.getTextureForLayer(l, tileId);
+					if (!texture) continue;
+
+					const sprite = new Sprite(texture);
+					sprite.x = x * 8;
+					sprite.y = y * 8;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
 					if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";
 
 					if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
+<<<<<<< HEAD
+=======
+						sprite.zIndex = sprite.y;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 						(sprite as any)._isTileSprite = true;
 						this.objectDetailContainer.addChild(sprite);
 					} else {
@@ -437,5 +586,12 @@ export class GameMap {
 				}
 			}
 		}
+<<<<<<< HEAD
+=======
+
+		// Shadow layers: translucent
+		this.layers[MapData.MAP_GROUND_SHADOW_LAYER].alpha = 0.5;
+		this.layers[MapData.MAP_OBJECT_SHADOW_LAYER].alpha = 0.75;
+>>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	}
 }
