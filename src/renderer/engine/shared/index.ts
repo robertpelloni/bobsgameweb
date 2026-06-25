@@ -8,3 +8,4 @@ export { BobMenu, type MenuOption } from './BobMenu';
 export { GlobalSettings, DEFAULT_SETTINGS, type GlobalSettingsData } from './GlobalSettings';
 export { ManifestLoader, type ManifestEntry, type AssetManifest as ManifestAssetManifest } from './ManifestLoader';
 export { FileUtils } from './FileUtils';
+export { LegacyAssetPipeline, type LegacyMapIndex, type LegacyAudioIndex } from '../pipeline/LegacyAssetPipeline';
