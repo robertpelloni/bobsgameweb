@@ -1,3 +1,12 @@
+## v3.0.29 — 2026-06-25
+
+### Added
+- **Visual Debug Hit Layer**: Added a permanent debug graphics layer rendering a thin red 'X' over every hit tile, inserted below player/NPC entities to visually display the collision boundaries.
+- **Door Sprite Fallback**: Implemented a PixiJS Graphics fallback representation for doors (rendering a brown door frame with a gold handle) when the target sprite sheet animation is not present in the atlas.
+
+### Changed
+- **Reverted Coordinate Scaling**: Reverted warp areas, triggers, door areas, warp destinations, and NPC coordinates to 1X scale (matching the player's coordinate space and resolving misalignment errors).
+
 ## v3.0.28 — 2026-06-25
 
 ### Fixed

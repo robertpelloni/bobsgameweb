@@ -103,6 +103,7 @@ export class WorldScene extends Scene {
 	private touchControls: TouchControls | null = null;
 	private minimapContainer: Container | null = null;
 	private minimapGraphics: Graphics | null = null;
+	private hitDebugGraphics: Graphics | null = null;
 	private hudContainer: Container | null = null;
 	private vignetteOverlay: Sprite | null = null;
 	private hpText: Text | null = null;
@@ -819,6 +820,16 @@ export class WorldScene extends Scene {
 			} else {
 				transform.x = doorX * WorldScene.TILE_PX;
 				transform.y = doorY * WorldScene.TILE_PX;
+
+				// Fallback door graphics (brown rectangle with gold border and knob)
+				const g = new Graphics();
+				g.rect(0, 0, WorldScene.TILE_PX, WorldScene.TILE_PX);
+				g.fill(0x8b5a2b); // Brown door
+				g.rect(0, 0, WorldScene.TILE_PX, WorldScene.TILE_PX);
+				g.stroke({ width: 1, color: 0xd4af37 }); // Gold border
+				g.circle(WorldScene.TILE_PX - 2, WorldScene.TILE_PX / 2, 1.5);
+				g.fill(0xd4af37); // Gold knob
+				spriteComp.sprite = g as any;
 			}
 			this.world.addComponent(entity, transform);
 			this.world.addComponent(entity, spriteComp);
@@ -889,8 +900,8 @@ export class WorldScene extends Scene {
 		if (scriptEntities.length > 0) {
 			placements = scriptEntities.map((e) => ({
 				sprite: e.spriteName,
-				x: e.x * 2,
-				y: e.y * 2,
+				x: e.x,
+				y: e.y,
 			}));
 		} else {
 			// Fallback: load from npc_placements.json
@@ -3356,6 +3367,37 @@ export class WorldScene extends Scene {
 		this.hitDetectionSystem.loadCameraLayer(mapData.layerTileIndex[MapData.MAP_CAMERA_BOUNDS_LAYER]);
 		this.hitDetectionSystem.markUtilityLayersLoaded();
 		this.updateHitSystemColliders();
+
+		// Draw debug hit layer (thin red X's)
+		if (this.hitDebugGraphics) {
+			if (this.hitDebugGraphics.parent) {
+				this.hitDebugGraphics.parent.removeChild(this.hitDebugGraphics);
+			}
+			this.hitDebugGraphics.destroy();
+			this.hitDebugGraphics = null;
+		}
+
+		if (this.map) {
+			const g = new Graphics();
+			g.zIndex = 6; // under entities (zIndex 50), above ground/objects (zIndex 0-5)
+			g.lineStyle(1, 0xff0000, 0.8);
+			const W = mapData.widthTiles1X;
+			const H = mapData.heightTiles1X;
+			for (let ty = 0; ty < H; ty++) {
+				for (let tx = 0; tx < W; tx++) {
+					if (this.isHitTile(tx, ty)) {
+						const px = tx * 16;
+						const py = ty * 16;
+						g.moveTo(px + 2, py + 2);
+						g.lineTo(px + 14, py + 14);
+						g.moveTo(px + 14, py + 2);
+						g.lineTo(px + 2, py + 14);
+					}
+				}
+			}
+			this.hitDebugGraphics = g;
+			this.map.container.addChild(g);
+		}
 	}
 
 	private updateHitSystemColliders(): void {
@@ -3567,15 +3609,11 @@ export class WorldScene extends Scene {
 
 		const warpAreas = getWarpAreasForMap(mapName);
 		for (const area of warpAreas) {
-			const ax = area.x * 2;
-			const ay = area.y * 2;
-			const aw = area.w * 2;
-			const ah = area.h * 2;
 			if (
-				px >= ax &&
-				px < ax + aw &&
-				py >= ay &&
-				py < ay + ah
+				px >= area.x &&
+				px < area.x + area.w &&
+				py >= area.y &&
+				py < area.y + area.h
 			) {
 				// Player is in the warp area - find the destination from door_graph
 				const graphDoors = getDoorGraphForMap(mapName);
@@ -3617,8 +3655,8 @@ export class WorldScene extends Scene {
 				}
 
 				if (matchingDoor) {
-					const destX = (matchingDoor.arrivalX ?? 8) * 2;
-					const destY = (matchingDoor.arrivalY ?? 8) * 2;
+					const destX = matchingDoor.arrivalX ?? 8;
+					const destY = matchingDoor.arrivalY ?? 8;
 					console.log(
 						`[WorldScene] Warp area "${area.areaName}" triggered -> ${matchingDoor.destMap} at px(${destX},${destY})`,
 					);
@@ -3656,15 +3694,11 @@ export class WorldScene extends Scene {
 
 			// Check if player overlaps the area
 			const NEAR = 24; // proximity range (3 tiles)
-			const ax = area.x * 2;
-			const ay = area.y * 2;
-			const aw = area.w * 2;
-			const ah = area.h * 2;
 			const nearArea =
-				px >= ax - NEAR &&
-				px < ax + aw + NEAR &&
-				py >= ay - NEAR &&
-				py < ay + ah + NEAR;
+				px >= area.x - NEAR &&
+				px < area.x + area.w + NEAR &&
+				py >= area.y - NEAR &&
+				py < area.y + area.h + NEAR;
 			if (nearArea) {
 				// Player is in the area - show hint
 				if (this.lastAreaTriggerKey !== area.key) {
@@ -3754,15 +3788,11 @@ export class WorldScene extends Scene {
 			const key = mapName + "." + area.areaName;
 			// Check if player overlaps the area
 			const NEAR = 16; // proximity range
-			const ax = area.x * 2;
-			const ay = area.y * 2;
-			const aw = area.w * 2;
-			const ah = area.h * 2;
 			if (
-				px >= ax - NEAR &&
-				px < ax + aw + NEAR &&
-				py >= ay - NEAR &&
-				py < ay + ah + NEAR
+				px >= area.x - NEAR &&
+				px < area.x + area.w + NEAR &&
+				py >= area.y - NEAR &&
+				py < area.y + area.h + NEAR
 			) {
 				// Show hint
 				if (this.lastDoorAreaKey !== key) {
