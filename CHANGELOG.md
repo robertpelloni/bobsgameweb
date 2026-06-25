@@ -1,4 +1,9 @@
-## v3.0.29 — 2026-06-25
+## v3.0.31 — 2026-06-25
+
+### Fixed
+- **Collision Hit Layer Swap**: Swapped `hitBounds` and `extra` layers in `LegacyMapLoader.ts`. The `extra` layer (index 11) contains actual binary hit markers, while `hitBounds` (index 9) contains decorative/shadow tiles. This corrects the player collision system and debug hit tile overlay to align perfectly with physical wall boundaries rather than shadows.
+
+## v3.0.30 — 2026-06-25
 
 ### Added
 - **Visual Debug Hit Layer**: Added a permanent debug graphics layer rendering a thin red 'X' over every hit tile, inserted below player/NPC entities to visually display the collision boundaries.

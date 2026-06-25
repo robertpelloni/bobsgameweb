@@ -157,9 +157,9 @@ export class LegacyMapLoader {
 			above: MapData.MAP_ABOVE_LAYER,
 			above2: MapData.MAP_ABOVE_DETAIL_LAYER,
 			spriteShadow: MapData.MAP_SPRITE_SHADOW_LAYER,
-			hitBounds: MapData.MAP_HIT_LAYER,
+			hitBounds: MapData.MAP_CAMERA_BOUNDS_LAYER,
 			lightMask: MapData.MAP_LIGHT_MASK_LAYER,
-			extra: MapData.MAP_CAMERA_BOUNDS_LAYER,
+			extra: MapData.MAP_HIT_LAYER,
 			extra2: MapData.MAP_ENTITY_LAYER,
 		};
 

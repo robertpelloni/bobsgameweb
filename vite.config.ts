@@ -17,7 +17,7 @@ export default defineConfig(({ command, mode }) => {
     },
     build: {
       outDir: 'dist/renderer',
-      emptyOutDir: true,
+      emptyOutDir: false,
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'index.html'),
