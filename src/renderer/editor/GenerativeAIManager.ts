@@ -26,10 +26,6 @@ export class GenerativeAIManager {
             ToastManager.showInfo("AI Sprite generation complete!");
             console.log(`[GenAI] Sprite generation finished:`, data);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-            // TODO: Process data.imageUrl or data.base64 into the sprite editor canvas
-=======
             document.dispatchEvent(new CustomEvent("ai-asset-generated", {
                 detail: {
                     type: "sprite",
@@ -37,10 +33,6 @@ export class GenerativeAIManager {
                     data: data.imageUrl || data.base64
                 }
             }));
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-            // TODO: Process data.imageUrl or data.base64 into the sprite editor canvas
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         } catch (e) {
             console.warn(`[GenAI] Failed to connect to AI backend (${(e as Error).message}). Falling back to mock delay.`);
             ToastManager.showInfo(`AI Connection Failed. Simulating generation...`);
@@ -68,10 +60,6 @@ export class GenerativeAIManager {
             ToastManager.showInfo("AI Tileset generation complete!");
             console.log(`[GenAI] Tileset generation finished:`, data);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-            // TODO: Process data into the tilemap editor
-=======
             document.dispatchEvent(new CustomEvent("ai-asset-generated", {
                 detail: {
                     type: "tileset",
@@ -79,10 +67,6 @@ export class GenerativeAIManager {
                     data: data.imageUrl || data.base64 || data
                 }
             }));
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-            // TODO: Process data into the tilemap editor
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         } catch (e) {
             console.warn(`[GenAI] Failed to connect to AI backend (${(e as Error).message}). Falling back to mock delay.`);
             ToastManager.showInfo(`AI Connection Failed. Simulating generation...`);
@@ -90,9 +74,6 @@ export class GenerativeAIManager {
             ToastManager.showInfo("AI Tileset generation complete! (Mock Fallback)");
         }
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
     public static async generateDialogue(characterName: string, prompt: string): Promise<void> {
         console.log(`[GenAI] Starting Text-to-Dialogue generation for "${characterName}": "${prompt}"`);
@@ -157,7 +138,4 @@ export class GenerativeAIManager {
             return `[Connection Error] ${characterName} is speechless.`;
         }
     }
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 }

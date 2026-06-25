@@ -1,3 +1,4 @@
+import { Texture, Sprite } from "pixi.js";
 import { Dropdown } from '../ui/Dropdown';
 import { Checkbox } from '../ui/Checkbox';
 import { GameType, BlockType, PieceType, GamePlayMode, networkManager } from '../puzzle';
@@ -88,15 +89,9 @@ export class CustomGameEditor {
   private pieceClimbingCheckbox!: HTMLInputElement;
   private flip180Checkbox!: HTMLInputElement;
   private floorKickCheckbox!: HTMLInputElement;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
   private asepritePathInput!: TextInput;
   private tilemapPathInput!: TextInput;
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
   
   private blockList!: HTMLSelectElement;
   private pieceList!: HTMLSelectElement;
@@ -267,33 +262,6 @@ export class CustomGameEditor {
 
     this.pixiContainer.addChild(aiPanel.container);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
-    const externalToolsPanel = new Panel();
-    externalToolsPanel.setPosition(10, 480);
-    const extToolsLabel = new PIXIText("External Pixel Tools", { fill: 0xffffff, fontSize: 16, fontWeight: "bold" });
-    extToolsLabel.position.set(10, 10);
-    externalToolsPanel.addChild(extToolsLabel);
-
-    const asepriteBtn = new Button("Launch Aseprite", { width: 140, height: 30 });
-    asepriteBtn.setPosition(10, 40);
-    asepriteBtn.on("click", () => {
-        console.log("[CustomGameEditor] Requesting Aseprite launch...");
-        // In a native Electron environment, this event would be caught by IPC to launch the desktop binary.
-        // In a web environment, we would ideally iframe a WASM port here.
-        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "aseprite" } }));
-    });
-    externalToolsPanel.addChild(asepriteBtn.container);
-
-    const tilemapBtn = new Button("Launch Tilemap Studio", { width: 160, height: 30 });
-    tilemapBtn.setPosition(160, 40);
-    tilemapBtn.on("click", () => {
-        console.log("[CustomGameEditor] Requesting Tilemap Studio launch...");
-        document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "tilemap-studio" } }));
-<<<<<<< HEAD
-=======
     const externalToolsPanel = new Panel({ width: 350, height: 180, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
     externalToolsPanel.setPosition(740, 340);
     const extToolsLabel = new PIXIText({ text: "External Pixel Tools", style: { fill: 0xffffff, fontSize: 16, fontWeight: "bold" } });
@@ -337,9 +305,6 @@ export class CustomGameEditor {
         const path = localStorage.getItem('tilemap-studio-path') || this.tilemapPathInput.value;
         console.log(`[CustomGameEditor] Requesting Tilemap Studio launch at ${path}...`);
         document.dispatchEvent(new CustomEvent("launch-external-tool", { detail: { tool: "tilemap-studio", path } }));
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     });
     externalToolsPanel.addChild(tilemapBtn.container);
 
@@ -1410,9 +1375,6 @@ export class CustomGameEditor {
         this.syncPieceBlockOverrideControl();
         this.updateSummary();
     });
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
     document.addEventListener('ai-asset-generated', (e: any) => {
         const { type, prompt, data } = e.detail;
@@ -1434,9 +1396,6 @@ export class CustomGameEditor {
         // Since CustomGameEditor doesn't own MapEditor instance directly in this file's current scope,
         // we'll dispatch a more specific event or log it.
     });
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
   }
 
   private renderPieceShapeEditor() {

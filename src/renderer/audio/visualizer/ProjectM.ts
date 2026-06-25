@@ -57,20 +57,6 @@ export class ProjectMVisualizer {
         this.visualizer.loadPreset(this.presets[name], 2.0); // 2 second blend
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    public loadRandomPreset(): string {
-        if (!this.initialized) return "";
-        const keys = Object.keys(this.presets);
-        const randomKey = keys[Math.floor(Math.random() * keys.length)];
-        this.visualizer.loadPreset(this.presets[randomKey], 2.0);
-        return randomKey;
-    }
-
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     public destroy(): void {
         if (this.initialized) {
             Howler.masterGain.disconnect(this.visualizer.destination);

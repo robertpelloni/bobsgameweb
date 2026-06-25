@@ -3,72 +3,23 @@
  * 
  * Offloads heavy pathfinding and logic from the main thread.
  */
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 interface Point { x: number, y: number }
 
-=======
-import { WasmPhysicsBridge } from './physics/WasmPhysicsBridge';
-
-interface Point { x: number, y: number }
-
-const wasmBridge = WasmPhysicsBridge.getInstance();
-wasmBridge.init();
-
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-
-interface Point { x: number, y: number }
-
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 self.onmessage = (e) => {
     const { type, data } = e.data;
 
     switch (type) {
         case 'findPath':
             const { start, end, grid, width, height } = data;
-<<<<<<< HEAD
-<<<<<<< HEAD
             const path = findPath(start, end, grid, width, height);
             self.postMessage({ type: 'pathResult', data: { entityId: data.entityId, path } });
-=======
-
-            // Try Wasm pathfinding first
-            const wasmPath = wasmBridge.findPath(
-                start.x, start.y,
-                end.x, end.y,
-                width, height,
-                Array.from(grid),
-                true
-            );
-
-            if (wasmPath && wasmPath.length > 0) {
-                self.postMessage({ type: 'pathResult', data: { entityId: data.entityId, path: wasmPath } });
-            } else {
-                // Fallback to JS A*
-                const path = findPath(start, end, grid, width, height);
-                self.postMessage({ type: 'pathResult', data: { entityId: data.entityId, path } });
-            }
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-            const path = findPath(start, end, grid, width, height);
-            self.postMessage({ type: 'pathResult', data: { entityId: data.entityId, path } });
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             break;
     }
 };
 
 /**
-<<<<<<< HEAD
-<<<<<<< HEAD
  * Simple A* Implementation for grid pathfinding
-=======
- * Simple A* Implementation for grid pathfinding (JS Fallback)
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
- * Simple A* Implementation for grid pathfinding
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
  */
 function findPath(start: Point, end: Point, grid: Int32Array, width: number, height: number): Point[] {
     const openSet: Point[] = [start];

@@ -1,19 +1,10 @@
 {
-<<<<<<< HEAD
   "generatedAt": "2026-06-15T00:51:10.659Z",
   "scope": "turn_delta",
   "sessionId": "lens-mqe2a5e3-eaf47727",
   "turnIndex": 136,
   "projectSeqStart": 411,
   "projectSeqEnd": 411,
-=======
-  "generatedAt": "2026-06-12T13:15:36.608Z",
-  "scope": "turn_delta",
-  "sessionId": "lens-mqaa7p51-45154114",
-  "turnIndex": 14,
-  "projectSeqStart": 367,
-  "projectSeqEnd": 367,
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
   "deltaOnly": true,
   "files": [],
   "summary": {

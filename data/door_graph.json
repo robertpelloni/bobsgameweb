@@ -71,13 +71,8 @@
       "destDoor": "",
       "x": 33,
       "y": 10,
-<<<<<<< HEAD
       "arrivalX": 11,
       "arrivalY": 9
-=======
-      "arrivalX": 13,
-      "arrivalY": 14
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     {
       "name": "door_5",
@@ -85,13 +80,8 @@
       "destDoor": "",
       "x": 51,
       "y": 10,
-<<<<<<< HEAD
       "arrivalX": 7,
       "arrivalY": 19
-=======
-      "arrivalX": 4,
-      "arrivalY": 1
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     {
       "name": "door_6",
@@ -99,13 +89,8 @@
       "destDoor": "",
       "x": 23,
       "y": 4,
-<<<<<<< HEAD
       "arrivalX": 7,
       "arrivalY": 9
-=======
-      "arrivalX": 6,
-      "arrivalY": 1
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     {
       "name": "door_7",
@@ -113,11 +98,7 @@
       "destDoor": "",
       "x": 46,
       "y": 4,
-<<<<<<< HEAD
       "arrivalX": 12,
-=======
-      "arrivalX": 26,
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "arrivalY": 9
     },
     {
@@ -126,13 +107,8 @@
       "destDoor": "",
       "x": 30,
       "y": 9,
-<<<<<<< HEAD
       "arrivalX": 19,
       "arrivalY": 20
-=======
-      "arrivalX": 7,
-      "arrivalY": 19
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     }
   ],
   "TOWNYUUUpstairsYuusRoom": [

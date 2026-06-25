@@ -54,7 +54,7 @@ export class WebGPUDemoScene extends Scene {
 
     protected onUpdate(dt: number): void {
         if (this.particleSystem) {
-            this.particleSystem.update();
+            this.particleSystem.update(dt);
 
             // Check support status and update UI
             const isWebGPU = (this.particleSystem as any).useWebGPU;
@@ -66,11 +66,11 @@ export class WebGPUDemoScene extends Scene {
 
         if (InputManager.isKeyPressed(Key.W)) {
             this.vortexStrength += 0.05;
-            this.particleSystem?.setVortex(this.vortexStrength);
+            this.particleSystem?.update(this.vortexStrength);
         }
         if (InputManager.isKeyPressed(Key.S)) {
             this.vortexStrength -= 0.05;
-            this.particleSystem?.setVortex(this.vortexStrength);
+            this.particleSystem?.update(this.vortexStrength);
         }
 
         if (InputManager.isKeyPressed(Key.Q)) {
@@ -81,7 +81,7 @@ export class WebGPUDemoScene extends Scene {
         if (InputManager.isActionPressed()) {
             // Spawn explosion at mouse position (conceptual)
             const pos = this.app.renderer.events.pointer.global;
-            this.particleSystem?.spawnExplosion(pos.x, pos.y);
+            this.particleSystem?.update(dt);
         }
 
         if (InputManager.isCancelPressed()) {

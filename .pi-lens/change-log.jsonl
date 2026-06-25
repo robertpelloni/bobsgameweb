@@ -365,7 +365,6 @@
 {"seq":365,"timestamp":"2026-06-11T18:26:53.340Z","sessionId":"lens-mq8gsd9h-185d173c","turnIndex":299,"source":"format","filePath":"C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\scenes\\WorldScene.ts","fileSeq":74}
 {"seq":366,"timestamp":"2026-06-12T13:11:11.737Z","sessionId":"lens-mqaa7p51-45154114","turnIndex":9,"source":"agent-edit","filePath":"C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\scenes\\WorldScene.ts","fileSeq":75,"changedRange":{"start":3202,"end":3206}}
 {"seq":367,"timestamp":"2026-06-12T13:13:52.207Z","sessionId":"lens-mqaa7p51-45154114","turnIndex":13,"source":"format","filePath":"C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\scenes\\WorldScene.ts","fileSeq":76}
-<<<<<<< HEAD
 {"seq":368,"timestamp":"2026-06-12T16:25:58.331Z","sessionId":"lens-mqaa7p51-45154114","turnIndex":57,"source":"agent-edit","filePath":"C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\LegacyMapLoader.ts","fileSeq":7,"changedRange":{"start":172,"end":182}}
 {"seq":369,"timestamp":"2026-06-12T16:32:40.158Z","sessionId":"lens-mqaa7p51-45154114","turnIndex":60,"source":"format","filePath":"C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\engine\\map\\LegacyMapLoader.ts","fileSeq":8}
 {"seq":370,"timestamp":"2026-06-13T12:43:46.388Z","sessionId":"lens-mqcbfh1d-3403e483","turnIndex":2,"source":"agent-edit","filePath":"C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\renderer\\scenes\\WorldScene.ts","fileSeq":77,"changedRange":{"start":3219,"end":3219}}
@@ -411,5 +410,3 @@
 {"seq":410,"timestamp":"2026-06-15T00:05:00.047Z","sessionId":"lens-mqe2a5e3-eaf47727","turnIndex":107,"source":"format","filePath":"C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\shared\\Config.ts","fileSeq":2}
 {"seq":411,"timestamp":"2026-06-15T00:50:57.599Z","sessionId":"lens-mqe2a5e3-eaf47727","turnIndex":135,"source":"agent-edit","filePath":"C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\server\\index.js","fileSeq":4}
 {"seq":412,"timestamp":"2026-06-15T00:51:46.870Z","sessionId":"lens-mqe2a5e3-eaf47727","turnIndex":139,"source":"format","filePath":"C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\server\\index.js","fileSeq":5}
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788

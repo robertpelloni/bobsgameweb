@@ -86,15 +86,7 @@ export class OptionsScene extends Scene {
 
     private createOptions(): void {
         const startY = this.height * 0.32;
-<<<<<<< HEAD
-<<<<<<< HEAD
         const spacing = 80;
-=======
-        const spacing = 70;
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-        const spacing = 80;
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
         this.masterSlider = this.createSlider(
             'Master Volume',
@@ -126,35 +118,6 @@ export class OptionsScene extends Scene {
         );
         this.optionItems.push({ type: 'slider', label: 'SFX Volume', slider: this.sfxSlider });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        // WebGPU Toggle
-        const gpuBtnStyle: ButtonStyle = {
-            width: 320,
-            height: 40,
-            backgroundColor: 0x222222,
-            borderColor: 0x444444,
-            borderWidth: 2,
-            textColor: 0x00ffff,
-            fontSize: 18,
-            borderRadius: 4
-        };
-        const gpuToggleBtn = new Button('Rendering: Auto (WebGL)', gpuBtnStyle);
-        gpuToggleBtn.setPosition(this.centerX, startY + spacing * 3);
-        const isWebGPUSupported = 'gpu' in navigator;
-        if (isWebGPUSupported) {
-            gpuToggleBtn.text = 'Rendering: Prefer WebGPU';
-        }
-        gpuToggleBtn.onClick(() => {
-            alert(isWebGPUSupported ? "WebGPU will be prioritized on next restart." : "WebGPU not supported on this hardware.");
-        });
-        this.container.addChild(gpuToggleBtn.container);
-        this.optionItems.push({ type: 'button', label: 'WebGPU Toggle', button: gpuToggleBtn });
-
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         const buttonStyle: ButtonStyle = {
             width: 200,
             height: 50,
@@ -169,103 +132,18 @@ export class OptionsScene extends Scene {
         };
 
         const backButton = new Button('Back', buttonStyle);
-<<<<<<< HEAD
-<<<<<<< HEAD
         backButton.setPosition(this.centerX - 120, startY + spacing * 3.5);
-=======
-        backButton.setPosition(this.centerX - 120, startY + spacing * 5.2);
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-        backButton.setPosition(this.centerX - 120, startY + spacing * 3.5);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         backButton.onClick(() => this.goBack());
         this.container.addChild(backButton.container);
         this.optionItems.push({ type: 'button', label: 'Back', button: backButton });
 
         const testSoundBtn = new Button('Test Sound', buttonStyle);
-<<<<<<< HEAD
-<<<<<<< HEAD
         testSoundBtn.setPosition(this.centerX + 120, startY + spacing * 3.5);
-=======
-        testSoundBtn.setPosition(this.centerX + 120, startY + spacing * 5.2);
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-        testSoundBtn.setPosition(this.centerX + 120, startY + spacing * 3.5);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         testSoundBtn.onClick(() => {
             this.playSelectSound();
         });
         this.container.addChild(testSoundBtn.container);
         this.optionItems.push({ type: 'button', label: 'Test Sound', button: testSoundBtn });
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-        // Haptic Feedback Slider
-        const hapticValue = parseInt(localStorage.getItem('haptic-intensity') || '10') / 50;
-        const hapticSlider = this.createSlider(
-            'Haptic Intensity',
-            hapticValue,
-            startY + spacing * 4.6,
-            (v) => {
-                const intensity = Math.round(v * 50);
-                localStorage.setItem('haptic-intensity', intensity.toString());
-                if (intensity > 0 && "vibrate" in navigator) navigator.vibrate(intensity);
-            }
-        );
-        this.optionItems.push({ type: 'slider', label: 'Haptic Intensity', slider: hapticSlider });
-
-        // HD Sprites Toggle
-        const hdBtnStyle: ButtonStyle = {
-            width: 320,
-            height: 40,
-            backgroundColor: 0x1a2a4a,
-            borderColor: 0x4a6a8a,
-            borderWidth: 2,
-            textColor: 0xffffff,
-            fontSize: 18,
-            borderRadius: 4
-        };
-        const hdToggleBtn = new Button('HD Sprites (HQ2X): OFF', hdBtnStyle);
-        hdToggleBtn.setPosition(this.centerX, startY + spacing * 3.8);
-        hdToggleBtn.onClick(() => {
-            const worldScene = StateManager.getScene('world') as any;
-            if (worldScene?.spriteAtlas) {
-                worldScene.spriteAtlas.useHQ2X = !worldScene.spriteAtlas.useHQ2X;
-                hdToggleBtn.text = `HD Sprites (HQ2X): ${worldScene.spriteAtlas.useHQ2X ? 'ON' : 'OFF'}`;
-                this.playSelectSound();
-            } else {
-                alert("HD mode only available while in the RPG world.");
-            }
-        });
-        this.container.addChild(hdToggleBtn.container);
-        this.optionItems.push({ type: 'button', label: 'HD Toggle', button: hdToggleBtn });
-
-        // Mobile Mode Toggle
-        const mobileBtnStyle: ButtonStyle = {
-            width: 320,
-            height: 40,
-            backgroundColor: 0x1a2a4a,
-            borderColor: 0x4a6a8a,
-            borderWidth: 2,
-            textColor: 0xffffff,
-            fontSize: 18,
-            borderRadius: 4
-        };
-        const mobileMode = localStorage.getItem('mobile-mode-override') === 'true';
-        const mobileToggleBtn = new Button(`Mobile Mode: ${mobileMode ? 'ON' : 'OFF'}`, mobileBtnStyle);
-        mobileToggleBtn.setPosition(this.centerX, startY + spacing * 0.6);
-        mobileToggleBtn.onClick(() => {
-            const current = localStorage.getItem('mobile-mode-override') === 'true';
-            localStorage.setItem('mobile-mode-override', (!current).toString());
-            mobileToggleBtn.text = `Mobile Mode: ${!current ? 'ON' : 'OFF'}`;
-            this.playSelectSound();
-        });
-        this.container.addChild(mobileToggleBtn.container);
-        this.optionItems.push({ type: 'button', label: 'Mobile Mode', button: mobileToggleBtn });
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     }
 
     private createSlider(label: string, initialValue: number, y: number, onChange: (value: number) => void): Slider {

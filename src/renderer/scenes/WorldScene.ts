@@ -43,14 +43,6 @@ import { LightingSystem } from "../engine/ecs/systems/LightingSystem";
 import { LightComponent } from "../engine/ecs/components/LightComponent";
 import { ParticleSystem } from "../engine/ecs/systems/ParticleSystem";
 import { ParticleComponent } from "../engine/ecs/components/ParticleComponent";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import { ParticlePresets } from "../engine/graphics/ParticleSystem";
-import { WeatherRenderer } from "../engine/graphics/WeatherRenderer";
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 import { TouchControls } from "../ui/TouchControls";
 import { Localization, type Language } from "../../shared/Localization";
 // Easing - reserved for future use
@@ -80,21 +72,8 @@ import {
 import { DialogueTracker } from "../engine/event/DialogueTracker";
 import { FlagManager } from "../engine/event/FlagManager";
 import { AmbientMusicGenerator } from "../audio/AmbientMusicGenerator";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import { GenerativeAIManager } from "../editor/GenerativeAIManager";
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
 export class WorldScene extends Scene {
 	private world: World;
-=======
-import { YuuEntity, NPCEntity } from "../engine/entity";
-
-export class WorldScene extends Scene {
-	private world: World;
-	private yuu: YuuEntity | null = null;
-	private npcEntities: Map<number, NPCEntity> = new Map();
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private map: GameMap | null = null;
 	private tileset: Tileset;
 	private palette: Palette;
@@ -143,33 +122,12 @@ export class WorldScene extends Scene {
 	private controlsOverlay: Container | null = null;
 	private footstepTimer: number = 0;
 	private footstepIndex: number = 0;
-<<<<<<< HEAD
 	private _ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
 	private weatherContainer: Container | null = null;
-<<<<<<< HEAD
-=======
-	private ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
-	private weatherContainer: Container | null = null;
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private rainDrops: { x: number; y: number; speed: number }[] = [];
 	private isExteriorMap: boolean = false;
 	private isPaused: boolean = false;
 	private _autoSaveTimer: number = 0;
-<<<<<<< HEAD
-=======
-	private weatherRenderer: WeatherRenderer | null = null;
-
-	private isExteriorMap: boolean = false;
-	private isPaused: boolean = false;
-	private _autoSaveTimer: number = 0;
-	private chatInput: HTMLInputElement | null = null;
-	private currentChatNPC: string | null = null;
-	private currentChatPersona: string | null = null;
-	private chatHistory: { role: string; content: string }[] = [];
-	private chatUIContainer: Container | null = null;
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private pauseContainer: Container | null = null;
 	private static readonly TILE_PX = 8; // pixels per tile at 1X (matches Tileset.TILE_SIZE)
 	private playerIsMoving: boolean = false;
@@ -178,11 +136,7 @@ export class WorldScene extends Scene {
 
 	// Debug layer visibility state (Java: F-keys toggled per-layer)
 	private debugShowHitLayer: boolean = false;
-<<<<<<< HEAD
 	private _debugShowBoundsLayer: boolean = false;
-=======
-	private debugShowBoundsLayer: boolean = false;
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private debugLayerCycleIndex: number = 0;
 	private debugLightingEnabled: boolean = true;
 	private debugHudVisible: boolean = false;
@@ -223,10 +177,6 @@ export class WorldScene extends Scene {
 		this.worldContainer.sortableChildren = true;
 		this.container.addChild(this.worldContainer);
 		this.world = new World();
-<<<<<<< HEAD
-=======
-		this.yuu = new YuuEntity(this.spriteAtlas);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		// Build the interpretive legacy tileset with proper palette
 		const built = TilesetBuilder.build();
 		this.tileset = built.tileset;
@@ -496,12 +446,6 @@ export class WorldScene extends Scene {
 		this.world.addComponent(playerEntity, new ParticleComponent());
 		// Spawn tween removed
 		this.playerTransform = transform;
-<<<<<<< HEAD
-=======
-		if (this.yuu) {
-			this.yuu.setPosition(transform.x, transform.y);
-		}
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (this.camera) {
 			this.camera.setContainer(this.worldContainer);
 			this.camera.clearTargets();
@@ -533,52 +477,19 @@ export class WorldScene extends Scene {
 		this.createConsoleUI();
 		this.createMinimapUI();
 		this.createHudUI();
-<<<<<<< HEAD
-<<<<<<< HEAD
 		if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
 			this.touchControls = new TouchControls(this.width, this.height);
 			this.container.addChild(this.touchControls as any);
-=======
-
-		const mobileMode = localStorage.getItem('mobile-mode-override') === 'true' ||
-						  "ontouchstart" in window ||
-						  navigator.maxTouchPoints > 0;
-
-		if (mobileMode) {
-			this.touchControls = new TouchControls(this.width, this.height);
-			this.container.addChild(this.touchControls as any);
-
-			// Reposition HUD for mobile to avoid overlap with controls
-			if (this.hudContainer) {
-				this.hudContainer.position.set(20, 110); // Move down below top buttons if any
-			}
-			if (this.minimapContainer) {
-				this.minimapContainer.position.set(this.width - 160, 110);
-			}
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-		if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
-			this.touchControls = new TouchControls(this.width, this.height);
-			this.container.addChild(this.touchControls as any);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		}
 		// Show the room name
 		this.showRoomBanner(
 			WorldScene.friendlyMapName(this.currentMapName || "Unknown"),
 		);
-<<<<<<< HEAD
 		// Ambient music disabled — was causing buzzing noise
 		// const mood = AmbientMusicGenerator.getMoodFromMapName(
 		//   this.currentMapName || "",
 		// );
 		// this.ambientMusic.play(mood);
-=======
-		// Play ambient music matching room mood
-		const mood = AmbientMusicGenerator.getMoodFromMapName(
-			this.currentMapName || "",
-		);
-		this.ambientMusic.play(mood);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		// Play background music
 		try {
 			if (AudioManager.isLoaded("game")) {
@@ -608,11 +519,8 @@ export class WorldScene extends Scene {
 			const fallbackData = new MapData(-1, "Empty", 20, 15);
 			this.map = new GameMap(fallbackData, this.realTileset);
 			this.worldContainer.addChild(this.map.container);
-<<<<<<< HEAD
 			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
 			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			this.map.render(this.tileset, this.palette);
 			// Update RenderSystem to use the entity sprite layer (below rooftops)
 			if ((this as any)._renderSystem && this.map?.entitySpriteContainer) {
@@ -642,14 +550,11 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
 				this.worldContainer.addChild(playerSpriteComp.sprite);
 			}
-<<<<<<< HEAD
 			// Save shadow sprite before map destruction
 			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
 			if (shadowSave?.parent === this.map.entitySpriteContainer) {
 				this.map.entitySpriteContainer.removeChild(shadowSave);
 			}
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			this.worldContainer.removeChild(this.map.container);
 			this.map.container.destroy({ children: true });
 		}
@@ -696,27 +601,15 @@ export class WorldScene extends Scene {
 			console.warn(`[WorldScene] Cannot find map named: "${mapName}"`);
 			return false;
 		}
-<<<<<<< HEAD
-=======
-
-		// Add player shadow sprite to entitySpriteContainer
-		const shadow = (this as any).playerShadowSprite as Sprite | null;
-		if (shadow && !shadow.parent && this.map?.entitySpriteContainer) {
-			this.map.entitySpriteContainer.addChild(shadow);
-		}
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		// Find the filename to use the normal load path
 		const filename = LegacyMapLoader.getFilenameForMap(mapName);
 		if (filename) {
 			await this.loadLegacyMap(filename);
-<<<<<<< HEAD
 			// Re-add shadow to NEW map's entitySpriteContainer after load
 			const shadow2 = (this as any).playerShadowSprite as Sprite | null;
 			if (shadow2 && this.map?.entitySpriteContainer) {
 				if (!shadow2.parent) this.map.entitySpriteContainer.addChild(shadow2);
 			}
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			return true;
 		}
 		// Direct conversion if no filename mapping
@@ -732,14 +625,11 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
 				this.worldContainer.addChild(playerSpriteComp.sprite);
 			}
-<<<<<<< HEAD
 			// Save shadow sprite before map destruction
 			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
 			if (shadowSave?.parent === this.map.entitySpriteContainer) {
 				this.map.entitySpriteContainer.removeChild(shadowSave);
 			}
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			this.worldContainer.removeChild(this.map.container);
 			this.map.container.destroy({ children: true });
 		}
@@ -760,10 +650,7 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.addChild(psc2.sprite);
 			}
 		}
-<<<<<<< HEAD
 		this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.map.render(this.tileset, this.palette);
 		return true;
 	}
@@ -774,7 +661,6 @@ export class WorldScene extends Scene {
 	private createDoorEntities(): void {
 		if (!this.map) return;
 		const doorList = this.map.data.doorDataList;
-<<<<<<< HEAD
 		const W = this.map.data.widthTiles1X;
 		const H = this.map.data.heightTiles1X;
 
@@ -881,66 +767,15 @@ export class WorldScene extends Scene {
 				`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
 			);
 
-=======
-		for (const door of doorList) {
-			const entity = this.world.createEntity();
-			const transform = new TransformComponent();
-			const doorX: number = door.x ?? 0;
-			const doorY: number = door.y ?? 0;
-			transform.x = doorX * WorldScene.TILE_PX;
-			transform.y = doorY * WorldScene.TILE_PX;
-			this.world.addComponent(entity, transform);
-			// Door sprite: render door frame tiles from the real tileset if available
-			const sprite = new SpriteComponent();
-			const doorWidth = (door.width ?? 2) * WorldScene.TILE_PX;
-			const doorHeight = (door.height ?? 2) * WorldScene.TILE_PX;
-
-			// Try to render door frame using real tileset textures
-			const doorContainer = new Container();
-			const realTileset = (this.map as any).realTileset;
-			if (realTileset && realTileset.loaded) {
-				// Door frame tiles: 742 (left frame), 743 (right frame), 744/745 (top corners)
-				const leftTex = realTileset.getTileTexture(742);
-				const rightTex = realTileset.getTileTexture(743);
-				const topTex = realTileset.getTileTexture(744);
-				if (leftTex && rightTex) {
-					// Top row of door frame
-					if (topTex) {
-						const topSprite = new Sprite(topTex);
-						topSprite.x = 0;
-						topSprite.y = 0;
-						doorContainer.addChild(topSprite);
-					}
-					// Bottom row: left + right frame
-					const leftSprite = new Sprite(leftTex);
-					leftSprite.x = 0;
-					leftSprite.y = 8;
-					doorContainer.addChild(leftSprite);
-					const rightSprite = new Sprite(rightTex);
-					rightSprite.x = 8;
-					rightSprite.y = 8;
-					doorContainer.addChild(rightSprite);
-				}
-			}
-			const tex = this.app.renderer.generateTexture(doorContainer);
-			sprite.sprite = new Sprite(tex);
-			this.world.addComponent(entity, sprite);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			const teleport = new TeleportComponent();
 			teleport.targetMapId = door.destinationMapName ?? "";
 			teleport.targetX = (door.destinationX ?? 0) * WorldScene.TILE_PX;
 			teleport.targetY = (door.destinationY ?? 0) * WorldScene.TILE_PX;
-<<<<<<< HEAD
 			// Walkway is typically 2 tiles wide, 1 tile tall
 			teleport.width = 16;
 			teleport.height = 16;
 			this.world.addComponent(entity, teleport);
 
-=======
-			teleport.width = doorWidth;
-			teleport.height = doorHeight;
-			this.world.addComponent(entity, teleport);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			// Also add interaction for "press A to enter" feedback
 			const inter = new InteractionComponent();
 			inter.interactions.push({
@@ -948,12 +783,8 @@ export class WorldScene extends Scene {
 				params: { text: [`Door: ${door.name}`] },
 			});
 			this.world.addComponent(entity, inter);
-<<<<<<< HEAD
 
 			// Clear wall collision at door walkway so player can walk through
-=======
-			// Clear wall collision at door position so player can walk through
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			if (this.map) {
 				// Ensure the door area is walkable (EXTRA=1 = interior)
 				// Clear a wider area (3x2) so the player can approach the door
@@ -977,7 +808,6 @@ export class WorldScene extends Scene {
 					}
 				}
 			}
-<<<<<<< HEAD
 
 			console.log(
 				`[WorldScene] Created door entity: "${door.name}" at (${doorX},${doorY}) px(${doorX * 8},${doorY * 8}) walkway=${walkwayFound} -> ${door.destinationMapName} dest(${door.destinationX},${door.destinationY})`,
@@ -988,17 +818,6 @@ export class WorldScene extends Scene {
 	/**
 	 * Spawn NPCs from game_script.json (primary) or npc_placements.json (fallback).
 	 */
-=======
-			console.log(
-				`[WorldScene] Created door entity: "${door.name}" at (${doorX},${doorY}) px(${doorX * 8},${doorY * 8}) -> ${door.destinationMapName} dest(${door.destinationX},${door.destinationY})`,
-			);
-		}
-	}
-	/**
-  /**
-   * Spawn NPCs from game_script.json (primary) or npc_placements.json (fallback).
-   */
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private async createNPCs(): Promise<void> {
 		if (!this.map || !this.spriteAtlas.loaded) return;
 
@@ -1043,18 +862,6 @@ export class WorldScene extends Scene {
 			const atlasEntry = this.spriteAtlas.getEntry(npc.sprite);
 			const fw = atlasEntry?.frameWidth ?? 16;
 			const fh = atlasEntry?.frameHeight ?? 40;
-<<<<<<< HEAD
-=======
-
-			// Create NPCEntity hub
-			const npcEnt = new NPCEntity(this.spriteAtlas, npc.sprite, { height: fh });
-			// Metadata-driven hitbox: children (identified by sprite name containing 'Child' or 'Kid') get 24px offset
-			if (npc.sprite.toLowerCase().includes('child') || npc.sprite.toLowerCase().includes('kid')) {
-				npcEnt.hitBoxOffset = 24;
-			}
-			this.npcEntities.set(entity, npcEnt);
-
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			// Adjust NPC position to nearest walkable tile
 			let npcX = npc.x;
 			let npcY = npc.y;
@@ -1290,10 +1097,6 @@ export class WorldScene extends Scene {
 				}
 			}
 			this.map.entities = [];
-<<<<<<< HEAD
-=======
-			this.npcEntities.clear();
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		}
 		// Show loading text for large maps
 		const loadingText = new Text({
@@ -1305,18 +1108,6 @@ export class WorldScene extends Scene {
 		this.container.addChild(loadingText);
 		// Try to load the map by name
 		const loaded = await this.loadLegacyMapByName(mapId);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-		// Notify server of map change for regional clustering
-		if (loaded && networkManager.connected) {
-			networkManager.emit("joinMap", mapId);
-		}
-
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		// Remove loading text
 		loadingText.destroy();
 		if (!loaded) {
@@ -1419,18 +1210,11 @@ export class WorldScene extends Scene {
 			WorldScene.friendlyMapName(this.currentMapName || "Unknown"),
 		);
 		// Switch ambient music to new room mood
-<<<<<<< HEAD
 		// Ambient music disabled — was causing buzzing noise
 		// const newMood = AmbientMusicGenerator.getMoodFromMapName(
 		//   this.currentMapName || "",
 		// );
 		// this.ambientMusic.play(newMood);
-=======
-		const newMood = AmbientMusicGenerator.getMoodFromMapName(
-			this.currentMapName || "",
-		);
-		this.ambientMusic.play(newMood);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.mapTransitioning = false;
 	}
 	public onMapGenerated(mapData: MapData): void {
@@ -1442,10 +1226,7 @@ export class WorldScene extends Scene {
 		this.map.setSpawnPosition(spX, spY);
 		this.worldContainer.removeChildAt(0);
 		this.worldContainer.addChildAt(this.map.container, 0);
-<<<<<<< HEAD
 		this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.map.render(this.tileset, this.palette);
 		this.showDialogue(Localization.get("welcome"));
 	}
@@ -1690,11 +1471,7 @@ export class WorldScene extends Scene {
 		// Show version in corner
 		if (!this.versionText && this.hudContainer) {
 			const style = new TextStyle({ fill: "#888888", fontSize: 10 });
-<<<<<<< HEAD
 			this.versionText = new Text({ text: "v3.3.5", style });
-=======
-			this.versionText = new Text({ text: "v" + APP_VERSION, style });
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			this.versionText.position.set(4, this.height - 16);
 			this.container.addChild(this.versionText);
 		}
@@ -1824,10 +1601,6 @@ export class WorldScene extends Scene {
 		this.pauseContainer!.visible = true;
 		AudioManager.playSound("menu_select", { volume: 0.2 });
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private updateWeather(dt: number): void {
 		if (!this.isExteriorMap || !this.weatherContainer) return;
 		// Create rain drops if needed
@@ -1857,33 +1630,15 @@ export class WorldScene extends Scene {
 			g.stroke({ color: 0x8899bb, width: 1, alpha: 0.4 });
 		}
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	private createWeatherOverlay(): void {
 		if (this.weatherContainer) {
 			this.weatherContainer.destroy({ children: true });
 		}
 		this.weatherContainer = new Container();
 		this.weatherContainer.zIndex = 9990;
-<<<<<<< HEAD
-<<<<<<< HEAD
 		const g = new Graphics();
 		this.weatherContainer.addChild(g);
 		this.container.addChild(this.weatherContainer);
-=======
-		this.container.addChild(this.weatherContainer);
-		this.weatherRenderer = new WeatherRenderer(this.weatherContainer, this.width, this.height);
-		this.weatherRenderer.setWeather("rain", 0.5);
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-		const g = new Graphics();
-		this.weatherContainer.addChild(g);
-		this.container.addChild(this.weatherContainer);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	}
 	private updateMinimap(): void {
 		if (!this.minimapGraphics || !this.playerTransform || !this.map) return;
@@ -1965,66 +1720,6 @@ export class WorldScene extends Scene {
 		this.dialogueContainer = new Container();
 		this.dialogueContainer.visible = false;
 		this.container.addChild(this.dialogueContainer);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-		// AI Chat UI
-		this.chatUIContainer = new Container();
-		this.chatUIContainer.visible = false;
-		this.chatUIContainer.zIndex = 10005;
-		this.container.addChild(this.chatUIContainer);
-
-		this.chatInput = document.createElement("input");
-		this.chatInput.type = "text";
-		this.chatInput.placeholder = "Type your message to NPC... (Enter to send)";
-		this.chatInput.style.position = "absolute";
-		this.chatInput.style.left = "70px";
-		this.chatInput.style.bottom = "160px";
-		this.chatInput.style.width = this.width - 140 + "px";
-		this.chatInput.style.background = "rgba(5, 5, 20, 0.85)";
-		this.chatInput.style.color = "#00ffff";
-		this.chatInput.style.border = "2px solid #66aaff";
-		this.chatInput.style.padding = "12px";
-		this.chatInput.style.borderRadius = "0px";
-		this.chatInput.style.fontFamily = "'Courier New', monospace";
-		this.chatInput.style.boxShadow = "0 0 15px rgba(102, 170, 255, 0.4)";
-		this.chatInput.style.outline = "none";
-		this.chatInput.style.display = "none";
-		this.chatInput.style.zIndex = "10001";
-		document.body.appendChild(this.chatInput);
-
-		this.chatInput.onkeydown = async (e) => {
-			if (e.key === "Enter" && this.chatInput!.value.trim()) {
-				const msg = this.chatInput!.value.trim();
-				this.chatInput!.value = "";
-				this.chatInput!.disabled = true;
-				this.chatHistory.push({ role: "user", content: msg });
-
-				this.showDialogue(`${this.currentChatNPC} is thinking...`, false, "AI CHAT", true);
-
-				const response = await GenerativeAIManager.chatWithNPC(this.currentChatNPC!, msg, this.currentChatPersona!, this.chatHistory);
-				this.chatHistory.push({ role: "assistant", content: response });
-
-				this.chatInput!.disabled = false;
-				this.chatInput!.focus();
-				this.showDialogue(response, false, this.currentChatNPC!, true);
-			}
-		};
-
-		const chatBg = new Graphics();
-		chatBg.rect(20, this.height - 220, 200, 40);
-		chatBg.fill({ color: 0x111111, alpha: 0.9 });
-		chatBg.stroke({ color: 0x00ffff, width: 2 });
-		this.chatUIContainer.addChild(chatBg);
-
-		const chatTitle = new Text({ text: "AI CHAT MODE", style: { fill: 0x00ffff, fontSize: 14, fontWeight: "bold" } });
-		chatTitle.position.set(30, this.height - 210);
-		this.chatUIContainer.addChild(chatTitle);
-
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		const bg = new Graphics();
 		bg.rect(50, this.height - 150, this.width - 100, 100);
 		bg.fill({ color: 0x0a0a2e, alpha: 0.92 });
@@ -2068,13 +1763,6 @@ export class WorldScene extends Scene {
 		messages: string | string[],
 		countAsNpcInteraction: boolean = false,
 		caption?: string,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-		isAIChat: boolean = false,
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 	): void {
 		if (!this.dialogueText || !this.dialogueContainer) return;
 		if (countAsNpcInteraction) {
@@ -2087,22 +1775,6 @@ export class WorldScene extends Scene {
 		this.isDialogueActive = true;
 		this.dialogueContainer.visible = true;
 		this.dialogueText.text = "";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-		if (isAIChat) {
-			this.chatInput!.style.display = "block";
-			this.chatInput!.focus();
-			if (this.chatUIContainer) this.chatUIContainer.visible = true;
-		} else {
-			this.chatInput!.style.display = "none";
-			if (this.chatUIContainer) this.chatUIContainer.visible = false;
-		}
-
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (this.dialogueCaption) {
 			this.dialogueCaption.text = caption || "";
 		}
@@ -2133,28 +1805,9 @@ export class WorldScene extends Scene {
 			if (this.isActionJustPressed) {
 				this.currentDialoguePage++;
 				if (this.currentDialoguePage >= this.dialoguePages.length) {
-<<<<<<< HEAD
-<<<<<<< HEAD
 					this.isDialogueActive = false;
 					this.dialogueContainer.visible = false;
 					AudioManager.playSound("menu_cancel", { volume: 0.1 });
-=======
-					if (this.chatInput!.style.display === "block") {
-						this.dialogueTypingIndex = 0;
-						this.dialogueText.text = this.dialoguePages[this.currentDialoguePage - 1];
-						this.currentDialoguePage = this.dialoguePages.length;
-					} else {
-						this.isDialogueActive = false;
-						this.dialogueContainer.visible = false;
-						this.chatInput!.style.display = "none";
-						AudioManager.playSound("menu_cancel", { volume: 0.1 });
-					}
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-					this.isDialogueActive = false;
-					this.dialogueContainer.visible = false;
-					AudioManager.playSound("menu_cancel", { volume: 0.1 });
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				} else {
 					this.dialogueTypingIndex = 0;
 					this.dialogueText.text = "";
@@ -2257,11 +1910,7 @@ export class WorldScene extends Scene {
 			StateManager.push(skillTree);
 		}
 	}
-<<<<<<< HEAD
 	private _createControlsOverlay(): void {
-=======
-	private createControlsOverlay(): void {
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.controlsOverlay = new Container();
 		this.controlsOverlay.zIndex = 9998;
 		this.container.addChild(this.controlsOverlay);
@@ -2275,22 +1924,17 @@ export class WorldScene extends Scene {
 
 		const title = new Text({
 			text: "bob's game",
-<<<<<<< HEAD
 			style: new TextStyle({
 				fill: "#3366ff",
 				fontSize: 24,
 				fontWeight: "bold",
 			}),
-=======
-			style: new TextStyle({ fill: '#3366ff', fontSize: 24, fontWeight: 'bold' })
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		});
 		title.anchor.set(0.5);
 		title.position.set(this.width / 2, this.height / 2 - 55);
 		this.controlsOverlay.addChild(title);
 
 		const controls = new Text({
-<<<<<<< HEAD
 			text: "WASD / Arrows - Move\nShift - Sprint\nE - Talk / Interact\nEsc - Pause Menu\nI - Inventory\nQ - Quest Log\n` (Tilde) - Debug Console",
 			style: new TextStyle({
 				fill: "#cccccc",
@@ -2298,23 +1942,14 @@ export class WorldScene extends Scene {
 				lineHeight: 22,
 				align: "center",
 			}),
-=======
-			text: 'WASD / Arrows - Move\nShift - Sprint\nE - Talk / Interact\nEsc - Pause Menu\nI - Inventory\nQ - Quest Log\n` (Tilde) - Debug Console',
-			style: new TextStyle({ fill: '#cccccc', fontSize: 13, lineHeight: 22, align: 'center' }),
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		});
 		controls.anchor.set(0.5);
 		controls.position.set(this.width / 2, this.height / 2 + 5);
 		this.controlsOverlay.addChild(controls);
 
 		const hint = new Text({
-<<<<<<< HEAD
 			text: "Press any key to start",
 			style: new TextStyle({ fill: "#666666", fontSize: 12 }),
-=======
-			text: 'Press any key to start',
-			style: new TextStyle({ fill: '#666666', fontSize: 12 })
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		});
 		hint.anchor.set(0.5);
 		hint.position.set(this.width / 2, this.height / 2 + 60);
@@ -2638,56 +2273,20 @@ export class WorldScene extends Scene {
 		}
 		if (this.isDialogueActive) {
 			this.updateDialogue(dt);
-<<<<<<< HEAD
-=======
-			// Still update NPC idle animations while dialogue is active
-			for (const npc of this.npcEntities.values()) {
-				npc.updateEntity(dt / 1000, 0, 0, false);
-			}
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			if (InputManager.isKeyPressed(Key.Tilde)) this.toggleConsole();
 			return;
 		}
 		this.world.update(dt);
-<<<<<<< HEAD
 		// === Player Movement with hit-collision ===
 		if (this.playerTransform && this.map && !this.isDialogueActive) {
 			const PLAYER_SPEED = (this as any)._customSpeed ?? 80; // pixels per second at 1X
 			const SPRINT_MULT = this.playerIsSprinting ? 1.8 : 1.0;
-=======
-
-		// Update NPCs
-		for (const [entityId, npc] of this.npcEntities.entries()) {
-			const transform = this.world.getComponent(entityId, "Transform") as TransformComponent | undefined;
-			if (transform) {
-				// For now NPCs are mostly static, but we update their Hub for animations
-				npc.setPosition(transform.x, transform.y);
-				npc.updateEntity(dt / 1000, 0, 0, false);
-
-				// Sync back to SpriteComponent
-				const spriteComp = this.world.getComponent(entityId, "Sprite") as any;
-				const npcSprite = npc.getSprite();
-				if (spriteComp?.sprite && npcSprite) {
-					spriteComp.sprite.textures = npcSprite.textures;
-					spriteComp.sprite.currentFrame = npcSprite.currentFrame;
-					if (npcSprite.playing) spriteComp.sprite.play();
-					else spriteComp.sprite.stop();
-				}
-			}
-		}
-
-		// === Player Movement with hit-collision ===
-		if (this.playerTransform && this.map && !this.isDialogueActive && this.yuu) {
-			const PLAYER_SPEED = (this as any)._customSpeed ?? 80; // pixels per second at 1X
-			const SPRINT_MULT = InputManager.isKeyHeld("Shift") ? 1.8 : 1.0;
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			let dx = 0,
 				dy = 0;
 			if (InputManager.isUpHeld()) dy -= 1;
 			if (InputManager.isDownHeld()) dy += 1;
 			if (InputManager.isLeftHeld()) dx -= 1;
 			if (InputManager.isRightHeld()) dx += 1;
-<<<<<<< HEAD
 			// === 8-Direction Animation System (from original game) ===
 			// Direction constants: 0=Up, 1=Down, 2=Left, 3=Right, 4=UpLeft, 5=UpRight, 6=DownLeft, 7=DownRight
 			const DIR_NAMES = [
@@ -2721,27 +2320,15 @@ export class WorldScene extends Scene {
 				else if (dx > 0 && dy > 0) targetDir = 7; // DownRight
 				this.moveDirection = targetDir;
 			}
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 
 			this.playerIsSprinting = InputManager.isKeyHeld("Shift");
 			this.playerIsMoving = dx !== 0 || dy !== 0;
 
-<<<<<<< HEAD
-=======
-			// Delegate movement state and animation to YuuEntity
-			this.yuu.updateEntity(dt / 1000, dx, dy, this.playerIsSprinting);
-			this.animDirection = this.yuu.animDirection;
-			this.moveDirection = this.yuu.moveDirection;
-			this.isTurning = this.yuu.isTurning;
-
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			const playerSpriteComp = this.world.getComponent(
 				(this.world as any).playerEntityId,
 				"Sprite",
 			) as any;
 
-<<<<<<< HEAD
 			if (playerSpriteComp?.sprite) {
 				const has8Dir = this.spriteAtlas.has8Directions("yuu");
 				let displayDir = this.animDirection;
@@ -2830,18 +2417,6 @@ export class WorldScene extends Scene {
 					playerSpriteComp.sprite.gotoAndStop(0);
 					playerSpriteComp.sprite.stop();
 				}
-=======
-			if (playerSpriteComp?.sprite && this.yuu.getSprite()) {
-				const yuuSprite = this.yuu.getSprite()!;
-				playerSpriteComp.sprite.textures = yuuSprite.textures;
-				playerSpriteComp.sprite.currentFrame = yuuSprite.currentFrame;
-				playerSpriteComp.sprite.animationSpeed = yuuSprite.animationSpeed;
-				if (yuuSprite.playing) playerSpriteComp.sprite.play();
-				else playerSpriteComp.sprite.stop();
-
-				// Sync position and jitter
-				playerSpriteComp.sprite.x = yuuSprite.x;
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			}
 
 			// Footstep sounds
@@ -2853,31 +2428,6 @@ export class WorldScene extends Scene {
 					AudioManager.playSound(`footstep_${this.footstepIndex}`, {
 						volume: 0.15,
 					});
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-					// Emit footstep dust particles
-					const dust = ParticlePresets.footstep(this.playerTransform.x, this.playerTransform.y);
-					if (this.map?.entitySpriteContainer) {
-						this.map.entitySpriteContainer.addChild(dust.container);
-					} else {
-						this.worldContainer.addChild(dust.container);
-					}
-
-					// Standalone emitter lifecycle for one-shot burst
-					const updateDust = (ticker: any) => {
-						dust.update(ticker.deltaTime / 60);
-						dust.render();
-						if (dust.count === 0) {
-							dust.destroy();
-							this.app.ticker.remove(updateDust);
-						}
-					};
-					this.app.ticker.add(updateDust);
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				}
 			} else {
 				this.footstepTimer = 0;
@@ -2893,7 +2443,6 @@ export class WorldScene extends Scene {
 			const newY =
 				this.playerTransform.y + dy * PLAYER_SPEED * SPRINT_MULT * dt;
 			// Hit-collision check using the map's hitBounds layer
-<<<<<<< HEAD
 			const PW = 8; // player half-width (collision box)
 			const PH = 8; // player collision height (feet only)
 			const OX = -4; // offset from transform origin
@@ -2914,25 +2463,6 @@ export class WorldScene extends Scene {
 						}
 					}
 					if (blocked) break;
-=======
-			// OX: offset from transform origin (center-bottom) to left edge of 8px collider
-			const OX = -4;
-
-			// Check X movement
-			if (dx !== 0) {
-				const testX = newX + OX;
-				const collisionY = this.yuu.getCollisionY();
-				const tileL = Math.floor(testX / WorldScene.TILE_PX);
-				const tileR = Math.floor((testX + 8 - 1) / WorldScene.TILE_PX);
-				const tileY = Math.floor(collisionY / WorldScene.TILE_PX);
-
-				let blocked = false;
-				for (let tx = tileL; tx <= tileR; tx++) {
-					if (!this.godMode && this.isHitTile(tx, tileY)) {
-						blocked = true;
-						break;
-					}
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				}
 				if (!blocked) {
 					this.playerTransform.x = newX;
@@ -2942,7 +2472,6 @@ export class WorldScene extends Scene {
 			if (dy !== 0) {
 				const feetX = this.playerTransform.x + OX;
 				const testY = newY;
-<<<<<<< HEAD
 				const tileL = Math.floor(feetX / WorldScene.TILE_PX);
 				const tileR = Math.floor((feetX + PW - 1) / WorldScene.TILE_PX);
 				const tileT = Math.floor(testY / WorldScene.TILE_PX);
@@ -2956,30 +2485,10 @@ export class WorldScene extends Scene {
 						}
 					}
 					if (blocked) break;
-=======
-				this.yuu.setPosition(this.playerTransform.x, testY);
-				const collisionY = this.yuu.getCollisionY();
-
-				const tileL = Math.floor(feetX / WorldScene.TILE_PX);
-				const tileR = Math.floor((feetX + 8 - 1) / WorldScene.TILE_PX);
-				const tileY = Math.floor(collisionY / WorldScene.TILE_PX);
-
-				let blocked = false;
-				for (let tx = tileL; tx <= tileR; tx++) {
-					if (!this.godMode && this.isHitTile(tx, tileY)) {
-						blocked = true;
-						break;
-					}
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				}
 				if (!blocked) {
 					this.playerTransform.y = newY;
 				}
-<<<<<<< HEAD
-=======
-				// Revert Yuu position to actual player position for next check
-				this.yuu.setPosition(this.playerTransform.x, this.playerTransform.y);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 			}
 			// Clamp player to map bounds
 			if (this.map) {
@@ -2996,16 +2505,7 @@ export class WorldScene extends Scene {
 			}
 			// Sync sprite position
 			if (playerSpriteComp?.sprite) {
-<<<<<<< HEAD
 				playerSpriteComp.sprite.x = this.playerTransform.x;
-=======
-				// Use position from YuuEntity to preserve idle jitter/turning offsets
-				if (this.yuu.getSprite()) {
-					playerSpriteComp.sprite.x = this.yuu.getSprite()!.x;
-				} else {
-					playerSpriteComp.sprite.x = this.playerTransform.x;
-				}
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				playerSpriteComp.sprite.y = this.playerTransform.y;
 				playerSpriteComp.sprite.zIndex = this.playerTransform.y;
 			}
@@ -3018,11 +2518,7 @@ export class WorldScene extends Scene {
 					shadow.texture = playerSprite.texture;
 				}
 				shadow.x = this.playerTransform.x;
-<<<<<<< HEAD
 				shadow.y = this.playerTransform.y - 5; // lift shadow 5 pixels to sit at player feet
-=======
-				shadow.y = this.playerTransform.y - 3; // lift shadow 3 pixels to sit at player feet
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 				shadow.zIndex = this.playerTransform.y - 0.1;
 				if (!shadow.parent) {
 					this.map.entitySpriteContainer.addChild(shadow);
@@ -3143,18 +2639,7 @@ export class WorldScene extends Scene {
 				}, 2000);
 			}
 		}
-<<<<<<< HEAD
-<<<<<<< HEAD
 		this.updateWeather(dt);
-=======
-
-		if (this.isExteriorMap && this.weatherRenderer) {
-			this.weatherRenderer.update(dt / 1000);
-		}
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-		this.updateWeather(dt);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		this.updateHud();
 		this.updateDebugHud();
 		this.saveTimer += dt;
@@ -3190,7 +2675,6 @@ export class WorldScene extends Scene {
 			this.togglePause();
 		}
 
-<<<<<<< HEAD
 		// +/- zoom keys
 		if (
 			InputManager.isKeyPressed(Key.Plus) ||
@@ -3205,8 +2689,6 @@ export class WorldScene extends Scene {
 			this.camera?.zoomOut();
 		}
 
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		// === Debug Keys (from original Java game) ===
 		this.handleDebugKeys();
 	}
@@ -3717,7 +3199,6 @@ export class WorldScene extends Scene {
 			ty,
 		);
 
-<<<<<<< HEAD
 		// DEBUG: log shadow tile collision values
 		if (objTile === 839) {
 			console.log(
@@ -3725,8 +3206,6 @@ export class WorldScene extends Scene {
 			);
 		}
 
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		// 1. Explicit Hit Markers (Highest Priority)
 		if (hitTile !== 0) return true;
 
@@ -3734,34 +3213,18 @@ export class WorldScene extends Scene {
 		// 1 = interior/walkable, 0 = void/blocked
 		if (extraTile === 1) return false;
 
-<<<<<<< HEAD
 		// 3. Floor Exception: 839 on a floor tile is a SHADOW, not a wall.
 		// Shadows overlay furniture/floor areas and should be walkable.
 		if (MapData.FLOOR_IDS.has(gndTile)) {
-<<<<<<< HEAD
 			console.log(`[COLLISION] (${tx},${ty}) FLOOR CHECK PASSED - walkable`);
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
 			return false;
 		}
 
 		// 4. Strict Wall ID Blocking (non-floor ground with wall object)
-=======
-		// 3. Strict Wall ID Blocking (if no extra override)
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		if (objTile === 839 || objTile === 8280) return true;
 		if (MapData.WALL_IDS.has(objTile)) return true;
 		if (MapData.WALL_IDS.has(gndTile)) return true;
 
-<<<<<<< HEAD
-=======
-		// 4. Floor Exception (Walkable floor IDs)
-		if (MapData.FLOOR_IDS.has(gndTile)) {
-			if (objTile !== 0 && MapData.WALL_IDS.has(objTile)) return true;
-			return false;
-		}
-
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		// 5. Void check (if not a floor and no extra marker, empty is blocked)
 		if (gndTile === 0 && objTile === 0) return true;
 		if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
@@ -3786,19 +3249,6 @@ export class WorldScene extends Scene {
 				return true; // inside entity bounding box = blocked
 			}
 		}
-<<<<<<< HEAD
-=======
-
-		// 8. NPC Collision
-		for (const npc of this.npcEntities.values()) {
-			const ntx = Math.floor(npc.x / WorldScene.TILE_PX);
-			const nty = Math.floor(npc.getCollisionY() / WorldScene.TILE_PX);
-			if (tx === ntx && ty === nty) {
-				return true;
-			}
-		}
-
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		return false; // walkable
 	}
 
@@ -3836,34 +3286,7 @@ export class WorldScene extends Scene {
 							"lines",
 						);
 						if (dialogue && dialogue.lines && dialogue.lines.length > 0) {
-<<<<<<< HEAD
-<<<<<<< HEAD
 							this.showDialogue(dialogue.lines, true, dialogue.caption);
-=======
-							const persona = dialogue.lines.join(" ");
-							this.currentChatNPC = dialogue.caption;
-							this.currentChatPersona = persona;
-							this.chatHistory = [];
-
-							this.showDialogue(`[AI] Would you like to chat with ${dialogue.caption}? (Press C to Chat, E for Normal)`, true, dialogue.caption);
-
-							const onKey = (ev: KeyboardEvent) => {
-								if (ev.key.toLowerCase() === 'c') {
-									window.removeEventListener('keydown', onKey);
-									this.chatUIContainer!.visible = true;
-									this.showDialogue(`Hello there! What would you like to talk about?`, true, dialogue.caption, true);
-								} else if (ev.key.toLowerCase() === 'e') {
-									window.removeEventListener('keydown', onKey);
-									this.showDialogue(dialogue.lines, true, dialogue.caption);
-								}
-							};
-							window.addEventListener('keydown', onKey);
-							setTimeout(() => window.removeEventListener('keydown', onKey), 5000);
-
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-							this.showDialogue(dialogue.lines, true, dialogue.caption);
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 							return true;
 						}
 					}
@@ -4182,13 +3605,6 @@ export class WorldScene extends Scene {
 	protected async destroy(): Promise<void> {
 		if (this.worker) this.worker.terminate();
 		if (this.consoleInput) this.consoleInput.remove();
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-		if (this.chatInput) this.chatInput.remove();
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 		await super.destroy();
 	}
 }

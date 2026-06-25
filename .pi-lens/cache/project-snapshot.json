@@ -1,13 +1,8 @@
 {
   "version": 1,
   "projectRoot": "C:/Users/hyper/workspace/bg/bobsgameweb",
-<<<<<<< HEAD
   "generatedAt": "2026-06-15T00:04:24.299Z",
   "seq": 384,
-=======
-  "generatedAt": "2026-06-12T13:11:57.624Z",
-  "seq": 365,
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
   "files": {
     "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts": {
       "path": "C:/Users/hyper/workspace/bg/bobsgameweb/capacitor.config.ts",
@@ -1418,13 +1413,9 @@
       "path": "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/DoorGraphLoader.ts",
       "mtimeMs": 1778089649680.4414,
       "size": 1575,
-<<<<<<< HEAD
       "imports": [
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/shared/Config.ts"
       ],
-=======
-      "imports": [],
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "lastSeq": 0
     },
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/EntityData.ts": {
@@ -2743,14 +2734,10 @@
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/input/InputManager.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/BobNet.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/PuzzleScene.ts",
-<<<<<<< HEAD
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LoginScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SplashScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts",
-=======
-        "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts",
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/StateManager.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/ui/ToastManager.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/shared/puzzle/GameType.ts"
@@ -3039,10 +3026,7 @@
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/input/InputManager.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/BobNet.ts",
-<<<<<<< HEAD
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/PuzzleScene.ts",
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/Scene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/SceneTransition.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/StateManager.ts"
@@ -3146,10 +3130,7 @@
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/data/AchievementIdentity.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/shared/GlobalSettings.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/input/InputManager.ts",
-<<<<<<< HEAD
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts",
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/Scene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/SceneTransition.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/shared/Config.ts"
@@ -3167,7 +3148,6 @@
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/BobNet.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/PuzzleScene.ts",
-<<<<<<< HEAD
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/AchievementsScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/ArenaScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BestiaryScene.ts",
@@ -3197,8 +3177,6 @@
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldEditorScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldMapScene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts",
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/Scene.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/SceneTransition.ts",
         "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/ui/Button.ts",
@@ -3980,7 +3958,6 @@
       "size": 1704,
       "imports": [],
       "lastSeq": 0
-<<<<<<< HEAD
     },
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts": {
       "path": "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts",
@@ -4055,8 +4032,6 @@
       "size": 2551,
       "imports": [],
       "lastSeq": 0
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     }
   },
   "symbols": {},
@@ -4065,14 +4040,11 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/generate_placeholder_maps.js": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/build-mobile.cjs": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/convert_maps.js": [],
-<<<<<<< HEAD
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_all_doors.py": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_arrival_positions.py": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_doors.py": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_hallway_doors.py": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/fix_room_arrivals.py": [],
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/generate-audio.cjs": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/scripts/generate-dummy-assets.cjs": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/server/ai_proxy.js": [],
@@ -4111,10 +4083,7 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/__tests__/validation.test.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/__tests__/visual-systems.test.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/__tests__/weather.test.ts": [],
-<<<<<<< HEAD
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts": [],
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/main/index.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/main/preload.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/assets/AssetLoader.ts": [],
@@ -4124,10 +4093,7 @@
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/audio/AudioManager.ts": [
-<<<<<<< HEAD
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts",
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/audio/visualizer/ProjectM.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/ecs/behaviors/NPCBehavior.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/ecs/systems/AudioReactiveSystem.ts",
@@ -4578,10 +4544,7 @@
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/SpriteAtlas.ts": [
-<<<<<<< HEAD
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts",
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/TilesetBuilder.ts": [
@@ -4956,10 +4919,7 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/text/TextManager.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/text/TextWindow.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/entity/Entity.ts": [
-<<<<<<< HEAD
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/game/entities/YuuEntity.ts",
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/GameMap.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/entity/index.ts": [],
@@ -5053,15 +5013,11 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/puzzle/PuzzleScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/Game.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CustomGameEditorScene.ts",
-<<<<<<< HEAD
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/GameSequenceEditorScene.ts",
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/RankingsScene.ts"
     ],
-<<<<<<< HEAD
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/AchievementsScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
     ],
@@ -5105,28 +5061,10 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HighScoresScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
     ],
-=======
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/AchievementsScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BattleScene.ts": [
-      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
-    ],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BestiaryScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/BossRushScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/CustomGameEditorScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EngineDemoScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EngineScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/EventSheetEditorScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/FishingScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/GameOverScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/GameSequenceEditorScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HelpScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HighScoresScene.ts": [],
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/index.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/InventoryScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
-<<<<<<< HEAD
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/JournalScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
     ],
@@ -5153,22 +5091,10 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/PartyScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
     ],
-=======
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/JournalScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LeaderboardScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LoginScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts": [
-      "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/Game.ts"
-    ],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/OptionsScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/PartyScene.ts": [],
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/PauseOverlay.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/QuestLogScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
-<<<<<<< HEAD
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/RankingsScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
     ],
@@ -5178,18 +5104,12 @@
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SettingsScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
     ],
-=======
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/RankingsScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SaveSlotScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SettingsScene.ts": [],
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/ShopScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SkillTreeScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts"
     ],
-<<<<<<< HEAD
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SplashScene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/Game.ts"
     ],
@@ -5213,15 +5133,6 @@
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/Game.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/MainMenuScene.ts"
     ],
-=======
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/SplashScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TournamentResultsScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TournamentScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/TutorialScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldEditorScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldMapScene.ts": [],
-    "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/WorldScene.ts": [],
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/index.ts": [],
     "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/state/Scene.ts": [
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/AchievementsScene.ts",
@@ -5384,10 +5295,7 @@
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/assets/AssetLoader.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/editor/MapEditor.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/editor/WorldEditor.ts",
-<<<<<<< HEAD
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/engine/map/DoorGraphLoader.ts",
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/HighScoresScene.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LobbyScene.ts",
       "C:/Users/hyper/workspace/bg/bobsgameweb/src/renderer/scenes/LoginScene.ts",
@@ -5560,19 +5468,11 @@
     ],
     [
       "assert",
-<<<<<<< HEAD
       "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
     ],
     [
       "assertEqual",
       "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\trade-daynight.test.ts"
-=======
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
-    ],
-    [
-      "assertEqual",
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     ],
     [
       "assertThrows",
@@ -5600,11 +5500,7 @@
     ],
     [
       "calculateScore",
-<<<<<<< HEAD
       "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\puzzle-logic.test.ts"
-=======
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\tutorial-leaderboard.test.ts"
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     ],
     [
       "calculateShakeDecay",
@@ -5688,11 +5584,7 @@
     ],
     [
       "decay",
-<<<<<<< HEAD
       "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\pet-bossrush.test.ts"
-=======
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\arena-cutscene.test.ts"
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     ],
     [
       "detectTSpin",
@@ -5764,11 +5656,7 @@
     ],
     [
       "generateBracket",
-<<<<<<< HEAD
       "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\arena-cutscene.test.ts"
-=======
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\networking.test.ts"
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     ],
     [
       "get",
@@ -6012,11 +5900,7 @@
     ],
     [
       "nextState",
-<<<<<<< HEAD
       "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\fishing-guild.test.ts"
-=======
-      "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb\\src\\__tests__\\achievement-quest.test.ts"
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     ],
     [
       "onClear",
@@ -6208,22 +6092,12 @@
     ],
     "hasCustomRules": true
   },
-<<<<<<< HEAD
-=======
-  "projectIndex": {
-    "entryCount": 80
-  },
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
   "startupScan": {
     "cwd": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb",
     "scanRoot": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb",
     "projectRoot": "C:\\Users\\hyper\\workspace\\bg\\bobsgameweb",
     "canWarmCaches": true,
-<<<<<<< HEAD
     "sourceFileCount": 430
-=======
-    "sourceFileCount": 429
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
   },
   "languageProfile": {
     "present": {
@@ -6267,11 +6141,7 @@
       "jsts": true
     },
     "counts": {
-<<<<<<< HEAD
       "jsts": 416
-=======
-      "jsts": 415
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
     },
     "detectedKinds": [
       "jsts"

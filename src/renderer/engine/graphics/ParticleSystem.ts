@@ -1,29 +1,13 @@
 /**
-<<<<<<< HEAD
-<<<<<<< HEAD
  * ParticleSystem — Reusable particle engine for bob's game.
-=======
- * ParticleSystem — Unified particle engine for bob's game.
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
- * ParticleSystem — Reusable particle engine for bob's game.
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
  *
  * Supports emitters with configurable:
  *  - emission rate, lifetime, gravity, drag
  *  - color/size/alpha over lifetime
  *  - burst and continuous modes
  *  - shape-based emission (point, circle, rect)
-<<<<<<< HEAD
-<<<<<<< HEAD
  *
  * Parity: Phaser (7/7 particles), LÖVE (full), GameMaker (full), Construct (full)
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
- *
- * Parity: Phaser (7/7 particles), LÖVE (full), GameMaker (full), Construct (full)
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
  */
 
 import { Container, Graphics } from 'pixi.js';
@@ -117,29 +101,11 @@ export class ParticleEmitter {
             maxParticles: config.maxParticles ?? 500,
         };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         // Burst mode: emit all at once
         if (this.config.burst) {
             for (let i = 0; i < this.config.rate; i++) {
                 this.emitParticle();
             }
-<<<<<<< HEAD
-=======
-        if (this.config.burst) {
-            this.burst();
-        }
-    }
-
-    public burst(): void {
-        const count = this.config.rate;
-        for (let i = 0; i < count; i++) {
-            this.emitParticle();
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         }
     }
 
@@ -185,14 +151,7 @@ export class ParticleEmitter {
     update(dt: number): void {
         if (!this.active) return;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         // Continuous emission
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-        // Continuous emission
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         if (!this.config.burst) {
             this.emitAccumulator += dt * this.config.rate;
             while (this.emitAccumulator >= 1) {
@@ -201,14 +160,7 @@ export class ParticleEmitter {
             }
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         // Update particles
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-        // Update particles
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
             p.age += dt;
@@ -218,14 +170,7 @@ export class ParticleEmitter {
                 continue;
             }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
             // Physics
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-            // Physics
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             p.vx += this.config.gravityX * dt;
             p.vy += this.config.gravityY * dt;
             p.vx *= (1 - this.config.drag);
@@ -240,10 +185,6 @@ export class ParticleEmitter {
         const g = new Graphics();
 
         for (const p of this.particles) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             const t = p.age / p.maxAge; // 0..1
 
             // Interpolate size
@@ -255,16 +196,6 @@ export class ParticleEmitter {
             if (alpha <= 0.01) continue;
 
             // Interpolate color
-<<<<<<< HEAD
-=======
-            const t = p.age / p.maxAge;
-            const size = p.startSize + (p.endSize - p.startSize) * t;
-            if (size <= 0) continue;
-            const alpha = p.startAlpha + (p.endAlpha - p.startAlpha) * t;
-            if (alpha <= 0.01) continue;
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             const color = this.lerpColor(p.startColor, p.endColor, t);
 
             g.circle(p.x, p.y, size);
@@ -287,10 +218,6 @@ export class ParticleEmitter {
         return (r << 16) | (gv << 8) | bv;
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     /** Get particle count */
     get count(): number {
         return this.particles.length;
@@ -303,13 +230,6 @@ export class ParticleEmitter {
     }
 
     /** Destroy emitter and clean up */
-<<<<<<< HEAD
-=======
-    get count(): number { return this.particles.length; }
-    setPosition(x: number, y: number): void { this.x = x; this.y = y; }
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     destroy(): void {
         this.active = false;
         this.particles = [];
@@ -317,19 +237,10 @@ export class ParticleEmitter {
     }
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 // ============================================================
 // Preset Emitters
 // ============================================================
 
-<<<<<<< HEAD
-=======
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
 export class ParticlePresets {
     static fire(x: number, y: number): ParticleEmitter {
         return new ParticleEmitter(x, y, {
@@ -410,24 +321,12 @@ export class ParticlePresets {
             endSize: 3,
             startAlpha: 1,
             endAlpha: 0.5,
-<<<<<<< HEAD
-<<<<<<< HEAD
             startColor: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff][Math.floor(Math.random() * 6)],
-=======
-            startColor: 0xff0000, // could randomise
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
-            startColor: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff][Math.floor(Math.random() * 6)],
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             endColor: 0xffffff,
             burst: true,
         });
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
     static rain(x: number, y: number, width: number): ParticleEmitter {
         return new ParticleEmitter(x, y, {
             rate: 60,
@@ -439,58 +338,15 @@ export class ParticlePresets {
             angleVariance: 0.05,
             gravityY: 100,
             drag: 0,
-<<<<<<< HEAD
-=======
-    static footstep(x: number, y: number): ParticleEmitter {
-        return new ParticleEmitter(x, y, {
-            rate: 5,
-            lifetime: 0.4,
-            speed: 15,
-            angle: -Math.PI / 2,
-            angleVariance: 0.5,
-            gravityY: -10,
-            startSize: 2,
-            endSize: 6,
-            startAlpha: 0.5,
-            endAlpha: 0,
-            startColor: 0x998877,
-            endColor: 0xccbbaa,
-            burst: true
-        });
-    }
-
-    static rain(x: number, y: number, width: number): ParticleEmitter {
-        return new ParticleEmitter(x, y, {
-            rate: 100,
-            lifetime: 1.5,
-            speed: 400,
-            angle: Math.PI / 2 + 0.1,
-            gravityY: 100,
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             startSize: 1,
             endSize: 1,
             startAlpha: 0.4,
             endAlpha: 0.1,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
             startColor: 0x6688bb,
             endColor: 0x4466aa,
             shape: 'rect',
             shapeWidth: width,
             shapeHeight: 10,
-<<<<<<< HEAD
-=======
-            startColor: 0x8899cc,
-            shape: 'rect',
-            shapeWidth: width,
-            shapeHeight: 20
->>>>>>> origin/jules-3-0-10-sanitization-and-editor-updates-534417342975684788
-=======
->>>>>>> origin/jules-3-0-9-engine-sync-12991498515375513677
         });
     }
 
