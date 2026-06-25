@@ -231,11 +231,11 @@ export class LegacyMapLoader {
 				for (const gd of graphDoors) {
 					if (!gd.destMap) continue;
 					const dd = new DoorData(-1, gd.name);
-					dd.x = Math.round((gd.x ?? 0) / 8);
-					dd.y = Math.round((gd.y ?? 0) / 8);
+					dd.x = gd.x ?? 0;
+					dd.y = gd.y ?? 0;
 					dd.destinationMapName = gd.destMap;
-					dd.destinationX = Math.round((gd.arrivalX ?? 8) / 8);
-					dd.destinationY = Math.round((gd.arrivalY ?? 8) / 8);
+					dd.destinationX = gd.arrivalX ?? 1;
+					dd.destinationY = gd.arrivalY ?? 1;
 					dd.width = 1;
 					dd.height = 1;
 					mapData.doorDataList.push(dd);

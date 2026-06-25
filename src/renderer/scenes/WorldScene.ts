@@ -811,28 +811,37 @@ export class WorldScene extends Scene {
 						fh = (actualTexture as any).height ?? 16;
 					}
 				}
-				// Position door sprite based on bottom-center anchor
-				transform.x = doorX * WorldScene.TILE_PX + fw / 2;
-				transform.y = doorY * WorldScene.TILE_PX + fh;
-				doorAnim.anchor.set(0.5, 1.0);
+				// Position door transform at the top-left of the walkway tile
+				transform.x = doorX * WorldScene.TILE_PX;
+				transform.y = doorY * WorldScene.TILE_PX;
+				// Animated sprites use bottom-left anchor (0, 1) to cover tiles above the walkway
+				doorAnim.anchor.set(0.0, 1.0);
 				doorAnim.play();
 				spriteComp.sprite = doorAnim;
 			} else {
 				transform.x = doorX * WorldScene.TILE_PX;
 				transform.y = doorY * WorldScene.TILE_PX;
 
-				// Fallback door graphics (brown rectangle with gold border and knob)
+				// Fallback door graphics (drawn above the origin so they sit above the walkway)
 				const g = new Graphics();
-				g.rect(0, 0, WorldScene.TILE_PX, WorldScene.TILE_PX);
+				g.rect(0, -WorldScene.TILE_PX, WorldScene.TILE_PX, WorldScene.TILE_PX);
 				g.fill(0x8b5a2b); // Brown door
-				g.rect(0, 0, WorldScene.TILE_PX, WorldScene.TILE_PX);
+				g.rect(0, -WorldScene.TILE_PX, WorldScene.TILE_PX, WorldScene.TILE_PX);
 				g.stroke({ width: 1, color: 0xd4af37 }); // Gold border
-				g.circle(WorldScene.TILE_PX - 2, WorldScene.TILE_PX / 2, 1.5);
+				g.circle(WorldScene.TILE_PX - 2, -WorldScene.TILE_PX / 2, 1.5);
 				g.fill(0xd4af37); // Gold knob
 				spriteComp.sprite = g as any;
 			}
 			this.world.addComponent(entity, transform);
 			this.world.addComponent(entity, spriteComp);
+
+			if (this.map) {
+				this.map.addEntity({
+					id: entity,
+					sprite: spriteComp.sprite,
+					update: () => {},
+				} as any);
+			}
 
 			console.log(
 				`[WorldScene] Door: "${door.name}" sprite: "${spriteName}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
@@ -2164,6 +2173,13 @@ export class WorldScene extends Scene {
 			light.flicker = true;
 			light.intensity = 0.8;
 			this.world.addComponent(entity, light);
+
+			if (this.map) {
+				this.map.addEntity({
+					id: entity,
+					update: () => {},
+				} as any);
+			}
 		}
 		console.log(`[WorldScene] Created ${torchPositions.length} torch lights`);
 	}
@@ -3377,26 +3393,27 @@ export class WorldScene extends Scene {
 			this.hitDebugGraphics = null;
 		}
 
-		if (this.map) {
+		if (this.map && this.map.entitySpriteContainer) {
 			const g = new Graphics();
-			g.zIndex = 6; // under entities (zIndex 50), above ground/objects (zIndex 0-5)
-			g.lineStyle(1, 0xff0000, 0.8);
+			g.zIndex = -999999; // draw below entities inside entitySpriteContainer
 			const W = mapData.widthTiles1X;
 			const H = mapData.heightTiles1X;
 			for (let ty = 0; ty < H; ty++) {
 				for (let tx = 0; tx < W; tx++) {
 					if (this.isHitTile(tx, ty)) {
-						const px = tx * 16;
-						const py = ty * 16;
-						g.moveTo(px + 2, py + 2);
-						g.lineTo(px + 14, py + 14);
-						g.moveTo(px + 14, py + 2);
-						g.lineTo(px + 2, py + 14);
+						const px = tx * WorldScene.TILE_PX;
+						const py = ty * WorldScene.TILE_PX;
+						g.moveTo(px + 1, py + 1);
+						g.lineTo(px + 7, py + 7);
+						g.moveTo(px + 7, py + 1);
+						g.lineTo(px + 1, py + 7);
 					}
 				}
 			}
+			g.stroke({ width: 1, color: 0xff0000, alpha: 0.8 });
 			this.hitDebugGraphics = g;
-			this.map.container.addChild(g);
+			this.map.entitySpriteContainer.addChild(g);
+			this.map.entitySpriteContainer.sortChildren();
 		}
 	}
 
@@ -3483,8 +3500,8 @@ export class WorldScene extends Scene {
 
 		// 6. Pixel-level hit detection and entity colliders
 		if (this.hitDetectionSystem.utilityLayersLoaded) {
-			const pixelX = tx * 16 + 8;
-			const pixelY = ty * 16 + 8;
+			const pixelX = tx * 8 + 4;
+			const pixelY = ty * 8 + 4;
 			const hitLayerBlocked = this.hitDetectionSystem.getHitLayerValueAtPixels(
 				pixelX,
 				pixelY,

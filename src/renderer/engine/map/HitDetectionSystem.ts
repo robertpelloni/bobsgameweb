@@ -52,7 +52,7 @@ export interface Collider {
  *           → tilex = Math.floor(pix / 16)
  */
 function pixToTile1X(pix: number): number {
-	return Math.floor(pix / 16);
+	return Math.floor(pix / 8);
 }
 
 export class HitDetectionSystem {
@@ -135,8 +135,8 @@ export class HitDetectionSystem {
 		if (!this.utilityLayersLoaded) return true;
 
 		// Outside bounds = blocked
-		const widthPx = this.tilesWide * 16;
-		const heightPx = this.tilesHigh * 16;
+		const widthPx = this.tilesWide * 8;
+		const heightPx = this.tilesHigh * 8;
 		if (
 			mapXPixels < 0 ||
 			mapYPixels < 0 ||
@@ -146,9 +146,9 @@ export class HitDetectionSystem {
 			return true;
 		}
 
-		// Convert pixel to 1X tile index (Java formula)
-		const tilex = Math.floor(mapXPixels / 16);
-		const tiley = Math.floor(mapYPixels / 16);
+		// Convert pixel to 1X tile index
+		const tilex = Math.floor(mapXPixels / 8);
+		const tiley = Math.floor(mapYPixels / 8);
 		const index = tiley * this.tilesWide + tilex;
 
 		if (!this.hitLayer) return false; // no hit layer = walkable
@@ -162,8 +162,8 @@ export class HitDetectionSystem {
 	getCameraBoundsValueAtPixels(mapXPixels: number, mapYPixels: number): number {
 		if (!this.utilityLayersLoaded || !this.cameraLayer) return 0;
 
-		const tilex = Math.floor(mapXPixels / 16);
-		const tiley = Math.floor(mapYPixels / 16);
+		const tilex = Math.floor(mapXPixels / 8);
+		const tiley = Math.floor(mapYPixels / 8);
 		const index = tiley * this.tilesWide + tilex;
 		return (this.cameraLayer[index] as number) ?? 0;
 	}
