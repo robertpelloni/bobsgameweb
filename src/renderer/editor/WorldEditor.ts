@@ -4,6 +4,7 @@ import { SERVER_URL } from '../../shared/Config';
 import { AchievementManager } from '../data/AchievementManager';
 import { getAchievementIdentity } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
+import { GenerativeAIManager } from './GenerativeAIManager';
 
 import { Container, Text as PIXIText } from "pixi.js";
 import { EventSheetEditor } from "./EventSheetEditor";
@@ -133,7 +134,7 @@ export class WorldEditor {
         try {
             const resp = await fetch(`${SERVER_URL}/stats`);
             const stats = await resp.json();
-            const el = this.container.querySelector('#server-status');
+            const el = this.container.querySelector('#server-status') as HTMLElement;
             if (el) {
                 let statusText = `Server: Online | Players: ${stats.players} | Rooms: ${stats.rooms} | Uptime: ${stats.uptime}s`;
 
@@ -149,7 +150,7 @@ export class WorldEditor {
                 el.style.color = '#00ff00';
             }
         } catch (e) {
-            const el = this.container.querySelector('#server-status');
+            const el = this.container.querySelector('#server-status') as HTMLElement;
             if (el) {
                 el.textContent = 'Server: Offline';
                 el.style.color = '#ff0000';

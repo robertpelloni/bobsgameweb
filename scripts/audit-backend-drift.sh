@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Audit bobsgameweb backend drift between local tracked source, remote files on disk,
 # and the currently running public backend process.

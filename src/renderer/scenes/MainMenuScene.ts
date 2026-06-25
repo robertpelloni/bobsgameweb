@@ -1,7 +1,7 @@
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
 import { AudioManager } from "../audio/AudioManager";
 import type { GameMode } from "../data/HighScoreManager";
-import { InputManager } from "../input/InputManager";
+import { InputManager, Key } from "../input/InputManager";
 import type { PuzzleSceneConfig } from "../puzzle";
 import { GameType, GameTypes } from "../puzzle";
 import { BobNet } from "../puzzle/BobNet";

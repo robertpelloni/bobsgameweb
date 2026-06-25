@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Verify both the backend host and the production frontend after cutover.
 #

@@ -1,4 +1,5 @@
 import { Dropdown } from '../ui/Dropdown';
+import { Texture, Sprite } from 'pixi.js';
 import { Checkbox } from '../ui/Checkbox';
 import { GameType, BlockType, PieceType, GamePlayMode, networkManager } from '../puzzle';
 import { TurnFromBlockTypeToType } from '../../shared/puzzle/BlockType';

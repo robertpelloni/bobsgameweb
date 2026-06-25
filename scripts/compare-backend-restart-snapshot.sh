@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Compare a previously captured backend restart-readiness snapshot against the current live state.
 # This is read-only and intended for post-restart validation, but it can also be used before a restart

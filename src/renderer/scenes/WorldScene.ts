@@ -574,8 +574,8 @@ export class WorldScene extends Scene {
 				"Sprite",
 			) as SpriteComponent | undefined;
 			if (playerSpriteComp?.sprite?.parent === this.map.entitySpriteContainer) {
-				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
-				this.worldContainer.addChild(playerSpriteComp.sprite);
+				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite!);
+				this.worldContainer.addChild(playerSpriteComp.sprite!);
 			}
 			// Save shadow sprite before map destruction
 			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
@@ -583,6 +583,7 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.removeChild(shadowSave);
 			}
 			this.worldContainer.removeChild(this.map.container);
+			this.map.destroy();
 			this.map.container.destroy({ children: true });
 		}
 		this.map = new GameMap(mapData, this.realTileset);
@@ -649,8 +650,8 @@ export class WorldScene extends Scene {
 				"Sprite",
 			) as SpriteComponent | undefined;
 			if (playerSpriteComp?.sprite?.parent === this.map.entitySpriteContainer) {
-				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
-				this.worldContainer.addChild(playerSpriteComp.sprite);
+				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite!);
+				this.worldContainer.addChild(playerSpriteComp.sprite!);
 			}
 			// Save shadow sprite before map destruction
 			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
@@ -658,6 +659,7 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.removeChild(shadowSave);
 			}
 			this.worldContainer.removeChild(this.map.container);
+			this.map.destroy();
 			this.map.container.destroy({ children: true });
 		}
 		this.map = new GameMap(mapData, this.realTileset);

@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Planned maintenance helper for aligning the running backend process with already-synced
 # backend files on disk. This script is intentionally DRY-RUN by default.

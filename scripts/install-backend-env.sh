@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Install or refresh the backend environment file on a VPS.
 #

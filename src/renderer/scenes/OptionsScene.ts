@@ -196,7 +196,7 @@ export class OptionsScene extends Scene {
         const hdToggleBtn = new Button('HD Sprites (HQ2X): OFF', hdBtnStyle);
         hdToggleBtn.setPosition(this.centerX, startY + spacing * 3.8);
         hdToggleBtn.onClick(() => {
-            const worldScene = StateManager.getScene('world') as any;
+            const worldScene = StateManager.getByName('world') as any;
             if (worldScene?.spriteAtlas) {
                 worldScene.spriteAtlas.useHQ2X = !worldScene.spriteAtlas.useHQ2X;
                 hdToggleBtn.text = `HD Sprites (HQ2X): ${worldScene.spriteAtlas.useHQ2X ? 'ON' : 'OFF'}`;

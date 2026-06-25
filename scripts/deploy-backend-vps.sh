@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Deploy only the backend service to a VPS (Hetzner/DO/etc.)
 #

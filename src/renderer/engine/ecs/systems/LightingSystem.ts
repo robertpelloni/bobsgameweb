@@ -127,7 +127,7 @@ export class LightingSystem extends System {
     let audioPulse = 0;
     const analyzer = (AudioManager as any).analyzer as AnalyserNode;
     if (analyzer) {
-        analyzer.getByteFrequencyData(this.fftData);
+        analyzer.getByteFrequencyData(this.fftData as any);
         // Use sub-bass / bass frequencies (bins 0-10)
         let sum = 0;
         for (let i = 0; i < 10; i++) sum += this.fftData[i];

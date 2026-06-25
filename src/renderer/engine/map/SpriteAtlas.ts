@@ -2,7 +2,7 @@
  * SpriteAtlas — Loads the extracted sprite atlas for character rendering.
  * Uses the original game's animation sequence data for proper direction mapping.
  */
-import { Texture, Sprite, Assets, AnimatedSprite, BaseTexture, Rectangle } from 'pixi.js';
+import { Texture, Sprite, Assets, AnimatedSprite, Rectangle } from 'pixi.js';
 import { HQ2X } from '../shared/HQ2X';
 
 export interface SpriteAtlasEntry {

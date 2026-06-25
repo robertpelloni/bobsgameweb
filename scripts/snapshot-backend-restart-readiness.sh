@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Capture a pre-maintenance snapshot before a planned backend restart window.
 # This is read-only and does not restart or kill any processes.

@@ -1,3 +1,12 @@
+## v3.0.27 — 2026-06-24
+
+### Added
+- Pre-render layer rendering optimization in PixiJS RPG engine: entire tile layers are compiled to single larger images/textures at load time to reduce individual tile sprite draws.
+- Created `PerformanceMonitor.ts` placeholder to resolve missing dependencies.
+
+### Fixed
+- TypeScript compilation errors and type mismatches in options, custom game editor, world editor, and lighting system.
+
 ## v3.0.26 — 2026-06-23
 
 ### Changed

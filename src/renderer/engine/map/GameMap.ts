@@ -39,6 +39,7 @@ export class GameMap {
 	public entities: Entity[] = [];
 	private tileTextures: globalThis.Map<number, Texture> = new globalThis.Map();
 	private realTileset: RealTileset | null = null;
+	private generatedTextures: Texture[] = [];
 
 	// Camera
 	public camX = 0;
@@ -109,6 +110,7 @@ export class GameMap {
 	}
 
 	public render(tileset: Tileset, palette: Palette) {
+		this.clearGeneratedTextures();
 		if (this.realTileset && this.realTileset.loaded) {
 			this.renderWithRealTileset();
 		} else {
@@ -122,6 +124,13 @@ export class GameMap {
 				this.renderLayer(l, tileset, palette);
 			}
 		}
+	}
+
+	private clearGeneratedTextures() {
+		for (const t of this.generatedTextures) {
+			t.destroy(true);
+		}
+		this.generatedTextures = [];
 	}
 
 	/** No-op — kept for backward compatibility with WorldScene calls. */
@@ -152,9 +161,14 @@ export class GameMap {
 
 	private renderLayerReal(l: number) {
 		const layer = this.layers[l];
-		let spriteCount = 0;
-		let nullTextureCount = 0;
-		const totalTiles = this.data.widthTiles1X * this.data.heightTiles1X;
+		layer.removeChildren();
+
+		const mapW = this.data.widthTiles1X;
+		const mapH = this.data.heightTiles1X;
+		const canvas = document.createElement("canvas");
+		canvas.width = mapW * 8;
+		canvas.height = mapH * 8;
+		const ctx = canvas.getContext("2d")!;
 
 		// L3 (objects) and L6 (above) are the shadow composite layers —
 		// they contain solid-black tile 839 (walls, overhead)
@@ -162,29 +176,10 @@ export class GameMap {
 		const isShadowCompositeLayer =
 			l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER;
 
-		let startX = 0,
-			startY = 0,
-			endX = this.data.widthTiles1X,
-			endY = this.data.heightTiles1X;
+		let drawnCount = 0;
 
-		if (totalTiles > 10000) {
-			const cx =
-				this.initialSpawnX > 0
-					? Math.floor(this.initialSpawnX / 8)
-					: Math.floor(this.data.widthTiles1X / 2);
-			const cy =
-				this.initialSpawnY > 0
-					? Math.floor(this.initialSpawnY / 8)
-					: Math.floor(this.data.heightTiles1X / 2);
-			const radius = totalTiles > 100000 ? 40 : 60;
-			startX = Math.max(0, cx - radius);
-			startY = Math.max(0, cy - radius);
-			endX = Math.min(this.data.widthTiles1X, cx + radius);
-			endY = Math.min(this.data.heightTiles1X, cy + radius);
-		}
-
-		for (let y = startY; y < endY; y++) {
-			for (let x = startX; x < endX; x++) {
+		for (let y = 0; y < mapH; y++) {
+			for (let x = 0; x < mapW; x++) {
 				const tileId = this.data.getTileIndex(l, x, y);
 				if (tileId === 0) continue;
 
@@ -197,9 +192,7 @@ export class GameMap {
 					continue;
 
 				// On L6 (above): skip 839 if L3 (objects) already has 839 at
-				// the same position. These are wall columns already rendered
-				// translucently on L3; duplicating them on L6 creates a
-				// double-alpha dark square (the "black squares" bug).
+				// the same position.
 				if (
 					l === MapData.MAP_ABOVE_LAYER &&
 					tileId === 839 &&
@@ -207,75 +200,98 @@ export class GameMap {
 				)
 					continue;
 
-				const skipFactor = totalTiles > 50000 ? 2 : 1;
-				if (
-					skipFactor > 1 &&
-					l === MapData.MAP_GROUND_DETAIL_LAYER &&
-					(x + y) % skipFactor !== 0
-				)
-					continue;
-				if (
-					skipFactor > 1 &&
-					l === MapData.MAP_OBJECT_DETAIL_LAYER &&
-					(x + y) % skipFactor !== 0
-				)
-					continue;
-
-				const px = Math.round(x * 8);
-				const py = Math.round(y * 8);
-
 				const texture = this.realTileset!.getTileTexture(tileId);
-				if (!texture) {
-					nullTextureCount++;
-					continue;
-				}
+				if (!texture) continue;
 
-				const sprite = new Sprite(texture);
-				sprite.x = px;
-				sprite.y = py;
+				const source = texture.source.resource as HTMLImageElement;
+				const frame = texture.frame;
 
-				// On L3/L6: black tiles render translucent at shadowAlpha=0.59;
-				// color tiles (furniture, rails) render opaque.
+				const oldAlpha = ctx.globalAlpha;
 				if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId)) {
-					sprite.alpha = 0.59;
+					ctx.globalAlpha = 0.59;
 				}
 
-				if (l === MapData.MAP_LIGHT_MASK_LAYER) {
-					sprite.tint = 0x000000;
+				ctx.drawImage(
+					source,
+					frame.x,
+					frame.y,
+					frame.width,
+					frame.height,
+					x * 8,
+					y * 8,
+					8,
+					8
+				);
+
+				if (ctx.globalAlpha !== oldAlpha) {
+					ctx.globalAlpha = oldAlpha;
 				}
-				if (l === MapData.MAP_LIGHT_LAYER) {
-					sprite.blendMode = "add";
-				}
-				if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
-					(sprite as any)._isTileSprite = true;
-					this.objectDetailContainer.addChild(sprite);
-				} else {
-					layer.addChild(sprite);
-				}
-				spriteCount++;
+
+				drawnCount++;
 			}
 		}
 
-		if (spriteCount > 0 || nullTextureCount > 0) {
-			console.log(
-				`[GameMap] Layer ${l} (${MapData.LAYER_NAMES[l] || "?"}): ${spriteCount} sprites, ${nullTextureCount} null`,
-			);
+		if (drawnCount > 0) {
+			const texture = Texture.from(canvas);
+			texture.source.scaleMode = "nearest";
+			this.generatedTextures.push(texture);
+
+			const sprite = new Sprite(texture);
+			sprite.x = 0;
+			sprite.y = 0;
+
+			if (l === MapData.MAP_LIGHT_MASK_LAYER) {
+				sprite.tint = 0x000000;
+			}
+			if (l === MapData.MAP_LIGHT_LAYER) {
+				sprite.blendMode = "add";
+			}
+
+			if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
+				(sprite as any)._isTileSprite = true;
+				this.objectDetailContainer.addChild(sprite);
+			} else {
+				layer.addChild(sprite);
+			}
 		}
 	}
 
 	public renderLayer(l: number, tileset: Tileset, palette: Palette) {
 		const layer = this.layers[l];
 		layer.removeChildren();
-		for (let y = 0; y < this.data.heightTiles1X; y++) {
-			for (let x = 0; x < this.data.widthTiles1X; x++) {
+
+		const mapW = this.data.widthTiles1X;
+		const mapH = this.data.heightTiles1X;
+		const canvas = document.createElement("canvas");
+		canvas.width = mapW * 8;
+		canvas.height = mapH * 8;
+		const ctx = canvas.getContext("2d")!;
+
+		let drawnCount = 0;
+		const alpha = MapData.isTransparentLayer(l) ? 150 : 255;
+
+		for (let y = 0; y < mapH; y++) {
+			for (let x = 0; x < mapW; x++) {
 				const tileIndex = this.data.getTileIndex(l, x, y);
 				if (tileIndex === 0) continue;
-				const texture = this.getTileTexture(tileIndex, tileset, palette, l);
-				const sprite = new Sprite(texture);
-				sprite.x = x * Tileset.TILE_SIZE;
-				sprite.y = y * Tileset.TILE_SIZE;
-				layer.addChild(sprite);
+
+				const rgba = tileset.getTileRGBA(tileIndex, palette, alpha);
+				const imgData = new ImageData(new Uint8ClampedArray(rgba), 8, 8);
+				ctx.putImageData(imgData, x * 8, y * 8);
+
+				drawnCount++;
 			}
+		}
+
+		if (drawnCount > 0) {
+			const texture = Texture.from(canvas);
+			texture.source.scaleMode = "nearest";
+			this.generatedTextures.push(texture);
+
+			const sprite = new Sprite(texture);
+			sprite.x = 0;
+			sprite.y = 0;
+			layer.addChild(sprite);
 		}
 	}
 
@@ -331,111 +347,15 @@ export class GameMap {
 		screenH: number,
 		zoom: number,
 	): void {
-		if (!this.isLargeMap || !this.realTileset?.loaded) return;
+		// Pre-rendered layer rendering does not require dynamic viewport culling.
+	}
 
-		const tileCX = Math.floor(centerX / 8);
-		const tileCY = Math.floor(centerY / 8);
-
-		if (
-			Math.abs(tileCX - this.lastViewportCX) < 3 &&
-			Math.abs(tileCY - this.lastViewportCY) < 3
-		)
-			return;
-
-		this.lastViewportCX = tileCX;
-		this.lastViewportCY = tileCY;
-
-		const extraMargin = 16;
-		const halfW = Math.ceil(screenW / (8 * zoom * 2)) + 8 + extraMargin;
-		const halfH = Math.ceil(screenH / (8 * zoom * 2)) + 8 + extraMargin;
-
-		const startX = Math.max(0, tileCX - halfW);
-		const startY = Math.max(0, tileCY - halfH);
-		const endX = Math.min(this.data.widthTiles1X, tileCX + halfW);
-		const endY = Math.min(this.data.heightTiles1X, tileCY + halfH);
-
-		const renderableLayers = [
-			MapData.MAP_GROUND_LAYER,
-			MapData.MAP_GROUND_DETAIL_LAYER,
-			MapData.MAP_GROUND_SHADOW_LAYER,
-			MapData.MAP_OBJECT_LAYER,
-			MapData.MAP_OBJECT_DETAIL_LAYER,
-			MapData.MAP_OBJECT_SHADOW_LAYER,
-			MapData.MAP_ABOVE_LAYER,
-			MapData.MAP_ABOVE_DETAIL_LAYER,
-			MapData.MAP_SPRITE_SHADOW_LAYER,
-			MapData.MAP_LIGHT_MASK_LAYER,
-			MapData.MAP_LIGHT_LAYER,
-			MapData.MAP_DOOR_LAYER,
-		];
-
-		// Clean up tile sprites from detail and entity containers
-		const detailTiles: any[] = [];
-		for (const child of this.objectDetailContainer.children) {
-			if ((child as any)._isTileSprite) detailTiles.push(child);
+	public destroy() {
+		this.clearGeneratedTextures();
+		for (const t of this.tileTextures.values()) {
+			t.destroy(true);
 		}
-		for (const s of detailTiles) this.objectDetailContainer.removeChild(s);
-
-		const entityTiles: any[] = [];
-		for (const child of this.entitySpriteContainer.children) {
-			if ((child as any)._isTileSprite) entityTiles.push(child);
-		}
-		for (const s of entityTiles) this.entitySpriteContainer.removeChild(s);
-
-		for (const l of renderableLayers) {
-			const layer = this.layers[l];
-			if (!layer) continue;
-			layer.removeChildren();
-
-			// L3 (objects) and L6 (above) are the shadow composite layers
-			const isShadowCompositeLayer =
-				l === MapData.MAP_OBJECT_LAYER || l === MapData.MAP_ABOVE_LAYER;
-
-			for (let y = startY; y < endY; y++) {
-				for (let x = startX; x < endX; x++) {
-					const tileId = this.data.getTileIndex(l, x, y);
-					if (tileId === 0) continue;
-
-					if (
-						tileId === 839 &&
-						l !== MapData.MAP_OBJECT_LAYER &&
-						l !== MapData.MAP_ABOVE_LAYER
-					)
-						continue;
-
-					// On L6 (above): skip 839 if L3 already has 839 at same position
-					if (
-						l === MapData.MAP_ABOVE_LAYER &&
-						tileId === 839 &&
-						this.data.getTileIndex(MapData.MAP_OBJECT_LAYER, x, y) === 839
-					)
-						continue;
-
-					const px = Math.round(x * 8);
-					const py = Math.round(y * 8);
-
-					const texture = this.realTileset!.getTileTexture(tileId);
-					if (!texture) continue;
-
-					const sprite = new Sprite(texture);
-					sprite.x = px;
-					sprite.y = py;
-
-					// L3/L6: black tiles render translucent at shadowAlpha
-					if (isShadowCompositeLayer && this.realTileset?.isBlackTile(tileId))
-						sprite.alpha = 0.59;
-
-					if (l === MapData.MAP_LIGHT_MASK_LAYER) sprite.tint = 0x000000;
-					if (l === MapData.MAP_LIGHT_LAYER) sprite.blendMode = "add";
-
-					if (l === MapData.MAP_OBJECT_DETAIL_LAYER) {
-						(sprite as any)._isTileSprite = true;
-						this.objectDetailContainer.addChild(sprite);
-					} else {
-						layer.addChild(sprite);
-					}
-				}
-			}
-		}
+		this.tileTextures.clear();
+		this.entities = [];
 	}
 }

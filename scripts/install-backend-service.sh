@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Install or refresh the nginx + systemd assets for the backend on a VPS.
 #

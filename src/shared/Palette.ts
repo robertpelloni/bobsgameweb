@@ -40,4 +40,22 @@ export class Palette {
         // Simplified for web port.
         return -1;
     }
+
+    public findNearestColor(color: BobColor): number {
+        let minDistance = Infinity;
+        let nearestIndex = 0;
+        // Start from index 1 to avoid transparent/background color at index 0
+        for (let i = 1; i < this.numColors; i++) {
+            const c = this.colors[i];
+            const dr = c.r - color.r;
+            const dg = c.g - color.g;
+            const db = c.b - color.b;
+            const dist = dr * dr + dg * dg + db * db;
+            if (dist < minDistance) {
+                minDistance = dist;
+                nearestIndex = i;
+            }
+        }
+        return nearestIndex;
+    }
 }

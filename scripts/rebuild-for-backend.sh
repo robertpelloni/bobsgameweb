@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Rebuild the frontend against a specific backend host and optionally deploy it.
 #

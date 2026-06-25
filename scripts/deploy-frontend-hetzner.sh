@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # Upload the built bobsgameweb static frontend to the Hetzner host.
 #

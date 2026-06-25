@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+﻿#!/bin/bash
+set -eu
 
 # One-shot-ish Hetzner/VPS backend provisioner.
 #
