@@ -112,7 +112,7 @@ export class MapData extends AssetData {
 	public eventDataList: EventData[] = [];
 	public doorDataList: DoorData[] = [];
 
-	private layerTileIndex: Int32Array[];
+	public layerTileIndex: Int32Array[];
 	private chunks: globalThis.Map<string, Int32Array[]> = new globalThis.Map();
 	private isInfinite: boolean = false;
 

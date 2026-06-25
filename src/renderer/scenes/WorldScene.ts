@@ -60,6 +60,7 @@ import {
 import { TilesetBuilder } from "../engine/map/TilesetBuilder";
 import { RealTileset } from "../engine/map/RealTileset";
 import { SpriteAtlas } from "../engine/map/SpriteAtlas";
+import doorsConfig from "../../../data/doors.json";
 import {
 	loadGameScript,
 	getNPCDialogue,
@@ -545,6 +546,7 @@ export class WorldScene extends Scene {
 			// Fallback: create a small empty map
 			const fallbackData = new MapData(-1, "Empty", 20, 15);
 			this.map = new GameMap(fallbackData, this.realTileset);
+			this.setupHitDetection(fallbackData);
 			this.worldContainer.addChild(this.map.container);
 			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
 			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
@@ -587,6 +589,7 @@ export class WorldScene extends Scene {
 			this.map.container.destroy({ children: true });
 		}
 		this.map = new GameMap(mapData, this.realTileset);
+		this.setupHitDetection(mapData);
 		const spX =
 			(mapData.defaultSpawnX ?? Math.floor(mapData.widthTiles1X / 2)) * 8;
 		const spY =
@@ -663,6 +666,7 @@ export class WorldScene extends Scene {
 			this.map.container.destroy({ children: true });
 		}
 		this.map = new GameMap(mapData, this.realTileset);
+		this.setupHitDetection(mapData);
 		const spX =
 			(mapData.defaultSpawnX ?? Math.floor(mapData.widthTiles1X / 2)) * 8;
 		const spY =
@@ -777,23 +781,50 @@ export class WorldScene extends Scene {
 				}
 			}
 
-			transform.x = doorX * WorldScene.TILE_PX;
-			transform.y = doorY * WorldScene.TILE_PX;
-			this.world.addComponent(entity, transform);
-
-			// Door indicator: add to map container so it's cleaned up on map change.
-			const doorGfx = new Graphics();
-			doorGfx.rect(0, 0, 24, 24);
-			doorGfx.fill({ color: 0xff0000 });
-			doorGfx.x = transform.x - 4;
-			doorGfx.y = transform.y - 4;
-			doorGfx.zIndex = 99999;
-			if (this.map?.container) {
-				this.map.container.addChild(doorGfx);
-				this.map.container.sortChildren();
+			// Look up door sprite name from doors.json
+			let spriteName = "DoorDownBrownGoldKnob"; // default fallback
+			const mapDoorsData = (doorsConfig as any)[this.currentMapName || ""];
+			if (mapDoorsData && mapDoorsData.doors) {
+				const matchingDoor = mapDoorsData.doors.find(
+					(d: any) => d.destMap === door.destinationMapName
+				);
+				if (matchingDoor && matchingDoor.sprite) {
+					spriteName = matchingDoor.sprite;
+				}
 			}
+
+			const spriteComp = new SpriteComponent();
+			const doorAnim = this.spriteAtlas.createAnimatedSprite(
+				spriteName,
+				"Down",
+				0.15,
+			);
+			if (doorAnim) {
+				const tex = doorAnim.textures[0];
+				let fw = 16;
+				let fh = 16;
+				if (tex) {
+					const actualTexture = (tex as any).texture || tex;
+					if (actualTexture) {
+						fw = (actualTexture as any).width ?? 16;
+						fh = (actualTexture as any).height ?? 16;
+					}
+				}
+				// Position door sprite based on bottom-center anchor
+				transform.x = doorX * WorldScene.TILE_PX + fw / 2;
+				transform.y = doorY * WorldScene.TILE_PX + fh;
+				doorAnim.anchor.set(0.5, 1.0);
+				doorAnim.play();
+				spriteComp.sprite = doorAnim;
+			} else {
+				transform.x = doorX * WorldScene.TILE_PX;
+				transform.y = doorY * WorldScene.TILE_PX;
+			}
+			this.world.addComponent(entity, transform);
+			this.world.addComponent(entity, spriteComp);
+
 			console.log(
-				`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
+				`[WorldScene] Door: "${door.name}" sprite: "${spriteName}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
 			);
 
 			const teleport = new TeleportComponent();
@@ -858,8 +889,8 @@ export class WorldScene extends Scene {
 		if (scriptEntities.length > 0) {
 			placements = scriptEntities.map((e) => ({
 				sprite: e.spriteName,
-				x: e.x,
-				y: e.y,
+				x: e.x * 2,
+				y: e.y * 2,
 			}));
 		} else {
 			// Fallback: load from npc_placements.json
@@ -1157,6 +1188,31 @@ export class WorldScene extends Scene {
 		if (this.playerTransform && this.map) {
 			let arrX = targetX;
 			let arrY = targetY;
+
+			if (this.currentMapName) {
+				const prevMapName = this.currentMapName;
+				const reverseDoor = this.map.data.doorDataList.find(
+					(d) => d.destinationMapName === prevMapName
+				);
+				if (reverseDoor) {
+					let targetTileX = reverseDoor.x;
+					let targetTileY = reverseDoor.y + 1;
+					const extra = this.map.data.getTileIndex(
+						MapData.MAP_CAMERA_BOUNDS_LAYER,
+						targetTileX,
+						targetTileY,
+					);
+					if (extra === 0) {
+						targetTileY = reverseDoor.y;
+					}
+					arrX = targetTileX * WorldScene.TILE_PX;
+					arrY = targetTileY * WorldScene.TILE_PX;
+					console.log(
+						`[WorldScene] Matched reverse door: placing player at (${targetTileX}, ${targetTileY})`,
+					);
+				}
+			}
+
 			const arrTX = Math.floor(arrX / WorldScene.TILE_PX);
 			const arrTY = Math.floor(arrY / WorldScene.TILE_PX);
 			const arrExtra = this.map.data.getTileIndex(
@@ -3293,6 +3349,43 @@ export class WorldScene extends Scene {
 		this.debugHud.text = lines.join("\n");
 	}
 
+	private setupHitDetection(mapData: MapData): void {
+		this.hitDetectionSystem.tilesWide = mapData.widthTiles1X;
+		this.hitDetectionSystem.tilesHigh = mapData.heightTiles1X;
+		this.hitDetectionSystem.loadHitLayer(mapData.layerTileIndex[MapData.MAP_HIT_LAYER]);
+		this.hitDetectionSystem.loadCameraLayer(mapData.layerTileIndex[MapData.MAP_CAMERA_BOUNDS_LAYER]);
+		this.hitDetectionSystem.markUtilityLayersLoaded();
+		this.updateHitSystemColliders();
+	}
+
+	private updateHitSystemColliders(): void {
+		const list: any[] = [];
+		// Add furniture/prop entity colliders
+		for (const ec of this.entityColliders) {
+			list.push({
+				x: ec.x,
+				y: ec.y,
+				w: ec.w,
+				h: ec.h,
+				nonWalkable: true,
+			});
+		}
+		// Add door colliders (doors are non-walkable by default in Java unless open)
+		if (this.map) {
+			for (const door of this.map.data.doorDataList) {
+				list.push({
+					x: (door.x ?? 0) * WorldScene.TILE_PX,
+					y: (door.y ?? 0) * WorldScene.TILE_PX,
+					w: (door.width ?? 1) * WorldScene.TILE_PX,
+					h: (door.height ?? 1) * WorldScene.TILE_PX,
+					nonWalkable: true,
+					isOpen: false, // by default doors start closed
+				});
+			}
+		}
+		this.hitDetectionSystem.setColliders(list);
+	}
+
 	private isHitTile(tx: number, ty: number): boolean {
 		if (!this.map) return true;
 		if (
@@ -3304,65 +3397,64 @@ export class WorldScene extends Scene {
 			return true;
 		if (this.godMode) return false;
 
-		// ---- Legacy fallback for maps without loaded hit layer ----
-		// IMPORTANT: This must run FIRST because HitDetectionSystem.getHitLayerValueAtPixels()
-		// returns `true` (blocked) when utilityLayersLoaded is false, which would make this
-		// fallback unreachable if we checked the HitDetectionSystem first.
-		if (!this.hitDetectionSystem.utilityLayersLoaded) {
-			const gndTile = this.map.data.getTileIndex(
-				MapData.MAP_GROUND_LAYER,
-				tx,
-				ty,
-			);
-			const objTile = this.map.data.getTileIndex(
-				MapData.MAP_OBJECT_LAYER,
-				tx,
-				ty,
-			);
-			const hitTileResult = this.map.data.getTileIndex(
-				MapData.MAP_HIT_LAYER,
-				tx,
-				ty,
-			);
-			const extraTile = this.map.data.getTileIndex(
-				MapData.MAP_CAMERA_BOUNDS_LAYER,
-				tx,
-				ty,
-			);
+		const gndTile = this.map.data.getTileIndex(
+			MapData.MAP_GROUND_LAYER,
+			tx,
+			ty,
+		);
+		const objTile = this.map.data.getTileIndex(
+			MapData.MAP_OBJECT_LAYER,
+			tx,
+			ty,
+		);
+		const hitTileResult = this.map.data.getTileIndex(
+			MapData.MAP_HIT_LAYER,
+			tx,
+			ty,
+		);
+		const extraTile = this.map.data.getTileIndex(
+			MapData.MAP_CAMERA_BOUNDS_LAYER,
+			tx,
+			ty,
+		);
 
-			// 1. Explicit Hit Markers (highest priority)
-			if (hitTileResult !== 0) return true;
+		// 1. Explicit Hit Markers (highest priority)
+		if (hitTileResult !== 0) return true;
 
-			// 2. Extra Layer Override (1 = interior/walkable zone)
-			if (extraTile === 1) return false;
+		// 2. WALL on OBJECT layer blocks regardless of ground layer.
+		if (objTile === 839 || objTile === 8280) return true;
+		if (MapData.WALL_IDS.has(objTile)) return true;
 
-			// 3. WALL on OBJECT layer blocks regardless of ground layer.
-			// Must check BEFORE floor exception, because walls sit on top of
-			// floor tiles in the real tileset (e.g. wall object on floor ground).
-			if (objTile === 839 || objTile === 8280) return true;
-			if (MapData.WALL_IDS.has(objTile)) return true;
+		// 3. Wall on GROUND layer blocks
+		if (MapData.WALL_IDS.has(gndTile)) return true;
 
-			// 4. Floor Exception: known floor IDs are walkable.
-			// Only applies when there's no blocking wall on the object layer above.
-			if (MapData.FLOOR_IDS.has(gndTile)) {
-				return false;
+		// 4. Void check
+		if (gndTile === 0 && objTile === 0) return true;
+		if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
+
+		// 5. Doors (Passage Zone) - ignore door frame boundaries if player is approaching door
+		const isDoor = this.map.data.doorDataList.some(
+			(d) =>
+				tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height,
+		);
+		if (isDoor) return false;
+
+		// 6. Pixel-level hit detection and entity colliders
+		if (this.hitDetectionSystem.utilityLayersLoaded) {
+			const pixelX = tx * 16 + 8;
+			const pixelY = ty * 16 + 8;
+			const hitLayerBlocked = this.hitDetectionSystem.getHitLayerValueAtPixels(
+				pixelX,
+				pixelY,
+			);
+			const entityBlocked =
+				this.hitDetectionSystem.checkAgainstNonWalkableEntities(pixelX, pixelY);
+
+			if (hitLayerBlocked || entityBlocked) {
+				return true;
 			}
-
-			// 5. Wall on GROUND layer blocks (for tiles where wall IS the ground)
-			if (MapData.WALL_IDS.has(gndTile)) return true;
-
-			// 6. Void check
-			if (gndTile === 0 && objTile === 0) return true;
-			if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
-
-			// 7. Doors (Passage Zone)
-			const isDoor = this.map.data.doorDataList.some(
-				(d) =>
-					tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height,
-			);
-			if (isDoor) return false;
-
-			// 8. Entity collision (furniture bounding boxes) - legacy fallback
+		} else {
+			// Entity collision fallback (furniture bounding boxes)
 			const px = tx * WorldScene.TILE_PX;
 			const py = ty * WorldScene.TILE_PX;
 			for (const ec of this.entityColliders) {
@@ -3375,29 +3467,17 @@ export class WorldScene extends Scene {
 					return true;
 				}
 			}
+		}
+
+		// 7. Floor Exception: known floor IDs are walkable.
+		if (MapData.FLOOR_IDS.has(gndTile)) {
 			return false;
 		}
 
-		// ---- Pixel-level hit detection via Java-accurate HitDetectionSystem ----
-		// Convert tile center to pixel position (Java uses 16px/tile at 1X)
-		const pixelX = tx * 16 + 8;
-		const pixelY = ty * 16 + 8;
+		// 8. Extra Layer Override (1 = interior/walkable zone)
+		if (extraTile === 1) return false;
 
-		// 1. Hit layer check (Java: Map.getHitLayerValueAtXYPixels)
-		const hitLayerBlocked = this.hitDetectionSystem.getHitLayerValueAtPixels(
-			pixelX,
-			pixelY,
-		);
-
-		// 2. Non-walkable entity check (Java: checkXYAgainstNonWalkableEntities)
-		const entityBlocked =
-			this.hitDetectionSystem.checkAgainstNonWalkableEntities(pixelX, pixelY);
-
-		if (hitLayerBlocked || entityBlocked) {
-			return true; // blocked by hit layer or entity
-		}
-
-		return false; // walkable (hit layer says clear and no entity blocks)
+		return false;
 	}
 
 	/**
@@ -3487,11 +3567,15 @@ export class WorldScene extends Scene {
 
 		const warpAreas = getWarpAreasForMap(mapName);
 		for (const area of warpAreas) {
+			const ax = area.x * 2;
+			const ay = area.y * 2;
+			const aw = area.w * 2;
+			const ah = area.h * 2;
 			if (
-				px >= area.x &&
-				px < area.x + area.w &&
-				py >= area.y &&
-				py < area.y + area.h
+				px >= ax &&
+				px < ax + aw &&
+				py >= ay &&
+				py < ay + ah
 			) {
 				// Player is in the warp area - find the destination from door_graph
 				const graphDoors = getDoorGraphForMap(mapName);
@@ -3533,10 +3617,10 @@ export class WorldScene extends Scene {
 				}
 
 				if (matchingDoor) {
-					const destX = (matchingDoor.arrivalX ?? 1) * WorldScene.TILE_PX;
-					const destY = (matchingDoor.arrivalY ?? 1) * WorldScene.TILE_PX;
+					const destX = (matchingDoor.arrivalX ?? 8) * 2;
+					const destY = (matchingDoor.arrivalY ?? 8) * 2;
 					console.log(
-						`[WorldScene] Warp area "${area.areaName}" triggered -> ${matchingDoor.destMap}`,
+						`[WorldScene] Warp area "${area.areaName}" triggered -> ${matchingDoor.destMap} at px(${destX},${destY})`,
 					);
 					this.changeMap(matchingDoor.destMap, destX, destY);
 					return;
@@ -3572,11 +3656,15 @@ export class WorldScene extends Scene {
 
 			// Check if player overlaps the area
 			const NEAR = 24; // proximity range (3 tiles)
+			const ax = area.x * 2;
+			const ay = area.y * 2;
+			const aw = area.w * 2;
+			const ah = area.h * 2;
 			const nearArea =
-				px >= area.x - NEAR &&
-				px < area.x + area.w + NEAR &&
-				py >= area.y - NEAR &&
-				py < area.y + area.h + NEAR;
+				px >= ax - NEAR &&
+				px < ax + aw + NEAR &&
+				py >= ay - NEAR &&
+				py < ay + ah + NEAR;
 			if (nearArea) {
 				// Player is in the area - show hint
 				if (this.lastAreaTriggerKey !== area.key) {
@@ -3666,11 +3754,15 @@ export class WorldScene extends Scene {
 			const key = mapName + "." + area.areaName;
 			// Check if player overlaps the area
 			const NEAR = 16; // proximity range
+			const ax = area.x * 2;
+			const ay = area.y * 2;
+			const aw = area.w * 2;
+			const ah = area.h * 2;
 			if (
-				px >= area.x - NEAR &&
-				px < area.x + area.w + NEAR &&
-				py >= area.y - NEAR &&
-				py < area.y + area.h + NEAR
+				px >= ax - NEAR &&
+				px < ax + aw + NEAR &&
+				py >= ay - NEAR &&
+				py < ay + ah + NEAR
 			) {
 				// Show hint
 				if (this.lastDoorAreaKey !== key) {

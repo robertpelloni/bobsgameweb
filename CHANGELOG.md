@@ -1,3 +1,11 @@
+## v3.0.28 — 2026-06-25
+
+### Fixed
+- **Door Transition Coordinates**: Divided the raw pixel coordinates from `door_graph.json` by 8 when parsing in `LegacyMapLoader.ts` to correctly convert them to tile coordinates.
+- **Coordinate Scaling Factor Discrepancy**: Multiplied coordinate bounds by 2 in `checkWarpAreas()`, `checkAreaTriggers()`, `checkDoorAreas()`, and `createNPCs()` inside `WorldScene.ts` to properly match the game's 2X pixel rendering scale.
+- **Door Sprite and Texture Mismatch**: Resolved compiler errors regarding PixiJS `Texture | FrameObject` union when retrieving door dimensions.
+- **Warp Transition Multiplier**: Fixed transition destination coordinates by multiplying raw door graph pixel values by 2 instead of `WorldScene.TILE_PX` to prevent teleports landing inside walls.
+
 ## v3.0.27 — 2026-06-24
 
 ### Added

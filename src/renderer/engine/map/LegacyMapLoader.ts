@@ -24,6 +24,7 @@ export interface RealMapJSON {
 	height: number;
 	isOutside: boolean;
 	layers: Record<string, number[] | SparseLayer>;
+	doorDataList?: any[];
 }
 
 /** Sparse layer format: only non-zero entries */
@@ -207,24 +208,45 @@ export class LegacyMapLoader {
 			}
 		}
 
-		// Load doors from the comprehensive door graph (door_graph.json)
-		const graphDoors = getDoorGraphForMap(legacy.name);
-		if (graphDoors.length > 0) {
-			for (const gd of graphDoors) {
-				if (!gd.destMap) continue;
-				const dd = new DoorData(-1, gd.name);
-				dd.x = gd.x ?? 0;
-				dd.y = gd.y ?? 0;
-				dd.destinationMapName = gd.destMap;
-				dd.destinationX = gd.arrivalX ?? 1;
-				dd.destinationY = gd.arrivalY ?? 1;
-				dd.width = 1;
-				dd.height = 1;
+		// Try to load doors from the map JSON's own doorDataList (most accurate)
+		if (legacy.doorDataList && legacy.doorDataList.length > 0) {
+			for (const ld of legacy.doorDataList) {
+				const dd = new DoorData(ld.id ?? -1, ld.name);
+				dd.x = ld.x ?? 0;
+				dd.y = ld.y ?? 0;
+				dd.destinationMapName = ld.destinationMapName ?? "";
+				dd.destinationX = ld.destinationX ?? 1;
+				dd.destinationY = ld.destinationY ?? 1;
+				dd.width = ld.width ?? 1;
+				dd.height = ld.height ?? 1;
 				mapData.doorDataList.push(dd);
 			}
+			console.log(
+				`[LegacyMapLoader] Loaded ${mapData.doorDataList.length} doors from legacy JSON doorDataList for ${legacy.name}`,
+			);
+		} else {
+			// Fallback: load doors from the comprehensive door graph (door_graph.json)
+			const graphDoors = getDoorGraphForMap(legacy.name);
+			if (graphDoors.length > 0) {
+				for (const gd of graphDoors) {
+					if (!gd.destMap) continue;
+					const dd = new DoorData(-1, gd.name);
+					dd.x = Math.round((gd.x ?? 0) / 8);
+					dd.y = Math.round((gd.y ?? 0) / 8);
+					dd.destinationMapName = gd.destMap;
+					dd.destinationX = Math.round((gd.arrivalX ?? 8) / 8);
+					dd.destinationY = Math.round((gd.arrivalY ?? 8) / 8);
+					dd.width = 1;
+					dd.height = 1;
+					mapData.doorDataList.push(dd);
+				}
+				console.log(
+					`[LegacyMapLoader] Loaded ${mapData.doorDataList.length} doors from door_graph.json fallback for ${legacy.name}`,
+				);
+				// Scan objects layer for door tiles and refine positions
+				LegacyMapLoader.scanForDoors(mapData, legacy);
+			}
 		}
-		// Scan objects layer for door tiles and refine positions
-		LegacyMapLoader.scanForDoors(mapData, legacy);
 
 		const cx = Math.floor(w / 2);
 		const cy = Math.floor(h / 2);
@@ -408,12 +430,28 @@ export class LegacyMapLoader {
 			const gx = door.x ?? 0;
 			const gy = door.y ?? 0;
 
-			// If the door is already on a walkable tile (obj=0), don't snap it.
-			// The door_graph coordinates are already correct.
-			const currentObj = dense[gy * w + gx];
-			if (currentObj === 0) {
+			// If the door is already on or adjacent to a door frame tile, don't snap it.
+			const isNearFrame = [
+				[0, 0],
+				[0, 1],
+				[0, -1],
+				[1, 0],
+				[-1, 0],
+			].some(([ox, oy]) => {
+				const tx = gx + ox;
+				const ty = gy + oy;
+				if (tx < 0 || tx >= w || ty < 0 || ty >= h) return false;
+				const tile = dense[ty * w + tx];
+				return (
+					LegacyMapLoader.DOOR_TILE_IDS.has(tile) ||
+					tile === 832 ||
+					tile === 1132
+				);
+			});
+
+			if (isNearFrame) {
 				console.log(
-					`[LegacyMapLoader] Door "${door.name}" already on walkable tile (${gx},${gy}), keeping`,
+					`[LegacyMapLoader] Door "${door.name}" already near door frame at (${gx},${gy}), keeping`,
 				);
 				continue;
 			}
@@ -438,9 +476,9 @@ export class LegacyMapLoader {
 				}
 			}
 
-			// Allow larger snap distance (20 tiles) since door graph coords
+			// Allow larger snap distance (40 tiles) since door graph coords
 			// can be far from the actual door on the map
-			if (bestIdx >= 0 && bestDist <= 20) {
+			if (bestIdx >= 0 && bestDist <= 40) {
 				console.log(
 					`[LegacyMapLoader] Snapping door "${door.name}" from (${gx},${gy}) to ${allPositions[bestIdx].priority === 0 ? "frame" : "gap"} at (${allPositions[bestIdx].x},${allPositions[bestIdx].y}) dist=${bestDist}`,
 				);
