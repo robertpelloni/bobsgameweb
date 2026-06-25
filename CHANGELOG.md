@@ -1,5 +1,10 @@
-## v3.0.31 — 2026-06-25
+## v3.0.32 — 2026-06-25
 
+### Fixed
+- **Deactivated Shadow Layer Collisions**: Removed collision blocking, NPC path adjustment, and player arrival checks from `MapData.MAP_CAMERA_BOUNDS_LAYER` (loaded from `hitBounds` shadow layer) and fully redirected those checks to the correct `MapData.MAP_HIT_LAYER`.
+- **Walkway Entity Clearance**: Adjusted the door area initialization to also clear the `MAP_HIT_LAYER` at the doorway so the player is not blocked by wall collisions when transitioning.
+
+## v3.0.31 — 2026-06-25
 ### Fixed
 - **Collision Hit Layer Swap**: Swapped `hitBounds` and `extra` layers in `LegacyMapLoader.ts`. The `extra` layer (index 11) contains actual binary hit markers, while `hitBounds` (index 9) contains decorative/shadow tiles. This corrects the player collision system and debug hit tile overlay to align perfectly with physical wall boundaries rather than shadows.
 

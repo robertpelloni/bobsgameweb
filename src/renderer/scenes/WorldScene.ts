@@ -884,6 +884,12 @@ export class WorldScene extends Scene {
 								clearY,
 								1,
 							);
+							this.map.data.setTileIndex(
+								MapData.MAP_HIT_LAYER,
+								clearX,
+								clearY,
+								0,
+							);
 						}
 					}
 				}
@@ -948,12 +954,12 @@ export class WorldScene extends Scene {
 			if (this.map) {
 				const tileX = Math.floor(npcX / WorldScene.TILE_PX);
 				const tileY = Math.floor(npcY / WorldScene.TILE_PX);
-				const extraVal = this.map.data.getTileIndex(
-					MapData.MAP_CAMERA_BOUNDS_LAYER,
+				const hitVal = this.map.data.getTileIndex(
+					MapData.MAP_HIT_LAYER,
 					tileX,
 					tileY,
 				);
-				if (extraVal === 0) {
+				if (hitVal !== 0) {
 					const W = this.map.data.widthTiles1X;
 					const H = this.map.data.heightTiles1X;
 					for (let r = 1; r < 15; r++) {
@@ -964,11 +970,11 @@ export class WorldScene extends Scene {
 								const ty = tileY + dy;
 								if (tx >= 0 && tx < W && ty >= 0 && ty < H) {
 									const val = this.map.data.getTileIndex(
-										MapData.MAP_CAMERA_BOUNDS_LAYER,
+										MapData.MAP_HIT_LAYER,
 										tx,
 										ty,
 									);
-									if (val !== 0) {
+									if (val === 0) {
 										npcX = tx * WorldScene.TILE_PX;
 										npcY = ty * WorldScene.TILE_PX;
 										found = true;
@@ -1217,12 +1223,12 @@ export class WorldScene extends Scene {
 				if (reverseDoor) {
 					let targetTileX = reverseDoor.x;
 					let targetTileY = reverseDoor.y + 1;
-					const extra = this.map.data.getTileIndex(
-						MapData.MAP_CAMERA_BOUNDS_LAYER,
+					const hitVal = this.map.data.getTileIndex(
+						MapData.MAP_HIT_LAYER,
 						targetTileX,
 						targetTileY,
 					);
-					if (extra === 0) {
+					if (hitVal !== 0) {
 						targetTileY = reverseDoor.y;
 					}
 					arrX = targetTileX * WorldScene.TILE_PX;
@@ -1235,12 +1241,12 @@ export class WorldScene extends Scene {
 
 			const arrTX = Math.floor(arrX / WorldScene.TILE_PX);
 			const arrTY = Math.floor(arrY / WorldScene.TILE_PX);
-			const arrExtra = this.map.data.getTileIndex(
-				MapData.MAP_CAMERA_BOUNDS_LAYER,
+			const arrHit = this.map.data.getTileIndex(
+				MapData.MAP_HIT_LAYER,
 				arrTX,
 				arrTY,
 			);
-			if (arrExtra === 0) {
+			if (arrHit !== 0) {
 				// Arrival position is on void/wall - find nearest walkable tile
 				console.log(
 					`[WorldScene] Arrival (${arrTX},${arrTY}) is on void, searching for walkable tile...`,
@@ -1255,11 +1261,11 @@ export class WorldScene extends Scene {
 							const ty = arrTY + dy;
 							if (tx >= 0 && tx < W && ty >= 0 && ty < H) {
 								const e = this.map.data.getTileIndex(
-									MapData.MAP_CAMERA_BOUNDS_LAYER,
+									MapData.MAP_HIT_LAYER,
 									tx,
 									ty,
 								);
-								if (e !== 0) {
+								if (e === 0) {
 									arrX = tx * WorldScene.TILE_PX;
 									arrY = ty * WorldScene.TILE_PX;
 									found = true;
@@ -1743,13 +1749,13 @@ export class WorldScene extends Scene {
 					x,
 					y,
 				);
-				const extra = this.map.data.getTileIndex(
-					MapData.MAP_CAMERA_BOUNDS_LAYER,
+				const hit = this.map.data.getTileIndex(
+					MapData.MAP_HIT_LAYER,
 					x,
 					y,
 				);
 				const obj = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, x, y);
-				if (extra === 0) {
+				if (hit !== 0) {
 					this.minimapGraphics.rect(x * scale, y * scale, scale, scale);
 					this.minimapGraphics.fill(0x222233); // void/exterior
 				} else if (obj === 839) {
@@ -3471,11 +3477,6 @@ export class WorldScene extends Scene {
 			tx,
 			ty,
 		);
-		const extraTile = this.map.data.getTileIndex(
-			MapData.MAP_CAMERA_BOUNDS_LAYER,
-			tx,
-			ty,
-		);
 
 		// 1. Explicit Hit Markers (highest priority)
 		if (hitTileResult !== 0) return true;
@@ -3489,7 +3490,6 @@ export class WorldScene extends Scene {
 
 		// 4. Void check
 		if (gndTile === 0 && objTile === 0) return true;
-		if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
 
 		// 5. Doors (Passage Zone) - ignore door frame boundaries if player is approaching door
 		const isDoor = this.map.data.doorDataList.some(
@@ -3534,6 +3534,11 @@ export class WorldScene extends Scene {
 		}
 
 		// 8. Extra Layer Override (1 = interior/walkable zone)
+		const extraTile = this.map.data.getTileIndex(
+			MapData.MAP_CAMERA_BOUNDS_LAYER,
+			tx,
+			ty,
+		);
 		if (extraTile === 1) return false;
 
 		return false;
