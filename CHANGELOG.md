@@ -1,3 +1,12 @@
+## v3.0.33 — 2026-06-25
+
+### Fixed
+- **Corrected Collision Logic**: Inverted hit check logic so that `0` in the walkability map/extra layer is treated as blocked/wall, and `1` (or non-zero) is treated as walkable. This fixes the issue where walkable floor areas were marked as blocked with red Xs.
+- **Door Mapping and Snapping**:
+  - Prioritized `door_graph.json` over the map JSON's local `doorDataList` to ensure accurate global door coordinate loading (fixing Yuu's room door coordinate loading).
+  - Reduced door snapping distance threshold from `40` to `5` tiles in `scanForDoors`, preventing main entrance doors from snapping to closets on the other side of the room.
+- **Door Rendering**: Because Yuu's room door is now correctly positioned at `(19, 20)` instead of `(2, 9)`, the fallback door graphic is no longer hidden behind wall graphics (above layer) and renders correctly.
+
 ## v3.0.32 — 2026-06-25
 
 ### Fixed

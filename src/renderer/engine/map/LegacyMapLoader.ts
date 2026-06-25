@@ -208,8 +208,28 @@ export class LegacyMapLoader {
 			}
 		}
 
-		// Try to load doors from the map JSON's own doorDataList (most accurate)
-		if (legacy.doorDataList && legacy.doorDataList.length > 0) {
+		// Try to load doors from the comprehensive door graph (door_graph.json) first
+		const graphDoors = getDoorGraphForMap(legacy.name);
+		if (graphDoors.length > 0) {
+			for (const gd of graphDoors) {
+				if (!gd.destMap) continue;
+				const dd = new DoorData(-1, gd.name);
+				dd.x = gd.x ?? 0;
+				dd.y = gd.y ?? 0;
+				dd.destinationMapName = gd.destMap;
+				dd.destinationX = gd.arrivalX ?? 1;
+				dd.destinationY = gd.arrivalY ?? 1;
+				dd.width = 1;
+				dd.height = 1;
+				mapData.doorDataList.push(dd);
+			}
+			console.log(
+				`[LegacyMapLoader] Loaded ${mapData.doorDataList.length} doors from door_graph.json for ${legacy.name}`,
+			);
+			// Scan objects layer for door tiles and refine positions
+			LegacyMapLoader.scanForDoors(mapData, legacy);
+		} else if (legacy.doorDataList && legacy.doorDataList.length > 0) {
+			// Fallback: load doors from the map JSON's own doorDataList (placeholder/legacy data)
 			for (const ld of legacy.doorDataList) {
 				const dd = new DoorData(ld.id ?? -1, ld.name);
 				dd.x = ld.x ?? 0;
@@ -222,30 +242,8 @@ export class LegacyMapLoader {
 				mapData.doorDataList.push(dd);
 			}
 			console.log(
-				`[LegacyMapLoader] Loaded ${mapData.doorDataList.length} doors from legacy JSON doorDataList for ${legacy.name}`,
+				`[LegacyMapLoader] Loaded ${mapData.doorDataList.length} doors from legacy JSON doorDataList fallback for ${legacy.name}`,
 			);
-		} else {
-			// Fallback: load doors from the comprehensive door graph (door_graph.json)
-			const graphDoors = getDoorGraphForMap(legacy.name);
-			if (graphDoors.length > 0) {
-				for (const gd of graphDoors) {
-					if (!gd.destMap) continue;
-					const dd = new DoorData(-1, gd.name);
-					dd.x = gd.x ?? 0;
-					dd.y = gd.y ?? 0;
-					dd.destinationMapName = gd.destMap;
-					dd.destinationX = gd.arrivalX ?? 1;
-					dd.destinationY = gd.arrivalY ?? 1;
-					dd.width = 1;
-					dd.height = 1;
-					mapData.doorDataList.push(dd);
-				}
-				console.log(
-					`[LegacyMapLoader] Loaded ${mapData.doorDataList.length} doors from door_graph.json fallback for ${legacy.name}`,
-				);
-				// Scan objects layer for door tiles and refine positions
-				LegacyMapLoader.scanForDoors(mapData, legacy);
-			}
 		}
 
 		const cx = Math.floor(w / 2);
@@ -476,9 +474,9 @@ export class LegacyMapLoader {
 				}
 			}
 
-			// Allow larger snap distance (40 tiles) since door graph coords
-			// can be far from the actual door on the map
-			if (bestIdx >= 0 && bestDist <= 40) {
+			// Allow smaller snap distance (5 tiles) to prevent doors from snapping
+			// across the room to completely incorrect frames/closets.
+			if (bestIdx >= 0 && bestDist <= 5) {
 				console.log(
 					`[LegacyMapLoader] Snapping door "${door.name}" from (${gx},${gy}) to ${allPositions[bestIdx].priority === 0 ? "frame" : "gap"} at (${allPositions[bestIdx].x},${allPositions[bestIdx].y}) dist=${bestDist}`,
 				);
@@ -487,7 +485,7 @@ export class LegacyMapLoader {
 				assigned.add(bestIdx);
 			} else {
 				console.log(
-					`[LegacyMapLoader] Door "${door.name}" at (${gx},${gy}) dist to nearest: ${bestDist}`,
+					`[LegacyMapLoader] Door "${door.name}" at (${gx},${gy}) dist to nearest: ${bestDist} (exceeds snap threshold, keeping original)`,
 				);
 			}
 		}

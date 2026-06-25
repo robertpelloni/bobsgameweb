@@ -3224,7 +3224,7 @@ export class WorldScene extends Scene {
 								x,
 								y,
 							);
-							if (tileId === 0) continue;
+							if (tileId === 1) continue;
 							const g = new Graphics();
 							g.rect(x * 8, y * 8, 8, 8);
 							g.fill(0xff0000);
@@ -3479,7 +3479,7 @@ export class WorldScene extends Scene {
 		);
 
 		// 1. Explicit Hit Markers (highest priority)
-		if (hitTileResult !== 0) return true;
+		if (hitTileResult === 0) return true;
 
 		// 2. WALL on OBJECT layer blocks regardless of ground layer.
 		if (objTile === 839 || objTile === 8280) return true;
