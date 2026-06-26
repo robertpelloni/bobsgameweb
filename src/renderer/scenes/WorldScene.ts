@@ -3206,24 +3206,26 @@ export class WorldScene extends Scene {
 			);
 		}
 
-		// 1. Explicit Hit Markers (Highest Priority)
+		// 1. Wall Checks (Highest Priority)
+		if (MapData.WALL_IDS.has(objTile)) return true;
+		if (MapData.WALL_IDS.has(gndTile)) return true;
+
+		// 2. Explicit Hit Markers
 		if (hitTile !== 0) return true;
 
-		// 2. Extra Layer Override (Original game walkable zone)
+		// 3. Extra Layer Override (Original game walkable zone)
 		// 1 = interior/walkable, 0 = void/blocked
 		if (extraTile === 1) return false;
 
-		// 3. Floor Exception: 839 on a floor tile is a SHADOW, not a wall.
+		// 4. Floor Exception: 839 on a floor tile is a SHADOW, not a wall.
 		// Shadows overlay furniture/floor areas and should be walkable.
 		if (MapData.FLOOR_IDS.has(gndTile)) {
 			console.log(`[COLLISION] (${tx},${ty}) FLOOR CHECK PASSED - walkable`);
 			return false;
 		}
 
-		// 4. Strict Wall ID Blocking (non-floor ground with wall object)
+		// 5. Strict Wall ID Blocking (non-floor ground with wall object)
 		if (objTile === 839 || objTile === 8280) return true;
-		if (MapData.WALL_IDS.has(objTile)) return true;
-		if (MapData.WALL_IDS.has(gndTile)) return true;
 
 		// 5. Void check (if not a floor and no extra marker, empty is blocked)
 		if (gndTile === 0 && objTile === 0) return true;
