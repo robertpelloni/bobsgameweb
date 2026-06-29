@@ -1,3 +1,16 @@
+# CHANGELOG
+
+## v3.0.11 (2026-06-28)
+### Added
+- "Blah" dialogue system
+- 8-directional movement support and animations for Yuu
+- HQ2X sprite scaling toggle
+- WebGPU PoC with compute-shader particles
+- FFT visualizer integration to AudioManager and WebGPU
+
+### Fixed
+- Collision parity: Wall checks strictly override floor markers
+- CustomGameEditor PIXIText parameter bugs
 ## v3.0.9 — 2026-05-28
 
 ### Added

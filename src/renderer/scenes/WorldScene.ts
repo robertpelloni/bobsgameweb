@@ -3206,16 +3206,16 @@ export class WorldScene extends Scene {
 			);
 		}
 
-		// 1. Wall Checks (Highest Priority)
-		if (MapData.WALL_IDS.has(objTile)) return true;
-		if (MapData.WALL_IDS.has(gndTile)) return true;
-
-		// 2. Explicit Hit Markers
+		// 1. Explicit Hit Markers (Original Engine Priority)
 		if (hitTile !== 0) return true;
 
-		// 3. Extra Layer Override (Original game walkable zone)
+		// 2. Extra Layer Override (Original game walkable zone)
 		// 1 = interior/walkable, 0 = void/blocked
 		if (extraTile === 1) return false;
+
+		// 3. Wall Checks
+		if (MapData.WALL_IDS.has(objTile)) return true;
+		if (MapData.WALL_IDS.has(gndTile)) return true;
 
 		// 4. Floor Exception: 839 on a floor tile is a SHADOW, not a wall.
 		// Shadows overlay furniture/floor areas and should be walkable.
