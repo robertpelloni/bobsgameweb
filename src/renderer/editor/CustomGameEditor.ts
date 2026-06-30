@@ -1,5 +1,5 @@
+import { Texture, Sprite } from "pixi.js";
 import { Dropdown } from '../ui/Dropdown';
-import { Texture, Sprite } from 'pixi.js';
 import { Checkbox } from '../ui/Checkbox';
 import { GameType, BlockType, PieceType, GamePlayMode, networkManager } from '../puzzle';
 import { TurnFromBlockTypeToType } from '../../shared/puzzle/BlockType';
@@ -9,6 +9,7 @@ import { BobNet } from '../puzzle/BobNet';
 import { AchievementManager } from '../data/AchievementManager';
 import { getAchievementIdentity } from '../data/AchievementIdentity';
 import { ToastManager } from '../ui/ToastManager';
+import { Tooltip } from '../ui/Tooltip';
 
 type RecentGameHistoryEntry = {
   source: 'import' | 'share';
@@ -53,6 +54,7 @@ import { Panel } from "../ui/Panel";
 
 export class CustomGameEditor {
   public pixiContainer: Container = new Container();
+  private tooltip!: Tooltip;
 
   private container: HTMLElement;
   private currentGameType: GameType;
@@ -140,10 +142,14 @@ export class CustomGameEditor {
 
     const namePanel = new Panel({ width: 350, height: 80, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
     namePanel.setPosition(20, 380);
-    const nameLabel = new PIXIText({ text: "Game Name", style: { fill: 0xcccccc, fontSize: 16 } });
+    const nameLabel = new PIXIText("Game Name", { fill: 0xcccccc, fontSize: 16 });
     nameLabel.position.set(10, 10);
     namePanel.addChild(nameLabel);
+    this.tooltip = new Tooltip(window.innerWidth, window.innerHeight);
+    this.pixiContainer.addChild(this.tooltip.getContainer());
+
     this.pixiNameInput = new TextInput("Enter Game Name", { width: 330, height: 30 });
+    this.addTooltip(this.pixiNameInput, "Name your custom puzzle game. This name is visible when sharing your game.");
     this.pixiNameInput.setPosition(10, 35);
     this.pixiNameInput.on("change", (val: string) => {
       this.nameInput.value = val;
@@ -157,12 +163,13 @@ export class CustomGameEditor {
     actionPanel.setPosition(20, 20);
 
     const saveBtn = new Button("Save to Slot 1", { width: 140, height: 30 });
+    this.addTooltip(saveBtn, "Save your custom ruleset to Browser Storage Slot 1.");
     saveBtn.on("click", () => this.savePresetSlot(1));
     saveBtn.setPosition(10, 10);
     actionPanel.addChild(saveBtn.container);
 
 
-    const infoLabel = new PIXIText({ text: "Porting UI to Native Pixi", style: { fill: 0xffffff, fontSize: 16 } });
+    const infoLabel = new PIXIText("Porting UI to Native Pixi", { fill: 0xffffff, fontSize: 16 });
     infoLabel.position.set(10, 85);
     actionPanel.addChild(infoLabel);
 
@@ -170,30 +177,34 @@ export class CustomGameEditor {
     const aiPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x220022, backgroundAlpha: 0.9, borderColor: 0xff00ff });
     aiPanel.setPosition(20, 140);
 
-    const aiTitle = new PIXIText({ text: "Generative AI Tools", style: { fill: 0xff88ff, fontSize: 18, fontWeight: "bold" } });
+    const aiTitle = new PIXIText("Generative AI Tools", { fill: 0xff88ff, fontSize: 18, fontWeight: "bold" });
     aiTitle.position.set(10, 10);
     aiPanel.addChild(aiTitle);
 
     const txt2SpriteBtn = new Button("Text-to-Sprite", { width: 150, height: 30, backgroundColor: 0x440044 });
+    this.addTooltip(txt2SpriteBtn, "Generate a sprite from a text description using AI.");
     txt2SpriteBtn.on("click", () => GenerativeAIManager.generateSpriteFromText("blue hero character walking"));
     txt2SpriteBtn.setPosition(10, 45);
     aiPanel.addChild(txt2SpriteBtn.container);
 
     const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+    this.addTooltip(txt2TileBtn, "Generate a tile map from a text description using AI.");
     txt2TileBtn.on("click", () => GenerativeAIManager.generateTilesetFromText("16x16 dungeon stone floor"));
 
     const palettePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x002222, backgroundAlpha: 0.9, borderColor: 0x00ffff });
     palettePanel.setPosition(20, 260);
 
-    const paletteTitle = new PIXIText({ text: "Color Palette", style: { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" } });
+    const paletteTitle = new PIXIText("Color Palette", { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" });
     paletteTitle.position.set(10, 10);
     palettePanel.addChild(paletteTitle);
 
     const addColorBtn = new Button("Add Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    this.addTooltip(addColorBtn, "Add a new block color to your palette.");
     addColorBtn.setPosition(10, 45);
     palettePanel.addChild(addColorBtn.container);
 
     const rmColorBtn = new Button("Remove Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    this.addTooltip(rmColorBtn, "Remove the last block color from your palette.");
     rmColorBtn.setPosition(170, 45);
     palettePanel.addChild(rmColorBtn.container);
 
@@ -203,36 +214,42 @@ export class CustomGameEditor {
     const presetPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000022, backgroundAlpha: 0.9, borderColor: 0x0000ff });
     presetPanel.setPosition(380, 20);
 
-    const presetTitle = new PIXIText({ text: "Preset Families", style: { fill: 0x8888ff, fontSize: 18, fontWeight: "bold" } });
+    const presetTitle = new PIXIText("Preset Families", { fill: 0x8888ff, fontSize: 18, fontWeight: "bold" });
     presetTitle.position.set(10, 10);
     presetPanel.addChild(presetTitle);
 
     const preset1 = new Button("Classic Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset1, "Load the Classic Drop ruleset (Standard 10x20 grid, 7 tetrominoes).");
     preset1.on("click", () => this.applyPreset("classic"));
     preset1.setPosition(10, 45);
     presetPanel.addChild(preset1.container);
 
     const preset2 = new Button("Sprint Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset2, "Load the Sprint Drop ruleset (Fast gravity, no lock delay).");
     preset2.on("click", () => this.applyPreset("sprint"));
     preset2.setPosition(120, 45);
     presetPanel.addChild(preset2.container);
 
     const preset3 = new Button("Cascade", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset3, "Load the Cascade ruleset (Blocks fall apart when lines clear).");
     preset3.on("click", () => this.applyPreset("cascade"));
     preset3.setPosition(230, 45);
     presetPanel.addChild(preset3.container);
 
     const preset4 = new Button("Zen Garden", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset4, "Load the Zen Garden ruleset (Relaxing gameplay, slow gravity).");
     preset4.on("click", () => this.applyPreset("zen"));
     preset4.setPosition(10, 80);
     presetPanel.addChild(preset4.container);
 
     const preset5 = new Button("Stack", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset5, "Load the Stack ruleset (Build as high as you can).");
     preset5.on("click", () => this.applyPreset("stack"));
     preset5.setPosition(120, 80);
     presetPanel.addChild(preset5.container);
 
     const preset6 = new Button("Micro", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset6, "Load the Micro ruleset (Tiny grid, tiny pieces).");
     preset6.on("click", () => this.applyPreset("micro"));
     preset6.setPosition(230, 80);
     presetPanel.addChild(preset6.container);
@@ -242,15 +259,17 @@ export class CustomGameEditor {
     const timelinePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x222200, backgroundAlpha: 0.9, borderColor: 0xffff00 });
     timelinePanel.setPosition(380, 260);
 
-    const timelineTitle = new PIXIText({ text: "Animation Timeline", style: { fill: 0xffff88, fontSize: 18, fontWeight: "bold" } });
+    const timelineTitle = new PIXIText("Animation Timeline", { fill: 0xffff88, fontSize: 18, fontWeight: "bold" });
     timelineTitle.position.set(10, 10);
     timelinePanel.addChild(timelineTitle);
 
     const playBtn = new Button("Play", { width: 100, height: 30, backgroundColor: 0x444400 });
+    this.addTooltip(playBtn, "Play animation timeline.");
     playBtn.setPosition(10, 45);
     timelinePanel.addChild(playBtn.container);
 
     const stopBtn = new Button("Stop", { width: 100, height: 30, backgroundColor: 0x444400 });
+    this.addTooltip(stopBtn, "Stop animation timeline.");
     stopBtn.setPosition(120, 45);
     timelinePanel.addChild(stopBtn.container);
 
@@ -264,11 +283,11 @@ export class CustomGameEditor {
 
     const externalToolsPanel = new Panel({ width: 350, height: 180, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
     externalToolsPanel.setPosition(740, 340);
-    const extToolsLabel = new PIXIText({ text: "External Pixel Tools", style: { fill: 0xffffff, fontSize: 16, fontWeight: "bold" } });
+    const extToolsLabel = new PIXIText("External Pixel Tools", { fill: 0xffffff, fontSize: 16, fontWeight: "bold" });
     extToolsLabel.position.set(10, 10);
     externalToolsPanel.addChild(extToolsLabel);
 
-    const aseLabel = new PIXIText({ text: "Aseprite Path", style: { fill: 0xcccccc, fontSize: 12 } });
+    const aseLabel = new PIXIText("Aseprite Path", { fill: 0xcccccc, fontSize: 12 });
     aseLabel.position.set(10, 35);
     externalToolsPanel.addChild(aseLabel);
     this.asepritePathInput = new TextInput(localStorage.getItem('aseprite-path') || "C:\\Program Files\\Aseprite\\aseprite.exe", { width: 330, height: 25 });
@@ -288,7 +307,7 @@ export class CustomGameEditor {
     });
     externalToolsPanel.addChild(asepriteBtn.container);
 
-    const tileLabel = new PIXIText({ text: "Tilemap Studio Path", style: { fill: 0xcccccc, fontSize: 12 } });
+    const tileLabel = new PIXIText("Tilemap Studio Path", { fill: 0xcccccc, fontSize: 12 });
     tileLabel.position.set(10, 115);
     externalToolsPanel.addChild(tileLabel);
     this.tilemapPathInput = new TextInput(localStorage.getItem('tilemap-studio-path') || "C:\\Tools\\TilemapStudio.exe", { width: 330, height: 25 });
@@ -312,23 +331,28 @@ export class CustomGameEditor {
 
 
     const saveBtn2 = new Button("Save 2", { width: 70, height: 30 });
+    this.addTooltip(saveBtn2, "Save your custom ruleset to Browser Storage Slot 2.");
     saveBtn2.on("click", () => this.savePresetSlot(2));
     saveBtn2.setPosition(10, 45);
     actionPanel.addChild(saveBtn2.container);
     const loadBtn2 = new Button("Load 2", { width: 70, height: 30 });
+    this.addTooltip(loadBtn2, "Load custom ruleset from Browser Storage Slot 2.");
     loadBtn2.on("click", () => this.loadPresetSlot(2));
     loadBtn2.setPosition(85, 45);
     actionPanel.addChild(loadBtn2.container);
     const saveBtn3 = new Button("Save 3", { width: 70, height: 30 });
+    this.addTooltip(saveBtn3, "Save your custom ruleset to Browser Storage Slot 3.");
     saveBtn3.on("click", () => this.savePresetSlot(3));
     saveBtn3.setPosition(160, 45);
     actionPanel.addChild(saveBtn3.container);
     const loadBtn3 = new Button("Load 3", { width: 70, height: 30 });
+    this.addTooltip(loadBtn3, "Load custom ruleset from Browser Storage Slot 3.");
     loadBtn3.on("click", () => this.loadPresetSlot(3));
     loadBtn3.setPosition(235, 45);
     actionPanel.addChild(loadBtn3.container);
 
     const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
+    this.addTooltip(loadBtn, "Load custom ruleset from Browser Storage Slot 1.");
     loadBtn.on("click", () => this.loadPresetSlot(1));
     loadBtn.setPosition(160, 10);
     actionPanel.addChild(loadBtn.container);
@@ -339,7 +363,7 @@ export class CustomGameEditor {
     const libPanel = new Panel({ width: 710, height: 120, backgroundColor: 0x000000, backgroundAlpha: 0.9, borderColor: 0x555555 });
     libPanel.setPosition(20, 500);
 
-    const libTitle = new PIXIText({ text: "Unified Template Library Search", style: { fill: 0xffffff, fontSize: 18, fontWeight: "bold" } });
+    const libTitle = new PIXIText("Unified Template Library Search", { fill: 0xffffff, fontSize: 18, fontWeight: "bold" });
     libTitle.position.set(10, 10);
     libPanel.addChild(libTitle);
 
@@ -373,14 +397,14 @@ export class CustomGameEditor {
     const settingsPanel = new Panel({ width: 350, height: 350, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
     settingsPanel.setPosition(20, 640);
 
-    const settingsTitle = new PIXIText({ text: "Game Settings", style: { fill: 0xffffff, fontSize: 18, fontWeight: "bold" } });
+    const settingsTitle = new PIXIText("Game Settings", { fill: 0xffffff, fontSize: 18, fontWeight: "bold" });
     settingsTitle.position.set(10, 10);
     settingsPanel.addChild(settingsTitle);
 
     // We will use TextInput for now even for numbers and selects, simulating the fields.
     // In a full PIXI UI system, we would create a Dropdown and NumberInput component.
 
-    const modeLabel = new PIXIText({ text: "Game Mode", style: { fill: 0xcccccc, fontSize: 14 } });
+    const modeLabel = new PIXIText("Game Mode", { fill: 0xcccccc, fontSize: 14 });
     modeLabel.position.set(10, 45);
     settingsPanel.addChild(modeLabel);
     const modeInput = new Dropdown([
@@ -396,7 +420,7 @@ export class CustomGameEditor {
     modeInput.setPosition(10, 65);
     settingsPanel.addChild(modeInput.container);
 
-    const widthLabel = new PIXIText({ text: "Grid Width", style: { fill: 0xcccccc, fontSize: 14 } });
+    const widthLabel = new PIXIText("Grid Width", { fill: 0xcccccc, fontSize: 14 });
     widthLabel.position.set(10, 105);
     settingsPanel.addChild(widthLabel);
     const widthInput = new TextInput("10", { width: 160, height: 30 });
@@ -408,7 +432,7 @@ export class CustomGameEditor {
     widthInput.setPosition(10, 125);
     settingsPanel.addChild(widthInput.container);
 
-    const heightLabel = new PIXIText({ text: "Grid Height", style: { fill: 0xcccccc, fontSize: 14 } });
+    const heightLabel = new PIXIText("Grid Height", { fill: 0xcccccc, fontSize: 14 });
     heightLabel.position.set(180, 105);
     settingsPanel.addChild(heightLabel);
     const heightInput = new TextInput("20", { width: 160, height: 30 });
@@ -420,7 +444,7 @@ export class CustomGameEditor {
     heightInput.setPosition(180, 125);
     settingsPanel.addChild(heightInput.container);
 
-    const gravityLabel = new PIXIText({ text: "Gravity Base", style: { fill: 0xcccccc, fontSize: 14 } });
+    const gravityLabel = new PIXIText("Gravity Base", { fill: 0xcccccc, fontSize: 14 });
     gravityLabel.position.set(10, 165);
     settingsPanel.addChild(gravityLabel);
     const gravityInput = new TextInput("1.0", { width: 160, height: 30 });
@@ -432,7 +456,7 @@ export class CustomGameEditor {
     gravityInput.setPosition(10, 185);
     settingsPanel.addChild(gravityInput.container);
 
-    const lockLabel = new PIXIText({ text: "Lock Delay", style: { fill: 0xcccccc, fontSize: 14 } });
+    const lockLabel = new PIXIText("Lock Delay", { fill: 0xcccccc, fontSize: 14 });
     lockLabel.position.set(180, 165);
     settingsPanel.addChild(lockLabel);
     const lockInput = new TextInput("30", { width: 160, height: 30 });
@@ -444,7 +468,7 @@ export class CustomGameEditor {
     lockInput.setPosition(180, 185);
     settingsPanel.addChild(lockInput.container);
 
-    const chainLabel = new PIXIText({ text: "Chain Clear Amount", style: { fill: 0xcccccc, fontSize: 14 } });
+    const chainLabel = new PIXIText("Chain Clear Amount", { fill: 0xcccccc, fontSize: 14 });
     chainLabel.position.set(10, 225);
     settingsPanel.addChild(chainLabel);
     const chainInput = new TextInput("4", { width: 160, height: 30 });
@@ -456,7 +480,7 @@ export class CustomGameEditor {
     chainInput.setPosition(10, 245);
     settingsPanel.addChild(chainInput.container);
 
-    const nextLabel = new PIXIText({ text: "Next Pieces Count", style: { fill: 0xcccccc, fontSize: 14 } });
+    const nextLabel = new PIXIText("Next Pieces Count", { fill: 0xcccccc, fontSize: 14 });
     nextLabel.position.set(180, 225);
     settingsPanel.addChild(nextLabel);
     const nextInput = new TextInput("5", { width: 160, height: 30 });
@@ -474,7 +498,7 @@ export class CustomGameEditor {
     const blocksPanel = new Panel({ width: 350, height: 200, backgroundColor: 0x1a0000, backgroundAlpha: 0.9, borderColor: 0xff4444 });
     blocksPanel.setPosition(380, 380);
 
-    const blocksTitle = new PIXIText({ text: "Block Palette", style: { fill: 0xffaaaa, fontSize: 18, fontWeight: "bold" } });
+    const blocksTitle = new PIXIText("Block Palette", { fill: 0xffaaaa, fontSize: 18, fontWeight: "bold" });
     blocksTitle.position.set(10, 10);
     blocksPanel.addChild(blocksTitle);
 
@@ -491,7 +515,7 @@ export class CustomGameEditor {
     const piecesPanel = new Panel({ width: 350, height: 300, backgroundColor: 0x001a00, backgroundAlpha: 0.9, borderColor: 0x44ff44 });
     piecesPanel.setPosition(740, 20);
 
-    const piecesTitle = new PIXIText({ text: "Pieces Editor", style: { fill: 0xaaffaa, fontSize: 18, fontWeight: "bold" } });
+    const piecesTitle = new PIXIText("Pieces Editor", { fill: 0xaaffaa, fontSize: 18, fontWeight: "bold" });
     piecesTitle.position.set(10, 10);
     piecesPanel.addChild(piecesTitle);
 
@@ -513,7 +537,7 @@ export class CustomGameEditor {
     const blockEditorPanel = new Panel({ width: 350, height: 350, backgroundColor: 0x110000, backgroundAlpha: 0.9, borderColor: 0xaa2222 });
     blockEditorPanel.setPosition(380, 600);
 
-    const blockEditorTitle = new PIXIText({ text: "Block Properties", style: { fill: 0xff8888, fontSize: 18, fontWeight: "bold" } });
+    const blockEditorTitle = new PIXIText("Block Properties", { fill: 0xff8888, fontSize: 18, fontWeight: "bold" });
     blockEditorTitle.position.set(10, 10);
     blockEditorPanel.addChild(blockEditorTitle);
 
@@ -3015,16 +3039,32 @@ export class CustomGameEditor {
       }
   }
 
+  private addTooltip(target: any, text: string) {
+    target.container.on("pointerover", (e: any) => {
+      this.tooltip.show(e.global.x, e.global.y, text);
+    });
+    target.container.on("pointermove", (e: any) => {
+      this.tooltip.updatePosition(e.global.x, e.global.y);
+    });
+    target.container.on("pointerout", () => {
+      this.tooltip.hide();
+    });
+  }
+
   private createNew() {
     this.currentGameType = new GameType();
 
 
     const namePanel = new Panel({ width: 350, height: 80, backgroundColor: 0x111111, backgroundAlpha: 0.9, borderColor: 0x555555 });
     namePanel.setPosition(20, 380);
-    const nameLabel = new PIXIText({ text: "Game Name", style: { fill: 0xcccccc, fontSize: 16 } });
+    const nameLabel = new PIXIText("Game Name", { fill: 0xcccccc, fontSize: 16 });
     nameLabel.position.set(10, 10);
     namePanel.addChild(nameLabel);
+    this.tooltip = new Tooltip(window.innerWidth, window.innerHeight);
+    this.pixiContainer.addChild(this.tooltip.getContainer());
+
     this.pixiNameInput = new TextInput("Enter Game Name", { width: 330, height: 30 });
+    this.addTooltip(this.pixiNameInput, "Name your custom puzzle game. This name is visible when sharing your game.");
     this.pixiNameInput.setPosition(10, 35);
     this.pixiNameInput.on("change", (val: string) => {
       this.nameInput.value = val;
@@ -3038,12 +3078,13 @@ export class CustomGameEditor {
     actionPanel.setPosition(20, 20);
 
     const saveBtn = new Button("Save to Slot 1", { width: 140, height: 30 });
+    this.addTooltip(saveBtn, "Save your custom ruleset to Browser Storage Slot 1.");
     saveBtn.on("click", () => this.savePresetSlot(1));
     saveBtn.setPosition(10, 10);
     actionPanel.addChild(saveBtn.container);
 
 
-    const infoLabel = new PIXIText({ text: "Porting UI to Native Pixi", style: { fill: 0xffffff, fontSize: 16 } });
+    const infoLabel = new PIXIText("Porting UI to Native Pixi", { fill: 0xffffff, fontSize: 16 });
     infoLabel.position.set(10, 85);
     actionPanel.addChild(infoLabel);
 
@@ -3051,30 +3092,34 @@ export class CustomGameEditor {
     const aiPanel = new Panel({ width: 350, height: 100, backgroundColor: 0x220022, backgroundAlpha: 0.9, borderColor: 0xff00ff });
     aiPanel.setPosition(20, 140);
 
-    const aiTitle = new PIXIText({ text: "Generative AI Tools", style: { fill: 0xff88ff, fontSize: 18, fontWeight: "bold" } });
+    const aiTitle = new PIXIText("Generative AI Tools", { fill: 0xff88ff, fontSize: 18, fontWeight: "bold" });
     aiTitle.position.set(10, 10);
     aiPanel.addChild(aiTitle);
 
     const txt2SpriteBtn = new Button("Text-to-Sprite", { width: 150, height: 30, backgroundColor: 0x440044 });
+    this.addTooltip(txt2SpriteBtn, "Generate a sprite from a text description using AI.");
     txt2SpriteBtn.on("click", () => GenerativeAIManager.generateSpriteFromText("blue hero character walking"));
     txt2SpriteBtn.setPosition(10, 45);
     aiPanel.addChild(txt2SpriteBtn.container);
 
     const txt2TileBtn = new Button("Text-to-Tileset", { width: 150, height: 30, backgroundColor: 0x440044 });
+    this.addTooltip(txt2TileBtn, "Generate a tile map from a text description using AI.");
     txt2TileBtn.on("click", () => GenerativeAIManager.generateTilesetFromText("16x16 dungeon stone floor"));
 
     const palettePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x002222, backgroundAlpha: 0.9, borderColor: 0x00ffff });
     palettePanel.setPosition(20, 260);
 
-    const paletteTitle = new PIXIText({ text: "Color Palette", style: { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" } });
+    const paletteTitle = new PIXIText("Color Palette", { fill: 0x88ffff, fontSize: 18, fontWeight: "bold" });
     paletteTitle.position.set(10, 10);
     palettePanel.addChild(paletteTitle);
 
     const addColorBtn = new Button("Add Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    this.addTooltip(addColorBtn, "Add a new block color to your palette.");
     addColorBtn.setPosition(10, 45);
     palettePanel.addChild(addColorBtn.container);
 
     const rmColorBtn = new Button("Remove Color", { width: 150, height: 30, backgroundColor: 0x004444 });
+    this.addTooltip(rmColorBtn, "Remove the last block color from your palette.");
     rmColorBtn.setPosition(170, 45);
     palettePanel.addChild(rmColorBtn.container);
 
@@ -3084,36 +3129,42 @@ export class CustomGameEditor {
     const presetPanel = new Panel({ width: 350, height: 120, backgroundColor: 0x000022, backgroundAlpha: 0.9, borderColor: 0x0000ff });
     presetPanel.setPosition(380, 20);
 
-    const presetTitle = new PIXIText({ text: "Preset Families", style: { fill: 0x8888ff, fontSize: 18, fontWeight: "bold" } });
+    const presetTitle = new PIXIText("Preset Families", { fill: 0x8888ff, fontSize: 18, fontWeight: "bold" });
     presetTitle.position.set(10, 10);
     presetPanel.addChild(presetTitle);
 
     const preset1 = new Button("Classic Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset1, "Load the Classic Drop ruleset (Standard 10x20 grid, 7 tetrominoes).");
     preset1.on("click", () => this.applyPreset("classic"));
     preset1.setPosition(10, 45);
     presetPanel.addChild(preset1.container);
 
     const preset2 = new Button("Sprint Drop", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset2, "Load the Sprint Drop ruleset (Fast gravity, no lock delay).");
     preset2.on("click", () => this.applyPreset("sprint"));
     preset2.setPosition(120, 45);
     presetPanel.addChild(preset2.container);
 
     const preset3 = new Button("Cascade", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset3, "Load the Cascade ruleset (Blocks fall apart when lines clear).");
     preset3.on("click", () => this.applyPreset("cascade"));
     preset3.setPosition(230, 45);
     presetPanel.addChild(preset3.container);
 
     const preset4 = new Button("Zen Garden", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset4, "Load the Zen Garden ruleset (Relaxing gameplay, slow gravity).");
     preset4.on("click", () => this.applyPreset("zen"));
     preset4.setPosition(10, 80);
     presetPanel.addChild(preset4.container);
 
     const preset5 = new Button("Stack", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset5, "Load the Stack ruleset (Build as high as you can).");
     preset5.on("click", () => this.applyPreset("stack"));
     preset5.setPosition(120, 80);
     presetPanel.addChild(preset5.container);
 
     const preset6 = new Button("Micro", { width: 100, height: 30, backgroundColor: 0x000044 });
+    this.addTooltip(preset6, "Load the Micro ruleset (Tiny grid, tiny pieces).");
     preset6.on("click", () => this.applyPreset("micro"));
     preset6.setPosition(230, 80);
     presetPanel.addChild(preset6.container);
@@ -3123,15 +3174,17 @@ export class CustomGameEditor {
     const timelinePanel = new Panel({ width: 350, height: 100, backgroundColor: 0x222200, backgroundAlpha: 0.9, borderColor: 0xffff00 });
     timelinePanel.setPosition(380, 260);
 
-    const timelineTitle = new PIXIText({ text: "Animation Timeline", style: { fill: 0xffff88, fontSize: 18, fontWeight: "bold" } });
+    const timelineTitle = new PIXIText("Animation Timeline", { fill: 0xffff88, fontSize: 18, fontWeight: "bold" });
     timelineTitle.position.set(10, 10);
     timelinePanel.addChild(timelineTitle);
 
     const playBtn = new Button("Play", { width: 100, height: 30, backgroundColor: 0x444400 });
+    this.addTooltip(playBtn, "Play animation timeline.");
     playBtn.setPosition(10, 45);
     timelinePanel.addChild(playBtn.container);
 
     const stopBtn = new Button("Stop", { width: 100, height: 30, backgroundColor: 0x444400 });
+    this.addTooltip(stopBtn, "Stop animation timeline.");
     stopBtn.setPosition(120, 45);
     timelinePanel.addChild(stopBtn.container);
 
@@ -3144,23 +3197,28 @@ export class CustomGameEditor {
     this.pixiContainer.addChild(aiPanel.container);
 
     const saveBtn2 = new Button("Save 2", { width: 70, height: 30 });
+    this.addTooltip(saveBtn2, "Save your custom ruleset to Browser Storage Slot 2.");
     saveBtn2.on("click", () => this.savePresetSlot(2));
     saveBtn2.setPosition(10, 45);
     actionPanel.addChild(saveBtn2.container);
     const loadBtn2 = new Button("Load 2", { width: 70, height: 30 });
+    this.addTooltip(loadBtn2, "Load custom ruleset from Browser Storage Slot 2.");
     loadBtn2.on("click", () => this.loadPresetSlot(2));
     loadBtn2.setPosition(85, 45);
     actionPanel.addChild(loadBtn2.container);
     const saveBtn3 = new Button("Save 3", { width: 70, height: 30 });
+    this.addTooltip(saveBtn3, "Save your custom ruleset to Browser Storage Slot 3.");
     saveBtn3.on("click", () => this.savePresetSlot(3));
     saveBtn3.setPosition(160, 45);
     actionPanel.addChild(saveBtn3.container);
     const loadBtn3 = new Button("Load 3", { width: 70, height: 30 });
+    this.addTooltip(loadBtn3, "Load custom ruleset from Browser Storage Slot 3.");
     loadBtn3.on("click", () => this.loadPresetSlot(3));
     loadBtn3.setPosition(235, 45);
     actionPanel.addChild(loadBtn3.container);
 
     const loadBtn = new Button("Load from Slot 1", { width: 140, height: 30 });
+    this.addTooltip(loadBtn, "Load custom ruleset from Browser Storage Slot 1.");
     loadBtn.on("click", () => this.loadPresetSlot(1));
     loadBtn.setPosition(160, 10);
     actionPanel.addChild(loadBtn.container);

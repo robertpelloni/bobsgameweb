@@ -193,7 +193,7 @@ export class ClientGameEngine extends BGClientEngine {
 
 	private async loadLegacyHouseMaps(): Promise<number> {
 		try {
-			return await this.mapLoader.loadFromManifest("/maps/legacy-house-manifest.json");
+			return await this.mapLoader.loadFromManifest("/maps_v2/manifest.json");
 		} catch (e) {
 			log.warn(`Legacy house asset load skipped: ${e}`);
 			return 0;

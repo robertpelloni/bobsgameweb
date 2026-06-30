@@ -43,8 +43,6 @@ import { LightingSystem } from "../engine/ecs/systems/LightingSystem";
 import { LightComponent } from "../engine/ecs/components/LightComponent";
 import { ParticleSystem } from "../engine/ecs/systems/ParticleSystem";
 import { ParticleComponent } from "../engine/ecs/components/ParticleComponent";
-import { ParticlePresets } from "../engine/graphics/ParticleSystem";
-import { WeatherRenderer } from "../engine/graphics/WeatherRenderer";
 import { TouchControls } from "../ui/TouchControls";
 import { Localization, type Language } from "../../shared/Localization";
 // Easing - reserved for future use
@@ -60,7 +58,6 @@ import {
 import { TilesetBuilder } from "../engine/map/TilesetBuilder";
 import { RealTileset } from "../engine/map/RealTileset";
 import { SpriteAtlas } from "../engine/map/SpriteAtlas";
-import doorsConfig from "../../../data/doors.json";
 import {
 	loadGameScript,
 	getNPCDialogue,
@@ -75,8 +72,6 @@ import {
 import { DialogueTracker } from "../engine/event/DialogueTracker";
 import { FlagManager } from "../engine/event/FlagManager";
 import { AmbientMusicGenerator } from "../audio/AmbientMusicGenerator";
-import { GenerativeAIManager } from "../editor/GenerativeAIManager";
-import { HitDetectionSystem } from "../engine/map/HitDetectionSystem";
 export class WorldScene extends Scene {
 	private world: World;
 	private map: GameMap | null = null;
@@ -84,7 +79,6 @@ export class WorldScene extends Scene {
 	private palette: Palette;
 	private realTileset: RealTileset = new RealTileset();
 	private spriteAtlas: SpriteAtlas = new SpriteAtlas();
-	private hitDetectionSystem: HitDetectionSystem;
 	private entityColliders: { x: number; y: number; w: number; h: number }[] =
 		[];
 	public playerTransform: TransformComponent | null = null;
@@ -103,7 +97,6 @@ export class WorldScene extends Scene {
 	private touchControls: TouchControls | null = null;
 	private minimapContainer: Container | null = null;
 	private minimapGraphics: Graphics | null = null;
-	private hitDebugGraphics: Graphics | null = null;
 	private hudContainer: Container | null = null;
 	private vignetteOverlay: Sprite | null = null;
 	private hpText: Text | null = null;
@@ -131,16 +124,10 @@ export class WorldScene extends Scene {
 	private footstepIndex: number = 0;
 	private _ambientMusic: AmbientMusicGenerator = new AmbientMusicGenerator();
 	private weatherContainer: Container | null = null;
-	private weatherRenderer: WeatherRenderer | null = null;
-
+	private rainDrops: { x: number; y: number; speed: number }[] = [];
 	private isExteriorMap: boolean = false;
 	private isPaused: boolean = false;
 	private _autoSaveTimer: number = 0;
-	private chatInput: HTMLInputElement | null = null;
-	private currentChatNPC: string | null = null;
-	private currentChatPersona: string | null = null;
-	private chatHistory: { role: string; content: string }[] = [];
-	private chatUIContainer: Container | null = null;
 	private pauseContainer: Container | null = null;
 	private static readonly TILE_PX = 8; // pixels per tile at 1X (matches Tileset.TILE_SIZE)
 	private playerIsMoving: boolean = false;
@@ -194,8 +181,6 @@ export class WorldScene extends Scene {
 		const built = TilesetBuilder.build();
 		this.tileset = built.tileset;
 		this.palette = built.palette;
-		// Initialize hit detection system (dimensions set when map loads)
-		this.hitDetectionSystem = new HitDetectionSystem(1, 1);
 	}
 	public async create(): Promise<void> {
 		console.log("[WorldScene] create() started");
@@ -255,7 +240,7 @@ export class WorldScene extends Scene {
 		const mapGenSystem = new MapGenSystem();
 		(mapGenSystem as any).scene = this;
 		this.world.addSystem(mapGenSystem);
-		this.world.addSystem(new WeatherSystem(this.worldContainer));
+		this.world.addSystem(new WeatherSystem(this.app, this.worldContainer));
 		this.world.addSystem(new AudioReactiveSystem());
 		this.world.addSystem(new ParticleSystem(this.worldContainer));
 		const renderSystem = new RenderSystem(this.worldContainer);
@@ -492,23 +477,9 @@ export class WorldScene extends Scene {
 		this.createConsoleUI();
 		this.createMinimapUI();
 		this.createHudUI();
-
-		const mobileMode =
-			localStorage.getItem("mobile-mode-override") === "true" ||
-			"ontouchstart" in window ||
-			navigator.maxTouchPoints > 0;
-
-		if (mobileMode) {
+		if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
 			this.touchControls = new TouchControls(this.width, this.height);
 			this.container.addChild(this.touchControls as any);
-
-			// Reposition HUD for mobile to avoid overlap with controls
-			if (this.hudContainer) {
-				this.hudContainer.position.set(20, 110); // Move down below top buttons if any
-			}
-			if (this.minimapContainer) {
-				this.minimapContainer.position.set(this.width - 160, 110);
-			}
 		}
 		// Show the room name
 		this.showRoomBanner(
@@ -547,7 +518,6 @@ export class WorldScene extends Scene {
 			// Fallback: create a small empty map
 			const fallbackData = new MapData(-1, "Empty", 20, 15);
 			this.map = new GameMap(fallbackData, this.realTileset);
-			this.setupHitDetection(fallbackData);
 			this.worldContainer.addChild(this.map.container);
 			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
 			this.map.loadAtlasPixels(); // async: will re-render when atlas pixels are ready
@@ -577,8 +547,8 @@ export class WorldScene extends Scene {
 				"Sprite",
 			) as SpriteComponent | undefined;
 			if (playerSpriteComp?.sprite?.parent === this.map.entitySpriteContainer) {
-				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite!);
-				this.worldContainer.addChild(playerSpriteComp.sprite!);
+				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
+				this.worldContainer.addChild(playerSpriteComp.sprite);
 			}
 			// Save shadow sprite before map destruction
 			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
@@ -586,11 +556,9 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.removeChild(shadowSave);
 			}
 			this.worldContainer.removeChild(this.map.container);
-			this.map.destroy();
 			this.map.container.destroy({ children: true });
 		}
 		this.map = new GameMap(mapData, this.realTileset);
-		this.setupHitDetection(mapData);
 		const spX =
 			(mapData.defaultSpawnX ?? Math.floor(mapData.widthTiles1X / 2)) * 8;
 		const spY =
@@ -654,8 +622,8 @@ export class WorldScene extends Scene {
 				"Sprite",
 			) as SpriteComponent | undefined;
 			if (playerSpriteComp?.sprite?.parent === this.map.entitySpriteContainer) {
-				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite!);
-				this.worldContainer.addChild(playerSpriteComp.sprite!);
+				this.map.entitySpriteContainer.removeChild(playerSpriteComp.sprite);
+				this.worldContainer.addChild(playerSpriteComp.sprite);
 			}
 			// Save shadow sprite before map destruction
 			const shadowSave = (this as any).playerShadowSprite as Sprite | null;
@@ -663,11 +631,9 @@ export class WorldScene extends Scene {
 				this.map.entitySpriteContainer.removeChild(shadowSave);
 			}
 			this.worldContainer.removeChild(this.map.container);
-			this.map.destroy();
 			this.map.container.destroy({ children: true });
 		}
 		this.map = new GameMap(mapData, this.realTileset);
-		this.setupHitDetection(mapData);
 		const spX =
 			(mapData.defaultSpawnX ?? Math.floor(mapData.widthTiles1X / 2)) * 8;
 		const spY =
@@ -782,69 +748,23 @@ export class WorldScene extends Scene {
 				}
 			}
 
-			// Look up door sprite name from doors.json
-			let spriteName = "DoorDownBrownGoldKnob"; // default fallback
-			const mapDoorsData = (doorsConfig as any)[this.currentMapName || ""];
-			if (mapDoorsData && mapDoorsData.doors) {
-				const matchingDoor = mapDoorsData.doors.find(
-					(d: any) => d.destMap === door.destinationMapName
-				);
-				if (matchingDoor && matchingDoor.sprite) {
-					spriteName = matchingDoor.sprite;
-				}
-			}
-
-			const spriteComp = new SpriteComponent();
-			const doorAnim = this.spriteAtlas.createAnimatedSprite(
-				spriteName,
-				"Down",
-				0.15,
-			);
-			if (doorAnim) {
-				const tex = doorAnim.textures[0];
-				let fw = 16;
-				let fh = 16;
-				if (tex) {
-					const actualTexture = (tex as any).texture || tex;
-					if (actualTexture) {
-						fw = (actualTexture as any).width ?? 16;
-						fh = (actualTexture as any).height ?? 16;
-					}
-				}
-				// Position door transform at the top-left of the walkway tile
-				transform.x = doorX * WorldScene.TILE_PX;
-				transform.y = doorY * WorldScene.TILE_PX;
-				// Animated sprites use bottom-left anchor (0, 1) to cover tiles above the walkway
-				doorAnim.anchor.set(0.0, 1.0);
-				doorAnim.play();
-				spriteComp.sprite = doorAnim;
-			} else {
-				transform.x = doorX * WorldScene.TILE_PX;
-				transform.y = doorY * WorldScene.TILE_PX;
-
-				// Fallback door graphics (drawn above the origin so they sit above the walkway)
-				const g = new Graphics();
-				g.rect(0, -WorldScene.TILE_PX, WorldScene.TILE_PX, WorldScene.TILE_PX);
-				g.fill(0x8b5a2b); // Brown door
-				g.rect(0, -WorldScene.TILE_PX, WorldScene.TILE_PX, WorldScene.TILE_PX);
-				g.stroke({ width: 1, color: 0xd4af37 }); // Gold border
-				g.circle(WorldScene.TILE_PX - 2, -WorldScene.TILE_PX / 2, 1.5);
-				g.fill(0xd4af37); // Gold knob
-				spriteComp.sprite = g as any;
-			}
+			transform.x = doorX * WorldScene.TILE_PX;
+			transform.y = doorY * WorldScene.TILE_PX;
 			this.world.addComponent(entity, transform);
-			this.world.addComponent(entity, spriteComp);
 
-			if (this.map) {
-				this.map.addEntity({
-					id: entity,
-					sprite: spriteComp.sprite,
-					update: () => {},
-				} as any);
+			// Door indicator: add to map container so it's cleaned up on map change.
+			const doorGfx = new Graphics();
+			doorGfx.rect(0, 0, 24, 24);
+			doorGfx.fill({ color: 0xff0000 });
+			doorGfx.x = transform.x - 4;
+			doorGfx.y = transform.y - 4;
+			doorGfx.zIndex = 99999;
+			if (this.map?.container) {
+				this.map.container.addChild(doorGfx);
+				this.map.container.sortChildren();
 			}
-
 			console.log(
-				`[WorldScene] Door: "${door.name}" sprite: "${spriteName}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
+				`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
 			);
 
 			const teleport = new TeleportComponent();
@@ -883,12 +803,6 @@ export class WorldScene extends Scene {
 								clearX,
 								clearY,
 								1,
-							);
-							this.map.data.setTileIndex(
-								MapData.MAP_HIT_LAYER,
-								clearX,
-								clearY,
-								0,
 							);
 						}
 					}
@@ -954,12 +868,12 @@ export class WorldScene extends Scene {
 			if (this.map) {
 				const tileX = Math.floor(npcX / WorldScene.TILE_PX);
 				const tileY = Math.floor(npcY / WorldScene.TILE_PX);
-				const hitVal = this.map.data.getTileIndex(
-					MapData.MAP_HIT_LAYER,
+				const extraVal = this.map.data.getTileIndex(
+					MapData.MAP_CAMERA_BOUNDS_LAYER,
 					tileX,
 					tileY,
 				);
-				if (hitVal !== 0) {
+				if (extraVal === 0) {
 					const W = this.map.data.widthTiles1X;
 					const H = this.map.data.heightTiles1X;
 					for (let r = 1; r < 15; r++) {
@@ -970,11 +884,11 @@ export class WorldScene extends Scene {
 								const ty = tileY + dy;
 								if (tx >= 0 && tx < W && ty >= 0 && ty < H) {
 									const val = this.map.data.getTileIndex(
-										MapData.MAP_HIT_LAYER,
+										MapData.MAP_CAMERA_BOUNDS_LAYER,
 										tx,
 										ty,
 									);
-									if (val === 0) {
+									if (val !== 0) {
 										npcX = tx * WorldScene.TILE_PX;
 										npcY = ty * WorldScene.TILE_PX;
 										found = true;
@@ -1194,12 +1108,6 @@ export class WorldScene extends Scene {
 		this.container.addChild(loadingText);
 		// Try to load the map by name
 		const loaded = await this.loadLegacyMapByName(mapId);
-
-		// Notify server of map change for regional clustering
-		if (loaded && networkManager.connected) {
-			networkManager.emit("joinMap", mapId);
-		}
-
 		// Remove loading text
 		loadingText.destroy();
 		if (!loaded) {
@@ -1214,39 +1122,14 @@ export class WorldScene extends Scene {
 		if (this.playerTransform && this.map) {
 			let arrX = targetX;
 			let arrY = targetY;
-
-			if (this.currentMapName) {
-				const prevMapName = this.currentMapName;
-				const reverseDoor = this.map.data.doorDataList.find(
-					(d) => d.destinationMapName === prevMapName
-				);
-				if (reverseDoor) {
-					let targetTileX = reverseDoor.x;
-					let targetTileY = reverseDoor.y + 1;
-					const hitVal = this.map.data.getTileIndex(
-						MapData.MAP_HIT_LAYER,
-						targetTileX,
-						targetTileY,
-					);
-					if (hitVal !== 0) {
-						targetTileY = reverseDoor.y;
-					}
-					arrX = targetTileX * WorldScene.TILE_PX;
-					arrY = targetTileY * WorldScene.TILE_PX;
-					console.log(
-						`[WorldScene] Matched reverse door: placing player at (${targetTileX}, ${targetTileY})`,
-					);
-				}
-			}
-
 			const arrTX = Math.floor(arrX / WorldScene.TILE_PX);
 			const arrTY = Math.floor(arrY / WorldScene.TILE_PX);
-			const arrHit = this.map.data.getTileIndex(
-				MapData.MAP_HIT_LAYER,
+			const arrExtra = this.map.data.getTileIndex(
+				MapData.MAP_CAMERA_BOUNDS_LAYER,
 				arrTX,
 				arrTY,
 			);
-			if (arrHit !== 0) {
+			if (arrExtra === 0) {
 				// Arrival position is on void/wall - find nearest walkable tile
 				console.log(
 					`[WorldScene] Arrival (${arrTX},${arrTY}) is on void, searching for walkable tile...`,
@@ -1261,11 +1144,11 @@ export class WorldScene extends Scene {
 							const ty = arrTY + dy;
 							if (tx >= 0 && tx < W && ty >= 0 && ty < H) {
 								const e = this.map.data.getTileIndex(
-									MapData.MAP_HIT_LAYER,
+									MapData.MAP_CAMERA_BOUNDS_LAYER,
 									tx,
 									ty,
 								);
-								if (e === 0) {
+								if (e !== 0) {
 									arrX = tx * WorldScene.TILE_PX;
 									arrY = ty * WorldScene.TILE_PX;
 									found = true;
@@ -1718,20 +1601,44 @@ export class WorldScene extends Scene {
 		this.pauseContainer!.visible = true;
 		AudioManager.playSound("menu_select", { volume: 0.2 });
 	}
-
+	private updateWeather(dt: number): void {
+		if (!this.isExteriorMap || !this.weatherContainer) return;
+		// Create rain drops if needed
+		if (this.rainDrops.length === 0) {
+			for (let i = 0; i < 80; i++) {
+				this.rainDrops.push({
+					x: Math.random() * this.width,
+					y: Math.random() * this.height,
+					speed: 300 + Math.random() * 200,
+				});
+			}
+		}
+		const g = this.weatherContainer.children[0] as any;
+		if (!g) return;
+		g.clear();
+		// Update and draw rain
+		for (const drop of this.rainDrops) {
+			drop.y += drop.speed * dt;
+			drop.x -= 30 * dt; // Slight wind
+			if (drop.y > this.height) {
+				drop.y = -10;
+				drop.x = Math.random() * this.width;
+			}
+			if (drop.x < 0) drop.x = this.width;
+			g.moveTo(drop.x, drop.y);
+			g.lineTo(drop.x - 1, drop.y + 8);
+			g.stroke({ color: 0x8899bb, width: 1, alpha: 0.4 });
+		}
+	}
 	private createWeatherOverlay(): void {
 		if (this.weatherContainer) {
 			this.weatherContainer.destroy({ children: true });
 		}
 		this.weatherContainer = new Container();
 		this.weatherContainer.zIndex = 9990;
+		const g = new Graphics();
+		this.weatherContainer.addChild(g);
 		this.container.addChild(this.weatherContainer);
-		this.weatherRenderer = new WeatherRenderer(
-			this.weatherContainer,
-			this.width,
-			this.height,
-		);
-		this.weatherRenderer.setWeather("rain", 0.5);
 	}
 	private updateMinimap(): void {
 		if (!this.minimapGraphics || !this.playerTransform || !this.map) return;
@@ -1749,13 +1656,13 @@ export class WorldScene extends Scene {
 					x,
 					y,
 				);
-				const hit = this.map.data.getTileIndex(
-					MapData.MAP_HIT_LAYER,
+				const extra = this.map.data.getTileIndex(
+					MapData.MAP_CAMERA_BOUNDS_LAYER,
 					x,
 					y,
 				);
 				const obj = this.map.data.getTileIndex(MapData.MAP_OBJECT_LAYER, x, y);
-				if (hit !== 0) {
+				if (extra === 0) {
 					this.minimapGraphics.rect(x * scale, y * scale, scale, scale);
 					this.minimapGraphics.fill(0x222233); // void/exterior
 				} else if (obj === 839) {
@@ -1813,73 +1720,6 @@ export class WorldScene extends Scene {
 		this.dialogueContainer = new Container();
 		this.dialogueContainer.visible = false;
 		this.container.addChild(this.dialogueContainer);
-
-		// AI Chat UI
-		this.chatUIContainer = new Container();
-		this.chatUIContainer.visible = false;
-		this.chatUIContainer.zIndex = 10005;
-		this.container.addChild(this.chatUIContainer);
-
-		this.chatInput = document.createElement("input");
-		this.chatInput.type = "text";
-		this.chatInput.placeholder = "Type your message to NPC... (Enter to send)";
-		this.chatInput.style.position = "absolute";
-		this.chatInput.style.left = "70px";
-		this.chatInput.style.bottom = "160px";
-		this.chatInput.style.width = this.width - 140 + "px";
-		this.chatInput.style.background = "rgba(5, 5, 20, 0.85)";
-		this.chatInput.style.color = "#00ffff";
-		this.chatInput.style.border = "2px solid #66aaff";
-		this.chatInput.style.padding = "12px";
-		this.chatInput.style.borderRadius = "0px";
-		this.chatInput.style.fontFamily = "'Courier New', monospace";
-		this.chatInput.style.boxShadow = "0 0 15px rgba(102, 170, 255, 0.4)";
-		this.chatInput.style.outline = "none";
-		this.chatInput.style.display = "none";
-		this.chatInput.style.zIndex = "10001";
-		document.body.appendChild(this.chatInput);
-
-		this.chatInput.onkeydown = async (e) => {
-			if (e.key === "Enter" && this.chatInput!.value.trim()) {
-				const msg = this.chatInput!.value.trim();
-				this.chatInput!.value = "";
-				this.chatInput!.disabled = true;
-				this.chatHistory.push({ role: "user", content: msg });
-
-				this.showDialogue(
-					`${this.currentChatNPC} is thinking...`,
-					false,
-					"AI CHAT",
-					true,
-				);
-
-				const response = await GenerativeAIManager.chatWithNPC(
-					this.currentChatNPC!,
-					msg,
-					this.currentChatPersona!,
-					this.chatHistory,
-				);
-				this.chatHistory.push({ role: "assistant", content: response });
-
-				this.chatInput!.disabled = false;
-				this.chatInput!.focus();
-				this.showDialogue(response, false, this.currentChatNPC!, true);
-			}
-		};
-
-		const chatBg = new Graphics();
-		chatBg.rect(20, this.height - 220, 200, 40);
-		chatBg.fill({ color: 0x111111, alpha: 0.9 });
-		chatBg.stroke({ color: 0x00ffff, width: 2 });
-		this.chatUIContainer.addChild(chatBg);
-
-		const chatTitle = new Text({
-			text: "AI CHAT MODE",
-			style: { fill: 0x00ffff, fontSize: 14, fontWeight: "bold" },
-		});
-		chatTitle.position.set(30, this.height - 210);
-		this.chatUIContainer.addChild(chatTitle);
-
 		const bg = new Graphics();
 		bg.rect(50, this.height - 150, this.width - 100, 100);
 		bg.fill({ color: 0x0a0a2e, alpha: 0.92 });
@@ -1923,7 +1763,6 @@ export class WorldScene extends Scene {
 		messages: string | string[],
 		countAsNpcInteraction: boolean = false,
 		caption?: string,
-		isAIChat: boolean = false,
 	): void {
 		if (!this.dialogueText || !this.dialogueContainer) return;
 		if (countAsNpcInteraction) {
@@ -1936,16 +1775,6 @@ export class WorldScene extends Scene {
 		this.isDialogueActive = true;
 		this.dialogueContainer.visible = true;
 		this.dialogueText.text = "";
-
-		if (isAIChat) {
-			this.chatInput!.style.display = "block";
-			this.chatInput!.focus();
-			if (this.chatUIContainer) this.chatUIContainer.visible = true;
-		} else {
-			this.chatInput!.style.display = "none";
-			if (this.chatUIContainer) this.chatUIContainer.visible = false;
-		}
-
 		if (this.dialogueCaption) {
 			this.dialogueCaption.text = caption || "";
 		}
@@ -1976,17 +1805,9 @@ export class WorldScene extends Scene {
 			if (this.isActionJustPressed) {
 				this.currentDialoguePage++;
 				if (this.currentDialoguePage >= this.dialoguePages.length) {
-					if (this.chatInput!.style.display === "block") {
-						this.dialogueTypingIndex = 0;
-						this.dialogueText.text =
-							this.dialoguePages[this.currentDialoguePage - 1];
-						this.currentDialoguePage = this.dialoguePages.length;
-					} else {
-						this.isDialogueActive = false;
-						this.dialogueContainer.visible = false;
-						this.chatInput!.style.display = "none";
-						AudioManager.playSound("menu_cancel", { volume: 0.1 });
-					}
+					this.isDialogueActive = false;
+					this.dialogueContainer.visible = false;
+					AudioManager.playSound("menu_cancel", { volume: 0.1 });
 				} else {
 					this.dialogueTypingIndex = 0;
 					this.dialogueText.text = "";
@@ -2179,13 +2000,6 @@ export class WorldScene extends Scene {
 			light.flicker = true;
 			light.intensity = 0.8;
 			this.world.addComponent(entity, light);
-
-			if (this.map) {
-				this.map.addEntity({
-					id: entity,
-					update: () => {},
-				} as any);
-			}
 		}
 		console.log(`[WorldScene] Created ${torchPositions.length} torch lights`);
 	}
@@ -2614,28 +2428,6 @@ export class WorldScene extends Scene {
 					AudioManager.playSound(`footstep_${this.footstepIndex}`, {
 						volume: 0.15,
 					});
-
-					// Emit footstep dust particles
-					const dust = ParticlePresets.footstep(
-						this.playerTransform.x,
-						this.playerTransform.y,
-					);
-					if (this.map?.entitySpriteContainer) {
-						this.map.entitySpriteContainer.addChild(dust.container);
-					} else {
-						this.worldContainer.addChild(dust.container);
-					}
-
-					// Standalone emitter lifecycle for one-shot burst
-					const updateDust = (ticker: any) => {
-						dust.update(ticker.deltaTime / 60);
-						dust.render();
-						if (dust.count === 0) {
-							dust.destroy();
-							this.app.ticker.remove(updateDust);
-						}
-					};
-					this.app.ticker.add(updateDust);
 				}
 			} else {
 				this.footstepTimer = 0;
@@ -2847,10 +2639,7 @@ export class WorldScene extends Scene {
 				}, 2000);
 			}
 		}
-
-		if (this.isExteriorMap && this.weatherRenderer) {
-			this.weatherRenderer.update(dt / 1000);
-		}
+		this.updateWeather(dt);
 		this.updateHud();
 		this.updateDebugHud();
 		this.saveTimer += dt;
@@ -3224,7 +3013,7 @@ export class WorldScene extends Scene {
 								x,
 								y,
 							);
-							if (tileId === 1) continue;
+							if (tileId === 0) continue;
 							const g = new Graphics();
 							g.rect(x * 8, y * 8, 8, 8);
 							g.fill(0xff0000);
@@ -3382,75 +3171,6 @@ export class WorldScene extends Scene {
 		this.debugHud.text = lines.join("\n");
 	}
 
-	private setupHitDetection(mapData: MapData): void {
-		this.hitDetectionSystem.tilesWide = mapData.widthTiles1X;
-		this.hitDetectionSystem.tilesHigh = mapData.heightTiles1X;
-		this.hitDetectionSystem.loadHitLayer(mapData.layerTileIndex[MapData.MAP_HIT_LAYER]);
-		this.hitDetectionSystem.loadCameraLayer(mapData.layerTileIndex[MapData.MAP_CAMERA_BOUNDS_LAYER]);
-		this.hitDetectionSystem.markUtilityLayersLoaded();
-		this.updateHitSystemColliders();
-
-		// Draw debug hit layer (thin red X's)
-		if (this.hitDebugGraphics) {
-			if (this.hitDebugGraphics.parent) {
-				this.hitDebugGraphics.parent.removeChild(this.hitDebugGraphics);
-			}
-			this.hitDebugGraphics.destroy();
-			this.hitDebugGraphics = null;
-		}
-
-		if (this.map && this.map.entitySpriteContainer) {
-			const g = new Graphics();
-			g.zIndex = -999999; // draw below entities inside entitySpriteContainer
-			const W = mapData.widthTiles1X;
-			const H = mapData.heightTiles1X;
-			for (let ty = 0; ty < H; ty++) {
-				for (let tx = 0; tx < W; tx++) {
-					if (this.isHitTile(tx, ty)) {
-						const px = tx * WorldScene.TILE_PX;
-						const py = ty * WorldScene.TILE_PX;
-						g.moveTo(px + 1, py + 1);
-						g.lineTo(px + 7, py + 7);
-						g.moveTo(px + 7, py + 1);
-						g.lineTo(px + 1, py + 7);
-					}
-				}
-			}
-			g.stroke({ width: 1, color: 0xff0000, alpha: 0.8 });
-			this.hitDebugGraphics = g;
-			this.map.entitySpriteContainer.addChild(g);
-			this.map.entitySpriteContainer.sortChildren();
-		}
-	}
-
-	private updateHitSystemColliders(): void {
-		const list: any[] = [];
-		// Add furniture/prop entity colliders
-		for (const ec of this.entityColliders) {
-			list.push({
-				x: ec.x,
-				y: ec.y,
-				w: ec.w,
-				h: ec.h,
-				nonWalkable: true,
-			});
-		}
-		// Add door colliders (doors are non-walkable by default in Java unless open)
-		if (this.map) {
-			for (const door of this.map.data.doorDataList) {
-				list.push({
-					x: (door.x ?? 0) * WorldScene.TILE_PX,
-					y: (door.y ?? 0) * WorldScene.TILE_PX,
-					w: (door.width ?? 1) * WorldScene.TILE_PX,
-					h: (door.height ?? 1) * WorldScene.TILE_PX,
-					nonWalkable: true,
-					isOpen: false, // by default doors start closed
-				});
-			}
-		}
-		this.hitDetectionSystem.setColliders(list);
-	}
-
 	private isHitTile(tx: number, ty: number): boolean {
 		if (!this.map) return true;
 		if (
@@ -3472,76 +3192,66 @@ export class WorldScene extends Scene {
 			tx,
 			ty,
 		);
-		const hitTileResult = this.map.data.getTileIndex(
-			MapData.MAP_HIT_LAYER,
+		const hitTile = this.map.data.getTileIndex(MapData.MAP_HIT_LAYER, tx, ty);
+		const extraTile = this.map.data.getTileIndex(
+			MapData.MAP_CAMERA_BOUNDS_LAYER,
 			tx,
 			ty,
 		);
 
-		// 1. Explicit Hit Markers (highest priority)
-		if (hitTileResult === 0) return true;
+		// DEBUG: log shadow tile collision values
+		if (objTile === 839) {
+			console.log(
+				`[COLLISION] (${tx},${ty}) obj=${objTile} gnd=${gndTile} hit=${hitTile} extra=${extraTile} floor=${MapData.FLOOR_IDS.has(gndTile)}`,
+			);
+		}
 
-		// 2. WALL on OBJECT layer blocks regardless of ground layer.
-		if (objTile === 839 || objTile === 8280) return true;
+		// 1. Explicit Hit Markers (Original Engine Priority)
+		if (hitTile !== 0) return true;
+
+		// 2. Extra Layer Override (Original game walkable zone)
+		// 1 = interior/walkable, 0 = void/blocked
+		if (extraTile === 1) return false;
+
+		// 3. Wall Checks
 		if (MapData.WALL_IDS.has(objTile)) return true;
-
-		// 3. Wall on GROUND layer blocks
 		if (MapData.WALL_IDS.has(gndTile)) return true;
 
-		// 4. Void check
-		if (gndTile === 0 && objTile === 0) return true;
+		// 4. Floor Exception: 839 on a floor tile is a SHADOW, not a wall.
+		// Shadows overlay furniture/floor areas and should be walkable.
+		if (MapData.FLOOR_IDS.has(gndTile)) {
+			console.log(`[COLLISION] (${tx},${ty}) FLOOR CHECK PASSED - walkable`);
+			return false;
+		}
 
-		// 5. Doors (Passage Zone) - ignore door frame boundaries if player is approaching door
+		// 5. Strict Wall ID Blocking (non-floor ground with wall object)
+		if (objTile === 839 || objTile === 8280) return true;
+
+		// 5. Void check (if not a floor and no extra marker, empty is blocked)
+		if (gndTile === 0 && objTile === 0) return true;
+		if (extraTile === 0 && (gndTile === 839 || gndTile === 8280)) return true;
+
+		// 6. Doors (Passage Zone)
 		const isDoor = this.map.data.doorDataList.some(
 			(d) =>
 				tx >= d.x && tx < d.x + d.width && ty >= d.y && ty < d.y + d.height,
 		);
 		if (isDoor) return false;
 
-		// 6. Pixel-level hit detection and entity colliders
-		if (this.hitDetectionSystem.utilityLayersLoaded) {
-			const pixelX = tx * 8 + 4;
-			const pixelY = ty * 8 + 4;
-			const hitLayerBlocked = this.hitDetectionSystem.getHitLayerValueAtPixels(
-				pixelX,
-				pixelY,
-			);
-			const entityBlocked =
-				this.hitDetectionSystem.checkAgainstNonWalkableEntities(pixelX, pixelY);
-
-			if (hitLayerBlocked || entityBlocked) {
-				return true;
-			}
-		} else {
-			// Entity collision fallback (furniture bounding boxes)
-			const px = tx * WorldScene.TILE_PX;
-			const py = ty * WorldScene.TILE_PX;
-			for (const ec of this.entityColliders) {
-				if (
-					px + WorldScene.TILE_PX > ec.x &&
-					px < ec.x + ec.w &&
-					py + WorldScene.TILE_PX > ec.y &&
-					py < ec.y + ec.h
-				) {
-					return true;
-				}
+		// 7. Entity collision (furniture bounding boxes)
+		const px = tx * WorldScene.TILE_PX;
+		const py = ty * WorldScene.TILE_PX;
+		for (const ec of this.entityColliders) {
+			if (
+				px + WorldScene.TILE_PX > ec.x &&
+				px < ec.x + ec.w &&
+				py + WorldScene.TILE_PX > ec.y &&
+				py < ec.y + ec.h
+			) {
+				return true; // inside entity bounding box = blocked
 			}
 		}
-
-		// 7. Floor Exception: known floor IDs are walkable.
-		if (MapData.FLOOR_IDS.has(gndTile)) {
-			return false;
-		}
-
-		// 8. Extra Layer Override (1 = interior/walkable zone)
-		const extraTile = this.map.data.getTileIndex(
-			MapData.MAP_CAMERA_BOUNDS_LAYER,
-			tx,
-			ty,
-		);
-		if (extraTile === 1) return false;
-
-		return false;
+		return false; // walkable
 	}
 
 	/**
@@ -3578,38 +3288,7 @@ export class WorldScene extends Scene {
 							"lines",
 						);
 						if (dialogue && dialogue.lines && dialogue.lines.length > 0) {
-							const persona = dialogue.lines.join(" ");
-							this.currentChatNPC = dialogue.caption;
-							this.currentChatPersona = persona;
-							this.chatHistory = [];
-
-							this.showDialogue(
-								`[AI] Would you like to chat with ${dialogue.caption}? (Press C to Chat, E for Normal)`,
-								true,
-								dialogue.caption,
-							);
-
-							const onKey = (ev: KeyboardEvent) => {
-								if (ev.key.toLowerCase() === "c") {
-									window.removeEventListener("keydown", onKey);
-									this.chatUIContainer!.visible = true;
-									this.showDialogue(
-										`Hello there! What would you like to talk about?`,
-										true,
-										dialogue.caption,
-										true,
-									);
-								} else if (ev.key.toLowerCase() === "e") {
-									window.removeEventListener("keydown", onKey);
-									this.showDialogue(dialogue.lines, true, dialogue.caption);
-								}
-							};
-							window.addEventListener("keydown", onKey);
-							setTimeout(
-								() => window.removeEventListener("keydown", onKey),
-								5000,
-							);
-
+							this.showDialogue(dialogue.lines, true, dialogue.caption);
 							return true;
 						}
 					}
@@ -3677,10 +3356,10 @@ export class WorldScene extends Scene {
 				}
 
 				if (matchingDoor) {
-					const destX = matchingDoor.arrivalX ?? 8;
-					const destY = matchingDoor.arrivalY ?? 8;
+					const destX = (matchingDoor.arrivalX ?? 1) * WorldScene.TILE_PX;
+					const destY = (matchingDoor.arrivalY ?? 1) * WorldScene.TILE_PX;
 					console.log(
-						`[WorldScene] Warp area "${area.areaName}" triggered -> ${matchingDoor.destMap} at px(${destX},${destY})`,
+						`[WorldScene] Warp area "${area.areaName}" triggered -> ${matchingDoor.destMap}`,
 					);
 					this.changeMap(matchingDoor.destMap, destX, destY);
 					return;
@@ -3928,7 +3607,6 @@ export class WorldScene extends Scene {
 	protected async destroy(): Promise<void> {
 		if (this.worker) this.worker.terminate();
 		if (this.consoleInput) this.consoleInput.remove();
-		if (this.chatInput) this.chatInput.remove();
 		await super.destroy();
 	}
 }

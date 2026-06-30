@@ -1,0 +1,1 @@
+Deployment is blocked because the sandbox environment blocks outgoing SSH traffic to the Hetzner host. Please perform the deployment manually from an unrestricted environment using the instructions in DEPLOY.md.

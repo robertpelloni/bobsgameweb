@@ -1,156 +1,16 @@
-## v3.0.33 — 2026-06-25
+# CHANGELOG
+
+## v3.0.11 (2026-06-28)
+### Added
+- "Blah" dialogue system
+- 8-directional movement support and animations for Yuu
+- HQ2X sprite scaling toggle
+- WebGPU PoC with compute-shader particles
+- FFT visualizer integration to AudioManager and WebGPU
 
 ### Fixed
-- **Corrected Collision Logic**: Inverted hit check logic so that `0` in the walkability map/extra layer is treated as blocked/wall, and `1` (or non-zero) is treated as walkable. This fixes the issue where walkable floor areas were marked as blocked with red Xs.
-- **Door Mapping and Snapping**:
-  - Prioritized `door_graph.json` over the map JSON's local `doorDataList` to ensure accurate global door coordinate loading (fixing Yuu's room door coordinate loading).
-  - Reduced door snapping distance threshold from `40` to `5` tiles in `scanForDoors`, preventing main entrance doors from snapping to closets on the other side of the room.
-- **Door Rendering**: Because Yuu's room door is now correctly positioned at `(19, 20)` instead of `(2, 9)`, the fallback door graphic is no longer hidden behind wall graphics (above layer) and renders correctly.
-
-## v3.0.32 — 2026-06-25
-
-### Fixed
-- **Deactivated Shadow Layer Collisions**: Removed collision blocking, NPC path adjustment, and player arrival checks from `MapData.MAP_CAMERA_BOUNDS_LAYER` (loaded from `hitBounds` shadow layer) and fully redirected those checks to the correct `MapData.MAP_HIT_LAYER`.
-- **Walkway Entity Clearance**: Adjusted the door area initialization to also clear the `MAP_HIT_LAYER` at the doorway so the player is not blocked by wall collisions when transitioning.
-
-## v3.0.31 — 2026-06-25
-### Fixed
-- **Collision Hit Layer Swap**: Swapped `hitBounds` and `extra` layers in `LegacyMapLoader.ts`. The `extra` layer (index 11) contains actual binary hit markers, while `hitBounds` (index 9) contains decorative/shadow tiles. This corrects the player collision system and debug hit tile overlay to align perfectly with physical wall boundaries rather than shadows.
-
-## v3.0.30 — 2026-06-25
-
-### Added
-- **Visual Debug Hit Layer**: Added a permanent debug graphics layer rendering a thin red 'X' over every hit tile, inserted below player/NPC entities to visually display the collision boundaries.
-- **Door Sprite Fallback**: Implemented a PixiJS Graphics fallback representation for doors (rendering a brown door frame with a gold handle) when the target sprite sheet animation is not present in the atlas.
-
-### Changed
-- **Reverted Coordinate Scaling**: Reverted warp areas, triggers, door areas, warp destinations, and NPC coordinates to 1X scale (matching the player's coordinate space and resolving misalignment errors).
-
-## v3.0.28 — 2026-06-25
-
-### Fixed
-- **Door Transition Coordinates**: Divided the raw pixel coordinates from `door_graph.json` by 8 when parsing in `LegacyMapLoader.ts` to correctly convert them to tile coordinates.
-- **Coordinate Scaling Factor Discrepancy**: Multiplied coordinate bounds by 2 in `checkWarpAreas()`, `checkAreaTriggers()`, `checkDoorAreas()`, and `createNPCs()` inside `WorldScene.ts` to properly match the game's 2X pixel rendering scale.
-- **Door Sprite and Texture Mismatch**: Resolved compiler errors regarding PixiJS `Texture | FrameObject` union when retrieving door dimensions.
-- **Warp Transition Multiplier**: Fixed transition destination coordinates by multiplying raw door graph pixel values by 2 instead of `WorldScene.TILE_PX` to prevent teleports landing inside walls.
-
-## v3.0.27 — 2026-06-24
-
-### Added
-- Pre-render layer rendering optimization in PixiJS RPG engine: entire tile layers are compiled to single larger images/textures at load time to reduce individual tile sprite draws.
-- Created `PerformanceMonitor.ts` placeholder to resolve missing dependencies.
-
-### Fixed
-- TypeScript compilation errors and type mismatches in options, custom game editor, world editor, and lighting system.
-
-## v3.0.26 — 2026-06-23
-
-### Changed
-- Production deployment to Hetzner VPS with code formatting updates and README status notice.
-
-## v3.0.25 — 2026-06-22
-
-
-### Fixed
-- **CRITICAL: Player movement completely blocked**: `isHitTile()` checked HitDetectionSystem before legacy fallback. `getHitLayerValueAtPixels()` returned `true` (blocked) when utility layers were not loaded, making the legacy fallback unreachable. Every tile treated as wall.
-- **CRITICAL: Walls not blocking movement**: FLOOR_IDS check on ground layer ran before WALL_IDS check on objects layer. Walls sitting on floor tiles were skipped as "walkable". Reordered: walls checked before floors.
-
-### Added
-- **Wasm Physics Bridge**: C++ port of collision detection with Wasm compilation pipeline (`cpp_port/src/PhysicsBridge.cpp`)
-- **WebGPU Particle System**: Compute-shader based particle system with vortex effects (`WebGPUParticleSystem.ts`, `WebGPUDemoScene.ts`)
-- **Generative AI Manager**: AI-powered NPC dialogue generation and tile in-painting
-- **Performance Manager**: Audio performance monitoring with adaptive quality
-- **FFT Visualizer**: Real-time spectrum analyzer for audio visualization
-- **Mobile UX**: Enhanced TouchControls with direct manipulation and haptic feedback
-- **Pathfinding Benchmarks**: Wasm-backed pathfinding stress tests
-
-### Merged
-- Feature branch `jules-3-0-10-sanitization-and-editor-updates` forward-merged into master
-- Dependabot security update (npm_and_yarn group)
-- Reverse-merge of master collision fixes into feature branch
-
-## v3.0.20 — 2026-06-08
-
-### Added
-- **Optimized Physics Engine**: Integrated `WasmPhysicsBridge` into `Physics.ts` for accelerated narrow-phase checks.
-- **Spatial Grid Broad-phase**: Implemented O(N) collision detection using a 128px spatial grid to support massive entity counts.
-- **Packet Compression**: Integrated `pako` (zlib) for dynamic compression of high-frequency MMO world sync traffic.
-
-### Changed
-- **Performance Architecture**: Refactored the core physics loop to utilize spatial partitioning, significantly reducing CPU overhead in dense regional clusters.
-
-## v3.0.19 — 2026-06-08
-
-### Added
-- **Regional Clusters**: Implemented server-side spatial partitioning using Socket.io rooms to optimize MMO traffic.
-- **Virtual Joystick**: Replaced legacy mobile D-pad with a fluid Analog Joystick supporting 8-directional input.
-- **Haptic Intensity Control**: Added customizable vibration feedback settings for mobile devices in the Options menu.
-- **Population Metrics**: Updated the `/stats` endpoint and World Editor to display regional cluster population.
-
-### Changed
-- **Hardened Transitions**: Upgraded `WorldScene` map transition protocol to include explicit map-room synchronization with the server.
-
-## v3.0.18 — 2026-06-08
-
-### Added
-- **Wasm Physics Foundation**: Created C++ `PhysicsBridge` with AABB collision logic and Emscripten bindings.
-- **Enhanced Wasm Bridge**: Updated `WasmPhysicsBridge.ts` with Rect interface, batch collision support, and improved JS fallback.
-- **Server Health Monitoring**: Added real-time server status polling to the World Database Editor.
-- **Improved Rate-Limit Logging**: Enhanced server logs with throttled per-player rate-limit warnings.
-
-### Fixed
-- **Chiptune3 Worklet**: Corrected `getSongs()` return type to array for consistent subsong metadata extraction.
-
-## v3.0.13 — 2026-06-08
-
-### Added
-- **Unified Particle Engine**: Unified the ECS and standalone graphics particle implementations. Created a feature-rich `ParticleEmitter` and `ParticlePresets` hub.
-- **Enhanced Visual Effects**: Replaced procedural rain and footstep logic in `WorldScene` and `WeatherRenderer` with the new particle system.
-- **Particle Editor UI**: Added a "Particle Testing" panel to the `WorldEditor`.
-
-## v3.0.16 — 2026-06-08
-
-### Added
-- **C++ Porting Evaluation**: Analyzed `cpp_port/` and `submodules/bobui` for Wasm integration.
-- **Wasm Physics Bridge**: Implemented a architectural singleton `WasmPhysicsBridge` to facilitate future porting of heavy engine logic (physics, collision) to C++.
-
-## v3.0.15 — 2026-06-08
-
-### Added
-- **Audio Performance Optimization**: Introduced `PerformanceManager` for runtime environment detection (mobile/low-end).
-- **Prioritized Compressed Audio**: Updated `AudioManager` to prioritize OGG variants of audio assets in performance-constrained environments to reduce CPU and memory overhead.
-
-## v3.0.14 — 2026-06-08
-
-### Added
-- **Unified Particle Architecture**: Centralized particle logic into a reusable `ParticleEmitter` and `ParticlePresets` system.
-- **Refactored Environmental Effects**: Updated `WorldScene` and `WeatherRenderer` to use the unified particle system for rain, snow, and footstep "dust" effects.
-- **ECS Integration**: Refactored the `ParticleSystem` ECS system to leverage the unified emitter engine.
-
-## v3.0.13 — 2026-06-08
-
-### Added
-- **AI Asset loading Implementation**: Initialized logic for loading AI-generated assets in editors.
-
-## v3.0.12 — 2026-06-08
-
-### Added
-- **Multiplayer Hardening**: Implemented server-side rate-limiting for high-frequency events (`frame`, `game_frame`, `playerMove`, `chatMessage`).
-- **Input Validation**: Added payload validation and HTML sanitization to server-side event handlers to prevent malformed data or XSS.
-
-## v3.0.11 — 2026-06-08
-
-### Added
-- **AI Asset Loading**: Implemented logic in `MapEditor` to load AI-generated sprites into the canvas and slice AI-generated tilesets into 8x8 tiles with palette matching.
-- **Image Processing Utilities**: Created `ImageUtils` to handle asynchronous image loading and pixel data extraction.
-- **Enhanced AI Feedback**: Added visual preview support for generated assets in the `CustomGameEditor`.
-
-## v3.0.10 — 2026-06-08
-
-### Added
-- **External Tool Configuration**: Implemented persistent path configuration for Aseprite and Tilemap Studio in `CustomGameEditor`.
-- **AI Asset Integration**: Wired `GenerativeAIManager` to dispatch events for AI-generated sprites and tilesets, with corresponding UI feedback and history tracking in the editor.
-
+- Collision parity: Wall checks strictly override floor markers
+- CustomGameEditor PIXIText parameter bugs
 ## v3.0.9 — 2026-05-28
 
 ### Added
