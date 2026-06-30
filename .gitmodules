@@ -1,9 +1,3 @@
 [submodule "submodules/bobui"]
 	path = submodules/bobui
 	url = https://github.com/robertpelloni/bobui.git
-[submodule "bobsgameonlinejava"]
-	path = bobsgameonlinejava
-	url = https://github.com/robertpelloni/bobsgameonlinejava
-[submodule "okgame"]
-	path = okgame
-	url = https://github.com/robertpelloni/okgame
