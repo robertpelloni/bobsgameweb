@@ -748,8 +748,61 @@ export class WorldScene extends Scene {
 				}
 			}
 
+<<<<<<< Updated upstream
 			transform.x = doorX * WorldScene.TILE_PX;
 			transform.y = doorY * WorldScene.TILE_PX;
+=======
+			// Look up door sprite name from doors.json
+			let spriteName = "DoorDownBrownGoldKnob"; // default fallback
+			const mapDoorsData = (doorsConfig as any)[this.currentMapName || ""];
+			if (mapDoorsData && mapDoorsData.doors) {
+				const matchingDoor = mapDoorsData.doors.find(
+					(d: any) => d.destMap === door.destinationMapName
+				);
+				if (matchingDoor && matchingDoor.sprite) {
+					spriteName = matchingDoor.sprite;
+				}
+			}
+
+			const spriteComp = new SpriteComponent();
+			const doorAnim = this.spriteAtlas.createAnimatedSprite(
+				spriteName,
+				"Down",
+				0.15,
+			);
+			if (doorAnim) {
+				const tex = doorAnim.textures[0];
+				let fw = 16;
+				let fh = 16;
+				if (tex) {
+					const actualTexture = (tex as any).texture || tex;
+					if (actualTexture) {
+						fw = (actualTexture as any).width ?? 16;
+						fh = (actualTexture as any).height ?? 16;
+					}
+				}
+				// Position door transform at the top-left of the walkway tile
+				transform.x = doorX * WorldScene.TILE_PX;
+				transform.y = doorY * WorldScene.TILE_PX;
+				// Animated sprites use bottom-left anchor (0, 1) to cover tiles above the walkway
+				doorAnim.anchor.set(0.0, 1.0);
+				doorAnim.play();
+				spriteComp.sprite = doorAnim;
+			} else {
+				transform.x = doorX * WorldScene.TILE_PX;
+				transform.y = doorY * WorldScene.TILE_PX;
+
+				// Fallback door graphics (drawn above the origin so they sit above the walkway)
+				const g = new Graphics();
+				g.rect(0, -16, 16, 16);
+				g.fill(0x8b5a2b); // Brown door
+				g.rect(0, -16, 16, 16);
+				g.stroke({ width: 1, color: 0xd4af37 }); // Gold border
+				g.circle(12, -8, 2);
+				g.fill(0xd4af37); // Gold knob
+				spriteComp.sprite = g as any;
+			}
+>>>>>>> Stashed changes
 			this.world.addComponent(entity, transform);
 
 			// Door indicator: add to map container so it's cleaned up on map change.
@@ -3199,12 +3252,17 @@ export class WorldScene extends Scene {
 			ty,
 		);
 
+<<<<<<< Updated upstream
 		// DEBUG: log shadow tile collision values
 		if (objTile === 839) {
 			console.log(
 				`[COLLISION] (${tx},${ty}) obj=${objTile} gnd=${gndTile} hit=${hitTile} extra=${extraTile} floor=${MapData.FLOOR_IDS.has(gndTile)}`,
 			);
 		}
+=======
+		// 1. Explicit Hit Markers (highest priority)
+		if (hitTileResult !== 0) return true;
+>>>>>>> Stashed changes
 
 		// 1. Explicit Hit Markers (Original Engine Priority)
 		if (hitTile !== 0) return true;

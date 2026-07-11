@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Verify that critical lazy-loaded runtime chunks are discoverable from the live site.

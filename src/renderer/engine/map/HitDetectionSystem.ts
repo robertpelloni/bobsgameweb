@@ -152,7 +152,7 @@ export class HitDetectionSystem {
 		const index = tiley * this.tilesWide + tilex;
 
 		if (!this.hitLayer) return false; // no hit layer = walkable
-		return (this.hitLayer[index] as number) !== 1;
+		return (this.hitLayer[index] as number) !== 0;
 	}
 
 	/**

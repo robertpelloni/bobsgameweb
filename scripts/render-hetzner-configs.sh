@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Render domain-/path-specific VPS config artifacts locally from the checked-in templates.

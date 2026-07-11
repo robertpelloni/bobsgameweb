@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Planned maintenance helper for aligning the running backend process with already-synced

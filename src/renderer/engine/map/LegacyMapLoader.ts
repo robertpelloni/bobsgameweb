@@ -15,6 +15,7 @@ import { MapData } from "../../../shared/MapData";
 import { DoorData } from "../../../shared/DoorData";
 // DoorGraph.ts fallback removed - door_graph.json is the single source of truth
 import { getDoorGraphForMap } from "./DoorGraphLoader";
+import doorsConfig from "../../../../data/doors.json";
 
 /** Shape of a real binary-extracted map JSON file */
 export interface RealMapJSON {
@@ -157,9 +158,9 @@ export class LegacyMapLoader {
 			above: MapData.MAP_ABOVE_LAYER,
 			above2: MapData.MAP_ABOVE_DETAIL_LAYER,
 			spriteShadow: MapData.MAP_SPRITE_SHADOW_LAYER,
-			hitBounds: MapData.MAP_CAMERA_BOUNDS_LAYER,
+			hitBounds: MapData.MAP_HIT_LAYER,
 			lightMask: MapData.MAP_LIGHT_MASK_LAYER,
-			extra: MapData.MAP_HIT_LAYER,
+			extra: MapData.MAP_CAMERA_BOUNDS_LAYER,
 			extra2: MapData.MAP_ENTITY_LAYER,
 		};
 
@@ -208,9 +209,54 @@ export class LegacyMapLoader {
 			}
 		}
 
-		// Try to load doors from the comprehensive door graph (door_graph.json) first
-		const graphDoors = getDoorGraphForMap(legacy.name);
-		if (graphDoors.length > 0) {
+		// Try to load doors from the verified doors.json config first (specific override)
+		const mapDoorsData = (doorsConfig as any)[legacy.name];
+		if (mapDoorsData && mapDoorsData.doors && mapDoorsData.doors.length > 0) {
+			for (const gd of mapDoorsData.doors) {
+				const dd = new DoorData(-1, gd.name);
+				dd.x = Math.floor((gd.arrX ?? 0) / 8);
+				dd.y = Math.floor((gd.arrY ?? 0) / 8);
+				dd.destinationMapName = gd.destMap;
+
+				// Find reverse door in destMap to set arrival tile
+				let destX = 1;
+				let destY = 1;
+				const destDoorsData = (doorsConfig as any)[gd.destMap];
+				if (destDoorsData && destDoorsData.doors) {
+					// Match where destMap is the current map and destDoor matches name
+					const reverse = destDoorsData.doors.find(
+						(rd: any) =>
+							rd.destMap === legacy.name &&
+							(rd.destDoor === gd.name ||
+								gd.name.endsWith("." + rd.destDoor) ||
+								rd.name.endsWith("." + gd.destDoor)),
+					);
+					if (reverse) {
+						destX = Math.floor((reverse.arrX ?? 0) / 8);
+						destY = Math.floor((reverse.arrY ?? 0) / 8);
+					} else {
+						// Fallback: match by destination map name only
+						const fallbackRev = destDoorsData.doors.find(
+							(rd: any) => rd.destMap === legacy.name,
+						);
+						if (fallbackRev) {
+							destX = Math.floor((fallbackRev.arrX ?? 0) / 8);
+							destY = Math.floor((fallbackRev.arrY ?? 0) / 8);
+						}
+					}
+				}
+				dd.destinationX = destX;
+				dd.destinationY = destY;
+				dd.width = 1;
+				dd.height = 1;
+				mapData.doorDataList.push(dd);
+			}
+			console.log(
+				`[LegacyMapLoader] Loaded ${mapData.doorDataList.length} doors from doors.json override for ${legacy.name}`,
+			);
+			// Scan objects layer for door tiles and refine positions
+			LegacyMapLoader.scanForDoors(mapData, legacy);
+		} else if (graphDoors.length > 0) {
 			for (const gd of graphDoors) {
 				if (!gd.destMap) continue;
 				const dd = new DoorData(-1, gd.name);

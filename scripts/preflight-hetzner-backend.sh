@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Preflight checks before provisioning or deploying the backend to a VPS.

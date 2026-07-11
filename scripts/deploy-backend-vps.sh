@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Deploy only the backend service to a VPS (Hetzner/DO/etc.)

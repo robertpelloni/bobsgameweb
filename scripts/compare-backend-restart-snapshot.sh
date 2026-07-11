@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Compare a previously captured backend restart-readiness snapshot against the current live state.

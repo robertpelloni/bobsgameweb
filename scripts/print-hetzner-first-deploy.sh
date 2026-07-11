@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Prints the exact first-deploy command sequence for a Hetzner/VPS backend.

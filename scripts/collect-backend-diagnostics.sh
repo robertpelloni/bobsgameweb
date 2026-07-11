@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Collect useful diagnostics from a VPS-hosted backend.

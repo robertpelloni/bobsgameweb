@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Capture a pre-maintenance snapshot before a planned backend restart window.

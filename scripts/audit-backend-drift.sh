@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Audit bobsgameweb backend drift between local tracked source, remote files on disk,
