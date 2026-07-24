@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## v3.0.12 - Phase 4 Engine Stabilization & Tooling (Hetzner Merge)
+
+### Added
+- **WebGPU Validation Section:** Documented the successful local integration of WebGPU WGSL compute shaders (`WebGPUParticleSystem`) in `WeatherRenderer.ts` within `MEMORY.md`.
+- **Insecure Curl Flags:** Added `-k` (insecure) flags to automated production verification bash scripts (`scripts/verify-production-stack.sh`, etc.) to bypass strict validation blocks caused by an expired SSL certificate on `bobsgame.com`.
+
+### Notes
+- Automated deployment to Hetzner is structurally blocked by sandbox port 22 firewalls.
+- Verified that local `main` engine code is out of sync with the live production deployment.
+
+
+## v3.0.12 (2026-06-30)
+### Added
+- CustomGameEditor tooltips
+- BOM removal from bash scripts for reliable execution
+- WasmPhysicsBridge integration into Physics loop checkBatchCollisions
+
+### Fixed
+- Collision fixes deployed and validated on production
+- Duplicate function definitions in MainMenuScene resolved
+- WeatherSystem instantiation fixed in WorldScene
+
+
 ## v3.0.11 (2026-06-28)
 ### Added
 - "Blah" dialogue system

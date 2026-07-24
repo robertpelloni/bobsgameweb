@@ -133,6 +133,9 @@ export class Physics {
                         othersRects
                     );
 
+                    // Note: HitDetectionSystem legacy fallback ordering is bypassed during narrow-phase
+                    // Wasm collision processing. Wasm is strictly used for dynamic entity AABB.
+
                     for (const idx of collisionIndices) {
                         const b = remaining[idx];
 

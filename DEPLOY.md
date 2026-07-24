@@ -19,15 +19,16 @@ It additionally checks for expected custom-editor markers in the live asset set 
 
 The Omni-Engine web port is ready for deployment to DreamHost.
 
-## Current Observed Blockers
-From the agent environment on 2026-04-03:
-- `sshpass` is installed and usable.
-- `rsync` is **not** installed locally.
-- password-based SSH using the provided DreamHost credentials was **rejected by the server** (`Permission denied (publickey,password)`).
 
-That means deployment automation is now mostly ready, but live deploy still requires either:
-1. a working password, or
-2. SSH key auth enabled for `robertpelloni@pdx1-shared-a1-33.dreamhost.com`.
+## Current Observed Blockers
+From the agent sandbox environment on 2026-07-01:
+- `sshpass` is installed and usable.
+- `rsync` is installed locally (v3.2.7).
+- **CRITICAL BLOCKER:** The local sandbox infrastructure enforces a network policy that completely blocks outgoing SSH traffic on port 22. Any attempt to `ssh`, `scp`, or `rsync` over SSH from this environment (whether targeting DreamHost or Hetzner) will result in a hard connection timeout.
+- **LIVE PARITY BLOCKER:** The local sandbox is completely decoupled from the production deployment due to the SSH blocks. We have confirmed the `verify-production-stack.sh` execution parses WebGPU particle chunks, lazy-loaded scene chunks, and FFT visualizer markers inside the output properly. However, since we cannot physically connect to `5.161.250.43`, the output of scanning the live host returns a failure because the v3.0.12 code does not exist there. The live host MUST be deployed to manually for the scan to succeed.
+
+
+Because of this environment-level network constraint, configuring SSH key authentication or running automated deployment scripts directly from the agent environment is impossible. Deployments must be run manually by the user outside of the sandbox.
 
 ## 1. Prerequisites
 Recommended:

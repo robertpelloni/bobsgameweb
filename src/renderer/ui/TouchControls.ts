@@ -1,4 +1,4 @@
-// @ts-nocheck
+//
 /**
  * TouchControls — mobile touch overlay with virtual joystick and action buttons.
  */
@@ -14,6 +14,8 @@ export class TouchControls extends Container {
 	private joystickPointerId: number | null = null;
 	private currentDir: { x: number; y: number } = { x: 0, y: 0 };
 	private activeKeys: Set<string> = new Set();
+	private _onPointerMove: (e: PointerEvent) => void;
+	private _onPointerUp: (e: PointerEvent) => void;
 
 	constructor(
 		private screenWidth: number,
@@ -110,14 +112,14 @@ export class TouchControls extends Container {
 		if (dx > threshold) newKeys.add("ArrowRight");
 
 		// Release keys no longer active
-		for (const key of this.activeKeys) {
+		for (const key of Array.from(this.activeKeys)) {
 			if (!newKeys.has(key)) {
 				this.simulateKey(key, false);
 			}
 		}
 
 		// Press new keys
-		for (const key of newKeys) {
+		for (const key of Array.from(newKeys)) {
 			if (!this.activeKeys.has(key)) {
 				this.simulateKey(key, true);
 			}
@@ -127,7 +129,7 @@ export class TouchControls extends Container {
 	}
 
 	private resetJoystickKeys(): void {
-		for (const key of this.activeKeys) {
+		for (const key of Array.from(this.activeKeys)) {
 			this.simulateKey(key, false);
 		}
 		this.activeKeys.clear();

@@ -33,3 +33,8 @@
 *   **Expansion (Phase 4):** In progress. Focusing on high-density performance and cross-platform multiplayer hardening.
 
 I will now update the plan to focus on the next logical performance milestone: migrating the A* pathfinding logic to the Wasm layer.
+#### **6. WebGPU Validation & Deployment**
+*   **WebGPU Integration Status:** The `WebGPUParticleSystem` with WGSL compute shaders is fully integrated locally into `WeatherRenderer.ts`. It correctly uses `navigator.gpu` to verify hardware availability and gracefully falls back to legacy WebGL particles if unavailable.
+*   **Wasm/Visualizer Sync:** The visualizer rendering loop in the engine requires precise integration with Wasm and native bindings to correctly sync high-density workloads (like FFT-driven frequency bands mapping to Wasm logic). This integration is present in the `main` branch codebase.
+*   **Deployment Constraints:** Because outbound SSH access is structurally restricted (blocked port 22) in the local sandbox environment, automated frontend deployments via `deploy-frontend-hetzner.sh` will timeout and fail.
+*   **Production State Mismatch:** Due to this sandbox constraint, the live Hetzner deployment at `bobsgame.com` is out-of-sync. Automated verification scripts via `verify-production-stack.sh` confirm that WebGPU chunks (`particle.wgsl`, `WebGPUParticleSystem`) are successfully built in local bundles but are *missing* in production. The deployment must be executed manually by the supervisor.

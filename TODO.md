@@ -27,5 +27,6 @@
 - [x] Production deploy: collision fix build + deploy to Hetzner
 - [x] Server: fix profiles.json permissions (EACCES)
 - [x] Cleanup: remove 220+ stale JS files from Hetzner server
-- [ ] Connect `WasmPhysicsBridge` to actual physics loop for performance
+- [x] Connect `WasmPhysicsBridge` to actual physics loop for performance
 - [ ] Build and deploy v3.0.25 stable to Hetzner production
+- [x] Wire `WebGPUParticleSystem` fully into `WeatherRenderer` with WGSL hardware detection.

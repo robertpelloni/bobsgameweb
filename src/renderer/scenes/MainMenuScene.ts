@@ -1062,15 +1062,7 @@ export class MainMenuScene extends Scene {
 		SceneTransition.pushWithFade(this.app, visualizerScene);
 	}
 
-	private async openWebGPUDemo(): Promise<void> {
-		const { WebGPUDemoScene } = await import("./WebGPUDemoScene");
-		const demoScene = new WebGPUDemoScene({
-			name: "webgpu-demo",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, demoScene);
-	}
+
 
 	// ============================================================
 	// Audio

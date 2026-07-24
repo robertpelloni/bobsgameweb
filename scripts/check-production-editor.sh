@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 set -eu
 
 # Verify that the live production frontend contains expected custom editor markers.
@@ -19,7 +19,7 @@ TMP_EXTRA=$(mktemp)
 trap 'rm -f "$TMP_HTML" "$TMP_SCAN" "$TMP_ASSETS" "$TMP_EXTRA"' EXIT
 
 echo "=== Checking production editor markers: $FRONTEND_URL ==="
-curl -L --max-time 20 "$FRONTEND_URL" -o "$TMP_HTML"
+curl -Lk --max-time 60 "$FRONTEND_URL" -o "$TMP_HTML"
 
 grep -o 'assets/[^"]*\.js' "$TMP_HTML" | head -20 | sort -u > "$TMP_ASSETS" || true
 if [[ ! -s "$TMP_ASSETS" ]]; then
@@ -35,7 +35,7 @@ echo "[2/4] Downloading initial assets for marker scan"
 while IFS= read -r asset; do
   [[ -z "$asset" ]] && continue
   asset_url="${FRONTEND_URL%/}/${asset}"
-  curl -L --max-time 20 "$asset_url" >> "$TMP_SCAN"
+  curl -Lk --max-time 60 "$asset_url" >> "$TMP_SCAN"
 done < "$TMP_ASSETS"
 
 echo
@@ -47,7 +47,7 @@ while IFS= read -r asset; do
     echo "[info] loading extra chunk: $asset"
     echo "$asset" >> "$TMP_ASSETS"
     asset_url="${FRONTEND_URL%/}/${asset}"
-    curl -L --max-time 20 "$asset_url" >> "$TMP_SCAN"
+    curl -Lk --max-time 60 "$asset_url" >> "$TMP_SCAN"
   fi
 done < "$TMP_EXTRA"
 

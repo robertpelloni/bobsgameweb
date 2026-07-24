@@ -18,3 +18,8 @@
     - [x] AI Sprite/Tileset Processing
     - [x] Collision fix: HitDetectionSystem legacy fallback ordering
     - [x] Collision fix: Wall check before floor check
+- [ ] **Phase 5: Production Polish & Extensibility** - Finalizing the omni-engine architecture for massive scale.
+    - [ ] Complete UI migration from HTML DOM to native PixiJS components.
+    - [ ] WebGPU main render pipeline switch.
+    - [ ] Multiplayer robust state reconciliation and interpolation.
+    - [ ] Full C++ Qt6 port validation with `bobui` submodule.
