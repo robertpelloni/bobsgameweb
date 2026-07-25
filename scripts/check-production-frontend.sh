@@ -14,7 +14,7 @@ TMP_SCAN=$(mktemp)
 trap 'rm -f "$TMP_HTML" "$TMP_SCAN"' EXIT
 
 echo "=== Checking frontend: $FRONTEND_URL ==="
-curl -L --max-time 20 "$FRONTEND_URL" -o "$TMP_HTML"
+curl -Lk --max-time 20 "$FRONTEND_URL" -o "$TMP_HTML"
 
 echo "[1/4] Frontend HTML fetched"
 head -40 "$TMP_HTML" || true
@@ -34,7 +34,7 @@ if [[ -n "$EXPECTED_BACKEND" ]]; then
   while IFS= read -r asset; do
     [[ -z "$asset" ]] && continue
     asset_url="${FRONTEND_URL%/}/${asset}"
-    curl -L --max-time 20 "$asset_url" >> "$TMP_SCAN"
+    curl -Lk --max-time 20 "$asset_url" >> "$TMP_SCAN"
   done <<< "$ASSET_PATHS"
 
   if grep -Fq "$EXPECTED_BACKEND" "$TMP_SCAN"; then

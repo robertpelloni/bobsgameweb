@@ -40,9 +40,15 @@ if [[ ! -f "dist/renderer/index.html" ]]; then
   exit 1
 fi
 
-echo "=== Uploading frontend to Hetzner ==="
-"${SSH_BASE[@]}" "$FRONTEND_USER@$FRONTEND_HOST" "mkdir -p '$FRONTEND_REMOTE_PATH'"
-tar -C dist/renderer -czf - . | "${SSH_BASE[@]}" "$FRONTEND_USER@$FRONTEND_HOST" "tar xzf - -C '$FRONTEND_REMOTE_PATH'"
 
+
+if command -v rsync >/dev/null 2>&1; then
+    echo "=== Uploading frontend to Hetzner via RSYNC ==="
+    rsync -avz --delete -e "ssh ${SSH_OPTS[*]}" dist/renderer/ "$FRONTEND_USER@$FRONTEND_HOST:$FRONTEND_REMOTE_PATH/"
+else
+    echo "=== Uploading frontend to Hetzner via tar-over-ssh fallback ==="
+    "${SSH_BASE[@]}" "$FRONTEND_USER@$FRONTEND_HOST" "mkdir -p '$FRONTEND_REMOTE_PATH'"
+    tar -C dist/renderer -czf - . | "${SSH_BASE[@]}" "$FRONTEND_USER@$FRONTEND_HOST" "tar xzf - -C '$FRONTEND_REMOTE_PATH'"
+fi
 echo "=== Frontend upload complete ==="
 echo "Remote path: $FRONTEND_USER@$FRONTEND_HOST:$FRONTEND_REMOTE_PATH"

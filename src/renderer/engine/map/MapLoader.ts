@@ -81,7 +81,12 @@ export const TILE_COLORS: Record<number, number> = {
 // MapLoader
 // ============================================================
 
+import { MapIndexer } from "./MapIndexer";
+
 export class MapLoader {
+    static async initLegacyIndexing() {
+        await MapIndexer.parseLegacyProjectData();
+    }
 	private mapManager: MapManager;
 	private loadedMapIds: Set<number> = new Set();
 

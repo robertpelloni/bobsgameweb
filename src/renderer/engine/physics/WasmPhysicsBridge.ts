@@ -68,9 +68,10 @@ export class WasmPhysicsBridge {
      * Batch collision check for high-concurrency scenarios.
      * Uses C++ batch processor if available.
      */
+
     public checkBatchCollisions(rect: Rect, others: Rect[]): number[] {
         if (this.module && this.module.PhysicsBridge) {
-            // return this.module.PhysicsBridge.checkBatchCollisions(rect, others);
+            return this.module.PhysicsBridge.checkBatchCollisions(rect, others);
         }
 
         // JS Fallback

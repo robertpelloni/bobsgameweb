@@ -5,6 +5,7 @@
  */
 import { Container, Graphics } from "pixi.js";
 import { ParticleEmitter, ParticlePresets } from "./ParticleSystem";
+import { WebGPUParticleSystem } from "./WebGPUParticleSystem";
 
 export type WeatherType = "clear" | "rain" | "snow" | "fog" | "sandstorm";
 
@@ -14,6 +15,8 @@ export class WeatherRenderer {
 	private height: number;
 	private graphics: Graphics;
 	private emitter: ParticleEmitter | null = null;
+	private webgpuEmitter: WebGPUParticleSystem | null = null;
+	private useWebGPU: boolean = false;
 	private weatherType: WeatherType = "clear";
 	private intensity = 1.0;
 	private time = 0;
@@ -23,6 +26,7 @@ export class WeatherRenderer {
 		this.width = width;
 		this.height = height;
 		this.graphics = new Graphics();
+		this.useWebGPU = 'gpu' in navigator;
 		this.container.addChild(this.graphics);
 	}
 
@@ -38,14 +42,46 @@ export class WeatherRenderer {
 			this.emitter = null;
 		}
 
+        if (type === "clear") {
+            if (this.webgpuEmitter) {
+                // Future cleanup hook: this.webgpuEmitter.destroy();
+                // For now, we must remove it from the container to prevent frozen particles/leaks
+                // if it has a container/view exposed.
+                if ((this.webgpuEmitter as any).container) {
+                    this.container.removeChild((this.webgpuEmitter as any).container);
+                    (this.webgpuEmitter as any).container.destroy();
+                }
+                this.webgpuEmitter = null;
+            }
+            return;
+        }
+
+		if (this.useWebGPU && !this.webgpuEmitter) {
+            const app = (window as any).app || (globalThis as any).__app;
+            if (app) {
+			    this.webgpuEmitter = new WebGPUParticleSystem(app, this.container);
+			    this.webgpuEmitter.init(100000);
+            } else {
+                this.useWebGPU = false;
+            }
+		}
+
+		if (this.useWebGPU && this.webgpuEmitter) {
+            // WebGPU particles active
+		}
+
 		switch (type) {
 			case "rain":
-				this.emitter = ParticlePresets.rain(this.width / 2, -10, this.width + 100);
-				this.container.addChild(this.emitter.container);
+				if (!this.useWebGPU) {
+					this.emitter = ParticlePresets.rain(this.width / 2, -10, this.width + 100);
+					this.container.addChild(this.emitter.container);
+				}
 				break;
 			case "snow":
-				this.emitter = ParticlePresets.snow(this.width / 2, -10, this.width + 100);
-				this.container.addChild(this.emitter.container);
+				if (!this.useWebGPU) {
+					this.emitter = ParticlePresets.snow(this.width / 2, -10, this.width + 100);
+					this.container.addChild(this.emitter.container);
+				}
 				break;
 			// Sandstorm and Fog could use specific presets or overlays
 		}
@@ -64,6 +100,10 @@ export class WeatherRenderer {
 		if (this.emitter) {
 			this.emitter.update(dt);
 			this.emitter.render();
+		}
+
+		if (this.webgpuEmitter) {
+		    this.webgpuEmitter.update(dt);
 		}
 
 		if (this.weatherType === "fog") {

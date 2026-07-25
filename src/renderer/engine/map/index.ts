@@ -23,3 +23,4 @@ export {
 	MapStateData,
 	type TileChange,
 } from "./MapStateData";
+export * from "./MapIndexer";
