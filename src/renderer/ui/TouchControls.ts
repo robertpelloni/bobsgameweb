@@ -6,16 +6,16 @@ import { Container, Graphics, Text, TextStyle, FederatedPointerEvent } from "pix
 
 export class TouchControls extends Container {
 	private joystick: Container;
-	private joystickBase: Graphics;
-	private joystickHandle: Graphics;
+	private joystickBase!: Graphics;
+	private joystickHandle!: Graphics;
 	private buttons: Container;
 
 	private isJoystickActive = false;
 	private joystickPointerId: number | null = null;
 	private currentDir: { x: number; y: number } = { x: 0, y: 0 };
 	private activeKeys: Set<string> = new Set();
-	private _onPointerMove: (e: PointerEvent) => void;
-	private _onPointerUp: (e: PointerEvent) => void;
+	private _onPointerMove!: (e: PointerEvent) => void;
+	private _onPointerUp!: (e: PointerEvent) => void;
 
 	constructor(
 		private screenWidth: number,
