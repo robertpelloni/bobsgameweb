@@ -209,6 +209,8 @@ export class LegacyMapLoader {
 			}
 		}
 
+		const graphDoors = getDoorGraphForMap(legacy.name);
+
 		// Try to load doors from the verified doors.json config first (specific override)
 		const mapDoorsData = (doorsConfig as any)[legacy.name];
 		if (mapDoorsData && mapDoorsData.doors && mapDoorsData.doors.length > 0) {
