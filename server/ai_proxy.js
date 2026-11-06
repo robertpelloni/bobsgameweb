@@ -4,9 +4,9 @@
  * and forwards requests from the frontend client.
  */
 
-const express = require('express');
-const cors = require('cors');
-const OpenAI = require('openai');
+import express from 'express';
+import cors from 'cors';
+import OpenAI from 'openai';
 
 const app = express();
 
