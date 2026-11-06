@@ -5,7 +5,14 @@
     "module": "ESNext",
     "outDir": "dist/main",
     "noEmit": false,
-    "lib": ["ES2022"]
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ]
   },
-  "include": ["src/main/**/*", "src/shared/**/*"]
+  "include": [
+    "src/main/**/*",
+    "src/shared/**/*"
+  ]
 }
