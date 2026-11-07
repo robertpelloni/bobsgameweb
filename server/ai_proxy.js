@@ -192,6 +192,24 @@ app.post('/api/chat', async (req, res) => {
     });
 });
 
+app.get('/healthz', (req, res) => {
+    res.json({
+        status: 'ok',
+        service: 'ai-proxy',
+        openaiConfigured: openai !== null,
+        port: PORT
+    });
+});
+
+app.get('/api/status', (req, res) => {
+    res.json({
+        status: 'ok',
+        service: 'ai-proxy',
+        openaiConfigured: openai !== null,
+        port: PORT
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`[AI Proxy] Server running on http://localhost:${PORT}`);
 });

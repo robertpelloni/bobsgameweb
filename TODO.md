@@ -30,3 +30,4 @@
 - [x] Connect `WasmPhysicsBridge` to actual physics loop for performance
 - [ ] Build and deploy v3.0.25 stable to Hetzner production
 - [x] Wire `WebGPUParticleSystem` fully into `WeatherRenderer` with WGSL hardware detection.
+- [x] Implement AI Proxy status reporting endpoint and MainMenuScene dashboard integration.

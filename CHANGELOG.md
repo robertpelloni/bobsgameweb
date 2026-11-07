@@ -1,14 +1,16 @@
 # CHANGELOG
 
-## v3.0.13 - System Tray & Consolidated Dashboard UI
+## v3.0.13 - System Tray, AI Proxy Integration & Consolidated Dashboard UI
 
 ### Added
 - **Electron System Tray (`src/main/index.ts`):** Added native system tray with icon, window visibility toggling, minimize-to-tray handling, dynamic server process lifecycle controls (start/stop/restart AI proxy on port 8080), and graceful exit teardown.
 - **Consolidated Dashboard UI (`MainMenuScene.ts`):** Redesigned the main menu into high-value organized category tabs (Play Games, Creation & Editors, Community & Progress, System & Engine) with contextual Tooltips, keyboard quick-switching (Q/E), and clean navigation.
+- **AI Proxy Server Status & Client Controls (`GenerativeAIManager.ts` & `MainMenuScene.ts`):** Added `/healthz` and `/api/status` endpoints to `server/ai_proxy.js`, wired `checkServerStatus()` in `GenerativeAIManager`, and added an interactive dashboard button under *System & Engine* allowing users to inspect and toggle the AI server via Electron IPC.
 - **Script Archival:** Non-destructively moved legacy deployment scripts to `scripts/archive/`.
 
 ### Fixed
 - **TypeScript Compilation:** Stripped merge conflict markers in `WorldScene.ts` and resolved definite assignment checks in `TouchControls.ts` and `LegacyMapLoader.ts`.
+- **Electron Icon Resolution:** Dynamically resolves application icon across dev and packaged layouts.
 
 ## v3.0.12 - Phase 4 Engine Stabilization & Tooling (Hetzner Merge)
 

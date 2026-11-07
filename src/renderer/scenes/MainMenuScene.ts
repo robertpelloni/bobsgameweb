@@ -12,6 +12,8 @@ import { Button, type ButtonStyle } from "../ui/Button";
 import { Tooltip } from "../ui/Tooltip";
 import { APP_VERSION } from "../../shared/Config";
 import { FFTVisualizer } from "../ui/FFTVisualizer";
+import { GenerativeAIManager } from "../editor/GenerativeAIManager";
+import { ToastManager } from "../ui/ToastManager";
 
 // ============================================================
 // Types & Categories
@@ -603,6 +605,13 @@ export class MainMenuScene extends Scene {
 				},
 			},
 			{
+				label: "AI Proxy Server",
+				description: "Inspect & toggle local Generative AI proxy",
+				tooltip: "Check connectivity to port 8080 AI proxy (OpenAI / mock fallback) and manage Electron daemon",
+				category: "system",
+				action: () => this.toggleOrCheckAiServer(),
+			},
+			{
 				label: "Help & Manual",
 				description: "Comprehensive manual and documentation",
 				tooltip: "Browse reference guides for editor tooling, shortcut keys, and engine architecture",
@@ -613,6 +622,37 @@ export class MainMenuScene extends Scene {
 				},
 			},
 		];
+	}
+
+	private async toggleOrCheckAiServer(): Promise<void> {
+		this.playSelectSound();
+		ToastManager.showInfo("Checking AI Proxy Server status...");
+		const status = await GenerativeAIManager.checkServerStatus();
+
+		const electronAPI = (window as unknown as { electronAPI?: { startAiServer?: () => Promise<boolean>; stopAiServer?: () => Promise<boolean> } }).electronAPI;
+
+		if (status.online) {
+			const mode = status.openaiConfigured ? "OpenAI Live Mode" : "Local Mock Mode";
+			ToastManager.showInfo(`AI Server Online: Port 8080 (${mode})`);
+			if (electronAPI && electronAPI.stopAiServer) {
+				const stop = confirm(`AI Proxy is running (${mode}). Stop server process?`);
+				if (stop) {
+					await electronAPI.stopAiServer();
+					ToastManager.showInfo("Sent stop request to AI Proxy server.");
+				}
+			}
+		} else {
+			ToastManager.showInfo(`AI Server Offline (${status.error || "Connection Refused"})`);
+			if (electronAPI && electronAPI.startAiServer) {
+				const start = confirm("AI Proxy server is offline. Start it now via Electron daemon?");
+				if (start) {
+					const ok = await electronAPI.startAiServer();
+					ToastManager.showInfo(ok ? "AI Proxy daemon starting..." : "Failed to start AI Proxy daemon.");
+				}
+			} else {
+				alert("AI Proxy is offline. Start it via 'npm run server' or run the Electron client with system tray controls.");
+			}
+		}
 	}
 
 	// ============================================================
