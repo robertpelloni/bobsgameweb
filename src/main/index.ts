@@ -148,13 +148,26 @@ const updateTrayMenu = (): void => {
 };
 
 /**
+ * Helper to locate the application icon across development and production layouts.
+ */
+const getAppIconPath = (): string | undefined => {
+  const candidates = [
+    join(__dirname, '../../public/bobsgame.png'),
+    join(__dirname, '../renderer/bobsgame.png'),
+    join(__dirname, '../../bobsgame.png'),
+    join(app.getAppPath(), 'public/bobsgame.png'),
+  ];
+  return candidates.find((p) => existsSync(p));
+};
+
+/**
  * Initializes the Electron System Tray with app icon and context menu.
  */
 const createTray = (): void => {
-  const iconPath = join(__dirname, '../../bobsgame.png');
+  const iconPath = getAppIconPath();
   let trayIcon: Electron.NativeImage;
 
-  if (existsSync(iconPath)) {
+  if (iconPath && existsSync(iconPath)) {
     trayIcon = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
   } else {
     trayIcon = nativeImage.createEmpty();
@@ -189,7 +202,7 @@ const createWindow = (): void => {
       nodeIntegration: false,
       contextIsolation: true,
     },
-    icon: join(__dirname, '../../bobsgame.png'),
+    icon: getAppIconPath(),
     title: "bob's game",
     backgroundColor: '#000000',
   });
