@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } from 'electron';
+import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage, Notification } from 'electron';
 import { join } from 'path';
 import { spawn, ChildProcess } from 'child_process';
 import { existsSync } from 'fs';
@@ -10,10 +10,22 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+// Ensure single-instance lock to avoid multiple daemon instances and tray conflicts
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+}
+
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let aiProxyProcess: ChildProcess | null = null;
 let isQuitting = false;
+
+const showNotification = (title: string, body: string): void => {
+  if (Notification.isSupported()) {
+    new Notification({ title, body, silent: true }).show();
+  }
+};
 
 /**
  * Spawns the local Node/Express AI Proxy server on port 8080 if not already running.
@@ -48,6 +60,7 @@ const startAiProxyServer = (): void => {
       });
 
       console.log('[Main] AI Proxy server process spawned successfully.');
+      showNotification("bob's game AI Proxy", "Server daemon started on port 8080.");
     } catch (err) {
       console.error('[Main] Failed to spawn AI proxy process:', err);
     }
@@ -64,6 +77,7 @@ const stopAiProxyServer = (): void => {
     console.log('[Main] Terminating AI Proxy server process...');
     aiProxyProcess.kill('SIGTERM');
     aiProxyProcess = null;
+    showNotification("bob's game AI Proxy", "Server daemon terminated.");
   }
 };
 
@@ -148,13 +162,26 @@ const updateTrayMenu = (): void => {
 };
 
 /**
+ * Helper to locate the application icon across development and production layouts.
+ */
+const getAppIconPath = (): string | undefined => {
+  const candidates = [
+    join(__dirname, '../../public/bobsgame.png'),
+    join(__dirname, '../renderer/bobsgame.png'),
+    join(__dirname, '../../bobsgame.png'),
+    join(app.getAppPath(), 'public/bobsgame.png'),
+  ];
+  return candidates.find((p) => existsSync(p));
+};
+
+/**
  * Initializes the Electron System Tray with app icon and context menu.
  */
 const createTray = (): void => {
-  const iconPath = join(__dirname, '../../bobsgame.png');
+  const iconPath = getAppIconPath();
   let trayIcon: Electron.NativeImage;
 
-  if (existsSync(iconPath)) {
+  if (iconPath && existsSync(iconPath)) {
     trayIcon = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
   } else {
     trayIcon = nativeImage.createEmpty();
@@ -189,7 +216,7 @@ const createWindow = (): void => {
       nodeIntegration: false,
       contextIsolation: true,
     },
-    icon: join(__dirname, '../../bobsgame.png'),
+    icon: getAppIconPath(),
     title: "bob's game",
     backgroundColor: '#000000',
   });
@@ -217,6 +244,15 @@ const createWindow = (): void => {
   mainWindow.on('show', () => updateTrayMenu());
   mainWindow.on('hide', () => updateTrayMenu());
 };
+
+app.on('second-instance', () => {
+  // If a second instance is launched, focus existing main window
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    if (!mainWindow.isVisible()) mainWindow.show();
+    mainWindow.focus();
+  }
+});
 
 app.whenReady().then(() => {
   createWindow();

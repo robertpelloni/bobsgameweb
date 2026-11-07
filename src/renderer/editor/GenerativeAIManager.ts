@@ -5,6 +5,32 @@ export class GenerativeAIManager {
     // Configurable endpoint for AI operations.
     // In production, this would point to a local proxy or remote server to protect API keys.
     private static AI_ENDPOINT = "http://localhost:8080/api/generate";
+    private static AI_BASE_URL = "http://localhost:8080";
+
+    /**
+     * Checks if the AI proxy server is reachable and reports its configuration state.
+     */
+    public static async checkServerStatus(): Promise<{ online: boolean; openaiConfigured: boolean; error?: string }> {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2000);
+            const response = await fetch(`${this.AI_BASE_URL}/api/status`, {
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (response.ok) {
+                const data = await response.json();
+                return {
+                    online: true,
+                    openaiConfigured: Boolean(data.openaiConfigured)
+                };
+            }
+            return { online: false, openaiConfigured: false, error: `HTTP ${response.status}` };
+        } catch (err) {
+            return { online: false, openaiConfigured: false, error: (err as Error).message };
+        }
+    }
 
     public static async generateSpriteFromText(prompt: string): Promise<void> {
         console.log(`[GenAI] Starting Text-to-Sprite generation for prompt: "${prompt}"`);

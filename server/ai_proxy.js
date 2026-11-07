@@ -4,9 +4,9 @@
  * and forwards requests from the frontend client.
  */
 
-const express = require('express');
-const cors = require('cors');
-const OpenAI = require('openai');
+import express from 'express';
+import cors from 'cors';
+import OpenAI from 'openai';
 
 const app = express();
 
@@ -189,6 +189,24 @@ app.post('/api/chat', async (req, res) => {
         success: true,
         characterName,
         response: `[Mock] ${characterName} says: "I heard you say ${prompt}. That's interesting!"`
+    });
+});
+
+app.get('/healthz', (req, res) => {
+    res.json({
+        status: 'ok',
+        service: 'ai-proxy',
+        openaiConfigured: openai !== null,
+        port: PORT
+    });
+});
+
+app.get('/api/status', (req, res) => {
+    res.json({
+        status: 'ok',
+        service: 'ai-proxy',
+        openaiConfigured: openai !== null,
+        port: PORT
     });
 });
 
