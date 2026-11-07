@@ -42,7 +42,7 @@ export default defineConfig(({ command, mode }) => {
                 build: {
                   outDir: 'dist/main',
                   rollupOptions: {
-                    external: ['electron'],
+                    external: ['electron', 'electron-squirrel-startup'],
                   },
                 },
               },
