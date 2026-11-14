@@ -33,8 +33,15 @@ export abstract class Scene<T extends SceneConfig = SceneConfig> implements Stat
   }
 
   async onExit(): Promise<void> {
-    await this.destroy();
+    // Remove from the stage FIRST: a throwing destroy() used to strand the
+    // scene on screen forever (world pause "Quit to Menu" saved, popped,
+    // and stayed visible because removal never ran).
     this.container.removeFromParent();
+    try {
+      await this.destroy();
+    } catch (e) {
+      console.warn(`[Scene] destroy() failed for ${this.name}:`, e);
+    }
     this.container.destroy({ children: true });
   }
 
