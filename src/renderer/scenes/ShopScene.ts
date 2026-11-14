@@ -96,7 +96,10 @@ export class ShopScene extends Scene {
 
 	constructor(config: ShopConfig) {
 		super(config);
-		this.config = config;
+		// shopConfig was declared but never assigned, so refreshUI()/buyItem()
+		// crashed on `this.shopConfig.inventory` for every caller (dashboard
+		// and in-world shops alike). Assign it from the constructor config.
+		this.shopConfig = config;
 		this.gold = config.gold;
 		this.items = [...DEFAULT_ITEMS];
 	}
