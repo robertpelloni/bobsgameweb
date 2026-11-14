@@ -19,6 +19,7 @@ if (!gotTheLock) {
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let aiProxyProcess: ChildProcess | null = null;
+let wsServerProcess: ChildProcess | null = null;
 let isQuitting = false;
 
 const showNotification = (title: string, body: string): void => {
@@ -82,6 +83,51 @@ const stopAiProxyServer = (): void => {
 };
 
 /**
+ * Spawns the multiplayer Socket.io game server (server/index.js, port 6065).
+ * Previously the tray only managed the AI proxy, so the actual game server
+ * could not be started, stopped, or quit from the tray at all.
+ */
+const startWsServer = (): void => {
+  if (wsServerProcess) {
+    console.log('[Main] WS game server is already running.');
+    return;
+  }
+  const serverPath = join(__dirname, '../../server/index.js');
+  if (!existsSync(serverPath)) {
+    console.warn(`[Main] WS game server file not found at ${serverPath}`);
+    return;
+  }
+  try {
+    wsServerProcess = spawn('node', [serverPath], { stdio: 'pipe', detached: false });
+    wsServerProcess.stdout?.on('data', (d) => console.log(`[WS Server STDOUT]: ${d}`));
+    wsServerProcess.stderr?.on('data', (d) => console.error(`[WS Server STDERR]: ${d}`));
+    wsServerProcess.on('close', (code) => {
+      console.log(`[Main] WS game server exited with code ${code}`);
+      wsServerProcess = null;
+      updateTrayMenu();
+    });
+    console.log('[Main] WS game server process spawned successfully.');
+    showNotification("bob's game WS Server", 'Game server daemon started on port 6065.');
+  } catch (err) {
+    console.error('[Main] Failed to spawn WS game server:', err);
+  }
+};
+
+const stopWsServer = (): void => {
+  if (wsServerProcess) {
+    console.log('[Main] Terminating WS game server process...');
+    wsServerProcess.kill('SIGTERM');
+    wsServerProcess = null;
+    showNotification("bob's game WS Server", 'Game server daemon terminated.');
+  }
+};
+
+const stopAllServers = (): void => {
+  stopAiProxyServer();
+  stopWsServer();
+};
+
+/**
  * Updates the System Tray context menu with dynamic states (e.g., server status, window visibility).
  */
 const updateTrayMenu = (): void => {
@@ -89,6 +135,7 @@ const updateTrayMenu = (): void => {
 
   const isWindowVisible = mainWindow ? mainWindow.isVisible() : false;
   const isServerRunning = aiProxyProcess !== null;
+  const isWsRunning = wsServerProcess !== null;
 
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -137,12 +184,29 @@ const updateTrayMenu = (): void => {
         updateTrayMenu();
       },
     },
+    { type: 'separator' },
+    {
+      label: `Game Server (WS): ${isWsRunning ? 'Running (Port 6065)' : 'Stopped'}`,
+      enabled: false,
+    },
+    {
+      label: isWsRunning ? 'Stop Game Server (WS)' : 'Start Game Server (WS)',
+      click: () => {
+        if (isWsRunning) {
+          stopWsServer();
+        } else {
+          startWsServer();
+        }
+        updateTrayMenu();
+      },
+    },
     {
       label: 'Restart All Servers',
       click: () => {
-        stopAiProxyServer();
+        stopAllServers();
         setTimeout(() => {
           startAiProxyServer();
+          startWsServer();
           updateTrayMenu();
         }, 500);
       },
@@ -152,7 +216,7 @@ const updateTrayMenu = (): void => {
       label: 'Quit Servers & Exit',
       click: () => {
         isQuitting = true;
-        stopAiProxyServer();
+        stopAllServers();
         app.quit();
       },
     },
@@ -267,7 +331,7 @@ app.whenReady().then(() => {
 
 app.on('before-quit', () => {
   isQuitting = true;
-  stopAiProxyServer();
+  stopAllServers();
 });
 
 app.on('window-all-closed', () => {
@@ -287,3 +351,15 @@ ipcMain.handle('stop-ai-server', () => {
   stopAiProxyServer();
   return true;
 });
+ipcMain.handle('start-ws-server', () => {
+  startWsServer();
+  return wsServerProcess !== null;
+});
+ipcMain.handle('stop-ws-server', () => {
+  stopWsServer();
+  return true;
+});
+ipcMain.handle('get-server-status', () => ({
+  aiProxy: aiProxyProcess !== null,
+  wsServer: wsServerProcess !== null,
+}));

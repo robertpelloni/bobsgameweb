@@ -335,6 +335,36 @@ export class MainMenuScene extends Scene {
 				},
 			},
 			{
+				label: "Inventory & Equipment",
+				description: "Items, equipment slots, and consumables",
+				tooltip: "Browse your bag, equip weapons and armor, and use potions (also opens in-world)",
+				category: "play",
+				action: () => this.openInventory(),
+				prefetch: () => {
+					void import("./InventoryScene");
+				},
+			},
+			{
+				label: "Shop & Trading",
+				description: "Buy and sell weapons, armor, and supplies",
+				tooltip: "Spend gold on gear and consumables, or sell loot back (also opens at in-world merchants)",
+				category: "play",
+				action: () => this.openShop(),
+				prefetch: () => {
+					void import("./ShopScene");
+				},
+			},
+			{
+				label: "Skill Tree",
+				description: "Unlock combat, magic, and utility skills",
+				tooltip: "Spend skill points across three branching paths with prerequisites (also opens in-world)",
+				category: "play",
+				action: () => this.openSkillTree(),
+				prefetch: () => {
+					void import("./SkillTreeScene");
+				},
+			},
+			{
 				label: "Watch Last Replay",
 				description: "Playback your recorded puzzle match",
 				tooltip: "Watch a step-by-step frame recreation of your most recent puzzle game",
@@ -520,6 +550,16 @@ export class MainMenuScene extends Scene {
 				action: () => this.openWorldMap(),
 				prefetch: () => {
 					void import("./WorldMapScene");
+				},
+			},
+			{
+				label: "Quest Log",
+				description: "Active objectives, rewards, and quest chains",
+				tooltip: "Track main, side, daily, and challenge quests with objective progress (story diary stays under Quest Journal)",
+				category: "community",
+				action: () => this.openQuestLog(),
+				prefetch: () => {
+					void import("./QuestLogScene");
 				},
 			},
 			{
@@ -1245,6 +1285,48 @@ export class MainMenuScene extends Scene {
 			camera: this.camera ?? undefined,
 		});
 		SceneTransition.pushWithFade(this.app, seqEditorScene);
+	}
+
+	private async openInventory(): Promise<void> {
+		const { InventoryScene } = await import("./InventoryScene");
+		const scene = new InventoryScene({
+			name: "inventory",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openShop(): Promise<void> {
+		const { ShopScene } = await import("./ShopScene");
+		const scene = new ShopScene({
+			name: "shop",
+			app: this.app,
+			camera: this.camera ?? undefined,
+			gold: 250,
+			inventory: [],
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openSkillTree(): Promise<void> {
+		const { SkillTreeScene } = await import("./SkillTreeScene");
+		const scene = new SkillTreeScene({
+			name: "skill-tree",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
+	}
+
+	private async openQuestLog(): Promise<void> {
+		const { QuestLogScene } = await import("./QuestLogScene");
+		const scene = new QuestLogScene({
+			name: "quest-log",
+			app: this.app,
+			camera: this.camera ?? undefined,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
 	}
 
 	private async openVisualizer(): Promise<void> {
