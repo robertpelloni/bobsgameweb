@@ -129,7 +129,7 @@ export class BattleScene extends Scene<BattleSceneConfig> {
             this.menuTexts.push(t);
         }
         
-        this.actionMenu.position.set(40, this.height - 240);
+        this.actionMenu.position.set(40, this.height - 258);
         this.container.addChild(this.actionMenu);
 
         // Health Bars
