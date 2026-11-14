@@ -717,7 +717,12 @@ export class Camera {
 	// ─── Container update (pixel-rounded to prevent grid gaps) ───
 
 	private updateContainer(): void {
-		if (!this.container) return;
+		// WorldScene repoints the camera at its own container, which is
+		// destroyed when the scene exits. Without this guard, Game's per-frame
+		// camera update threw on the destroyed container forever after
+		// "Quit to Menu", starving the renderer (black screen, menu alive
+		// underneath). Skip until a live container is attached again.
+		if (!this.container || this.container.destroyed) return;
 		this.container.scale.set(this._zoomVal);
 		// Round position to nearest pixel to prevent sub-pixel grid gaps
 		this.container.position.set(
