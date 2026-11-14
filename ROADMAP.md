@@ -1,25 +1,30 @@
-# ROADMAP: okgame Structural Milestones
-- [ ] **Phase 1: Recovery & Foundation** - Indexing legacy assets, stabilizing the world graph, and implementing the import pipeline.
-- [x] **Phase 2: Feature Parity** - Achieving 1:1 functionality with the v8830 engine (dialogue, audio, movement, collision).
-    - [x] "Blah" system for dialogue.
-    - [x] 8-directional movement support.
-    - [x] SFX library (IDs 0-87) full mapping.
-    - [x] 8-directional animation for Yuu (64 frames implemented in `YuuEntity`).
-    - [x] Collision parity with metadata-driven hitboxes (30px/24px).
-- [x] **Phase 3: Modernization** - Implementing WebGPU rendering, advanced particle systems, and FFT-driven visualizers.
-- [x] **Phase 4: Expansion** - Regional clusters, multiplayer hardening, mobile optimization, Wasm physics, WebGPU particles.
-    - [x] Server-side spatial partitioning (Regional Clusters).
-    - [x] Mobile UI Refinement (Virtual Joystick).
-    - [x] Hardened map transition protocol.
-    - [x] Wasm Physics Bridge (C++ → Wasm compilation)
-    - [x] WebGPU Particle System (compute-shader based)
-    - [x] FFT Audio Visualizer
-    - [x] AI NPC Dialogue Generation
-    - [x] AI Sprite/Tileset Processing
-    - [x] Collision fix: HitDetectionSystem legacy fallback ordering
-    - [x] Collision fix: Wall check before floor check
+# ROADMAP: okgame (`bobsgameweb`) Structural Milestones
+
+- [x] **Phase 1: Recovery & Foundation** - Indexing legacy assets, stabilizing the 244-map / 726-door world graph, and implementing the `LegacyMapLoader` + `data/doors.json` import pipeline.
+- [x] **Phase 2: Feature Parity** - Achieving 1:1 functionality with the v8830 Java engine (dialogue, audio, movement, collision, doors).
+    - [x] "Blah" procedural voice system for dialogue.
+    - [x] 8-directional movement support & 64-frame animations for Yuu (`YuuEntity`).
+    - [x] SFX library (IDs 0–87) and tracker/OGG music library mapping in `AudioManager`.
+    - [x] Collision parity: `HitDetectionSystem` (`!== 0` hit markers), `hitBounds`/`extra` layer alignment, `WALL_IDS` priority over `FLOOR_IDS`, and metadata-driven hitboxes (`24px` kids / `30px` adults).
+    - [x] Door sprite ECS integration (`SpriteComponent` + `doors.json` lookup + procedural variant fallback + `F2` debug trigger overlay).
+- [x] **Phase 3: Modernization** - Implementing WebGPU compute shaders, unified particle systems, and FFT/Butterchurn audio visualizers.
+- [x] **Phase 4: Expansion & Desktop Shell** - Regional clusters, multiplayer hardening, mobile touch controls, Wasm physics bridge, AI tooling, and Electron desktop integration.
+    - [x] Server-side spatial partitioning (Regional Clusters) & RPG sync rate-limiting.
+    - [x] Mobile UI Refinement (Virtual Joystick / `TouchControls`).
+    - [x] Hardened map transition protocol & entity cleanup.
+    - [x] Wasm Physics Bridge (`cpp_port/` C++ → WebAssembly compilation & worker bridge).
+    - [x] WebGPU Particle System (`WebGPUParticleSystem` WGSL compute shaders wired into `WeatherRenderer`).
+    - [x] FFT Audio Visualizer & ProjectM/Butterchurn presets.
+    - [x] AI NPC Dialogue Generation & real-time chat via `GenerativeAIManager` and `server/ai_proxy.js`.
+    - [x] AI Sprite/Tileset Processing & external tool launching in `CustomGameEditor.ts`.
+    - [x] Electron System Tray daemon, single-instance lock, and AI Proxy server lifecycle controls (`src/main/index.ts`).
+    - [x] Consolidated tabbed Dashboard UI (`MainMenuScene.ts`) with live AI Proxy health status.
+    - [x] Vite `copyPublicDir` build optimization avoiding redundant 2.5 GB `data/` copies, plus root Windows execution scripts (`build.bat`, `start.bat`, `setup.bat`).
+    - [x] Recursive submodule synchronization (`submodules/bobui` `v1.2.52`, `juce` `9.0.5`, `ultimatepp` latest `master`).
 - [ ] **Phase 5: Production Polish & Extensibility** - Finalizing the omni-engine architecture for massive scale.
-    - [ ] Complete UI migration from HTML DOM to native PixiJS components.
-    - [ ] WebGPU main render pipeline switch.
-    - [ ] Multiplayer robust state reconciliation and interpolation.
-    - [ ] Full C++ Qt6 port validation with `bobui` submodule.
+    - [ ] Extract dedicated door sprite frames from legacy binary pak into `data/sprites/sprite_atlas.{png,json}` so `WorldScene` upgrades automatically from procedural door panels to pixel-art animated doors.
+    - [ ] Complete remaining HTML DOM editor overlays migration to native PixiJS components.
+    - [ ] Switch primary 2D tile/entity render pipeline to WebGPU by default with WebGL2 fallback.
+    - [ ] Multiplayer client-side prediction, state reconciliation, and entity interpolation under high latency.
+    - [ ] Full native desktop/Wasm parity integration between `cpp_port/` and `submodules/bobui` (`BQt` `v1.2.52` Go/C++ kernel).
+    - [ ] Deploy `v3.0.34` bundle (`index.html` + `dist/renderer/assets/`) to Hetzner production (`/srv/www/bobsgame.com`).

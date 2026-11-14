@@ -4,16 +4,45 @@
  * and forwards requests from the frontend client.
  */
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import OpenAI from 'openai';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/**
+ * Resolve the canonical semantic version string from the root `VERSION.md`
+ * (single source of truth), falling back gracefully if deployed standalone.
+ */
+function resolveAiProxyVersion() {
+    const candidates = [
+        path.resolve(__dirname, '..', 'VERSION.md'),
+        path.resolve(__dirname, 'VERSION.md'),
+    ];
+    for (const candidate of candidates) {
+        try {
+            if (fs.existsSync(candidate)) {
+                const raw = fs.readFileSync(candidate, 'utf-8').trim();
+                if (raw) return raw.replace(/^v/i, '');
+            }
+        } catch {
+            // Ignore read errors and fall through
+        }
+    }
+    return '3.0.34';
+}
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-const PORT = 8080;
+const PORT = Number(process.env.AI_PROXY_PORT || 8080);
+const AI_PROXY_VERSION = resolveAiProxyVersion();
 
 // Initialize OpenAI. It expects process.env.OPENAI_API_KEY to be set.
 // If it's not set, it will fallback to mock behavior.
@@ -196,6 +225,7 @@ app.get('/healthz', (req, res) => {
     res.json({
         status: 'ok',
         service: 'ai-proxy',
+        version: AI_PROXY_VERSION,
         openaiConfigured: openai !== null,
         port: PORT
     });
@@ -205,6 +235,7 @@ app.get('/api/status', (req, res) => {
     res.json({
         status: 'ok',
         service: 'ai-proxy',
+        version: AI_PROXY_VERSION,
         openaiConfigured: openai !== null,
         port: PORT
     });

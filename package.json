@@ -1,14 +1,16 @@
 {
   "name": "okgame",
-  "version": "3.0.33",
+  "version": "3.0.34",
   "description": "bob's game - puzzle game engine",
   "main": "dist/main/index.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "server": "node server/ai_proxy.js",
+    "server:ws": "node server/index.js",
     "dev:electron": "concurrently \"vite\" \"electron .\"",
-    "build": "tsc && vite build",
+    "build": "tsc && tsc -p tsconfig.main.json && vite build",
+    "build:main": "tsc -p tsconfig.main.json",
     "build:electron": "npm run build && electron-builder",
     "preview": "vite preview",
     "lint": "eslint src --ext .ts,.tsx",

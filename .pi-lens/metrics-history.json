@@ -593,13 +593,13 @@
     },
     "src\\renderer\\scenes\\WorldScene.ts": {
       "latest": {
-        "commit": "unknown",
-        "timestamp": "2026-06-22T12:34:12.849Z",
-        "mi": 0,
-        "cognitive": 2029,
+        "commit": "8d21a9da",
+        "timestamp": "2026-07-14T05:23:38.125Z",
+        "mi": 28.2,
+        "cognitive": 2113,
         "nesting": 12,
-        "lines": 3218,
-        "maxCyclomatic": 371,
+        "lines": 3269,
+        "maxCyclomatic": 141,
         "entropy": 8.4
       },
       "history": [
@@ -682,9 +682,19 @@
           "lines": 3218,
           "maxCyclomatic": 371,
           "entropy": 8.4
+        },
+        {
+          "commit": "8d21a9da",
+          "timestamp": "2026-07-14T05:23:38.125Z",
+          "mi": 28.2,
+          "cognitive": 2113,
+          "nesting": 12,
+          "lines": 3269,
+          "maxCyclomatic": 141,
+          "entropy": 8.4
         }
       ],
-      "trend": "stable"
+      "trend": "improving"
     },
     "src\\renderer\\engine\\map\\NPCDialogue.ts": {
       "latest": {
@@ -1417,5 +1427,5 @@
       "trend": "stable"
     }
   },
-  "capturedAt": "2026-06-22T12:38:36.871Z"
+  "capturedAt": "2026-07-14T05:23:43.138Z"
 }

@@ -24,11 +24,19 @@ export const SERVER_URL =
 	envServerUrl ||
 	(isProd ? "https://ws.bobsgame.com" : "http://localhost:6065");
 
+declare const __APP_VERSION__: string | undefined;
+
 /**
  * The current application version string.
- * Should be kept in sync with VERSION.md and CHANGELOG.md.
+ *
+ * Dynamically injected at build/dev time by `vite.config.ts` directly from
+ * `VERSION.md` (single source of truth), with a safe static fallback when
+ * imported outside Vite (e.g., direct `tsx` unit tests or Electron `tsc -p`).
  */
-export const APP_VERSION = "3.0.10";
+export const APP_VERSION: string =
+	typeof __APP_VERSION__ !== "undefined" && __APP_VERSION__
+		? __APP_VERSION__
+		: "3.0.34";
 
 /**
  * Base URL for large assets (sprites, maps, audio).

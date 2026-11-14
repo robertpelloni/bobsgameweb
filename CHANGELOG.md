@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## v3.0.34 — 2026-11-14 — Repository Synchronization, Single-Source Versioning, REST CORS Fix, BelowNormal Ops & Submodule Governance
+
+### Added
+- **Consolidated Local Operations Orchestrator (`scripts/local-ops.ps1`):** Added a unified PowerShell orchestrator (`status`, `start`, `stop`, `restart`, `logs`, `build`) for `ws` (`6065`), `ai` (`8080`), `web` (`3000`), and `electron` that lowers Windows scheduling priority to `BelowNormal` and records owned PIDs in `logs/pids.json` so `stop` never terminates unrelated host processes.
+- **Root Windows Execution Suite (`build.bat`, `start.bat`, `setup.bat`):** Added root batch scripts supporting full-stack local dev startup (`start.bat`), Electron desktop mode (`--electron`), production preview (`--preview`), backend/AI-proxy standalone launch (`--server`, `--ai-proxy`), `bobui` delegation (`--bobui`), recursive submodule setup (`setup.bat`), and non-destructive full builds (`build.bat`), all lowered to `BelowNormal` CPU scheduling priority. Updated `tools_build.sh` for `submodules/bobui` Go builds and `cpp_port/` Emscripten builds.
+- **Universal REST HTTP CORS & `/api/status` Endpoint (`server/index.js`):** Added `Access-Control-Allow-Origin`, `Access-Control-Allow-Methods`, `Access-Control-Allow-Headers`, `204` `OPTIONS` preflight handling, and `/api/status` health metadata directly to `httpServer` so browser clients can query `/healthz`, `/api/status`, `/stats`, `/maps/*`, `/players/*`, and `/leaderboards` without CORS failures.
+- **Structural Map (`STRUCTURAL_MAP.md`):** Generated a complete recursive repository & submodule structural map documenting exact remote URLs, tracking branches, commit SHAs, and directory layout across `bobsgameweb`, `submodules/bobui` (`bqt`), `submodules/bobui/submodules/juce` (JUCE `9.0.5`), and `submodules/bobui/submodules/ultimatepp`.
+
+### Changed
+- **Recursive Submodule Synchronization (`submodules/bobui` -> `v1.2.60`):** Fast-forwarded `submodules/bobui` (`https://github.com/robertpelloni/bqt.git`) to `92bb40654b` (`v1.2.60`), retaining nested `submodules/juce` at `origin/master` (`d60b7a78030661574a615b586d9325ba7a7fa7dd`) and `submodules/ultimatepp` at `origin/master` (`1a56dd3a4a02112563eb9e16f62f17bba8a0edd1`).
+- **Single-Source Version Governance (`VERSION.md`):** Wired `vite.config.ts` (`define: { __APP_VERSION__ }`), `src/shared/Config.ts`, `server/index.js`, and `server/ai_proxy.js` to dynamically read `VERSION.md` as the single source of truth rather than duplicating hardcoded version literals across client and backend entrypoints.
+- **Vite Public Directory Build Optimization (`vite.config.ts`):** Added smart `copyPublicDir` detection that skips re-copying the ~2.5 GB `data/` directory (`lancedb/`, `maps/`) when `dist/renderer/maps_v2` is already hydrated on disk (overridable via `VITE_COPY_PUBLIC_DIR=true|false`), eliminating multi-minute build stalls while preserving `emptyOutDir: false`.
+- **Tracking & Non-Destructive Script Archival:** Removed `*.db` and `.memory/branches/*/log.md` exclusions from `.gitignore` so all agent memory, `.pi-lens/` sessions, databases, and non-sensitive documentation remain tracked in git; ignored ephemeral `logs/*.log` and `logs/pids.json`; archived obsolete one-off scripts (`resolve_conflicts.sh`, `generate-dummy-assets.cjs`, `fix_hallway_doors.py`, `fix_room_arrivals.py`, `print-hetzner-first-deploy.sh`, `rebuild-for-backend.sh`) into `scripts/archive/`.
+
+## v3.0.25–v3.0.33 (Reconciled Map, Door & Collision Milestones)
+
+### Added & Fixed
+- **Map Layer Pre-Rendering & Coordinate Unification:** Pre-rendered static tile layers to composite textures for frame-rate stability, unified 1X (`8px`) hit-detection coordinate scales across `WorldScene` and `HitDetectionSystem`, and integrated `data/doors.json` arrival/reverse-door overrides in `LegacyMapLoader.ts`.
+- **Hit Layer & Bounds Layer Alignment:** Mapped `hitBounds` to `MapData.MAP_HIT_LAYER` (`!== 0` blocked) and `extra` to `MapData.MAP_CAMERA_BOUNDS_LAYER` (`1` interior walkable override), with `F2` visual debug overlays for both layers.
+
 ## v3.0.13 - System Tray, AI Proxy Integration & Consolidated Dashboard UI
 
 ### Added

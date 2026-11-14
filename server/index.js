@@ -18,7 +18,30 @@ import pako from "pako";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const SERVER_VERSION = "3.0.10";
+/**
+ * Resolve the canonical semantic version string from the root `VERSION.md`
+ * (single source of truth), falling back gracefully if deployed standalone
+ * without the parent directory.
+ */
+function resolveServerVersion() {
+	const candidates = [
+		path.resolve(__dirname, "..", "VERSION.md"),
+		path.resolve(__dirname, "VERSION.md"),
+	];
+	for (const candidate of candidates) {
+		try {
+			if (fs.existsSync(candidate)) {
+				const raw = fs.readFileSync(candidate, "utf-8").trim();
+				if (raw) return raw.replace(/^v/i, "");
+			}
+		} catch {
+			// Ignore read errors and fall through to next candidate
+		}
+	}
+	return "3.0.34";
+}
+
+const SERVER_VERSION = resolveServerVersion();
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = parseInt(process.env.PORT || "6065", 10);
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
@@ -139,17 +162,53 @@ function getMapPath(mapId) {
 const httpServer = createServer((req, res) => {
 	const url = req.url || "/";
 
+	// =========================================================================
+	// Universal HTTP CORS & Preflight Middleware
+	// =========================================================================
+	// WHAT: Attaches `Access-Control-Allow-*` headers to every HTTP REST route
+	//       (`/healthz`, `/api/status`, `/stats`, `/maps/*`, `/players/*`,
+	//       `/leaderboards`) and short-circuits `OPTIONS` preflight requests.
+	// WHY:  Previously, CORS was configured only on the Socket.io instance
+	//       (`new Server(httpServer, { cors })`), which only intercepts
+	//       `/socket.io/*` paths. Direct browser `fetch()` requests from Vite
+	//       (`localhost:3000`) or `https://bobsgame.com` to port `6065` failed
+	//       browser CORS checks on REST endpoints and `PUT` preflights.
+	res.setHeader("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
+	res.setHeader(
+		"Access-Control-Allow-Methods",
+		"GET, POST, PUT, DELETE, OPTIONS",
+	);
+	res.setHeader(
+		"Access-Control-Allow-Headers",
+		"Content-Type, Authorization, X-Requested-With",
+	);
+	if (req.method === "OPTIONS") {
+		res.writeHead(204);
+		res.end();
+		return;
+	}
+
 	if (url === "/" || url.startsWith("/?")) {
 		res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
 		res.end("bob's game backend is running\n");
 		return;
 	}
 
-	if (url === "/healthz" || url.startsWith("/healthz?")) {
+	if (
+		url === "/healthz" ||
+		url.startsWith("/healthz?") ||
+		url === "/api/status" ||
+		url.startsWith("/api/status?")
+	) {
 		const payload = {
 			ok: true,
+			status: "ok",
 			service: "bobsgameweb-socket-server",
 			version: SERVER_VERSION,
+			port: PORT,
+			uptime: Math.floor(process.uptime()),
+			connections: typeof io !== "undefined" ? io.engine.clientsCount : 0,
+			rooms: typeof rooms !== "undefined" ? rooms.size : 0,
 			time: Date.now(),
 		};
 		res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
