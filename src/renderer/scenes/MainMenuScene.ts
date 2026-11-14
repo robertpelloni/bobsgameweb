@@ -720,23 +720,29 @@ export class MainMenuScene extends Scene {
 		// Mode buttons are relevant for puzzle modes in 'play' category
 		this.modeContainer.visible = category === "play";
 
+		// Compact rows when a category overflows 720p (Play has 14 items = 7
+		// rows; at 52px spacing the last row was clipped behind the page
+		// footer in the live 1280x720 verification screenshots).
+		const cols = 2;
+		const rows = Math.ceil(this.currentMenuItems.length / cols);
+		const compact = rows > 6;
+
 		const buttonStyle: ButtonStyle = {
 			width: 280,
-			height: 44,
+			height: compact ? 38 : 44,
 			backgroundColor: 0x16243b,
 			backgroundColorHover: 0x274066,
 			backgroundColorPressed: 0x0e1726,
 			borderColor: 0x3d5a80,
 			borderWidth: 2,
 			textColor: 0xffffff,
-			fontSize: 15,
+			fontSize: compact ? 14 : 15,
 			borderRadius: 8,
 		};
 
 		const startY = category === "play" ? this.height * 0.46 : this.height * 0.40;
 		const spacingX = 300;
-		const spacingY = 52;
-		const cols = 2;
+		const spacingY = compact ? 46 : 52;
 
 		this.currentMenuItems.forEach((item, index) => {
 			const col = index % cols;

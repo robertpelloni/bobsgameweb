@@ -114,22 +114,22 @@ export class BattleScene extends Scene<BattleSceneConfig> {
         // Action Menu (4 options with cursor)
         this.actionMenu = new Container();
         const menuBg = new Graphics();
-        menuBg.rect(0, 0, 240, 180);
+        menuBg.rect(0, 0, 240, 215);
         menuBg.fill({ color: 0x000000, alpha: 0.85 });
         menuBg.stroke({ color: 0x00ff00, width: 2 });
         this.actionMenu.addChild(menuBg);
         
-        this.menuOptions = ['ATTACK', 'MAGIC', 'ITEMS', 'FLEE'];
+        this.menuOptions = ['ATTACK', 'MAGIC', 'DEFEND', 'ITEMS', 'FLEE'];
         this.menuCursorPos = 0;
         this.menuTexts = [];
         for (let i = 0; i < this.menuOptions.length; i++) {
             const t = new Text({ text: (i === 0 ? '▶ ' : '  ') + this.menuOptions[i], style: { fill: '#00ff00', fontSize: 20, lineHeight: 36 } });
-            t.position.set(20, 15 + i * 40);
+            t.position.set(20, 15 + i * 36);
             this.actionMenu.addChild(t);
             this.menuTexts.push(t);
         }
         
-        this.actionMenu.position.set(40, this.height - 220);
+        this.actionMenu.position.set(40, this.height - 240);
         this.container.addChild(this.actionMenu);
 
         // Health Bars
@@ -244,8 +244,9 @@ export class BattleScene extends Scene<BattleSceneConfig> {
         switch (index) {
             case 0: this.playerAttack(); break;
             case 1: this.playerMagic(); break;
-            case 2: this.playerUseItem(); break;
-            case 3: this.flee(); break;
+            case 2: this.playerDefend(); break;
+            case 3: this.playerUseItem(); break;
+            case 4: this.flee(); break;
         }
     }
 
@@ -371,6 +372,19 @@ export class BattleScene extends Scene<BattleSceneConfig> {
         });
     }
 
+    private playerDefend(): void {
+        // Brace: halve the next enemy hit. Uses the playerDefending flag that
+        // existed unused since the scene was written; cleared when a hit lands.
+        this.playerDefending = true;
+        this.logMessage('You brace yourself! Next hit halved.');
+        this.playerSprite.tint = 0x4488ff;
+        setTimeout(() => this.playerSprite.tint = 0xffffff, 500);
+        this.turn = 'animating';
+        setTimeout(() => {
+            this.turn = 'enemy';
+        }, 800);
+    }
+
     private playerUseItem(): void {
         // Simple item usage — heal potion
         const hp = this.config.player.hp;
@@ -426,9 +440,14 @@ export class BattleScene extends Scene<BattleSceneConfig> {
         this.logMessage(`Enemy attacks!`);
         
         this.animateLunge(this.enemySprite, this.eOriginalX, this.eOriginalY, -1, () => {
-            const dmg = Math.max(1, this.config.enemy.atk - this.config.player.def);
+            let dmg = Math.max(1, this.config.enemy.atk - this.config.player.def);
+            const blocked = this.playerDefending;
+            if (blocked) {
+                dmg = Math.max(1, Math.floor(dmg / 2));
+                this.playerDefending = false;
+            }
             this.config.player.hp -= dmg;
-            
+
             this.triggerShake(10);
             InputManager.vibrate(0, 200, 0.5, 0.8); // Medium rumble on taking damage
             
@@ -439,7 +458,7 @@ export class BattleScene extends Scene<BattleSceneConfig> {
             setTimeout(() => this.playerSprite.tint = 0xffffff, 200);
 
             this.updateHealthBars();
-            this.logMessage(`Enemy deals ${dmg} damage!`);
+            this.logMessage(blocked ? `Blocked! Enemy deals only ${dmg} damage!` : `Enemy deals ${dmg} damage!`);
             
             setTimeout(() => this.checkVictory(true), 1000);
         });
@@ -450,7 +469,11 @@ export class BattleScene extends Scene<BattleSceneConfig> {
 
         this.animateLunge(this.enemySprite, this.eOriginalX, this.eOriginalY, -1, () => {
             const baseDmg = Math.max(1, this.config.enemy.atk - this.config.player.def);
-            const dmg = Math.floor(baseDmg * multiplier);
+            let dmg = Math.floor(baseDmg * multiplier);
+            if (this.playerDefending) {
+                dmg = Math.max(1, Math.floor(dmg / 2));
+                this.playerDefending = false;
+            }
             this.config.player.hp -= dmg;
 
             this.triggerShake(15);
