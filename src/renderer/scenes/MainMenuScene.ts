@@ -315,6 +315,16 @@ export class MainMenuScene extends Scene {
 				},
 			},
 			{
+				label: "Demo Battle",
+				description: "Turn-based battle against a training opponent",
+				tooltip: "Try the turn-based battle system with demo combatants (real battles start from NPCs in MMO World)",
+				category: "play",
+				action: () => this.openDemoBattle(),
+				prefetch: () => {
+					void import("./BattleScene");
+				},
+			},
+			{
 				label: "Fishing Mini-Game",
 				description: "Relaxing waterfront fishing experience",
 				tooltip: "Cast lines, hook catches, and earn rewards across local waters in the fishing mini-game",
@@ -1285,6 +1295,37 @@ export class MainMenuScene extends Scene {
 			camera: this.camera ?? undefined,
 		});
 		SceneTransition.pushWithFade(this.app, seqEditorScene);
+	}
+
+	private async openDemoBattle(): Promise<void> {
+		// BattleScene normally receives live ECS combatants from WorldScene NPC
+		// encounters. For dashboard access we fabricate equivalent components
+		// with the same field shape, so the battle system runs unchanged.
+		const [{ BattleScene }, { CombatComponent }] = await Promise.all([
+			import("./BattleScene"),
+			import("../engine/ecs/components/CombatComponent"),
+		]);
+		const player = new CombatComponent();
+		player.isPlayer = true;
+		player.level = 3;
+		player.hp = 100;
+		player.maxHp = 100;
+		player.atk = 14;
+		player.def = 6;
+		const enemy = new CombatComponent();
+		enemy.level = 2;
+		enemy.hp = 60;
+		enemy.maxHp = 60;
+		enemy.atk = 9;
+		enemy.def = 3;
+		const scene = new BattleScene({
+			name: "battle",
+			app: this.app,
+			camera: this.camera ?? undefined,
+			player,
+			enemy,
+		});
+		SceneTransition.pushWithFade(this.app, scene);
 	}
 
 	private async openInventory(): Promise<void> {
