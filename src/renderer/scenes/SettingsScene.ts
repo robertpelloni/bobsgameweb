@@ -319,9 +319,27 @@ export class SettingsScene extends Scene {
 		saveButton.on("pointerdown", () => this.saveName());
 		this.container.addChild(saveButton);
 
+		// Graphics & haptics live in OptionsScene; it used to be a second,
+		// overlapping dashboard entry (both scenes had volume sliders). It is
+		// now one "Settings & Options" surface: this page links onward, and
+		// Options' Back button returns here.
+		const optionsButton = this.createStyledButton("Graphics & Haptics →", 200, 36);
+		optionsButton.position.set(cx - 100, 448);
+		optionsButton.on("pointerdown", async () => {
+			this.cleanup();
+			const { OptionsScene } = await import("./OptionsScene");
+			const optionsScene = new OptionsScene({
+				name: "options",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			});
+			SceneTransition.pushWithFade(this.app, optionsScene);
+		});
+		this.container.addChild(optionsButton);
+
 		// ---- BACK BUTTON ----
 		this.backButton = this.createStyledButton("Back", 200, 44);
-		this.backButton.position.set(cx - 100, 460);
+		this.backButton.position.set(cx - 100, 496);
 		this.backButton.on("pointerdown", () => {
 			this.cleanup();
 			SceneTransition.popWithFade(this.app);
@@ -332,7 +350,7 @@ export class SettingsScene extends Scene {
 		const hintStyle = new TextStyle({ fill: "#555566", fontSize: 12 });
 		const hint = new Text({ text: "Press ESC to go back", style: hintStyle });
 		hint.anchor.set(0.5);
-		hint.position.set(cx, 520);
+		hint.position.set(cx, 556);
 		this.container.addChild(hint);
 	}
 

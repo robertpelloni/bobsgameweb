@@ -316,8 +316,8 @@ export class MainMenuScene extends Scene {
 			},
 			{
 				label: "Demo Battle",
-				description: "Turn-based battle against a training opponent",
-				tooltip: "Try the turn-based battle system with demo combatants (real battles start from NPCs in MMO World)",
+				description: "Turn-based battle against a hard-hitting training opponent",
+				tooltip: "Try the turn-based battle system with demo combatants — it hits hard, so passive play loses (real battles start from NPCs in MMO World)",
 				category: "play",
 				action: () => this.openDemoBattle(),
 				prefetch: () => {
@@ -635,19 +635,9 @@ export class MainMenuScene extends Scene {
 				},
 			},
 			{
-				label: "Game Options",
-				description: "Video, audio, and gameplay toggles",
-				tooltip: "Adjust SFX volume, music tracks, particle density, and render scale",
-				category: "system",
-				action: () => this.openOptions(),
-				prefetch: () => {
-					void import("./OptionsScene");
-				},
-			},
-			{
-				label: "Engine Settings",
-				description: "Internal engine hardware options",
-				tooltip: "Configure renderer preference (WebGPU/WebGL), VSync, and debug overlays",
+				label: "Settings & Options",
+				description: "Audio, profile, graphics, and haptics in one place",
+				tooltip: "Volume, mute, and profile name; the Graphics & Haptics button inside opens renderer, HD sprite, and vibration options (one consolidated settings surface)",
 				category: "system",
 				action: () => this.openSettings(),
 				prefetch: () => {
@@ -1319,11 +1309,15 @@ export class MainMenuScene extends Scene {
 		player.atk = 14;
 		player.def = 6;
 		const enemy = new CombatComponent();
-		enemy.level = 2;
-		enemy.hp = 60;
-		enemy.maxHp = 60;
-		enemy.atk = 9;
-		enemy.def = 3;
+		// Retuned 2026-11-14 so DEFEAT is reachable: at atk 9 the demo enemy
+		// dealt ~3/hit and died in ~6 hits, so the player could never lose.
+		// Now it deals ~13/hit (player attack deals 10/hit vs 90 HP): winning
+		// needs magic, heals, or crits; defending or idling loses in ~8-17 hits.
+		enemy.level = 5;
+		enemy.hp = 90;
+		enemy.maxHp = 90;
+		enemy.atk = 17;
+		enemy.def = 4;
 		const scene = new BattleScene({
 			name: "battle",
 			app: this.app,
