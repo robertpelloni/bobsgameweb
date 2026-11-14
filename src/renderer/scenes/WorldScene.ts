@@ -72,6 +72,7 @@ import {
 import { DialogueTracker } from "../engine/event/DialogueTracker";
 import { FlagManager } from "../engine/event/FlagManager";
 import { AmbientMusicGenerator } from "../audio/AmbientMusicGenerator";
+import doorsConfig from "../../../data/doors.json";
 export class WorldScene extends Scene {
 	private world: World;
 	private map: GameMap | null = null;
@@ -127,6 +128,8 @@ export class WorldScene extends Scene {
 	private rainDrops: { x: number; y: number; speed: number }[] = [];
 	private isExteriorMap: boolean = false;
 	private isPaused: boolean = false;
+	private pauseCursor = 0;
+	private pauseOptionTexts: Text[] = [];
 	private _autoSaveTimer: number = 0;
 	private pauseContainer: Container | null = null;
 	private static readonly TILE_PX = 8; // pixels per tile at 1X (matches Tileset.TILE_SIZE)
@@ -752,19 +755,100 @@ export class WorldScene extends Scene {
 			transform.y = doorY * WorldScene.TILE_PX;
 			this.world.addComponent(entity, transform);
 
-			// Door indicator: add to map container so it's cleaned up on map change.
+			// =========================================================================
+			// Door Visual Representation (Reconciled Primary + Alternate Implementations)
+			// =========================================================================
+			// WHAT: Resolves the canonical door sprite identifier from `data/doors.json`
+			//       and attaches a `SpriteComponent` to the ECS door entity, using a
+			//       `SpriteAtlas` AnimatedSprite when available and a palette-matched
+			//       procedural `Graphics` door panel when the atlas lacks the entry.
+			// WHY:  Previously, a merge-conflict strip dropped the `SpriteComponent`
+			//       wiring (and the earlier stash omitted `world.addComponent(entity, spriteComp)`),
+			//       leaving only an opaque red debug square (`0xff0000`) at zIndex 99999.
+			// SIDE EFFECTS & OPTIMIZATION:
+			//       - Registering `SpriteComponent` delegates parenting, position sync,
+			//         and Y-depth sorting (`zIndex = transform.y`) to `RenderSystem`
+			//         on `entitySpriteContainer`, avoiding per-frame manual container sorts.
+			//       - Drawing the procedural fallback on `[0, -16, 16, 16]` mirrors the
+			//         bottom-left `(0.0, 1.0)` anchor of `AnimatedSprite`, placing the
+			//         door panel directly above the walkable threshold tile.
+			// ALTERNATE METHOD (Retained):
+			//       - The high-visibility red trigger-zone overlay (`doorGfx`) is preserved
+			//         as an opt-in debug indicator bound to `this.debugShowHitLayer` (F2)
+			//         so collision/warp debugging remains available without obscuring doors.
+			let spriteName = "DoorDownBrownGoldKnob";
+			const mapDoorsData = (
+				doorsConfig as Record<
+					string,
+					{ doors?: { name?: string; destMap?: string; sprite?: string }[] }
+				>
+			)[this.currentMapName || ""];
+			if (mapDoorsData?.doors) {
+				const matchingDoor =
+					mapDoorsData.doors.find((d) => d.name === door.name) ??
+					mapDoorsData.doors.find(
+						(d) => d.destMap === door.destinationMapName,
+					);
+				if (matchingDoor?.sprite) {
+					spriteName = matchingDoor.sprite;
+				}
+			}
+
+			const spriteComp = new SpriteComponent();
+			const doorAnim = this.spriteAtlas.loaded
+				? this.spriteAtlas.createAnimatedSpriteWithFallback(
+						spriteName,
+						["Down", "Closed", "Idle"],
+						0.15,
+					)
+				: null;
+
+			if (doorAnim) {
+				// Anchor at bottom-left (0, 1) so multi-tile doors rise above the walkway origin.
+				doorAnim.anchor.set(0.0, 1.0);
+				doorAnim.gotoAndStop(0);
+				spriteComp.sprite = doorAnim;
+			} else {
+				// Procedural vector fallback styled after the legacy door variant name
+				// (GraySilverKnob vs DarkBrownGoldKnob vs standard BrownGoldKnob).
+				const isGray = spriteName.includes("Gray");
+				const isDarkBrown = spriteName.includes("DarkBrown");
+				const panelColor = isGray
+					? 0x7a8288
+					: isDarkBrown
+						? 0x5c3a1e
+						: 0x8b5a2b;
+				const trimColor = isGray ? 0xc0c8d0 : 0xd4af37;
+
+				const g = new Graphics();
+				g.rect(0, -16, 16, 16);
+				g.fill({ color: panelColor });
+				g.rect(0, -16, 16, 16);
+				g.stroke({ width: 1, color: trimColor });
+				g.circle(12, -8, 1.8);
+				g.fill({ color: trimColor });
+				spriteComp.sprite = g as unknown as Sprite;
+			}
+			(spriteComp as unknown as { assetId?: string }).assetId = spriteName;
+			this.world.addComponent(entity, spriteComp);
+
+			// Alternate debug trigger-bounds indicator (toggled via F2 hit-layer debug mode).
 			const doorGfx = new Graphics();
-			doorGfx.rect(0, 0, 24, 24);
-			doorGfx.fill({ color: 0xff0000 });
-			doorGfx.x = transform.x - 4;
-			doorGfx.y = transform.y - 4;
+			doorGfx.rect(0, 0, 16, 16);
+			doorGfx.fill({ color: 0xff0000, alpha: 0.45 });
+			doorGfx.x = transform.x;
+			doorGfx.y = transform.y;
 			doorGfx.zIndex = 99999;
+			doorGfx.visible = this.debugShowHitLayer;
+			(
+				doorGfx as Graphics & { isDebugDoorIndicator?: boolean }
+			).isDebugDoorIndicator = true;
 			if (this.map?.container) {
 				this.map.container.addChild(doorGfx);
 				this.map.container.sortChildren();
 			}
 			console.log(
-				`[WorldScene] Door: "${door.name}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
+				`[WorldScene] Door: "${door.name}" sprite="${spriteName}" at (${doorX},${doorY}) px(${transform.x},${transform.y})`,
 			);
 
 			const teleport = new TeleportComponent();
@@ -1532,7 +1616,9 @@ export class WorldScene extends Scene {
 	private togglePause(): void {
 		this.isPaused = !this.isPaused;
 		if (this.isPaused) {
+			this.pauseCursor = 0;
 			this.createPauseMenu();
+			this.updatePauseCursor();
 		} else if (this.pauseContainer) {
 			this.pauseContainer.visible = false;
 			AudioManager.playSound("menu_cancel", { volume: 0.2 });
@@ -1569,37 +1655,71 @@ export class WorldScene extends Scene {
 				btn.eventMode = "static";
 				btn.cursor = "pointer";
 				btn.on("pointerdown", () => {
-					switch (idx) {
-						case 0:
-							this.togglePause();
-							break;
-						case 1:
-							this.saveCharacterToCloud();
-							AudioManager.playSound("rpg_save", { volume: 0.3 });
-							this.showDialogue("Game saved!");
-							this.togglePause();
-							break;
-						case 2:
-							this.showDialogue([
-								"WASD/Arrows - Move",
-								"Shift - Sprint",
-								"E - Interact",
-								"Tilde - Console",
-								"F5/F9 - Save/Load",
-							]);
-							this.togglePause();
-							break;
-						case 3:
-							this.saveCharacterToCloud();
-							StateManager.pop();
-							break;
-					}
+					this.pauseCursor = idx;
+					this.updatePauseCursor();
+					this.activatePauseOption(idx);
 				});
+				this.pauseOptionTexts.push(btn);
 				this.pauseContainer?.addChild(btn);
 			});
+			this.updatePauseCursor();
 		}
 		this.pauseContainer!.visible = true;
 		AudioManager.playSound("menu_select", { volume: 0.2 });
+	}
+
+	/** Shared pause-menu activation for mouse (pointerdown) and keyboard. */
+	private activatePauseOption(idx: number): void {
+		switch (idx) {
+			case 0:
+				this.togglePause();
+				break;
+			case 1:
+				this.saveCharacterToCloud();
+				AudioManager.playSound("rpg_save", { volume: 0.3 });
+				this.showDialogue("Game saved!");
+				this.togglePause();
+				break;
+			case 2:
+				this.showDialogue([
+					"WASD/Arrows - Move",
+					"Shift - Sprint",
+					"E - Interact",
+					"Tilde - Console",
+					"F5/F9 - Save/Load",
+				]);
+				this.togglePause();
+				break;
+			case 3:
+				this.saveCharacterToCloud();
+				StateManager.pop();
+				break;
+		}
+	}
+
+	private updatePauseCursor(): void {
+		const labels = ["Resume", "Save Game", "Controls", "Quit to Menu"];
+		this.pauseOptionTexts.forEach((t, i) => {
+			const selected = i === this.pauseCursor;
+			t.text = (selected ? "▶ " : "") + labels[i];
+			t.style.fill = selected ? "#ffcc00" : "#ffffff";
+		});
+	}
+
+	/** Arrow-key + Enter navigation while the pause menu is open. */
+	private updatePauseMenuInput(): void {
+		const count = 4;
+		if (InputManager.isUpPressed()) {
+			this.pauseCursor = (this.pauseCursor - 1 + count) % count;
+			this.updatePauseCursor();
+		}
+		if (InputManager.isDownPressed()) {
+			this.pauseCursor = (this.pauseCursor + 1) % count;
+			this.updatePauseCursor();
+		}
+		if (InputManager.isActionPressed() || InputManager.isKeyPressed(Key.Enter)) {
+			this.activatePauseOption(this.pauseCursor);
+		}
 	}
 	private updateWeather(dt: number): void {
 		if (!this.isExteriorMap || !this.weatherContainer) return;
@@ -2671,6 +2791,7 @@ export class WorldScene extends Scene {
 		if (InputManager.isKeyPressed(Key.Q)) this.openQuestLog();
 		if (InputManager.isKeyPressed(Key.I)) this.openInventory();
 		if (InputManager.isKeyPressed(Key.K)) this.openSkillTree();
+		if (this.isPaused) this.updatePauseMenuInput();
 		if (InputManager.isKeyPressed(Key.Escape)) {
 			this.togglePause();
 		}
@@ -3044,6 +3165,14 @@ export class WorldScene extends Scene {
 							boundsLayer.addChild(g);
 						}
 					}
+				}
+			}
+			for (const child of this.map.container.children) {
+				if (
+					(child as Graphics & { isDebugDoorIndicator?: boolean })
+						.isDebugDoorIndicator
+				) {
+					child.visible = this.debugShowHitLayer;
 				}
 			}
 			this.map.container.sortChildren();
