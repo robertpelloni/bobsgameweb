@@ -2376,6 +2376,9 @@ export class WorldScene extends Scene {
 		}
 	}
 	protected onUpdate(dt: number): void {
+		// Pause-menu input first: isActionPressed()/isKeyPressed() below consume
+		// the pressed-state, so Enter would never reach the pause handler.
+		if (this.isPaused) this.updatePauseMenuInput();
 		this.isActionJustPressed =
 			InputManager.isActionPressed() || InputManager.isKeyPressed(Key.E);
 		// Dismiss controls overlay on any input
@@ -2791,7 +2794,6 @@ export class WorldScene extends Scene {
 		if (InputManager.isKeyPressed(Key.Q)) this.openQuestLog();
 		if (InputManager.isKeyPressed(Key.I)) this.openInventory();
 		if (InputManager.isKeyPressed(Key.K)) this.openSkillTree();
-		if (this.isPaused) this.updatePauseMenuInput();
 		if (InputManager.isKeyPressed(Key.Escape)) {
 			this.togglePause();
 		}
