@@ -38,13 +38,49 @@ function resolveServerVersion() {
 			// Ignore read errors and fall through to next candidate
 		}
 	}
-	return "3.0.35";
+	return "3.0.36";
 }
 
 const SERVER_VERSION = resolveServerVersion();
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = parseInt(process.env.PORT || "6065", 10);
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
+
+// Optional live OpenAI integration on Hetzner Cloud (`ws.bobsgame.com`),
+// eliminating the need for any separate local AI proxy server.
+let openai = null;
+(async () => {
+	if (!process.env.OPENAI_API_KEY) return;
+	try {
+		const mod = await import("openai");
+		const OpenAIClient = mod.default || mod.OpenAI;
+		openai = new OpenAIClient({ apiKey: process.env.OPENAI_API_KEY });
+		console.log("[AI] OpenAI initialized on unified Hetzner backend.");
+	} catch (err) {
+		console.warn("[AI] OpenAI SDK unavailable; running deterministic mock fallback:", err?.message || err);
+	}
+})();
+
+function readJsonBody(req) {
+	return new Promise((resolve, reject) => {
+		let body = "";
+		req.on("data", (chunk) => {
+			body += chunk;
+			if (body.length > 2_000_000) {
+				reject(new Error("Payload too large"));
+				req.destroy();
+			}
+		});
+		req.on("end", () => {
+			try {
+				resolve(body ? JSON.parse(body) : {});
+			} catch (e) {
+				reject(e);
+			}
+		});
+		req.on("error", reject);
+	});
+}
 
 // ============================================================
 // Leaderboard Persistence
@@ -173,7 +209,19 @@ const httpServer = createServer((req, res) => {
 	//       `/socket.io/*` paths. Direct browser `fetch()` requests from Vite
 	//       (`localhost:3000`) or `https://bobsgame.com` to port `6065` failed
 	//       browser CORS checks on REST endpoints and `PUT` preflights.
-	res.setHeader("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
+	const reqOrigin = req.headers.origin;
+	if (ALLOWED_ORIGIN === "*") {
+		res.setHeader("Access-Control-Allow-Origin", "*");
+	} else if (
+		reqOrigin &&
+		(ALLOWED_ORIGIN.split(",").map((s) => s.trim()).includes(reqOrigin) ||
+			/^https:\/\/([a-z0-9-]+\.)?bobsgame\.com$/i.test(reqOrigin))
+	) {
+		res.setHeader("Access-Control-Allow-Origin", reqOrigin);
+		res.setHeader("Vary", "Origin");
+	} else {
+		res.setHeader("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
+	}
 	res.setHeader(
 		"Access-Control-Allow-Methods",
 		"GET, POST, PUT, DELETE, OPTIONS",
@@ -205,6 +253,7 @@ const httpServer = createServer((req, res) => {
 			status: "ok",
 			service: "bobsgameweb-socket-server",
 			version: SERVER_VERSION,
+			openaiConfigured: openai !== null,
 			port: PORT,
 			uptime: Math.floor(process.uptime()),
 			connections: typeof io !== "undefined" ? io.engine.clientsCount : 0,
@@ -213,6 +262,167 @@ const httpServer = createServer((req, res) => {
 		};
 		res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
 		res.end(JSON.stringify(payload));
+		return;
+	}
+
+	// ---- Unified Generative AI Routes (Live Hetzner Cloud) ----
+	if (req.method === "POST" && (url === "/api/generate/sprite" || url === "/api/generate/tileset")) {
+		const kind = url.endsWith("/sprite") ? "sprite" : "tileset";
+		readJsonBody(req)
+			.then(async (body) => {
+				const prompt = String(body.prompt || "").slice(0, 500);
+				if (openai) {
+					try {
+						const prefix =
+							kind === "sprite"
+								? "Create a pixel art sprite sheet on a transparent background for a 2D video game. "
+								: "Create a seamless 2D pixel art tilemap grid for a video game environment. ";
+						const response = await openai.images.generate({
+							model: "dall-e-3",
+							prompt: prefix + prompt,
+							n: 1,
+							size: "1024x1024",
+							response_format: "b64_json",
+						});
+						res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+						res.end(
+							JSON.stringify({
+								success: true,
+								type: kind,
+								prompt,
+								message: "Successfully generated via OpenAI.",
+								imageUrl: `data:image/png;base64,${response.data[0].b64_json}`,
+							}),
+						);
+						return;
+					} catch (e) {
+						console.error(`[AI] OpenAI ${kind} error:`, e?.message || e);
+					}
+				}
+				res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+				res.end(
+					JSON.stringify({
+						success: true,
+						type: kind,
+						prompt,
+						message: "Mock payload from unified Hetzner backend.",
+						imageUrl:
+							kind === "sprite"
+								? "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+								: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+					}),
+				);
+			})
+			.catch(() => {
+				res.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
+				res.end(JSON.stringify({ ok: false, error: "Invalid JSON" }));
+			});
+		return;
+	}
+
+	if (req.method === "POST" && url === "/api/generate/dialogue") {
+		readJsonBody(req)
+			.then(async (body) => {
+				const prompt = String(body.prompt || "").slice(0, 500);
+				const characterName = String(body.characterName || "Villager").slice(0, 64);
+				if (openai) {
+					try {
+						const response = await openai.chat.completions.create({
+							model: "gpt-4o-mini",
+							messages: [
+								{
+									role: "system",
+									content: `You are an NPC named ${characterName} in 'bob's game'. Return JSON {"lines": ["..."]} with 3-5 short lines of dialogue.`,
+								},
+								{ role: "user", content: prompt },
+							],
+							response_format: { type: "json_object" },
+						});
+						const content = JSON.parse(response.choices[0].message.content || "{}");
+						const lines = content.lines || content.dialogue || Object.values(content)[0];
+						res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+						res.end(
+							JSON.stringify({
+								success: true,
+								type: "dialogue",
+								characterName,
+								lines: Array.isArray(lines) ? lines : [String(lines || "")],
+							}),
+						);
+						return;
+					} catch (e) {
+						console.error("[AI] OpenAI dialogue error:", e?.message || e);
+					}
+				}
+				res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+				res.end(
+					JSON.stringify({
+						success: true,
+						type: "dialogue",
+						characterName,
+						lines: [
+							`Hello! I am ${characterName}.`,
+							`You asked about: ${prompt}`,
+							"Welcome to bob's game!",
+						],
+					}),
+				);
+			})
+			.catch(() => {
+				res.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
+				res.end(JSON.stringify({ ok: false, error: "Invalid JSON" }));
+			});
+		return;
+	}
+
+	if (req.method === "POST" && url === "/api/chat") {
+		readJsonBody(req)
+			.then(async (body) => {
+				const prompt = String(body.prompt || "").slice(0, 500);
+				const characterName = String(body.characterName || "NPC").slice(0, 64);
+				const persona = String(body.persona || "A character in the game 'bob's game'.").slice(0, 300);
+				const history = Array.isArray(body.history) ? body.history.slice(-8) : [];
+				if (openai) {
+					try {
+						const messages = [
+							{ role: "system", content: `You are ${characterName}. ${persona} Keep responses brief (1-2 sentences).` },
+							...history.map((h) => ({
+								role: h?.role === "assistant" ? "assistant" : "user",
+								content: String(h?.content || "").slice(0, 300),
+							})),
+							{ role: "user", content: prompt },
+						];
+						const response = await openai.chat.completions.create({
+							model: "gpt-4o-mini",
+							messages,
+							max_tokens: 120,
+						});
+						res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+						res.end(
+							JSON.stringify({
+								success: true,
+								characterName,
+								response: response.choices[0].message.content,
+							}),
+						);
+						return;
+					} catch (e) {
+						console.error("[AI] OpenAI chat error:", e?.message || e);
+					}
+				}
+				res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+				res.end(
+					JSON.stringify({
+						success: true,
+						characterName,
+						response: `${characterName}: "I heard you say '${prompt}'—welcome to the neighborhood!"`,
+					}),
+				);
+			})
+			.catch(() => {
+				res.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
+				res.end(JSON.stringify({ ok: false, error: "Invalid JSON" }));
+			});
 		return;
 	}
 

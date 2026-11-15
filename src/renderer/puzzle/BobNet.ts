@@ -37,23 +37,23 @@ export class BobNet {
     }
   }
 
-  public static debugServerAddress = "localhost";
+  public static debugServerAddress = "ws.bobsgame.com";
   public static releaseServerAddress = "bobsgame.com";
-  public static serverTCPPort = 6065;
+  public static serverTCPPort = 443;
 
   public static clientUDPPortStartRange = 6435;
 
-  public static debugSTUNServerAddress = "localhost";
+  public static debugSTUNServerAddress = "stun.bobsgame.com";
   public static releaseSTUNServerAddress = "stun.bobsgame.com";
   public static STUNServerUDPPort = 6433;
 
-  public static debugBigDataURL = "http://localhost/z/";
+  public static debugBigDataURL = "https://bobsgame.com/z/";
   public static releaseBigDataURL = "https://bobsgame.s3.amazonaws.com/z/";
 
-  public static debugSmallDataURL = "http://localhost/assets/";
-  public static releaseSmallDataURL = "http://bobsgame.com/assets/";
+  public static debugSmallDataURL = "https://bobsgame.com/assets/";
+  public static releaseSmallDataURL = "https://bobsgame.com/assets/";
 
-  public static debugINDEXServerAddress = "localhost";
+  public static debugINDEXServerAddress = "index.bobsgame.com";
   public static releaseINDEXServerAddress = "index.bobsgame.com";
   public static INDEXServerTCPPort = 606;
 

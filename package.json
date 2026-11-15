@@ -1,21 +1,19 @@
 {
   "name": "okgame",
-  "version": "3.0.35",
+  "version": "3.0.36",
   "description": "bob's game - puzzle game engine",
   "main": "dist/main/index.js",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "server": "node server/ai_proxy.js",
-    "server:ws": "node server/index.js",
-    "dev:electron": "concurrently \"vite\" \"electron .\"",
+    "electron": "electron .",
     "build": "tsc && npm run build:main && vite build",
     "build:main": "tsc -p tsconfig.main.json && node -e \"import('fs').then(fs=>fs.writeFileSync('dist/main/package.json','{\\\"type\\\":\\\"commonjs\\\"}\\n'))\"",
     "build:electron": "npm run build && electron-builder",
-    "preview": "vite preview",
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
-    "deploy:hetzner": "./scripts/deploy-with-rollback.sh"
+    "deploy:hetzner": "./scripts/deploy-with-rollback.sh",
+    "deploy:backend": "./scripts/deploy-backend-vps.sh",
+    "verify:live": "./scripts/verify-production-stack.sh"
   },
   "keywords": [
     "game",

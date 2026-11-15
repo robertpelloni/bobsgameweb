@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v3.0.36 — 2026-11-14 — Hetzner Live-Only Architecture (Zero Local Servers) & Unified Live Cloud Deployment
+
+### Changed
+- **Hetzner Live-Only Configuration (`src/shared/Config.ts`, `GenerativeAIManager.ts`, `DemoWorld.ts`, `BobNet.ts`):** Removed all `localhost` / `127.0.0.1` server fallbacks so `SERVER_URL` and `GenerativeAIManager` always connect directly to live Hetzner Cloud (`https://ws.bobsgame.com`) and `https://bobsgame.com`.
+- **Unified Hetzner Backend with Integrated AI Routes (`server/index.js`, `server/VERSION.md`):** Merged Generative AI endpoints (`/api/generate/sprite`, `/api/generate/tileset`, `/api/generate/dialogue`, `/api/chat`) and `openaiConfigured` health reporting directly into `server/index.js` on `https://ws.bobsgame.com`, added dynamic `*.bobsgame.com` `Origin` CORS matching, and archived standalone local `ai_proxy.js` and `local-ops.ps1` into `scripts/archive/`.
+- **Dashboard, Manual & Electron Client Cloud Alignment (`MainMenuScene.ts`, `HelpScene.ts`, `src/main/index.ts`, `src/main/preload.ts`, `start.bat`, `package.json`):** Replaced local server Start/Stop daemon controls on the Consolidated Single-Page Dashboard and Electron System Tray with live Hetzner Cloud (`https://ws.bobsgame.com/healthz`) telemetry, and pointed Electron and `start.bat` directly at live `https://bobsgame.com`.
+- **Safe, Fast Hetzner Live Deployment Scripts (`scripts/deploy-with-rollback.sh`, `deploy-frontend-hetzner.sh`, `deploy-backend-vps.sh`, `check-backend-host.sh`):** Updated frontend deploy to upload only code bundles (`index.html` + `assets/`) without re-uploading 2.5 GB of hydrated map/audio assets, updated backend deploy to strictly preserve live `profiles.json`, `leaderboards.json`, `achievement_profiles/`, `characters/`, `emulator_states/`, and `maps/`, and deployed `v3.0.36` live to `bobsgame.com` and `ws.bobsgame.com`.
+
 ## v3.0.35 — 2026-11-14 — Consolidated Single-Page Dashboard, Unified Settings, Electron Tray Overhaul & Full Governance
 
 ### Added

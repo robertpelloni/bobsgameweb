@@ -7,8 +7,7 @@
  * discarded `MenuItem.description`) with ONE singular, consolidated, smoothly
  * scrollable high-value dashboard page:
  *   1. Pinned Telemetry & Control Header:
- *      - Live health & Electron daemon Start/Stop/Restart pills for BOTH
- *        `Game WS Server (:6065)` and `AI Proxy (:6066)`.
+ *      - Live Hetzner Cloud health telemetry pill (`ws.bobsgame.com`) — zero local servers.
  *      - Inline Puzzle Mode selector (`[MARATHON] [SPRINT] [ULTRA]`).
  *      - Quick-Jump Section Anchor pills (`1–5` / `Q·E`) that smoothly scroll
  *        to each section on the SAME page rather than hiding other sections.
@@ -25,7 +24,6 @@ import { Container, Graphics, Text, TextStyle } from "pixi.js";
 import { APP_VERSION, SERVER_URL } from "../../shared/Config";
 import { AudioManager } from "../audio/AudioManager";
 import type { GameMode } from "../data/HighScoreManager";
-import { GenerativeAIManager } from "../editor/GenerativeAIManager";
 import { InputManager, Key } from "../input/InputManager";
 import type { PuzzleSceneConfig } from "../puzzle";
 import { GameType, GameTypes } from "../puzzle";
@@ -110,8 +108,7 @@ export class MainMenuScene extends Scene {
 	private headerContainer!: Container;
 	private titleText!: Text;
 	private subtitleText!: Text;
-	private wsServerPill!: PillControl;
-	private aiServerPill!: PillControl;
+	private cloudServerPill!: PillControl;
 	private modePills: PillControl[] = [];
 	private anchorPills: PillControl[] = [];
 	private footerContainer!: Container;
@@ -146,13 +143,9 @@ export class MainMenuScene extends Scene {
 	private selectedIndex = 0;
 	private selectedCategoryIndex = 0; // Puzzle GameMode index
 
-	// Live server state
-	private wsOnline = false;
-	private wsManaged = false;
-	private wsDetail = "Unchecked";
-	private aiOnline = false;
-	private aiManaged = false;
-	private aiDetail = "Unchecked";
+	// Live Hetzner cloud state (`https://ws.bobsgame.com`)
+	private cloudOnline = false;
+	private cloudDetail = "Checking Hetzner Cloud...";
 	private statusPollTimer: number | null = null;
 	private wheelHandler: ((e: WheelEvent) => void) | null = null;
 
@@ -218,12 +211,12 @@ export class MainMenuScene extends Scene {
 		{
 			key: "system",
 			shortLabel: "5. System & Demos",
-			headerTitle: "⚙️ UNIFIED SETTINGS, SERVER DAEMONS, MANUAL & ENGINE DEMOS",
+			headerTitle: "⚙️ UNIFIED SETTINGS, HETZNER CLOUD, MANUAL & ENGINE DEMOS",
 			headerSubtitle:
-				"Single-page Audio/Graphics/HQ2X/WebGPU settings, in-game manual, local WS & AI server controls, and GPU/Wasm tech demos",
+				"Single-page Audio/Graphics/HQ2X/WebGPU settings, in-game manual, live Hetzner Cloud telemetry, and GPU/Wasm tech demos",
 			accentColor: 0x06b6d4,
 			tooltip:
-				"Jump to Section 5 (Shortcut: 5): Unified Settings & Options, Help Manual, Server Daemon Controls, WebGPU, FFT & nD Demos.",
+				"Jump to Section 5 (Shortcut: 5): Unified Settings & Options, Help Manual, Hetzner Cloud Status, WebGPU, FFT & nD Demos.",
 		},
 	];
 
@@ -648,7 +641,7 @@ export class MainMenuScene extends Scene {
 				prefetch: () => void import("./BestiaryScene"),
 			},
 
-			// --- SECTION 5: SYSTEM, UNIFIED SETTINGS, DAEMONS & TECH DEMOS ---
+			// --- SECTION 5: SYSTEM, UNIFIED SETTINGS, HETZNER CLOUD & TECH DEMOS ---
 			{
 				label: "Settings & Options",
 				description: "Unified Audio, WebGPU, HQ2X, Haptics & Profile",
@@ -660,28 +653,20 @@ export class MainMenuScene extends Scene {
 			},
 			{
 				label: "Help & Controls Manual",
-				description: "Full keyboard, gamepad, tray & editor guide",
+				description: "Full keyboard, gamepad & Creation Studio guide",
 				tooltip:
-					"Comprehensive scrollable reference manual covering shortcuts, world mechanics, server daemons, and editors.",
+					"Comprehensive scrollable reference manual covering shortcuts, world mechanics, puzzle rules, and editors.",
 				section: "system",
 				action: () => this.openHelp(),
 				prefetch: () => void import("./HelpScene"),
 			},
 			{
-				label: "Game WS Server (:6065)",
-				description: "Check health or Start/Stop multiplayer daemon",
+				label: "Hetzner Cloud Status",
+				description: "Live ws.bobsgame.com health, players & AI telemetry",
 				tooltip:
-					"Probes port 6065 (`/healthz`) and lets you start, stop, or restart the local Socket.io game server via Electron IPC.",
+					"Probes live https://ws.bobsgame.com/healthz to display deployed server version, active players, multiplayer rooms, and AI readiness.",
 				section: "system",
-				action: () => this.toggleOrCheckWsServer(),
-			},
-			{
-				label: "AI Proxy Server (:6066)",
-				description: "Check health or Start/Stop Generative AI daemon",
-				tooltip:
-					"Probes port 6066 (`/healthz`) for OpenAI / Mock mode status and toggles the local Express AI proxy via Electron IPC.",
-				section: "system",
-				action: () => this.toggleOrCheckAiServer(),
+				action: () => this.inspectCloudServerStatus(),
 			},
 			{
 				label: "WebGPU Compute Demo",
@@ -779,46 +764,34 @@ export class MainMenuScene extends Scene {
 		this.subtitleText.position.set(22, compactHeader ? 44 : 50);
 		this.headerContainer.addChild(this.subtitleText);
 
-		// Live Server Control & Telemetry Strip (Top-Right)
+		// Live Hetzner Cloud Telemetry Strip (Top-Right)
 		const serverRowY = 14;
 		const refreshPill = this.createPill(
 			"↻ Probe",
 			68,
 			26,
 			0x3b82f6,
-			"Re-check live HTTP health of Game WS Server (:6065) and AI Proxy (:6066).",
+			"Re-check live HTTPS health of Hetzner Cloud (https://ws.bobsgame.com/healthz).",
 			() => {
 				this.playMoveSound();
-				ToastManager.showInfo("Refreshing server health telemetry...");
+				ToastManager.showInfo("Probing live Hetzner Cloud (ws.bobsgame.com)...");
 				void this.refreshServerStatuses();
 			},
 		);
 		refreshPill.container.position.set(w - 86, serverRowY);
 		this.headerContainer.addChild(refreshPill.container);
 
-		this.aiServerPill = this.createPill(
-			"○ AI Proxy :6066",
-			168,
+		this.cloudServerPill = this.createPill(
+			"○ Cloud: ws.bobsgame.com",
+			224,
 			26,
 			0x10b981,
 			() =>
-				`Local AI Proxy (:6066) — ${this.aiDetail}\nClick to inspect or Start/Stop daemon via Electron IPC (or 'start.bat --ai-proxy').`,
-			() => void this.toggleOrCheckAiServer(),
+				`Hetzner Live Cloud (https://ws.bobsgame.com) — ${this.cloudDetail}\nClick to inspect live server version, connected players, rooms, and AI status.`,
+			() => void this.inspectCloudServerStatus(),
 		);
-		this.aiServerPill.container.position.set(w - 262, serverRowY);
-		this.headerContainer.addChild(this.aiServerPill.container);
-
-		this.wsServerPill = this.createPill(
-			"○ WS Server :6065",
-			174,
-			26,
-			0x3b82f6,
-			() =>
-				`Multiplayer Game WS Server (:6065) — ${this.wsDetail}\nClick to inspect or Start/Stop daemon via Electron IPC (or 'start.bat --server').`,
-			() => void this.toggleOrCheckWsServer(),
-		);
-		this.wsServerPill.container.position.set(w - 444, serverRowY);
-		this.headerContainer.addChild(this.wsServerPill.container);
+		this.cloudServerPill.container.position.set(w - 318, serverRowY);
+		this.headerContainer.addChild(this.cloudServerPill.container);
 
 		// Inline Puzzle Mode Selector (`[MARATHON] [SPRINT] [ULTRA]`)
 		const modeRowY = compactHeader ? 66 : 48;
@@ -1328,23 +1301,24 @@ export class MainMenuScene extends Scene {
 	}
 
 	// ============================================================
-	// Dual-Server Health Telemetry & Daemon Controls (:6065 & :6066)
+	// Hetzner Live Cloud Telemetry (`https://ws.bobsgame.com`)
 	// ============================================================
 
-	private getLocalOrConfiguredWsHttpBase(): string {
+	private getCloudHttpBase(): string {
 		return SERVER_URL.replace(/^ws(s?):\/\//i, "http$1://").replace(/\/+$/, "");
 	}
 
-	private async probeWsServerHealth(): Promise<{
+	private async probeCloudServerHealth(): Promise<{
 		online: boolean;
 		version?: string;
 		connections?: number;
 		rooms?: number;
+		openaiConfigured?: boolean;
 		error?: string;
 	}> {
-		const base = this.getLocalOrConfiguredWsHttpBase();
+		const base = this.getCloudHttpBase();
 		const controller = new AbortController();
-		const timer = window.setTimeout(() => controller.abort(), 1800);
+		const timer = window.setTimeout(() => controller.abort(), 3500);
 		try {
 			const res = await fetch(`${base}/healthz`, {
 				signal: controller.signal,
@@ -1357,12 +1331,14 @@ export class MainMenuScene extends Scene {
 				version?: string;
 				connections?: number;
 				rooms?: number;
+				openaiConfigured?: boolean;
 			};
 			return {
 				online: Boolean(json.ok),
 				version: json.version,
 				connections: json.connections,
 				rooms: json.rooms,
+				openaiConfigured: json.openaiConfigured,
 			};
 		} catch (e) {
 			return {
@@ -1375,126 +1351,43 @@ export class MainMenuScene extends Scene {
 	}
 
 	private async refreshServerStatuses(): Promise<void> {
-		const electronAPI = window.electronAPI;
-		const [wsHealth, aiHealth, ipcStatus] = await Promise.all([
-			this.probeWsServerHealth(),
-			GenerativeAIManager.checkServerStatus(),
-			electronAPI?.getServerStatus
-				? electronAPI.getServerStatus().catch(() => null)
-				: Promise.resolve(null),
-		]);
-
-		this.wsOnline = wsHealth.online || Boolean(ipcStatus?.wsServer);
-		this.wsManaged = Boolean(ipcStatus?.wsManaged);
-		this.wsDetail = this.wsOnline
-			? `ONLINE (v${wsHealth.version ?? APP_VERSION}${typeof wsHealth.connections === "number" ? `, ${wsHealth.connections} clients` : ""}${this.wsManaged ? ", Tray-Managed" : ""})`
-			: `OFFLINE (${wsHealth.error || "Port 6065 closed"})`;
-
-		this.aiOnline = aiHealth.online || Boolean(ipcStatus?.aiProxy);
-		this.aiManaged = Boolean(ipcStatus?.aiManaged);
-		const aiMode = aiHealth.openaiConfigured ? "OpenAI Live" : "Mock Fallback";
-		this.aiDetail = this.aiOnline
-			? `ONLINE (${aiMode}${this.aiManaged ? ", Tray-Managed" : ""})`
-			: `OFFLINE (${aiHealth.error || "Port 6066 closed"})`;
-
+		const health = await this.probeCloudServerHealth();
+		this.cloudOnline = health.online;
+		if (health.online) {
+			const players =
+				typeof health.connections === "number"
+					? `, ${health.connections} online`
+					: "";
+			const rooms =
+				typeof health.rooms === "number" ? `, ${health.rooms} rooms` : "";
+			const aiTag = health.openaiConfigured ? ", AI: Live" : "";
+			this.cloudDetail = `ONLINE (v${health.version ?? APP_VERSION}${players}${rooms}${aiTag})`;
+		} else {
+			this.cloudDetail = `UNREACHABLE (${health.error || "Check network"})`;
+		}
 		this.updateServerPillsVisuals();
 	}
 
 	private updateServerPillsVisuals(): void {
-		if (this.wsServerPill) {
-			this.wsServerPill.label.text = this.wsOnline
-				? "● WS :6065 ONLINE"
-				: "○ WS :6065 OFFLINE";
-			this.wsServerPill.label.style.fill = this.wsOnline
+		if (this.cloudServerPill) {
+			this.cloudServerPill.label.text = this.cloudOnline
+				? "● Cloud: ws.bobsgame.com ON"
+				: "○ Cloud: ws.bobsgame.com";
+			this.cloudServerPill.label.style.fill = this.cloudOnline
 				? "#66ffcc"
 				: "#ffcc66";
-			this.wsServerPill.redraw(
-				this.wsOnline,
+			this.cloudServerPill.redraw(
+				this.cloudOnline,
 				false,
-				this.wsOnline ? 0x10b981 : 0xd97706,
-			);
-		}
-		if (this.aiServerPill) {
-			this.aiServerPill.label.text = this.aiOnline
-				? "● AI :6066 ONLINE"
-				: "○ AI :6066 OFFLINE";
-			this.aiServerPill.label.style.fill = this.aiOnline
-				? "#66ffcc"
-				: "#ffcc66";
-			this.aiServerPill.redraw(
-				this.aiOnline,
-				false,
-				this.aiOnline ? 0x10b981 : 0xd97706,
+				this.cloudOnline ? 0x10b981 : 0xd97706,
 			);
 		}
 	}
 
-	private async toggleOrCheckWsServer(): Promise<void> {
+	private async inspectCloudServerStatus(): Promise<void> {
 		this.playSelectSound();
 		await this.refreshServerStatuses();
-		const electronAPI = window.electronAPI;
-
-		if (this.wsOnline) {
-			ToastManager.showInfo(`Game WS Server (:6065) — ${this.wsDetail}`);
-			if (electronAPI?.stopWsServer && this.wsManaged) {
-				if (confirm(`Game WS Server is running (${this.wsDetail}). Stop Electron-managed daemon?`)) {
-					await electronAPI.stopWsServer();
-					ToastManager.showInfo("Stopped Game WS Server (:6065).");
-					await this.refreshServerStatuses();
-				}
-			}
-		} else {
-			ToastManager.showInfo(`Game WS Server Offline (${this.wsDetail})`);
-			if (electronAPI?.startWsServer) {
-				if (confirm("Game WS Server (:6065) is offline. Start it now via Electron System Tray daemon?")) {
-					const ok = await electronAPI.startWsServer();
-					ToastManager.showInfo(
-						ok
-							? "Game WS Server (:6065) starting at BelowNormal priority..."
-							: "Failed to start Game WS Server.",
-					);
-					window.setTimeout(() => void this.refreshServerStatuses(), 800);
-				}
-			} else {
-				alert(
-					"Game WS Server (:6065) is offline.\n\nStart locally via:\n  start.bat --server\nor:\n  .\\scripts\\local-ops.ps1 -Action start -Target ws\nor launch the Electron desktop shell for System Tray controls.",
-				);
-			}
-		}
-	}
-
-	private async toggleOrCheckAiServer(): Promise<void> {
-		this.playSelectSound();
-		await this.refreshServerStatuses();
-		const electronAPI = window.electronAPI;
-
-		if (this.aiOnline) {
-			ToastManager.showInfo(`AI Proxy (:6066) — ${this.aiDetail}`);
-			if (electronAPI?.stopAiServer && this.aiManaged) {
-				if (confirm(`AI Proxy is running (${this.aiDetail}). Stop Electron-managed daemon?`)) {
-					await electronAPI.stopAiServer();
-					ToastManager.showInfo("Stopped AI Proxy (:6066).");
-					await this.refreshServerStatuses();
-				}
-			}
-		} else {
-			ToastManager.showInfo(`AI Proxy Offline (${this.aiDetail})`);
-			if (electronAPI?.startAiServer) {
-				if (confirm("AI Proxy (:6066) is offline. Start it now via Electron System Tray daemon?")) {
-					const ok = await electronAPI.startAiServer();
-					ToastManager.showInfo(
-						ok
-							? "AI Proxy (:6066) starting at BelowNormal priority..."
-							: "Failed to start AI Proxy.",
-					);
-					window.setTimeout(() => void this.refreshServerStatuses(), 800);
-				}
-			} else {
-				alert(
-					"AI Proxy (:6066) is offline.\n\nStart locally via:\n  start.bat --ai-proxy\nor:\n  .\\scripts\\local-ops.ps1 -Action start -Target ai\nor launch the Electron desktop shell for System Tray controls.",
-				);
-			}
-		}
+		ToastManager.showInfo(`Hetzner Cloud (ws.bobsgame.com) — ${this.cloudDetail}`);
 	}
 
 	// ============================================================

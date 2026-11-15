@@ -36,7 +36,7 @@ curl -fsSL --max-time 20 "$trimmed/healthz" -o "$TMP_HEALTH"
 
 echo
 if [[ -n "$EXPECTED_BACKEND_VERSION" ]]; then
-  runtime_version=$(node -e "const fs=require('fs'); const payload=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); console.log(payload.version || '');" "$TMP_HEALTH")
+  runtime_version=$(node -e "let d='';process.stdin.setEncoding('utf8');process.stdin.on('data',c=>d+=c).on('end',()=>{try{console.log(JSON.parse(d).version||'')}catch{console.log('')}});" < "$TMP_HEALTH" | tr -d '\r')
   echo "[3/4] Runtime version check"
   echo "Expected backend version: $EXPECTED_BACKEND_VERSION"
   echo "Observed backend version: $runtime_version"

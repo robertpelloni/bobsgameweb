@@ -1,22 +1,21 @@
+import { SERVER_URL } from "../../shared/Config";
 import { ToastManager } from "../ui/ToastManager";
 
 export class GenerativeAIManager {
 
-    // Configurable endpoint for AI operations.
-    // Defaults to port 6066 (adjacent to the 6065 multiplayer WS server) to
-    // avoid port 8080 collisions with unrelated local Go/Java/Docker proxies.
+    // Live Hetzner Cloud AI endpoint (`https://ws.bobsgame.com`), eliminating all local AI proxy daemons.
     private static AI_BASE_URL: string =
         ((typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_AI_PROXY_URL) ||
-            "http://127.0.0.1:6066").replace(/\/+$/, "");
+            SERVER_URL).replace(/\/+$/, "");
     private static AI_ENDPOINT = `${GenerativeAIManager.AI_BASE_URL}/api/generate`;
 
     /**
-     * Checks if the AI proxy server is reachable and verifies its `service: "ai-proxy"` identity.
+     * Checks live Hetzner backend `/api/status` health and OpenAI / Mock readiness.
      */
     public static async checkServerStatus(): Promise<{ online: boolean; openaiConfigured: boolean; error?: string }> {
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2000);
+            const timeoutId = setTimeout(() => controller.abort(), 3000);
             const response = await fetch(`${this.AI_BASE_URL}/api/status`, {
                 signal: controller.signal
             });
@@ -24,12 +23,9 @@ export class GenerativeAIManager {
 
             if (response.ok) {
                 const data = await response.json();
-                if (data?.service && data.service !== "ai-proxy") {
-                    return { online: false, openaiConfigured: false, error: `Foreign service (${data.service})` };
-                }
                 return {
-                    online: true,
-                    openaiConfigured: Boolean(data.openaiConfigured)
+                    online: Boolean(data?.ok || data?.status === "ok"),
+                    openaiConfigured: Boolean(data?.openaiConfigured)
                 };
             }
             return { online: false, openaiConfigured: false, error: `HTTP ${response.status}` };

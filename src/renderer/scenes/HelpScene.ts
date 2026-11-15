@@ -1,10 +1,10 @@
 /**
- * HelpScene — Comprehensive In-Game Manual, Controls & Server Operations Reference.
+ * HelpScene — Comprehensive In-Game Manual, Controls & Hetzner Cloud Reference.
  *
- * Synchronized in v3.0.35 with the Consolidated Single-Page Omni-Engine Dashboard,
+ * Synchronized in v3.0.36 with the Consolidated Single-Page Omni-Engine Dashboard,
  * Unified Settings & Options page, World `☰ Omni-Dashboard` HUD button, F1/F2
- * collision/door debug overlays, Creation Studio editors, and Electron System Tray
- * dual-server (`:6065` & `:6066`) daemon controls.
+ * collision/door debug overlays, Creation Studio editors, and live Hetzner Cloud
+ * (`bobsgame.com` & `ws.bobsgame.com`) multiplayer + AI architecture.
  */
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
 import { APP_VERSION } from "../../shared/Config";
@@ -33,10 +33,10 @@ export class HelpScene extends Scene {
 		{
 			title: "🧭 Consolidated Omni-Engine Dashboard (#menu)",
 			lines: [
-				"All 38 gameplay modes, editors, rankings, and engine tools live on ONE scrollable page.",
+				"All 37 gameplay modes, editors, rankings, and engine tools live on ONE scrollable page.",
 				"Mouse Wheel / Scrollbar Drag / PageUp / PageDown — Smoothly scroll the entire dashboard.",
 				"Keys 1–5 or Q / E — Smoothly jump between the 5 priority sections on the same page.",
-				"Top-Right Telemetry Pills — Live health & click-to-toggle for WS Server (:6065) and AI Proxy (:6066).",
+				"Top-Right Cloud Telemetry — Live health, player count & AI status on Hetzner Cloud (ws.bobsgame.com).",
 				"Inline Puzzle Mode Pills — Switch between MARATHON, SPRINT, and ULTRA before starting any puzzle.",
 				"Hover any card or ⓘ badge to inspect full contextual tooltips; press V to toggle the FFT visualizer.",
 			],
@@ -66,21 +66,21 @@ export class HelpScene extends Scene {
 			],
 		},
 		{
-			title: "🛠️ Creation Studio & Generative AI Proxy (:6066)",
+			title: "🛠️ Creation Studio & Hetzner Cloud AI (ws.bobsgame.com)",
 			lines: [
 				"Custom Game Rule Editor — Configure piece shapes, gravity tables, lock delays, and garbage rules.",
 				"World Database Editor — Edit tilemap layers, warp doors, NPC spawns, and AI-generated tilesets.",
 				"Pixel Sprite Editor — Draw frames, test 8-direction walk animations, or prompt Text-to-Sprite.",
 				"Event Sheet & Game Sequence Editors — Script cutscenes/quests and chain multi-stage puzzle campaigns.",
-				"Set OPENAI_API_KEY in environment for live DALL-E/GPT generation, or run offline in deterministic Mock Mode.",
+				"Generative AI requests route directly to live Hetzner Cloud (https://ws.bobsgame.com/api/*) — no local servers.",
 			],
 		},
 		{
-			title: "🖥️ Unified Settings, System Tray & Local Servers",
+			title: "🖥️ Unified Settings, System Tray & Live Cloud Architecture",
 			lines: [
 				"Unified Settings & Options — Audio Mixer, WebGPU/WebGL2, HQ2X HD Sprites, Ghost Piece, Touch HUD, Haptics & Name on one page.",
-				"Electron System Tray — Minimize-to-tray, jump to #menu or #world, and Start/Stop/Restart both local daemons at BelowNormal priority.",
-				"Local CLI Quick-Start — Run 'start.bat' or '.\\scripts\\local-ops.ps1 -Action start -Target all' to launch WS (:6065), AI (:6066), and Web (:3000).",
+				"Electron Desktop Shell & System Tray — Minimize-to-tray, jump to #menu or #world, and connect directly to Hetzner Live.",
+				"Live Deployment — Hosted exclusively on Hetzner Cloud at https://bobsgame.com and https://ws.bobsgame.com (zero local servers).",
 			],
 		},
 	];

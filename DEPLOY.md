@@ -1,83 +1,42 @@
-# Deployment & Operations Guide: `bobsgameweb` (`bobsgame.com`)
+# Deployment Guide: `bobsgameweb` — Hetzner Live Only (`bobsgame.com` & `ws.bobsgame.com`)
 
-## 1. Local Full-Stack Operations (`BelowNormal` Priority)
-
-All Windows build and runtime scripts automatically lower CPU scheduling priority to **`BelowNormal`** and never purge compiled binaries or hydrated static assets.
-
-### PowerShell Orchestrator (`scripts/local-ops.ps1` — Recommended)
-```powershell
-# Inspect live TCP + /healthz status across WS (:6065), AI (:6066), Web (:3000), and Electron
-.\scripts\local-ops.ps1 -Action status
-
-# Start all local services (WS :6065 + AI :6066 + Vite Web :3000) in background at BelowNormal priority
-.\scripts\local-ops.ps1 -Action start -Target all
-
-# Start Electron Desktop Shell + System Tray
-.\scripts\local-ops.ps1 -Action start -Target electron
-
-# View recent stdout/stderr logs in logs/local-*.log
-.\scripts\local-ops.ps1 -Action logs -Target all
-
-# Stop only exact child PIDs spawned by local-ops.ps1 (tracked in logs/pids.json)
-.\scripts\local-ops.ps1 -Action stop -Target all
-```
-
-### Root Batch Launchers (`setup.bat`, `build.bat`, `start.bat`)
-```bat
-setup.bat                :: Sync recursive submodules + npm install in root and server/
-build.bat                :: Build bobui (if Go installed) + tsc + Electron main + Vite bundle
-build.bat --copy-assets  :: Force full 2.5 GB data/ -> dist/renderer/ asset copy
-start.bat                :: Start WS (:6065) + AI (:6066) + Vite dev (:3000) at BelowNormal priority
-start.bat --electron     :: Launch Vite + Electron System Tray desktop shell
-start.bat --server       :: Run Multiplayer WS/REST server (:6065) standalone
-start.bat --ai-proxy     :: Run Generative AI Proxy (:6066) standalone
-start.bat --preview      :: Serve production bundle in dist/renderer via Vite preview
-```
+> **Policy (`v3.0.36+`):** `bobsgameweb` operates **exclusively against live Hetzner Cloud** (`https://bobsgame.com` frontend and `https://ws.bobsgame.com` unified multiplayer + REST + Generative AI backend). **Do not run or configure local servers.**
 
 ---
 
-## 2. Hetzner Production Deployment (`bobsgame.com` & `ws.bobsgame.com`)
+## 1. Live Hetzner Architecture
 
-- **Frontend Host**: Hetzner VPS (`5.161.250.43`), served by `nginx` from `/srv/www/bobsgame.com`.
-- **Backend WebSocket / REST Host**: `https://ws.bobsgame.com` (`nginx` TLS proxy on `:443` → `127.0.0.1:6065`, `systemd` unit `bobsgameweb-server`).
+| Tier | Host / Domain | Remote Path / Service | Role |
+| :--- | :--- | :--- | :--- |
+| **Frontend Static & Big-Data** | `https://bobsgame.com` (`5.161.250.43`) | `/srv/www/bobsgame.com` (`nginx`) | Serves Vite WebGPU/WebGL2 bundle (`index.html`, `assets/*`) + hydrated `maps_v2/`, `audio/`, `doors.json`, `lancedb/` |
+| **Unified Backend (WS + REST + AI)** | `https://ws.bobsgame.com` (`5.161.250.43`) | `/opt/bobsgameweb/server` (`systemd` `bobsgameweb-server`, `:6065` behind `nginx` `:443`) | Socket.io multiplayer rooms/tournaments, `/healthz`, `/api/status`, `/stats`, `/players/*`, `/leaderboards`, `/maps/*`, and `/api/generate/*` + `/api/chat` |
 
-### Frontend Deploy with Automatic Rollback & Post-Deploy Verification
-Run from a machine with SSH key access to `5.161.250.43`:
+---
+
+## 2. One-Command Live Hetzner Deploy (with Automatic Rollback & Verification)
 
 ```bash
-VITE_SERVER_URL=https://ws.bobsgame.com VITE_COPY_PUBLIC_DIR=false npm run build
-
-FRONTEND_HOST=5.161.250.43 \
-FRONTEND_USER=root \
-BACKEND_URL=https://ws.bobsgame.com \
-./scripts/deploy-with-rollback.sh
+FRONTEND_HOST=5.161.250.43 ./scripts/deploy-with-rollback.sh
 ```
 
-Or step-by-step:
-```bash
-# 1. Upload built frontend assets (index.html + assets/ chunks; skips 2.5 GB data/)
-FRONTEND_HOST=5.161.250.43 FRONTEND_USER=root BACKEND_URL=https://ws.bobsgame.com ./scripts/deploy-frontend-hetzner.sh
+What `scripts/deploy-with-rollback.sh` executes sequentially:
+1. Snapshots `/srv/www/bobsgame.com/index.html` and `/srv/www/bobsgame.com/assets/` on Hetzner into `/tmp/bobsgame_frontend_backup_<timestamp>`.
+2. Builds the local production bundle (`VITE_SERVER_URL=https://ws.bobsgame.com VITE_COPY_PUBLIC_DIR=false npm run build`).
+3. Deploys the unified backend (`scripts/deploy-backend-vps.sh`) to `/opt/bobsgameweb/server` while **strictly preserving** live `profiles.json`, `leaderboards.json`, `achievement_profiles/`, `characters/`, `emulator_states/`, and `maps/`, then restarts `bobsgameweb-server`.
+4. Uploads `dist/renderer/index.html` + `dist/renderer/assets/` (`scripts/deploy-frontend-hetzner.sh`) to `/srv/www/bobsgame.com` without touching hydrated map/audio directories.
+5. Verifies live `https://ws.bobsgame.com/healthz` (`EXPECTED_BACKEND_VERSION`), `https://bobsgame.com`, custom editor markers, lazy runtime chunks, and WebGPU WGSL particle chunks (`scripts/verify-production-stack.sh`), rolling back automatically on any failure.
 
-# 2. Deploy / restart backend Socket.io service on port 6065
+---
+
+## 3. Individual Hetzner Scripts
+
+```bash
+# Deploy backend code only & restart systemd service bobsgameweb-server
 BACKEND_HOST=5.161.250.43 BACKEND_USER=root ./scripts/deploy-backend-vps.sh
 
-# 3. Verify live frontend chunks, custom editor markers, and backend /healthz version
-BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com EXPECTED_BACKEND_VERSION=3.0.35 ./scripts/verify-production-stack.sh
+# Deploy frontend code bundle only (index.html + assets/)
+FRONTEND_HOST=5.161.250.43 FRONTEND_USER=root ./scripts/deploy-frontend-hetzner.sh
+
+# Verify live Hetzner stack end-to-end
+BACKEND_URL=https://ws.bobsgame.com FRONTEND_URL=https://bobsgame.com EXPECTED_BACKEND_VERSION=3.0.36 ./scripts/verify-production-stack.sh
 ```
-
-### Active Operations Scripts in `scripts/`
-| Script | Purpose |
-| :--- | :--- |
-| `scripts/local-ops.ps1` | Local Windows `BelowNormal` process manager (`status`, `start`, `stop`, `restart`, `logs`, `build`). |
-| `scripts/deploy-with-rollback.sh` | Wraps `deploy-frontend-hetzner.sh` + `verify-production-stack.sh` with automatic tar backup & rollback. |
-| `scripts/deploy-frontend-hetzner.sh` | Uploads `dist/renderer/` code bundles to `/srv/www/bobsgame.com`. |
-| `scripts/deploy-backend-vps.sh` | Syncs `server/` to Hetzner VPS and restarts `bobsgameweb-server`. |
-| `scripts/verify-production-stack.sh` | Runs `check-backend-host.sh`, `check-production-frontend.sh`, `check-production-editor.sh`, and `check-production-runtime-chunks.sh`. |
-| `scripts/run-backend-maintenance-restart.sh` | Snapshots pre/post restart diagnostics (`snapshot-backend-restart-readiness.sh` + `compare-backend-restart-snapshot.sh`). |
-| `scripts/archive/` | Non-destructive archive of historical/one-off migration and setup scripts. |
-
----
-
-## 3. Known Sandbox / Environment Deployment Notes
-- **Outgoing SSH Port 22 Restriction in Agent Sandboxes**: Automated agent sandboxes typically block outbound TCP port `22`, preventing direct `ssh`/`scp`/`rsync` pushes to `5.161.250.43` from inside the sandbox. Build & commit inside the repo, then run `./scripts/deploy-with-rollback.sh` from an unrestricted host terminal with `~/.ssh` credentials.
-- **Static Big-Data (`data/lancedb`, `data/maps_v2`)**: Hydrated once on `/srv/www/bobsgame.com`; `vite.config.ts` skips re-copying `data/` when `dist/renderer/maps_v2` exists (or when `VITE_COPY_PUBLIC_DIR=false`).

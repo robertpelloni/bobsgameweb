@@ -1,6 +1,6 @@
 # ROADMAP: `okgame` (`bobsgameweb`) Structural Milestones
 
-- [x] **Phase 1: Recovery & Foundation** — Indexing legacy assets, stabilizing the 244-map / 726-door world graph, and implementing `LegacyMapLoader` + `data/doors.json` import pipeline.
+- [x] **Phase 1: Recovery & Foundation** — Indexing legacy assets, stabilizing the 244-map / 726-door world graph, and implementing `LegacyMapLoader` + `src/shared/doors.json` import pipeline.
 - [x] **Phase 2: Feature Parity** — Achieving 1:1 functionality with the v8830 Java engine (dialogue, audio, movement, collision, doors).
     - [x] `"Blah"` procedural voice system for NPC dialogue.
     - [x] 8-directional movement & 64-frame parity-turning animations for Yuu (`YuuEntity`).
@@ -8,15 +8,16 @@
     - [x] Collision parity: `HitDetectionSystem` (`!== 0` hit markers), `hitBounds`/`extra` layer alignment, `WALL_IDS` priority over `FLOOR_IDS`, and metadata-driven hitboxes (`24px` kids / `30px` adults).
     - [x] Door sprite ECS integration (`SpriteComponent` + `doors.json` lookup + procedural variant fallback + `F2` debug trigger overlay).
 - [x] **Phase 3: Modernization** — Implementing WebGPU WGSL compute shaders (`WebGPUParticleSystem`), unified particle systems, and FFT/Butterchurn audio visualizers.
-- [x] **Phase 4: Consolidated Omni-Dashboard, Desktop Tray & Ops Governance (`v3.0.34`–`v3.0.35`)**
-    - [x] **Single-Page Consolidated Dashboard (`MainMenuScene.ts`)**: Replaced 4-tab fragmentation with one scrollable multi-column dashboard displaying all 38 features, inline descriptions, `ⓘ` tooltips, section quick-jumps (`1–5` / `Q·E`), inline Puzzle Mode pills, and live dual-server (`:6065` & `:6066`) health/toggle pills.
+- [x] **Phase 4: Consolidated Omni-Dashboard & Single-Source Governance (`v3.0.34`–`v3.0.35`)**
+    - [x] **Single-Page Consolidated Dashboard (`MainMenuScene.ts`)**: Replaced 4-tab fragmentation with one scrollable multi-column dashboard displaying all features, inline descriptions, `ⓘ` tooltips, section quick-jumps (`1–5` / `Q·E`), and inline Puzzle Mode pills.
     - [x] **Unified Single-Page Settings (`SettingsScene.ts` & `OptionsScene.ts`)**: Merged Audio Mixer, Haptics, WebGPU/WebGL2 toggle, HQ2X HD Sprites, Ghost Piece, Pixel-Perfect scaling, Touch HUD override, Auto-Login, and Player Identity onto one page.
-    - [x] **Electron Main/Preload & System Tray Overhaul (`src/main/`)**: Fixed `tsconfig.main.json` (`rootDir: "src/main"`, `CommonJS` + `dist/main/package.json`), guarded optional Squirrel startup, added `/healthz` service-identity probing (`6065`/`6066`) for external daemon awareness, and enforced `BelowNormal` priority on all spawned servers.
-    - [x] **Universal Backend REST CORS (`server/index.js`) & Single-Source `VERSION.md`**: Fixed browser CORS on REST routes (`/healthz`, `/api/status`, `/stats`, `/maps`, `/players`, `/leaderboards`) and wired dynamic `VERSION.md` loading across Vite, Electron, WS server, and AI Proxy.
     - [x] **Recursive Submodule Sync**: Fast-forwarded `submodules/bobui` (`bqt`) to `v1.2.60` (`92bb40654b`) alongside `juce` (`9.0.5`) and `ultimatepp` (`master`).
-- [ ] **Phase 5: Production Polish, Live VPS Cutover & Cross-Engine Convergence**
+- [x] **Phase 5: Hetzner Live-Only Cloud Architecture & Production Cutover (`v3.0.36`)**
+    - [x] **Eliminate Local Servers**: Removed all `localhost:6065` / `127.0.0.1:6066` / `localhost:3001` fallbacks, local Start/Stop UI pills, and Electron local child-process spawning; unified all client, Electron Tray, and Creation Studio traffic onto `https://bobsgame.com` and `https://ws.bobsgame.com`.
+    - [x] **Unified Hetzner Backend (`server/index.js`)**: Merged Creation Studio Generative AI endpoints (`/api/generate/sprite`, `/api/generate/tileset`, `/api/generate/dialogue`, `/api/chat`) directly into `server/index.js` behind `https://ws.bobsgame.com`.
+    - [x] **Non-Destructive Hetzner Live Deployment (`scripts/deploy-with-rollback.sh`)**: Deployed `v3.0.36` live to Hetzner (`5.161.250.43`) while preserving live player data (`profiles.json`, `leaderboards.json`, `achievement_profiles/`, `characters/`, `emulator_states/`, `maps/`) and hydrated big-data assets (`maps_v2/`, `audio/`, `lancedb/`).
+- [ ] **Phase 6: Next-Gen World Polish & Cross-Engine Convergence**
     - [ ] Extract dedicated pixel-art `Door*` sprite frames from legacy binary archive into `data/sprites/sprite_atlas.{png,json}` so `WorldScene` upgrades automatically from procedural door panels to animated pixel-art doors.
-    - [ ] Execute `scripts/deploy-with-rollback.sh` from an SSH-authorized host to publish `v3.0.35` to Hetzner (`/srv/www/bobsgame.com` & `ws.bobsgame.com`).
-    - [ ] Wire `data/lancedb/` vector memory into `server/ai_proxy.js` (`:6066`) for persistent long-term NPC memory across player sessions.
-    - [ ] Integrate `submodules/bobui` (`BQt` `v1.2.60`) `MeshNode` peer discovery for zero-config LAN multiplayer rooms.
-    - [ ] Expand automated Playwright/headless visual regression and multiplayer latency-reconciliation suites.
+    - [ ] Wire `lancedb/` vector memory on Hetzner into `server/index.js` (`https://ws.bobsgame.com/api/chat`) for persistent long-term NPC memory across player sessions.
+    - [ ] Integrate `submodules/bobui` (`BQt` `v1.2.60`) native client bridges with `https://ws.bobsgame.com` MMO rooms.
+    - [ ] Expand automated Playwright visual regression and live cloud latency-reconciliation suites.

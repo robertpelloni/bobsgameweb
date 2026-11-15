@@ -15,14 +15,11 @@ const envBigDataUrl =
 	typeof env.VITE_BIG_DATA_URL === "string" ? env.VITE_BIG_DATA_URL.trim() : "";
 
 /**
- * The WebSocket / backend URL for multiplayer functionality.
- * - Dev default: http://localhost:6065
- * - Prod default: https://ws.bobsgame.com
- * - Override: VITE_SERVER_URL=https://ws.bobsgame.com (or another backend origin)
+ * The WebSocket / REST / AI backend URL on Hetzner Cloud (live-only; no local server).
+ * - Default: https://ws.bobsgame.com
+ * - Override: VITE_SERVER_URL=https://ws.bobsgame.com (or another live backend origin)
  */
-export const SERVER_URL =
-	envServerUrl ||
-	(isProd ? "https://ws.bobsgame.com" : "http://localhost:6065");
+export const SERVER_URL = envServerUrl || "https://ws.bobsgame.com";
 
 declare const __APP_VERSION__: string | undefined;
 
@@ -36,7 +33,7 @@ declare const __APP_VERSION__: string | undefined;
 export const APP_VERSION: string =
 	typeof __APP_VERSION__ !== "undefined" && __APP_VERSION__
 		? __APP_VERSION__
-		: "3.0.35";
+		: "3.0.36";
 
 /**
  * Base URL for large assets (sprites, maps, audio).

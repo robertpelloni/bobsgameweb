@@ -1,8 +1,12 @@
-# HANDOFF: `bobsgameweb` (`okgame`) — `v3.0.35`
+# HANDOFF: `bobsgameweb` (`okgame`) — `v3.0.36` (Hetzner Live-Only)
 
-**Timestamp:** 2026-11-14  
+**Timestamp:** 2026-11-15  
 **Repository:** `https://github.com/robertpelloni/bobsgameweb.git` (`main` & `master` synchronized)  
-**Current Version:** **`v3.0.35`** (single-sourced from `VERSION.md`)  
+**Current Version:** **`v3.0.36`** (single-sourced from `VERSION.md`, deployed live on Hetzner)  
+**Live Production Endpoints (Hetzner `5.161.250.43`):**
+- **Frontend:** `https://bobsgame.com` (`/srv/www/bobsgame.com` — live `v3.0.36`)
+- **Unified Backend:** `https://ws.bobsgame.com` (`/opt/bobsgameweb/server`, `systemd` `bobsgameweb-server` = `active`, `version: "3.0.36"`)
+
 **Recursive Submodules:**
 - `submodules/bobui` (`https://github.com/robertpelloni/bqt.git`): **`v1.2.60`** (`92bb40654b`), clean
 - `submodules/bobui/submodules/juce`: **`9.0.5`** (`d60b7a7803`), clean
@@ -10,80 +14,55 @@
 
 ---
 
-## 1. Executive Summary of Completed Milestones (`v3.0.34` → `v3.0.35`)
+## 1. Executive Summary of `v3.0.36` (Hetzner Live-Only Cutover)
 
-### A. Consolidated Single-Page Omni-Engine Dashboard (`src/renderer/scenes/MainMenuScene.ts`)
-- Replaced the fragmented 4-tab exclusive layout (`play` | `editors` | `community` | `system` — which hid 75% of engine features at any moment and discarded `MenuItem.description`) with **one singular, consolidated, smoothly scrollable multi-column dashboard** (`#menu`) surfacing **all 38 gameplay modes, RPG scenes, Creation Studio editors, online competitive rankings, and engine tech demos** on one page.
-- Every card displays its primary title, inline description subtitle, category accent stripe, and an `ⓘ` indicator wired to `Tooltip.ts`.
-- Added a **Pinned Telemetry & Control Header** featuring:
-  - Live HTTP `/healthz` + Electron IPC daemon status & click-to-toggle pills for **both** `Game WS Server (:6065)` and `AI Proxy (:6066)`.
-  - Inline `[MARATHON] [SPRINT] [ULTRA]` Puzzle Mode selector pills.
-  - Quick-jump section anchor pills (`1–5` keys or `Q`/`E`) that smoothly scroll the unified page, plus mouse-wheel scrolling, draggable scrollbar thumb, and `PageUp`/`PageDown`/`Home`/`End` support (`InputManager.ts`).
+### A. Zero Local Servers — Exclusive Hetzner Live Architecture
+- Per explicit directive (**no local servers — Hetzner deploy only live**), removed all local server fallbacks (`localhost:6065`, `127.0.0.1:6066`, `localhost:3001`), local daemon Start/Stop UI pills/cards, Electron child `node` server spawning, and local dev-server scripts (`dev`, `server`, `server:ws`, `dev:electron`, `preview`).
+- **`src/shared/Config.ts`**, **`src/renderer/editor/GenerativeAIManager.ts`**, **`src/renderer/engine/rpg/DemoWorld.ts`**, and **`src/renderer/puzzle/BobNet.ts`** connect unconditionally to **`https://ws.bobsgame.com`** and **`https://bobsgame.com`**.
+- **`src/main/index.ts` & `src/main/preload.ts`**: Simplified the Electron Desktop Shell + Native System Tray into a pure live Hetzner Cloud client loading `https://bobsgame.com/#menu` and probing `https://ws.bobsgame.com/healthz` with zero local background daemons.
+- **`start.bat`**: Opens live `https://bobsgame.com` directly (`start.bat --electron` launches Electron against Hetzner live; `start.bat --deploy` executes `./scripts/deploy-with-rollback.sh`).
+- Non-destructively archived `server/ai_proxy.js` → `scripts/archive/ai_proxy.legacy.js` and `scripts/local-ops.ps1` → `scripts/archive/local-ops.legacy.ps1`.
 
-### B. Unified Single-Page Settings & Scene-Stack Integrity
-- **`src/renderer/scenes/SettingsScene.ts` & `OptionsScene.ts`**: Merged Audio Mixer, Haptic Pulse, WebGPU/WebGL2 renderer preference, HQ2X HD Sprites, Ghost Piece, Pixel-Perfect Scaling, Mobile Touch HUD override, Auto-Login, and Player Identity onto **one responsive two-column page** with `Tooltip` hover descriptions (`OptionsScene` now aliases `SettingsScene`).
-- **`src/renderer/Game.ts` & `WorldScene.ts`**: Fixed the empty `StateManager` scene-stack bug when exiting `WorldScene` on `/` or `#world` boots by seeding `MainMenuScene` beneath `WorldScene`, eliminated a duplicate eager `mainMenuScene.create()` invocation before `StateManager.push()`, and added a 1-click `☰ Omni-Dashboard (Esc)` HUD button inside `WorldScene`.
-- **`src/renderer/scenes/HelpScene.ts`**: Added smooth mouse-wheel scrolling, viewport masking, draggable/synced scrollbar thumb, and updated reference documentation for `#menu`, Unified Settings, World HUD shortcuts, and System Tray daemons.
+### B. Unified Hetzner Cloud Backend (`server/index.js` on `https://ws.bobsgame.com`)
+- Integrated Creation Studio Generative AI endpoints (`/api/generate/sprite`, `/api/generate/tileset`, `/api/generate/dialogue`, `/api/chat`) directly into `server/index.js`, loading the `openai` SDK dynamically when `OPENAI_API_KEY` is configured in `/etc/bobsgameweb-server.env` and falling back cleanly to deterministic procedural payloads otherwise.
+- Added dynamic `*.bobsgame.com` `Origin` CORS reflection and `openaiConfigured` status reporting on `/healthz` and `/api/status`.
 
-### C. Electron Desktop Shell, Native System Tray & Dual-Server Daemons (`:6065` & `:6066`)
-- **Fixed `tsconfig.main.json` & `build:main`**: Set `rootDir: "src/main"`, `"module": "CommonJS"`, `"outDir": "dist/main"`, and generated `dist/main/package.json` (`{"type":"commonjs"}`) so `dist/main/index.js` and `dist/main/preload.js` execute cleanly under Electron 45 alongside the root `"type": "module"` Vite workspace. Guarded optional `electron-squirrel-startup`.
-- **Migrated AI Proxy Default Port (`8080` → `6066`) & Added `/healthz` Service Identity Verification**: Live HTTP probing uncovered an unrelated host Go server occupying `127.0.0.1:8080` (returning `404 page not found` while `ai_proxy.js` bound IPv6 `[::]:8080`). Migrated `AI_PROXY_PORT` default to **`6066`** (`0.0.0.0:6066`, paired adjacent to `:6065`) across `server/ai_proxy.js`, `GenerativeAIManager.ts`, `src/main/index.ts`, `MainMenuScene.ts`, `start.bat`, and `scripts/local-ops.ps1`, and implemented `probeServiceHealth()` in `src/main/index.ts` to validate JSON `service` names (`bobsgameweb-socket-server` & `ai-proxy`).
-- **Universal REST CORS (`server/index.js`) & Self-Healing `server/node_modules`**: Added `Access-Control-Allow-*` headers, `204` `OPTIONS` preflight handling, and `/api/status` to `server/index.js` (`:6065`); hydrated `server/node_modules` (`89 packages`); and added automatic `server/node_modules/socket.io` checks to `start.bat` and `scripts/local-ops.ps1`.
-- **Electron File Telemetry (`logs/local-electron.log`)**: Added `logMain()` and renderer console/load telemetry to `src/main/index.ts` because Windows `electron.exe` (`/SUBSYSTEM:WINDOWS`) does not flush `console.log` over detached `Start-Process` pipes.
+### C. Consolidated Single-Page Dashboard & Hetzner Telemetry (`MainMenuScene.ts` & `HelpScene.ts`)
+- Replaced the local `Game WS Server (:6065)` and `AI Proxy Server (:6066)` toggle pills/cards on `MainMenuScene.ts` with a live **`Hetzner Cloud (ws.bobsgame.com)`** status pill in the pinned header and a `Hetzner Cloud Status` telemetry card in Section 5 (37 consolidated cards total).
+- Updated `HelpScene.ts` to document the Hetzner Live-Only Cloud architecture.
 
-### D. Vite Dev/Build Fixes, Single-Source Versioning & `BelowNormal` Ops Suite
-- **Single-Source `VERSION.md`**: Dynamically ingested by `vite.config.ts` (`__APP_VERSION__`), `src/shared/Config.ts`, `src/main/index.ts`, `server/index.js`, and `server/ai_proxy.js`.
-- **Vite Dev & Electron `file://` Fixes (`vite.config.ts`, `src/shared/doors.json`, `DemoWorld.ts`)**:
-  - Mirrored `data/doors.json` to `src/shared/doors.json` so Vite dev mode no longer throws `Assets in public directory cannot be imported from JavaScript` when importing `WorldScene` / `LegacyMapLoader`.
-  - Added `base: './'` (fixing `file://` asset loading in standalone/packaged Electron builds), `optimizeDeps.entries: ['index.html']`, `server.watch.ignored` (`data/`, `submodules/`, `dist/`, `cpp_port/`, `logs/`), and smart `copyPublicDir` (skipping redundant 2.5 GB `data/` copies when `dist/renderer/maps_v2` is already hydrated, reducing incremental `vite build` to **~1.31s**).
-  - Updated `DemoWorld.ts` dynamic scene imports to analyzable template literals (`../../scenes/${sceneName}.ts`).
-- **Process Priority & Binary Safety (`build.bat`, `start.bat`, `setup.bat`, `scripts/local-ops.ps1`, `.gitattributes`)**:
-  - Normalized `.bat` files to pure ASCII + CRLF via `.gitattributes` (preventing Windows `cmd.exe` multi-byte offset corruption).
-  - Enforced **`BelowNormal`** CPU scheduling priority across all build scripts, Node daemons, and Electron children, with owned PIDs tracked in `logs/pids.json` so `stop` never terminates unrelated host processes.
+### D. Disk-Safe & Data-Safe Hetzner Deployment Suite (`scripts/`)
+- **`scripts/deploy-frontend-hetzner.sh` & `scripts/deploy-with-rollback.sh`**: Back up `/srv/www/bobsgame.com/index.html` + `assets/` to `/tmp/bobsgame_frontend_backup_<ts>` and upload only `dist/renderer/index.html` + `dist/renderer/assets/` (`~19.37 MB` uncompressed), preserving the multi-gigabyte hydrated static assets (`maps_v2/`, `audio/`, `lancedb/`) on Hetzner and safeguarding `/dev/sda1` free disk space (`14 GB` free).
+- **`scripts/deploy-backend-vps.sh`**: Syncs `VERSION.md` to `server/VERSION.md` and `/opt/bobsgameweb/VERSION.md`, uploads `server/` via `tar` excluding `node_modules`, `profiles.json`, `leaderboards.json`, `achievement_profiles`, `characters`, `emulator_states`, and `maps`, runs `npm install --omit=dev`, restores `bobsgame:bobsgame` ownership, and restarts `bobsgameweb-server`.
+- **`scripts/check-backend-host.sh`**: Pipes `/healthz` JSON via `stdin` into `node -e` so Windows Git Bash + native `node.exe` never fails on `/tmp/...` POSIX paths.
 
 ---
 
-## 2. Verified Build, Unit Test & Live Full-Stack Probe Results
+## 2. Live Production Deployment & Verification Telemetry (`v3.0.36`)
 
-1. **Production Build (`cmd.exe /c build.bat` & `npm run build`)**:
-   - `tsc` + `npm run build:main` + `vite build`: **0 errors**, `930 modules transformed`, built in **1.31s**.
-2. **Automated Test Suites (`190 / 190` Assertions Passed)**:
-   - `npx tsx src/__tests__/shop-config.test.ts` → **3 passed, 0 failed**
-   - `npx tsx scripts/tests/puzzle-logic.test.ts` → **60 passed, 0 failed**
-   - `npx tsx scripts/tests/validation.test.ts` → **57 passed, 0 failed**
-   - `npx tsx scripts/tests/map-data.test.ts` → **70 passed, 0 failed**
-3. **Live Full-Stack 4-Service Runtime Verification (Zero STDERR Warnings/Errors)**:
-   - **`server/index.js` (`http://127.0.0.1:6065/healthz` & `/api/status`)**: `HTTP 200`, `Access-Control-Allow-Origin: *`, `{"ok":true,"status":"ok","service":"bobsgameweb-socket-server","version":"3.0.35","port":6065,...}`
-   - **`server/ai_proxy.js` (`http://127.0.0.1:6066/healthz`)**: `HTTP 200`, `{"status":"ok","service":"ai-proxy","version":"3.0.35","openaiConfigured":true,"port":6066}`
-   - **Vite Web Dev Server (`http://127.0.0.1:3000/`)**: `HTTP 200` (`7,822 bytes`, ready in `704 ms`, zero `STDERR` warnings)
-   - **Electron Desktop Shell + System Tray (`logs/local-electron.log`)**: `ExitCode: 0`, `[Main] System Tray initialized (version=v3.0.35, icon=...\public\bobsgame.png, empty=false)`, `wsOnline=true, aiOnline=true`, `BrowserWindow finished loading URL: http://127.0.0.1:3000/#menu`, `Game initialized`, `Game starting...`
+1. **Local Production Bundle Build (`npm run build`)**:
+   - `tsc` + `npm run build:main` + `vite build` (`VITE_SERVER_URL=https://ws.bobsgame.com VITE_COPY_PUBLIC_DIR=false`): **0 errors**, `930 modules transformed`, built in **1.15s**.
+2. **Live Hetzner Backend Verification (`https://ws.bobsgame.com`)**:
+   - `systemctl is-active bobsgameweb-server` → **`active`**
+   - `GET https://ws.bobsgame.com/healthz` → **`HTTP/1.1 200 OK`**, `access-control-allow-origin: https://bobsgame.com`, `{"ok":true,"status":"ok","service":"bobsgameweb-socket-server","version":"3.0.36","openaiConfigured":false,"port":6065,"uptime":7,"connections":0,"rooms":0,"time":1794717222231}`
+   - `GET https://ws.bobsgame.com/socket.io/?EIO=4&transport=polling` → **`HTTP/1.1 200 OK`** (`upgrades: ["websocket"]`)
+3. **Live Hetzner Frontend Verification (`https://bobsgame.com`)**:
+   - Expected backend origin `https://ws.bobsgame.com` confirmed in live deployed JS chunks (`assets/main-B46fDiix.js`, `assets/Config-DEq-DvBv.js`, `assets/GenerativeAIManager-DEoRKMqD.js`).
+   - All custom editor markers (`Saved Template Slots`, `preset-slots-panel`, `block-conversion-list`, etc.) verified live.
+   - Lazy runtime chunk families verified live (`CustomGameEditorScene-k3N8nJxJ.js` `118,306 B`, `AchievementsScene-DuDVp7tL.js` `4,686 B`, `WorldScene-PxRBriwv.js` `120,091 B`, `WorldEditorScene-18e0dxfb.js` `10,647 B`, `LobbyScene-CD82KO6m.js` `13,667 B`).
+   - WebGPU WGSL particle integration verified live (`assets/WebGPUParticleSystem-kSZv-oSf.js`).
 
 ---
 
-## 3. Quick-Start Operational Commands
+## 3. Operational Commands (Hetzner Live-Only)
 
-```powershell
-# Check status of WS (:6065), AI (:6066), Vite Web (:3000), and Electron Tray
-.\scripts\local-ops.ps1 -Action status
+```bash
+# Build frontend + Electron main locally (no local server started)
+npm run build
 
-# Start all local background daemons + web dev server at BelowNormal priority
-.\scripts\local-ops.ps1 -Action start -Target all
+# Deploy frontend + backend live to Hetzner with automatic rollback & verification
+npm run deploy:hetzner
 
-# Launch Electron Desktop Shell + Native System Tray
-.\scripts\local-ops.ps1 -Action start -Target electron
-
-# Tail service & Electron logs
-.\scripts\local-ops.ps1 -Action logs -Target all
-
-# Stop only exact child PIDs owned by local-ops.ps1
-.\scripts\local-ops.ps1 -Action stop -Target all
+# Re-verify live https://bobsgame.com & https://ws.bobsgame.com stack
+npm run verify:live
 ```
-
----
-
-## 4. Known Constraints & Next Actionable Steps
-
-1. **Hetzner Live VPS Cutover (`5.161.250.43`)**: Outbound SSH port `22` is restricted inside the agent terminal sandbox. From an unrestricted developer shell with SSH keys, run `./scripts/deploy-with-rollback.sh` (documented in `DEPLOY.md`) to publish `v3.0.35` to `bobsgame.com` and `ws.bobsgame.com`.
-2. **Legacy Pixel-Art `Door*` Atlas Frames**: `WorldScene.ts` resolves canonical door sprite names (`DoorDownBrownGoldKnob`, etc.) from `doors.json` via `SpriteAtlas` and currently renders palette-matched procedural doors (`createFallbackDoorGraphic`) until `DoorDown*`/`DoorUp*` sheets are extracted into `data/sprites/sprite_atlas.{png,json}`.
-3. **Low Disk Space on `C:` (`< 4 GB` free)**: Keep `vite.config.ts` smart `copyPublicDir` enabled (`dist/renderer/maps_v2` is already hydrated on disk) and avoid duplicating the 2.5 GB `data/` directory unnecessarily.
-4. **Host Debugging Port Boundary**: Raw host browser debugging ports (such as `msedge` CDP `9222`) were intentionally not probed per environment security boundaries; runtime verification was conducted via dedicated spawned `BelowNormal` instances and Electron `logs/local-electron.log` telemetry.

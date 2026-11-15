@@ -16,7 +16,7 @@ export default defineConfig(({ command, mode }) => {
   // WHY:  Prevents version drift between `VERSION.md`, `src/shared/Config.ts`,
   //       `MainMenuScene`, `SettingsScene`, and `HelpScene`. Updating
   //       `VERSION.md` automatically propagates across the entire client UI.
-  let appVersion = '3.0.35';
+  let appVersion = '3.0.36';
   try {
     const rawVersion = readFileSync(resolve(__dirname, 'VERSION.md'), 'utf-8').trim();
     if (rawVersion) {
@@ -54,9 +54,7 @@ export default defineConfig(({ command, mode }) => {
         : !hasHydratedPublicAssets;
 
   return {
-    // Relative asset base ensures `dist/renderer/index.html` works identically on
-    // both `https://bobsgame.com/` (hash-routed SPA) and Electron `file://` loads.
-    base: './',
+    base: isElectron ? './' : '/',
     define: {
       __APP_VERSION__: JSON.stringify(appVersion),
     },

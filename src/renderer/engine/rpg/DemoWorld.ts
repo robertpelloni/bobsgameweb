@@ -677,10 +677,7 @@ export class DemoWorld {
 	private initNetwork(): void {
 		try {
 			this.networkManager = new NetworkManager();
-			const wsURL =
-				window.location.hostname === "localhost"
-					? "http://localhost:3001"
-					: "https://ws.bobsgame.com";
+			const wsURL = "https://ws.bobsgame.com";
 
 			this.networkManager.on("connected", () => {
 				this.isOnline = true;
