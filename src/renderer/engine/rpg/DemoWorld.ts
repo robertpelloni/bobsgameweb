@@ -5137,7 +5137,7 @@ export class DemoWorld {
 		if (!app) return;
 
 		import("../../state/StateManager").then(({ StateManager }) => {
-			import("../../scenes/" + sceneName)
+			import(`../../scenes/${sceneName}.ts`)
 				.then((mod) => {
 					const SceneClass = Object.values(mod)[0] as any;
 					if (!SceneClass) return;

@@ -72,7 +72,7 @@ import {
 import { DialogueTracker } from "../engine/event/DialogueTracker";
 import { FlagManager } from "../engine/event/FlagManager";
 import { AmbientMusicGenerator } from "../audio/AmbientMusicGenerator";
-import doorsConfig from "../../../data/doors.json";
+import doorsConfig from "../../shared/doors.json";
 export class WorldScene extends Scene {
 	private world: World;
 	private map: GameMap | null = null;
@@ -1389,6 +1389,70 @@ export class WorldScene extends Scene {
 		});
 		this.mapNameText.position.set(15, 58);
 		this.hudContainer.addChild(this.hpText, this.goldText, this.mapNameText);
+
+		// =========================================================================
+		// Quick-Access Consolidated Dashboard HUD Pill
+		// =========================================================================
+		// WHAT: Renders a compact 1-click "☰ Omni-Dashboard" button directly below
+		//       the status HUD panel (`y = 86`) with hover feedback.
+		// WHY:  Default browser boot enters `WorldScene` immediately; exposing a
+		//       dedicated HUD button makes the Consolidated Single-Page Dashboard
+		//       (Puzzle modes, Editors, Multiplayer, Settings, Server Controls)
+		//       discoverable in 1 click without hunting through the ESC menu.
+		const dashBtn = new Container();
+		dashBtn.position.set(0, 86);
+		dashBtn.eventMode = "static";
+		dashBtn.cursor = "pointer";
+
+		const dashBg = new Graphics();
+		const drawDashBg = (hovered: boolean) => {
+			dashBg.clear();
+			dashBg.roundRect(0, 0, 196, 28, 7);
+			dashBg.fill({ color: hovered ? 0x224477 : 0x101c33, alpha: 0.85 });
+			dashBg.stroke({ color: hovered ? 0x66bbff : 0x3366ff, width: 1.5 });
+		};
+		drawDashBg(false);
+		dashBtn.addChild(dashBg);
+
+		const dashLabel = new Text({
+			text: "☰ Omni-Dashboard  (Esc)",
+			style: new TextStyle({
+				fill: "#ddeeff",
+				fontSize: 12,
+				fontWeight: "bold",
+			}),
+		});
+		dashLabel.anchor.set(0.5);
+		dashLabel.position.set(98, 14);
+		dashBtn.addChild(dashLabel);
+
+		dashBtn.on("pointerover", () => drawDashBg(true));
+		dashBtn.on("pointerout", () => drawDashBg(false));
+		dashBtn.on("pointerdown", (e) => {
+			e.stopPropagation();
+			void this.openConsolidatedDashboard();
+		});
+		this.hudContainer.addChild(dashBtn);
+	}
+
+	/**
+	 * Saves active player state and transitions cleanly to the Consolidated
+	 * Omni-Engine Dashboard (`MainMenuScene`), safeguarding against an empty
+	 * `StateManager` stack if `WorldScene` was ever pushed standalone.
+	 */
+	private async openConsolidatedDashboard(): Promise<void> {
+		this.saveCharacterToCloud();
+		if (StateManager.size > 1) {
+			await StateManager.pop();
+		} else {
+			const { MainMenuScene } = await import("./MainMenuScene");
+			const menuScene = new MainMenuScene({
+				name: "main-menu",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			});
+			await StateManager.replace(menuScene);
+		}
 	}
 	/** Get a friendly display name for a map ID */
 	private static friendlyMapName(mapId: string): string {
@@ -1691,8 +1755,7 @@ export class WorldScene extends Scene {
 				this.togglePause();
 				break;
 			case 3:
-				this.saveCharacterToCloud();
-				StateManager.pop();
+				void this.openConsolidatedDashboard();
 				break;
 		}
 	}

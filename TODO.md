@@ -1,38 +1,20 @@
-# TODO: okgame (`bobsgameweb`) Granular Tasks
+# TODO: `okgame` (`bobsgameweb`) Granular Tasks
 
-## Completed
-- [x] Hook SFX library (IDs 0-87) into `AudioManager`.
-- [x] Implement 8-directional animations for Yuu (64 frames) using `data/sprites/yuu.json`.
-- [x] Fix depth-sorting and collision bugs using extracted `hitBoxFromTop` values (24px for kids, 30px for adults).
-- [x] Implement `YuuEntity` class to centralize player logic and animations.
-- [x] Standardize NPC logic with `NPCEntity` hub.
-- [x] Fix server-side scoping and emit bugs in `server/index.js`.
-- [x] Optimize audio by prioritizing OGG variants in performance-constrained environments.
-- [x] Implement system path configuration for external tool launching (Aseprite, Tilemap Studio) in `CustomGameEditor.ts`.
-- [x] Implement AI sprite/tileset processing and wiring in `GenerativeAIManager.ts` and `CustomGameEditor.ts`.
-- [x] Implement rate-limiting and input validation for RPG world sync packets.
-- [x] Implement unified particle system and integrate into `WorldScene`.
-- [x] Refactor weather and footstep effects to use a unified particle system.
-- [x] Evaluate `bobui` C++ integration with `cpp_port/` and implement Wasm bridge skeleton.
-- [x] Implement AI-driven NPC Dialogue generation in `WorldEditor`.
-- [x] Implement FFT-driven Audio Visualizer (FFTVisualizer & ProjectM/Butterchurn).
-- [x] Implement real-time AI NPC chat in `WorldScene`.
-- [x] Implement WebGPU-Ready Particle System skeleton and hardware detection.
-- [x] Implement full WebGPU-based compute-shader particle demo.
-- [x] Finalize `chiptune3.worklet.js` UTF8 string handling (v3.0.18).
-- [x] CRITICAL: Fix `isHitTile()` — HitDetectionSystem called before legacy fallback, blocking all movement.
-- [x] CRITICAL: Fix `isHitTile()` — `FLOOR_IDS` checked before `WALL_IDS`, walls didn't block.
-- [x] Connect `WasmPhysicsBridge` to actual physics loop (`checkBatchCollisions`).
-- [x] Wire `WebGPUParticleSystem` fully into `WeatherRenderer` with WGSL hardware detection.
-- [x] Implement Electron System Tray, single-instance lock, and AI Proxy status/lifecycle controls (`MainMenuScene` & `src/main/index.ts`).
-- [x] Restore & wire ECS `SpriteComponent` door rendering (`doors.json` lookup + procedural variant fallback + `F2`-toggled debug trigger overlay) in `WorldScene.ts`.
-- [x] Optimize `vite.config.ts` `copyPublicDir` so `npm run build` skips re-copying 2.5 GB `data/` when `dist/renderer/maps_v2` is already present.
-- [x] Add root Windows execution scripts (`build.bat`, `start.bat`, `setup.bat`) and update `tools_build.sh`.
-- [x] Update `.gitignore` to ensure databases (`*.db`), `.memory/branches/*/log.md`, and session logs remain tracked while ignoring `build_output/` CMake probe trees.
-- [x] Synchronize `submodules/bobui` (`bqt` `v1.2.52`) and nested `juce` (`9.0.5`) + `ultimatepp` (`master`) submodules, and unify version `3.0.34` (`v3.0.34`) across all metadata files.
+## Completed (`v3.0.34` – `v3.0.35`)
+- [x] Synchronize `submodules/bobui` (`bqt`) to `v1.2.60` (`92bb40654b`) and verify nested `juce` (`9.0.5`) and `ultimatepp` (`master`) cleanliness.
+- [x] Wire single-source `VERSION.md` dynamic version ingestion across `vite.config.ts`, `src/shared/Config.ts`, `src/main/index.ts`, `server/index.js`, and `server/ai_proxy.js`.
+- [x] Fix missing HTTP CORS & `OPTIONS` preflight headers + add `/api/status` on `server/index.js` (`:6065`).
+- [x] Redesign `MainMenuScene.ts` into a **single consolidated scrollable dashboard page** surfacing all 38 capabilities with visible inline descriptions, `ⓘ` tooltips, quick-jump section anchors (`1–5` / `Q·E`), inline `[MARATHON] [SPRINT] [ULTRA]` mode pills, and live dual-server (`:6065` & `:6066`) controls.
+- [x] Consolidate `OptionsScene.ts` into `SettingsScene.ts` so Audio, Haptics, WebGPU, HQ2X HD Sprites, Ghost Piece, Pixel-Perfect scaling, Touch HUD, Auto-Login, and Player Name live on one page with tooltips.
+- [x] Fix `Game.ts` + `WorldScene.ts` scene stack so default/deep-link `WorldScene` boots over `MainMenuScene`, add a 1-click `☰ Omni-Dashboard (Esc)` HUD button in `WorldScene`, and eliminate double `MainMenuScene.create()` invocation.
+- [x] Fix Electron main/preload compilation (`tsconfig.main.json` `rootDir: "src/main"`, `CommonJS` + `dist/main/package.json`), guard `electron-squirrel-startup`, migrate AI Proxy default port from `8080` to `6066`, add `/healthz` service-identity verification (`6065`/`6066`), and lower child server priority to `BelowNormal`.
+- [x] Update `HelpScene.ts` with mouse-wheel scrolling and full documentation of the Consolidated Dashboard, Unified Settings, World HUD shortcuts, and System Tray daemons.
+- [x] Add `scripts/local-ops.ps1` (`BelowNormal` PID-tracked process manager), update `build.bat` & `start.bat` to `BelowNormal` priority, and non-destructively archive obsolete one-off scripts into `scripts/archive/`.
+- [x] Unify `AGENTS.md` master instructions and align `CLAUDE.md`, `GEMINI.md`, `GPT.md`, `copilot-instructions.md`, `VISION.md`, `MEMORY.md`, `DEPLOY.md`, `IDEAS.md`, `STRUCTURAL_MAP.md`, `.memory/main.md`, and `HANDOFF.md`.
 
-## Upcoming / Open
-- [ ] Extract pixel-art `Door*` sprite sheets from legacy archive into `data/sprites/sprite_atlas.{png,json}` and `sprite_animations.json`.
-- [ ] Wire entity `nonWalkable`, `ignoreHitLayer`, and `ignoreHitPlayer` flags from map entity metadata directly into `HitDetectionSystem` `Collider` instances.
-- [ ] Deploy `v3.0.34` frontend bundle (`dist/renderer/index.html` + `dist/renderer/assets/`) and `server/` (`3.0.34`) to Hetzner production (`/srv/www/bobsgame.com` & `ws.bobsgame.com`).
-- [ ] Expand automated Vitest/Playwright smoke coverage for map transitions, door triggers, and multiplayer room sync.
+## Upcoming / Actionable Backlog
+- [ ] Extract legacy pixel-art `DoorDown*` / `DoorUp*` sprite frames into `data/sprites/sprite_atlas.{png,json}` and `sprite_animations.json`.
+- [ ] Wire map entity `nonWalkable`, `ignoreHitLayer`, and `ignoreHitPlayer` flags directly into `HitDetectionSystem` `Collider` instances.
+- [ ] Add live type-ahead filter bar on `MainMenuScene.ts` to filter the 38 dashboard cards by keyword.
+- [ ] Add `#cartridge=` compressed URL sharing for `CustomGameType` + `GameSequence` creations.
+- [ ] Run `./scripts/deploy-with-rollback.sh` from an SSH-enabled workstation outside the port-22-restricted sandbox to cut over `bobsgame.com` and `ws.bobsgame.com` to `v3.0.35`.

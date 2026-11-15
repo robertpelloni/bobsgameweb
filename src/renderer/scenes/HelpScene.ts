@@ -1,13 +1,16 @@
 /**
- * HelpScene — in-game help and controls reference.
+ * HelpScene — Comprehensive In-Game Manual, Controls & Server Operations Reference.
  *
- * Shows game controls (keyboard + gamepad), tutorials, and tips.
- * Accessible from the main menu or in-game pause menu.
+ * Synchronized in v3.0.35 with the Consolidated Single-Page Omni-Engine Dashboard,
+ * Unified Settings & Options page, World `☰ Omni-Dashboard` HUD button, F1/F2
+ * collision/door debug overlays, Creation Studio editors, and Electron System Tray
+ * dual-server (`:6065` & `:6066`) daemon controls.
  */
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
+import { APP_VERSION } from "../../shared/Config";
+import { InputManager, Key } from "../input/InputManager";
 import { Scene, type SceneConfig } from "../state/Scene";
-import { StateManager } from "../state/StateManager";
-import { InputManager } from "../input/InputManager";
+import { SceneTransition } from "../state/SceneTransition";
 
 interface HelpSection {
 	title: string;
@@ -16,88 +19,68 @@ interface HelpSection {
 
 export class HelpScene extends Scene {
 	private scrollY = 0;
+	private targetScrollY = 0;
 	private contentContainer!: Container;
-	private readonly scrollSpeed = 40;
+	private viewportMask!: Graphics;
+	private scrollThumb!: Graphics;
+	private readonly scrollSpeed = 340;
 	private maxScroll = 0;
+	private readonly viewportTop = 58;
+	private viewportHeight = 580;
+	private wheelHandler: ((e: WheelEvent) => void) | null = null;
 
 	private static readonly SECTIONS: HelpSection[] = [
 		{
-			title: "🎮 Keyboard Controls",
+			title: "🧭 Consolidated Omni-Engine Dashboard (#menu)",
 			lines: [
-				"WASD / Arrow Keys — Move character",
-				"Space / E — Interact / Confirm",
-				"Escape / Backspace — Cancel / Back",
-				"Shift — Sprint",
-				"V — Toggle Menu Visualizer",
-				"C — AI NPC Chat (when near NPC)",
-				"F5 — Quick Save",
-				"F9 — Quick Load",
-				"Tab — Toggle Minimap",
+				"All 38 gameplay modes, editors, rankings, and engine tools live on ONE scrollable page.",
+				"Mouse Wheel / Scrollbar Drag / PageUp / PageDown — Smoothly scroll the entire dashboard.",
+				"Keys 1–5 or Q / E — Smoothly jump between the 5 priority sections on the same page.",
+				"Top-Right Telemetry Pills — Live health & click-to-toggle for WS Server (:6065) and AI Proxy (:6066).",
+				"Inline Puzzle Mode Pills — Switch between MARATHON, SPRINT, and ULTRA before starting any puzzle.",
+				"Hover any card or ⓘ badge to inspect full contextual tooltips; press V to toggle the FFT visualizer.",
 			],
 		},
 		{
-			title: "🎮 Gamepad Controls",
+			title: "🎮 World & RPG Keyboard Controls",
 			lines: [
-				"Left Stick / D-Pad — Move character",
-				"A Button — Interact / Confirm",
-				"B Button — Cancel / Back",
-				"Start — Pause Menu",
-				"Select — Toggle Minimap",
+				"WASD / Arrow Keys — 8-directional character movement",
+				"Shift (Hold) — Sprint",
+				"Space / E / Enter — Interact with NPCs, signs, chests, and doors",
+				"☰ Omni-Dashboard Button (Top-Left HUD) or ESC — Pause / Return to Consolidated Dashboard",
+				"C — Open Generative AI NPC Chat when standing near an NPC",
+				"F — Cast fishing line near water",
+				"Tab — Toggle World Minimap   |   Tilde (~) — Toggle Engine Debug Console",
+				"F1 — Toggle Coordinate & Layer Debug HUD   |   F2 — Toggle Collision & Door Trigger Overlays",
+				"F5 — Quick Save   |   F9 — Quick Load",
 			],
 		},
 		{
-			title: "🗺️ World Map",
+			title: "🕹️ Puzzle & Gamepad Controls",
 			lines: [
-				"Explore the world of TOWNYUU and beyond!",
-				"Walk near NPCs and press Space/E to talk.",
-				"Doors glow — walk into them to enter buildings.",
-				"The minimap (top-right) shows your position.",
-				"Blue tiles are water — you can't walk on them.",
-				"Bridges let you cross rivers.",
-				"Chests contain items — walk into them to open.",
+				"Left / Right Arrows (or D-Pad) — Shift falling piece horizontally (DAS/ARR configurable)",
+				"Z / X (or A / B Buttons) — Rotate piece counter-clockwise / clockwise (SRS wall kicks in Modern)",
+				"Down Arrow — Soft drop   |   Up Arrow / Space — Instant hard drop",
+				"C / Shift — Hold current piece",
+				"Gamepad Start — Pause Menu   |   Gamepad Select — Toggle Minimap",
 			],
 		},
 		{
-			title: "🧩 Puzzle Games",
+			title: "🛠️ Creation Studio & Generative AI Proxy (:6066)",
 			lines: [
-				"Select 'Play Puzzle' from the main menu.",
-				"Clear lines by filling rows completely.",
-				"Speed increases as you level up.",
-				"Compete online for high scores!",
-				"Game sequences chain multiple puzzle variants.",
+				"Custom Game Rule Editor — Configure piece shapes, gravity tables, lock delays, and garbage rules.",
+				"World Database Editor — Edit tilemap layers, warp doors, NPC spawns, and AI-generated tilesets.",
+				"Pixel Sprite Editor — Draw frames, test 8-direction walk animations, or prompt Text-to-Sprite.",
+				"Event Sheet & Game Sequence Editors — Script cutscenes/quests and chain multi-stage puzzle campaigns.",
+				"Set OPENAI_API_KEY in environment for live DALL-E/GPT generation, or run offline in deterministic Mock Mode.",
 			],
 		},
 		{
-			title: "⚔️ Tournaments",
+			title: "🖥️ Unified Settings, System Tray & Local Servers",
 			lines: [
-				"Join bracket tournaments from the Tournament menu.",
-				"Single elimination — lose and you're out!",
-				"ELO ratings adjust after each match.",
-				"Higher ELO players win more simulation matches.",
-				"Watch tournaments as a spectator.",
-			],
-		},
-		{
-			title: "🌐 Online Play",
-			lines: [
-				"Select 'Go Online' to connect to the server.",
-				"Enter your username to identify yourself.",
-				"Join or create rooms in the multiplayer lobby.",
-				"Chat with other players in the lobby.",
-				"Leaderboards track marathon, sprint, and ultra scores.",
-			],
-		},
-		{
-			title: "💡 Tips",
-			lines: [
-				"Press F5 to save anywhere, anytime.",
-				"Fish near water by pressing F.",
-				"Talk to NPCs multiple times — they may have new dialogue.",
-				"Try the AI Chat for deep character interactions!",
-				"Enable 'HD Sprites' in Options for HQ2X upscaling.",
-				"Check the achievements screen for goals.",
-				"Use the Settings menu to adjust audio volumes.",
-				"The nD Handheld plays mini-games within the game!",
+				"Unified Settings & Options — Audio Mixer, WebGPU/WebGL2, HQ2X HD Sprites, Ghost Piece, Touch HUD, Haptics & Name on one page.",
+				"Electron System Tray — Minimize-to-tray, jump to #menu or #world, and Start/Stop/Restart both local daemons at BelowNormal priority.",
+				"Local CLI Quick-Start — Run 'start.bat' or '.\\scripts\\local-ops.ps1 -Action start -Target all' to launch WS (:6065), AI (:6066), and Web (:3000).",
 			],
 		},
 	];
@@ -107,21 +90,49 @@ export class HelpScene extends Scene {
 	}
 
 	public async create(): Promise<void> {
+		this.detachWheel();
+		this.container.removeChildren();
+
+		this.viewportHeight = Math.max(200, this.height - this.viewportTop - 44);
 		this.createBackground();
 		this.createTitle();
 		this.createContent();
 		this.createScrollbar();
 		this.createFooter();
+		this.attachWheel();
+	}
+
+	private attachWheel(): void {
+		this.detachWheel();
+		this.wheelHandler = (e: WheelEvent) => {
+			if (this._paused) return;
+			e.preventDefault();
+			const delta = e.deltaMode === 1 ? e.deltaY * 28 : e.deltaY * 0.8;
+			this.targetScrollY = Math.max(
+				0,
+				Math.min(this.maxScroll, this.targetScrollY + delta),
+			);
+		};
+		this.app.canvas.addEventListener("wheel", this.wheelHandler, {
+			passive: false,
+		});
+	}
+
+	private detachWheel(): void {
+		if (this.wheelHandler) {
+			this.app.canvas.removeEventListener("wheel", this.wheelHandler);
+			this.wheelHandler = null;
+		}
 	}
 
 	private createBackground(): void {
 		const bg = new Graphics();
-		for (let i = 0; i < 30; i++) {
-			const ratio = i / 30;
-			const r = Math.floor(4 + ratio * 8);
-			const g = Math.floor(4 + ratio * 6);
-			const b = Math.floor(12 + ratio * 20);
-			bg.rect(0, (this.height / 30) * i, this.width, this.height / 30 + 1);
+		for (let i = 0; i < 24; i++) {
+			const ratio = i / 24;
+			const r = Math.floor(7 + ratio * 10);
+			const g = Math.floor(10 + ratio * 14);
+			const b = Math.floor(20 + ratio * 24);
+			bg.rect(0, (this.height / 24) * i, this.width, this.height / 24 + 1);
 			bg.fill((r << 16) | (g << 8) | b);
 		}
 		this.container.addChild(bg);
@@ -129,105 +140,192 @@ export class HelpScene extends Scene {
 
 	private createTitle(): void {
 		const title = new Text({
-			text: "📖 HELP & CONTROLS",
+			text: `📖 HELP, CONTROLS & OPERATIONS MANUAL  (v${APP_VERSION})`,
 			style: new TextStyle({
 				fontFamily: "Arial Black, Arial, sans-serif",
-				fontSize: 28,
+				fontSize: 22,
 				fill: 0xffcc44,
 				fontWeight: "bold",
 				letterSpacing: 1,
 			}),
 		});
 		title.anchor.set(0.5);
-		title.position.set(this.width / 2, 20);
+		title.position.set(this.width / 2, 28);
 		this.container.addChild(title);
 	}
 
 	private createContent(): void {
-		this.contentContainer = new Container();
-		this.container.addChild(this.contentContainer);
+		const wrapper = new Container();
+		wrapper.position.set(0, this.viewportTop);
+		this.container.addChild(wrapper);
 
-		let y = 60;
-		const padX = 30;
-		const lineH = 20;
+		this.contentContainer = new Container();
+		wrapper.addChild(this.contentContainer);
+
+		this.viewportMask = new Graphics();
+		this.viewportMask.rect(0, this.viewportTop, this.width, this.viewportHeight);
+		this.viewportMask.fill(0xffffff);
+		this.container.addChild(this.viewportMask);
+		wrapper.mask = this.viewportMask;
+
+		let y = 10;
+		const padX = 32;
+		const lineH = 21;
 		const sectionGap = 16;
 
 		for (const section of HelpScene.SECTIONS) {
-			// Section header
-			const headerStyle = new TextStyle({
-				fill: 0x66aaff,
-				fontSize: 16,
-				fontWeight: "bold",
-				letterSpacing: 0.5,
+			const header = new Text({
+				text: section.title,
+				style: new TextStyle({
+					fill: 0x66b2ff,
+					fontSize: 15,
+					fontWeight: "bold",
+					letterSpacing: 0.5,
+				}),
 			});
-			const header = new Text({ text: section.title, style: headerStyle });
 			header.position.set(padX, y);
 			this.contentContainer.addChild(header);
-			y += lineH + 4;
+			y += lineH + 3;
 
-			// Separator line
 			const sep = new Graphics();
 			sep.moveTo(padX, y);
-			sep.lineTo(this.width - padX, y);
-			sep.stroke({ color: 0x223355, width: 1 });
+			sep.lineTo(this.width - padX - 16, y);
+			sep.stroke({ color: 0x22385c, width: 1.2 });
 			this.contentContainer.addChild(sep);
-			y += 6;
+			y += 7;
 
-			// Lines
 			for (const line of section.lines) {
-				const lineStyle = new TextStyle({
-					fill: 0xaabbcc,
-					fontSize: 13,
+				const text = new Text({
+					text: `• ${line}`,
+					style: new TextStyle({
+						fill: 0xc5d6ea,
+						fontSize: 13,
+						wordWrap: true,
+						wordWrapWidth: this.width - padX * 2 - 28,
+					}),
 				});
-				const text = new Text({ text: `  ${line}`, style: lineStyle });
 				text.position.set(padX + 8, y);
 				this.contentContainer.addChild(text);
-				y += lineH;
+				y += Math.max(lineH, text.height + 5);
 			}
 
 			y += sectionGap;
 		}
 
-		this.maxScroll = Math.max(0, y - this.height + 50);
+		this.maxScroll = Math.max(0, y - this.viewportHeight + 16);
 	}
 
 	private createScrollbar(): void {
 		const barW = 6;
-		const barX = this.width - 12;
-		const barY = 55;
-		const barH = this.height - 80;
-
+		const barX = this.width - 14;
 		const track = new Graphics();
-		track.roundRect(barX, barY, barW, barH, 3);
-		track.fill(0x112233);
+		track.roundRect(barX, this.viewportTop, barW, this.viewportHeight, 3);
+		track.fill(0x112238);
 		this.container.addChild(track);
+
+		this.scrollThumb = new Graphics();
+		this.container.addChild(this.scrollThumb);
+		this.redrawThumb();
+	}
+
+	private redrawThumb(): void {
+		const barW = 6;
+		const barX = this.width - 14;
+		const thumbH =
+			this.maxScroll > 0
+				? Math.max(
+						32,
+						(this.viewportHeight / (this.viewportHeight + this.maxScroll)) *
+							this.viewportHeight,
+					)
+				: this.viewportHeight;
+		const pct = this.maxScroll > 0 ? this.scrollY / this.maxScroll : 0;
+		const thumbY = this.viewportTop + pct * (this.viewportHeight - thumbH);
+
+		this.scrollThumb.clear();
+		this.scrollThumb.roundRect(barX, thumbY, barW, thumbH, 3);
+		this.scrollThumb.fill(0x3b82f6);
 	}
 
 	private createFooter(): void {
+		const backBtn = new Container();
+		backBtn.position.set(24, this.height - 36);
+		backBtn.eventMode = "static";
+		backBtn.cursor = "pointer";
+
+		const g = new Graphics();
+		g.roundRect(0, 0, 180, 28, 6);
+		g.fill(0x193050);
+		g.stroke({ color: 0x4b7bb5, width: 1.5 });
+		backBtn.addChild(g);
+
+		const lbl = new Text({
+			text: "← Back to Dashboard",
+			style: new TextStyle({ fill: 0xffffff, fontSize: 12, fontWeight: "bold" }),
+		});
+		lbl.anchor.set(0.5);
+		lbl.position.set(90, 14);
+		backBtn.addChild(lbl);
+		backBtn.on("pointerdown", () => this.goBack());
+		this.container.addChild(backBtn);
+
 		const footer = new Text({
-			text: "↑↓ Scroll  |  ESC / B — Back",
-			style: new TextStyle({ fill: 0x556677, fontSize: 12 }),
+			text: "🖱️ Mouse Wheel / ↑↓ / PageUp·PageDown: Scroll   |   ESC / B: Back",
+			style: new TextStyle({ fill: 0x7c97b8, fontSize: 12 }),
 		});
 		footer.anchor.set(0.5);
-		footer.position.set(this.width / 2, this.height - 18);
+		footer.position.set(this.width / 2 + 60, this.height - 22);
 		this.container.addChild(footer);
 	}
 
-	protected onUpdate(_dt: number): void {
-		// Scroll with arrow keys
+	private goBack(): void {
+		this.detachWheel();
+		SceneTransition.popWithFade(this.app);
+	}
+
+	public onResize(width: number, height: number): void {
+		super.onResize(width, height);
+		void this.create();
+	}
+
+	protected onUpdate(dt: number): void {
 		if (InputManager.isKeyHeld("ArrowUp")) {
-			this.scrollY = Math.max(0, this.scrollY - this.scrollSpeed * _dt);
+			this.targetScrollY = Math.max(0, this.targetScrollY - this.scrollSpeed * dt);
 		}
 		if (InputManager.isKeyHeld("ArrowDown")) {
-			this.scrollY = Math.min(this.maxScroll, this.scrollY + this.scrollSpeed * _dt);
+			this.targetScrollY = Math.min(
+				this.maxScroll,
+				this.targetScrollY + this.scrollSpeed * dt,
+			);
+		}
+		if (InputManager.isKeyPressed(Key.PageDown)) {
+			this.targetScrollY = Math.min(
+				this.maxScroll,
+				this.targetScrollY + this.viewportHeight * 0.8,
+			);
+		}
+		if (InputManager.isKeyPressed(Key.PageUp)) {
+			this.targetScrollY = Math.max(
+				0,
+				this.targetScrollY - this.viewportHeight * 0.8,
+			);
 		}
 
-		// Apply scroll
-		this.contentContainer.position.y = -this.scrollY;
-
-		// Back
-		if (InputManager.isCancelPressed()) {
-			StateManager.pop();
+		if (Math.abs(this.targetScrollY - this.scrollY) > 0.3) {
+			this.scrollY += (this.targetScrollY - this.scrollY) * Math.min(1, dt * 14);
+			this.contentContainer.position.y = -this.scrollY;
+			this.redrawThumb();
 		}
+
+		if (
+			InputManager.isCancelPressed() ||
+			InputManager.isKeyPressed(Key.Escape)
+		) {
+			this.goBack();
+		}
+	}
+
+	protected async destroy(): Promise<void> {
+		this.detachWheel();
 	}
 }

@@ -1,0 +1,213 @@
+{
+  "TOWNYUUUpstairsYuusRoom": {
+    "doors": [
+      {
+        "name": "TOWNYUUUpstairsYuusRoom.toHallway",
+        "destMap": "TOWNYUUUpstairs",
+        "destDoor": "toYuusRoom",
+        "arrX": 160,
+        "arrY": 160,
+        "sprite": "DoorDownBrownGoldKnob"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUUpstairs": {
+    "doors": [
+      {
+        "name": "TOWNYUUUpstairs.toParentsRoom",
+        "destMap": "TOWNYUUUpstairsParentsRoom",
+        "destDoor": "toHallway",
+        "arrX": 104,
+        "arrY": 112,
+        "sprite": "DoorDownBrownGoldKnob"
+      },
+      {
+        "name": "TOWNYUUUpstairs.toLittleBrothersRoom",
+        "destMap": "TOWNYUUUpstairsBabyRoom",
+        "destDoor": "toHallway",
+        "arrX": 288,
+        "arrY": 112,
+        "sprite": "DoorDownBrownGoldKnob"
+      },
+      {
+        "name": "TOWNYUUUpstairs.toBathroom",
+        "destMap": "TOWNYUUUpstairsBathroom",
+        "destDoor": "toHallway",
+        "arrX": 432,
+        "arrY": 112,
+        "sprite": "DoorDownGraySilverKnob"
+      },
+      {
+        "name": "TOWNYUUUpstairs.toBrothersRoom",
+        "destMap": "TOWNYUUUpstairsBrothersRoom",
+        "destDoor": "toHallway",
+        "arrX": 208,
+        "arrY": 72,
+        "sprite": "DoorUpBrownGoldKnob"
+      },
+      {
+        "name": "TOWNYUUUpstairs.toYuusRoom",
+        "destMap": "TOWNYUUUpstairsYuusRoom",
+        "destDoor": "toHallway",
+        "arrX": 392,
+        "arrY": 72,
+        "sprite": "DoorUpBrownGoldKnob"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUDownstairs": {
+    "doors": [
+      {
+        "name": "TOWNYUUDownstairs.toBathroom",
+        "destMap": "TOWNYUUDownstairsBathroom",
+        "destDoor": "toDownstairs",
+        "arrX": 224,
+        "arrY": 288,
+        "sprite": "DoorUpBrownGoldKnob"
+      },
+      {
+        "name": "TOWNYUUDownstairs.toBasement",
+        "destMap": "TOWNYUUBasement",
+        "destDoor": "toKitchen",
+        "arrX": 40,
+        "arrY": 104,
+        "sprite": "DoorDownDarkBrownGoldKnob"
+      },
+      {
+        "name": "TOWNYUUDownstairs.toGarage",
+        "destMap": "TOWNYUUGarage",
+        "destDoor": "toKitchen",
+        "arrX": 16,
+        "arrY": 88,
+        "sprite": "DoorLeftBrownGoldKnob"
+      },
+      {
+        "name": "TOWNYUUDownstairs.toBackyard",
+        "destMap": "TOWNOutsideNeighborhood",
+        "destDoor": "toYuusHouseBack",
+        "arrX": 256,
+        "arrY": 72,
+        "sprite": "DoorUpWhiteWindowKitchenSilverKnob"
+      },
+      {
+        "name": "TOWNYUUDownstairs.toFrontYard",
+        "destMap": "TOWNOutsideNeighborhood",
+        "destDoor": "toYuusHouse",
+        "arrX": 104,
+        "arrY": 320,
+        "sprite": "DoorDownWhiteFrontDoor"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUUpstairsBabyRoom": {
+    "doors": [
+      {
+        "name": "TOWNYUUUpstairsBabyRoom.toHallway",
+        "destMap": "TOWNYUUUpstairs",
+        "destDoor": "toLittleBrothersRoom",
+        "arrX": 72,
+        "arrY": 72,
+        "sprite": "DoorUpBrownGoldKnob"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUUpstairsBrothersRoom": {
+    "doors": [
+      {
+        "name": "TOWNYUUUpstairsBrothersRoom.toHallway",
+        "destMap": "TOWNYUUUpstairs",
+        "destDoor": "toBrothersRoom",
+        "arrX": 208,
+        "arrY": 160,
+        "sprite": "DoorDownBrownGoldKnob"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUUpstairsBathroom": {
+    "doors": [
+      {
+        "name": "TOWNYUUUpstairsBathroom.toHallway",
+        "destMap": "TOWNYUUUpstairs",
+        "destDoor": "toBathroom",
+        "arrX": 72,
+        "arrY": 72,
+        "sprite": "DoorUpGraySilverKnob"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUUpstairsParentsRoom": {
+    "doors": [
+      {
+        "name": "TOWNYUUUpstairsParentsRoom.toHallway",
+        "destMap": "TOWNYUUUpstairs",
+        "destDoor": "toParentsRoom",
+        "arrX": 48,
+        "arrY": 72,
+        "sprite": "DoorUpBrownGoldKnob"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUBasement": {
+    "doors": [
+      {
+        "name": "TOWNYUUBasement.toKitchen",
+        "destMap": "TOWNYUUDownstairs",
+        "destDoor": "toBasement",
+        "arrX": 40,
+        "arrY": 72,
+        "sprite": "DoorUpBrownGoldKnob"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUGarage": {
+    "doors": [
+      {
+        "name": "TOWNYUUGarage.toKitchen",
+        "destMap": "TOWNYUUDownstairs",
+        "destDoor": "toGarage",
+        "arrX": 192,
+        "arrY": 88,
+        "sprite": "DoorRightBrownGoldKnob"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUAttic": {
+    "doors": [],
+    "warps": []
+  },
+  "TOWNYUUBackyardToolShed": {
+    "doors": [
+      {
+        "name": "TOWNYUUBackyardToolShed.toBackyard",
+        "destMap": "TOWNOutsideNeighborhood",
+        "destDoor": "toHouseShed",
+        "arrX": 48,
+        "arrY": 128,
+        "sprite": "DoorDownWoodenShedDoorCutout"
+      }
+    ],
+    "warps": []
+  },
+  "TOWNYUUDownstairsBathroom": {
+    "doors": [
+      {
+        "name": "TOWNYUUDownstairsBathroom.toDownstairs",
+        "destMap": "TOWNYUUDownstairs",
+        "destDoor": "toBathroom",
+        "arrX": 48,
+        "arrY": 120,
+        "sprite": "DoorDownBrownGoldKnob"
+      }
+    ],
+    "warps": []
+  }
+}

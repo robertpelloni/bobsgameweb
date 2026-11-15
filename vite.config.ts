@@ -16,7 +16,7 @@ export default defineConfig(({ command, mode }) => {
   // WHY:  Prevents version drift between `VERSION.md`, `src/shared/Config.ts`,
   //       `MainMenuScene`, `SettingsScene`, and `HelpScene`. Updating
   //       `VERSION.md` automatically propagates across the entire client UI.
-  let appVersion = '3.0.34';
+  let appVersion = '3.0.35';
   try {
     const rawVersion = readFileSync(resolve(__dirname, 'VERSION.md'), 'utf-8').trim();
     if (rawVersion) {
@@ -54,6 +54,9 @@ export default defineConfig(({ command, mode }) => {
         : !hasHydratedPublicAssets;
 
   return {
+    // Relative asset base ensures `dist/renderer/index.html` works identically on
+    // both `https://bobsgame.com/` (hash-routed SPA) and Electron `file://` loads.
+    base: './',
     define: {
       __APP_VERSION__: JSON.stringify(appVersion),
     },
@@ -113,7 +116,26 @@ export default defineConfig(({ command, mode }) => {
           renderer(),
         ]
       : [],
+    optimizeDeps: {
+      // Restrict dependency discovery to root `index.html` so Vite never crawls
+      // `.html` files inside `submodules/` (bobui/juce/ultimatepp) or `dist/`.
+      entries: ['index.html'],
+    },
     server: {
+      port: 3000,
+      watch: {
+        // Prevent chokidar from watching the ~2.5 GB `data/` asset directory,
+        // `submodules/`, `dist/`, and `logs/` during local development.
+        ignored: [
+          '**/data/**',
+          '**/submodules/**',
+          '**/dist/**',
+          '**/cpp_port/**',
+          '**/logs/**',
+        ],
+      },
+    },
+    preview: {
       port: 3000,
     },
     publicDir: 'data',

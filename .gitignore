@@ -18,6 +18,7 @@ Release/
 Debug/
 build/
 build_output/
+.build_success
 cpp_port/.build_success
 
 version.txt

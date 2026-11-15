@@ -38,7 +38,7 @@ function resolveServerVersion() {
 			// Ignore read errors and fall through to next candidate
 		}
 	}
-	return "3.0.34";
+	return "3.0.35";
 }
 
 const SERVER_VERSION = resolveServerVersion();

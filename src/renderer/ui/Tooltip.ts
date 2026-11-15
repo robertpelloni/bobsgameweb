@@ -30,7 +30,7 @@ export class Tooltip {
 				fontFamily: "Arial, sans-serif",
 				lineHeight: 16,
 				wordWrap: true,
-				wordWrapWidth: 200,
+				wordWrapWidth: 280,
 			}),
 		});
 		this.text.position.set(6, 4);

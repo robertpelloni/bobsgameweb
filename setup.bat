@@ -1,6 +1,6 @@
 @echo off
 REM ============================================================================
-REM bob's game web (okgame) — Workspace & Submodule Setup Script (setup.bat)
+REM bob's game web (okgame) -- Workspace and Submodule Setup Script (setup.bat)
 REM ============================================================================
 REM Initializes recursive git submodules:
 REM   - submodules/bobui (https://github.com/robertpelloni/bqt.git)
@@ -10,7 +10,7 @@ REM Installs npm packages for the root web/Electron app and server/ backend,
 REM and seeds .env.production from .env.production.example if absent.
 REM ============================================================================
 setlocal
-title bob's game web — Setup
+title bobsgameweb - Setup
 cd /d "%~dp0"
 
 echo [bobsgameweb] Synchronizing recursive git submodules...

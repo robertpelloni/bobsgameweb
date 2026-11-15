@@ -1,0 +1,6 @@
+# Enforce OS-appropriate line endings so Windows cmd.exe batch parsers and
+# POSIX bash deployment scripts never fail due to LF/CRLF byte-offset drift.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.sh text eol=lf

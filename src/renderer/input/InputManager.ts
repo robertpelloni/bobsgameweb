@@ -32,6 +32,10 @@ export enum Key {
   Semicolon = ';',
   Quote = "'",
   Tilde = '`',
+  PageUp = 'PageUp',
+  PageDown = 'PageDown',
+  Home = 'Home',
+  End = 'End',
 }
 
 export enum MouseButton {

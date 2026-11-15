@@ -7,7 +7,7 @@
     bob's game web services without ever cleaning built binaries or killing
     unrelated processes:
       - ws       : Multiplayer Socket.io / REST Server (server/index.js, port 6065)
-      - ai       : Generative AI Proxy Server (server/ai_proxy.js, port 8080)
+      - ai       : Generative AI Proxy Server (server/ai_proxy.js, port 6066)
       - web      : Vite Frontend Dev Server (port 3000)
       - electron : Electron Desktop Shell + System Tray (dist/main/index.js)
 
@@ -76,13 +76,20 @@ function Start-BelowNormalService([string]$Name, [string]$FilePath, [string[]]$A
     $outLog = Join-Path $LogDir "local-$Name.log"
     $errLog = Join-Path $LogDir "local-$Name.err.log"
 
-    $proc = Start-Process -FilePath $FilePath `
-        -ArgumentList $ArgumentList `
-        -WorkingDirectory $RepoRoot `
-        -RedirectStandardOutput $outLog `
-        -RedirectStandardError $errLog `
-        -WindowStyle Hidden `
-        -PassThru
+    if ($Name -eq 'electron') {
+        $proc = Start-Process -FilePath $FilePath `
+            -ArgumentList $ArgumentList `
+            -WorkingDirectory $RepoRoot `
+            -PassThru
+    } else {
+        $proc = Start-Process -FilePath $FilePath `
+            -ArgumentList $ArgumentList `
+            -WorkingDirectory $RepoRoot `
+            -RedirectStandardOutput $outLog `
+            -RedirectStandardError $errLog `
+            -WindowStyle Hidden `
+            -PassThru
+    }
 
     try {
         $proc.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::BelowNormal
@@ -116,7 +123,7 @@ function Show-ServiceStatus {
     $reg = Read-PidRegistry
     $services = @(
         @{ Key = 'ws';       Label = 'Game WS Server'; Port = 6065; Health = 'http://127.0.0.1:6065/healthz' },
-        @{ Key = 'ai';       Label = 'AI Proxy';       Port = 8080; Health = 'http://127.0.0.1:8080/healthz' },
+        @{ Key = 'ai';       Label = 'AI Proxy';       Port = 6066; Health = 'http://127.0.0.1:6066/healthz' },
         @{ Key = 'web';      Label = 'Vite Web';       Port = 3000; Health = 'http://127.0.0.1:3000/' },
         @{ Key = 'electron'; Label = 'Electron Tray';  Port = 0;    Health = '' }
     )
@@ -150,11 +157,16 @@ switch ($Action) {
         & cmd.exe /c (Join-Path $RepoRoot 'build.bat')
     }
     'start' {
+        $socketIoDir = Join-Path $RepoRoot 'server\node_modules\socket.io'
+        if (($Target -in @('all', 'ws')) -and -not (Test-Path $socketIoDir)) {
+            Write-Host "[local-ops] Installing missing server/node_modules dependencies..." -ForegroundColor Cyan
+            & npm --prefix (Join-Path $RepoRoot 'server') install --no-audit --no-fund
+        }
         if ($Target -in @('all', 'ws')) {
             Start-BelowNormalService -Name 'ws' -FilePath 'node' -ArgumentList @('server/index.js') -Port 6065
         }
         if ($Target -in @('all', 'ai')) {
-            Start-BelowNormalService -Name 'ai' -FilePath 'node' -ArgumentList @('server/ai_proxy.js') -Port 8080
+            Start-BelowNormalService -Name 'ai' -FilePath 'node' -ArgumentList @('server/ai_proxy.js') -Port 6066
         }
         if ($Target -in @('all', 'web')) {
             Start-BelowNormalService -Name 'web' -FilePath 'node' -ArgumentList @('node_modules/vite/bin/vite.js', '--port', '3000') -Port 3000

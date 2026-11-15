@@ -25,7 +25,7 @@ The following features from removed submodules are now natively implemented in t
 
 | Submodule Path | Remote URL | Branch / Commit | Category | Status | Rationale |
 |----------------|------------|-----------------|----------|--------|-----------|
-| `submodules/bobui` | `https://github.com/robertpelloni/bqt.git` | `main` @ `a0d9e9633704d1857f4ac0cbf85ce0c0a3f25abd` (`v1.2.52`) | Library | **RETAINED** | Robert Pelloni's cross-platform BQt (C++ BobQ/OmniUI + Go runtime kernel) framework. |
+| `submodules/bobui` | `https://github.com/robertpelloni/bqt.git` | `main` @ `92bb40654b` (`v1.2.60`) | Library | **RETAINED** | Robert Pelloni's cross-platform BQt (C++ BobQ/OmniUI + Go `MeshNode` runtime kernel) framework. |
 | `submodules/bobui/submodules/juce` | `https://github.com/juce-framework/JUCE` | `master` @ `d60b7a78030661574a615b586d9325ba7a7fa7dd` (`9.0.5`) | Nested Library | **RETAINED** | Audio/DSP & component UI framework bridged via `BobQJuceHost` inside `bobui`. |
 | `submodules/bobui/submodules/ultimatepp` | `https://github.com/ultimatepp/ultimatepp` | `master` @ `1a56dd3a4a02112563eb9e16f62f17bba8a0edd1` | Nested Library | **RETAINED** | Rapid C++ GUI framework bridged via `BobQUppComponentRegistry` inside `bobui`. |
 | submodules/aseprite | — | — | Reference | Removed | Ported to AsepriteParser.ts. |

@@ -3,12 +3,15 @@ import { ToastManager } from "../ui/ToastManager";
 export class GenerativeAIManager {
 
     // Configurable endpoint for AI operations.
-    // In production, this would point to a local proxy or remote server to protect API keys.
-    private static AI_ENDPOINT = "http://localhost:8080/api/generate";
-    private static AI_BASE_URL = "http://localhost:8080";
+    // Defaults to port 6066 (adjacent to the 6065 multiplayer WS server) to
+    // avoid port 8080 collisions with unrelated local Go/Java/Docker proxies.
+    private static AI_BASE_URL: string =
+        ((typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_AI_PROXY_URL) ||
+            "http://127.0.0.1:6066").replace(/\/+$/, "");
+    private static AI_ENDPOINT = `${GenerativeAIManager.AI_BASE_URL}/api/generate`;
 
     /**
-     * Checks if the AI proxy server is reachable and reports its configuration state.
+     * Checks if the AI proxy server is reachable and verifies its `service: "ai-proxy"` identity.
      */
     public static async checkServerStatus(): Promise<{ online: boolean; openaiConfigured: boolean; error?: string }> {
         try {
@@ -21,6 +24,9 @@ export class GenerativeAIManager {
 
             if (response.ok) {
                 const data = await response.json();
+                if (data?.service && data.service !== "ai-proxy") {
+                    return { online: false, openaiConfigured: false, error: `Foreign service (${data.service})` };
+                }
                 return {
                     online: true,
                     openaiConfigured: Boolean(data.openaiConfigured)

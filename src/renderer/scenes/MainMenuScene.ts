@@ -1,6 +1,31 @@
+/**
+ * MainMenuScene — Consolidated Single-Page High-Value Omni-Engine Dashboard
+ *
+ * ARCHITECTURAL REDESIGN (v3.0.35):
+ * Replaces the previous 4-tab exclusive view (`play` | `editors` | `community` |
+ * `system` — which hid 75% of engine capabilities behind tab switches and
+ * discarded `MenuItem.description`) with ONE singular, consolidated, smoothly
+ * scrollable high-value dashboard page:
+ *   1. Pinned Telemetry & Control Header:
+ *      - Live health & Electron daemon Start/Stop/Restart pills for BOTH
+ *        `Game WS Server (:6065)` and `AI Proxy (:6066)`.
+ *      - Inline Puzzle Mode selector (`[MARATHON] [SPRINT] [ULTRA]`).
+ *      - Quick-Jump Section Anchor pills (`1–5` / `Q·E`) that smoothly scroll
+ *        to each section on the SAME page rather than hiding other sections.
+ *   2. Unified Multi-Column Rich Card Canvas:
+ *      - Renders all 38 gameplay modes, RPG scenes, creation editors, online
+ *        competitive rankings, and engine tech demos in priority order.
+ *      - Every card renders both its primary title, a concise inline subtitle,
+ *        a section accent bar, and an `ⓘ` tooltip indicator wired to `Tooltip`.
+ *      - Supports mouse-wheel scrolling, interactive scrollbar dragging,
+ *        `PageUp`/`PageDown`/`Home`/`End`, and full keyboard/gamepad grid
+ *        navigation with automatic scroll-into-view.
+ */
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
+import { APP_VERSION, SERVER_URL } from "../../shared/Config";
 import { AudioManager } from "../audio/AudioManager";
 import type { GameMode } from "../data/HighScoreManager";
+import { GenerativeAIManager } from "../editor/GenerativeAIManager";
 import { InputManager, Key } from "../input/InputManager";
 import type { PuzzleSceneConfig } from "../puzzle";
 import { GameType, GameTypes } from "../puzzle";
@@ -8,15 +33,12 @@ import { BobNet } from "../puzzle/BobNet";
 import { PuzzleScene } from "../puzzle/PuzzleScene";
 import { Scene, type SceneConfig } from "../state/Scene";
 import { SceneTransition } from "../state/SceneTransition";
-import { Button, type ButtonStyle } from "../ui/Button";
-import { Tooltip } from "../ui/Tooltip";
-import { APP_VERSION } from "../../shared/Config";
 import { FFTVisualizer } from "../ui/FFTVisualizer";
-import { GenerativeAIManager } from "../editor/GenerativeAIManager";
 import { ToastManager } from "../ui/ToastManager";
+import { Tooltip } from "../ui/Tooltip";
 
 // ============================================================
-// Types & Categories
+// Types & Section Taxonomy
 // ============================================================
 
 export interface MainMenuSceneConfig extends SceneConfig {
@@ -24,52 +46,117 @@ export interface MainMenuSceneConfig extends SceneConfig {
 	onOptions?: () => void;
 }
 
-export type DashboardCategory = "play" | "editors" | "community" | "system";
+export type DashboardSectionKey =
+	| "core"
+	| "combat"
+	| "editors"
+	| "community"
+	| "system";
+
+/** Retained type alias for backwards compatibility with external callers. */
+export type DashboardCategory = DashboardSectionKey;
+
+interface SectionMeta {
+	key: DashboardSectionKey;
+	shortLabel: string;
+	headerTitle: string;
+	headerSubtitle: string;
+	accentColor: number;
+	tooltip: string;
+}
 
 interface MenuItem {
 	label: string;
 	description: string;
 	tooltip: string;
-	category: DashboardCategory;
+	section: DashboardSectionKey;
 	action: () => void | Promise<void>;
 	prefetch?: () => void;
 }
 
+interface CardEntry {
+	item: MenuItem;
+	container: Container;
+	bg: Graphics;
+	accentColor: number;
+	x: number;
+	y: number;
+	w: number;
+	h: number;
+	hovered: boolean;
+}
+
+interface PillControl {
+	container: Container;
+	bg: Graphics;
+	label: Text;
+	redraw: (active: boolean, hovered: boolean, accentOverride?: number) => void;
+}
+
 // ============================================================
-// MainMenuScene - Consolidated High-Value Omni-Engine Dashboard
+// MainMenuScene
 // ============================================================
 
 export class MainMenuScene extends Scene {
 	private menuConfig: MainMenuSceneConfig;
 
-	private titleText!: Text;
-	private subtitleText!: Text;
-	private versionText!: Text;
-
-	// Navigation tabs & category buttons
-	private categoryTabs: Button[] = [];
-	private activeCategory: DashboardCategory = "play";
-	private categoryContainer!: Container;
-
-	// Mode selector buttons (Marathon, Sprint, Ultra)
-	private modeButtons: Button[] = [];
-	private modeContainer!: Container;
-	private selectedCategoryIndex = 0; // GameMode index (marathon, sprint, ultra)
-
-	// Menu items & buttons
-	private allMenuItems: MenuItem[] = [];
-	private currentMenuItems: MenuItem[] = [];
-	private menuButtons: Button[] = [];
-	private menuButtonsContainer!: Container;
-	private selectedIndex = 0;
-
-	// Visual effects & Tooltip
+	// Background & ambient layers
 	private background!: Graphics;
 	private particles: Particle[] = [];
 	private particleContainer!: Container;
 	private visualizer!: FFTVisualizer;
-	private tooltip!: Tooltip;
 
+	// Pinned header & footer layers
+	private headerContainer!: Container;
+	private titleText!: Text;
+	private subtitleText!: Text;
+	private wsServerPill!: PillControl;
+	private aiServerPill!: PillControl;
+	private modePills: PillControl[] = [];
+	private anchorPills: PillControl[] = [];
+	private footerContainer!: Container;
+	private versionText!: Text;
+
+	// Scrollable viewport & scrollbar
+	private viewportY = 148;
+	private viewportHeight = 540;
+	private viewportMask!: Graphics;
+	private scrollWrapper!: Container;
+	private scrollContent!: Container;
+	private scrollTrack!: Graphics;
+	private scrollThumb!: Graphics;
+	private scrollY = 0;
+	private targetScrollY = 0;
+	private maxScrollY = 0;
+	private draggingScrollbar = false;
+	private dragStartPointerY = 0;
+	private dragStartScrollY = 0;
+
+	// Cards, section offsets & selection state
+	private allMenuItems: MenuItem[] = [];
+	private cards: CardEntry[] = [];
+	private sectionOffsets: Record<DashboardSectionKey, number> = {
+		core: 0,
+		combat: 0,
+		editors: 0,
+		community: 0,
+		system: 0,
+	};
+	private gridCols = 3;
+	private selectedIndex = 0;
+	private selectedCategoryIndex = 0; // Puzzle GameMode index
+
+	// Live server state
+	private wsOnline = false;
+	private wsManaged = false;
+	private wsDetail = "Unchecked";
+	private aiOnline = false;
+	private aiManaged = false;
+	private aiDetail = "Unchecked";
+	private statusPollTimer: number | null = null;
+	private wheelHandler: ((e: WheelEvent) => void) | null = null;
+
+	private tooltip!: Tooltip;
 	private titleBounce = 0;
 
 	private readonly gameModes: GameMode[] = ["marathon", "sprint", "ultra"];
@@ -78,27 +165,65 @@ export class MainMenuScene extends Scene {
 		sprint: "SPRINT",
 		ultra: "ULTRA",
 	};
+	private readonly gameModeTooltips: Record<GameMode, string> = {
+		marathon:
+			"Marathon Mode: Progressive 150-line / endless speed curve — classic endurance scoring.",
+		sprint:
+			"Sprint Mode: Clear 40 lines as fast as possible — pure speedrun time-attack.",
+		ultra:
+			"Ultra Mode: Score as many points as possible within a strict 3-minute countdown.",
+	};
 
-	private readonly dashboardTabs: { key: DashboardCategory; label: string; tooltip: string }[] = [
+	private readonly sections: SectionMeta[] = [
 		{
-			key: "play",
-			label: "🎮 PLAY GAMES",
-			tooltip: "Play Classic & Modern Puzzle modes, MMO World, or the full Action RPG",
+			key: "core",
+			shortLabel: "1. Core & Puzzle",
+			headerTitle: "🌟 CORE WORLDS, PUZZLE MODES & REPLAYS",
+			headerSubtitle:
+				"Flagship MMO RPG world, story engine, Classic/Modern/Custom falling-block puzzle modes, tutorial & instant replays",
+			accentColor: 0x3b82f6,
+			tooltip:
+				"Jump to Section 1 (Shortcut: 1): Flagship MMO World, Story RPG Engine, Classic/Modern/Custom Puzzle modes, Tutorial, and Replays.",
+		},
+		{
+			key: "combat",
+			shortLabel: "2. Combat & RPG",
+			headerTitle: "⚔️ COMBAT ARENAS, MINI-GAMES & CHARACTER LOADOUT",
+			headerSubtitle:
+				"Real-time & turn-based combat, Boss Rush gauntlet, Fishing, Inventory, Merchant Shop, Skill Tree, Crafting & Save Slots",
+			accentColor: 0xf59e0b,
+			tooltip:
+				"Jump to Section 2 (Shortcut: 2): Arena & Turn-Based Combat, Boss Rush, Fishing, Inventory, Shop, Skill Tree, Crafting & Saves.",
 		},
 		{
 			key: "editors",
-			label: "🛠️ CREATION & EDITORS",
-			tooltip: "Custom Puzzle Rules, World Editor, Sprite Studio, and Event Scripts",
+			shortLabel: "3. Creation Studio",
+			headerTitle: "🛠️ CREATION, MODDING & GENERATIVE AI STUDIO",
+			headerSubtitle:
+				"Author custom puzzle physics/pieces, edit RPG maps & warp doors, animate pixel sprites, script events & chain campaigns",
+			accentColor: 0x10b981,
+			tooltip:
+				"Jump to Section 3 (Shortcut: 3): Custom Game Rule Editor, World Database Editor, Sprite Studio, Event Sheets & Sequence Editor.",
 		},
 		{
 			key: "community",
-			label: "🏆 COMMUNITY & PROGRESS",
-			tooltip: "Multiplayer Matchmaking, Tournaments, High Scores, and Quests",
+			shortLabel: "4. Online & Lore",
+			headerTitle: "🌐 MULTIPLAYER, COMPETITIVE RANKINGS & WORLD COMPENDIUM",
+			headerSubtitle:
+				"30-player lobbies, tournaments, live global leaderboards, ELO tiers, achievements, quests, world map & creature bestiary",
+			accentColor: 0x8b5cf6,
+			tooltip:
+				"Jump to Section 4 (Shortcut: 4): Multiplayer Lobby, Cloud Login, Tournaments, Leaderboards, ELO Rankings, Quests & Bestiary.",
 		},
 		{
 			key: "system",
-			label: "⚙️ SYSTEM & ENGINE",
-			tooltip: "WebGPU demos, Audio Visualizer, Hardware settings, and Diagnostics",
+			shortLabel: "5. System & Demos",
+			headerTitle: "⚙️ UNIFIED SETTINGS, SERVER DAEMONS, MANUAL & ENGINE DEMOS",
+			headerSubtitle:
+				"Single-page Audio/Graphics/HQ2X/WebGPU settings, in-game manual, local WS & AI server controls, and GPU/Wasm tech demos",
+			accentColor: 0x06b6d4,
+			tooltip:
+				"Jump to Section 5 (Shortcut: 5): Unified Settings & Options, Help Manual, Server Daemon Controls, WebGPU, FFT & nD Demos.",
 		},
 	];
 
@@ -108,694 +233,1308 @@ export class MainMenuScene extends Scene {
 	}
 
 	// ============================================================
-	// Lifecycle
+	// Lifecycle (Idempotent Build + Clean Listener Management)
 	// ============================================================
 
 	public create(): void {
+		this.detachNativeListeners();
+		this.container.removeChildren();
+		this.particles = [];
+		this.cards = [];
+
 		this.createBackground();
 		this.createParticles();
 		this.createVisualizer();
-		this.createTitle();
-
-		this.menuButtonsContainer = new Container();
-		this.container.addChild(this.menuButtonsContainer);
-
-		this.modeContainer = new Container();
-		this.container.addChild(this.modeContainer);
-
-		this.categoryContainer = new Container();
-		this.container.addChild(this.categoryContainer);
 
 		this.initMenuItems();
-		this.createCategorySelector();
-		this.createGameModeSelector();
-		this.rebuildCategoryMenu(this.activeCategory);
 
+		// Scrollable masked card canvas (positioned beneath pinned header)
+		this.scrollWrapper = new Container();
+		this.container.addChild(this.scrollWrapper);
+
+		this.scrollContent = new Container();
+		this.scrollWrapper.addChild(this.scrollContent);
+
+		this.viewportMask = new Graphics();
+		this.container.addChild(this.viewportMask);
+		this.scrollWrapper.mask = this.viewportMask;
+
+		this.scrollTrack = new Graphics();
+		this.scrollThumb = new Graphics();
+		this.container.addChild(this.scrollTrack);
+		this.container.addChild(this.scrollThumb);
+
+		// Pinned top header & bottom footer
+		this.headerContainer = new Container();
+		this.container.addChild(this.headerContainer);
+
+		this.footerContainer = new Container();
+		this.container.addChild(this.footerContainer);
+
+		// Top-most floating tooltip layer
 		this.tooltip = new Tooltip(this.width, this.height);
 		this.container.addChild(this.tooltip.getContainer());
+
+		this.buildLayout();
+		this.attachNativeListeners();
+		void this.refreshServerStatuses();
 
 		this.playMenuMusic();
 		this.scheduleScenePrefetch();
 	}
 
-	// ============================================================
-	// Category Tabs & Mode Selectors
-	// ============================================================
+	public onPause(): void {
+		super.onPause();
+		this.detachNativeListeners();
+		this.tooltip?.hide();
+	}
 
-	private createCategorySelector(): void {
-		this.categoryContainer.removeChildren();
-		this.categoryTabs = [];
+	public onResume(): void {
+		super.onResume();
+		this.attachNativeListeners();
+		void this.refreshServerStatuses();
+	}
 
-		const tabStyle: ButtonStyle = {
-			width: 210,
-			height: 38,
-			backgroundColor: 0x141f36,
-			backgroundColorHover: 0x22385c,
-			backgroundColorPressed: 0x0c1424,
-			borderColor: 0x3d5a80,
-			borderWidth: 2,
-			textColor: 0xdde6ed,
-			fontSize: 13,
-			borderRadius: 8,
+	public async onExit(): Promise<void> {
+		this.detachNativeListeners();
+		this.particles = [];
+		this.cards = [];
+		this.tooltip?.destroy();
+		await super.onExit();
+	}
+
+	private attachNativeListeners(): void {
+		this.detachNativeListeners();
+		this.wheelHandler = (e: WheelEvent) => {
+			if (this._paused) return;
+			e.preventDefault();
+			const step = e.deltaMode === 1 ? e.deltaY * 32 : e.deltaY * 0.85;
+			this.setTargetScroll(this.targetScrollY + step);
 		};
-
-		const totalWidth = this.dashboardTabs.length * 220 - 10;
-		const startX = this.centerX - totalWidth / 2 + 105;
-		const y = this.height * 0.32;
-
-		this.dashboardTabs.forEach((tab, i) => {
-			const button = new Button(tab.label, tabStyle);
-			button.setPosition(startX + i * 220, y);
-
-			button.onClick(() => {
-				this.selectDashboardCategory(tab.key);
-				this.playMoveSound();
-			});
-
-			button.on("hover", () => {
-				this.tooltip.show(button.x, button.y - 10, tab.tooltip);
-			});
-			button.on("hoverEnd", () => {
-				this.tooltip.hide();
-			});
-
-			this.categoryContainer.addChild(button.container);
-			this.categoryTabs.push(button);
+		this.app.canvas.addEventListener("wheel", this.wheelHandler, {
+			passive: false,
 		});
 
-		this.updateCategoryTabsVisuals();
+		this.statusPollTimer = window.setInterval(() => {
+			if (!this._paused) {
+				void this.refreshServerStatuses();
+			}
+		}, 8000);
 	}
 
-	private selectDashboardCategory(category: DashboardCategory): void {
-		this.activeCategory = category;
-		this.updateCategoryTabsVisuals();
-		this.rebuildCategoryMenu(category);
-	}
-
-	private updateCategoryTabsVisuals(): void {
-		this.categoryTabs.forEach((btn, i) => {
-			const isActive = this.dashboardTabs[i].key === this.activeCategory;
-			btn.selected = isActive;
-			btn.container.alpha = isActive ? 1.0 : 0.7;
-		});
-	}
-
-	private createGameModeSelector(): void {
-		this.modeContainer.removeChildren();
-		this.modeButtons = [];
-
-		const modeStyle: ButtonStyle = {
-			width: 120,
-			height: 32,
-			backgroundColor: 0x1a2a4a,
-			backgroundColorHover: 0x2a4a6a,
-			backgroundColorPressed: 0x0a1a3a,
-			borderColor: 0x4a6a8a,
-			borderWidth: 2,
-			textColor: 0xffffff,
-			fontSize: 13,
-			borderRadius: 16,
-		};
-
-		const startX = this.centerX - (this.gameModes.length * 130) / 2 + 65;
-		const y = this.height * 0.39;
-
-		for (let i = 0; i < this.gameModes.length; i++) {
-			const mode = this.gameModes[i];
-			const button = new Button(this.gameModeLabels[mode], modeStyle);
-			button.setPosition(startX + i * 130, y);
-			button.onClick(() => {
-				this.selectedCategoryIndex = i;
-				this.updateModeVisuals();
-				this.playMoveSound();
-			});
-
-			button.on("hover", () => {
-				this.tooltip.show(
-					button.x,
-					button.y - 10,
-					"Set Puzzle Mode: " + this.gameModeLabels[mode] + " (Time & Clear rules)",
-				);
-			});
-			button.on("hoverEnd", () => {
-				this.tooltip.hide();
-			});
-
-			this.modeContainer.addChild(button.container);
-			this.modeButtons.push(button);
+	private detachNativeListeners(): void {
+		if (this.wheelHandler) {
+			this.app.canvas.removeEventListener("wheel", this.wheelHandler);
+			this.wheelHandler = null;
 		}
-
-		this.updateModeVisuals();
-	}
-
-	private updateModeVisuals(): void {
-		for (let i = 0; i < this.modeButtons.length; i++) {
-			const isSelected = i === this.selectedCategoryIndex;
-			this.modeButtons[i].selected = isSelected;
-			this.modeButtons[i].container.alpha = isSelected ? 1.0 : 0.6;
+		if (this.statusPollTimer !== null) {
+			window.clearInterval(this.statusPollTimer);
+			this.statusPollTimer = null;
 		}
 	}
 
 	// ============================================================
-	// Menu Items Initialization
+	// Consolidated Menu Catalog (All 38 Capabilities on One Page)
 	// ============================================================
 
 	private initMenuItems(): void {
 		this.allMenuItems = [
-			// --- PLAY GAMES ---
+			// --- SECTION 1: CORE WORLDS, PUZZLE & REPLAYS ---
+			{
+				label: "MMO World (TOWNYUU)",
+				description: "Persistent multiplayer RPG world & towns",
+				tooltip:
+					"Explore Yuu's hometown and 240+ interconnected legacy maps with NPC dialogue, dynamic lighting, weather, and live Socket.io players.",
+				section: "core",
+				action: () => this.openWorld(),
+				prefetch: () => void import("./WorldScene"),
+			},
+			{
+				label: "Play RPG Story Engine",
+				description: "Standalone 2D action-RPG campaign loop",
+				tooltip:
+					"Step into Yuu's single-player quest inside the core 2D RPG engine with scripted events, collisions, and cutscenes.",
+				section: "core",
+				action: () => this.openEngineGame(),
+				prefetch: () => void import("./EngineScene"),
+			},
 			{
 				label: "Classic Puzzle",
-				description: "Traditional puzzle falling block mode",
-				tooltip: "Experience authentic retro falling block gameplay with pure classic physics",
-				category: "play",
+				description: "Authentic retro falling-block physics",
+				tooltip:
+					"Play pure classic falling-block rules using the currently selected Puzzle Mode (Marathon / Sprint / Ultra) in the top bar.",
+				section: "core",
 				action: () => this.startGame(GameTypes.CLASSIC),
 			},
 			{
-				label: "Modern Puzzle",
-				description: "Enhanced mechanics with hard drop and SRS kicks",
-				tooltip: "Play fast-paced puzzle action featuring SRS rotation, ghost blocks, and lock delays",
-				category: "play",
+				label: "Modern SRS Puzzle",
+				description: "Hard drop, hold piece, ghost & wall kicks",
+				tooltip:
+					"Fast-paced competitive puzzle mechanics with Super Rotation System (SRS) kicks, lock delay, and ghost preview.",
+				section: "core",
 				action: () => this.startGame(GameTypes.MODERN),
 			},
 			{
-				label: "Play Custom Game",
-				description: "Play with customized parameters and rulesets",
-				tooltip: "Launch your custom-configured puzzle game rules, pieces, and timing preset",
-				category: "play",
+				label: "Play Custom Rule Puzzle",
+				description: "Run your saved Custom Game Editor preset",
+				tooltip:
+					"Launch a puzzle session powered by your custom block catalog, gravity curve, and rotation rules saved in the Custom Game Editor.",
+				section: "core",
 				action: () => this.startCustomGame(),
 			},
 			{
-				label: "Play RPG Engine",
-				description: "Step into Yuu's quest in the full retro RPG",
-				tooltip: "Explore the 2D action RPG world engine with dialogue, NPCs, and dynamic collisions",
-				category: "play",
-				action: () => this.openEngineGame(),
-				prefetch: () => {
-					void import("./EngineScene");
-				},
-			},
-			{
-				label: "MMO World",
-				description: "Seamless multi-player persistent world",
-				tooltip: "Connect to the shared Hetzner MMO cluster to explore maps with other players in real time",
-				category: "play",
-				action: () => this.openWorld(),
-				prefetch: () => {
-					void import("./WorldScene");
-				},
-			},
-			{
-				label: "Arena Battle",
-				description: "Engage in real-time combat battles",
-				tooltip: "Battle opponents, monsters, and challengers in the combat arena test scene",
-				category: "play",
-				action: () => this.openArena(),
-				prefetch: () => {
-					void import("./ArenaScene");
-				},
-			},
-			{
-				label: "Demo Battle",
-				description: "Turn-based battle against a hard-hitting training opponent",
-				tooltip: "Try the turn-based battle system with demo combatants — it hits hard, so passive play loses (real battles start from NPCs in MMO World)",
-				category: "play",
-				action: () => this.openDemoBattle(),
-				prefetch: () => {
-					void import("./BattleScene");
-				},
-			},
-			{
-				label: "Fishing Mini-Game",
-				description: "Relaxing waterfront fishing experience",
-				tooltip: "Cast lines, hook catches, and earn rewards across local waters in the fishing mini-game",
-				category: "play",
-				action: () => this.openFishing(),
-				prefetch: () => {
-					void import("./FishingScene");
-				},
-			},
-			{
-				label: "Boss Rush",
-				description: "Sequential high-difficulty combat challenges",
-				tooltip: "Take on back-to-back engine bosses under timer constraints to test your combat skill",
-				category: "play",
-				action: () => this.openBossRush(),
-				prefetch: () => {
-					void import("./BossRushScene");
-				},
-			},
-			{
-				label: "Inventory & Equipment",
-				description: "Items, equipment slots, and consumables",
-				tooltip: "Browse your bag, equip weapons and armor, and use potions (also opens in-world)",
-				category: "play",
-				action: () => this.openInventory(),
-				prefetch: () => {
-					void import("./InventoryScene");
-				},
-			},
-			{
-				label: "Shop & Trading",
-				description: "Buy and sell weapons, armor, and supplies",
-				tooltip: "Spend gold on gear and consumables, or sell loot back (also opens at in-world merchants)",
-				category: "play",
-				action: () => this.openShop(),
-				prefetch: () => {
-					void import("./ShopScene");
-				},
-			},
-			{
-				label: "Skill Tree",
-				description: "Unlock combat, magic, and utility skills",
-				tooltip: "Spend skill points across three branching paths with prerequisites (also opens in-world)",
-				category: "play",
-				action: () => this.openSkillTree(),
-				prefetch: () => {
-					void import("./SkillTreeScene");
-				},
+				label: "Interactive Tutorial",
+				description: "Step-by-step controls & mechanics guide",
+				tooltip:
+					"Guided hands-on lessons covering movement, rotation kicks, line clears, and RPG interaction fundamentals.",
+				section: "core",
+				action: () => this.openTutorial(),
+				prefetch: () => void import("./TutorialScene"),
 			},
 			{
 				label: "Watch Last Replay",
-				description: "Playback your recorded puzzle match",
-				tooltip: "Watch a step-by-step frame recreation of your most recent puzzle game",
-				category: "play",
+				description: "Deterministic frame playback of last match",
+				tooltip:
+					"Re-watch your most recent recorded puzzle run frame-by-frame directly inside the puzzle engine.",
+				section: "core",
 				action: () => this.playLastReplay(),
 			},
 			{
-				label: "Share Last Replay",
-				description: "Copy shareable URL to clipboard",
-				tooltip: "Encode your last replay run into a compressed base64 link to share with others",
-				category: "play",
+				label: "Share Replay Link",
+				description: "Copy GZip+Base64 `#replay=` URL to clipboard",
+				tooltip:
+					"Compresses your latest puzzle replay via BobNet GZip+Base64 encoding into a self-contained shareable browser URL.",
+				section: "core",
 				action: () => this.shareLastReplay(),
 			},
 
-			// --- CREATION & EDITORS ---
+			// --- SECTION 2: COMBAT, MINI-GAMES & CHARACTER LOADOUT ---
 			{
-				label: "Custom Game Editor",
-				description: "Comprehensive puzzle engine rule editor",
-				tooltip: "Configure gravity, lock delay, kick tables, piece shapes, and block catalogs in one place",
-				category: "editors",
-				action: () => this.openCustomEditor(),
-				prefetch: () => {
-					void import("./CustomGameEditorScene");
-				},
+				label: "Arena Battle",
+				description: "Real-time action combat & wave survival",
+				tooltip:
+					"Fight waves of monsters and challengers in the real-time ECS combat arena.",
+				section: "combat",
+				action: () => this.openArena(),
+				prefetch: () => void import("./ArenaScene"),
 			},
 			{
-				label: "World Database Editor",
-				description: "Full RPG world, maps, and entity database",
-				tooltip: "Inspect maps, entity spawns, warp doors, and auto-tiler metadata across the world graph",
-				category: "editors",
-				action: () => this.openWorldEditor(),
-				prefetch: () => {
-					void import("./WorldEditorScene");
-				},
+				label: "Demo Turn-Based Battle",
+				description: "Tactical turn-based duel against Lv.5 foe",
+				tooltip:
+					"Test Attack, Magic, Defend, and Item tactics against a tuned training adversary (full encounters also trigger in MMO World).",
+				section: "combat",
+				action: () => this.openDemoBattle(),
+				prefetch: () => void import("./BattleScene"),
 			},
 			{
-				label: "Sprite Editor",
-				description: "Character & object sprite animator",
-				tooltip: "Edit pixel art frames, slice sprite sheets, and test directional animation sequences",
-				category: "editors",
-				action: () => this.openSpriteEditor(),
-				prefetch: () => {
-					void import("./SpriteEditorScene");
-				},
+				label: "Boss Rush Gauntlet",
+				description: "Back-to-back timed boss encounters",
+				tooltip:
+					"Challenge sequential high-difficulty engine bosses under strict survival and timer pressure.",
+				section: "combat",
+				action: () => this.openBossRush(),
+				prefetch: () => void import("./BossRushScene"),
 			},
 			{
-				label: "Event Sheet Editor",
-				description: "Visual cinematic & gameplay scripting",
-				tooltip: "Create trigger-condition-action event trees for cutscenes, doors, quests, and triggers",
-				category: "editors",
-				action: () => this.openEventEditor(),
-				prefetch: () => {
-					void import("./EventSheetEditorScene");
-				},
+				label: "Fishing Mini-Game",
+				description: "Cast lines, time bites & reel rare catches",
+				tooltip:
+					"Relaxing waterfront fishing mini-game with tension timing, rarity tiers, and gold/item rewards.",
+				section: "combat",
+				action: () => this.openFishing(),
+				prefetch: () => void import("./FishingScene"),
 			},
 			{
-				label: "Game Sequence Editor",
-				description: "Curate multi-game puzzle stages",
-				tooltip: "Sequence levels, difficulty curves, and custom game stages into complete campaigns",
-				category: "editors",
-				action: () => this.openGameSequenceEditor(),
-				prefetch: () => {
-					void import("./GameSequenceEditorScene");
-				},
+				label: "Inventory & Equipment",
+				description: "Manage bag items, weapons, armor & potions",
+				tooltip:
+					"Inspect your backpack, equip stat-boosting gear, and use consumables (also accessible inside MMO World).",
+				section: "combat",
+				action: () => this.openInventory(),
+				prefetch: () => void import("./InventoryScene"),
 			},
 			{
-				label: "Crafting Recipes",
-				description: "Item synthesis and blueprint workshop",
-				tooltip: "Combine materials, forge equipment, and configure recipe unlock requirements",
-				category: "editors",
+				label: "Merchant Shop & Trading",
+				description: "Buy & sell weapons, armor and supplies",
+				tooltip:
+					"Browse merchant stock, compare gear stats, spend gold, or sell surplus loot.",
+				section: "combat",
+				action: () => this.openShop(),
+				prefetch: () => void import("./ShopScene"),
+			},
+			{
+				label: "Skill Tree",
+				description: "Unlock Combat, Magic & Utility abilities",
+				tooltip:
+					"Invest skill points across three branching progression paths with prerequisite links.",
+				section: "combat",
+				action: () => this.openSkillTree(),
+				prefetch: () => void import("./SkillTreeScene"),
+			},
+			{
+				label: "Crafting & Synthesis",
+				description: "Combine materials into upgraded gear",
+				tooltip:
+					"Synthesize potions, weapons, and rare equipment from gathered world ingredients and blueprints.",
+				section: "combat",
 				action: () => this.openCrafting(),
-				prefetch: () => {
-					void import("./CraftingScene");
-				},
-			},
-
-			// --- COMMUNITY & PROGRESS ---
-			{
-				label: "Multiplayer Lobby",
-				description: "Matchmaking & 30-player rooms",
-				tooltip: "Join or host multiplayer puzzle and MMO rooms with live network synchronization",
-				category: "community",
-				action: () => this.openLobby(),
-				prefetch: () => {
-					void import("./LobbyScene");
-				},
-			},
-			{
-				label: "Go Online / Account",
-				description: "Log in and sync cloud profile",
-				tooltip: "Authenticate with the central server to sync save profiles, stats, and achievements",
-				category: "community",
-				action: () => this.openLogin(),
-				prefetch: () => {
-					void import("./LoginScene");
-				},
-			},
-			{
-				label: "Party Manager",
-				description: "Manage multiplayer party & team roster",
-				tooltip: "Invite friends, configure team roles, and coordinate co-op instances",
-				category: "community",
-				action: () => this.openParty(),
-				prefetch: () => {
-					void import("./PartyScene");
-				},
-			},
-			{
-				label: "Tournament Mode",
-				description: "Competitive bracket matchmaking",
-				tooltip: "Enter single-elimination tournament brackets with live leaderboard seeds",
-				category: "community",
-				action: () => this.openTournament(),
-				prefetch: () => {
-					void import("./TournamentScene");
-				},
-			},
-			{
-				label: "High Scores",
-				description: "Local and global high score records",
-				tooltip: "View top rankings and best completion times sorted across all puzzle modes",
-				category: "community",
-				action: () => this.openHighScores(),
-				prefetch: () => {
-					void import("./HighScoresScene");
-				},
-			},
-			{
-				label: "Global Leaderboard",
-				description: "Hetzner server-wide competitive stats",
-				tooltip: "Inspect worldwide ELO ratings and marathon rankings on ws.bobsgame.com",
-				category: "community",
-				action: () => this.openLeaderboard(),
-				prefetch: () => {
-					void import("./LeaderboardScene");
-				},
-			},
-			{
-				label: "Rankings & ELO",
-				description: "Skill tiers and competitive tiers",
-				tooltip: "Track competitive rating curves, tournament wins, and seasonal league standings",
-				category: "community",
-				action: () => this.openRankings(),
-				prefetch: () => {
-					void import("./RankingsScene");
-				},
-			},
-			{
-				label: "Achievements",
-				description: "Milestones & unlocked badges",
-				tooltip: "View your unlocked engine milestones, hidden badges, and mastery progress",
-				category: "community",
-				action: () => this.openAchievements(),
-				prefetch: () => {
-					void import("./AchievementsScene");
-				},
-			},
-			{
-				label: "Bestiary Log",
-				description: "Catalog of creatures & bosses",
-				tooltip: "Browse detailed encounter stats, monster lore, weakness tables, and drop rates",
-				category: "community",
-				action: () => this.openBestiary(),
-				prefetch: () => {
-					void import("./BestiaryScene");
-				},
-			},
-			{
-				label: "Quest Journal",
-				description: "Active and completed storyline quests",
-				tooltip: "Review campaign objectives, dialogue summaries, and NPC quest chains",
-				category: "community",
-				action: () => this.openJournal(),
-				prefetch: () => {
-					void import("./JournalScene");
-				},
-			},
-			{
-				label: "World Map Overview",
-				description: "Global geography and warp waypoints",
-				tooltip: "View regional map connections, town locations, and fast-travel coordinates",
-				category: "community",
-				action: () => this.openWorldMap(),
-				prefetch: () => {
-					void import("./WorldMapScene");
-				},
-			},
-			{
-				label: "Quest Log",
-				description: "Active objectives, rewards, and quest chains",
-				tooltip: "Track main, side, daily, and challenge quests with objective progress (story diary stays under Quest Journal)",
-				category: "community",
-				action: () => this.openQuestLog(),
-				prefetch: () => {
-					void import("./QuestLogScene");
-				},
+				prefetch: () => void import("./CraftingScene"),
 			},
 			{
 				label: "Save / Load Slots",
-				description: "Multi-slot game state manager",
-				tooltip: "Manage, backup, and restore game progression across local and cloud slots",
-				category: "community",
+				description: "Multi-slot local & cloud state manager",
+				tooltip:
+					"Create backups, inspect timestamps, and load saved RPG progression slots.",
+				section: "combat",
 				action: () => this.openSaveSlots(),
-				prefetch: () => {
-					void import("./SaveSlotScene");
-				},
+				prefetch: () => void import("./SaveSlotScene"),
 			},
 
-			// --- SYSTEM & ENGINE ---
+			// --- SECTION 3: CREATION, MODDING & AI STUDIO ---
 			{
-				label: "Engine Tech Demo",
-				description: "Stress-test physics, ECS, and tilemaps",
-				tooltip: "Run benchmarking passes on ECS systems, Wasm pathfinding, and dynamic lighting",
-				category: "system",
-				action: () => this.openEngineDemo(),
-				prefetch: () => {
-					void import("./EngineDemoScene");
-				},
+				label: "Custom Game Rule Editor",
+				description: "Design custom puzzle pieces, gravity & kicks",
+				tooltip:
+					"Full parameter studio for authoring falling-block rulesets, piece matrices, garbage formulas, and color palettes.",
+				section: "editors",
+				action: () => this.openCustomEditor(),
+				prefetch: () => void import("./CustomGameEditorScene"),
 			},
 			{
-				label: "WebGPU Compute Demo",
-				description: "GPU compute shader particle demo",
-				tooltip: "Demonstrates thousands of particles simulated directly in WebGPU WGSL compute shaders",
-				category: "system",
-				action: () => this.openWebGPUDemo(),
-				prefetch: () => {
-					void import("./WebGPUDemoScene");
-				},
+				label: "World Database Editor",
+				description: "Edit RPG maps, layers, NPCs & warp doors",
+				tooltip:
+					"Inspect and edit tilemap layers, collision bounds, door graphs, NPC placements, and AI-assisted tilesets.",
+				section: "editors",
+				action: () => this.openWorldEditor(),
+				prefetch: () => void import("./WorldEditorScene"),
 			},
 			{
-				label: "Audio FFT Visualizer",
-				description: "Real-time frequency & spectrum canvas",
-				tooltip: "Full-screen frequency analyzer powered by ProjectM/Butterchurn and native FFT hooks",
-				category: "system",
-				action: () => this.openVisualizer(),
-				prefetch: () => {
-					void import("./VisualizerScene");
-				},
+				label: "Pixel Sprite Editor",
+				description: "Draw frames, slice sheets & preview walk cycles",
+				tooltip:
+					"Create character and prop pixel art, test 8-directional animation loops, and generate sprites via the AI Proxy.",
+				section: "editors",
+				action: () => this.openSpriteEditor(),
+				prefetch: () => void import("./SpriteEditorScene"),
 			},
 			{
-				label: "nD Spatial Demo",
-				description: "Experimental multi-dimensional space",
-				tooltip: "Preview experimental higher-dimensional projection algorithms and shaders",
-				category: "system",
-				action: () => this.openNDDemo(),
-				prefetch: () => {
-					void import("./NDDemoScene");
-				},
+				label: "Event Sheet Editor",
+				description: "Visual trigger-condition-action scripting",
+				tooltip:
+					"Build branching dialogue, cutscene camera pans, quest flags, and warp triggers without writing raw code.",
+				section: "editors",
+				action: () => this.openEventEditor(),
+				prefetch: () => void import("./EventSheetEditorScene"),
 			},
 			{
-				label: "Interactive Tutorial",
-				description: "Beginner guide & controls manual",
-				tooltip: "Learn puzzle mechanics, movement tricks, and battle basics with interactive steps",
-				category: "system",
-				action: () => this.openTutorial(),
-				prefetch: () => {
-					void import("./TutorialScene");
-				},
+				label: "Game Sequence Editor",
+				description: "Chain custom puzzle stages into gauntlets",
+				tooltip:
+					"Curate ordered playlists of puzzle variants with custom transition timers and win conditions.",
+				section: "editors",
+				action: () => this.openGameSequenceEditor(),
+				prefetch: () => void import("./GameSequenceEditorScene"),
 			},
+
+			// --- SECTION 4: MULTIPLAYER, RANKINGS & COMPENDIUM ---
+			{
+				label: "Multiplayer Lobby",
+				description: "Real-time rooms, chat & 30-player sync",
+				tooltip:
+					"Host or join live multiplayer puzzle rooms, spectate active matches, and chat via the Socket.io WS server.",
+				section: "community",
+				action: () => this.openLobby(),
+				prefetch: () => void import("./LobbyScene"),
+			},
+			{
+				label: "Online Account & Sync",
+				description: "Authenticate & sync cloud profile/ELO",
+				tooltip:
+					"Sign in to synchronize your display name, ELO rating, achievements, and cloud character data.",
+				section: "community",
+				action: () => this.openLogin(),
+				prefetch: () => void import("./LoginScene"),
+			},
+			{
+				label: "Co-op Party Manager",
+				description: "Assemble party roster & team roles",
+				tooltip:
+					"Organize multiplayer party members, inspect readiness, and coordinate shared world sessions.",
+				section: "community",
+				action: () => this.openParty(),
+				prefetch: () => void import("./PartyScene"),
+			},
+			{
+				label: "Tournament Brackets",
+				description: "Single-elimination ELO bracket competition",
+				tooltip:
+					"Compete in seeded elimination brackets with automated round progression and ELO rating updates.",
+				section: "community",
+				action: () => this.openTournament(),
+				prefetch: () => void import("./TournamentScene"),
+			},
+			{
+				label: "Global Leaderboard",
+				description: "Server-wide Marathon, Sprint & Ultra top 50",
+				tooltip:
+					"Query live competitive scoreboards hosted on the WebSocket backend across all three puzzle modes.",
+				section: "community",
+				action: () => this.openLeaderboard(),
+				prefetch: () => void import("./LeaderboardScene"),
+			},
+			{
+				label: "Local High Scores",
+				description: "Personal best scores & times on this device",
+				tooltip:
+					"Inspect your offline personal records and completion times filtered by Marathon, Sprint, and Ultra.",
+				section: "community",
+				action: () => this.openHighScores(),
+				prefetch: () => void import("./HighScoresScene"),
+			},
+			{
+				label: "ELO Rankings & Tiers",
+				description: "Competitive league divisions & win rates",
+				tooltip:
+					"Track ELO rating curves, seasonal skill tiers, and win/loss statistics.",
+				section: "community",
+				action: () => this.openRankings(),
+				prefetch: () => void import("./RankingsScene"),
+			},
+			{
+				label: "Achievements & Badges",
+				description: "43 unlockable milestones & stat trackers",
+				tooltip:
+					"Browse unlocked badges, secret objectives, and cumulative gameplay counters.",
+				section: "community",
+				action: () => this.openAchievements(),
+				prefetch: () => void import("./AchievementsScene"),
+			},
+			{
+				label: "Active Quest Log",
+				description: "Main, side, daily & challenge objectives",
+				tooltip:
+					"Track active quest steps, completion percentages, and claimable XP/gold rewards.",
+				section: "community",
+				action: () => this.openQuestLog(),
+				prefetch: () => void import("./QuestLogScene"),
+			},
+			{
+				label: "Story & Lore Journal",
+				description: "Narrative diary, characters & chapter notes",
+				tooltip:
+					"Read storyline entries, NPC background lore, and discovered world history.",
+				section: "community",
+				action: () => this.openJournal(),
+				prefetch: () => void import("./JournalScene"),
+			},
+			{
+				label: "World Map Overview",
+				description: "Regional geography & discovered warp nodes",
+				tooltip:
+					"Inspect interconnected town districts, interior landmarks, and fast-travel waypoints.",
+				section: "community",
+				action: () => this.openWorldMap(),
+				prefetch: () => void import("./WorldMapScene"),
+			},
+			{
+				label: "Creature Bestiary",
+				description: "Monster stats, elemental weaknesses & drops",
+				tooltip:
+					"Catalog of encountered enemies and bosses with HP/ATK/DEF stats and loot drop tables.",
+				section: "community",
+				action: () => this.openBestiary(),
+				prefetch: () => void import("./BestiaryScene"),
+			},
+
+			// --- SECTION 5: SYSTEM, UNIFIED SETTINGS, DAEMONS & TECH DEMOS ---
 			{
 				label: "Settings & Options",
-				description: "Audio, profile, graphics, and haptics in one place",
-				tooltip: "Volume, mute, and profile name; the Graphics & Haptics button inside opens renderer, HD sprite, and vibration options (one consolidated settings surface)",
-				category: "system",
+				description: "Unified Audio, WebGPU, HQ2X, Haptics & Profile",
+				tooltip:
+					"Single-page control center combining Audio Mixer, WebGPU/WebGL2 selection, HQ2X HD Sprites, Ghost Piece, Touch HUD, Haptics, and Player Name.",
+				section: "system",
 				action: () => this.openSettings(),
-				prefetch: () => {
-					void import("./SettingsScene");
-				},
+				prefetch: () => void import("./SettingsScene"),
 			},
 			{
-				label: "AI Proxy Server",
-				description: "Inspect & toggle local Generative AI proxy",
-				tooltip: "Check connectivity to port 8080 AI proxy (OpenAI / mock fallback) and manage Electron daemon",
-				category: "system",
+				label: "Help & Controls Manual",
+				description: "Full keyboard, gamepad, tray & editor guide",
+				tooltip:
+					"Comprehensive scrollable reference manual covering shortcuts, world mechanics, server daemons, and editors.",
+				section: "system",
+				action: () => this.openHelp(),
+				prefetch: () => void import("./HelpScene"),
+			},
+			{
+				label: "Game WS Server (:6065)",
+				description: "Check health or Start/Stop multiplayer daemon",
+				tooltip:
+					"Probes port 6065 (`/healthz`) and lets you start, stop, or restart the local Socket.io game server via Electron IPC.",
+				section: "system",
+				action: () => this.toggleOrCheckWsServer(),
+			},
+			{
+				label: "AI Proxy Server (:6066)",
+				description: "Check health or Start/Stop Generative AI daemon",
+				tooltip:
+					"Probes port 6066 (`/healthz`) for OpenAI / Mock mode status and toggles the local Express AI proxy via Electron IPC.",
+				section: "system",
 				action: () => this.toggleOrCheckAiServer(),
 			},
 			{
-				label: "Help & Manual",
-				description: "Comprehensive manual and documentation",
-				tooltip: "Browse reference guides for editor tooling, shortcut keys, and engine architecture",
-				category: "system",
-				action: () => this.openHelp(),
-				prefetch: () => {
-					void import("./HelpScene");
-				},
+				label: "WebGPU Compute Demo",
+				description: "WGSL GPU compute-shader particle simulation",
+				tooltip:
+					"Runs thousands of hardware-accelerated particles directly inside WebGPU WGSL compute shaders.",
+				section: "system",
+				action: () => this.openWebGPUDemo(),
+				prefetch: () => void import("./WebGPUDemoScene"),
+			},
+			{
+				label: "Audio FFT Visualizer",
+				description: "Full-screen Butterchurn & spectrum canvas",
+				tooltip:
+					"Interactive real-time audio frequency analyzer and MilkDrop/Butterchurn preset showcase (press V on dashboard to cycle mini-bar).",
+				section: "system",
+				action: () => this.openVisualizer(),
+				prefetch: () => void import("./VisualizerScene"),
+			},
+			{
+				label: "Engine Stress Benchmark",
+				description: "ECS, Wasm physics & dynamic lighting testbed",
+				tooltip:
+					"Benchmarks large entity counts, tilemap batching, Wasm collision checks, and point-light shadows.",
+				section: "system",
+				action: () => this.openEngineDemo(),
+				prefetch: () => void import("./EngineDemoScene"),
+			},
+			{
+				label: "nD Handheld & Spatial Demo",
+				description: "Virtual nD console & higher-dimensional projection",
+				tooltip:
+					"Preview the embedded nD handheld console shell and experimental multi-dimensional projection shaders.",
+				section: "system",
+				action: () => this.openNDDemo(),
+				prefetch: () => void import("./NDDemoScene"),
 			},
 		];
 	}
 
-	private async toggleOrCheckAiServer(): Promise<void> {
-		this.playSelectSound();
-		ToastManager.showInfo("Checking AI Proxy Server status...");
-		const status = await GenerativeAIManager.checkServerStatus();
-
-		const electronAPI = (window as unknown as { electronAPI?: { startAiServer?: () => Promise<boolean>; stopAiServer?: () => Promise<boolean> } }).electronAPI;
-
-		if (status.online) {
-			const mode = status.openaiConfigured ? "OpenAI Live Mode" : "Local Mock Mode";
-			ToastManager.showInfo(`AI Server Online: Port 8080 (${mode})`);
-			if (electronAPI && electronAPI.stopAiServer) {
-				const stop = confirm(`AI Proxy is running (${mode}). Stop server process?`);
-				if (stop) {
-					await electronAPI.stopAiServer();
-					ToastManager.showInfo("Sent stop request to AI Proxy server.");
-				}
-			}
-		} else {
-			ToastManager.showInfo(`AI Server Offline (${status.error || "Connection Refused"})`);
-			if (electronAPI && electronAPI.startAiServer) {
-				const start = confirm("AI Proxy server is offline. Start it now via Electron daemon?");
-				if (start) {
-					const ok = await electronAPI.startAiServer();
-					ToastManager.showInfo(ok ? "AI Proxy daemon starting..." : "Failed to start AI Proxy daemon.");
-				}
-			} else {
-				alert("AI Proxy is offline. Start it via 'npm run server' or run the Electron client with system tray controls.");
-			}
-		}
-	}
-
 	// ============================================================
-	// Menu Grid Reconstruction
+	// Consolidated Responsive Layout Builder
 	// ============================================================
 
-	private rebuildCategoryMenu(category: DashboardCategory): void {
-		this.menuButtonsContainer.removeChildren();
-		this.menuButtons = [];
+	private buildLayout(): void {
+		this.headerContainer.removeChildren();
+		this.footerContainer.removeChildren();
+		this.scrollContent.removeChildren();
+		this.cards = [];
+		this.modePills = [];
+		this.anchorPills = [];
 
-		this.currentMenuItems = this.allMenuItems.filter(
-			(item) => item.category === category,
+		const w = this.width;
+		const h = this.height;
+		const compactHeader = w < 960;
+
+		this.viewportY = compactHeader ? 168 : 138;
+		const footerH = 28;
+		this.viewportHeight = Math.max(200, h - this.viewportY - footerH);
+
+		// ---- 1. PINNED HEADER BACKDROP ----
+		const headerBg = new Graphics();
+		headerBg.rect(0, 0, w, this.viewportY - 2);
+		headerBg.fill({ color: 0x090f1d, alpha: 0.94 });
+		headerBg.moveTo(0, this.viewportY - 2);
+		headerBg.lineTo(w, this.viewportY - 2);
+		headerBg.stroke({ color: 0x264066, width: 1.5 });
+		this.headerContainer.addChild(headerBg);
+
+		// Brand Title (Top-Left)
+		this.titleText = new Text({
+			text: "bob's game",
+			style: new TextStyle({
+				fontFamily: "Arial Black, Arial, sans-serif",
+				fontSize: compactHeader ? 28 : 34,
+				fontWeight: "bold",
+				fill: 0xffffff,
+				stroke: { color: 0x003366, width: 4 },
+				letterSpacing: 2,
+			}),
+		});
+		this.titleText.position.set(20, 10);
+		this.headerContainer.addChild(this.titleText);
+
+		this.subtitleText = new Text({
+			text: "CONSOLIDATED OMNI-ENGINE DASHBOARD",
+			style: new TextStyle({
+				fontFamily: "Arial, sans-serif",
+				fontSize: 11,
+				fontWeight: "bold",
+				fill: 0x7aa6d8,
+				letterSpacing: 2.5,
+			}),
+		});
+		this.subtitleText.position.set(22, compactHeader ? 44 : 50);
+		this.headerContainer.addChild(this.subtitleText);
+
+		// Live Server Control & Telemetry Strip (Top-Right)
+		const serverRowY = 14;
+		const refreshPill = this.createPill(
+			"↻ Probe",
+			68,
+			26,
+			0x3b82f6,
+			"Re-check live HTTP health of Game WS Server (:6065) and AI Proxy (:6066).",
+			() => {
+				this.playMoveSound();
+				ToastManager.showInfo("Refreshing server health telemetry...");
+				void this.refreshServerStatuses();
+			},
 		);
+		refreshPill.container.position.set(w - 86, serverRowY);
+		this.headerContainer.addChild(refreshPill.container);
 
-		// Mode buttons are relevant for puzzle modes in 'play' category
-		this.modeContainer.visible = category === "play";
+		this.aiServerPill = this.createPill(
+			"○ AI Proxy :6066",
+			168,
+			26,
+			0x10b981,
+			() =>
+				`Local AI Proxy (:6066) — ${this.aiDetail}\nClick to inspect or Start/Stop daemon via Electron IPC (or 'start.bat --ai-proxy').`,
+			() => void this.toggleOrCheckAiServer(),
+		);
+		this.aiServerPill.container.position.set(w - 262, serverRowY);
+		this.headerContainer.addChild(this.aiServerPill.container);
 
-		// Compact rows when a category overflows 720p (Play has 14 items = 7
-		// rows; at 52px spacing the last row was clipped behind the page
-		// footer in the live 1280x720 verification screenshots).
-		const cols = 2;
-		const rows = Math.ceil(this.currentMenuItems.length / cols);
-		const compact = rows > 6;
+		this.wsServerPill = this.createPill(
+			"○ WS Server :6065",
+			174,
+			26,
+			0x3b82f6,
+			() =>
+				`Multiplayer Game WS Server (:6065) — ${this.wsDetail}\nClick to inspect or Start/Stop daemon via Electron IPC (or 'start.bat --server').`,
+			() => void this.toggleOrCheckWsServer(),
+		);
+		this.wsServerPill.container.position.set(w - 444, serverRowY);
+		this.headerContainer.addChild(this.wsServerPill.container);
 
-		const buttonStyle: ButtonStyle = {
-			width: 280,
-			height: compact ? 38 : 44,
-			backgroundColor: 0x16243b,
-			backgroundColorHover: 0x274066,
-			backgroundColorPressed: 0x0e1726,
-			borderColor: 0x3d5a80,
-			borderWidth: 2,
-			textColor: 0xffffff,
-			fontSize: compact ? 14 : 15,
-			borderRadius: 8,
-		};
+		// Inline Puzzle Mode Selector (`[MARATHON] [SPRINT] [ULTRA]`)
+		const modeRowY = compactHeader ? 66 : 48;
+		const modeBaseX = w - 334;
+		const modeTag = new Text({
+			text: "PUZZLE MODE:",
+			style: new TextStyle({
+				fill: "#7e9ec2",
+				fontSize: 10,
+				fontWeight: "bold",
+				letterSpacing: 1,
+			}),
+		});
+		modeTag.anchor.set(1, 0.5);
+		modeTag.position.set(modeBaseX - 8, modeRowY + 12);
+		this.headerContainer.addChild(modeTag);
 
-		const startY = category === "play" ? this.height * 0.46 : this.height * 0.40;
-		const spacingX = 300;
-		const spacingY = compact ? 46 : 52;
+		this.gameModes.forEach((mode, idx) => {
+			const pill = this.createPill(
+				this.gameModeLabels[mode],
+				102,
+				24,
+				0xf59e0b,
+				this.gameModeTooltips[mode],
+				() => {
+					this.selectedCategoryIndex = idx;
+					this.updateModePillsVisuals();
+					this.playMoveSound();
+				},
+			);
+			pill.container.position.set(modeBaseX + idx * 108, modeRowY);
+			this.headerContainer.addChild(pill.container);
+			this.modePills.push(pill);
+		});
+		this.updateModePillsVisuals();
 
-		this.currentMenuItems.forEach((item, index) => {
-			const col = index % cols;
-			const row = Math.floor(index / cols);
+		// Quick-Jump Section Anchor Strip (Smoothly scrolls same page!)
+		const anchorRowY = compactHeader ? 100 : 84;
+		let ax = 20;
+		let ay = anchorRowY;
+		const jumpLabel = new Text({
+			text: "JUMP TO:",
+			style: new TextStyle({
+				fill: "#6e8cb0",
+				fontSize: 10,
+				fontWeight: "bold",
+				letterSpacing: 1,
+			}),
+		});
+		jumpLabel.position.set(ax, ay + 7);
+		this.headerContainer.addChild(jumpLabel);
+		ax += 64;
 
-			const x = this.centerX + (col === 0 ? -spacingX / 2 : spacingX / 2);
-			const y = startY + row * spacingY;
-
-			const button = new Button(item.label, buttonStyle);
-			button.setPosition(x, y);
-
-			button.onClick(() => {
-				this.playSelectSound();
-				item.action();
-			});
-
-			button.on("hover", () => {
-				this.tooltip.show(button.x, button.y - 12, item.tooltip);
-			});
-
-			button.on("hoverEnd", () => {
-				this.tooltip.hide();
-			});
-
-			this.menuButtonsContainer.addChild(button.container);
-			this.menuButtons.push(button);
+		this.sections.forEach((sec) => {
+			const pw = Math.max(128, sec.shortLabel.length * 7.6 + 22);
+			if (ax + pw > w - 20) {
+				ax = 20;
+				ay += 30;
+			}
+			const pill = this.createPill(
+				sec.shortLabel,
+				pw,
+				25,
+				sec.accentColor,
+				sec.tooltip,
+				() => {
+					this.scrollToSection(sec.key);
+					this.playMoveSound();
+				},
+			);
+			pill.container.position.set(ax, ay);
+			this.headerContainer.addChild(pill.container);
+			this.anchorPills.push(pill);
+			ax += pw + 8;
 		});
 
-		this.selectedIndex = 0;
-		this.updateSelection();
+		// ---- 2. VIEWPORT MASK ----
+		this.viewportMask.clear();
+		this.viewportMask.rect(0, this.viewportY, w, this.viewportHeight);
+		this.viewportMask.fill(0xffffff);
+		this.scrollWrapper.position.set(0, this.viewportY);
+
+		// ---- 3. CONSOLIDATED MULTI-COLUMN RICH CARDS ----
+		const padX = 22;
+		const scrollbarGutter = 18;
+		const usableW = w - padX * 2 - scrollbarGutter;
+		this.gridCols = w >= 980 ? 3 : w >= 620 ? 2 : 1;
+		const gapX = 12;
+		const gapY = 10;
+		const cardW = Math.floor(
+			(usableW - gapX * (this.gridCols - 1)) / this.gridCols,
+		);
+		const cardH = 54;
+
+		let cursorY = 14;
+
+		for (const sec of this.sections) {
+			this.sectionOffsets[sec.key] = Math.max(0, cursorY - 10);
+
+			// Section Banner
+			const secBanner = new Container();
+			secBanner.position.set(padX, cursorY);
+
+			const secBar = new Graphics();
+			secBar.roundRect(0, 0, usableW, 38, 6);
+			secBar.fill({ color: 0x101b30, alpha: 0.9 });
+			secBar.rect(0, 0, 5, 38);
+			secBar.fill({ color: sec.accentColor });
+			secBanner.addChild(secBar);
+
+			const secTitle = new Text({
+				text: sec.headerTitle,
+				style: new TextStyle({
+					fill: "#eaf2ff",
+					fontSize: 13,
+					fontWeight: "bold",
+					letterSpacing: 0.8,
+				}),
+			});
+			secTitle.position.set(14, 5);
+			secBanner.addChild(secTitle);
+
+			const secSub = new Text({
+				text: sec.headerSubtitle,
+				style: new TextStyle({
+					fill: "#85a3c4",
+					fontSize: 11,
+				}),
+			});
+			secSub.position.set(14, 22);
+			secBanner.addChild(secSub);
+
+			this.scrollContent.addChild(secBanner);
+			cursorY += 46;
+
+			const secItems = this.allMenuItems.filter(
+				(item) => item.section === sec.key,
+			);
+			secItems.forEach((item, idx) => {
+				const col = idx % this.gridCols;
+				const row = Math.floor(idx / this.gridCols);
+				const cx = padX + col * (cardW + gapX);
+				const cy = cursorY + row * (cardH + gapY);
+
+				const card = this.createDashboardCard(
+					item,
+					cx,
+					cy,
+					cardW,
+					cardH,
+					sec.accentColor,
+					this.cards.length,
+				);
+				this.scrollContent.addChild(card.container);
+				this.cards.push(card);
+			});
+
+			const rows = Math.ceil(secItems.length / this.gridCols);
+			cursorY += rows * (cardH + gapY) + 14;
+		}
+
+		const totalContentH = cursorY + 12;
+		this.maxScrollY = Math.max(0, totalContentH - this.viewportHeight);
+		this.scrollY = Math.min(this.scrollY, this.maxScrollY);
+		this.targetScrollY = Math.min(this.targetScrollY, this.maxScrollY);
+		this.scrollContent.y = -this.scrollY;
+
+		this.buildScrollbar();
+
+		// ---- 4. PINNED FOOTER ----
+		const footerBg = new Graphics();
+		footerBg.rect(0, h - footerH, w, footerH);
+		footerBg.fill({ color: 0x080d1a, alpha: 0.95 });
+		footerBg.moveTo(0, h - footerH);
+		footerBg.lineTo(w, h - footerH);
+		footerBg.stroke({ color: 0x1f3556, width: 1 });
+		this.footerContainer.addChild(footerBg);
+
+		const controlsHint = new Text({
+			text: "🖱️ Wheel / Drag Bar: Scroll   |   ↑↓←→: Select Card   |   Enter: Launch   |   1–5 / Q·E: Jump Section   |   V: FFT Mode",
+			style: new TextStyle({
+				fill: "#7c97b8",
+				fontSize: 11,
+			}),
+		});
+		controlsHint.position.set(16, h - footerH + 7);
+		this.footerContainer.addChild(controlsHint);
+
+		this.versionText = new Text({
+			text: `v${APP_VERSION}`,
+			style: new TextStyle({
+				fontFamily: "monospace",
+				fontSize: 12,
+				fontWeight: "bold",
+				fill: 0x66aaff,
+			}),
+		});
+		this.versionText.anchor.set(1, 0.5);
+		this.versionText.position.set(w - 14, h - footerH / 2);
+		this.footerContainer.addChild(this.versionText);
+
+		this.selectedIndex = Math.min(
+			this.selectedIndex,
+			Math.max(0, this.cards.length - 1),
+		);
+		this.updateSelectionVisuals();
+		this.updateServerPillsVisuals();
+		this.updateActiveAnchorVisuals();
 	}
 
-	private updateSelection(): void {
-		for (let i = 0; i < this.menuButtons.length; i++) {
-			this.menuButtons[i].selected = i === this.selectedIndex;
+	private createDashboardCard(
+		item: MenuItem,
+		x: number,
+		y: number,
+		w: number,
+		h: number,
+		accentColor: number,
+		cardIndex: number,
+	): CardEntry {
+		const container = new Container();
+		container.position.set(x, y);
+		container.eventMode = "static";
+		container.cursor = "pointer";
+
+		const bg = new Graphics();
+		container.addChild(bg);
+
+		const title = new Text({
+			text: item.label,
+			style: new TextStyle({
+				fill: "#f2f7ff",
+				fontSize: 14,
+				fontWeight: "bold",
+				fontFamily: "Arial, sans-serif",
+			}),
+		});
+		title.position.set(13, 8);
+		container.addChild(title);
+
+		// Truncate inline subtitle gracefully on narrower viewports
+		const maxChars = Math.max(24, Math.floor((w - 36) / 6.1));
+		const descStr =
+			item.description.length > maxChars
+				? `${item.description.slice(0, maxChars - 1)}…`
+				: item.description;
+		const desc = new Text({
+			text: descStr,
+			style: new TextStyle({
+				fill: "#8fb0d4",
+				fontSize: 11,
+				fontFamily: "Arial, sans-serif",
+			}),
+		});
+		desc.position.set(13, 30);
+		container.addChild(desc);
+
+		const infoBadge = new Text({
+			text: "ⓘ",
+			style: new TextStyle({
+				fill: "#6ea8fe",
+				fontSize: 13,
+				fontWeight: "bold",
+			}),
+		});
+		infoBadge.anchor.set(1, 0);
+		infoBadge.position.set(w - 10, 8);
+		container.addChild(infoBadge);
+
+		const entry: CardEntry = {
+			item,
+			container,
+			bg,
+			accentColor,
+			x,
+			y,
+			w,
+			h,
+			hovered: false,
+		};
+		this.drawCardEntry(entry, cardIndex === this.selectedIndex);
+
+		container.on("pointerover", (e) => {
+			entry.hovered = true;
+			this.selectedIndex = cardIndex;
+			this.updateSelectionVisuals();
+			this.tooltip.show(e.global.x, e.global.y, `${item.label}\n${item.tooltip}`);
+		});
+		container.on("pointermove", (e) => {
+			if (entry.hovered) {
+				this.tooltip.updatePosition(e.global.x, e.global.y);
+			}
+		});
+		container.on("pointerout", () => {
+			entry.hovered = false;
+			this.drawCardEntry(entry, cardIndex === this.selectedIndex);
+			this.tooltip.hide();
+		});
+		container.on("pointertap", () => {
+			this.tooltip.hide();
+			this.playSelectSound();
+			void item.action();
+		});
+
+		return entry;
+	}
+
+	private drawCardEntry(entry: CardEntry, selected: boolean): void {
+		const { bg, w, h, accentColor, hovered } = entry;
+		bg.clear();
+		bg.roundRect(0, 0, w, h, 8);
+		bg.fill({
+			color: hovered ? 0x203658 : selected ? 0x1a2d4c : 0x132036,
+			alpha: 0.94,
+		});
+		bg.stroke({
+			color: selected ? 0x7cc4ff : hovered ? accentColor : 0x2a4368,
+			width: selected ? 2.2 : 1.4,
+		});
+		// Left category accent stripe
+		bg.roundRect(1, 5, 4, h - 10, 2);
+		bg.fill({ color: accentColor });
+	}
+
+	private createPill(
+		initialText: string,
+		w: number,
+		h: number,
+		accentColor: number,
+		tooltipSource: string | (() => string),
+		onClick: () => void,
+	): PillControl {
+		const container = new Container();
+		container.eventMode = "static";
+		container.cursor = "pointer";
+
+		const bg = new Graphics();
+		container.addChild(bg);
+
+		const label = new Text({
+			text: initialText,
+			style: new TextStyle({
+				fill: "#e6f0ff",
+				fontSize: 11,
+				fontWeight: "bold",
+				fontFamily: "Arial, sans-serif",
+			}),
+		});
+		label.anchor.set(0.5);
+		label.position.set(w / 2, h / 2);
+		container.addChild(label);
+
+		let isActive = false;
+		let isHovered = false;
+		let currentAccent = accentColor;
+
+		const redraw = (active: boolean, hovered: boolean, accentOverride?: number) => {
+			isActive = active;
+			isHovered = hovered;
+			if (accentOverride !== undefined) currentAccent = accentOverride;
+			bg.clear();
+			bg.roundRect(0, 0, w, h, h / 2);
+			bg.fill({
+				color: hovered ? 0x243e66 : active ? 0x1d3557 : 0x111d33,
+				alpha: 0.95,
+			});
+			bg.stroke({
+				color: active || hovered ? currentAccent : 0x2e4a70,
+				width: active ? 2 : 1.3,
+			});
+		};
+		redraw(false, false);
+
+		container.on("pointerover", (e) => {
+			redraw(isActive, true);
+			const text =
+				typeof tooltipSource === "function" ? tooltipSource() : tooltipSource;
+			this.tooltip.show(e.global.x, e.global.y, text);
+		});
+		container.on("pointerout", () => {
+			redraw(isActive, false);
+			this.tooltip.hide();
+		});
+		container.on("pointertap", () => {
+			this.tooltip.hide();
+			onClick();
+		});
+
+		return { container, bg, label, redraw };
+	}
+
+	// ============================================================
+	// Interactive Scrollbar & Smooth Scrolling
+	// ============================================================
+
+	private buildScrollbar(): void {
+		const barX = this.width - 12;
+		const barW = 7;
+
+		this.scrollTrack.clear();
+		this.scrollTrack.roundRect(barX, this.viewportY + 4, barW, this.viewportHeight - 8, 3.5);
+		this.scrollTrack.fill({ color: 0x0f1a2e, alpha: 0.9 });
+		this.scrollTrack.eventMode = "static";
+		this.scrollTrack.cursor = "pointer";
+		this.scrollTrack.removeAllListeners();
+		this.scrollTrack.on("pointerdown", (e) => {
+			if (this.maxScrollY <= 0) return;
+			const relY = e.global.y - this.viewportY;
+			const ratio = Math.max(0, Math.min(1, relY / this.viewportHeight));
+			this.setTargetScroll(ratio * this.maxScrollY);
+		});
+
+		this.scrollThumb.eventMode = "static";
+		this.scrollThumb.cursor = "grab";
+		this.scrollThumb.removeAllListeners();
+		this.scrollThumb.on("pointerdown", (e) => {
+			e.stopPropagation();
+			this.draggingScrollbar = true;
+			this.dragStartPointerY = e.global.y;
+			this.dragStartScrollY = this.targetScrollY;
+		});
+		this.scrollThumb.on("globalpointermove", (e) => {
+			if (!this.draggingScrollbar || this.maxScrollY <= 0) return;
+			const trackH = this.viewportHeight - 8;
+			const thumbH = this.computeThumbHeight(trackH);
+			const scrollableTrack = Math.max(1, trackH - thumbH);
+			const dy = e.global.y - this.dragStartPointerY;
+			this.setTargetScroll(
+				this.dragStartScrollY + (dy / scrollableTrack) * this.maxScrollY,
+			);
+		});
+		const endDrag = () => {
+			this.draggingScrollbar = false;
+		};
+		this.scrollThumb.on("pointerup", endDrag);
+		this.scrollThumb.on("pointerupoutside", endDrag);
+
+		this.redrawScrollThumb();
+	}
+
+	private computeThumbHeight(trackH: number): number {
+		if (this.maxScrollY <= 0) return trackH;
+		const visibleRatio =
+			this.viewportHeight / (this.viewportHeight + this.maxScrollY);
+		return Math.max(36, Math.floor(trackH * visibleRatio));
+	}
+
+	private redrawScrollThumb(): void {
+		const barX = this.width - 12;
+		const barW = 7;
+		const trackH = this.viewportHeight - 8;
+		const thumbH = this.computeThumbHeight(trackH);
+		const pct = this.maxScrollY > 0 ? this.scrollY / this.maxScrollY : 0;
+		const thumbY = this.viewportY + 4 + pct * (trackH - thumbH);
+
+		this.scrollThumb.clear();
+		this.scrollThumb.roundRect(barX, thumbY, barW, thumbH, 3.5);
+		this.scrollThumb.fill({
+			color: this.maxScrollY > 0 ? 0x3b82f6 : 0x1e3352,
+			alpha: 0.9,
+		});
+	}
+
+	private setTargetScroll(nextY: number): void {
+		this.targetScrollY = Math.max(0, Math.min(this.maxScrollY, nextY));
+	}
+
+	private scrollToSection(sectionKey: DashboardSectionKey): void {
+		this.setTargetScroll(this.sectionOffsets[sectionKey] ?? 0);
+	}
+
+	private ensureSelectedCardVisible(): void {
+		const card = this.cards[this.selectedIndex];
+		if (!card) return;
+		const top = card.y - 44;
+		const bottom = card.y + card.h + 16;
+		if (top < this.targetScrollY) {
+			this.setTargetScroll(top);
+		} else if (bottom > this.targetScrollY + this.viewportHeight) {
+			this.setTargetScroll(bottom - this.viewportHeight);
 		}
+	}
+
+	private updateActiveAnchorVisuals(): void {
+		let activeIdx = 0;
+		for (let i = 0; i < this.sections.length; i++) {
+			const offset = this.sectionOffsets[this.sections[i].key];
+			if (this.scrollY + 60 >= offset) {
+				activeIdx = i;
+			}
+		}
+		this.anchorPills.forEach((pill, idx) => {
+			pill.redraw(idx === activeIdx, false);
+		});
+	}
+
+	private updateModePillsVisuals(): void {
+		this.modePills.forEach((pill, idx) => {
+			pill.redraw(idx === this.selectedCategoryIndex, false);
+		});
+	}
+
+	private updateSelectionVisuals(): void {
+		this.cards.forEach((card, idx) => {
+			this.drawCardEntry(card, idx === this.selectedIndex);
+		});
 		this.prefetchSelectionNeighborhood();
 	}
 
 	// ============================================================
-	// Input Handling
+	// Dual-Server Health Telemetry & Daemon Controls (:6065 & :6066)
 	// ============================================================
 
-	private handleInput(): void {
+	private getLocalOrConfiguredWsHttpBase(): string {
+		return SERVER_URL.replace(/^ws(s?):\/\//i, "http$1://").replace(/\/+$/, "");
+	}
+
+	private async probeWsServerHealth(): Promise<{
+		online: boolean;
+		version?: string;
+		connections?: number;
+		rooms?: number;
+		error?: string;
+	}> {
+		const base = this.getLocalOrConfiguredWsHttpBase();
+		const controller = new AbortController();
+		const timer = window.setTimeout(() => controller.abort(), 1800);
+		try {
+			const res = await fetch(`${base}/healthz`, {
+				signal: controller.signal,
+			});
+			if (!res.ok) {
+				return { online: false, error: `HTTP ${res.status}` };
+			}
+			const json = (await res.json()) as {
+				ok?: boolean;
+				version?: string;
+				connections?: number;
+				rooms?: number;
+			};
+			return {
+				online: Boolean(json.ok),
+				version: json.version,
+				connections: json.connections,
+				rooms: json.rooms,
+			};
+		} catch (e) {
+			return {
+				online: false,
+				error: e instanceof Error ? e.message : "Unreachable",
+			};
+		} finally {
+			window.clearTimeout(timer);
+		}
+	}
+
+	private async refreshServerStatuses(): Promise<void> {
+		const electronAPI = window.electronAPI;
+		const [wsHealth, aiHealth, ipcStatus] = await Promise.all([
+			this.probeWsServerHealth(),
+			GenerativeAIManager.checkServerStatus(),
+			electronAPI?.getServerStatus
+				? electronAPI.getServerStatus().catch(() => null)
+				: Promise.resolve(null),
+		]);
+
+		this.wsOnline = wsHealth.online || Boolean(ipcStatus?.wsServer);
+		this.wsManaged = Boolean(ipcStatus?.wsManaged);
+		this.wsDetail = this.wsOnline
+			? `ONLINE (v${wsHealth.version ?? APP_VERSION}${typeof wsHealth.connections === "number" ? `, ${wsHealth.connections} clients` : ""}${this.wsManaged ? ", Tray-Managed" : ""})`
+			: `OFFLINE (${wsHealth.error || "Port 6065 closed"})`;
+
+		this.aiOnline = aiHealth.online || Boolean(ipcStatus?.aiProxy);
+		this.aiManaged = Boolean(ipcStatus?.aiManaged);
+		const aiMode = aiHealth.openaiConfigured ? "OpenAI Live" : "Mock Fallback";
+		this.aiDetail = this.aiOnline
+			? `ONLINE (${aiMode}${this.aiManaged ? ", Tray-Managed" : ""})`
+			: `OFFLINE (${aiHealth.error || "Port 6066 closed"})`;
+
+		this.updateServerPillsVisuals();
+	}
+
+	private updateServerPillsVisuals(): void {
+		if (this.wsServerPill) {
+			this.wsServerPill.label.text = this.wsOnline
+				? "● WS :6065 ONLINE"
+				: "○ WS :6065 OFFLINE";
+			this.wsServerPill.label.style.fill = this.wsOnline
+				? "#66ffcc"
+				: "#ffcc66";
+			this.wsServerPill.redraw(
+				this.wsOnline,
+				false,
+				this.wsOnline ? 0x10b981 : 0xd97706,
+			);
+		}
+		if (this.aiServerPill) {
+			this.aiServerPill.label.text = this.aiOnline
+				? "● AI :6066 ONLINE"
+				: "○ AI :6066 OFFLINE";
+			this.aiServerPill.label.style.fill = this.aiOnline
+				? "#66ffcc"
+				: "#ffcc66";
+			this.aiServerPill.redraw(
+				this.aiOnline,
+				false,
+				this.aiOnline ? 0x10b981 : 0xd97706,
+			);
+		}
+	}
+
+	private async toggleOrCheckWsServer(): Promise<void> {
+		this.playSelectSound();
+		await this.refreshServerStatuses();
+		const electronAPI = window.electronAPI;
+
+		if (this.wsOnline) {
+			ToastManager.showInfo(`Game WS Server (:6065) — ${this.wsDetail}`);
+			if (electronAPI?.stopWsServer && this.wsManaged) {
+				if (confirm(`Game WS Server is running (${this.wsDetail}). Stop Electron-managed daemon?`)) {
+					await electronAPI.stopWsServer();
+					ToastManager.showInfo("Stopped Game WS Server (:6065).");
+					await this.refreshServerStatuses();
+				}
+			}
+		} else {
+			ToastManager.showInfo(`Game WS Server Offline (${this.wsDetail})`);
+			if (electronAPI?.startWsServer) {
+				if (confirm("Game WS Server (:6065) is offline. Start it now via Electron System Tray daemon?")) {
+					const ok = await electronAPI.startWsServer();
+					ToastManager.showInfo(
+						ok
+							? "Game WS Server (:6065) starting at BelowNormal priority..."
+							: "Failed to start Game WS Server.",
+					);
+					window.setTimeout(() => void this.refreshServerStatuses(), 800);
+				}
+			} else {
+				alert(
+					"Game WS Server (:6065) is offline.\n\nStart locally via:\n  start.bat --server\nor:\n  .\\scripts\\local-ops.ps1 -Action start -Target ws\nor launch the Electron desktop shell for System Tray controls.",
+				);
+			}
+		}
+	}
+
+	private async toggleOrCheckAiServer(): Promise<void> {
+		this.playSelectSound();
+		await this.refreshServerStatuses();
+		const electronAPI = window.electronAPI;
+
+		if (this.aiOnline) {
+			ToastManager.showInfo(`AI Proxy (:6066) — ${this.aiDetail}`);
+			if (electronAPI?.stopAiServer && this.aiManaged) {
+				if (confirm(`AI Proxy is running (${this.aiDetail}). Stop Electron-managed daemon?`)) {
+					await electronAPI.stopAiServer();
+					ToastManager.showInfo("Stopped AI Proxy (:6066).");
+					await this.refreshServerStatuses();
+				}
+			}
+		} else {
+			ToastManager.showInfo(`AI Proxy Offline (${this.aiDetail})`);
+			if (electronAPI?.startAiServer) {
+				if (confirm("AI Proxy (:6066) is offline. Start it now via Electron System Tray daemon?")) {
+					const ok = await electronAPI.startAiServer();
+					ToastManager.showInfo(
+						ok
+							? "AI Proxy (:6066) starting at BelowNormal priority..."
+							: "Failed to start AI Proxy.",
+					);
+					window.setTimeout(() => void this.refreshServerStatuses(), 800);
+				}
+			} else {
+				alert(
+					"AI Proxy (:6066) is offline.\n\nStart locally via:\n  start.bat --ai-proxy\nor:\n  .\\scripts\\local-ops.ps1 -Action start -Target ai\nor launch the Electron desktop shell for System Tray controls.",
+				);
+			}
+		}
+	}
+
+	// ============================================================
+	// Input Handling (Grid Nav + Smooth Scroll + Section Shortcuts)
+	// ============================================================
+
+	private handleInput(dt: number): void {
 		if (InputManager.isKeyPressed(Key.V)) {
 			this.visualizer?.toggleMode();
 			this.playMoveSound();
 		}
 
-		// Tab switching via Q / E keys
+		// Direct section quick-jump keys (1–5) & Q/E section stepping
+		if (InputManager.isKeyPressed(Key.Num1)) this.scrollToSection("core");
+		if (InputManager.isKeyPressed(Key.Num2)) this.scrollToSection("combat");
+		if (InputManager.isKeyPressed(Key.Num3)) this.scrollToSection("editors");
+		if (InputManager.isKeyPressed(Key.Num4)) this.scrollToSection("community");
+		if (InputManager.isKeyPressed(Key.Num5)) this.scrollToSection("system");
+
 		if (InputManager.isKeyPressed(Key.Q)) {
-			this.cycleCategory(-1);
+			this.stepSectionScroll(-1);
 		} else if (InputManager.isKeyPressed(Key.E)) {
-			this.cycleCategory(1);
+			this.stepSectionScroll(1);
+		}
+
+		if (InputManager.isKeyPressed(Key.PageDown)) {
+			this.setTargetScroll(this.targetScrollY + this.viewportHeight * 0.8);
+		} else if (InputManager.isKeyPressed(Key.PageUp)) {
+			this.setTargetScroll(this.targetScrollY - this.viewportHeight * 0.8);
+		} else if (InputManager.isKeyPressed(Key.Home)) {
+			this.setTargetScroll(0);
+		} else if (InputManager.isKeyPressed(Key.End)) {
+			this.setTargetScroll(this.maxScrollY);
 		}
 
 		if (InputManager.isUpPressed()) {
-			this.moveSelection(-2);
+			this.moveSelection(-this.gridCols);
 		} else if (InputManager.isDownPressed()) {
-			this.moveSelection(2);
-		}
-
-		if (InputManager.isLeftPressed()) {
+			this.moveSelection(this.gridCols);
+		} else if (InputManager.isLeftPressed()) {
 			this.moveSelection(-1);
 		} else if (InputManager.isRightPressed()) {
 			this.moveSelection(1);
@@ -804,33 +1543,55 @@ export class MainMenuScene extends Scene {
 		if (InputManager.isActionPressed() || InputManager.isStartPressed()) {
 			this.selectCurrentItem();
 		}
+
+		// Smooth exponential scroll interpolation
+		if (Math.abs(this.targetScrollY - this.scrollY) > 0.4) {
+			const alpha = Math.min(1, dt * 14);
+			this.scrollY += (this.targetScrollY - this.scrollY) * alpha;
+			this.scrollContent.y = -this.scrollY;
+			this.redrawScrollThumb();
+			this.updateActiveAnchorVisuals();
+		} else if (this.scrollY !== this.targetScrollY) {
+			this.scrollY = this.targetScrollY;
+			this.scrollContent.y = -this.scrollY;
+			this.redrawScrollThumb();
+			this.updateActiveAnchorVisuals();
+		}
 	}
 
-	private cycleCategory(delta: number): void {
-		const order: DashboardCategory[] = ["play", "editors", "community", "system"];
-		const currentIndex = order.indexOf(this.activeCategory);
-		const newIndex = (currentIndex + delta + order.length) % order.length;
-		this.selectDashboardCategory(order[newIndex]);
+	private stepSectionScroll(delta: number): void {
+		let currentIdx = 0;
+		for (let i = 0; i < this.sections.length; i++) {
+			if (this.targetScrollY + 40 >= this.sectionOffsets[this.sections[i].key]) {
+				currentIdx = i;
+			}
+		}
+		const nextIdx =
+			(currentIdx + delta + this.sections.length) % this.sections.length;
+		this.scrollToSection(this.sections[nextIdx].key);
 		this.playMoveSound();
 	}
 
 	private moveSelection(delta: number): void {
-		if (this.currentMenuItems.length === 0) return;
-		const prevIndex = this.selectedIndex;
-		this.selectedIndex =
-			(this.selectedIndex + delta + this.currentMenuItems.length) %
-			this.currentMenuItems.length;
-
-		if (prevIndex !== this.selectedIndex) {
+		if (this.cards.length === 0) return;
+		const next = Math.max(
+			0,
+			Math.min(this.cards.length - 1, this.selectedIndex + delta),
+		);
+		if (next !== this.selectedIndex) {
+			this.selectedIndex = next;
 			this.playMoveSound();
-			this.updateSelection();
+			this.updateSelectionVisuals();
+			this.ensureSelectedCardVisible();
 		}
 	}
 
 	private selectCurrentItem(): void {
-		if (this.currentMenuItems.length === 0) return;
+		const card = this.cards[this.selectedIndex];
+		if (!card) return;
+		this.tooltip.hide();
 		this.playSelectSound();
-		this.currentMenuItems[this.selectedIndex].action();
+		void card.item.action();
 	}
 
 	private scheduleScenePrefetch(): void {
@@ -839,6 +1600,7 @@ export class MainMenuScene extends Scene {
 			void import("./WorldScene");
 			void import("./LobbyScene");
 			void import("./EngineScene");
+			void import("./SettingsScene");
 		};
 
 		const idleCallback =
@@ -856,338 +1618,337 @@ export class MainMenuScene extends Scene {
 	}
 
 	private prefetchSelectionNeighborhood(): void {
-		if (this.currentMenuItems.length === 0) return;
-		const targets = [
+		if (this.cards.length === 0) return;
+		const indices = [
 			this.selectedIndex,
-			(this.selectedIndex + 1) % this.currentMenuItems.length,
-			(this.selectedIndex - 1 + this.currentMenuItems.length) %
-				this.currentMenuItems.length,
+			Math.min(this.cards.length - 1, this.selectedIndex + 1),
+			Math.max(0, this.selectedIndex - 1),
 		];
-
-		for (const index of targets) {
-			this.currentMenuItems[index].prefetch?.();
+		for (const idx of indices) {
+			this.cards[idx]?.item.prefetch?.();
 		}
 	}
 
 	// ============================================================
-	// Actions
+	// Scene Launchers
 	// ============================================================
+
+	private startGame(gameType: GameType): void {
+		const gameMode = this.gameModes[this.selectedCategoryIndex];
+		if (this.menuConfig.onStartGame) {
+			this.menuConfig.onStartGame(gameType, gameMode);
+			return;
+		}
+		const puzzleConfig: PuzzleSceneConfig = {
+			name: "puzzle",
+			app: this.app,
+			camera: this.camera ?? undefined,
+			gameType,
+			gameMode,
+			startLevel: 1,
+		};
+		SceneTransition.pushWithFade(this.app, new PuzzleScene(puzzleConfig));
+	}
 
 	private startCustomGame(): void {
 		const data = localStorage.getItem("custom-game-type");
-		let gameType = GameTypes.CLASSIC; // Fallback
+		let gameType = GameTypes.CLASSIC;
 		if (data) {
 			try {
 				gameType = GameType.fromJSON(data);
 			} catch (e) {
 				console.error("Failed to load custom game type", e);
 			}
-		} else {
-			console.warn("No custom game saved, falling back to Classic.");
 		}
-
-		const gameMode = this.gameModes[this.selectedCategoryIndex];
 		const puzzleConfig: PuzzleSceneConfig = {
 			name: "puzzle",
 			app: this.app,
 			camera: this.camera ?? undefined,
 			gameType,
-			gameMode,
+			gameMode: this.gameModes[this.selectedCategoryIndex],
 			startLevel: 1,
 		};
+		SceneTransition.pushWithFade(this.app, new PuzzleScene(puzzleConfig));
+	}
 
-		const puzzleScene = new PuzzleScene(puzzleConfig);
-		SceneTransition.pushWithFade(this.app, puzzleScene);
+	private findLatestReplayKey(): string | null {
+		let lastKey: string | null = null;
+		let lastTime = 0;
+		for (let i = 0; i < localStorage.length; i++) {
+			const key = localStorage.key(i);
+			if (key?.startsWith("replay_")) {
+				const time = parseInt(key.split("_")[1] || "0", 10);
+				if (time > lastTime) {
+					lastTime = time;
+					lastKey = key;
+				}
+			}
+		}
+		return lastKey;
 	}
 
 	private playLastReplay(): void {
-		let lastKey = null;
-		let lastTime = 0;
-		for (let i = 0; i < localStorage.length; i++) {
-			const key = localStorage.key(i);
-			if (key && key.startsWith("replay_")) {
-				const time = parseInt(key.split("_")[1]);
-				if (time > lastTime) {
-					lastTime = time;
-					lastKey = key;
-				}
-			}
-		}
-
+		const lastKey = this.findLatestReplayKey();
 		if (!lastKey) {
-			alert("No replays found!");
+			ToastManager.showInfo("No recorded puzzle replays found yet — play a Puzzle match first!");
 			return;
 		}
-
 		const data = localStorage.getItem(lastKey)!;
-		const puzzleConfig: PuzzleSceneConfig = {
-			name: "puzzle-replay",
-			app: this.app,
-			camera: this.camera ?? undefined,
-			replayData: data,
-		};
-		const puzzleScene = new PuzzleScene(puzzleConfig);
-		SceneTransition.pushWithFade(this.app, puzzleScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new PuzzleScene({
+				name: "puzzle-replay",
+				app: this.app,
+				camera: this.camera ?? undefined,
+				replayData: data,
+			}),
+		);
 	}
 
 	private shareLastReplay(): void {
-		let lastKey = null;
-		let lastTime = 0;
-		for (let i = 0; i < localStorage.length; i++) {
-			const key = localStorage.key(i);
-			if (key && key.startsWith("replay_")) {
-				const time = parseInt(key.split("_")[1]);
-				if (time > lastTime) {
-					lastTime = time;
-					lastKey = key;
-				}
-			}
-		}
-
+		const lastKey = this.findLatestReplayKey();
 		if (!lastKey) {
-			alert("No replays found to share!");
+			ToastManager.showInfo("No recorded puzzle replays found to share yet!");
 			return;
 		}
-
 		const data = localStorage.getItem(lastKey)!;
-		const jsonObj = JSON.parse(data);
-		const b64 = BobNet.toBase64GZippedGSON(jsonObj);
-		const url = window.location.origin + window.location.pathname + "#replay=" + b64;
+		const b64 = BobNet.toBase64GZippedGSON(JSON.parse(data));
+		const url = `${window.location.origin}${window.location.pathname}#replay=${b64}`;
 		navigator.clipboard
 			.writeText(url)
-			.then(() => {
-				alert("Replay link copied to clipboard!");
-			})
-			.catch((err) => {
-				console.error("Failed to copy: ", err);
-				prompt("Copy this link manually:", url);
+			.then(() => ToastManager.showInfo("Compressed replay URL copied to clipboard!"))
+			.catch(() => {
+				prompt("Copy shareable replay URL:", url);
 			});
-	}
-
-	private startGame(gameType: GameType): void {
-		const gameMode = this.gameModes[this.selectedCategoryIndex];
-
-		if (this.menuConfig.onStartGame) {
-			this.menuConfig.onStartGame(gameType, gameMode);
-			return;
-		}
-
-		const puzzleConfig: PuzzleSceneConfig = {
-			name: "puzzle",
-			app: this.app,
-			camera: this.camera ?? undefined,
-			gameType,
-			gameMode,
-			startLevel: 1,
-		};
-
-		const puzzleScene = new PuzzleScene(puzzleConfig);
-		SceneTransition.pushWithFade(this.app, puzzleScene);
-	}
-
-	private async openOptions(): Promise<void> {
-		if (this.menuConfig.onOptions) {
-			this.menuConfig.onOptions();
-			return;
-		}
-		const { OptionsScene } = await import("./OptionsScene");
-		const optionsScene = new OptionsScene({
-			name: "options",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, optionsScene);
 	}
 
 	private async openWebGPUDemo(): Promise<void> {
 		const { WebGPUDemoScene } = await import("./WebGPUDemoScene");
-		const demoScene = new WebGPUDemoScene({
-			name: "webgpu-demo",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, demoScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new WebGPUDemoScene({
+				name: "webgpu-demo",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openLobby(): Promise<void> {
 		const { LobbyScene } = await import("./LobbyScene");
-		const lobbyScene = new LobbyScene({
-			name: "lobby",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, lobbyScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new LobbyScene({
+				name: "lobby",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openLogin(): Promise<void> {
 		const { LoginScene } = await import("./LoginScene");
-		const loginScene = new LoginScene({
-			name: "login",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, loginScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new LoginScene({
+				name: "login",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openEngineDemo(): Promise<void> {
 		const { EngineDemoScene } = await import("./EngineDemoScene");
-		const demoScene = new EngineDemoScene({
-			name: "engine-demo",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, demoScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new EngineDemoScene({
+				name: "engine-demo",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openTournament(): Promise<void> {
 		const { TournamentScene } = await import("./TournamentScene");
-		const tournamentScene = new TournamentScene({
-			name: "tournament",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, tournamentScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new TournamentScene({
+				name: "tournament",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openHelp(): Promise<void> {
 		const { HelpScene } = await import("./HelpScene");
-		const helpScene = new HelpScene({
-			name: "help",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, helpScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new HelpScene({
+				name: "help",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openSpriteEditor(): Promise<void> {
 		const { SpriteEditorScene } = await import("./SpriteEditorScene");
-		const editorScene = new SpriteEditorScene({
-			name: "sprite-editor",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, editorScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new SpriteEditorScene({
+				name: "sprite-editor",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openParty(): Promise<void> {
 		const { PartyScene } = await import("./PartyScene");
-		const partyScene = new PartyScene({
-			name: "party",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, partyScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new PartyScene({
+				name: "party",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openEventEditor(): Promise<void> {
 		const { EventSheetEditorScene } = await import("./EventSheetEditorScene");
-		const editorScene = new EventSheetEditorScene({
-			name: "event-editor",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, editorScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new EventSheetEditorScene({
+				name: "event-editor",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openCrafting(): Promise<void> {
 		const { CraftingScene } = await import("./CraftingScene");
-		const craftingScene = new CraftingScene({
-			name: "crafting",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, craftingScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new CraftingScene({
+				name: "crafting",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openSaveSlots(): Promise<void> {
 		const { SaveSlotScene } = await import("./SaveSlotScene");
-		const saveScene = new SaveSlotScene({
-			name: "save-slots",
-			app: this.app,
-			camera: this.camera ?? undefined,
-			mode: "save",
-		});
-		SceneTransition.pushWithFade(this.app, saveScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new SaveSlotScene({
+				name: "save-slots",
+				app: this.app,
+				camera: this.camera ?? undefined,
+				mode: "save",
+			}),
+		);
 	}
 
 	private async openBestiary(): Promise<void> {
 		const { BestiaryScene } = await import("./BestiaryScene");
-		const scene = new BestiaryScene({
-			name: "bestiary",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new BestiaryScene({
+				name: "bestiary",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openJournal(): Promise<void> {
 		const { JournalScene } = await import("./JournalScene");
-		const scene = new JournalScene({
-			name: "journal",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new JournalScene({
+				name: "journal",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openWorldMap(): Promise<void> {
 		const { WorldMapScene } = await import("./WorldMapScene");
-		const scene = new WorldMapScene({
-			name: "world-map",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new WorldMapScene({
+				name: "world-map",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openFishing(): Promise<void> {
 		const { FishingScene } = await import("./FishingScene");
-		const scene = new FishingScene({
-			name: "fishing",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new FishingScene({
+				name: "fishing",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openArena(): Promise<void> {
 		const { ArenaScene } = await import("./ArenaScene");
-		const scene = new ArenaScene({
-			name: "arena",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new ArenaScene({
+				name: "arena",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openLeaderboard(): Promise<void> {
 		const { LeaderboardScene } = await import("./LeaderboardScene");
-		const scene = new LeaderboardScene({
-			name: "leaderboard",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new LeaderboardScene({
+				name: "leaderboard",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openTutorial(): Promise<void> {
 		const { TutorialScene } = await import("./TutorialScene");
-		const scene = new TutorialScene({
-			name: "tutorial",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new TutorialScene({
+				name: "tutorial",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openBossRush(): Promise<void> {
 		const { BossRushScene } = await import("./BossRushScene");
-		const scene = new BossRushScene({
-			name: "boss-rush",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new BossRushScene({
+				name: "boss-rush",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openEngineGame(): Promise<void> {
@@ -1202,101 +1963,120 @@ export class MainMenuScene extends Scene {
 
 	private async openNDDemo(): Promise<void> {
 		const { NDDemoScene } = await import("./NDDemoScene");
-		const demoScene = new NDDemoScene({
-			name: "nd-demo",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, demoScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new NDDemoScene({
+				name: "nd-demo",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openWorld(): Promise<void> {
 		const { WorldScene } = await import("./WorldScene");
-		const worldScene = new WorldScene({
-			name: "world",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, worldScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new WorldScene({
+				name: "world",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openCustomEditor(): Promise<void> {
 		const { CustomGameEditorScene } = await import("./CustomGameEditorScene");
-		const editorScene = new CustomGameEditorScene({
-			name: "custom-editor",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, editorScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new CustomGameEditorScene({
+				name: "custom-editor",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openWorldEditor(): Promise<void> {
 		const { WorldEditorScene } = await import("./WorldEditorScene");
-		const editorScene = new WorldEditorScene({
-			name: "world-editor",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, editorScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new WorldEditorScene({
+				name: "world-editor",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openRankings(): Promise<void> {
 		const { RankingsScene } = await import("./RankingsScene");
-		const rankingsScene = new RankingsScene({
-			name: "rankings",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, rankingsScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new RankingsScene({
+				name: "rankings",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openSettings(): Promise<void> {
+		if (this.menuConfig.onOptions) {
+			this.menuConfig.onOptions();
+			return;
+		}
 		const { SettingsScene } = await import("./SettingsScene");
-		const settingsScene = new SettingsScene({
-			name: "settings",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, settingsScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new SettingsScene({
+				name: "settings",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openHighScores(): Promise<void> {
 		const { HighScoresScene } = await import("./HighScoresScene");
-		const highScoresScene = new HighScoresScene({
-			name: "high-scores",
-			app: this.app,
-			camera: this.camera ?? undefined,
-			initialMode: this.gameModes[this.selectedCategoryIndex],
-		});
-		SceneTransition.pushWithFade(this.app, highScoresScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new HighScoresScene({
+				name: "high-scores",
+				app: this.app,
+				camera: this.camera ?? undefined,
+				initialMode: this.gameModes[this.selectedCategoryIndex],
+			}),
+		);
 	}
 
 	private async openAchievements(): Promise<void> {
 		const { AchievementsScene } = await import("./AchievementsScene");
-		const achievementsScene = new AchievementsScene({
-			name: "achievements",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, achievementsScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new AchievementsScene({
+				name: "achievements",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openGameSequenceEditor(): Promise<void> {
 		const { GameSequenceEditorScene } = await import(
 			"./GameSequenceEditorScene"
 		);
-		const seqEditorScene = new GameSequenceEditorScene({
-			name: "game-sequence-editor",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, seqEditorScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new GameSequenceEditorScene({
+				name: "game-sequence-editor",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openDemoBattle(): Promise<void> {
-		// BattleScene normally receives live ECS combatants from WorldScene NPC
-		// encounters. For dashboard access we fabricate equivalent components
-		// with the same field shape, so the battle system runs unchanged.
 		const [{ BattleScene }, { CombatComponent }] = await Promise.all([
 			import("./BattleScene"),
 			import("../engine/ecs/components/CombatComponent"),
@@ -1308,80 +2088,90 @@ export class MainMenuScene extends Scene {
 		player.maxHp = 100;
 		player.atk = 14;
 		player.def = 6;
+
 		const enemy = new CombatComponent();
-		// Retuned 2026-11-14 so DEFEAT is reachable: at atk 9 the demo enemy
-		// dealt ~3/hit and died in ~6 hits, so the player could never lose.
-		// Now it deals ~13/hit (player attack deals 10/hit vs 90 HP): winning
-		// needs magic, heals, or crits; defending or idling loses in ~8-17 hits.
 		enemy.level = 5;
 		enemy.hp = 90;
 		enemy.maxHp = 90;
 		enemy.atk = 17;
 		enemy.def = 4;
-		const scene = new BattleScene({
-			name: "battle",
-			app: this.app,
-			camera: this.camera ?? undefined,
-			player,
-			enemy,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+
+		SceneTransition.pushWithFade(
+			this.app,
+			new BattleScene({
+				name: "battle",
+				app: this.app,
+				camera: this.camera ?? undefined,
+				player,
+				enemy,
+			}),
+		);
 	}
 
 	private async openInventory(): Promise<void> {
 		const { InventoryScene } = await import("./InventoryScene");
-		const scene = new InventoryScene({
-			name: "inventory",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new InventoryScene({
+				name: "inventory",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openShop(): Promise<void> {
 		const { ShopScene } = await import("./ShopScene");
-		const scene = new ShopScene({
-			name: "shop",
-			app: this.app,
-			camera: this.camera ?? undefined,
-			gold: 250,
-			inventory: [],
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new ShopScene({
+				name: "shop",
+				app: this.app,
+				camera: this.camera ?? undefined,
+				gold: 250,
+				inventory: [],
+			}),
+		);
 	}
 
 	private async openSkillTree(): Promise<void> {
 		const { SkillTreeScene } = await import("./SkillTreeScene");
-		const scene = new SkillTreeScene({
-			name: "skill-tree",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new SkillTreeScene({
+				name: "skill-tree",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openQuestLog(): Promise<void> {
 		const { QuestLogScene } = await import("./QuestLogScene");
-		const scene = new QuestLogScene({
-			name: "quest-log",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, scene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new QuestLogScene({
+				name: "quest-log",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	private async openVisualizer(): Promise<void> {
 		const { VisualizerScene } = await import("./VisualizerScene");
-		const visualizerScene = new VisualizerScene({
-			name: "visualizer",
-			app: this.app,
-			camera: this.camera ?? undefined,
-		});
-		SceneTransition.pushWithFade(this.app, visualizerScene);
+		SceneTransition.pushWithFade(
+			this.app,
+			new VisualizerScene({
+				name: "visualizer",
+				app: this.app,
+				camera: this.camera ?? undefined,
+			}),
+		);
 	}
 
 	// ============================================================
-	// Audio
+	// Audio, Background, Visualizer & Particles
 	// ============================================================
 
 	private playMenuMusic(): void {
@@ -1402,29 +2192,19 @@ export class MainMenuScene extends Scene {
 		}
 	}
 
-	// ============================================================
-	// Utilities
-	// ============================================================
-
 	private lerpColor(color1: number, color2: number, t: number): number {
 		const r1 = (color1 >> 16) & 0xff;
 		const g1 = (color1 >> 8) & 0xff;
 		const b1 = color1 & 0xff;
-
 		const r2 = (color2 >> 16) & 0xff;
 		const g2 = (color2 >> 8) & 0xff;
 		const b2 = color2 & 0xff;
-
-		const r = Math.round(r1 + (r2 - r1) * t);
-		const g = Math.round(g1 + (g2 - g1) * t);
-		const b = Math.round(b1 + (b2 - b1) * t);
-
-		return (r << 16) | (g << 8) | b;
+		return (
+			(Math.round(r1 + (r2 - r1) * t) << 16) |
+			(Math.round(g1 + (g2 - g1) * t) << 8) |
+			Math.round(b1 + (b2 - b1) * t)
+		);
 	}
-
-	// ============================================================
-	// Background, Visualizer & Particle Rendering
-	// ============================================================
 
 	private createBackground(): void {
 		this.background = new Graphics();
@@ -1434,11 +2214,9 @@ export class MainMenuScene extends Scene {
 
 	private drawBackground(): void {
 		this.background.clear();
-
 		const steps = 20;
 		for (let i = 0; i < steps; i++) {
-			const ratio = i / steps;
-			const color = this.lerpColor(0x0a0a1a, 0x1a1a3a, ratio);
+			const color = this.lerpColor(0x070b16, 0x15223d, i / steps);
 			this.background.rect(
 				0,
 				(this.height / steps) * i,
@@ -1452,115 +2230,46 @@ export class MainMenuScene extends Scene {
 	private createParticles(): void {
 		this.particleContainer = new Container();
 		this.container.addChild(this.particleContainer);
-
-		for (let i = 0; i < 50; i++) {
-			const particle = new Particle(this.width, this.height);
-			this.particleContainer.addChild(particle.graphics);
-			this.particles.push(particle);
-		}
-	}
-
-	private updateParticles(dt: number): void {
-		for (const particle of this.particles) {
-			particle.update(dt, this.height);
+		for (let i = 0; i < 45; i++) {
+			const p = new Particle(this.width, this.height);
+			this.particleContainer.addChild(p.graphics);
+			this.particles.push(p);
 		}
 	}
 
 	private createVisualizer(): void {
-		this.visualizer = new FFTVisualizer(this.width, 100);
-		this.visualizer.container.position.set(0, this.height - 100);
-		this.visualizer.container.alpha = 0.5;
+		this.visualizer = new FFTVisualizer(this.width, 90);
+		this.visualizer.container.position.set(0, this.height - 118);
+		this.visualizer.container.alpha = 0.35;
 		this.container.addChild(this.visualizer.container);
 	}
 
-	private createTitle(): void {
-		const titleStyle = new TextStyle({
-			fontFamily: "Arial Black, Arial, sans-serif",
-			fontSize: 60,
-			fontWeight: "bold",
-			fill: 0xffffff,
-			stroke: { color: 0x003366, width: 6 },
-			dropShadow: {
-				color: 0x000000,
-				blur: 8,
-				angle: Math.PI / 4,
-				distance: 6,
-			},
-			letterSpacing: 4,
-		});
-
-		this.titleText = new Text({ text: "bob's game", style: titleStyle });
-		this.titleText.anchor.set(0.5);
-		this.titleText.x = this.centerX;
-		this.titleText.y = this.height * 0.14;
-		this.container.addChild(this.titleText);
-
-		const subtitleStyle = new TextStyle({
-			fontFamily: "Arial, sans-serif",
-			fontSize: 18,
-			fill: 0x88aacc,
-			letterSpacing: 6,
-		});
-
-		this.subtitleText = new Text({ text: "OMNI-ENGINE DASHBOARD", style: subtitleStyle });
-		this.subtitleText.anchor.set(0.5);
-		this.subtitleText.x = this.centerX;
-		this.subtitleText.y = this.titleText.y + 48;
-		this.container.addChild(this.subtitleText);
-
-		const versionStyle = new TextStyle({
-			fontFamily: "Arial, sans-serif",
-			fontSize: 14,
-			fill: 0x445566,
-			letterSpacing: 1,
-		});
-		this.versionText = new Text({ text: "v" + APP_VERSION, style: versionStyle });
-		this.versionText.anchor.set(1, 1);
-		this.versionText.x = this.width - 10;
-		this.versionText.y = this.height - 10;
-		this.container.addChild(this.versionText);
-	}
-
-	private updateTitleAnimation(dt: number): void {
-		this.titleBounce += dt * 2;
-		this.titleText.y = this.height * 0.14 + Math.sin(this.titleBounce) * 4;
-		this.titleText.scale.set(1 + Math.sin(this.titleBounce * 0.5) * 0.015);
-	}
-
 	public onUpdate(dt: number): void {
-		this.updateParticles(dt);
+		for (const p of this.particles) {
+			p.update(dt, this.height);
+		}
 		this.visualizer?.update();
-		this.updateTitleAnimation(dt);
-		this.handleInput();
+		this.titleBounce += dt * 2;
+		if (this.titleText) {
+			this.titleText.scale.set(1 + Math.sin(this.titleBounce * 0.6) * 0.012);
+		}
+		this.handleInput(dt);
 	}
 
 	public onResize(width: number, height: number): void {
+		super.onResize(width, height);
 		this.drawBackground();
-		this.visualizer?.resize(width, 100);
-		this.visualizer.container.y = height - 100;
+		this.visualizer?.resize(width, 90);
+		if (this.visualizer) {
+			this.visualizer.container.y = height - 118;
+		}
 		this.tooltip?.resize(width, height);
-
-		this.titleText.x = this.centerX;
-		this.titleText.y = height * 0.14;
-		this.subtitleText.x = this.centerX;
-		this.subtitleText.y = this.titleText.y + 48;
-		this.versionText.x = width - 10;
-		this.versionText.y = height - 10;
-
-		this.createCategorySelector();
-		this.createGameModeSelector();
-		this.rebuildCategoryMenu(this.activeCategory);
-	}
-
-	public async onExit(): Promise<void> {
-		this.particles = [];
-		this.tooltip?.destroy();
-		await super.onExit();
+		this.buildLayout();
 	}
 }
 
 // ============================================================
-// Particle Effect
+// Ambient Background Particle
 // ============================================================
 
 class Particle {
@@ -1576,32 +2285,22 @@ class Particle {
 		this.screenWidth = screenWidth;
 		this.x = Math.random() * screenWidth;
 		this.y = Math.random() * screenHeight;
-		this.speed = 20 + Math.random() * 40;
-		this.size = 2 + Math.random() * 4;
-		this.alpha = 0.2 + Math.random() * 0.4;
-
+		this.speed = 18 + Math.random() * 36;
+		this.size = 1.8 + Math.random() * 3.5;
+		this.alpha = 0.15 + Math.random() * 0.32;
 		this.graphics = new Graphics();
-		this.draw();
-	}
-
-	private draw(): void {
-		this.graphics.clear();
 		this.graphics.circle(0, 0, this.size);
 		this.graphics.fill({ color: 0x4a8aff, alpha: this.alpha });
-		this.graphics.x = this.x;
-		this.graphics.y = this.y;
+		this.graphics.position.set(this.x, this.y);
 	}
 
 	public update(dt: number, screenHeight: number): void {
 		this.y -= this.speed * dt;
-
 		if (this.y < -this.size) {
 			this.y = screenHeight + this.size;
 			this.x = Math.random() * this.screenWidth;
 		}
-
-		this.graphics.y = this.y;
-		this.graphics.x = this.x;
-		this.x += Math.sin(this.y * 0.01) * 0.5;
+		this.x += Math.sin(this.y * 0.01) * 0.4;
+		this.graphics.position.set(this.x, this.y);
 	}
 }

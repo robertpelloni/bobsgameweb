@@ -33,7 +33,7 @@ function resolveAiProxyVersion() {
             // Ignore read errors and fall through
         }
     }
-    return '3.0.34';
+    return '3.0.35';
 }
 
 const app = express();
@@ -41,7 +41,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = Number(process.env.AI_PROXY_PORT || 8080);
+const HOST = process.env.HOST || '0.0.0.0';
+// Default to port 6066 (adjacent to the 6065 WS game server) so the AI Proxy
+// never collides with common host services bound to 127.0.0.1:8080.
+const PORT = Number(process.env.AI_PROXY_PORT || 6066);
 const AI_PROXY_VERSION = resolveAiProxyVersion();
 
 // Initialize OpenAI. It expects process.env.OPENAI_API_KEY to be set.
@@ -241,6 +244,6 @@ app.get('/api/status', (req, res) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`[AI Proxy] Server running on http://localhost:${PORT}`);
+app.listen(PORT, HOST, () => {
+    console.log(`[AI Proxy] Server running on http://${HOST}:${PORT} (v${AI_PROXY_VERSION})`);
 });

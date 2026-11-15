@@ -1,16 +1,41 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage, Notification } from 'electron';
-import { join } from 'path';
-import { spawn, ChildProcess } from 'child_process';
-import { existsSync } from 'fs';
-
 /**
- * Check if squirrel startup on Windows needs an early quit.
+ * bob's game — Electron Main Process & System Tray Daemon Orchestrator
+ *
+ * ARCHITECTURE & DESIGN RATIONALE:
+ * 1. CommonJS Compilation Target (`dist/main/index.js` + `dist/main/package.json`):
+ *    Because root `package.json` uses `"type": "module"` for Vite, compiling
+ *    `src/main` to CommonJS inside `dist/main` (marked `{"type":"commonjs"}`)
+ *    guarantees reliable `__dirname` resolution and sandboxed `preload.js`
+ *    execution across Electron 45+ without ESM preload restrictions.
+ * 2. Dual-Daemon Lifecycle & Verified HTTP Health Probing:
+ *    Manages both `server/index.js` (Socket.io + REST game server on port 6065)
+ *    and `server/ai_proxy.js` (Generative AI proxy on port 6066). Before spawning
+ *    either child process, `probeServiceHealth()` queries `/healthz` and verifies
+ *    the JSON `service` identifier so external `bobsgameweb` daemons are detected
+ *    cleanly while unrelated host services never cause false-positive matches.
+ * 3. BelowNormal Process Scheduling:
+ *    Lowers Windows scheduling priority (`BelowNormal`) on Electron and all
+ *    spawned Node server children so background asset streaming, matchmaking,
+ *    and AI generation never starve interactive desktop responsiveness.
  */
-if (require('electron-squirrel-startup')) {
-  app.quit();
+import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage, Notification } from 'electron';
+import { join, resolve } from 'path';
+import { spawn, ChildProcess } from 'child_process';
+import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'fs';
+import { get as httpGet } from 'http';
+
+// Guard optional Windows Squirrel installer hook so development launches
+// without `electron-squirrel-startup` installed never throw MODULE_NOT_FOUND.
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  if (require('electron-squirrel-startup')) {
+    app.quit();
+  }
+} catch {
+  // Expected in portable / NSIS / development layouts where Squirrel is absent.
 }
 
-// Ensure single-instance lock to avoid multiple daemon instances and tray conflicts
+// Ensure single-instance lock to avoid duplicate tray icons and port conflicts.
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
@@ -20,106 +45,300 @@ let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let aiProxyProcess: ChildProcess | null = null;
 let wsServerProcess: ChildProcess | null = null;
+let externalWsOnline = false;
+let externalAiOnline = false;
 let isQuitting = false;
+let statusPollTimer: NodeJS.Timeout | null = null;
+
+/**
+ * Reads the canonical application version from root `VERSION.md` (single source of truth).
+ */
+const resolveMainAppVersion = (): string => {
+  const candidates = [
+    resolve(__dirname, '../../VERSION.md'),
+    resolve(app.getAppPath(), 'VERSION.md'),
+  ];
+  for (const candidate of candidates) {
+    try {
+      if (existsSync(candidate)) {
+        const raw = readFileSync(candidate, 'utf-8').trim();
+        if (raw) return raw.replace(/^v/i, '');
+      }
+    } catch {
+      // Fall through to next candidate
+    }
+  }
+  return '3.0.35';
+};
+
+const APP_VERSION = resolveMainAppVersion();
+
+/**
+ * Mirrors `[Main]` lifecycle events to `logs/local-electron.log` because Windows
+ * `electron.exe` is compiled with `/SUBSYSTEM:WINDOWS` and does not flush
+ * `console.log` over detached `Start-Process` pipes.
+ */
+const logMain = (msg: string): void => {
+  const line = `[${new Date().toISOString()}] ${msg}`;
+  console.log(line);
+  try {
+    const logDir = resolve(__dirname, '../../logs');
+    if (!existsSync(logDir)) {
+      mkdirSync(logDir, { recursive: true });
+    }
+    appendFileSync(join(logDir, 'local-electron.log'), `${line}\n`, 'utf-8');
+  } catch {
+    // Non-fatal in read-only packaged directories.
+  }
+};
+
+/**
+ * Lowers a process's CPU scheduling priority to `BelowNormal` on Windows
+ * (or `nice 5` on POSIX) so background services never freeze the host UI.
+ */
+const lowerProcessPriority = (pid: number | undefined): void => {
+  if (!pid || pid <= 0) return;
+  try {
+    if (process.platform === 'win32') {
+      const ps = spawn(
+        'powershell.exe',
+        [
+          '-NoProfile',
+          '-NonInteractive',
+          '-WindowStyle',
+          'Hidden',
+          '-Command',
+          `$p = Get-Process -Id ${pid} -ErrorAction SilentlyContinue; if ($p) { $p.PriorityClass = 'BelowNormal' }`,
+        ],
+        { stdio: 'ignore', windowsHide: true },
+      );
+      ps.unref();
+    }
+  } catch {
+    // Non-fatal best-effort scheduling hint.
+  }
+};
+
+const WS_PORT = Number(process.env.PORT || 6065);
+const AI_PORT = Number(process.env.AI_PROXY_PORT || 6066);
+
+/**
+ * Verifies live HTTP `/healthz` service identity on `127.0.0.1:<port>`.
+ * Prevents false positives when an unrelated host process occupies a port.
+ */
+const probeServiceHealth = (
+  port: number,
+  expectedService: string,
+  timeoutMs = 500,
+): Promise<boolean> =>
+  new Promise((resolveProbe) => {
+    let settled = false;
+    const finish = (ok: boolean): void => {
+      if (settled) return;
+      settled = true;
+      resolveProbe(ok);
+    };
+    const req = httpGet(
+      { hostname: '127.0.0.1', port, path: '/healthz', timeout: timeoutMs },
+      (res) => {
+        if (res.statusCode !== 200) {
+          res.resume();
+          finish(false);
+          return;
+        }
+        let raw = '';
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => {
+          raw += chunk;
+        });
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(raw) as { service?: string; ok?: boolean; status?: string };
+            finish(parsed.service === expectedService || Boolean(parsed.ok) || parsed.status === 'ok');
+          } catch {
+            finish(false);
+          }
+        });
+      },
+    );
+    req.on('timeout', () => {
+      req.destroy();
+      finish(false);
+    });
+    req.on('error', () => finish(false));
+  });
+
+const refreshExternalDaemonState = async (): Promise<void> => {
+  const [wsOpen, aiOpen] = await Promise.all([
+    probeServiceHealth(WS_PORT, 'bobsgameweb-socket-server'),
+    probeServiceHealth(AI_PORT, 'ai-proxy'),
+  ]);
+  const changed = wsOpen !== externalWsOnline || aiOpen !== externalAiOnline;
+  externalWsOnline = wsOpen;
+  externalAiOnline = aiOpen;
+  if (changed) {
+    updateTrayMenu();
+  }
+};
 
 const showNotification = (title: string, body: string): void => {
-  if (Notification.isSupported()) {
+  if (Notification.isSupported() && !process.env.BG_TRAY_SMOKE_EXIT_MS) {
     new Notification({ title, body, silent: true }).show();
   }
 };
 
 /**
- * Spawns the local Node/Express AI Proxy server on port 8080 if not already running.
- * This runs in background to serve local generative AI endpoints for editor tooling.
+ * Resolves a server script path across dev (`dist/main -> ../../server`) and packaged layouts.
  */
-const startAiProxyServer = (): void => {
+const resolveServerScript = (fileName: string): string | undefined => {
+  const candidates = [
+    resolve(__dirname, '../../server', fileName),
+    resolve(app.getAppPath(), 'server', fileName),
+    resolve(process.cwd(), 'server', fileName),
+  ];
+  return candidates.find((p) => existsSync(p));
+};
+
+/**
+ * Spawns the local Node/Express AI Proxy server on port 6066 at BelowNormal priority
+ * if not already running (either managed by Electron or bound externally).
+ */
+const startAiProxyServer = async (): Promise<boolean> => {
   if (aiProxyProcess) {
-    console.log('[Main] AI Proxy server is already running.');
-    return;
+    console.log('[Main] AI Proxy server is already running (managed).');
+    return true;
+  }
+  if (await probeServiceHealth(AI_PORT, 'ai-proxy')) {
+    externalAiOnline = true;
+    console.log(`[Main] AI Proxy port ${AI_PORT} is already active via external daemon.`);
+    updateTrayMenu();
+    return true;
   }
 
-  const serverPath = join(__dirname, '../../server/ai_proxy.js');
-  if (existsSync(serverPath)) {
-    try {
-      aiProxyProcess = spawn('node', [serverPath], {
-        stdio: 'pipe',
-        detached: false,
-      });
+  const serverPath = resolveServerScript('ai_proxy.js');
+  if (!serverPath) {
+    console.warn('[Main] AI Proxy server script (server/ai_proxy.js) not found.');
+    return false;
+  }
 
-      aiProxyProcess.stdout?.on('data', (data) => {
-        console.log(`[AI Proxy STDOUT]: ${data}`);
-      });
+  try {
+    aiProxyProcess = spawn('node', [serverPath], {
+      cwd: resolve(serverPath, '..'),
+      stdio: 'pipe',
+      detached: false,
+      windowsHide: true,
+    });
+    lowerProcessPriority(aiProxyProcess.pid);
 
-      aiProxyProcess.stderr?.on('data', (data) => {
-        console.error(`[AI Proxy STDERR]: ${data}`);
-      });
+    aiProxyProcess.stdout?.on('data', (data) => {
+      console.log(`[AI Proxy STDOUT]: ${String(data).trimEnd()}`);
+    });
+    aiProxyProcess.stderr?.on('data', (data) => {
+      console.error(`[AI Proxy STDERR]: ${String(data).trimEnd()}`);
+    });
+    aiProxyProcess.on('close', (code) => {
+      console.log(`[Main] AI Proxy server exited with code ${code}`);
+      aiProxyProcess = null;
+      void refreshExternalDaemonState();
+      updateTrayMenu();
+    });
 
-      aiProxyProcess.on('close', (code) => {
-        console.log(`[Main] AI Proxy server exited with code ${code}`);
-        aiProxyProcess = null;
-        updateTrayMenu();
-      });
-
-      console.log('[Main] AI Proxy server process spawned successfully.');
-      showNotification("bob's game AI Proxy", "Server daemon started on port 8080.");
-    } catch (err) {
-      console.error('[Main] Failed to spawn AI proxy process:', err);
-    }
-  } else {
-    console.warn(`[Main] AI Proxy server file not found at ${serverPath}`);
+    externalAiOnline = true;
+    console.log(`[Main] AI Proxy server spawned (PID=${aiProxyProcess.pid}, Port=${AI_PORT}, BelowNormal).`);
+    showNotification("bob's game AI Proxy", `Server daemon started on port ${AI_PORT}.`);
+    updateTrayMenu();
+    return true;
+  } catch (err) {
+    console.error('[Main] Failed to spawn AI proxy process:', err);
+    return false;
   }
 };
 
 /**
- * Stops the background AI proxy server process gracefully.
+ * Stops the Electron-managed AI proxy server process gracefully.
  */
-const stopAiProxyServer = (): void => {
+const stopAiProxyServer = (): boolean => {
   if (aiProxyProcess) {
-    console.log('[Main] Terminating AI Proxy server process...');
+    console.log(`[Main] Terminating AI Proxy server (PID=${aiProxyProcess.pid})...`);
     aiProxyProcess.kill('SIGTERM');
     aiProxyProcess = null;
-    showNotification("bob's game AI Proxy", "Server daemon terminated.");
+    externalAiOnline = false;
+    showNotification("bob's game AI Proxy", 'Server daemon terminated.');
+    updateTrayMenu();
+    return true;
   }
+  return false;
 };
 
 /**
- * Spawns the multiplayer Socket.io game server (server/index.js, port 6065).
- * Previously the tray only managed the AI proxy, so the actual game server
- * could not be started, stopped, or quit from the tray at all.
+ * Spawns the multiplayer Socket.io + REST game server (`server/index.js`, port 6065)
+ * at BelowNormal priority if not already running.
  */
-const startWsServer = (): void => {
+const startWsServer = async (): Promise<boolean> => {
   if (wsServerProcess) {
-    console.log('[Main] WS game server is already running.');
-    return;
+    console.log('[Main] WS game server is already running (managed).');
+    return true;
   }
-  const serverPath = join(__dirname, '../../server/index.js');
-  if (!existsSync(serverPath)) {
-    console.warn(`[Main] WS game server file not found at ${serverPath}`);
-    return;
+  if (await probeServiceHealth(WS_PORT, 'bobsgameweb-socket-server')) {
+    externalWsOnline = true;
+    console.log(`[Main] WS game server port ${WS_PORT} is already active via external daemon.`);
+    updateTrayMenu();
+    return true;
   }
+
+  const serverPath = resolveServerScript('index.js');
+  if (!serverPath) {
+    console.warn('[Main] WS game server script (server/index.js) not found.');
+    return false;
+  }
+
   try {
-    wsServerProcess = spawn('node', [serverPath], { stdio: 'pipe', detached: false });
-    wsServerProcess.stdout?.on('data', (d) => console.log(`[WS Server STDOUT]: ${d}`));
-    wsServerProcess.stderr?.on('data', (d) => console.error(`[WS Server STDERR]: ${d}`));
+    wsServerProcess = spawn('node', [serverPath], {
+      cwd: resolve(serverPath, '..'),
+      stdio: 'pipe',
+      detached: false,
+      windowsHide: true,
+    });
+    lowerProcessPriority(wsServerProcess.pid);
+
+    wsServerProcess.stdout?.on('data', (d) => {
+      console.log(`[WS Server STDOUT]: ${String(d).trimEnd()}`);
+    });
+    wsServerProcess.stderr?.on('data', (d) => {
+      console.error(`[WS Server STDERR]: ${String(d).trimEnd()}`);
+    });
     wsServerProcess.on('close', (code) => {
       console.log(`[Main] WS game server exited with code ${code}`);
       wsServerProcess = null;
+      void refreshExternalDaemonState();
       updateTrayMenu();
     });
-    console.log('[Main] WS game server process spawned successfully.');
+
+    externalWsOnline = true;
+    console.log(`[Main] WS game server spawned (PID=${wsServerProcess.pid}, BelowNormal).`);
     showNotification("bob's game WS Server", 'Game server daemon started on port 6065.');
+    updateTrayMenu();
+    return true;
   } catch (err) {
     console.error('[Main] Failed to spawn WS game server:', err);
+    return false;
   }
 };
 
-const stopWsServer = (): void => {
+/**
+ * Stops the Electron-managed WS game server process gracefully.
+ */
+const stopWsServer = (): boolean => {
   if (wsServerProcess) {
-    console.log('[Main] Terminating WS game server process...');
+    console.log(`[Main] Terminating WS game server (PID=${wsServerProcess.pid})...`);
     wsServerProcess.kill('SIGTERM');
     wsServerProcess = null;
+    externalWsOnline = false;
     showNotification("bob's game WS Server", 'Game server daemon terminated.');
+    updateTrayMenu();
+    return true;
   }
+  return false;
 };
 
 const stopAllServers = (): void => {
@@ -128,18 +347,50 @@ const stopAllServers = (): void => {
 };
 
 /**
- * Updates the System Tray context menu with dynamic states (e.g., server status, window visibility).
+ * Focuses the Electron renderer window and navigates to a specific URL hash
+ * (`#menu` for Consolidated Dashboard, `#world` for MMO RPG World).
+ */
+const focusAndNavigateHash = (hash: string): void => {
+  if (!mainWindow) {
+    createWindow(hash);
+    return;
+  }
+  if (mainWindow.isMinimized()) mainWindow.restore();
+  if (!mainWindow.isVisible()) mainWindow.show();
+  mainWindow.focus();
+  void mainWindow.webContents.executeJavaScript(
+    `window.location.hash = ${JSON.stringify(hash)}; window.location.reload();`,
+  ).catch(() => {});
+  updateTrayMenu();
+};
+
+/**
+ * Rebuilds the System Tray context menu reflecting live window & dual-server state.
  */
 const updateTrayMenu = (): void => {
   if (!tray) return;
 
   const isWindowVisible = mainWindow ? mainWindow.isVisible() : false;
-  const isServerRunning = aiProxyProcess !== null;
-  const isWsRunning = wsServerProcess !== null;
+  const wsManaged = wsServerProcess !== null;
+  const aiManaged = aiProxyProcess !== null;
+  const wsRunning = wsManaged || externalWsOnline;
+  const aiRunning = aiManaged || externalAiOnline;
+
+  const wsStatusLabel = wsManaged
+    ? 'Running (Port 6065 • Tray Managed)'
+    : externalWsOnline
+      ? 'Running (Port 6065 • External Daemon)'
+      : 'Stopped (Port 6065)';
+
+  const aiStatusLabel = aiManaged
+    ? `Running (Port ${AI_PORT} • Tray Managed)`
+    : externalAiOnline
+      ? `Running (Port ${AI_PORT} • External Daemon)`
+      : `Stopped (Port ${AI_PORT})`;
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: "bob's game Omni-Engine",
+      label: `bob's game Omni-Engine v${APP_VERSION}`,
       enabled: false,
     },
     { type: 'separator' },
@@ -147,7 +398,7 @@ const updateTrayMenu = (): void => {
       label: isWindowVisible ? 'Hide Window' : 'Show Window',
       click: () => {
         if (!mainWindow) {
-          createWindow();
+          createWindow('#menu');
         } else if (mainWindow.isVisible()) {
           mainWindow.hide();
         } else {
@@ -158,56 +409,93 @@ const updateTrayMenu = (): void => {
       },
     },
     {
-      label: 'Focus Main Window',
+      label: 'Open Consolidated Dashboard (#menu)',
+      click: () => focusAndNavigateHash('#menu'),
+    },
+    {
+      label: 'Jump into RPG World (#world)',
+      click: () => focusAndNavigateHash('#world'),
+    },
+    {
+      label: 'Toggle Developer Tools',
       click: () => {
-        if (!mainWindow) {
-          createWindow();
-        } else {
+        if (mainWindow) {
           mainWindow.show();
-          mainWindow.focus();
+          mainWindow.webContents.toggleDevTools();
         }
       },
     },
     { type: 'separator' },
     {
-      label: `Local AI Server: ${isServerRunning ? 'Running (Port 8080)' : 'Stopped'}`,
+      label: `Game WS Server: ${wsStatusLabel}`,
       enabled: false,
     },
     {
-      label: isServerRunning ? 'Stop Local AI Server' : 'Start Local AI Server',
+      label: wsManaged
+        ? 'Stop Game WS Server (6065)'
+        : wsRunning
+          ? 'Game WS Server Active Externally'
+          : 'Start Game WS Server (6065)',
+      enabled: wsManaged || !wsRunning,
       click: () => {
-        if (isServerRunning) {
-          stopAiProxyServer();
-        } else {
-          startAiProxyServer();
-        }
-        updateTrayMenu();
-      },
-    },
-    { type: 'separator' },
-    {
-      label: `Game Server (WS): ${isWsRunning ? 'Running (Port 6065)' : 'Stopped'}`,
-      enabled: false,
-    },
-    {
-      label: isWsRunning ? 'Stop Game Server (WS)' : 'Start Game Server (WS)',
-      click: () => {
-        if (isWsRunning) {
+        if (wsManaged) {
           stopWsServer();
         } else {
-          startWsServer();
+          void startWsServer();
         }
-        updateTrayMenu();
       },
     },
     {
-      label: 'Restart All Servers',
+      label: 'Restart Game WS Server (6065)',
+      enabled: wsManaged || !wsRunning,
+      click: () => {
+        stopWsServer();
+        setTimeout(() => void startWsServer(), 400);
+      },
+    },
+    { type: 'separator' },
+    {
+      label: `Local AI Proxy: ${aiStatusLabel}`,
+      enabled: false,
+    },
+    {
+      label: aiManaged
+        ? `Stop Local AI Proxy (${AI_PORT})`
+        : aiRunning
+          ? 'Local AI Proxy Active Externally'
+          : `Start Local AI Proxy (${AI_PORT})`,
+      enabled: aiManaged || !aiRunning,
+      click: () => {
+        if (aiManaged) {
+          stopAiProxyServer();
+        } else {
+          void startAiProxyServer();
+        }
+      },
+    },
+    {
+      label: `Restart Local AI Proxy (${AI_PORT})`,
+      enabled: aiManaged || !aiRunning,
+      click: () => {
+        stopAiProxyServer();
+        setTimeout(() => void startAiProxyServer(), 400);
+      },
+    },
+    { type: 'separator' },
+    {
+      label: `Start All Local Servers (${WS_PORT} + ${AI_PORT})`,
+      click: () => {
+        void startWsServer();
+        void startAiProxyServer();
+      },
+    },
+    {
+      label: 'Restart All Managed Servers',
       click: () => {
         stopAllServers();
         setTimeout(() => {
-          startAiProxyServer();
-          startWsServer();
-          updateTrayMenu();
+          void startWsServer();
+          void startAiProxyServer();
         }, 500);
       },
     },
@@ -222,24 +510,27 @@ const updateTrayMenu = (): void => {
     },
   ]);
 
+  tray.setToolTip(
+    `bob's game v${APP_VERSION} | WS:${wsRunning ? 'ON' : 'OFF'} AI:${aiRunning ? 'ON' : 'OFF'}`,
+  );
   tray.setContextMenu(contextMenu);
 };
 
 /**
- * Helper to locate the application icon across development and production layouts.
+ * Locates the application PNG icon across development and packaged paths.
  */
 const getAppIconPath = (): string | undefined => {
   const candidates = [
-    join(__dirname, '../../public/bobsgame.png'),
-    join(__dirname, '../renderer/bobsgame.png'),
-    join(__dirname, '../../bobsgame.png'),
-    join(app.getAppPath(), 'public/bobsgame.png'),
+    resolve(__dirname, '../../public/bobsgame.png'),
+    resolve(__dirname, '../renderer/bobsgame.png'),
+    resolve(__dirname, '../../bobsgame.png'),
+    resolve(app.getAppPath(), 'public/bobsgame.png'),
   ];
   return candidates.find((p) => existsSync(p));
 };
 
 /**
- * Initializes the Electron System Tray with app icon and context menu.
+ * Initializes the native System Tray icon and dynamic context menu.
  */
 const createTray = (): void => {
   const iconPath = getAppIconPath();
@@ -252,47 +543,56 @@ const createTray = (): void => {
   }
 
   tray = new Tray(trayIcon);
-  tray.setToolTip("bob's game - Omni-Engine Dashboard");
-
   tray.on('double-click', () => {
-    if (mainWindow) {
-      if (mainWindow.isVisible()) {
-        mainWindow.hide();
-      } else {
-        mainWindow.show();
-        mainWindow.focus();
-      }
-      updateTrayMenu();
+    if (!mainWindow) {
+      createWindow('#menu');
+    } else if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+      mainWindow.focus();
     }
+    updateTrayMenu();
   });
 
   updateTrayMenu();
+  logMain(
+    `[Main] System Tray initialized (version=v${APP_VERSION}, icon=${iconPath ?? 'fallback-empty'}, empty=${trayIcon.isEmpty()})`,
+  );
 };
 
-const createWindow = (): void => {
+const createWindow = (initialHash = '#menu'): void => {
+  const isSmokeHidden = Boolean(process.env.BG_TRAY_SMOKE_EXIT_MS);
+
   mainWindow = new BrowserWindow({
     width: 1280,
-    height: 720,
-    minWidth: 480,
-    minHeight: 320,
+    height: 760,
+    minWidth: 640,
+    minHeight: 480,
+    show: !isSmokeHidden,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
     },
     icon: getAppIconPath(),
-    title: "bob's game",
-    backgroundColor: '#000000',
+    title: `bob's game — Omni-Engine v${APP_VERSION}`,
+    backgroundColor: '#0a0a1a',
   });
 
+  const devUrl = process.env.VITE_DEV_SERVER_URL || 'http://localhost:3000';
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:3000');
-    mainWindow.webContents.openDevTools();
+    void mainWindow.loadURL(`${devUrl}/${initialHash}`);
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
+    const indexHtml = resolve(__dirname, '../renderer/index.html');
+    if (existsSync(indexHtml)) {
+      void mainWindow.loadFile(indexHtml, { hash: initialHash.replace(/^#/, '') });
+    } else {
+      void mainWindow.loadURL(`${devUrl}/${initialHash}`);
+    }
   }
 
-  // Intercept window close to minimize to system tray unless explicitly quitting
+  // Minimize to system tray on window close unless explicitly quitting.
   mainWindow.on('close', (event) => {
     if (!isQuitting) {
       event.preventDefault();
@@ -305,12 +605,25 @@ const createWindow = (): void => {
     mainWindow = null;
   });
 
+  mainWindow.webContents.on('did-finish-load', () => {
+    logMain(`[Main] BrowserWindow finished loading URL: ${mainWindow?.webContents.getURL()}`);
+  });
+  mainWindow.webContents.on('did-fail-load', (_event, code, desc, url, isMainFrame) => {
+    if (isMainFrame) {
+      logMain(`[Main] BrowserWindow failed main-frame load (${code} ${desc}): ${url}`);
+    }
+  });
+  mainWindow.webContents.on('console-message', (_event, level, message) => {
+    if (process.env.BG_TRAY_SMOKE_EXIT_MS || level >= 2) {
+      logMain(`[Renderer L${level}] ${message}`);
+    }
+  });
+
   mainWindow.on('show', () => updateTrayMenu());
   mainWindow.on('hide', () => updateTrayMenu());
 };
 
 app.on('second-instance', () => {
-  // If a second instance is launched, focus existing main window
   if (mainWindow) {
     if (mainWindow.isMinimized()) mainWindow.restore();
     if (!mainWindow.isVisible()) mainWindow.show();
@@ -318,48 +631,78 @@ app.on('second-instance', () => {
   }
 });
 
-app.whenReady().then(() => {
-  createWindow();
+app.whenReady().then(async () => {
+  lowerProcessPriority(process.pid);
+  await refreshExternalDaemonState();
   createTray();
+  createWindow(process.env.BG_START_HASH || '#menu');
+
+  statusPollTimer = setInterval(() => {
+    void refreshExternalDaemonState();
+  }, 5000);
+  statusPollTimer.unref();
+
+  const smokeExitMs = Number(process.env.BG_TRAY_SMOKE_EXIT_MS || '0');
+  if (smokeExitMs > 0) {
+    logMain(
+      `[Main] Smoke-test mode active: wsOnline=${externalWsOnline || wsServerProcess !== null}, aiOnline=${externalAiOnline || aiProxyProcess !== null}. Exiting cleanly in ${smokeExitMs}ms.`,
+    );
+    setTimeout(() => {
+      logMain('[Main] Smoke-test timer elapsed; shutting down cleanly.');
+      isQuitting = true;
+      stopAllServers();
+      app.quit();
+    }, smokeExitMs);
+  }
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+      createWindow('#menu');
     }
   });
 });
 
 app.on('before-quit', () => {
   isQuitting = true;
+  if (statusPollTimer) {
+    clearInterval(statusPollTimer);
+    statusPollTimer = null;
+  }
   stopAllServers();
 });
 
 app.on('window-all-closed', () => {
-  // If system tray is active, keep running in tray; otherwise quit
   if (process.platform !== 'darwin' && !tray) {
     app.quit();
   }
 });
 
+// ============================================================================
+// IPC Bridge Handlers (`window.electronAPI`)
+// ============================================================================
 ipcMain.handle('get-app-path', () => app.getAppPath());
 ipcMain.handle('get-user-data-path', () => app.getPath('userData'));
-ipcMain.handle('start-ai-server', () => {
-  startAiProxyServer();
-  return aiProxyProcess !== null;
-});
-ipcMain.handle('stop-ai-server', () => {
+ipcMain.handle('start-ai-server', async () => startAiProxyServer());
+ipcMain.handle('stop-ai-server', () => stopAiProxyServer());
+ipcMain.handle('restart-ai-server', async () => {
   stopAiProxyServer();
-  return true;
+  await new Promise((r) => setTimeout(r, 350));
+  return startAiProxyServer();
 });
-ipcMain.handle('start-ws-server', () => {
-  startWsServer();
-  return wsServerProcess !== null;
-});
-ipcMain.handle('stop-ws-server', () => {
+ipcMain.handle('start-ws-server', async () => startWsServer());
+ipcMain.handle('stop-ws-server', () => stopWsServer());
+ipcMain.handle('restart-ws-server', async () => {
   stopWsServer();
-  return true;
+  await new Promise((r) => setTimeout(r, 350));
+  return startWsServer();
 });
-ipcMain.handle('get-server-status', () => ({
-  aiProxy: aiProxyProcess !== null,
-  wsServer: wsServerProcess !== null,
-}));
+ipcMain.handle('get-server-status', async () => {
+  await refreshExternalDaemonState();
+  return {
+    version: APP_VERSION,
+    aiProxy: aiProxyProcess !== null || externalAiOnline,
+    aiManaged: aiProxyProcess !== null,
+    wsServer: wsServerProcess !== null || externalWsOnline,
+    wsManaged: wsServerProcess !== null,
+  };
+});

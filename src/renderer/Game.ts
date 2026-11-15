@@ -162,26 +162,34 @@ export class Game extends EventEmitter<GameEvents> {
 					this.showMainMenu();
 				}
 			} else if (hash === "#world") {
-				console.log("[Game] Deep link: loading WorldScene directly");
+				console.log("[Game] Deep link: loading WorldScene directly (with Dashboard base scene)");
 				const { WorldScene } = await import("./scenes/WorldScene");
 				const worldScene = new WorldScene({
 					name: "world",
 					app: this.app,
 					camera: this._camera,
 				});
-				await await StateManager.push(worldScene);
+				if (this.mainMenuScene) {
+					await StateManager.push(this.mainMenuScene);
+				}
+				await StateManager.push(worldScene);
 			} else if (hash === "#menu") {
 				this.showMainMenu();
 			} else {
-				// Default: go directly to WorldScene (bob's game)
-				console.log("[Game] Default: loading WorldScene");
+				// Default: seed the Consolidated Omni-Engine Dashboard at the base of
+				// the scene stack, then push WorldScene on top so "Quit to Menu" /
+				// "☰ Omni-Dashboard" transitions cleanly without emptying StateManager.
+				console.log("[Game] Default: loading WorldScene over Consolidated Dashboard");
 				const { WorldScene } = await import("./scenes/WorldScene");
 				const worldScene = new WorldScene({
 					name: "world",
 					app: this.app,
 					camera: this._camera,
 				});
-				StateManager.push(worldScene);
+				if (this.mainMenuScene) {
+					await StateManager.push(this.mainMenuScene);
+				}
+				await StateManager.push(worldScene);
 			}
 		}
 
@@ -193,12 +201,14 @@ export class Game extends EventEmitter<GameEvents> {
 		if (this.mainMenuScene !== null) {
 			return;
 		}
+		// Note: `Scene.onEnter()` invokes `await this.create()` automatically when
+		// `StateManager.push()` activates the scene; avoiding an eager `create()`
+		// here prevents duplicate child containers and double particle loops.
 		this.mainMenuScene = new MainMenuScene({
 			name: "main-menu",
 			app: this.app,
 			camera: this._camera,
 		});
-		await this.mainMenuScene.create();
 	}
 
 	private splashShown = false;

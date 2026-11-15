@@ -15,7 +15,7 @@ import { MapData } from "../../../shared/MapData";
 import { DoorData } from "../../../shared/DoorData";
 // DoorGraph.ts fallback removed - door_graph.json is the single source of truth
 import { getDoorGraphForMap } from "./DoorGraphLoader";
-import doorsConfig from "../../../../data/doors.json";
+import doorsConfig from "../../../shared/doors.json";
 
 /** Shape of a real binary-extracted map JSON file */
 export interface RealMapJSON {

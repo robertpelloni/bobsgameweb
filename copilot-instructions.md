@@ -1,11 +1,8 @@
-# AGENTS.md
+# GitHub Copilot Instructions (`bobsgameweb`)
 
-Welcome Agent!
+> **Master Governance Reference:** Always read and obey **[AGENTS.md](./AGENTS.md)** as the single source of truth for architectural rules, commenting depth, `VERSION.md` synchronization, and submodule hygiene.
 
-## Directives
-1. **Analyze Deeply**: Always analyze the full project state, including `HANDOFF.md`, `ROADMAP.md`, `TODO.md`, `VISION.md`, and `CHANGELOG.md`.
-2. **Document Everything**: Input information and your findings must be documented in comprehensive, FULL extreme detail.
-3. **Comment Heavily**: Comment your code in depth—what it's doing, why, side effects, optimizations, alternate methods.
-4. **Version Control**: Every build should have a new version number. Update `VERSION.md` (which should only contain the version string). Update `CHANGELOG.md`. Commit and push with the version number in the commit message.
-5. **Autonomy**: Do not stop. Do whatever research needs to be done. Keep going until all planned features are 100% implemented.
-6. **Submodules**: Ensure all linked/referenced projects are added as submodules and their features are documented and assimilated.
+## Quick Copilot Checklist
+- **UI Architecture**: Maintain consolidated single-page surfaces (`src/renderer/scenes/MainMenuScene.ts`, `src/renderer/scenes/SettingsScene.ts`) with visible inline descriptions and `Tooltip` (`ⓘ`) wiring on every interactive control.
+- **TypeScript Targets**: Renderer code compiles under `tsconfig.json` (ESM/Vite); Electron main & preload compile under `tsconfig.main.json` (`CommonJS` -> `dist/main/`).
+- **Version Single Source**: Never hardcode version numbers in UI scenes; import `APP_VERSION` from `src/shared/Config.ts` (populated from `VERSION.md`).
