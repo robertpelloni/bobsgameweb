@@ -1,6 +1,13 @@
 # bobsgameweb — "okgame", the bob's game puzzle engine (TypeScript/PixiJS)
 
-This repo (package name `okgame`, version 3.0.33 per `package.json`) is the
+> **CANONICAL — THE bob's game build (decision 2026-11-19, Robert Pelloni).**
+> This is the only bob's game engine under active development. The C++ (`okgame`) and
+> Java (`bobsgameonlinejava`) engines are frozen as port sources: everything worthwhile
+> in them is to be ported here as efficiently as reasonable — rules, data, and playable
+> features, not file structures — and then finished out here. No parallel engine work.
+
+
+This repo (package name `okgame`, version 3.0.36 per `package.json`) is the
 modern web re-implementation of **bob's game**: a puzzle game engine being
 rebuilt in TypeScript on PixiJS, restoring the legacy Java engine into a form
 that runs in the browser, in Electron on desktop, and via Capacitor on mobile.
@@ -10,9 +17,8 @@ that runs in the browser, in Electron on desktop, and via Capacitor on mobile.
 
 ## Status
 
-**Actively developed in bursts.** Last commit: **2026-11-07** (Jules session
-merge; Electron tray/single-instance work and AI proxy dashboard controls in
-the days before). The game is not released; there is no public launch date.
+**Actively developed in bursts.** Last commit: **2026-11-15** (v3.0.36; Hetzner live-only
+architecture, unified ws.bobsgame.com AI routes, and live production cutover). The game is not released; there is no public launch date.
 
 Note: bob's game's Kickstarter campaign was a **failure** — it was not
 funded. Do not describe it as funded anywhere.
@@ -73,6 +79,8 @@ the repo.
 
 ## Last significant activity
 
+- **2026-11-15** — v3.0.36: Hetzner live-only architecture, unified
+  ws.bobsgame.com AI routes, and live production cutover to bobsgame.com.
 - **2026-11-07** — Jules session merge; Electron single-instance locking
   and tray notifications; AI proxy status reporting and dashboard controls.
 - **2026-11-06** — Electron system tray and consolidated dashboard UI
