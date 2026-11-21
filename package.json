@@ -33,7 +33,7 @@
     "concurrently": "^8.2.2",
     "cors": "^2.8.6",
     "electron": "^45.2.3",
-    "electron-builder": "^26.8.1",
+    "electron-builder": "^26.18.0",
     "eslint": "^8.55.0",
     "express": "^5.2.1",
     "typescript": "^5.3.2",
@@ -42,9 +42,9 @@
     "vite-plugin-electron-renderer": "^0.14.5"
   },
   "dependencies": {
-    "@capacitor/android": "^6.0.0",
+    "@capacitor/android": "^6.2.2",
     "@capacitor/core": "^6.0.0",
-    "@capacitor/ios": "^6.0.0",
+    "@capacitor/ios": "^6.2.2",
     "@pixi/sound": "^5.2.2",
     "butterchurn": "^2.6.7",
     "butterchurn-presets": "^2.4.7",
